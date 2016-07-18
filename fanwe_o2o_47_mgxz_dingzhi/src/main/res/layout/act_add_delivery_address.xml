@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="10dp"
+    android:scrollbars="none" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dip"
+                android:layout_marginTop="8dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical|right"
+                    android:text="姓名:" />
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/act_add_delivery_address_et_consignee"
+                    style="@style/edit_base"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_cricle"
+                    android:maxLines="1"
+                    android:paddingLeft="10dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical|right"
+                    android:text="手机号码:" />
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/act_add_delivery_address_et_phone"
+                    style="@style/edit_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="3dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_cricle"
+                    android:gravity="center_vertical"
+                    android:inputType="number"
+                    android:maxLines="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical|right"
+                    android:text="省市:" />
+
+                <TextView
+                    android:id="@+id/act_add_delivery_address_tv_delivery"
+                    style="@style/text_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="3dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_cricle"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    android:paddingLeft="10dip"
+                    android:text="省份   城市   区县" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="100dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical|right"
+                    android:text="详细地址:" />
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/act_add_delivery_address_et_address_detail"
+                    style="@style/edit_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="3dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_cricle"
+                    android:maxLines="4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dip"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical|right"
+                    android:text="邮编:" />
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/act_add_delivery_address_et_postcode"
+                    style="@style/edit_base"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="3dip"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_cricle"
+                    android:inputType="number"
+                    android:maxLines="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/act_add_delivery_address_tv_submit"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/selector_main_color_corner"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="#ffffff"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+</ScrollView>

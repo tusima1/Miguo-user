@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_white_gray"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:minHeight="50dp"
+    android:orientation="horizontal"
+    android:paddingRight="15dp" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp" >
+
+        <ImageView
+            android:id="@+id/iv_iamge"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/my_activities_photo" />
+
+        <RelativeLayout
+            android:id="@+id/re_dot"
+            android:layout_width="32dp"
+            android:layout_height="32dp" >
+
+            <FrameLayout
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true" >
+
+                <com.fanwe.customview.BadgeView
+                    android:id="@+id/badge_red_dot"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center" >
+
+                    <TextView
+                        android:id="@+id/tv_red_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+            </FrameLayout>
+
+            <ImageView
+                android:id="@+id/iv_red_big_small"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/ic_msg_small"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/iv_red_more"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_msg_more" 
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="活动消息"
+            android:textColor="#595959"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#999999"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text=""
+        android:textColor="#999999"
+        android:textSize="10sp" />
+
+</LinearLayout>

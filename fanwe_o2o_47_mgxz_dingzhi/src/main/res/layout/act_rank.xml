@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/act_my_refresh"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:background="@color/bg_activity_gray"
+        ptr:ptrHeaderSubTextColor="@color/gray"
+        ptr:ptrHeaderTextColor="@color/gray" >
+	<include layout="@layout/include_act_rank"/>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
+    

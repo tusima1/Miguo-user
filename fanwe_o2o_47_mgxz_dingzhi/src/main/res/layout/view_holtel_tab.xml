@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@drawable/layer_white_stroke_corner_item_single"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tab_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxLines="2"
+            android:paddingLeft="5dp"
+            android:text=""
+            android:textColor="@color/text_fenxiao"
+            android:textSize="10sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@drawable/bg_time_select" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/stroke"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/bg_holtel_search_lv" />
+
+        <TextView
+            android:id="@+id/tab_1"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="位置/酒店/关键词 "
+            android:textColor="@color/text_new_home"
+            android:textColorHint="#999999"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</LinearLayout>

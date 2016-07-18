@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/lv_business"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none" >
+    </ListView>
+
+    <Button
+        android:id="@+id/bt_clear"
+        android:layout_width="100dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_searchlv"
+        android:text="清除历史记录"
+        android:gravity="center"
+        android:textColor="@color/text_new_home"
+        android:textSize="12sp"
+        android:visibility="gone"
+        />
+
+</LinearLayout>

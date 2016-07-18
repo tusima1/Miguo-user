@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdge="none"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp" >
+
+            <!-- 二维码 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_scan"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_all"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_scan"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_saoyisao" />
+
+                <TextView
+                    android:id="@+id/act_more_tv_qrcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/iv_scan"
+                    android:gravity="center_vertical"
+                    android:text="扫一扫"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_toRightOf="@+id/act_more_tv_qrcode"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/text_item_content"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <!-- 是否在移动网络下加载图片 -->
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/selector_white_gray_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_load_image_in_mobile_net"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_wutu" />
+
+                <TextView
+                    android:id="@+id/act_more_tv_load_image_in_mobile_net"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_load_image_in_mobile_net"
+                    android:gravity="center_vertical"
+                    android:text="在移动网络下加载图片"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/cb_load_image_in_mobile_net"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_item_content"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <!-- 消息提醒 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_jpush"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:visibility="gone" >
+
+                <ImageView
+                    android:id="@+id/iv_jpush"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:src="@drawable/ic_guanyu" />
+
+                <TextView
+                    android:id="@+id/tv_jpush"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_jpush"
+                    android:gravity="center_vertical"
+                    android:text="消息提醒"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/cb_jpush"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_item_content"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <!-- 清除缓存 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_clear_cache"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_all"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_clear_cache"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_qingkong" />
+
+                <TextView
+                    android:id="@+id/tv_clear_cache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_clear_cache"
+                    android:gravity="center_vertical"
+                    android:text="清除缓存"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_cache_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_item_content"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_upgrade"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/selector_white_gray_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_upgrade"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_gengxin" />
+
+                <TextView
+                    android:id="@+id/act_more_tv_upgrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_upgrade"
+                    android:gravity="center_vertical"
+                    android:text="检查更新"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/act_more_tv_upgrade"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/text_item_content"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+
+            <!-- 公告列表 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_notice_list"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:visibility="gone"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_notice_list"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_fankui" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_notice_list"
+                    android:gravity="center_vertical"
+                    android:text="公告列表"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <!-- 客服电话 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_kf_phone"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_kf_phone"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_kf_phone" />
+
+                <TextView
+                    android:id="@+id/tv_kf_phone_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_kf_phone"
+                    android:gravity="center_vertical"
+                    android:text="客服电话"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_kf_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_kf_phone_label"
+                    android:gravity="center_vertical"
+                    android:text="客服电话"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+            <!-- 客服邮箱 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_kf_email"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:visibility="gone"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_kf_email"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_kf_email" />
+
+                <TextView
+                    android:id="@+id/tv_kf_email_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_kf_email"
+                    android:gravity="center_vertical"
+                    android:text="客服邮箱"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_kf_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_kf_email_label"
+                    android:gravity="center_vertical"
+                    android:text="客服邮箱"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+            <!-- 关于我们 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_about_us"
+                android:layout_width="fill_parent"
+                android:layout_height="55dip"
+                android:background="@drawable/selector_white_gray_stroke_all"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <ImageView
+                    android:id="@+id/iv_about_us"
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_guanyu" />
+
+                <TextView
+                    android:id="@+id/tv_about_us"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/iv_about_us"
+                    android:gravity="center_vertical"
+                    android:text="关于我们"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

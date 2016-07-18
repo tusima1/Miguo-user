@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/ssv_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical" >
+			
+            <TextView
+                android:id="@+id/tv_circle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/my_circle"
+                android:maxEms="3"
+                android:text="余额(元)"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp" >
+
+                <!-- 提现金额 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="提现金额"
+                        android:textColor="@color/black_d" />
+
+                    <com.fanwe.library.customview.ClearEditText
+                        android:id="@+id/et_money"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/layer_white_stroke_corner_item_single"
+                        android:hint="请输入提现金额(元)"
+                        android:inputType="numberDecimal"
+                        android:padding="5dp"
+                        android:text=""
+                        android:textColor="@color/black_d"
+                        android:textCursorDrawable="@null"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- 提现至 -->
+
+                <LinearLayout
+                    android:id="@+id/ll_withdraw_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="提现至"
+                        android:textColor="@color/black_d" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="3"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/selector_white_gray_stroke_corner_item_single"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp" >
+
+                            <TextView
+                                android:id="@+id/tv_withdraw_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="@color/black_d"
+                                android:textSize="14sp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:src="@drawable/ic_arrow_down" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_bank_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <!-- 开户行名称 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="开户行名称"
+                            android:textColor="@color/black_d" />
+
+                        <com.fanwe.library.customview.ClearEditText
+                            android:id="@+id/et_bank_name"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="3"
+                            android:background="@drawable/layer_white_stroke_corner_item_single"
+                            android:hint="请输入开户行名称"
+                            android:padding="5dp"
+                            android:text=""
+                            android:textColor="@color/black_d"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <!-- 银行卡号 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="开户行账号"
+                            android:textColor="@color/black_d" />
+
+                        <com.fanwe.library.customview.ClearEditText
+                            android:id="@+id/et_bank_number"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="3"
+                            android:background="@drawable/layer_white_stroke_corner_item_single"
+                            android:hint="请输入银行卡号"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:padding="5dp"
+                            android:text=""
+                            android:textColor="@color/black_d"
+                            android:textCursorDrawable="@null"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <!-- 真实姓名 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="真实姓名"
+                            android:textColor="@color/black_d" />
+
+                        <com.fanwe.library.customview.ClearEditText
+                            android:id="@+id/et_real_name"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="3"
+                            android:background="@drawable/layer_white_stroke_corner_item_single"
+                            android:hint="请输入姓名"
+                            android:padding="5dp"
+                            android:text=""
+                            android:singleLine="true"
+                            android:textColor="@color/black_d"
+                            android:textCursorDrawable="@null"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 手机验证码 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="手机验证码"
+                        android:textColor="@color/black_d" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <com.fanwe.library.customview.ClearEditText
+                            android:id="@+id/et_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/layer_white_stroke_corner_item_single"
+                            android:hint="请输入验证码"
+                            android:inputType="number"
+                            android:padding="5dp"
+                            android:text=""
+                            android:textColor="@color/black_d"
+                            android:textCursorDrawable="@null"
+                            android:textSize="14sp" />
+
+                        <com.fanwe.library.customview.SDSendValidateButton
+                            android:id="@+id/btn_send_code"
+                            android:layout_width="110dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/selector_main_color_corner"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/selector_main_color_corner"
+                    android:text="确定"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

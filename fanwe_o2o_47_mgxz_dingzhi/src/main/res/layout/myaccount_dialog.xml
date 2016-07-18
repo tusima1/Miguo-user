@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/cricle_white"
+     >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:minHeight="30dp"
+            android:padding="5dp"
+            android:text="当前用户名:"
+            android:textColor="@color/gray"
+            android:textSize="18sp" />
+
+        <!--
+            <EditText
+            android:id="@+id/inputName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/shape_cricle_gray"
+            android:gravity="top|left"
+            android:hint="请输入新用户名"
+            android:padding="5dp"
+            android:textColor="@color/gray"
+            android:textCursorDrawable="@null"
+            android:textSize="16sp"
+             />
+        -->
+
+        <com.fanwe.library.customview.ClearEditText
+            android:id="@+id/inputName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/shape_cricle_gray"
+            android:hint="请输入新用户名"
+            android:imeOptions="actionDone"
+            android:minHeight="30dp"
+            android:paddingLeft="5dp"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/text_size_normal_16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal" >
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/bt_cancle"
+                    style="@style/button_miguo"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:text="取消" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/bt_ensure"
+                    style="@style/button_miguo"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:text="确定" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

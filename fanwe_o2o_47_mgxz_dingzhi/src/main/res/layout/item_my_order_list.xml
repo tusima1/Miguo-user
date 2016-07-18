@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="5.0dip"
+    android:background="@drawable/layer_white_stroke_all"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_goods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+    
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:id="@+id/ll_order_list"
+        android:padding="10dp" >
+        <TextView 
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_money"
+            android:gravity="center_vertical"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_size_title"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消订单"
+            style="@style/text_order" 
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:id="@+id/tv_cancel_order"
+            />
+        
+        <TextView
+            style="@style/text_order" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="付款"
+            android:id="@+id/tv_pay"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="继续支付"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:id="@+id/tv_pay_again"
+            style="@style/text_order"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退款"
+            style="@style/text_order"
+            android:id="@+id/tv_refund"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:id="@+id/tv_delect"
+           	style="@style/text_order"
+            />
+	    </LinearLayout>
+	    <View 
+	        android:layout_width="match_parent"
+	        android:layout_height="1px"
+	        android:background="@color/stroke"
+	        />
+</LinearLayout>

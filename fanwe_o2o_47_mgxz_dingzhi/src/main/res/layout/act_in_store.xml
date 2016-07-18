@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_store_in_bc"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        <com.github.siyamed.shapeimageview.CircularImageView
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/iv_user_avatar"
+              android:layout_width="50dp"
+              android:layout_height="50dp"
+              app:siBorderColor="@color/white"
+              android:src="@drawable/nopic"
+              app:siBorderWidth="1dp" />
+        
+        <TextView 
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="@dimen/text_size_normal_16sp"
+            android:textColor="@color/white"
+            android:id="@+id/tv_name"
+            android:layout_marginLeft="10dp"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="人气："
+            android:textSize="@dimen/text_size_normal_16sp"
+            android:textColor="@color/white"
+            />
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="@dimen/text_size_normal_16sp"
+            android:textColor="@color/white"
+            android:id="@+id/tv_number"
+            />
+    </LinearLayout>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="10dp"
+        android:background="@color/stroke"
+        />
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+         android:numColumns="2"
+         android:paddingLeft="5dp"
+         android:paddingRight="5dp"
+         android:background="@color/bg_activity_white"
+         android:horizontalSpacing="10dp"
+         android:id="@+id/pull_scroll"
+        >
+    </com.handmark.pulltorefresh.library.PullToRefreshGridView>
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/stroke"
+        />
+</LinearLayout>

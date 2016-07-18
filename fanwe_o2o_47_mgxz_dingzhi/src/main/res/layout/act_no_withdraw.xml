@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:background="@color/bg_activity_white"
+     android:orientation="vertical"
+     >
+    
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ptrlv_no_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        ptr:ptrHeaderSubTextColor="@color/gray"
+        ptr:ptrHeaderTextColor="@color/gray" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_no_circle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/my_circle"
+                android:maxEms="3"
+                android:text="不可提现金额（元）"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+
+            <Button
+                android:id="@+id/ll_no_tixian"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="25dp"
+                android:layout_marginTop="20dp"
+                android:text="我要营销"
+                android:textColor="@color/white"
+                 android:textSize="@dimen/text_size_base"
+                android:background="@drawable/bg_no_withdraw" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/text_line" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="资金明细"
+                    android:textColor="@color/gray" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@color/text_line" />
+            </LinearLayout>
+
+            <com.fanwe.customview.SDListViewInScroll
+                android:id="@+id/lv_no_withdraw"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="#00000000"
+                android:listSelector="#00000000" />
+        </LinearLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+</LinearLayout>

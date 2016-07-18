@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="ratingbar_base" parent="@android:style/Widget.RatingBar">
+        <item name="android:numStars">5</item>
+    </style>
+	
+    <style name="ratingbar_store_list_item" parent="ratingbar_base">
+        <item name="android:progressDrawable">@drawable/layer_ratingbar_store_list_item</item>
+        <item name="android:minHeight">14dp</item>
+        <item name="android:maxHeight">14dp</item>
+        <item name="android:isIndicator">true</item>
+    </style>
+	
+    <style name="ratingbar_style" parent="ratingbar_base">
+        <item name="android:progressDrawable">@drawable/layer_rating_bar</item>
+    </style>
+
+    <style name="ratingbar_style_comment" parent="ratingbar_base">
+        <item name="android:progressDrawable">@drawable/layer_rating_bar_comment</item>
+    </style>
+
+</resources>

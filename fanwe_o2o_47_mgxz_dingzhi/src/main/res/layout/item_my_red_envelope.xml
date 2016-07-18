@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" >
+
+            <LinearLayout
+                android:id="@+id/ll_money"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_red_cart_left"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="80px"
+                    android:text="￥"
+                    android:textColor="@color/main_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_momey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="@color/main_color"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/tv_momey_dian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="80px"
+                    android:text=".0"
+                    android:textColor="@color/main_color"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/ll_money" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_red_cart_right"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="15dp" >
+
+                        <TextView
+                            android:id="@+id/tv_sort"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="普通红包"
+                            android:textColor="@color/text_fenxiao"
+                            android:textSize="@dimen/text_size_base" />
+
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_sort"
+                            android:layout_marginTop="5dp"
+                            android:text="·　带返回标记的商品可使用"
+                            android:textColor="@color/text_hongbao_title"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/tv_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_title"
+                            android:layout_marginTop="3dp"
+                            android:text="·　可叠加使用"
+                            android:textColor="@color/text_hongbao_title"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_type"
+                            android:layout_marginTop="3dp"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/tv_timebegin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="·　2015.12.12"
+                                android:textColor="@color/text_hongbao_title"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="至"
+                                android:textColor="@color/text_hongbao_title"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:id="@+id/tv_timeclose"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="·2015.12.22"
+                                android:textColor="@color/text_hongbao_title"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/bg_red_select_xuan"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/iv_disabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="15dp"
+                        android:src="@drawable/my_hongbao_used"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </FrameLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

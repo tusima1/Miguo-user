@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp" >
+
+            <!-- 设置密码 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layer_white_stroke_top_left_right"
+                android:gravity="center_vertical"
+                android:minHeight="55dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/et_pwd_into"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/layer_white_stroke_top_bot"
+                    android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                    android:hint="输入密码"
+                    android:inputType="textPassword"
+                    android:maxLength="18"
+                    android:password="true"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_size_normal_16sp" />
+            </LinearLayout>
+            <!-- 密码 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layer_white_stroke_bot_left_right"
+                android:gravity="center_vertical"
+                android:minHeight="55dp"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp" >
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/et_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="15dp"
+                    android:background="@null"
+                    android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                    android:hint="确认密码"
+                    android:inputType="textPassword"
+                    android:maxLength="18"
+                    android:password="true"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_size_normal_16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_find_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="密码不少于6位，仅限字母与数字"
+                android:textColor="@color/text_new_home"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_success"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/selector_main_color_corner"
+                android:gravity="center"
+                android:text="完成"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_normal_16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

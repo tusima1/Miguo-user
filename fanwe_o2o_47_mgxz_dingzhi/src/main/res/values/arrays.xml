@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="arrText">
+        <item >我的</item>
+      <!--   <item >市场</item> -->
+    </string-array>
+    <string-array name="my_arrText">
+        <item >可用红包</item>
+        <item >历史红包</item>
+    </string-array>
+    
+    <string-array name="my_store_arr">
+        <item >商品总价</item>
+        <item >余额支付</item>
+        <item >总计</item>
+    </string-array>
+    
+    <string-array name="my_store_arr2">
+        <item>商品总价</item>
+        <item>支付方式</item>
+        <item>余额支付</item>
+        <item>总计</item>
+        <item>应付总额</item>
+    </string-array>
+    <string-array name="my_store">
+        <item >商品总价</item>
+        <item >支付方式</item>
+        <item >总计</item>
+        <item >应付总额</item>
+    </string-array>
+    <integer-array name="share_image">
+        <item>@drawable/my_distribution_qq</item>
+        <item>@drawable/my_distribution_friend</item>
+        <item>@drawable/my_distribution_weixin</item>
+        <item>@drawable/my_distribution_weibo</item>
+        </integer-array>
+</resources>

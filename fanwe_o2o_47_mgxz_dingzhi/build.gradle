@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.fanwe.o2o.miguo"
+        minSdkVersion 14
+        targetSdkVersion 19
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':library_PhotoViewmaster')
+    compile project(':library_PullToRefresh')
+    compile project(':library_androidshapeimageview')
+    compile project(':library_sdDialog')
+    compile project(':library_umeng_share_project')
+    compile project(':library_xml_drawable_o2o')
+    compile project(':library_ZxingDemo')
+    compile project(':libcommon')
+    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:appcompat-v7:19.1.0'
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/fastjson-1.1.45.android.jar')
+    compile files('libs/jpush-android-2.1.5.jar')
+    compile files('libs/UPPayAssistEx.jar')
+    compile files('libs/UPPayPluginEx.jar')
+    compile files('libs/x-2.6.14-src-1.4-modify.jar')
+}

@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray" >
+
+    <LinearLayout
+        android:id="@+id/ll_sele"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/layer_white_stroke_top"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <CheckBox
+            android:id="@+id/ch_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_myred_ch"
+            android:button="@null" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:text="不使用红包"
+            android:textColor="@color/text_new_home"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/bt_confirm"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_main_color_corner"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ptrsv_all"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/ll_sele"
+        android:scrollbars="none"
+        ptr:ptrHeaderSubTextColor="@color/gray"
+        ptr:ptrHeaderTextColor="@color/gray" >
+    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+</RelativeLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/iv_1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/iv_close_1"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignRight="@+id/iv_1"
+                android:layout_alignTop="@+id/iv_1"
+                android:scaleType="centerInside"
+                android:src="@drawable/ico_close"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/iv_2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/iv_close_2"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignRight="@+id/iv_2"
+                android:layout_alignTop="@+id/iv_2"
+                android:scaleType="centerInside"
+                android:src="@drawable/ico_close"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/iv_3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/iv_close_3"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignRight="@+id/iv_3"
+                android:layout_alignTop="@+id/iv_3"
+                android:scaleType="centerInside"
+                android:src="@drawable/ico_close"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:text="钱都花了，为什么不拍几张靓图秀一秀呢！？"
+        android:textColor="#fc6f07"
+        android:textSize="12sp" />
+
+</LinearLayout>

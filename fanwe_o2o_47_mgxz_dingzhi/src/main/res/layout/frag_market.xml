@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/frag_market_titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_title_bar" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_110_px2dp"
+        android:background="@color/c_F2F2F2" >
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_70_px2dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape_cricle_solid_white"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
+            android:textColor="@color/rgb_898989"
+            android:textSize="@dimen/size_px2sp_30" />
+
+        <LinearLayout
+            android:id="@+id/ll_tip_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="@dimen/size_32_px2dp"
+                android:layout_height="@dimen/size_32_px2dp"
+                android:layout_marginTop="1dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/bg_holtel_search_lv" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_20_px2dp"
+                android:text="搜索商品或商家"
+                android:textColor="@color/rgb_153153153"
+                android:textSize="@dimen/size_px2sp_32" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:id="@+id/ll_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="100dp"
+                android:text="暂无商家信息"
+                android:textColor="@color/rgb_898989"
+                android:textSize="@dimen/size_px2sp_28" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/bottom"
+                android:src="@drawable/bg_empty" />
+        </RelativeLayout>
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ptrlv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:scrollbars="none"
+            ptr:ptrAnimationStyle="@null"
+            ptr:ptrHeaderSubTextColor="@color/gray"
+            ptr:ptrHeaderTextColor="@color/gray" >
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+    </FrameLayout>
+
+</LinearLayout>

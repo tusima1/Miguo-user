@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+    <ProgressBar
+        android:id="@+id/pgb_horizontal"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp" />
+
+
+
+
+    <WebView
+        android:id="@+id/wv_webview"
+        android:layout_width="fill_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/pgb_horizontal"
+        android:layout_height="match_parent" />
+</RelativeLayout>

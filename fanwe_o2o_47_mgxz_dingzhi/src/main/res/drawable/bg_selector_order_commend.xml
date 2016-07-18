@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 商品评论 推荐 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 初始状态 -->
+    <item android:drawable="@drawable/bg_order_recommend_normal" android:state_enabled="true"/>
+    <!-- 按下状态 -->
+    <item android:drawable="@drawable/bg_order_recommend_press" android:state_enabled="false"/>
+</selector>

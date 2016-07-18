@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <!-- 查看图文详情 -->
+	
+    <LinearLayout
+        android:id="@+id/ll_more_detail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" 
+        >
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_container_web"
+            android:visibility="gone"
+            android:orientation="vertical"
+            >
+            <View 
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="10dp"
+                android:background="@color/stroke_deep"
+                />
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="35dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            >
+            <ImageView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bg_combo"
+                />
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="套餐内容"
+                android:textColor="@color/text_new_home"
+                android:textSize="@dimen/text_size_normal_16sp"
+                android:paddingLeft="10dp"
+                />
+        </LinearLayout>
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/stroke"
+            android:layout_marginLeft="10dp"
+            />
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        <!-- <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/web_content"
+            /> -->
+        </LinearLayout>
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/stroke"
+            android:layout_marginLeft="10dp"
+            />
+        </LinearLayout>
+		<LinearLayout 
+		   android:layout_width="match_parent"
+		   android:layout_height="wrap_content"
+		   android:orientation="horizontal"
+		   android:paddingLeft="10dp"
+		   android:background="@drawable/selector_white_gray"
+		   android:gravity="center_vertical"
+       	   android:paddingRight="10dp"
+		    > 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="查看图文详情"
+            android:textColor="@color/main_color"
+            android:textSize="12sp" />
+        <ImageView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_right"
+            />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/stroke_deep" />
+
+</LinearLayout>

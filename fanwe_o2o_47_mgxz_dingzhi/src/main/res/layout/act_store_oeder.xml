@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/layer_white_stroke_corner_item_single"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="消费总额:"
+                    android:textColor="@color/text_fenxiao"
+                    android:textSize="16sp" />
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/act_store_et_money_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layer_gray_stroke_edtail"
+                    android:hint="询问服务员后输入"
+                    android:inputType="numberDecimal"
+                    android:maxLength="9"
+                    android:maxLines="1"
+                    android:textColor="@color/text_new_home"
+                    android:textColorHint="#999999"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+          <!--   <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <CheckBox
+                    android:id="@+id/tv_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/bg_select_text"
+                    android:button="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:text="输入不参与优惠金额（如酒水、特价菜）"
+                    android:textColor="@color/text_new_home"
+                    android:textSize="14sp" />
+            </LinearLayout> -->
+
+            <LinearLayout
+                android:id="@+id/ll_no_youhui"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/layer_white_stroke_corner_item_single"
+                android:orientation="horizontal"
+               	>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="不参与优惠金额:"
+                    android:textColor="@color/text_fenxiao"
+                    android:textSize="16sp" />
+
+                <com.fanwe.library.customview.ClearEditText
+                    android:id="@+id/act_store_et_money"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/layer_gray_stroke_edtail"
+                    android:hint="询问服务员后输入"
+                    android:inputType="numberDecimal"
+                    android:maxLength="9"
+                    android:maxLines="1"
+                    android:textColor="@color/text_new_home"
+                    android:textColorHint="#999999"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:id="@+id/v_count_top"
+                android:background="@color/stroke" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:minHeight="55dp"
+                android:id="@+id/ll_count"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/bg_store_hui" />
+
+                    <TextView
+                        android:id="@+id/tv_store_discount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:text=""
+                        android:textColor="@color/text_fenxiao"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_store_discount_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingRight="10dp"
+                        android:text=""
+                        android:textColor="@color/store_youhui_money"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical" >
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/text_line" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="35dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/store_youhui_text"
+                        android:textColor="@color/text_hongbao_title"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:id="@+id/v_count_bot"
+                android:layout_marginBottom="10dp"
+                android:background="@color/stroke" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/bg_activity_white"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="实付金额"
+                    android:textColor="@color/text_fenxiao"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_moneycode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="￥"
+                    android:textColor="@color/store_youhui_money"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_store_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="@color/store_youhui_money"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/stroke" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/bg_activity_white"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:visibility="gone"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="预计可返佣金"
+                    android:textColor="@color/text_fenxiao"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_Distrimoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textColor="@color/store_youhui_money"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:visibility="gone"
+                android:background="@color/stroke" />
+
+            <FrameLayout
+                android:id="@+id/act_store_confirm_order_fl_payments"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/act_store_confirm_order_fl_account_payments"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/act_store_confirm_order_fl_fees"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/act_confirm_order_btn_confirm_order"
+                android:layout_width="fill_parent"
+                android:layout_height="45dip"
+                android:layout_margin="10dp"
+                android:background="@drawable/selector_main_color_corner"
+                android:text="确认支付"
+                android:textColor="#ffffff"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

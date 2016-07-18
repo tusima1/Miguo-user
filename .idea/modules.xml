@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/fanwe_o2o_47_mgxz_dingzhi/fanwe_o2o_47_mgxz_dingzhi.iml" filepath="$PROJECT_DIR$/fanwe_o2o_47_mgxz_dingzhi/fanwe_o2o_47_mgxz_dingzhi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libcommon/libcommon.iml" filepath="$PROJECT_DIR$/libcommon/libcommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_PhotoViewmaster/library_PhotoViewmaster.iml" filepath="$PROJECT_DIR$/library_PhotoViewmaster/library_PhotoViewmaster.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_PullToRefresh/library_PullToRefresh.iml" filepath="$PROJECT_DIR$/library_PullToRefresh/library_PullToRefresh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_ZxingDemo/library_ZxingDemo.iml" filepath="$PROJECT_DIR$/library_ZxingDemo/library_ZxingDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_androidshapeimageview/library_androidshapeimageview.iml" filepath="$PROJECT_DIR$/library_androidshapeimageview/library_androidshapeimageview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_sdDialog/library_sdDialog.iml" filepath="$PROJECT_DIR$/library_sdDialog/library_sdDialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_umeng_share_project/library_umeng_share_project.iml" filepath="$PROJECT_DIR$/library_umeng_share_project/library_umeng_share_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library_xml_drawable_o2o/library_xml_drawable_o2o.iml" filepath="$PROJECT_DIR$/library_xml_drawable_o2o/library_xml_drawable_o2o.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mgxz_user.iml" filepath="$PROJECT_DIR$/mgxz_user.iml" />
+    </modules>
+  </component>
+</project>
