@@ -2,7 +2,7 @@ package com.fanwe;
 
 import java.util.Arrays;
 
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.dialog.SDDialogMenu;

@@ -22,7 +22,7 @@ import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.WithdrawLogActivity;
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.http.InterfaceServer;

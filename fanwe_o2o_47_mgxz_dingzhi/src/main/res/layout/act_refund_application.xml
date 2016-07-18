@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray" 
+    android:id="@+id/froot">
+
+    <com.fanwe.customview.SDStickyScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ptr_sv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_activity_gray"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/layout_list"
+                layout="@layout/item_act_refund_application" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:focusable="true"
+                android:background="@color/bg_pop_gray" />
+
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:background="@drawable/layer_white_stroke_all"
+                android:gravity="left|top"
+                android:hint="请输入关键字"
+                android:minHeight="150dp"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/c_CCCCCC"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/size_px2sp_32" />
+
+            <Button
+                android:id="@+id/bt_submit"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/selector_main_color_corner"
+                android:text="提交"
+                android:textSize="@dimen/size_px2sp_32" />
+        </LinearLayout>
+    </com.fanwe.customview.SDStickyScrollView>
+
+</FrameLayout>

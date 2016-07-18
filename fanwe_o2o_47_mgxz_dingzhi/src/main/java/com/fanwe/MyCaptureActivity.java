@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.zxing.CaptureActivity;
 import com.google.zxing.Result;
+import com.umeng.socialize.utils.Log;
 
 public class MyCaptureActivity extends CaptureActivity
 {

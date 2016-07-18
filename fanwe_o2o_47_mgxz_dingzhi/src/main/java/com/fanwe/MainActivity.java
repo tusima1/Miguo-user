@@ -1,8 +1,8 @@
 package com.fanwe;
 
 import com.fanwe.app.App;
+import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.config.AppConfig;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;

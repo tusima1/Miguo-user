@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fanwe.AddCommentActivity;
 import com.fanwe.AppWebViewActivity;
+import com.fanwe.RefundApplicationActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
@@ -20,6 +21,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.BaseActModel;
+import com.fanwe.model.OrderInItem;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_orderGoodsModel;
 import com.fanwe.model.Uc_order_check_deliveryActModel;
@@ -39,20 +41,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MyOrderListGoodsAdapter extends SDBaseAdapter<Uc_orderGoodsModel>
+public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 {
-
-	private static final int COLOR_ENABLE = R.color.main_color;
-	private static final int COLOR_DISABLE = R.color.gray;
 
 	private boolean mShowActions = true;
 	
-	private int mStatus_value;
+	private boolean isPayed=false;
+	
+	private int mStatus_value;//订单的状态
+	private int mOrderMode;//0,1,2,3,
 
-	public MyOrderListGoodsAdapter(List<Uc_orderGoodsModel> listModel, boolean showActions, Activity activity,int status_value)
+	public MyOrderListGoodsAdapter(List<OrderInItem> listModel, String isPayed, Activity activity,int status_value,int orderMode)
 	{
 		super(listModel, activity);
-		this.mShowActions = showActions;
+		if ("已支付".equalsIgnoreCase(isPayed)) {
+			this.isPayed = true;
+		}
+		this.mOrderMode=orderMode;
+//		this.mShowActions = showActions;
 		this.mStatus_value = status_value;
 	}
 
@@ -71,19 +77,22 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<Uc_orderGoodsModel>
 		TextView tv_order = ViewHolder.get(convertView, R.id.tv_order);
 		TextView tv_name = ViewHolder.get(convertView, R.id.tv_title);
 		TextView tv_time = ViewHolder.get(convertView, R.id.tv_time);
+		//底部显示的按钮
 		TextView tv_evaluate = ViewHolder.get(convertView, R.id.tv_evaluate);
+		TextView tv_tuikuan = ViewHolder.get(convertView, R.id.tv_tuikuan);
 		TextView tv_number = ViewHolder.get(convertView, R.id.tv_number);
 		TextView tv_sno = ViewHolder.get(convertView, R.id.tv_sno);
-		View v_line = ViewHolder.get(R.id.v_line, convertView);
+//		View v_line = ViewHolder.get(R.id.v_line, convertView);
 		TextView tv_total_price = ViewHolder.get(convertView, R.id.tv_total_price);
 	
-		final Uc_orderGoodsModel model = getItem(position);
+		final OrderInItem model = getItem(position);
+		int refund_status = model.getRefund_status();
 		if (model != null)
 		{
 			SDViewBinder.setImageView(iv_image, model.getDeal_icon());
 			SDViewBinder.setTextView(tv_name, model.getSub_name());
 			SDViewBinder.setTextView(tv_number, String.valueOf(model.getNumber()));
-			SDViewBinder.setTextView(tv_total_price, model.getTotal_priceFormat());
+			SDViewBinder.setTextView(tv_total_price, ""+model.getTotal_price());
 			SDViewBinder.setTextView(tv_sno, model.getOrder_sn());
 			SDViewBinder.setTextView(tv_order_title, model.getSlname());
 			switch (model.getCate_id())
@@ -130,92 +139,66 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<Uc_orderGoodsModel>
 			{
 				iv_img.setImageResource(R.drawable.bg_order_hui);
 			}
-			
-			if(mShowActions && model.getDeal_id() != 0)
-			{
-				if(mStatus_value == 0 || mStatus_value == 1)
-				{
-					SDViewBinder.setTextView(tv_order, "待付款");
-				}else if(mStatus_value == 2)
-				{
-					if(model.getConsume_count() == 0)
-					{
-						SDViewBinder.setTextView(tv_order, "待消费");
-					}else
-					{
-						if(model.getDp_id() == 0)
-						{
-							SDViewBinder.setTextView(tv_order, "待评价");
-							SDViewUtil.show(mLl_button);
-							SDViewUtil.show(tv_evaluate);
-							SDViewUtil.show(v_line);
-							tv_evaluate.setOnClickListener(new OnClickListener() {
-								
-								@Override
-								public void onClick(View v) 
-								{
-									Intent intent = new Intent(mActivity, AddCommentActivity.class);
-									intent.putExtra(AddCommentActivity.EXTRA_ID, model.getDeal_id());
-									intent.putExtra(AddCommentActivity.EXTRA_NAME, model.getName());
-									intent.putExtra(AddCommentActivity.EXTRA_TYPE, CommentType.DEAL);
-									mActivity.startActivity(intent);
-								}
-							});
-						}else 
-						{
-							SDViewUtil.hide(mLl_button);
-							SDViewUtil.hide(tv_evaluate);
-							SDViewUtil.hide(v_line);
-							SDViewBinder.setTextView(tv_order, "已评价");
-						}
-					}
-				}else if(mStatus_value == 3)
-				{
-					SDViewBinder.setTextView(tv_order, "退款中");
-					SDViewUtil.hide(mLl_button);
-				}else if(mStatus_value == 4)
-				{
-					SDViewBinder.setTextView(tv_order, "已退款");
-					SDViewUtil.hide(mLl_button);
-				}else if(mStatus_value == 5)
-				{
-					if(model.getDp_id() == 0)
-					{
-						SDViewBinder.setTextView(tv_order, "待评价");
-						SDViewUtil.show(mLl_button);
-						SDViewUtil.show(tv_evaluate);
-						SDViewUtil.show(v_line);
-						tv_evaluate.setOnClickListener(new OnClickListener() {
-							
-							@Override
-							public void onClick(View v) 
-							{
-								Intent intent = new Intent(mActivity, AddCommentActivity.class);
-								intent.putExtra(AddCommentActivity.EXTRA_ID, model.getDeal_id());
-								intent.putExtra(AddCommentActivity.EXTRA_NAME, model.getName());
-								intent.putExtra(AddCommentActivity.EXTRA_TYPE, CommentType.DEAL);
-								mActivity.startActivity(intent);
-							}
-						});
-					}else
-					{
-						SDViewUtil.hide(mLl_button);
-						SDViewUtil.hide(tv_evaluate);
-						SDViewUtil.hide(v_line);
-						SDViewBinder.setTextView(tv_order, "已评价");
-					}
-				}else if(mStatus_value == 6)
-				{
-					SDViewBinder.setTextView(tv_order, "已取消");
-				}
-			}else
-			{
-				SDViewUtil.hide(mLl_button);
-			}
-			if(model.getDeal_id() ==0)
-			{
+			/**
+			 * 状态说明 0 没有申请退款  1:退款中,2:已退款,3,退款失败
+			 */
+			String goodsStatus="";
+			int refundStatus = model.getRefund_status();
+			switch (mOrderMode) {
+				case 1:
+					goodsStatus="";
+					SDViewBinder.setTextView(tv_order, goodsStatus);
+					break;
 				
+		
+			case 3:
+				SDViewUtil.show(mLl_button);
+				if (model.getDp_id()==1) {
+					SDViewUtil.show(tv_evaluate);
+					tv_evaluate.setText("追评");
+				}
+				SDViewUtil.show(tv_evaluate);
+				tv_evaluate.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						//TODO 评价
+						Intent intent = new Intent(mActivity, AddCommentActivity.class);
+						intent.putExtra(AddCommentActivity.EXTRA_ID, model.getDeal_id());
+						intent.putExtra(AddCommentActivity.EXTRA_NAME, model.getName());
+						intent.putExtra(AddCommentActivity.EXTRA_TYPE, CommentType.DEAL);
+						mActivity.startActivity(intent);
+					}
+				});
+				break;
+				
+				case 4:
+					if (refundStatus==1) {
+						goodsStatus="退款中";
+					}else if (refundStatus==2) {
+						goodsStatus="已退款";
+					}else if (refundStatus==3) {
+						goodsStatus="退款失败";
+					}else {
+						goodsStatus="";
+//						goodsStatus = getGoodsStatus(Integer.valueOf(model.getNumber()), Integer.valueOf(model.getConsume_count()), model.getDp_id(),model.getRefund_status());
+					}
+					SDViewBinder.setTextView(tv_order, goodsStatus);
+					defaultShow(model, mLl_button, tv_tuikuan);
+					break;
+			default:
+				if (mStatus_value!=0) {//已支付
+					goodsStatus = getGoodsStatus(Integer.valueOf(model.getNumber()), Integer.valueOf(model.getConsume_count()), model.getDp_id(),model.getRefund_status());
+				}else {
+					goodsStatus="";
+				}
+				SDViewBinder.setTextView(tv_order, goodsStatus);
+				defaultShow(model,mLl_button,tv_tuikuan);
+				break;
 			}
+			
+			// 0 没有申请退款 1:退款中,2:已退款
+						
 			convertView.setOnClickListener(new OnClickListener()
 			{
 				@Override
@@ -230,7 +213,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<Uc_orderGoodsModel>
 					{
 						Intent intent = new Intent(mActivity, StoreDetailActivity.class);
 						Bundle bundle=new Bundle();
-						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID, model.getLocation_id());
+						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID, Integer.valueOf(model.getLocation_id()).intValue());
 						bundle.putInt("type",0);
 						intent.putExtras(bundle);
 						mActivity.startActivity(intent);
@@ -243,6 +226,108 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<Uc_orderGoodsModel>
 		}
 		return convertView;
 	}
+	
+	/**
+	 * 显示默认的
+	 * @param model
+	 * @param mLl_button
+	 * @param tv_tuikuan
+	 */
+	private void defaultShow(final OrderInItem model, LinearLayout mLl_button, TextView tv_tuikuan){
+		if (model.getDeal_id() != 0 && mStatus_value!=0) {
+			int judgement=Integer.valueOf(model.getNumber()).intValue() - Integer.valueOf(model.getConsume_count()).intValue()- model.getRefunded() -model.getRefunding();
+			if (judgement > 0 && model.getIs_refund() == 1) {
+				SDViewUtil.show(mLl_button);
+				SDViewUtil.show(tv_tuikuan);
+//				SDViewUtil.show(v_line);
+
+				// TODO 退款
+				tv_tuikuan.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						int id=0;
+						try {
+							id = Integer.valueOf(model.getId()).intValue();
+						} catch (NumberFormatException e) {
+							SDToast.showToast("id错误!");
+							return;
+						}
+						gotoRefundApplication(id);
+					}
+				});
+			}
+
+		}
+	}
+	/**
+	 * 获取订单的状态
+	 * @return
+	 */
+	private String getGoodsStatus(int totalNum,int usedNum,int dianPing,int status){
+//		1. 待消费
+//		2. 已消费
+//		3.已评价
+//		4. 退款中
+//		5. 已退款
+//		6. 退款失败
+		//状态说明 0 没有申请退款  1:退款中,2:已退款, 
+		if (status==1) {
+			return "退款中";
+		}
+		if (status==2) {
+			return "已退款";
+		}
+		if (status==3) {
+			return "退款失败";
+		}
+		if (status==0) {
+			if (usedNum < totalNum) {
+				return "待消费";
+			}
+			if (usedNum==totalNum) {
+				if (dianPing==1) {
+					return "已消费";
+				}else {
+					return "已评价";
+				}
+			}
+		}
+//		switch (mOrderMode) {
+//		case 0:
+//			
+//			break;
+//		case 1:
+//			
+//			break;
+//		case 2:
+//	
+//			break;
+//		case 3:
+//			return "";
+//		case 4:
+//	
+//			break;
+//
+//		default:
+//			break;
+//		}
+		
+		return "";
+	}
+
+	/**
+	 * 去退款页面
+	 * @param goodsID
+	 */
+	private void gotoRefundApplication(int goodsID){
+		Intent intent=new Intent(mActivity,RefundApplicationActivity.class);
+		Bundle data=new Bundle();
+		data.putInt("extra_id", goodsID);
+		intent.putExtras(data);
+		mActivity.startActivity(intent);
+	}
+	
 	/**
 	 * 点击确认收货
 	 * 

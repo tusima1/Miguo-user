@@ -1,6 +1,6 @@
 package com.fanwe;
 
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.title.SDTitleItem;

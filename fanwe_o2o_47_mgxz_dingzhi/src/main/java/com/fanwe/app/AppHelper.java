@@ -34,5 +34,14 @@ public class AppHelper
 	{
 		return App.getApplication().getmLocalUser();
 	}
+	/**
+	 * 更新数据库中用户表中用户数据。
+	 * @param localUser
+	 */
+	
+	public static void updateLocalUser(LocalUserModel localUser)
+	{
+		 App.getApplication().setmLocalUser(localUser);
+	}
 
 }

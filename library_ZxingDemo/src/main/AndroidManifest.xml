@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.zxing"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -17,8 +18,9 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
+        android:theme="@style/AppTheme"
+        tools:replace="icon, label,theme">
+        <!--<activity
             android:name="com.fanwe.zxing.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
@@ -30,7 +32,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>-->
     </application>
 
 </manifest>

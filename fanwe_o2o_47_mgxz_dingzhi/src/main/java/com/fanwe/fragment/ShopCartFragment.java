@@ -174,13 +174,14 @@ public class ShopCartFragment extends BaseFragment {
 		listModel=null;
 		mCb_xuanze.setChecked(false);
 		mCB_xuanze.setChecked(false);
+		SDViewUtil.hide(mLl_compile);
+		
 		
 		//重置下巴(结算)
 		mBt_account.setText("结算");
 		mBt_account.setBackgroundColor(getResources().getColor(
 				R.color.text_fenxiao));
 		mBt_account.setClickable(false);
-		mBt_delect.setClickable(false);
 		mTv_sum.setText("0.00");
 	}
 
@@ -567,8 +568,8 @@ public class ShopCartFragment extends BaseFragment {
 	private void clickSettleAccounts() {
 		if (mLlPhoneLogin.getVisibility() == View.VISIBLE) {
 			
-	    String mobileNumber = mEt_mobile.getText().toString();
-			if (TextUtils.isEmpty(mobileNumber)) {
+			mStrMobile =mEt_mobile.getText().toString();
+			if (TextUtils.isEmpty(mStrMobile)) {
 				SDToast.showToast("请输入手机号");
 				return;
 			}
@@ -588,6 +589,7 @@ public class ShopCartFragment extends BaseFragment {
 	}
 
 	private void requestCheckCart() {
+		
 		if (mActModel == null) {
 			return;
 		}
@@ -598,6 +600,7 @@ public class ShopCartFragment extends BaseFragment {
 		if (mAdapter != null) {
 			model.put("num", mAdapter.getMapNumber());
 		}
+		
 		model.put("mobile", mStrMobile);
 		model.put("sms_verify", mStrCode);
 		model.put("invite_mobile", mStrReference);

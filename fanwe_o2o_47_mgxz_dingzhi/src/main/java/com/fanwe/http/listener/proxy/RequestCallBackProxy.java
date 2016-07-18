@@ -14,7 +14,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSONException;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.UserLoginState;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;

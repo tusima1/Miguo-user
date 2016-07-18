@@ -206,14 +206,14 @@ public class AppJsHandler extends BaseJsHandler {
 	 * @param userId
 	 */
 	@JavascriptInterface
-	public void addCart(int productId, int userId) {
+	public void addCart(String productId, String userId) {
 		// 保存购物车
 		RequestModel request = new RequestModel();
 		request.putCtl("cart");
 		request.putAct("addcart");
 		request.put("id", productId);
 		request.put("uid", userId);
-		request.put("num", 1);
+		request.put("number", 1);
 
 		SDRequestCallBack<Cart_check_cartActModel> handler = new SDRequestCallBack<Cart_check_cartActModel>() {
 			@Override

@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.fanwe.app.AppConfig;
 import com.fanwe.common.ImageLoaderManager;
-import com.fanwe.config.AppConfig;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.utils.SDViewBinder;

@@ -8,7 +8,7 @@ import com.fanwe.MainActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.jpush.MessageHelper;
@@ -94,11 +94,10 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 		try {
 			obj = new JSONObject(extras);
 			object_id=obj.getInt("object_id");
-			messsage_id=obj.getInt("messsage_id");
-			messsage_type=obj.getInt("messsage_type");
+			messsage_id=obj.getInt("message_id");
+			messsage_type=obj.getInt("message_type");
 			act=obj.getString("message_act");
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

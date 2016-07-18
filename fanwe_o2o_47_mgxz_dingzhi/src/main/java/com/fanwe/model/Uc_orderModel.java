@@ -37,9 +37,51 @@ public class Uc_orderModel
 	private int refund_status;
 	private int status_value;//0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结
 	
+	
 	// add
 	private String total_priceFormat;
 	private String pay_amountFormat;
+	
+//	 'item': [
+//	          {
+//	            'id': '164',
+//	            'order_sn': '2016020206300523',
+//	            'order_status': '0',
+//	            'pay_status': '2',
+//	            'payment_id': '0', //0,15余额支付; 16,17,20,21支付宝; 23,25微信；
+//	            'refund_status': '0',
+//	            'create_time': '2016-02-02 18:30:05',
+//	            'pay_amount': 14.5, //已支付总额
+//	            'total_price': 14.5, //订单总额
+//	            'c': 1, //包含商品总数
+//	            'deal_order_item': [
+//	              {
+//	                'order_sn': '2016020206300523',
+//	                'slname': '老家面',
+//	                'supplier_id': '805', //商家ID
+//	                'location_id': '855', //门店ID，跳转到门店详情界面时请以data_id名称传此参数
+//	                'fx_user_id': '123', //分销ID，如果是分销订单,请以uid的名称传该参数
+//	                'cate_id': 8,
+//	                'id': '190',
+//	                'deal_id': 4592, //当商品ID为0时表示到店支付优惠买单
+//	                'deal_icon': 'http://mgxz.web.com/public/attachment/201510/27/11/562ef0b30252a_244x148.jpg',
+//	                'name': '【嵊州】老家面 仅售14.5元！价值17元的三鲜面一份，提供免费WiFi',
+//	                'sub_name': '老家面14.5元三鲜面',
+//	                'number': '1',
+//	                'unit_price': 14.5,
+//	                'total_price': 14.5,
+//	                'consume_count': 0, //消费数量，为0则是待消费
+//	                'dp_id': 0, //点评ID，如果没点评则为0
+//	                'delivery_status': 5,
+//	                'is_arrival': 0,
+//	                'is_refund': 1,
+//	                'refund_status': 0 //0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结
+//	              }
+//	            ],
+//	            'status': '已支付',
+//	            'status_value': 2 //0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结,6:已取消
+//	          }
+//	        ],
 
 	
 	public int getPayment_id() {

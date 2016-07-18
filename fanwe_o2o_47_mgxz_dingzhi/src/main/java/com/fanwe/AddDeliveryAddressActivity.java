@@ -10,8 +10,8 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.config.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.Region_confModelDao;
 import com.fanwe.event.EnumEventTag;

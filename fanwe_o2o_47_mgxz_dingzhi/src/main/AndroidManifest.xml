@@ -3,11 +3,11 @@
           xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.o2o.miguo"
     android:installLocation="auto"
-    android:versionCode="2016062401"
-    android:versionName="5.4.0" >
+    android:versionCode="2016071601"
+    android:versionName="5.5.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="12"
         android:targetSdkVersion="19" />
 
     <permission
@@ -50,15 +50,13 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!--android:theme="@style/FanweTheme"-->
     <application
         android:name="com.fanwe.app.App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
-        tools:replace="icon, label,theme"
-        >
+        tools:replace="icon, label,theme">
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
             android:label="@string/app_name" >
@@ -802,6 +800,22 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        
+        <!-- 申请退款new -->
+        <activity
+            android:name="com.fanwe.RefundApplicationActivity"
+            android:configChanges="keyboard|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" >
+        </activity>
+        
+        <!-- 待消费订单new -->
+        <activity
+            android:name="com.fanwe.OrderWait2UseActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
 
         <!-- 升级服务 -->
         <service android:name="com.fanwe.service.AppUpgradeService" >
@@ -840,7 +854,7 @@
         <!-- 正式版用正式的key -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="@string/test_umeng_key" >
+            android:value="@string/umeng_key" >
         </meta-data>
         <!-- 友盟统计分析-渠道 -->
         <meta-data android:value="HuaWei" android:name="UMENG_CHANNEL"/>

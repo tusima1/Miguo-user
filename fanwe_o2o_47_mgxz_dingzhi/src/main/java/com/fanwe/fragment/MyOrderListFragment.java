@@ -13,9 +13,11 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.OrderOutItem;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_orderModel;
 import com.fanwe.model.Uc_order_indexActModel;
+import com.fanwe.model.User_Order;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -48,15 +50,15 @@ public class MyOrderListFragment extends BaseFragment
 	private View mLl_empty;
 
 	private MyOrderListAdapter mAdapter;
-	private List<Uc_orderModel> mListModel = new ArrayList<Uc_orderModel>();
+	private List<OrderOutItem> mListModel = new ArrayList<OrderOutItem>();
 
 	private int mPage =1;
 
 	private String mPayStatus;
 	
 	private boolean mStatus = false;
-
-	protected Uc_order_indexActModel mActModel;
+	private int mOrderMode;
+	protected User_Order mActModel;
 
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -81,17 +83,22 @@ public class MyOrderListFragment extends BaseFragment
 		if(mPayStatus.equals("pay_wait"))
 		{
 			title = "待付款订单";
+			mOrderMode=1;
 		}else if(mPayStatus.equals("refund"))
 		{
 			title = "退款订单";
+			mOrderMode=4;
 		}else if(mPayStatus.equals("use_wait"))
 		{
 			title = "待消费订单";
+			mOrderMode=2;
 		}else if(mPayStatus.equals("comment_wait"))
 		{
 			title = "待评价订单";
+			mOrderMode=3;
 		}else if(mPayStatus.equals("all")){
 			title = "全部订单";
+			mOrderMode=0;
 		}
 		
 		mTitle.setMiddleTextTop(title);
@@ -110,7 +117,7 @@ public class MyOrderListFragment extends BaseFragment
 			mStatus = false;
 		}else
 		{
-			mAdapter = new MyOrderListAdapter(mListModel, getActivity(),true);
+			mAdapter = new MyOrderListAdapter(mListModel, getActivity(),true,mOrderMode);
 			mPtrlv_content.setAdapter(mAdapter);
 			mTitle.getItemRight(0).setTextTop("完成");
 			mStatus = true;
@@ -123,7 +130,7 @@ public class MyOrderListFragment extends BaseFragment
 
 	private void bindDefaultData()
 	{
-		mAdapter = new MyOrderListAdapter(mListModel, getActivity(),false);
+		mAdapter = new MyOrderListAdapter(mListModel, getActivity(),false,mOrderMode);
 		mPtrlv_content.setAdapter(mAdapter);
 	}
 	
@@ -167,7 +174,7 @@ public class MyOrderListFragment extends BaseFragment
 		model.put("type", mPayStatus);
 		model.putUser();
 		model.putPage(mPage);
-		SDRequestCallBack<Uc_order_indexActModel> handler = new SDRequestCallBack<Uc_order_indexActModel>()
+		SDRequestCallBack<User_Order> handler = new SDRequestCallBack<User_Order>()
 		{
 
 			@Override

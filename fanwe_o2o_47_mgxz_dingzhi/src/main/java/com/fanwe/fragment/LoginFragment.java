@@ -1,8 +1,8 @@
 package com.fanwe.fragment;
 
 import com.fanwe.MainActivity;
+import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.config.AppConfig;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;

@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyXiaomiDetailActivity;
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBaseAdapter;

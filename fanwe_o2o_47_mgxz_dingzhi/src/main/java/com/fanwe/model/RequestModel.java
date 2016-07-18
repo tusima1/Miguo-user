@@ -9,8 +9,8 @@ import java.util.Map;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.app.AppConfig;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.config.AppConfig;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.work.AppRuntimeWorker;
 

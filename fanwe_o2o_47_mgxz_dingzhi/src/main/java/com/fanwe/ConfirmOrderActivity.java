@@ -2,15 +2,6 @@ package com.fanwe;
 
 import java.util.ArrayList;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -28,7 +19,6 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDTypeParseUtil;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Cart_checkActModel;
 import com.fanwe.model.Cart_count_buy_totalModel;
 import com.fanwe.model.Cart_doneActModel;
@@ -43,6 +33,14 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 /**
  * 确认订单
@@ -107,7 +105,7 @@ public class ConfirmOrderActivity extends BaseActivity
 	{
 		mPtrsvAll = (PullToRefreshScrollView) findViewById(R.id.act_confirm_order_ptrsv_all);
 		mBtnConfirmOrder = (Button) findViewById(R.id.act_confirm_order_btn_confirm_order);
-		tv_dingdan = (TextView)findViewById(R.id.tv_panduan);
+//		tv_dingdan = (TextView)findViewById(R.id.tv_panduan);
 	}
 
 	private void addFragments()
@@ -269,14 +267,14 @@ public class ConfirmOrderActivity extends BaseActivity
 		{
 			return;
 		}
-		if(mCheckActModel.getListCartGroupsGoods().size() > 1)
-		{
-			
-			SDViewUtil.show(tv_dingdan);
-		}else
-		{
-			SDViewUtil.hide(tv_dingdan);
-		}
+//		if(mCheckActModel.getListCartGroupsGoods().size() > 1)
+//		{
+//			
+//			SDViewUtil.show(tv_dingdan);
+//		}else
+//		{
+//			SDViewUtil.hide(tv_dingdan);
+//		}
 		
 		// 绑定商品数据
 		mFragGoods.setmCheckActModel(mCheckActModel);
@@ -433,6 +431,8 @@ public class ConfirmOrderActivity extends BaseActivity
 	 */
 	protected void requestDoneOrder()
 	{
+		
+		 
 		RequestModel model = new RequestModel();
 		model.putCtl("cart");
 		model.putAct("done");
@@ -465,6 +465,8 @@ public class ConfirmOrderActivity extends BaseActivity
 			@Override
 			public void onFinish()
 			{
+				mBtnConfirmOrder.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
+				mBtnConfirmOrder.setClickable(true);
 				SDDialogManager.dismissProgressDialog();
 			}
 		};
@@ -500,8 +502,15 @@ public class ConfirmOrderActivity extends BaseActivity
 		mBtnConfirmOrder.setOnClickListener(new OnClickListener()
 		{
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v){
+				
+				
+				//支付方式选择。
+//				if(mFragPayments==null|| mFragPayments.getPaymentId()==0){
+//					
+//				}
+//				
+				
 				if (v.isClickable()) {
 					v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
 					v.setClickable(false);
@@ -511,6 +520,7 @@ public class ConfirmOrderActivity extends BaseActivity
 					v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
 					v.setClickable(true);
 				}
+				
 				requestDoneOrder();
 			}
 		});

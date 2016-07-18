@@ -70,40 +70,5 @@
             ptr:ptrHeaderTextColor="@color/gray" >
         </com.handmark.pulltorefresh.library.PullToRefreshListView>
     </RelativeLayout>
-    <!--
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/act_events_detail_ptrsv_all"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scrollbars="none"
-        ptr:ptrHeaderSubTextColor="@android:color/black"
-        ptr:ptrHeaderTextColor="@android:color/black" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <FrameLayout
-                android:id="@+id/act_event_detail_fl_top"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/act_event_detail_fl_field"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/act_event_detail_fl_comment"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-            </FrameLayout>
-        </LinearLayout>
-    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
-    -->
 
 </FrameLayout>

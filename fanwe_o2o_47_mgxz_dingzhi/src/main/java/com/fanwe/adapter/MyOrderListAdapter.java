@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.fanwe.OrderDetailActivity;
 import com.fanwe.RefundGoodsActivity;
-import com.fanwe.RefundTuanActivity;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBaseAdapter;
@@ -20,38 +19,35 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.BaseActModel;
-import com.fanwe.model.Uc_orderGoodsModel;
-import com.fanwe.model.Uc_orderModel;
-import com.fanwe.model.Uc_orderModelParcelable;
+import com.fanwe.model.OrderInItem;
+import com.fanwe.model.OrderOutItem;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
+public class MyOrderListAdapter extends SDBaseAdapter<OrderOutItem>
 {
 	
-	private static final int COLOR_DISABLE = R.color.gray;
-	private static final int COLOR_ENABLE = R.color.main_color;
 	protected static final RefundGoodsActivity SetUc_orderModel = null;
-	private List<Uc_orderGoodsModel> listGoods;
+	private List<OrderInItem> listGoods;
 	
 	private boolean isDelect = false;
 	private TextView tv_delect;
+	private int mOrderMode;//0,1,2,3,
 	
-	public MyOrderListAdapter(List<Uc_orderModel> listModel, Activity activity,boolean isDelect)
+	public MyOrderListAdapter(List<OrderOutItem> listModel, Activity activity,boolean isDelect,int orderMode)
 	{
 		super(listModel, activity);
 		this.isDelect = isDelect;
+		this.mOrderMode=orderMode;
 	}
 
 	@Override
@@ -68,15 +64,15 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 		TextView tv_money = ViewHolder.get(R.id.tv_money, convertView);
 		tv_delect = ViewHolder.get(R.id.tv_delect, convertView);
 		TextView tv_pay = ViewHolder.get(R.id.tv_pay, convertView);
-		TextView tv_refund = ViewHolder.get(R.id.tv_refund, convertView); 
+//		TextView tv_refund = ViewHolder.get(R.id.tv_refund, convertView); 
 		TextView tv_cancel_order = ViewHolder.get(R.id.tv_cancel_order, convertView); 
 
-		final Uc_orderModel model = getItem(position);
+		final OrderOutItem model = getItem(position);
 		if (model != null)
 		{
 			
 			listGoods = model.getDeal_order_item();
-			MyOrderListGoodsAdapter adapter = new MyOrderListGoodsAdapter(listGoods,true,mActivity,model.getStatus_value());
+			MyOrderListGoodsAdapter adapter = new MyOrderListGoodsAdapter(listGoods,model.getStatus(),mActivity,model.getStatus_value(),mOrderMode);
 			if (!SDCollectionUtil.isEmpty(listGoods))
 			{
 				ll_goods.removeAllViews();
@@ -84,7 +80,8 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 				for (int i = 0; i < size; i++)
 				{
 					ll_goods.addView(adapter.getView(i, null, null));
-					if(listGoods.get(i).getDeal_id()==0 && isDelect)
+					OrderInItem inItem = listGoods.get(i);
+					if(inItem.getDeal_id()==0 && isDelect)
 					{
 						SDViewUtil.show(tv_delect);
 						SDViewUtil.show(ll_order_list);
@@ -116,7 +113,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 						public void onClick(View v) 
 						{
 							Intent intent = new Intent(mActivity, OrderDetailActivity.class);
-							intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, model.getId());
+							intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, Integer.valueOf(model.getId()).intValue());
 							mActivity.startActivity(intent);
 						}
 					});
@@ -148,7 +145,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 						public void onClick(View v)
 						{
 							Intent intent = new Intent(mActivity, OrderDetailActivity.class);
-							intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, model.getId());
+							intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, Integer.valueOf(model.getId()).intValue());
 							mActivity.startActivity(intent);
 						}
 					});
@@ -167,58 +164,6 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 					SDViewUtil.hide(tv_pay_again);
 					//SDViewUtil.hide(tv_cancel_order);
 					SDViewUtil.hide(tv_delect);
-				}
-				if(model.getStatus_value() ==2)
-				{
-					SDViewUtil.show(ll_order_list);
-					SDViewUtil.show(tv_refund);
-					tv_refund.setOnClickListener(new OnClickListener()
-					{
-						@Override
-						public void onClick(View v) 
-						{
-							if (listGoods.get(0).isShop())
-							{
-								Uc_orderModelParcelable uc_orderModel1 =new Uc_orderModelParcelable();
-								uc_orderModel1.setId(model.getId());
-								uc_orderModel1.setOrder_sn(model.getOrder_sn());
-								uc_orderModel1.setCreate_time(model.getCreate_time());
-								uc_orderModel1.setC(model.getC());
-								uc_orderModel1.setPayment_id(model.getPayment_id());
-								uc_orderModel1.setStatus(model.getStatus());
-								uc_orderModel1.setTotal_priceFormat(model.getTotal_priceFormat());
-								uc_orderModel1.setPay_amountFormat(model.getPay_amountFormat());
-								
-								Intent intent = new Intent(mActivity, RefundGoodsActivity.class);
-								Bundle bundle =new Bundle();
-								bundle.putParcelable("model", uc_orderModel1);
-								bundle.putInt(RefundGoodsActivity.EXTRA_ID,  model.getId());
-								intent.putExtras(bundle);
-								mActivity.startActivity(intent);
-							} else
-							{
-								Uc_orderModelParcelable uc_orderModel2 =new Uc_orderModelParcelable();
-								uc_orderModel2.setId(model.getId());
-								uc_orderModel2.setOrder_sn(model.getOrder_sn());
-								uc_orderModel2.setCreate_time(model.getCreate_time());
-								uc_orderModel2.setC(model.getC());
-								uc_orderModel2.setPayment_id(model.getPayment_id());
-								uc_orderModel2.setStatus(model.getStatus());
-								uc_orderModel2.setTotal_priceFormat(model.getTotal_priceFormat());
-								uc_orderModel2.setPay_amountFormat(model.getPay_amountFormat());
-								Intent intent = new Intent(mActivity, RefundTuanActivity.class);
-								Bundle bundle =new Bundle ();
-								bundle.putParcelable("model", uc_orderModel2);
-								bundle.putInt(RefundGoodsActivity.EXTRA_ID,  model.getId());
-								intent.putExtras(bundle);
-								mActivity.startActivity(intent);
-							}
-						}
-					});
-				}else
-				{
-					SDViewUtil.hide(ll_order_list);
-					SDViewUtil.hide(tv_refund);
 				}
 				
 				if(model.getStatus_value() ==3 || model.getStatus_value() ==4 
@@ -266,11 +211,21 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 				}
 			}
 		}
+		
+		/**
+		 * 状态汇总
+		 */
+		if (tv_cancel_order.getVisibility()==View.GONE  && tv_pay.getVisibility() ==View.GONE && tv_pay_again.getVisibility() ==View.GONE && tv_delect.getVisibility() ==View.GONE) {
+			SDViewUtil.hide(ll_order_list);
+		}
+		
+		
+		
 		return convertView;
 	}
 	
 
-	protected void cancelOrder(final Uc_orderModel model, final int position)
+	protected void cancelOrder(final OrderOutItem model, final int position)
 	{
 		if (model == null)
 		{
@@ -304,9 +259,9 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 		
 	}
 
-	protected void requestCanCelOrder(final Uc_orderModel model,final int position)
+	protected void requestCanCelOrder(final OrderOutItem model,final int position)
 	{
-		CommonInterface.requestCanCelOrder(model.getId(), new SDRequestCallBack<BaseActModel>()
+		CommonInterface.requestCanCelOrder(Integer.valueOf(model.getId()).intValue(), new SDRequestCallBack<BaseActModel>()
 				{
 
 					@Override
@@ -341,7 +296,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 		
 	}
 
-	private void deleteOrder(final Uc_orderModel model, final int position)
+	private void deleteOrder(final OrderOutItem model, final int position)
 	{
 		if (model == null)
 		{
@@ -373,9 +328,9 @@ public class MyOrderListAdapter extends SDBaseAdapter<Uc_orderModel>
 		dialog.show();
 	}
 
-	private void requestDeleteOrder(final Uc_orderModel model, final int position)
+	private void requestDeleteOrder(final OrderOutItem model, final int position)
 	{
-		CommonInterface.requestDeleteOrder(model.getId(), new SDRequestCallBack<BaseActModel>()
+		CommonInterface.requestDeleteOrder(Integer.valueOf(model.getId()).intValue(), new SDRequestCallBack<BaseActModel>()
 		{
 
 			@Override

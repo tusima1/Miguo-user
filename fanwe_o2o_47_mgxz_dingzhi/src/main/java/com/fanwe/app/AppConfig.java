@@ -1,4 +1,4 @@
-package com.fanwe.config;
+package com.fanwe.app;
 
 import com.fanwe.library.config.SDConfig;
 import com.fanwe.o2o.miguo.R;

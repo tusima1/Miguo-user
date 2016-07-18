@@ -2,8 +2,8 @@ package com.fanwe.model;
 
 public class Check_MobActModel {
 	
-	private int exists;
-	private int is_tmp;
+	private int exists=0;
+	private int is_tmp=0;
 	private int status;
 	private String info;
 	public int getExists() {

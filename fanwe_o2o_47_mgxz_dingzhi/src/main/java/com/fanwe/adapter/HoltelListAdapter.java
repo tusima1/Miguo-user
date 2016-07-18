@@ -1,14 +1,18 @@
 package com.fanwe.adapter;
 
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -22,9 +26,9 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.HoltelModel_list;
+import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
-
-import java.util.List;
+import com.umeng.socialize.utils.Log;
 
 public class HoltelListAdapter extends SDSimpleBaseAdapter<HoltelModel_list>{
 

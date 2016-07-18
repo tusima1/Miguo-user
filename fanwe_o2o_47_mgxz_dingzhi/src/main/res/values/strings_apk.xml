@@ -4,7 +4,8 @@
     <!-- 打包需要修改 start -->
     <string name="app_name">米果小站</string>
     <string name="baidu_key">CBMjUKLd1PonYdwk71lWEQju</string>
-    <string name="umeng_key">5577d85867e58e5a430041bb</string>
+    <string name="umeng_key_out">5577d85867e58e5a430041bb</string>
+    <string name="umeng_key">5775ebcc67e58e87c400137b</string>
     <string name="test_umeng_key">5771efee67e58e049a000849</string>
     <!-- <string name="umeng_message_secret">586f480ecef8437b692acacc723f187d</string> -->
     <string name="jpush_appkey">4d41777777afe13b780d3c31</string>

@@ -3,10 +3,10 @@ package com.fanwe;
 import java.io.File;
 
 import com.fanwe.app.App;
+import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.common.ImageLoaderManager;
-import com.fanwe.config.AppConfig;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.SettingModelDao;
@@ -24,6 +24,7 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
+import com.fanwe.model.Cart_check_cartActModel;
 import com.fanwe.model.Discover_indexActModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
@@ -137,7 +138,7 @@ public class MyAccountActivity extends BaseActivity {
 	@ViewInject(R.id.iv_user_face)
 	private CircularImageView mUserFace;// 头像
 
-	private String mUserFaceString;
+	private String mUserFaceString = "";
 	private LocalUserModel mUser;
 
 	private UserFaceModule mUserFaceModule;
@@ -163,7 +164,10 @@ public class MyAccountActivity extends BaseActivity {
 
 	private void initBundle() {
 		Bundle extras = getIntent().getExtras();
-		mUserFaceString = extras.getString("user_face");
+		if (extras != null) {
+			mUserFaceString = extras.getString("user_face");
+		}
+
 	}
 
 	private void bindData() {
@@ -175,26 +179,31 @@ public class MyAccountActivity extends BaseActivity {
 			mCb_load_image_in_mobile_net.setChecked(false);
 			mCb_load_image_in_mobile_net.setText("否");
 		}
-		mCb_load_image_in_mobile_net.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		mCb_load_image_in_mobile_net
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
 
-				if (isChecked) {
-					SettingModelDao.updateLoadImageType(LoadImageType.ALL);
-					mCb_load_image_in_mobile_net.setText("是");
-				} else {
-					SettingModelDao.updateLoadImageType(LoadImageType.ONLY_WIFI);
-					mCb_load_image_in_mobile_net.setText("否");
-				}
-			}
-		});
+						if (isChecked) {
+							SettingModelDao
+									.updateLoadImageType(LoadImageType.ALL);
+							mCb_load_image_in_mobile_net.setText("是");
+						} else {
+							SettingModelDao
+									.updateLoadImageType(LoadImageType.ONLY_WIFI);
+							mCb_load_image_in_mobile_net.setText("否");
+						}
+					}
+				});
 
 		PackageInfo pi = SDPackageUtil.getCurrentPackageInfo();
 		mTv_version.setText(String.valueOf(pi.versionName));
 
 		String kfPhone = AppRuntimeWorker.getKf_phone();
 		SDViewBinder.setTextView(mTv_kf_phone, kfPhone);
-		SDViewBinder.setImageView(mUserFaceString, mUserFace, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+		SDViewBinder.setImageView(mUserFaceString, mUserFace,
+				ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
 
 	}
 
@@ -214,7 +223,7 @@ public class MyAccountActivity extends BaseActivity {
 		}
 
 		// 使用appconfig里的数据
-		mEt_username.setText(AppConfig.getUserName());
+		mEt_username.setText(mUser.getUser_name());
 		mEt_email.setText(mUser.getUser_email());
 
 		int isTemp = mUser.getIs_tmp();
@@ -284,7 +293,8 @@ public class MyAccountActivity extends BaseActivity {
 	}
 
 	private void clickTestUpgrade() {
-		Intent intent = new Intent(App.getApplication(), AppUpgradeService.class);
+		Intent intent = new Intent(App.getApplication(),
+				AppUpgradeService.class);
 		intent.putExtra(AppUpgradeService.EXTRA_SERVICE_START_TYPE, 1);
 		startService(intent);
 	}
@@ -332,7 +342,7 @@ public class MyAccountActivity extends BaseActivity {
 			clickAbout();
 		} else if (v == mRlUpgrade) {
 			clickTestUpgrade();
-		}else if (v == mUserFace) {
+		} else if (v == mUserFace) {
 			clickUserFace();
 		}
 	}
@@ -376,7 +386,8 @@ public class MyAccountActivity extends BaseActivity {
 		LayoutInflater inflater = this.getLayoutInflater();
 		View view = inflater.inflate(R.layout.myaccount_dialog, null);
 		TextView mTv_name = (TextView) view.findViewById(R.id.tv_name);
-		final EditText mInputName = (EditText) view.findViewById(R.id.inputName);
+		final EditText mInputName = (EditText) view
+				.findViewById(R.id.inputName);
 		mTv_name.setText("当前的用户名: " + mEt_username.getText());
 		final AlertDialog alertdialog = new AlertDialog.Builder(this).create();
 		// 在此使用setview方法可以设置布局文件和alertdialog四周边框的距离，可以消除黑边框
@@ -420,31 +431,35 @@ public class MyAccountActivity extends BaseActivity {
 		model.putAct("update");
 		model.put("user_name", name);
 
-		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Discover_indexActModel>() {
-			@Override
-			public void onStart() {
-				SDDialogManager.showProgressDialog("");
-			}
+		InterfaceServer.getInstance().requestInterface(model,
+				new SDRequestCallBack<Discover_indexActModel>() {
+					@Override
+					public void onStart() {
+						SDDialogManager.showProgressDialog("");
+					}
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					mEt_username.setText(name);
-					AppConfig.setUserName(name);
-				}
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						if (actModel.getStatus() == 1) {
+							mEt_username.setText(name);
+							mUser.setUser_name(name);
+							AppHelper.updateLocalUser(mUser);
 
-			}
+							AppConfig.setUserName(name);
+						}
 
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-			}
+					}
 
-			@Override
-			public void onFailure(HttpException error, String msg) {
-				SDToast.showToast("修改失败,请检查网络...");
-			}
-		});
+					@Override
+					public void onFinish() {
+						SDDialogManager.dismissProgressDialog();
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						SDToast.showToast("修改失败,请检查网络...");
+					}
+				});
 	}
 
 	private void clickWithdraw(View v) {
@@ -459,12 +474,40 @@ public class MyAccountActivity extends BaseActivity {
 	}
 
 	private void clickLogout(View v) {
-		SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
-		CommonInterface.requestLogout(null);
+		//调服务器退出登录接口。
+		RequestModel model = new RequestModel();
+		model.putCtl("user");
+		model.putAct("loginout");		
+		
+		SDRequestCallBack<Cart_check_cartActModel> handler = new SDRequestCallBack<Cart_check_cartActModel>() {
+			@Override
+			public void onStart() {
+				SDDialogManager.showProgressDialog("请稍候");
+			}
 
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				if (actModel.getStatus() == 1) {
+					
+				}
+			}
+
+			@Override
+			public void onFinish() {
+				SDDialogManager.dismissProgressDialog();
+			}
+		};
+		InterfaceServer.getInstance().requestInterface(model, handler);
+		SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
+		
+		CommonInterface.requestLogout(null);
+		App.getApplication().setmLocalUser(new LocalUserModel());
 		App.getApplication().clearAppsLocalUserModel();
 		AppConfig.setSessionId("");
+		AppConfig.setUserName("");
 		AppConfig.setRefId("");
+		
+		
 	}
 
 	/**
@@ -612,7 +655,8 @@ public class MyAccountActivity extends BaseActivity {
 	 * @param v
 	 */
 	private void clickBindMobile(View v) {
-		Intent intent = new Intent(getApplicationContext(), BindMobileActivity.class);
+		Intent intent = new Intent(getApplicationContext(),
+				BindMobileActivity.class);
 		startActivity(intent);
 	}
 
@@ -628,28 +672,29 @@ public class MyAccountActivity extends BaseActivity {
 		model.put("user_name", mStrUsername);
 		model.put("user_email", mStrEmail);
 
-		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<User_infoModel>() {
+		InterfaceServer.getInstance().requestInterface(model,
+				new SDRequestCallBack<User_infoModel>() {
 
-			@Override
-			public void onStart() {
-				SDDialogManager.showProgressDialog("请稍候");
-			}
+					@Override
+					public void onStart() {
+						SDDialogManager.showProgressDialog("请稍候");
+					}
 
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-			}
+					@Override
+					public void onFinish() {
+						SDDialogManager.dismissProgressDialog();
+					}
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					AppConfig.setUserName(actModel.getUser_name());
-					LocalUserModel.dealLoginSuccess(actModel, false);
-					initViewState();
-					initTitle();
-				}
-			}
-		});
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						if (actModel.getStatus() == 1) {
+							AppConfig.setUserName(actModel.getUser_name());
+							LocalUserModel.dealLoginSuccess(actModel, false);
+							initViewState();
+							initTitle();
+						}
+					}
+				});
 	}
 
 	private boolean validateParams() {
@@ -684,14 +729,14 @@ public class MyAccountActivity extends BaseActivity {
 		super.onResume();
 		bindData();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		mUserFaceModule.onDestory();
-		mUserFaceModule=null;
+		mUserFaceModule = null;
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		mUserFaceModule.onActivityResult(requestCode, resultCode, data);

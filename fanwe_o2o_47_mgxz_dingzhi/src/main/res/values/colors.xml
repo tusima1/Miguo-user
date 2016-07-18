@@ -46,4 +46,6 @@
     
     <color name="c_F2F2F2">#F2F2F2</color>
     <color name="c_FF443E">#FF443E</color>
+    <!-- hint 灰色字体 rgb 204,204,204 -->
+    <color name="c_CCCCCC">#CCCCCC</color>
 </resources>

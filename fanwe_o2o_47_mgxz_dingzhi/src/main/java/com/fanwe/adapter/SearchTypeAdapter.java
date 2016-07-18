@@ -20,7 +20,6 @@ public class SearchTypeAdapter extends SDBaseAdapter<SearchTypeModel>
 	public SearchTypeAdapter(List<SearchTypeModel> listModel, Activity activity)
 	{
 		super(listModel, activity);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -37,11 +36,11 @@ public class SearchTypeAdapter extends SDBaseAdapter<SearchTypeModel>
 			SDViewBinder.setTextView(tvCategory, model.getName());
 			if (model.isSelect())
 			{
-				tvCategory.setBackgroundResource(R.drawable.layer_main_color_normal);
+				tvCategory.setBackgroundResource(R.drawable.shape_cricle_yellow);
 				tvCategory.setTextColor(SDResourcesUtil.getColor(R.color.white));
 			} else
 			{
-				tvCategory.setBackgroundResource(R.drawable.layer_white_stroke_all);
+				tvCategory.setBackgroundResource(R.drawable.shape_cricle_gray_solid_white);
 				tvCategory.setTextColor(SDResourcesUtil.getColor(R.color.gray));
 			}
 		}

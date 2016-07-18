@@ -79,7 +79,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/text_fenxiao"
                     android:clickable="false"
-                    android:onClick="onClickAccount"
                     android:text="结算"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -137,7 +136,6 @@
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="#595959"
-                    android:onClick="onClickAccount"
                     android:text="移到收藏夹"
                     android:textSize="14sp" />
 

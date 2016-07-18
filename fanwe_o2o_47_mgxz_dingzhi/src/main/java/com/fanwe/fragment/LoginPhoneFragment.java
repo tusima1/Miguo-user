@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import com.fanwe.RegisterActivity;
 import com.fanwe.SetPwActivity;
+import com.fanwe.app.AppConfig;
 import com.fanwe.common.CommonInterface;
-import com.fanwe.config.AppConfig;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
@@ -105,7 +105,7 @@ public class LoginPhoneFragment extends LoginBaseFragment
 					public void onSuccess(ResponseInfo<String> responseInfo)
 					{
 						mActModel = actModel;
-						if(actModel.getExists() == 1  && actModel.getIs_tmp() ==0)
+						if(actModel.getExists() == 1)
 						{
 							requestSendCode();
 						}else

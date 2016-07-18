@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="40dip"
         android:layout_margin="10dip"
-        android:background="@drawable/selector_white_gray"
+        android:background="@drawable/shape_cricle_gray_solid_white"
         android:gravity="center"
         android:text="搜索"
         android:textColor="@color/gray" />

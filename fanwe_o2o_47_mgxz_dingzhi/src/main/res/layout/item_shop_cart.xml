@@ -135,14 +135,17 @@
 
                             <EditText
                                 android:id="@+id/et_number"
-                                android:layout_width="26dp"
+                                android:layout_width="wrap_content"
+                                android:maxWidth="100dp"
+                                android:minWidth="16dp"
+                                android:maxLength="3"
                                 android:layout_height="19dp"
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginRight="5dp"
                                 android:background="@drawable/submit_order_num"
                                 android:gravity="center"
                                 android:inputType="number"
-                                android:maxLength="3"
+                                
                                 android:singleLine="true"
                                 android:textColor="@color/gray"
                                 android:textCursorDrawable="@null"

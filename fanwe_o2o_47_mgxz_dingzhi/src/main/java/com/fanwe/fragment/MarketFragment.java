@@ -225,7 +225,6 @@ public class MarketFragment extends BaseFragment{
 		model.put("cate_id",mCate_id);
 		model.putPage(mPage.getPage());
 		model.put("fx_seach_key",mStrKeyword);
-		SDToast.showToast("市场城市id:"+city_id);
 		model.put("city2_id", city_id);
 		
 		InterfaceServer.getInstance().requestInterface(HttpMethod.POST,model, null,false,new SDRequestCallBack<Uc_fx_deal_fxActModel>()

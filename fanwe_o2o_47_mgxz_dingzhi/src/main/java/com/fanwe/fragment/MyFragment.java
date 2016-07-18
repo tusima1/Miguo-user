@@ -571,6 +571,9 @@ public class MyFragment extends BaseFragment {
 		if (notPaidCount != null) {
 			orderNotPaidBadge.setCount(notPaidCount);
 			if (notPaidCount > 0) {
+				if (notPaidCount >99) {
+					notPaidCountStr="99+";
+				}
 				orderNotPaidCountView.setVisibility(View.VISIBLE);
 				orderNotPaidCountView.setText(notPaidCountStr);
 			} else {
@@ -583,6 +586,9 @@ public class MyFragment extends BaseFragment {
 		if (groupVoucherCount != null) {
 			groupVoucherBadge.setCount(groupVoucherCount);
 			if (groupVoucherCount > 0) {
+				if (groupVoucherCount >99) {
+					groupVoucherCountStr="99+";
+				}
 				groupVoucherCountView.setVisibility(View.VISIBLE);
 				groupVoucherCountView.setText(groupVoucherCountStr);
 			} else {
@@ -595,6 +601,9 @@ public class MyFragment extends BaseFragment {
 		if (xiaomiCount != null) {
 			xiaomiBadge.setCount(xiaomiCount);
 			if (xiaomiCount > 0) {
+				if (xiaomiCount>99) {
+					xiaomiCountStr="99+";
+				}
 				xiaomiCountView.setVisibility(View.VISIBLE);
 				xiaomiCountView.setText(xiaomiCountStr);
 			} else {
@@ -607,6 +616,9 @@ public class MyFragment extends BaseFragment {
 		if (readyForUseCount != null) {
 			orderReadyForUseBadge.setCount(readyForUseCount);
 			if (readyForUseCount > 0) {
+				if (readyForUseCount>99) {
+					readyForUseCountStr="99+";
+				}
 				orderReadyForUseCountView.setVisibility(View.VISIBLE);
 				orderReadyForUseCountView.setText(readyForUseCountStr);
 			} else {
@@ -618,6 +630,9 @@ public class MyFragment extends BaseFragment {
 		if (notCommentedCount != null) {
 			orderNotCommentedBadge.setCount(notCommentedCount);
 			if (notCommentedCount > 0) {
+				if (notCommentedCount>99) {
+					notCommentedCountStr="99+";
+				}
 				orderNotCommentedCountView.setVisibility(View.VISIBLE);
 				orderNotCommentedCountView.setText(notCommentedCountStr);
 			} else {
@@ -630,6 +645,9 @@ public class MyFragment extends BaseFragment {
 		if (refundCount != null) {
 			orderRefundBadge.setCount(refundCount);
 			if (refundCount > 0) {
+				if (refundCount >99) {
+					refundCountStr="99+";
+				}
 				orderRefundCountView.setVisibility(View.VISIBLE);
 				orderRefundCountView.setText(refundCountStr);
 			} else {
@@ -781,9 +799,13 @@ public class MyFragment extends BaseFragment {
 	}
 
 	private void clickMyOrderView(String key) {
-		Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
-		intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
-		startActivity(intent);
+//		if ("use_wait".equalsIgnoreCase(key)) {
+//			startActivity(new Intent(getActivity(), OrderWait2UseActivity.class));
+//		}else {
+			Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
+			intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
+			startActivity(intent);
+//		}
 	}
 
 	/**

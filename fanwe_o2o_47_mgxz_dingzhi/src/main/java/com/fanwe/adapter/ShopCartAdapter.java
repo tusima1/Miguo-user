@@ -29,6 +29,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fanwe.common.CommonInterface;
 import com.fanwe.event.EnumEventTag;
@@ -36,6 +37,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -86,15 +88,16 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		this.mIsScore = isScore;
 		this.mIsDelect = isDelect;
 		// 搞到屏幕宽度
-		Display defaultDisplay = mActivity.getWindowManager().getDefaultDisplay();
+		Display defaultDisplay = mActivity.getWindowManager()
+				.getDefaultDisplay();
 		DisplayMetrics metrics = new DisplayMetrics();
 		defaultDisplay.getMetrics(metrics);
 		mScreenWidth = metrics.widthPixels;
-		mParams = new LinearLayout.LayoutParams(mScreenWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+		mParams = new LinearLayout.LayoutParams(mScreenWidth,
+				LinearLayout.LayoutParams.MATCH_PARENT);
 		// 初始化删除按钮事件与item滑动事件
 		mScrollImpl = new ScrollViewScrollImpl();
 	}
-
 
 	// 获取所有的购物车id
 	public ArrayList<Integer> getId() {
@@ -130,26 +133,33 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		return String.valueOf(bd);
 	}
 
-	@SuppressLint("ResourceAsColor") @Override
+	@SuppressLint("ResourceAsColor")
+	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		convertView = mInflater.inflate(R.layout.item_shop_cart, null);
 		scrollView = (HorizontalScrollView) convertView;
 		scrollView.setOnTouchListener(mScrollImpl);
 
 		ImageView iv_image = ViewHolder.get(convertView, R.id.iv_image);
-		//无效显示按钮。
-		Button  ineffectiveBtn = ViewHolder.get(convertView, R.id.ineffectiveBtn);
+		// 无效显示按钮。
+		Button ineffectiveBtn = ViewHolder
+				.get(convertView, R.id.ineffectiveBtn);
 		LinearLayout ll_percent = ViewHolder.get(R.id.ll_percent, convertView);
 		TextView tv_title = ViewHolder.get(convertView, R.id.tv_title);
 		TextView tv_max = ViewHolder.get(convertView, R.id.tv_max);
 		final CheckBox cb_check = ViewHolder.get(R.id.cb_check, convertView);
 		Button bt_delect = ViewHolder.get(R.id.bt_delect, convertView);
-		final TextView tv_sunMoney = ViewHolder.get(convertView, R.id.tv_sunMoney);
-		TextView tv_add_number = ViewHolder.get(convertView, R.id.tv_add_number);
-		TextView tv_minus_number = ViewHolder.get(convertView, R.id.tv_minus_number);
+		final TextView tv_sunMoney = ViewHolder.get(convertView,
+				R.id.tv_sunMoney);
+		TextView tv_add_number = ViewHolder
+				.get(convertView, R.id.tv_add_number);
+		TextView tv_minus_number = ViewHolder.get(convertView,
+				R.id.tv_minus_number);
 		final EditText et_number = ViewHolder.get(convertView, R.id.et_number);
-		final TextView tv_actualPrice = ViewHolder.get(convertView, R.id.tv_actualPrice);
-		final TextView tv_originalPrice = ViewHolder.get(convertView, R.id.tv_originalPrice);
+		final TextView tv_actualPrice = ViewHolder.get(convertView,
+				R.id.tv_actualPrice);
+		final TextView tv_originalPrice = ViewHolder.get(convertView,
+				R.id.tv_originalPrice);
 
 		final CartGoodsModel model = getItem(position);
 		if (model != null) {
@@ -163,72 +173,77 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 			SDViewBinder.setImageView(iv_image, model.getIcon());
 			if (model.getUser_max_bought() <= -1) {
 				SDViewUtil.hide(tv_max);
-			}else{
+			} else {
 				SDViewUtil.show(tv_max);
-				SDViewBinder.setTextView(tv_max, "限购"+model.getUser_max_bought()+"件");
+				SDViewBinder.setTextView(tv_max,
+						"限购" + model.getUser_max_bought() + "件");
 			}
 			SDViewBinder.setTextView(tv_title, model.getSub_name());
 			et_number.setText(String.valueOf(model.getNumber()));
-			SDViewBinder.setTextView(tv_originalPrice, SDFormatUtil.formatMoneyChina(model.getOrigin_price()));
+			SDViewBinder.setTextView(tv_originalPrice,
+					SDFormatUtil.formatMoneyChina(model.getOrigin_price()));
 			setPrice(tv_actualPrice, tv_sunMoney, model);
 			scrollView.scrollTo(0, 0);
 			bt_delect.setOnClickListener(new DeleteOnClickListener(position));
-			//ineffective
+			// ineffective
 			int user_max_bought = model.getUser_max_bought();
-			if(user_max_bought>-1&&model.getNumber()>user_max_bought){
-				
+			if (user_max_bought > -1 && model.getNumber() > user_max_bought) {
+
 			}
-			
-			if(!ineffectiveCheck(model)){
-				ineffectiveBtn .setVisibility(View.VISIBLE);
+
+			if (!ineffectiveCheck(model)) {
+				ineffectiveBtn.setVisibility(View.VISIBLE);
 				cb_check.setVisibility(View.GONE);
 				tv_add_number.setVisibility(View.GONE);
 				tv_minus_number.setVisibility(View.GONE);
 				et_number.setVisibility(View.GONE);
 				ll_percent.setBackgroundColor(Color.LTGRAY);
-				}else{
-				ineffectiveBtn .setVisibility(View.GONE);
+			} else {
+				ineffectiveBtn.setVisibility(View.GONE);
 				cb_check.setVisibility(View.VISIBLE);
 				tv_add_number.setVisibility(View.VISIBLE);
 				tv_minus_number.setVisibility(View.VISIBLE);
 				et_number.setVisibility(View.VISIBLE);
 			}
-			
-			
-			
-			if(mIsDelect){
-			    cb_check.setChecked(model.isEdit());
-			}else{
-				
-				cb_check.setChecked(model.isChecked());	
+
+			if (mIsDelect) {
+				cb_check.setChecked(model.isEdit());
+			} else {
+
+				cb_check.setChecked(model.isChecked());
 			}
 			cb_check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
 
 					if (!mIsDelect) {
-						model.setChecked(isChecked);	
-						if (mListener != null) {						
+						model.setChecked(isChecked);
+						if (mListener != null) {
 							mListener.onSelectedListener();
 						}
-					} else {	
+					} else {
 						model.setEdit(isChecked);
-						if (mListener != null) {						
+						if (mListener != null) {
 							mListener.onDelSelectedListener(model, mIsDelect);
 						}
 					}
-					
+
 				}
 			});
 			tv_add_number.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					int curNumber = getNumberFromEditText(et_number);
+					if(curNumber>=999){
+						SDToast.showToast("该宝贝不能购买更多哦！",Toast.LENGTH_LONG);
+						return;
+					}
 					int maxNumber = model.getUser_max_bought();
 					// -1表示无数量限制.
-					if ( (maxNumber <=-1)
-							|| ((maxNumber>-1) && curNumber < maxNumber)) {
+					if ((maxNumber <= -1)
+							|| ((maxNumber > -1) && curNumber < maxNumber)) {
 						curNumber++;
 						et_number.setText(String.valueOf(curNumber));
 					}
@@ -265,14 +280,14 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 						return;
 					} else {
 						int maxNumber = model.getUser_max_bought();
-						if (s.toString().length()>4) {
+						if (s.toString().length() > 4) {
 							int index = s.toString().length();
 							s.delete(index - 1, index);
 						}
 						int inputNum = Integer.valueOf(s.toString());
 						// 输入数量必须大于0
 						if (inputNum > 0) {
-							if (maxNumber >-1 && inputNum > maxNumber) {
+							if (maxNumber > -1 && inputNum > maxNumber) {
 								// 无限制
 								inputNum = maxNumber;
 							}
@@ -303,24 +318,33 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 
 	public interface ShopCartSelectedListener {
 		public void onSelectedListener();
+
 		/**
 		 * 删除状态下的被选择状态。
+		 * 
 		 * @param model
 		 * @param isChecked
 		 */
-		public void onDelSelectedListener(CartGoodsModel model, boolean isChecked);
+		public void onDelSelectedListener(CartGoodsModel model,
+				boolean isChecked);
+
 		/**
 		 * 购物车标题栏的数量变化
-		 * @param num 变化后的数量
+		 * 
+		 * @param num
+		 *            变化后的数量
 		 */
 		public void onTitleNumChangeListener(int num);
 	}
 
-	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice, CartGoodsModel model) {
+	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice,
+			CartGoodsModel model) {
 		if (model != null && tvSinglePrice != null && tvTotalPrice != null) {
 			if (mIsScore) {
-				SDViewBinder.setTextView(tvSinglePrice, model.getReturn_scoreFormat());
-				SDViewBinder.setTextView(tvTotalPrice, model.getReturn_total_scoreFormat());
+				SDViewBinder.setTextView(tvSinglePrice,
+						model.getReturn_scoreFormat());
+				SDViewBinder.setTextView(tvTotalPrice,
+						model.getReturn_total_scoreFormat());
 			} else {
 				int is_first = model.getIs_first();
 				is_first -= model.getCheck_first();
@@ -331,10 +355,11 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 				} else {
 					is_first = 0;
 				}
-			float	total_price = is_first * model.getIs_first_price();
-				total_price += (model.getNumber() - is_first) * Float.parseFloat(model.getUnit_price());
+				float total_price = is_first * model.getIs_first_price();
+				total_price += (model.getNumber() - is_first)
+						* Float.parseFloat(model.getUnit_price());
 				BigDecimal bd1 = new BigDecimal(total_price);
-						
+
 				bd1 = bd1.setScale(2, BigDecimal.ROUND_HALF_UP);
 				model.setSumPrice(bd1.floatValue());
 				SDViewBinder.setTextView(tvSinglePrice, model.getUnit_price());
@@ -381,8 +406,11 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 							mListModel.remove(model);
 							notifyDataSetChanged();
 							CommonInterface.updateCartNumber();
-							mListener.onTitleNumChangeListener(mListModel.size());
-							SDEventManager.post(EnumEventTag.DELETE_CART_GOODS_SUCCESS.ordinal());
+							mListener.onTitleNumChangeListener(mListModel
+									.size());
+							SDEventManager
+									.post(EnumEventTag.DELETE_CART_GOODS_SUCCESS
+											.ordinal());
 						}
 					}
 
@@ -396,7 +424,8 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 						SDDialogManager.dismissProgressDialog();
 					}
 				};
-				InterfaceServer.getInstance().requestInterface(request, handler);
+				InterfaceServer.getInstance()
+						.requestInterface(request, handler);
 			}
 		}
 	}
@@ -415,32 +444,38 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		@SuppressLint("ClickableViewAccessibility")
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				// 如果有划出删除按钮的itemView,就让他滑回去并且锁定本次touch操作,解锁会在父组件的dispatchTouchEvent中进行
-				if (mScrollView != null) {
-					scrollView(mScrollView, HorizontalScrollView.FOCUS_LEFT);
-					mScrollView = null;
-					mLockOnTouch = true;
-					return true;
+
+			if (!mIsDelect) {
+				return true;
+			} else {
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					// 如果有划出删除按钮的itemView,就让他滑回去并且锁定本次touch操作,解锁会在父组件的dispatchTouchEvent中进行
+					if (mScrollView != null) {
+						scrollView(mScrollView, HorizontalScrollView.FOCUS_LEFT);
+						mScrollView = null;
+						mLockOnTouch = true;
+						return true;
+					}
+					mLockOnTouch = false;
+					startX = event.getX();
+					break;
+				case MotionEvent.ACTION_UP:
+					HorizontalScrollView view = (HorizontalScrollView) v;
+					// 当前是编辑状态，并且滑动了>70个像素,就显示出删除按钮
+					if (mIsDelect && (startX > event.getX() + 70)) {
+						startX = 0;// 因为公用一个事件处理对象,防止错乱,还原startX值
+						scrollView(view, HorizontalScrollView.FOCUS_RIGHT);
+						mScrollView = view;
+
+					} else {
+						// scrollView(view, HorizontalScrollView.FOCUS_LEFT);
+					}
+					break;
+
 				}
-				mLockOnTouch = false;
-				startX = event.getX();
-				break;
-			case MotionEvent.ACTION_UP:
-				HorizontalScrollView view = (HorizontalScrollView) v;
-				// 当前是编辑状态，并且滑动了>70个像素,就显示出删除按钮
-				if (mIsDelect&&(startX > event.getX() + 70)) {
-					startX = 0;// 因为公用一个事件处理对象,防止错乱,还原startX值
-					scrollView(view, HorizontalScrollView.FOCUS_RIGHT);
-					mScrollView = view;
-					
-				} else {
-					//scrollView(view, HorizontalScrollView.FOCUS_LEFT);
-				}
-				break;
+				return false;
 			}
-			return false;
 		}
 	}
 
@@ -454,38 +489,34 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		});
 	}
 
-
 	public boolean ismIsDelect() {
 		return mIsDelect;
 	}
 
-
 	public void setmIsDelect(boolean mIsDelect) {
 		this.mIsDelect = mIsDelect;
 	}
-	
+
 	/**
 	 * 判断当前订单是否有效。
-	 * @param model 
+	 * 
+	 * @param model
 	 * @return
 	 */
-	public boolean ineffectiveCheck(CartGoodsModel model){
-	
-		int  user_max_bought = model.getUser_max_bought();
-		if(user_max_bought > -1 && model.getNumber()>user_max_bought){
+	public boolean ineffectiveCheck(CartGoodsModel model) {
+
+		int user_max_bought = model.getUser_max_bought();
+		if (user_max_bought > -1 && model.getNumber() > user_max_bought) {
 			return false;
 		}
-		if(model.getTime_status() ==2||model.getTime_status() ==3){
+		if (model.getTime_status() == 2 || model.getTime_status() == 3) {
 			return false;
 		}
-		
-		if(model.getBuy_status() ==2){
+
+		if (model.getBuy_status() == 2) {
 			return false;
 		}
 		return true;
 	}
 
-	
-	
-	
 }

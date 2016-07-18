@@ -7,7 +7,6 @@ import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.common.ImageLoaderManager;
-import com.fanwe.config.AppConfig;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.dao.SettingModelDao;
@@ -60,6 +59,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		}
 	}
 
+
 	@Override
 	public void onCreate()
 	{
@@ -83,6 +83,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		initBaiduMap();
 		//初始化友盟分享
 		UmengShareManager.initConfig();
+	
 		SDEventManager.register(this);
 		TANetworkStateReceiver.registerObserver(this);
 		initSettingModel();

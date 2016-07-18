@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size_20_px2dp"
-                android:text="搜索商品或商家"
+                android:text="搜索商家"
                 android:textColor="@color/rgb_153153153"
                 android:textSize="@dimen/size_px2sp_32" />
         </LinearLayout>

@@ -1,7 +1,7 @@
 package com.fanwe.common;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.dao.InitActModelDao;
 import com.fanwe.dialog.InputImageCodeDialog;
 import com.fanwe.http.InterfaceServer;

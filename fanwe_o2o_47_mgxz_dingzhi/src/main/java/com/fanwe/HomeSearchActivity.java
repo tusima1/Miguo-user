@@ -81,11 +81,11 @@ public class HomeSearchActivity extends BaseActivity
 	private void bindDefaultData()
 	{
 
-		SearchTypeModel model0 = new SearchTypeModel();
-		model0.setName(SearchTypeNormalString.YOU_HUI);
-		model0.setSelect(false);
-		model0.setType(SearchTypeNormal.YOU_HUI);
-		mListModel.add(model0);
+//		SearchTypeModel model0 = new SearchTypeModel();
+//		model0.setName(SearchTypeNormalString.YOU_HUI);
+//		model0.setSelect(false);
+//		model0.setType(SearchTypeNormal.YOU_HUI);
+//		mListModel.add(model0);
 
 		SearchTypeModel model2 = new SearchTypeModel();
 		model2.setName(SearchTypeNormalString.TUAN);
@@ -99,17 +99,17 @@ public class HomeSearchActivity extends BaseActivity
 		model3.setType(SearchTypeNormal.MERCHANT);
 		mListModel.add(model3);
 
-		SearchTypeModel model4 = new SearchTypeModel();
-		model4.setName(SearchTypeNormalString.EVENT);
-		model4.setSelect(false);
-		model4.setType(SearchTypeNormal.EVENT);
-		mListModel.add(model4);
-
-		SearchTypeModel model5 = new SearchTypeModel();
-		model5.setName(SearchTypeNormalString.SHOP);
-		model5.setSelect(false);
-		model5.setType(SearchTypeNormal.SHOP);
-		mListModel.add(model5);
+//		SearchTypeModel model4 = new SearchTypeModel();
+//		model4.setName(SearchTypeNormalString.EVENT);
+//		model4.setSelect(false);
+//		model4.setType(SearchTypeNormal.EVENT);
+//		mListModel.add(model4);
+//
+//		SearchTypeModel model5 = new SearchTypeModel();
+//		model5.setName(SearchTypeNormalString.SHOP);
+//		model5.setSelect(false);
+//		model5.setType(SearchTypeNormal.SHOP);
+//		mListModel.add(model5);
 
 		mAdapter = new SearchTypeAdapter(mListModel, this);
 		mGvType.setAdapter(mAdapter);

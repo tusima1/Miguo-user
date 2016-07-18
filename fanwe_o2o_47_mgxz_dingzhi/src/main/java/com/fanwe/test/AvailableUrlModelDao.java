@@ -18,9 +18,6 @@ public class AvailableUrlModelDao
 			if (dbModel != null)
 			{
 				dbModel.setTime(model.getTime());
-				/**
-				 * 将参数 null 改为 "",避免了Android studio 报错
-				 */
 				DbManagerX.getDbUtils().update(dbModel, "");
 			} else
 			{

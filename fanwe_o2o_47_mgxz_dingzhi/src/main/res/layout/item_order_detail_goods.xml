@@ -4,28 +4,28 @@
     android:layout_height="match_parent"
     android:background="@drawable/selector_white_gray"
     android:orientation="vertical" >
-	
-     <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="10dp" >
 
         <ImageView
+            android:id="@+id/iv_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/iv_img"
-            android:src="@drawable/bg_order_more"
-            />
+            android:src="@drawable/bg_order_more" />
+
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:maxLines="1"
-            android:ellipsize="end"
             android:id="@+id/tv_order_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:text=""
             android:textColor="@color/text_new_home"
             android:textSize="@dimen/text_size_order_info" />
 
@@ -37,12 +37,13 @@
             android:textColor="@color/text_order_select"
             android:textSize="@dimen/text_size_order_info" />
     </LinearLayout>
-    <View 
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/stroke"
         android:layout_marginLeft="10dp"
-        />
+        android:background="@color/stroke" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,17 +56,22 @@
 
         <!-- 左边 -->
 
-        <!-- <com.fanwe.library.customview.SDScaleImageView
-            android:id="@+id/iv_image"
-            android:layout_width="100dp"
-            android:layout_height="60dp" /> -->
-        <ImageView
-            android:scaleType="fitXY"
-            android:id="@+id/iv_image"
-            android:layout_width="100dp"
-            android:layout_height="62dp" />
 
-       <!-- 右边 --> 
+        <!--
+             <com.fanwe.library.customview.SDScaleImageView
+            android:id="@+id/iv_image"
+            android:layout_width="100dp"
+            android:layout_height="60dp" />
+        -->
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="100dp"
+            android:layout_height="62dp"
+            android:scaleType="fitXY" />
+
+        <!-- 右边 -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +79,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
-            <TextView 
+            <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,8 +87,8 @@
                 android:gravity="center_vertical"
                 android:maxLines="1"
                 android:textColor="@color/text_new_home"
-                android:textSize="@dimen/text_size_home_recommend_title" 
-                />
+                android:textSize="@dimen/text_size_home_recommend_title" />
+
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
@@ -90,9 +96,9 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:visibility="gone"
                 android:textColor="@color/text_new_home"
-                android:textSize="@dimen/text_size_item_content" />
+                android:textSize="@dimen/text_size_item_content"
+                android:visibility="gone" />
 
             <!-- 数量 -->
 
@@ -167,38 +173,50 @@
         android:layout_height="1px"
         android:layout_marginLeft="10dp"
         android:background="@color/stroke" />
+
     <LinearLayout
+        android:id="@+id/ll_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:id="@+id/ll_button"
-        android:visibility="gone"
-        android:padding="10dp" >
-        <TextView 
+        android:padding="10dp"
+        android:visibility="gone" >
+
+        <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            />
-        <TextView 
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_evaluate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="评价"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/main_color"
-            android:gravity="center"
-            android:visibility="gone"
-            android:id="@+id/tv_evaluate"
-            android:textSize="@dimen/text_size_title"
             android:background="@drawable/bg_order_select"
-            />
-       
-	    </LinearLayout>
- 	<View
+            android:gravity="center"
+            android:text="评价"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_size_title"
+            android:visibility="gone" />
+         <TextView
+            android:id="@+id/tv_tuikuan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_order_select"
+            android:gravity="center"
+            android:text="退款"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_size_title"
+            android:visibility="gone" />
+    </LinearLayout>
+
+   <!--  <View
+        android:id="@+id/v_line"
         android:layout_width="fill_parent"
         android:layout_height="1px"
-        android:visibility="gone"
-        android:id="@+id/v_line"
         android:layout_marginLeft="10dp"
-        android:background="@color/stroke" />
+        android:background="@color/stroke"
+        android:visibility="gone" /> -->
 
 </LinearLayout>

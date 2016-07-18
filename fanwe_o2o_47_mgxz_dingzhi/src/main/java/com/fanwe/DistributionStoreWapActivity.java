@@ -3,7 +3,7 @@ package com.fanwe;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fanwe.config.AppConfig;
+import com.fanwe.app.AppConfig;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.library.fragment.WebViewFragment.EnumProgressMode;

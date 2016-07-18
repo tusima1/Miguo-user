@@ -10,8 +10,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.AppConfig;
 import com.fanwe.common.CommonInterface;
-import com.fanwe.config.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.http.InterfaceServer;
