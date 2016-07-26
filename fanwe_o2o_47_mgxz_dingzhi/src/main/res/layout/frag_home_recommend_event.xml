@@ -3,12 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_activity_gray"
-    android:orientation="vertical" >
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_activity_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@drawable/layer_gray_stroke_bot" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_activity_white" >
+        android:background="@color/bg_activity_white"
+        android:visibility="gone">
 
         <!-- 推荐活动 -->
 
@@ -44,7 +55,7 @@
             android:layout_toLeftOf="@+id/iv_event_bt"
             android:layout_toRightOf="@id/iv_image"
             android:background="@drawable/my_home_event_bt"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_timer"
@@ -84,14 +95,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_activity_white"
-        android:orientation="horizontal"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp" >
-    </LinearLayout>
+        android:orientation="horizontal" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/stroke" />
-
+        android:background="@drawable/layer_gray_stroke_bot" />
 </LinearLayout>
