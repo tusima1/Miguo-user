@@ -1,9 +1,21 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 import com.fanwe.adapter.InitAdvsPagerAdapter;
+import com.fanwe.app.App;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.http.InterfaceServer;
@@ -27,19 +39,9 @@ import com.fanwe.work.RetryInitWorker;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.umeng.analytics.MobclickAgent;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.os.Build;
-import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -57,6 +59,8 @@ public class InitAdvsMultiActivity extends BaseActivity {
      * 正常初始化成功后显示时间
      */
     private static final long NORMAL_DISPLAY_TIME = 3 * 1000;
+
+    private final int REQUEST_PHONE_PERMISSIONS = 0;
 
     private Button mBtn_skip;
 
@@ -81,21 +85,23 @@ public class InitAdvsMultiActivity extends BaseActivity {
     }
 
     private void init() {
-        long timeSplash = System.currentTimeMillis();
+        checkPermission();
         startStatistics();
-        System.out.println("timeSplash startStatistics:" + (System.currentTimeMillis() - timeSplash));
-        timeSplash = System.currentTimeMillis();
         initTimer();
-        System.out.println("timeSplash initTimer:" + (System.currentTimeMillis() - timeSplash));
-        timeSplash = System.currentTimeMillis();
         registerClick();
-        System.out.println("timeSplash registerClick:" + (System.currentTimeMillis() - timeSplash));
-        timeSplash = System.currentTimeMillis();
         initSlidingPlayView();
-        System.out.println("timeSplash initSlidingPlayView:" + (System.currentTimeMillis() - timeSplash));
-        timeSplash = System.currentTimeMillis();
         requestInitInterface();
-        System.out.println("timeSplash requestInitInterface:" + (System.currentTimeMillis() - timeSplash));
+        getDeviceId();
+    }
+
+    /**
+     * 获取设备IMEI
+     * 需要权限.6.0申请无效
+     */
+    public void getDeviceId(){
+        TelephonyManager telephonyManager = (TelephonyManager) this
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        App.getInstance().setImei(telephonyManager.getDeviceId());
     }
 
     private void startStatistics() {
@@ -361,6 +367,19 @@ public class InitAdvsMultiActivity extends BaseActivity {
     protected void onResume() {
         JPushInterface.onResume(this);
         super.onResume();
+    }
+    void checkPermission() {
+        final List<String> permissionsList = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.READ_PHONE_STATE);
+            if ((checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permissionsList.size() != 0) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_PHONE_PERMISSIONS);
+            }
+        }
     }
 
 }

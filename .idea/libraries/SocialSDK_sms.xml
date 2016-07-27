@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="SocialSDK_sms">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/library_umeng_share_project/libs/SocialSDK_sms.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
