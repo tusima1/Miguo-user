@@ -7,13 +7,9 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="10dp"
+        android:layout_height="5dp"
         android:background="@color/bg_activity_gray" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@drawable/layer_gray_stroke_bot" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -97,8 +93,4 @@
         android:background="@color/bg_activity_white"
         android:orientation="horizontal" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@drawable/layer_gray_stroke_bot" />
 </LinearLayout>

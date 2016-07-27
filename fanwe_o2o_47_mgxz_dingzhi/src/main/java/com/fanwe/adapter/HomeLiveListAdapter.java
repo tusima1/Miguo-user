@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.fanwe.o2o.miguo.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,7 @@ public class HomeLiveListAdapter extends BaseAdapter {
     }
 
     private void setData(Holder mHolder, int position) {
+        ImageLoader.getInstance().displayImage(datas.get(position), mHolder.ivBg, null, null, null);
     }
 
     private static class Holder {

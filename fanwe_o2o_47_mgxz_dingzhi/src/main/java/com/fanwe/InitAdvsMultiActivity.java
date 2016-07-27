@@ -40,314 +40,327 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
 import cn.jpush.android.api.JPushInterface;
 
 /**
  * 初始化Activity
- * 
  */
 public class InitAdvsMultiActivity extends BaseActivity {
 
-	/** 广告图片显示时间 */
-	private static final long ADVS_DISPLAY_TIME = 3 * 1000;
+    /**
+     * 广告图片显示时间
+     */
+    private static final long ADVS_DISPLAY_TIME = 3 * 1000;
 
-	/** 正常初始化成功后显示时间 */
-	private static final long NORMAL_DISPLAY_TIME = 3 * 1000;
+    /**
+     * 正常初始化成功后显示时间
+     */
+    private static final long NORMAL_DISPLAY_TIME = 3 * 1000;
 
-	private Button mBtn_skip;
+    private Button mBtn_skip;
 
-	private SDSlidingPlayView mSpvAd;
+    private SDSlidingPlayView mSpvAd;
 
-	private InitAdvsPagerAdapter mAdapter;
+    private InitAdvsPagerAdapter mAdapter;
 
-	private SDTimer mTimer = new SDTimer();
+    private SDTimer mTimer = new SDTimer();
 
-	private long start;
+    private long start;
 
-	private String username;
-	private int user_id;
+    private String username;
+    private int user_id;
 
-	private SharedPreferences setting;
+    private SharedPreferences setting;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_init_advs_multi);
-		init();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.act_init_advs_multi);
+        init();
+    }
 
-	private void init() {
-		startStatistics();
-		initTimer();
-		registerClick();
-		initSlidingPlayView();
-		requestInitInterface();
-		
-	}
+    private void init() {
+        long timeSplash = System.currentTimeMillis();
+        startStatistics();
+        System.out.println("timeSplash startStatistics:" + (System.currentTimeMillis() - timeSplash));
+        timeSplash = System.currentTimeMillis();
+        initTimer();
+        System.out.println("timeSplash initTimer:" + (System.currentTimeMillis() - timeSplash));
+        timeSplash = System.currentTimeMillis();
+        registerClick();
+        System.out.println("timeSplash registerClick:" + (System.currentTimeMillis() - timeSplash));
+        timeSplash = System.currentTimeMillis();
+        initSlidingPlayView();
+        System.out.println("timeSplash initSlidingPlayView:" + (System.currentTimeMillis() - timeSplash));
+        timeSplash = System.currentTimeMillis();
+        requestInitInterface();
+        System.out.println("timeSplash requestInitInterface:" + (System.currentTimeMillis() - timeSplash));
+    }
 
-	private void startStatistics() {
-		setting = getSharedPreferences("firstApp", Context.MODE_PRIVATE);
-		Boolean user_first = setting.getBoolean("FIRST", true);
-		String version = setting.getString("version", -1+"");
-		PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
-		String versionCode = String.valueOf(info.versionCode);
-		if (user_first || (!versionCode.equals(-1+"") && !version.equals(versionCode))) {// 第一次
-			submmit();
-			setting.edit().putBoolean("FIRST", false).commit();
-			setting.edit().putString("version", versionCode);
-		}
-	}
+    private void startStatistics() {
+        setting = getSharedPreferences("firstApp", Context.MODE_PRIVATE);
+        Boolean user_first = setting.getBoolean("FIRST", true);
+        String version = setting.getString("version", -1 + "");
+        PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
+        String versionCode = String.valueOf(info.versionCode);
+        if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
+            submmit();
+            setting.edit().putBoolean("FIRST", false).commit();
+            setting.edit().putString("version", versionCode);
+        }
+    }
 
-	private void submmit() {
-		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		String mob_brand = Build.BRAND;
+    private void submmit() {
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String mob_brand = Build.BRAND;
 
-		String mob_model = Build.MODEL;
+        String mob_model = Build.MODEL;
 
-		String mob_imei = tm.getDeviceId();
+        String mob_imei = tm.getDeviceId();
 
-		String sys_name = "Android";
-		String sys_version = Build.VERSION.RELEASE;
+        String sys_name = "Android";
+        String sys_version = Build.VERSION.RELEASE;
 
-		PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
-		RequestModel model = new RequestModel();
-		model.putCtl("init");
-		model.putAct("first_run");
-		model.put("mob_brand", mob_brand);
-		model.put("app_name", "mgxz");
-		model.put("mob_model", mob_model);
-		model.put("app_version", info.versionCode);
-		model.put("mob_imei", mob_imei);
-		model.put("sys_name", sys_name);
-		model.put("sys_version", sys_version);
-		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<BaseActModel>(false) {
+        PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
+        RequestModel model = new RequestModel();
+        model.putCtl("init");
+        model.putAct("first_run");
+        model.put("mob_brand", mob_brand);
+        model.put("app_name", "mgxz");
+        model.put("mob_model", mob_model);
+        model.put("app_version", info.versionCode);
+        model.put("mob_imei", mob_imei);
+        model.put("sys_name", sys_name);
+        model.put("sys_version", sys_version);
+        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<BaseActModel>(false) {
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-				}
-			}
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() == 1) {
+                }
+            }
 
-			@Override
-			public void onFinish() {
+            @Override
+            public void onFinish() {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	private void initTimer() {
-		start = java.lang.System.currentTimeMillis();
-		mSpvAd = (SDSlidingPlayView) findViewById(R.id.spv_content);
-		mBtn_skip = (Button) findViewById(R.id.btn_skip);
-	}
+    private void initTimer() {
+        start = java.lang.System.currentTimeMillis();
+        mSpvAd = (SDSlidingPlayView) findViewById(R.id.spv_content);
+        mBtn_skip = (Button) findViewById(R.id.btn_skip);
+    }
 
 
-	private void registerClick() {
-		mBtn_skip.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startMainActivity();
-			}
-		});
-	}
+    private void registerClick() {
+        mBtn_skip.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMainActivity();
+            }
+        });
+    }
 
-	private void initSlidingPlayView() {
-		mSpvAd.mVpgContent.setmMeasureMode(EnumMeasureMode.NORMAL);
-		mSpvAd.setmImageNormalResId(R.drawable.ic_main_dot2_normal);
-		mSpvAd.setmImageSelectedResId(R.drawable.ic_main_dot2_foused);
-		mSpvAd.setmListenerOnTouch(new SDSlidingPlayViewOnTouchListener() {
+    private void initSlidingPlayView() {
+        mSpvAd.mVpgContent.setmMeasureMode(EnumMeasureMode.NORMAL);
+        mSpvAd.setmImageNormalResId(R.drawable.ic_main_dot2_normal);
+        mSpvAd.setmImageSelectedResId(R.drawable.ic_main_dot2_foused);
+        mSpvAd.setmListenerOnTouch(new SDSlidingPlayViewOnTouchListener() {
 
-			@Override
-			public void onUp(View v, MotionEvent event) {
+            @Override
+            public void onUp(View v, MotionEvent event) {
 
-			}
+            }
 
-			@Override
-			public void onTouch(View v, MotionEvent event) {
+            @Override
+            public void onTouch(View v, MotionEvent event) {
 
-			}
+            }
 
-			@Override
-			public void onMove(View v, MotionEvent event) {
-				if (mAdapter != null && mAdapter.getCount() > 1) {
-					mTimer.stopWork();
-				}
-			}
+            @Override
+            public void onMove(View v, MotionEvent event) {
+                if (mAdapter != null && mAdapter.getCount() > 1) {
+                    mTimer.stopWork();
+                }
+            }
 
-			@Override
-			public void onDown(View v, MotionEvent event) {
+            @Override
+            public void onDown(View v, MotionEvent event) {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	private void requestInitInterface() {
-		CommonInterface.requestInit(new SDRequestCallBack<Init_indexActModel>() {
-			private boolean nSuccess = false;
+    private void requestInitInterface() {
+        CommonInterface.requestInit(new SDRequestCallBack<Init_indexActModel>() {
+            private boolean nSuccess = false;
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					nSuccess = true;
-					dealInitSuccess(actModel);
-				}
-			}
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() == 1) {
+                    nSuccess = true;
+                    dealInitSuccess(actModel);
+                }
+            }
 
-			@Override
-			public void onStart() {
-			}
+            @Override
+            public void onStart() {
+            }
 
-			@Override
-			public void onFinish() {
-				if (!nSuccess) {
-					startMainActivity();
-				}
-			}
+            @Override
+            public void onFinish() {
+                if (!nSuccess) {
+                    startMainActivity();
+                }
+            }
 
-			@Override
-			public void onFailure(HttpException error, String msg) {
-				nSuccess = false;
-				RetryInitWorker.getInstance().start(); // 如果初始化失败重试
-			}
-		});
-	}
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                nSuccess = false;
+                RetryInitWorker.getInstance().start(); // 如果初始化失败重试
+            }
+        });
+    }
 
-	protected void dealInitSuccess(Init_indexActModel model) {
-		List<InitActStart_pageModel> listModel = model.getStart_page_new();
+    protected void dealInitSuccess(Init_indexActModel model) {
+        List<InitActStart_pageModel> listModel = model.getStart_page_new();
 
-		if (model.getQq_app_key().equals("")) {
-			model.setQq_app_key("1101169715");
-		}
-		if (model.getQq_app_secret().equals("")) {
-			model.setQq_app_secret("FtAZVvB6LZ85hjdE");
-		}
-		if (model.getWx_app_key().equals("")) {
-			model.setWx_app_key("wx6aafdae1bac40206");
-		}
-		if (model.getWx_app_secret().equals("")) {
-			model.setWx_app_secret("5f29a228760302af0d85774d02390273");
-		}
+        if (model.getQq_app_key().equals("")) {
+            model.setQq_app_key("1101169715");
+        }
+        if (model.getQq_app_secret().equals("")) {
+            model.setQq_app_secret("FtAZVvB6LZ85hjdE");
+        }
+        if (model.getWx_app_key().equals("")) {
+            model.setWx_app_key("wx6aafdae1bac40206");
+        }
+        if (model.getWx_app_secret().equals("")) {
+            model.setWx_app_secret("5f29a228760302af0d85774d02390273");
+        }
 
-		bindAdvsImages(listModel);
-	}
+        bindAdvsImages(listModel);
+    }
 
-	protected void bindAdvsImages(List<InitActStart_pageModel> listModel) {
-		List<InitActStart_pageModel> listModelCached = findCachedModel(listModel);
-		if (!SDCollectionUtil.isEmpty(listModelCached)) {
-			mAdapter = new InitAdvsPagerAdapter(listModelCached, mActivity);
-			mAdapter.setmListenerOnItemClick(new SDBasePagerAdapterOnItemClickListener() {
-				@Override
-				public void onItemClick(View v, int position) {
-					InitActStart_pageModel model = mAdapter.getItemModel(position);
-					if (model != null) {
-						int type = model.getType();
-						Intent intent = AppRuntimeWorker.createIntentByType(type, model.getData(), false);
-						if (intent != null) {
-							try {
-								mTimer.stopWork();
-								intent.putExtra(BaseActivity.EXTRA_IS_ADVS, true);
-								startActivity(intent);
-								finish();
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-			});
-			mSpvAd.setAdapter(mAdapter);
-			startAdvsDisplayTimer();
-			SDViewUtil.show(mBtn_skip);
-		} else {
-			startNormalDisplayTimer();
-		}
-	}
+    protected void bindAdvsImages(List<InitActStart_pageModel> listModel) {
+        List<InitActStart_pageModel> listModelCached = findCachedModel(listModel);
+        if (!SDCollectionUtil.isEmpty(listModelCached)) {
+            mAdapter = new InitAdvsPagerAdapter(listModelCached, mActivity);
+            mAdapter.setmListenerOnItemClick(new SDBasePagerAdapterOnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    InitActStart_pageModel model = mAdapter.getItemModel(position);
+                    if (model != null) {
+                        int type = model.getType();
+                        Intent intent = AppRuntimeWorker.createIntentByType(type, model.getData(), false);
+                        if (intent != null) {
+                            try {
+                                mTimer.stopWork();
+                                intent.putExtra(BaseActivity.EXTRA_IS_ADVS, true);
+                                startActivity(intent);
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            });
+            mSpvAd.setAdapter(mAdapter);
+            startAdvsDisplayTimer();
+            SDViewUtil.show(mBtn_skip);
+        } else {
+            startNormalDisplayTimer();
+        }
+    }
 
-	/**
-	 * 找到已经缓存过的实体
-	 * 
-	 * @param listModel
-	 * @return
-	 */
-	private List<InitActStart_pageModel> findCachedModel(List<InitActStart_pageModel> listModel) {
-		List<InitActStart_pageModel> listCachedModel = new ArrayList<InitActStart_pageModel>();
-		if (!SDCollectionUtil.isEmpty(listModel)) {
-			for (InitActStart_pageModel model : listModel) {
-				String url = model.getImg();
-				if (ImageLoaderManager.isCacheExistOnDisk(url)) {
-					listCachedModel.add(model);
-				} else {
-					ImageLoader.getInstance().loadImage(url, null);
-				}
-			}
-		}
-		return listCachedModel;
-	}
+    /**
+     * 找到已经缓存过的实体
+     *
+     * @param listModel
+     * @return
+     */
+    private List<InitActStart_pageModel> findCachedModel(List<InitActStart_pageModel> listModel) {
+        List<InitActStart_pageModel> listCachedModel = new ArrayList<InitActStart_pageModel>();
+        if (!SDCollectionUtil.isEmpty(listModel)) {
+            for (InitActStart_pageModel model : listModel) {
+                String url = model.getImg();
+                if (ImageLoaderManager.isCacheExistOnDisk(url)) {
+                    listCachedModel.add(model);
+                } else {
+                    ImageLoader.getInstance().loadImage(url, null);
+                }
+            }
+        }
+        return listCachedModel;
+    }
 
-	private void startAdvsDisplayTimer() {
-		long now = System.currentTimeMillis();
-		long past = now - start;
-		if (past >= ADVS_DISPLAY_TIME) {
-			startMainActivity();
-			return;
-		}
-		mTimer.startWork(ADVS_DISPLAY_TIME - past, Long.MAX_VALUE, new SDTimerListener() {
-			@Override
-			public void onWorkMain() {
-				startMainActivity();
-			}
+    private void startAdvsDisplayTimer() {
+        long now = System.currentTimeMillis();
+        long past = now - start;
+        if (past >= ADVS_DISPLAY_TIME) {
+            startMainActivity();
+            return;
+        }
+        mTimer.startWork(ADVS_DISPLAY_TIME - past, Long.MAX_VALUE, new SDTimerListener() {
+            @Override
+            public void onWorkMain() {
+                startMainActivity();
+            }
 
-			@Override
-			public void onWork() {
+            @Override
+            public void onWork() {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	private void startNormalDisplayTimer() {
-		long now = System.currentTimeMillis();
-		long past = now - start;
-		if (past >= NORMAL_DISPLAY_TIME) {
-			startMainActivity();
-			return;
-		}
-		mTimer.startWork(NORMAL_DISPLAY_TIME - past, Long.MAX_VALUE, new SDTimerListener() {
-			@Override
-			public void onWorkMain() {
-				startMainActivity();
-			}
+    private void startNormalDisplayTimer() {
+        long now = System.currentTimeMillis();
+        long past = now - start;
+        if (past >= NORMAL_DISPLAY_TIME) {
+            startMainActivity();
+            return;
+        }
+        mTimer.startWork(NORMAL_DISPLAY_TIME - past, Long.MAX_VALUE, new SDTimerListener() {
+            @Override
+            public void onWorkMain() {
+                startMainActivity();
+            }
 
-			@Override
-			public void onWork() {
+            @Override
+            public void onWork() {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	private void startMainActivity() {
-		// Intent intent = new Intent(getApplicationContext(),
-		// GuideActivity.class);
-		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-		startActivity(intent);
-		finish();
-	}
+    private void startMainActivity() {
+        // Intent intent = new Intent(getApplicationContext(),
+        // GuideActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
-	@Override
-	protected void onDestroy() {
-		mTimer.stopWork();
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        mTimer.stopWork();
+        super.onDestroy();
+    }
 
-	@Override
-	protected void onPause() {
-		JPushInterface.onPause(this);
-		super.onPause();
-	}
+    @Override
+    protected void onPause() {
+        JPushInterface.onPause(this);
+        super.onPause();
+    }
 
-	@Override
-	protected void onResume() {
-		JPushInterface.onResume(this);
-		super.onResume();
-	}
+    @Override
+    protected void onResume() {
+        JPushInterface.onResume(this);
+        super.onResume();
+    }
 
 }
