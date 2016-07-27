@@ -91,8 +91,6 @@ public class HomeFragment extends BaseFragment {
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
-
-        mLiveListHelper.getLiveList();
     }
 
     private void initPageModel(int totalPage) {
@@ -198,7 +196,7 @@ public class HomeFragment extends BaseFragment {
             pageData_2.clear();
 
 //            requestIndex();
-//            mLiveListHelper.getLiveList();
+            mLiveListHelper.getLiveList();
 //            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
