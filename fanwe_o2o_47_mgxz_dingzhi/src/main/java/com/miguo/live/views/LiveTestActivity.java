@@ -12,8 +12,6 @@ import com.fanwe.base.Result;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.miguo.live.views.customviews.MGToast;
 import com.tencent.av.sdk.AVContext;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
