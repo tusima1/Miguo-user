@@ -21,6 +21,20 @@
             <option value="$PROJECT_DIR$/library_xml_drawable_o2o" />
           </set>
         </option>
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/fanwe_o2o_47_mgxz_dingzhi" />
+            <option value="$PROJECT_DIR$/libcommon" />
+            <option value="$PROJECT_DIR$/library_PhotoViewmaster" />
+            <option value="$PROJECT_DIR$/library_PullToRefresh" />
+            <option value="$PROJECT_DIR$/library_ZxingDemo" />
+            <option value="$PROJECT_DIR$/library_androidshapeimageview" />
+            <option value="$PROJECT_DIR$/library_sdDialog" />
+            <option value="$PROJECT_DIR$/library_umeng_share_project" />
+            <option value="$PROJECT_DIR$/library_xml_drawable_o2o" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
