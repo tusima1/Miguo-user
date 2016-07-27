@@ -8,8 +8,9 @@ package com.fanwe.constant;
 public class  ServerUrl
 {
 	public static final boolean DEBUG = true;
-	//public static final String SERVER_API_TEST_URL="w2.mgxz.com";
-	public static final String  SERVER_API_TEST_URL ="http://api.test.mgxz.com/";
+//	public static final String SERVER_API_TEST_URL="w2.mgxz.com";
+//	public static final String  SERVER_API_TEST_URL ="http://api.test.mgxz.com/";
+	public static final String  SERVER_API_TEST_URL ="http://192.168.2.42:8080/mgxz.BussRPC";
 //	public static final String SERVER_API_TEST_URL="pre.mgxz.com";
 	public static final String SERVER_API_URL_MID = "www.mgxz.com";
 	public static final String SERVER_API_URL_PRE = "http://";
