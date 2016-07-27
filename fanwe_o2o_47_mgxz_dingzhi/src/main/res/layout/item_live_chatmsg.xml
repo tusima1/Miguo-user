@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/dp3"
+              android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_user_image"
+        android:layout_width="@dimen/dp20"
+        android:layout_height="@dimen/dp20"
+        android:layout_gravity="left|top"
+        android:src="@drawable/app_icon"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_live_chatmsg"
+        android:maxWidth="@dimen/dp100"
+        android:minHeight="@dimen/dp20"
+        android:paddingTop="@dimen/dp3"
+        android:paddingBottom="@dimen/dp3"
+        android:layout_marginLeft="@dimen/dp5"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="wulitaotao:"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp12"
+            android:textStyle="bold"/>
+        <!--<com.tencent.qcloud.suixinbo.views.customviews.CustomTextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp15"
+            android:layout_marginTop="@dimen/dp3"
+            android:text="text"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>-->
+        <!--<com.tencent.qcloud.suixinbo.views.customviews.CustomTextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp5"
+            android:layout_marginTop="@dimen/dp3"
+            android:text="njsdjsoidosjodjsijdoijoisjojidiojsodsjiojsodjosdsd"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp12"
+            />-->
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp3"
+            android:layout_marginLeft="@dimen/dp3"
+            android:text="njsdjsoidosjodjsijdoijoisjojidiojsodsjiojsodjosdsd"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp12"
+            />
+    </LinearLayout>
+
+</LinearLayout>
