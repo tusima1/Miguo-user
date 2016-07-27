@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fanwe.base.Presenter;
+import com.fanwe.base.Result;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.home.HomeConstants;
 import com.fanwe.network.MgCallback;
@@ -37,10 +38,16 @@ public class LiveListHelper extends Presenter {
         params.put("method", HomeConstants.LIVE_LIST);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
+
             @Override
             public void onSuccessResponse(String responseBody) {
                 Log.d("responseBody LIVE_LIST:", responseBody);
                 mHomeFragment.getLiveList(responseBody);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
             }
         });
     }

@@ -85,9 +85,12 @@ public abstract class MgCallback<T> implements Callback {
         }
         onFinish();
     }
-    public abstract void onSuccessResponse(Result<T> responseBody);
+    public  void onSuccessResponse(Result<T> responseBody){
+
+    }
     public  void onSuccessResponse(String responseBody){
+
         SDToast.showToast(responseBody);
-    };
+    }
     public abstract void onErrorResponse(String message,String errorCode);
 }

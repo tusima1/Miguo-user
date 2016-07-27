@@ -35,10 +35,11 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_live_test2);
         checkPermission();
 
-        MGToast.showToast("Version:"+ AVContext.getVersion());
+        MGToast.showToast("Version:" + AVContext.getVersion());
         findViewById(R.id.bt_zhibo).setOnClickListener(this);
         findViewById(R.id.bt_login).setOnClickListener(this);
 //        init();
+
     }
 
     private void init() {
@@ -56,20 +57,20 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id==R.id.bt_zhibo){
+        if (id == R.id.bt_zhibo) {
             doGetRoomId("wulala");
 //            init();
-        }else if (id==R.id.bt_login){
-            doLogin("654321","13567100270");
+        } else if (id == R.id.bt_login) {
+            doLogin("654321", "13567100270");
         }
     }
 
     private void doLogin(String s, String s1) {
-        TreeMap<String, String> params = new TreeMap<String,String>();
-        params.put("pwd",s);
-        params.put("mobile",s1);
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("pwd", s);
+        params.put("mobile", s1);
         params.put("method", "UserLogin");
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -114,16 +115,21 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
     }
 
     public void doGetRoomId(String shop_id) {
-        TreeMap<String, String> params = new TreeMap<String,String>();
-        params.put("shop_id",shop_id);
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("shop_id", shop_id);
         params.put("method", "ApplyRoom");
-        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast("Error"+message);
             }
 
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -163,10 +169,12 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
                 permissionsList.add(Manifest.permission.READ_PHONE_STATE);
             if ((checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
                 permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-			if (permissionsList.size() != 0) {
-				requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-						REQUEST_PHONE_PERMISSIONS);
-			}
+            if (permissionsList.size() != 0) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_PHONE_PERMISSIONS);
+            }
         }
     }
+
+
 }
