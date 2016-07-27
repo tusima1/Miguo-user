@@ -1,7 +1,10 @@
 package com.fanwe.app;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.support.multidex.MultiDex;
+import android.telephony.TelephonyManager;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
@@ -32,16 +35,15 @@ import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
 import com.umeng.analytics.MobclickAgent;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.telephony.TelephonyManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
 
 public class App extends Application implements SDEventObserver, TANetChangeObserver
 {
+
 
 	private static App mApp = null;
 
@@ -80,6 +82,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
 	private void init()
 	{
+
 		mApp = this;
 		ImageLoaderManager.initImageLoader();
 		initSDLibrary();
@@ -103,7 +106,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		SDCommandManager.getInstance().initialize();
 		LogUtil.isDebug = ServerUrl.DEBUG;
 
-		initDeviceId();
+//		initDeviceId();
 	}
 
 	
@@ -259,4 +262,12 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 	public static App getInstance() {
 		return myApplication;
 	}
+
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
+	}
+
+
 }
