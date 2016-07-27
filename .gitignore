@@ -45,3 +45,4 @@ captures/
 .settings
 *.properties
 
+.idea

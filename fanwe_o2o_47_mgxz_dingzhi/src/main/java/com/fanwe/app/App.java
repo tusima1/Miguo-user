@@ -35,11 +35,8 @@ import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
 import com.umeng.analytics.MobclickAgent;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.support.multidex.MultiDex;
-import android.telephony.TelephonyManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 

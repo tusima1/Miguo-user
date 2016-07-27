@@ -120,16 +120,7 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         params.put("method", "ApplyRoom");
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast("Error"+message);
-            }
 
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-
-            }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -140,6 +131,11 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
             @Override
             public void onSuccessResponse(Result responseBody) {
                 MGToast.showToast("成功");
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                
             }
 
             @Override
