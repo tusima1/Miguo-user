@@ -273,4 +273,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 	public void setmUserCurrentInfo(UserCurrentInfo mUserCurrentInfo) {
 		this.mUserCurrentInfo = mUserCurrentInfo;
 	}
+
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
+	}
 }
