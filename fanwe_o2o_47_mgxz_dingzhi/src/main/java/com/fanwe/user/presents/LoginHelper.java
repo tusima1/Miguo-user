@@ -98,34 +98,7 @@ public class LoginHelper extends Presenter {
         });
     }
 
-    /**
-     * 验证手机号是否已经存在。
-     * @param mobile
-     */
-    public void doCheckMobileExist(String mobile){
 
-        TreeMap<String, String> params = new TreeMap<String,String>();
-        params.put("mobile",mobile);
-        params.put("method", UserConstants.USER_CHECK_EXIST);
-        OkHttpUtils.getInstance().get(null,params,new MgCallback<JSONObject>(){
-
-            @Override
-            public void onSuccessResponse(Result<JSONObject> responseBody) {
-                if(responseBody==null ||responseBody.getBody()==null){
-                    onErrorResponse("验证手机号失败",null);
-                }
-                if(responseBody.getBody().size()>0) {
-
-                    mLoginView.loginSucc(responseBody.getBody().get(0));
-                }
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
-            }
-        });
-    }
 
     /**
      * 退出

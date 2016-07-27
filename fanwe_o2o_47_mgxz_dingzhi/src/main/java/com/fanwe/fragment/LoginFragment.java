@@ -254,7 +254,8 @@ public class LoginFragment extends LoginBaseFragment {
                 Toast.makeText(getActivity(), "password can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
+          //  mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
+            mLoginHelper.doLogin(mStrUserName, mStrPassword, 0);
         }
     }
     private void clickLoginNormal() {

@@ -71,6 +71,72 @@
                     android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp" >
+
+                <!-- 设置密码 -->
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layer_white_stroke_top_left_right"
+                    android:gravity="center_vertical"
+                    android:minHeight="55dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp" >
+
+                    <com.fanwe.library.customview.ClearEditText
+                        android:id="@+id/et_pwd_into"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/layer_white_stroke_top_bot"
+                        android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                        android:hint="输入密码    密码不少于6位，仅限字母与数字"
+                        android:inputType="textPassword"
+                        android:maxLength="18"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/text_size_normal_16sp" />
+                </LinearLayout>
+                <!-- 密码 -->
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layer_white_stroke_bot_left_right"
+                    android:gravity="center_vertical"
+                    android:minHeight="55dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp" >
+
+                    <com.fanwe.library.customview.ClearEditText
+                        android:id="@+id/pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="15dp"
+                        android:background="@null"
+                        android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                        android:hint="确认密码    密码不少于6位，仅限字母与数字"
+                        android:inputType="textPassword"
+
+                        android:maxLength="18"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textCursorDrawable="@null"
+                        android:textSize="@dimen/text_size_normal_16sp" />
+                </LinearLayout>
+
+
             <LinearLayout 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,3 +177,4 @@
        </LinearLayout>
     </LinearLayout>
 
+</LinearLayout>
