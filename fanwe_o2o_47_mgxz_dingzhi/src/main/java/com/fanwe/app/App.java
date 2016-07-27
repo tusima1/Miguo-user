@@ -36,6 +36,7 @@ import com.umeng.analytics.MobclickAgent;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.support.multidex.MultiDex;
 import android.telephony.TelephonyManager;
 
 import cn.jpush.android.api.JPushInterface;
