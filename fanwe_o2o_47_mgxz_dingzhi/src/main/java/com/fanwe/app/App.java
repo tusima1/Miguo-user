@@ -33,7 +33,10 @@ import com.ta.util.netstate.TANetworkStateReceiver;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.telephony.TelephonyManager;
+
 import cn.jpush.android.api.JPushInterface;
 
 
@@ -51,6 +54,12 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		return LocalUserModelDao.queryModel();
 	}
 
+	protected String imei;
+
+	/**
+	 * 自我引用 .
+	 */
+	private static App myApplication;
 	public void setmLocalUser(LocalUserModel localUser)
 	{
 		if (localUser != null)
@@ -64,6 +73,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 	public void onCreate()
 	{
 		super.onCreate();
+		myApplication = this;
+
 		init();
 	}
 
@@ -91,6 +102,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		addClassesNotFinishWhenLoginState0();
 		SDCommandManager.getInstance().initialize();
 		LogUtil.isDebug = ServerUrl.DEBUG;
+
+		initDeviceId();
 	}
 
 	
@@ -229,4 +242,21 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
 	}
 
+	public void initDeviceId(){
+		TelephonyManager telephonyManager = (TelephonyManager) this
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		imei = telephonyManager.getDeviceId();
+	}
+
+	public String getImei() {
+		return imei;
+	}
+	/**
+	 * 返回单实例.
+	 *
+	 * @return HsApplication
+	 */
+	public static App getInstance() {
+		return myApplication;
+	}
 }

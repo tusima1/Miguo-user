@@ -1,8 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -24,12 +22,14 @@ import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManage
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.SDUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
-public class LoginActivity extends BaseActivity
+import java.util.ArrayList;
+import java.util.List;
+
+public class LoginActivity extends BaseActivity implements CallbackView
 {
 
 	public static final String EXTRA_SELECT_TAG_INDEX = "extra_select_tag_index";
@@ -231,4 +231,13 @@ public class LoginActivity extends BaseActivity
 		super.onDestroy();
 	}
 
+	@Override
+	public void onSuccess(String responseBody) {
+
+	}
+
+	@Override
+	public void onFailue(String responseBody) {
+
+	}
 }

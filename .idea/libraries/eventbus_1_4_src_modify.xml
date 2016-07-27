@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="eventbus-1.4-src-modify">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/library_sdDialog/libs/eventbus-1.4-src-modify.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
