@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.fanwe.EventDetailActivity;
 import com.fanwe.app.App;
+import com.fanwe.customview.SnapUpCountDownTimerView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -47,7 +48,7 @@ public class HomeRecommendEventAdapter extends SDBaseAdapter<EventModel_List> {
         TextView tv_money = ViewHolder.get(convertView, R.id.tv_money);
         TextView tv_totalMoney = ViewHolder.get(convertView, R.id.tv_totalmoney);
         //倒计时
-        TextView tv_time = ViewHolder.get(convertView, R.id.item_home_recommend_event_tv_time);
+        SnapUpCountDownTimerView tv_time = ViewHolder.get(convertView, R.id.item_home_recommend_event_tv_time);
 
         final EventModel_List model = getItem(position);
         if (model != null) {
@@ -74,13 +75,9 @@ public class HomeRecommendEventAdapter extends SDBaseAdapter<EventModel_List> {
         return convertView;
     }
 
-    private void setTime(TextView tv_time, EventModel_List model) {
-        //创建一个 SpannableString对象
-        SpannableString sp = new SpannableString("10:19:23");
-        sp.setSpan(new BackgroundColorSpan(Color.parseColor("#FF6600")), 0, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sp.setSpan(new BackgroundColorSpan(Color.parseColor("#FF6600")), 3, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sp.setSpan(new BackgroundColorSpan(Color.parseColor("#FF6600")), 6, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tv_time.setText(sp);
+    private void setTime(SnapUpCountDownTimerView tv_time, EventModel_List model) {
+        tv_time.setTime(1, 55, 3);//设置小时，分钟，秒。注意不能大于正常值，否则会抛出异常
+        tv_time.start();//开始倒计时
     }
 
 }

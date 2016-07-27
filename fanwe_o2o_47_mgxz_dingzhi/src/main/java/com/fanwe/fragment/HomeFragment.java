@@ -117,7 +117,7 @@ public class HomeFragment extends BaseFragment {
                 pageData_1 = null;
                 pageData_2.clear();
                 requestIndex();
-                requestIndex2(false);
+//                requestIndex2(false);
                 if (location != null) {
                     dealLocationSuccess();
                 }
@@ -204,26 +204,29 @@ public class HomeFragment extends BaseFragment {
             pageData_2.clear();
 
             requestIndex();
-            requestIndex2(false);
+//            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
 
         @Override
         public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
 
-            if (pageModel.increment()) {
-                // 添加第二页数据
-                requestIndex2(true);
-                if (pageModel.getPage() == 3) {
-                    mPtrsvAll.setMode(Mode.PULL_FROM_START);
-                }
-            } else {
-                mFragRecommendDeals = new HomeRecommendTuanFragment();
-                mFragRecommendDeals.setmIndexModel(mListModel, 3);
-//                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-                mPtrsvAll.setMode(Mode.PULL_FROM_START);
-                mPtrsvAll.onRefreshComplete();
-            }
+            mPtrsvAll.onRefreshComplete();
+            SDDialogManager.dismissProgressDialog();
+
+//            if (pageModel.increment()) {
+//                // 添加第二页数据
+//                requestIndex2(true);
+//                if (pageModel.getPage() == 3) {
+//                    mPtrsvAll.setMode(Mode.PULL_FROM_START);
+//                }
+//            } else {
+//                mFragRecommendDeals = new HomeRecommendTuanFragment();
+//                mFragRecommendDeals.setmIndexModel(mListModel, 3);
+////                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
+//                mPtrsvAll.setMode(Mode.PULL_FROM_START);
+//                mPtrsvAll.onRefreshComplete();
+//            }
         }
 
     };
@@ -281,7 +284,6 @@ public class HomeFragment extends BaseFragment {
         model.putCtl("index");
         model.putAct("index2");
         model.putPage(pageModel.getPage() - 1);
-
         SDRequestCallBack<Index_indexActModel> handler = new SDRequestCallBack<Index_indexActModel>() {
 
             @Override

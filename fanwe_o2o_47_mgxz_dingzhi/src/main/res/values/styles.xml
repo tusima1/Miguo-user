@@ -34,12 +34,40 @@
         <item name="android:windowEnterAnimation">@anim/dialog_enter_sliding_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit_sliding_to_bottom</item>
     </style>
-    
+
     <style name="button_miguo">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@drawable/shape_cricle_yellow</item>
-        
-    </style>
-	
 
+    </style>
+
+
+    <style name="RushBuyCountDownTimerViewStyle" parent="SnapUpView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">0</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/bg_title_bar</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RushBuyCountDownTimerViewStyleRed" parent="RushBuyCountDownTimerViewStyle">
+        <item name="android:textColor">@android:color/holo_red_light</item>
+    </style>
+
+
+    <style name="SnapUpViewColon" parent="SnapUpView">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:text">:</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SnapUpView">
+        <!--//改变控件大小-->
+        <item name="android:textSize">14dp</item>
+    </style>
 </resources>
