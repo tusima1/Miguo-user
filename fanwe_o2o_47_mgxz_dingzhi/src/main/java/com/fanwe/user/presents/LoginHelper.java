@@ -47,7 +47,7 @@ public class LoginHelper extends Presenter {
         params.put("mobile",userName);
         params.put("pwd",password);
         params.put("method", UserConstants.USER_lOGIN);
-        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {
