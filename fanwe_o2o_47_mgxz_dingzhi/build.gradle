@@ -42,4 +42,6 @@ dependencies {
     compile files('libs/UPPayAssistEx.jar')
     compile files('libs/UPPayPluginEx.jar')
     compile files('libs/x-2.6.14-src-1.4-modify.jar')
+
+    compile 'com.google.code.gson:gson:2.3.1'
 }

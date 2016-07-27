@@ -85,4 +85,6 @@
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
 
+    <string name="three_login_message">第三方账号快速登录</string>
+
 </resources>

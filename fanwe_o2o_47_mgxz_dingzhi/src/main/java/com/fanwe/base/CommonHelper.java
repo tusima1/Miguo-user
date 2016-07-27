@@ -51,16 +51,25 @@ public class CommonHelper extends Presenter {
       }else{
             mgCallback = new MgCallback(){
                 @Override
-                public void onSuccessResponse(String responseBody) {
-                    Log.d("responseBody:",responseBody);
+                public void onSuccessResponse(Result responseBody) {
+
                     mView.onSuccess(responseBody);
+                }
+                @Override
+                public void onSuccessResponse(String body){
+                    mView.onSuccess(body);
+                }
+
+                @Override
+                public void onErrorResponse(String message, String errorCode) {
+
                 }
             };
         }
 
         TreeMap<String, String> params = new TreeMap<String,String>();
         params.put("mobile",mobile);
-        params.put("type",1+"");
+        params.put("type",type+"");
         params.put("method", SEND_CAPTCHA);
         OkHttpUtils.getInstance().get(null,params,mgCallback);
     }

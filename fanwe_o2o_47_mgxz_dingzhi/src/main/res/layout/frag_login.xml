@@ -81,30 +81,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/qq_login"
-                android:layout_marginLeft="@dimen/abc_action_bar_default_height"
-                android:layout_margin="@dimen/fenxiao_marginleft"
-                android:layout_width="@dimen/button_size"
-                android:layout_height="@dimen/button_size"
-                android:background="@drawable/my_distribution_qq"/>
-            <Button
-                android:id="@+id/weibo_login"
-                android:layout_margin="@dimen/fenxiao_marginleft"
-                android:layout_width="@dimen/button_size"
-                android:layout_height="@dimen/button_size"
-                android:background="@drawable/my_distribution_weibo"/>
-            <Button
-                android:id="@+id/weixin_login"
-                android:layout_margin="@dimen/fenxiao_marginleft"
-                android:layout_width="@dimen/button_size"
-                android:layout_height="@dimen/button_size"
-                android:background="@drawable/my_distribution_weixin"/>
-        </LinearLayout>
         <TextView
             android:id="@+id/act_login_tv_login"
             android:layout_width="fill_parent"
@@ -116,70 +92,8 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_normal_16sp" />
 
-        <!--
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="20dp" >
+        <include layout="@layout/act_third_login"></include>
 
-            <LinearLayout
-                android:id="@+id/act_login_ll_third_login"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-                <LinearLayout
-                    android:id="@+id/act_login_ll_login_sina"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/ic_sina_logo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="center"
-                        android:text="新浪微博"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/act_login_ll_login_qq"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal" >
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="10dp"
-                        android:src="@drawable/qq_logo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="center"
-                        android:text="QQ"
-                        android:textColor="@color/black"
-                        android:textSize="17sp" />
-                </LinearLayout>
-            </LinearLayout>
-        </RelativeLayout>
-        -->
     </LinearLayout>
 
 </LinearLayout>

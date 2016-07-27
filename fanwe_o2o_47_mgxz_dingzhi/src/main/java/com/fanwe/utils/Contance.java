@@ -4,6 +4,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 
 public class Contance {
+	/**
+	 * 验证验倒计时初始时间 。
+	 */
+	public static final int SEND_CODE_TIME=60;
 	public static final String IMPORT_DB_NAME = "jingdian_db";
 	public static final String IMPORT_DB_TABLENAME = "jingdian";
 	public static final String TAG_INFO = "import_db";

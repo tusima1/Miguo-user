@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.Result;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -232,7 +233,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	}
 
 	@Override
-	public void onSuccess(String responseBody) {
+	public void onSuccess(Result responseBody) {
 
 	}
 

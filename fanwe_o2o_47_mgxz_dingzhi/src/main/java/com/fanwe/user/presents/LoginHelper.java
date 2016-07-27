@@ -1,17 +1,16 @@
 package com.fanwe.user.presents;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fanwe.base.Presenter;
+import com.fanwe.base.Result;
 import com.fanwe.fragment.LoginFragment;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
 
@@ -47,12 +46,23 @@ public class LoginHelper extends Presenter {
         params.put("mobile",userName);
         params.put("pwd",password);
         params.put("method", UserConstants.USER_lOGIN);
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().post(null,params,new MgCallback<JSONObject>(){
 
             @Override
-            public void onSuccessResponse(String responseBody) {
-                Log.d("responseBody:",responseBody);
-                mLoginView.loginSucc(responseBody);
+            public void onSuccessResponse(Result<JSONObject> responseBody) {
+                if(responseBody==null ||responseBody.getBody()==null){
+                    onErrorResponse("登录失败",null);
+                }
+                if(responseBody.getBody().size()>0) {
+
+
+                    mLoginView.loginSucc(responseBody.getBody().get(0));
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
             }
         });
     }
@@ -68,12 +78,51 @@ public class LoginHelper extends Presenter {
         params.put("pwd",password);
         params.put("captcha",captcha);
         params.put("method", UserConstants.USER_REGISTER);
-        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().post(null,params,new MgCallback<JSONObject>(){
 
             @Override
-            public void onSuccessResponse(String responseBody) {
-                Log.d("responseBody:",responseBody);
-                mLoginView.loginSucc(responseBody);
+            public void onSuccessResponse(Result<JSONObject> responseBody) {
+               if(responseBody==null ||responseBody.getBody()==null){
+                   onErrorResponse("注册失败",null);
+               }
+                if(responseBody.getBody().size()>0) {
+
+                    mLoginView.loginSucc(responseBody.getBody().get(0));
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 验证手机号是否已经存在。
+     * @param mobile
+     */
+    public void doCheckMobileExist(String mobile){
+
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("mobile",mobile);
+        params.put("method", UserConstants.USER_CHECK_EXIST);
+        OkHttpUtils.getInstance().get(null,params,new MgCallback<JSONObject>(){
+
+            @Override
+            public void onSuccessResponse(Result<JSONObject> responseBody) {
+                if(responseBody==null ||responseBody.getBody()==null){
+                    onErrorResponse("验证手机号失败",null);
+                }
+                if(responseBody.getBody().size()>0) {
+
+                    mLoginView.loginSucc(responseBody.getBody().get(0));
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
             }
         });
     }

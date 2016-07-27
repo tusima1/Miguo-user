@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,12 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.alibaba.fastjson.JSON;
-import com.fanwe.RegisterActivity;
 import com.fanwe.SetPwActivity;
-import com.fanwe.app.AppConfig;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
+import com.fanwe.base.Result;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
@@ -29,10 +24,9 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
@@ -40,14 +34,12 @@ import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.model.UserInfoModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.work.AppRuntimeWorker;
+import com.fanwe.utils.Contance;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
-import com.tencent.connect.UserInfo;
 
 public class LoginPhoneFragment extends LoginBaseFragment implements CallbackView
 {
@@ -100,19 +92,28 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			SDToast.showToast("请输入手机号码");
 			return;
 		}
+		//开始倒计时。
+		mBtnSendCode.setmDisableTime(Contance.SEND_CODE_TIME);
+		mBtnSendCode.startTickWork();
+
 		mFragmentHelper.doGetCaptcha(mNumberPhone, 0, new MgCallback() {
+
+			@Override
+			public void onSuccessResponse(Result responseBody) {
+				SDToast.showToast("验证码发送成功");
+			}
+
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+				SDToast.showToast("验证码发送失败，请重新发送");
+				mBtnSendCode.setText("重新发送验证码");
+				mBtnSendCode.stopTickWork();
+
+			}
+
 			@Override
 			public void onSuccessResponse(String responseBody) {
-				mActModel = JSON.parseObject(responseBody, Check_MobActModel.class);
-
-						if(mActModel.getExists() == 1)
-						{
-							requestSendCode();
-						}else
-						{
-							showChangeLocationDialog();
-							SDViewBinder.setTextView(mBtnLogin, "提交");
-						}
+				SDToast.showToast("验证码发送成功");
 			}
 		});
 //		model.putCtl("user");
@@ -218,6 +219,9 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		}
 	}
 
+	/**
+	 *快捷 登录 接口。
+	 */
 	private void requestShortSet() {
 		
 		if (TextUtils.isEmpty(mNumberPhone))
@@ -279,6 +283,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		};
 		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
+
 	private boolean validateParams()
 	{
 		if(mActModel.getExists() != 1 || mActModel.getIs_tmp() == 1)//手机号未被注册
@@ -485,11 +490,17 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		}
 	}
 
+
+	@Override
+	public void onSuccess(Result responseBody) {
+
+			SDToast.showToast("验证码发送成功");
+
+	}
+
 	@Override
 	public void onSuccess(String responseBody) {
-		Log.d(TAG,responseBody);
-		//mBtnSendCode.setmDisableTime(actModel.getLesstime());
-		mBtnSendCode.startTickWork();
+
 	}
 
 	@Override
