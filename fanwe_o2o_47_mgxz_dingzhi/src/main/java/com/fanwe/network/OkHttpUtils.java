@@ -103,6 +103,9 @@ public class OkHttpUtils {
         if(!TextUtils.isEmpty(url)){
             serverUrl +=url;
         }
+        if(serverUrl.endsWith("/")){
+            serverUrl = serverUrl.substring(0,serverUrl.length()-1);
+        }
         //添加公共参数
         params.putAll(commonParams());
         //加密所有的参数
@@ -139,6 +142,9 @@ public class OkHttpUtils {
        // serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC";
         if(!TextUtils.isEmpty(url)){
             serverUrl +=url;
+        }
+        if(serverUrl.endsWith("/")){
+            serverUrl = serverUrl.substring(0,serverUrl.length()-1);
         }
         //添加公共参数
         params.putAll(commonParams());

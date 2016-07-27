@@ -1,27 +1,20 @@
 package com.fanwe.fragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import android.R.integer;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.Scroller;
-import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.adapter.TuanListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.event.EnumEventTag;
+import com.fanwe.home.presents.LiveListHelper;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -29,7 +22,6 @@ import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.IndexActAdvsModel;
@@ -37,13 +29,10 @@ import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.SDValidateUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -84,6 +73,8 @@ public class HomeFragment extends BaseFragment {
     private boolean isDown = true;
     protected Index_indexActModel mActModel;
 
+    private LiveListHelper mLiveListHelper;
+
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -94,11 +85,14 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void init() {
         super.init();
+
+        mLiveListHelper = new LiveListHelper(getActivity(), this);
 //		initPageModel();
         locationCity();
-
         addTitleBarFragment();
         initPullToRefreshListView();
+
+        mLiveListHelper.getLiveList();
     }
 
     private void initPageModel(int totalPage) {
@@ -116,8 +110,8 @@ public class HomeFragment extends BaseFragment {
                 pageModel.resetPage();
                 pageData_1 = null;
                 pageData_2.clear();
-                requestIndex();
-                requestIndex2(false);
+//                requestIndex();
+//                requestIndex2(false);
                 if (location != null) {
                     dealLocationSuccess();
                 }
@@ -203,27 +197,31 @@ public class HomeFragment extends BaseFragment {
             pageData_1 = null;
             pageData_2.clear();
 
-            requestIndex();
-            requestIndex2(false);
+//            requestIndex();
+//            mLiveListHelper.getLiveList();
+//            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
 
         @Override
         public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
 
-            if (pageModel.increment()) {
-                // 添加第二页数据
-                requestIndex2(true);
-                if (pageModel.getPage() == 3) {
-                    mPtrsvAll.setMode(Mode.PULL_FROM_START);
-                }
-            } else {
-                mFragRecommendDeals = new HomeRecommendTuanFragment();
-                mFragRecommendDeals.setmIndexModel(mListModel, 3);
-//                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-                mPtrsvAll.setMode(Mode.PULL_FROM_START);
-                mPtrsvAll.onRefreshComplete();
-            }
+            mPtrsvAll.onRefreshComplete();
+            SDDialogManager.dismissProgressDialog();
+
+//            if (pageModel.increment()) {
+//                // 添加第二页数据
+//                requestIndex2(true);
+//                if (pageModel.getPage() == 3) {
+//                    mPtrsvAll.setMode(Mode.PULL_FROM_START);
+//                }
+//            } else {
+//                mFragRecommendDeals = new HomeRecommendTuanFragment();
+//                mFragRecommendDeals.setmIndexModel(mListModel, 3);
+////                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
+//                mPtrsvAll.setMode(Mode.PULL_FROM_START);
+//                mPtrsvAll.onRefreshComplete();
+//            }
         }
 
     };
@@ -281,7 +279,6 @@ public class HomeFragment extends BaseFragment {
         model.putCtl("index");
         model.putAct("index2");
         model.putPage(pageModel.getPage() - 1);
-
         SDRequestCallBack<Index_indexActModel> handler = new SDRequestCallBack<Index_indexActModel>() {
 
             @Override
@@ -413,5 +410,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected String setUmengAnalyticsTag() {
         return this.getClass().getName().toString();
+    }
+
+    public void getLiveList(String responseBody) {
     }
 }
