@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
-import android.telephony.TelephonyManager;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
@@ -109,7 +108,6 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		SDCommandManager.getInstance().initialize();
 		LogUtil.isDebug = ServerUrl.DEBUG;
 
-		initDeviceId();
 		mUserCurrentInfo = UserCurrentInfo.getInstance();
 	}
 
@@ -249,14 +247,11 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
 	}
 
-	public void initDeviceId(){
-		TelephonyManager telephonyManager = (TelephonyManager) this
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		imei = telephonyManager.getDeviceId();
-	}
-
 	public String getImei() {
 		return imei;
+	}
+	public void setImei(String imei){
+		this.imei=imei;
 	}
 	/**
 	 * 返回单实例.

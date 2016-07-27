@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import com.fanwe.base.Result;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
@@ -76,9 +77,19 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
             }
 
             @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
             public void onResponse(Call call, Response response) throws IOException {
                 super.onResponse(call, response);
                 MGToast.showToast("onResponse");
+            }
+
+            @Override
+            public void onSuccessResponse(Result responseBody) {
+
             }
 
             @Override
@@ -109,14 +120,20 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         OkHttpUtils.getInstance().post(null,params,new MgCallback(){
 
             @Override
-            public void onSuccessResponse(String responseBody) {
-                MGToast.showToast("成功");
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast("Error"+message);
             }
+
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 super.onResponse(call, response);
                 MGToast.showToast("onResponse");
+            }
+
+            @Override
+            public void onSuccessResponse(Result responseBody) {
+                MGToast.showToast("成功");
             }
 
             @Override
