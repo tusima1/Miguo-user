@@ -1,10 +1,7 @@
 package com.fanwe.app;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.support.multidex.MultiDex;
-import android.telephony.TelephonyManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
@@ -26,6 +23,7 @@ import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.utils.CrashHandler;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -35,15 +33,16 @@ import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.telephony.TelephonyManager;
 
 import cn.jpush.android.api.JPushInterface;
 
 
 public class App extends Application implements SDEventObserver, TANetChangeObserver
 {
-
 
 	private static App mApp = null;
 
@@ -56,6 +55,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		return LocalUserModelDao.queryModel();
 	}
 
+	/**
+	 * 当前用户信息。存在于内存中。定义到2016-7-27 by  zhouhy
+	 */
+	public UserCurrentInfo mUserCurrentInfo;
 	protected String imei;
 
 	/**
@@ -82,7 +85,6 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
 	private void init()
 	{
-
 		mApp = this;
 		ImageLoaderManager.initImageLoader();
 		initSDLibrary();
@@ -106,7 +108,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		SDCommandManager.getInstance().initialize();
 		LogUtil.isDebug = ServerUrl.DEBUG;
 
-//		initDeviceId();
+		initDeviceId();
+		mUserCurrentInfo = UserCurrentInfo.getInstance();
 	}
 
 	
@@ -263,11 +266,17 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		return myApplication;
 	}
 
+	public UserCurrentInfo getmUserCurrentInfo() {
+		return mUserCurrentInfo;
+	}
+
+	public void setmUserCurrentInfo(UserCurrentInfo mUserCurrentInfo) {
+		this.mUserCurrentInfo = mUserCurrentInfo;
+	}
+
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
 		MultiDex.install(this);
 	}
-
-
 }

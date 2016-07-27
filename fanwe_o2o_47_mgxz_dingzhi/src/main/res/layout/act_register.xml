@@ -78,15 +78,13 @@
                 android:orientation="horizontal"
                 android:id="@+id/ll_register_xieyi"
                 android:gravity="right|center_vertical"
-                android:paddingRight="10dp"
-                >
+                android:paddingRight="10dp">
                    <CheckBox 
                        android:layout_width="15dip"
                        android:layout_height="15dip"
                        android:button="@null"
                        android:background="@drawable/bg_cb"
-                       android:id="@+id/ch_register"
-                       />
+                       android:id="@+id/ch_register"/>
                    <TextView 
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
@@ -109,6 +107,7 @@
             android:text="提交"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_normal_16sp" />
+         <include layout="@layout/act_third_login"></include>
+       </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>

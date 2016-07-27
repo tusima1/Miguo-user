@@ -38,6 +38,7 @@
     <dimen name="size_359_px2dp">180dp</dimen>
     <dimen name="size_386_px2dp">193dp</dimen>
     <dimen name="size_110_px2dp">55dp</dimen>
+    <dimen name="size_100_px2dp">50dp</dimen>
     <dimen name="size_108_px2dp">54dp</dimen>
     <dimen name="size_193_px2dp">96dp</dimen>
     <dimen name="size_80_px2dp">40dp</dimen>
@@ -60,6 +61,7 @@
     <dimen name="list_image_size">80dp</dimen>
     <!--login-->
     <dimen name="button_size">50dp</dimen>
+    <dimen name="margin_top">100dp</dimen>
 
     <!--自动生成的-->
     <dimen name="dp0">0dp</dimen>

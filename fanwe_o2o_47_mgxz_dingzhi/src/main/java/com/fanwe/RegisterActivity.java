@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.app.AppConfig;
+import com.fanwe.base.CallbackView;
+import com.fanwe.base.CommonHelper;
+import com.fanwe.base.Result;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.LoginPhoneFragment;
@@ -21,14 +21,13 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Check_MobActModel;
-import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.model.UserInfoModel;
-import com.fanwe.model.User_infoModel;
+import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.Contance;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -39,7 +38,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
  * @author Administrator
  * 
  */
-public class RegisterActivity extends BaseActivity
+public class RegisterActivity extends BaseActivity implements CallbackView
 {
 
 	@ViewInject(R.id.et_userphone)
@@ -67,7 +66,7 @@ public class RegisterActivity extends BaseActivity
 	private String userPhone;
 
 	protected Check_MobActModel mActModel;
-
+	CommonHelper mFragmentHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -80,11 +79,13 @@ public class RegisterActivity extends BaseActivity
 
 	private void init()
 	{
+		mFragmentHelper = new CommonHelper(this,this);
 		initGetIntent();
 		initTitle();
 		registeClick();
 		initRequest();
 		initSDSendValidateButton();
+
 	}
 	
 	
@@ -250,6 +251,36 @@ public class RegisterActivity extends BaseActivity
 					}
 				});
 	}
+
+	/**
+	 * 用JAVA 接口请求验证码。
+	 */
+	private void  doGetCaptcha(){
+		userPhone = mEtUserphone.getText().toString();
+		if (TextUtils.isEmpty(userPhone))
+		{
+			SDToast.showToast("请输入手机号码");
+			return;
+		}
+		//开始倒计时。
+		mBt_send_code.setmDisableTime(Contance.SEND_CODE_TIME);
+		mBt_send_code.startTickWork();
+		mFragmentHelper.doGetCaptcha(userPhone, 0, new MgCallback() {
+
+			@Override
+			public void onSuccessResponse(Result responseBody) {
+               SDToast.showToast("验证码发送成功");
+			}
+
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+				SDToast.showToast("验证码发送失败，请重新发送");
+				mBt_send_code.setText("重新发送验证码");
+				mBt_send_code.stopTickWork();
+
+			}
+		});
+	}
 	/**
 	 * 请求验证码
 	 */
@@ -301,6 +332,10 @@ public class RegisterActivity extends BaseActivity
 		});
 	}
 
+	/**
+	 * 参数有效性判断。
+	 * @return
+     */
 	private boolean validateParam()
 	{
 		userPhone = mEtUserphone.getText().toString();
@@ -323,4 +358,20 @@ public class RegisterActivity extends BaseActivity
 		return true;
 	}
 
+
+
+	@Override
+	public void onSuccess(Result responseBody) {
+
+	}
+
+	@Override
+	public void onSuccess(String responseBody) {
+
+	}
+
+	@Override
+	public void onFailue(String responseBody) {
+
+	}
 }

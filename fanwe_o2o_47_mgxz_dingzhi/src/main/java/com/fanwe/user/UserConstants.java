@@ -8,6 +8,10 @@ public class UserConstants {
      * 注册接口。
      */
     public static final String  USER_REGISTER ="UserRegister";
+    /**
+     * 验证手机号是否存在.
+     */
+    public static final  String   USER_CHECK_EXIST  ="UserCheckExist";
 
     public static final String BD_EXIT_APP = "bd_sxb_exit";
 

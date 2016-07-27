@@ -94,7 +94,7 @@ public class OkHttpUtils {
     public void post(String url, TreeMap<String,String> params, MgCallback mCallback,Object tag)  {
         String serverUrl="";
         if(ServerUrl.DEBUG){
-            serverUrl = ServerUrl.SERVER_API_TEST_URL;
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
         }else{
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
@@ -134,12 +134,12 @@ public class OkHttpUtils {
 
         String serverUrl="";
         if(ServerUrl.DEBUG){
-            serverUrl = ServerUrl.SERVER_API_TEST_URL;
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
         }else{
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
         //袁浩 测试地址
-       // serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC";
+     //   serverUrl = "http://192.168.2.42:8080/mgxz.BussRPC";
         if(!TextUtils.isEmpty(url)){
             serverUrl +=url;
         }

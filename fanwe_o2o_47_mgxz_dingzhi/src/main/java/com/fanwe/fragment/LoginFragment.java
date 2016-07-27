@@ -11,7 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fanwe.MainActivity;
+import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.http.InterfaceServer;
@@ -19,11 +22,13 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -139,7 +144,6 @@ public class LoginFragment extends LoginBaseFragment {
      * @param platform
      */
     public void goToAuth(SHARE_MEDIA platform) {
-
         mShareAPI.doOauthVerify(getActivity(), platform, umAuthListener);
     }
 
@@ -238,7 +242,9 @@ public class LoginFragment extends LoginBaseFragment {
         InterfaceServer.getInstance().requestInterface(model, handler);
     }
 
+
     public void doLogin(){
+
         if (validateParam()) {
             if (TextUtils.isEmpty(mStrUserName)) {
                 Toast.makeText(getActivity(), "name can not be empty!", Toast.LENGTH_SHORT).show();
@@ -248,7 +254,7 @@ public class LoginFragment extends LoginBaseFragment {
                 Toast.makeText(getActivity(), "password can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            mLoginHelper.doLogin(mStrUserName, mStrPassword, 0);
+            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
         }
     }
     private void clickLoginNormal() {
@@ -316,7 +322,19 @@ public class LoginFragment extends LoginBaseFragment {
     /**
      * JAVA 登录接口。
      */
-    public void   loginSucc(String responseBody){
+    public void   loginSucc(JSONObject jsonObject){
+        UserInfoNew userInfoNew = JSON.parseObject(String.valueOf(jsonObject), UserInfoNew.class);
+            if (userInfoNew != null) {
 
-    }
+                App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+
+                User_infoModel model = new User_infoModel();
+                model.setUser_id(userInfoNew.getUser_id());
+                model.setMobile(mStrUserName);
+                model.setUser_pwd(MD5Util.MD5(mStrPassword));
+                model.setUser_name(userInfoNew.getUser_name());
+                dealLoginSuccess(model);
+
+            }
+        }
 }

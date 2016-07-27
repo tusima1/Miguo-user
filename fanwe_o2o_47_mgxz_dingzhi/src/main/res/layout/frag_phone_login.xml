@@ -91,4 +91,7 @@
         android:text="快捷登录"
         android:textColor="#ffffffff" />
 
+    <include layout="@layout/act_third_login"></include>
+
+
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.fanwe.model;
 public class User_infoModel extends BaseActModel
 {
 	private int id;
+	private String user_id;
 	private String user_name;
 	private String user_pwd; // 加密过的密码
 	private String email;    
@@ -68,4 +69,11 @@ public class User_infoModel extends BaseActModel
 		this.email = email;
 	}
 
+	public String getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
 }

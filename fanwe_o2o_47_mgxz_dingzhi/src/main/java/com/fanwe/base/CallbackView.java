@@ -6,6 +6,8 @@ package com.fanwe.base;
  */
 public interface  CallbackView {
 
+      void onSuccess(Result responseBody);
       void onSuccess(String responseBody);
+
       void onFailue(String responseBody);
 }
