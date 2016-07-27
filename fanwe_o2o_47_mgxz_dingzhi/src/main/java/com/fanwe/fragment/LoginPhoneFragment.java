@@ -6,14 +6,19 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.alibaba.fastjson.JSON;
 import com.fanwe.RegisterActivity;
 import com.fanwe.SetPwActivity;
 import com.fanwe.app.AppConfig;
+import com.fanwe.base.CallbackView;
+import com.fanwe.base.CommonHelper;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
@@ -34,6 +39,8 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.model.UserInfoModel;
 import com.fanwe.model.User_infoModel;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.exception.HttpException;
@@ -42,9 +49,10 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.connect.UserInfo;
 
-public class LoginPhoneFragment extends LoginBaseFragment
+public class LoginPhoneFragment extends LoginBaseFragment implements CallbackView
 {
 
+	public static final String TAG = LoginPhoneFragment.class.getSimpleName();
 	public static final String EXTRA_PHONE_NUMBER = "extra_phone_number";
 
 	@ViewInject(R.id.et_mobile)
@@ -65,6 +73,8 @@ public class LoginPhoneFragment extends LoginBaseFragment
 
 	private String mNumberPhone;
 
+	CommonHelper mFragmentHelper;
+
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -75,37 +85,27 @@ public class LoginPhoneFragment extends LoginBaseFragment
 	protected void init()
 	{
 		super.init();
+		mFragmentHelper = new CommonHelper(getActivity(),this);
 		getIntentData();
-		initRequest();
+
 		registeClick();
 		initSDSendValidateButton();
 	}
 
 	public void initRequest()
 	{
-		RequestModel model =new RequestModel();
 		mNumberPhone = mEtMobile.getText().toString();
 		if (TextUtils.isEmpty(mNumberPhone))
 		{
 			SDToast.showToast("请输入手机号码");
 			return;
 		}
-		model.putCtl("user");
-		model.putAct("check_mobile");
-		model.put("mobile", mNumberPhone);
-		SDRequestCallBack<Check_MobActModel> handler = new SDRequestCallBack<Check_MobActModel>()
-		{
-					@Override
-					public void onStart()
-					{
-						SDDialogManager.showProgressDialog("请稍候...");
-					}
+		mFragmentHelper.doGetCaptcha(mNumberPhone, 0, new MgCallback() {
+			@Override
+			public void onSuccessResponse(String responseBody) {
+				mActModel = JSON.parseObject(responseBody, Check_MobActModel.class);
 
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo)
-					{
-						mActModel = actModel;
-						if(actModel.getExists() == 1)
+						if(mActModel.getExists() == 1)
 						{
 							requestSendCode();
 						}else
@@ -113,15 +113,40 @@ public class LoginPhoneFragment extends LoginBaseFragment
 							showChangeLocationDialog();
 							SDViewBinder.setTextView(mBtnLogin, "提交");
 						}
-					}
-
-					@Override
-					public void onFinish()
-					{
-						SDDialogManager.dismissProgressDialog();
-					}
-				};
-				InterfaceServer.getInstance().requestInterface(model, handler);
+			}
+		});
+//		model.putCtl("user");
+//		model.putAct("check_mobile");
+//		model.put("mobile", mNumberPhone);
+//		SDRequestCallBack<Check_MobActModel> handler = new SDRequestCallBack<Check_MobActModel>()
+//		{
+//					@Override
+//					public void onStart()
+//					{
+//						SDDialogManager.showProgressDialog("请稍候...");
+//					}
+//
+//					@Override
+//					public void onSuccess(ResponseInfo<String> responseInfo)
+//					{
+//						mActModel = actModel;
+//						if(actModel.getExists() == 1)
+//						{
+//							requestSendCode();
+//						}else
+//						{
+//							showChangeLocationDialog();
+//							SDViewBinder.setTextView(mBtnLogin, "提交");
+//						}
+//					}
+//
+//					@Override
+//					public void onFinish()
+//					{
+//						SDDialogManager.dismissProgressDialog();
+//					}
+//				};
+//				InterfaceServer.getInstance().requestInterface(model, handler);
 			}
 
 	protected void getIntentData()
@@ -270,7 +295,7 @@ public class LoginPhoneFragment extends LoginBaseFragment
 	 */
 	private void requestSendCode()
 	{
-		
+
 		CommonInterface.requestValidateCode(mNumberPhone, 0, new SDRequestCallBack<Sms_send_sms_codeActModel>()
 				{
 					@Override
@@ -288,7 +313,7 @@ public class LoginPhoneFragment extends LoginBaseFragment
 							break;
 						}
 					}
-					
+
 					@Override
 					public void onStart()
 					{
@@ -458,5 +483,17 @@ public class LoginPhoneFragment extends LoginBaseFragment
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onSuccess(String responseBody) {
+		Log.d(TAG,responseBody);
+		//mBtnSendCode.setmDisableTime(actModel.getLesstime());
+		mBtnSendCode.startTickWork();
+	}
+
+	@Override
+	public void onFailue(String responseBody) {
+
 	}
 }

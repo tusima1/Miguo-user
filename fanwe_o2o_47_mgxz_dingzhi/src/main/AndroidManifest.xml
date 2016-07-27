@@ -854,11 +854,32 @@
         <!-- 正式版用正式的key -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="@string/umeng_key" >
+            android:value="@string/test_umeng_key" >
         </meta-data>
         <!-- 友盟统计分析-渠道 -->
         <meta-data android:value="HuaWei" android:name="UMENG_CHANNEL"/>
-        
+
+        <!-- 微博-->
+
+        <!-- Share edit page-->
+        <activity
+            android:name="com.fanwe.o2o.miguo.WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" >
+        </activity>
+
+        <!--登录回调-->
+
         <!-- 友盟分享start -->
         <!-- 分享内容编辑页 -->
         <activity
@@ -872,7 +893,7 @@
 
         <!-- 微信回调activity -->
         <activity
-            android:name="com.fanwe.wxapi.WXEntryActivity"
+            android:name="com.fanwe.o2o.miguo.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -888,140 +909,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- <data android:scheme="tencent222222" /> -->
+               <!-- <data android:scheme="tencent222222" />-->
+                <data android:scheme="tencent1105496065" />
+
                 <!-- 100380359 100381104 222222 -->
-                <data android:scheme="tencent1101169715" />
+               <!-- <data android:scheme="tencent1101169715" />-->
             </intent-filter>
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- QQ登录end -->
-<!-- 友盟分享end -->
-       <!--  
-      	友盟推送start
-        监听通知点击或者忽略处理的广播
-        <receiver
-            android:name="com.umeng.message.NotificationProxyBroadcastReceiver"
-            android:exported="false" >
-        </receiver>
-        监听开机运行、网络连接变化、卸载的广播
-        <receiver
-            android:name="com.umeng.message.SystemReceiver"
-            android:process=":push" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        监听消息到达的广播
-        <receiver
-            android:name="com.umeng.message.MessageReceiver"
-            android:process=":push" >
-            <intent-filter>
-                <action android:name="org.agoo.android.intent.action.RECEIVE" />
-            </intent-filter>
-        </receiver>
-
-        监听宿主选举的广播
-        <receiver
-            android:name="com.umeng.message.ElectionReceiver"
-            android:process=":push" >
-            <intent-filter>
-                <action android:name="org.agoo.android.intent.action.ELECTION_RESULT_V4" />
-
-                <category android:name="umeng" />
-            </intent-filter>
-        </receiver>
-
-        监听注册的广播
-        【应用包名】字符串需要替换成本应用的应用包名
-        <receiver
-            android:name="com.umeng.message.RegistrationReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.fanwe.o2o.newo2o.intent.action.COMMAND" />
-                需要修改包名
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.umeng.message.UmengMessageBootReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        Umeng的长连服务，用来建立推送的长连接的
-        【应用包名】字符串需要替换成本应用的应用包名
-        <service
-            android:name="com.umeng.message.UmengService"
-            android:exported="true"
-            android:label="UPushService"
-            android:process=":push" >
-            <intent-filter>
-                <action android:name="com.fanwe.o2o.newo2o.intent.action.START" />
-                需要修改包名
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.fanwe.o2o.newo2o.intent.action.COCKROACH" />
-                需要修改包名
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.agoo.android.intent.action.PING_V4" />
-
-                <category android:name="umeng" />
-            </intent-filter>
-        </service>
-
-        Umeng的消息接收服务
-        <service
-            android:name="com.umeng.message.UmengIntentService"
-            android:process=":push" />
-
-        Umeng的消息路由服务
-        <service
-            android:name="com.umeng.message.UmengMessageIntentReceiverService"
-            android:exported="true"
-            android:process=":push" >
-            <intent-filter>
-                <action android:name="org.android.agoo.client.MessageReceiverService" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.android.agoo.client.ElectionReceiverService" />
-            </intent-filter>
-        </service>
-
-        v2.4.1添加的Service，Umeng的消息接收后的处理服务
-        <service
-            android:name="com.umeng.message.UmengMessageCallbackHandlerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.umeng.messge.registercallback.action" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.umeng.message.unregistercallback.action" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.umeng.message.message.handler.action" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.umeng.message.autoupdate.handler.action" />
-            </intent-filter>
-        </service>
-
-        V1.3.0添加的service，负责下载通知的资源
-        <service android:name="com.umeng.message.UmengDownloadResourceService" />
-
-        友盟end 
-        -->
         <activity
             android:name="com.fanwe.MyMessageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
@@ -1049,6 +947,10 @@
             </intent-filter>
         </activity>
         <!-- Required  SDK核心功能 -->
+        <service
+            android:name="com.sina.weibo.sdk.net.DownloadService"
+            android:exported="false">
+        </service>
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"

@@ -81,6 +81,30 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/qq_login"
+                android:layout_marginLeft="@dimen/abc_action_bar_default_height"
+                android:layout_margin="@dimen/fenxiao_marginleft"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@drawable/my_distribution_qq"/>
+            <Button
+                android:id="@+id/weibo_login"
+                android:layout_margin="@dimen/fenxiao_marginleft"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@drawable/my_distribution_weibo"/>
+            <Button
+                android:id="@+id/weixin_login"
+                android:layout_margin="@dimen/fenxiao_marginleft"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@drawable/my_distribution_weixin"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/act_login_tv_login"
             android:layout_width="fill_parent"

@@ -58,5 +58,7 @@
     <dimen name="size_px2sp_40">20sp</dimen>
     <dimen name="size_px2sp_28">14sp</dimen>
     <dimen name="list_image_size">80dp</dimen>
+    <!--login-->
+    <dimen name="button_size">50dp</dimen>
 
 </resources>
