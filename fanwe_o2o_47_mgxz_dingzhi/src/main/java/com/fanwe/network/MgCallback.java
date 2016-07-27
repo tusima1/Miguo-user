@@ -60,27 +60,32 @@ public abstract class MgCallback<T> implements Callback {
             if (ServerUrl.DEBUG) {
                 Log.e(TAG, body);
             }
-
-            Root<T> root = JSON.parseObject(body, Root.class);
-            String statusCode = root.getStatusCode();
-            int code = Integer.valueOf(statusCode);
-            if (code >= 200 && code <= 300) {
-                //保存每个接口返回的token值 到缓存中。
-                if (root.getToken() != null) {
-                    String token = root.getToken();
-                    UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-                    userCurrentInfo.setToken(token);
-                }
-                if (root.getResult() != null) {
-                    if (root.getResult().getBody() != null) {
-                        onSuccessResponse(root.getResult());
+            try {
+                Root<T> root = JSON.parseObject(body, Root.class);
+                String statusCode = root.getStatusCode();
+                int code = Integer.valueOf(statusCode);
+                if (code >= 200 && code <= 300) {
+                    //保存每个接口返回的token值 到缓存中。
+                    if (root.getToken() != null) {
+                        String token = root.getToken();
+                        UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+                        userCurrentInfo.setToken(token);
                     }
-                }else{
-                    onSuccessResponse(body);
+                    if (root.getResult() != null) {
+                        if (root.getResult().getBody() != null) {
+                            onSuccessResponse(root.getResult());
+                        }
+                    } else {
+                        onSuccessResponse(body);
+                    }
+                } else {
+                    String message = root.getMessage();
+                    onErrorResponse(message, statusCode);
                 }
-            } else {
-                String message = root.getMessage();
-                onErrorResponse(message, statusCode);
+
+            } catch (Exception e) {
+                Log.e(TAG,e.getMessage());
+                SDToast.showToast(e.getMessage());
             }
         }
         onFinish();

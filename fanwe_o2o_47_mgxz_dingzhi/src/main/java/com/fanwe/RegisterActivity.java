@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Result;
@@ -26,11 +27,16 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.model.UserInfoModel;
 import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.UserConstants;
+import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.utils.Contance;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+
+import java.util.TreeMap;
 
 /**
  * 注册界面
@@ -44,6 +50,10 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 	@ViewInject(R.id.et_userphone)
 	private ClearEditText mEtUserphone;
 
+
+	/**
+	 * 验证码。
+	 */
 	@ViewInject(R.id.et_pwd)
 	private ClearEditText mEtPwd;
 
@@ -58,13 +68,33 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 
 	@ViewInject(R.id.tv_register)
 	private TextView mTvRegister;
-	
+
+	/**
+	 * 密码。
+	 */
+
+	@ViewInject(R.id.et_pwd_into)
+	private ClearEditText mEt_pwd_into;
+
+	/**
+	 * 确认手机号。
+	 */
+	@ViewInject(R.id.pwd)
+	private ClearEditText pwd;
+
+
 	protected static String EXTRAS_Phone ="extras_phone";
 
+	/**
+	 * 验证码。
+	 */
 	private String mStrPwd;
 	
 	private String userPhone;
-
+	/**
+	 * 密码。
+	 */
+	private  String passwordStr;
 	protected Check_MobActModel mActModel;
 	CommonHelper mFragmentHelper;
 
@@ -85,7 +115,6 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 		registeClick();
 		initRequest();
 		initSDSendValidateButton();
-
 	}
 	
 	
@@ -135,8 +164,38 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 	{
 		if(validateParam())
 		{
-			requestShortSet();
+			doRegister();
+			//requestShortSet();
 		}
+	}
+
+	/**
+	 * 注册 。
+	 */
+	public void doRegister() {
+		TreeMap<String, String> params = new TreeMap<String,String>();
+		params.put("mobile",userPhone);
+		params.put("pwd",passwordStr);
+		params.put("captcha",mStrPwd);
+		params.put("method", UserConstants.USER_REGISTER);
+		OkHttpUtils.getInstance().post(null,params,new MgCallback<JSONObject>(){
+
+			@Override
+			public void onSuccessResponse(Result<JSONObject> responseBody) {
+				if(responseBody==null ||responseBody.getBody()==null){
+					onErrorResponse("注册失败",null);
+				}
+				if(responseBody.getBody().size()>0) {
+
+
+				}
+			}
+
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+				SDToast.showToast(message);
+			}
+		});
 	}
 	private void requestShortSet() {
 		
@@ -187,7 +246,36 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 		};
 		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
-	
+
+	public void checkMobileExist(){
+		userPhone = mEtUserphone.getText().toString();
+		if (TextUtils.isEmpty(userPhone))
+		{
+			SDToast.showToast("请输入手机号码");
+			return;
+		}
+		mFragmentHelper.doCheckMobileExist(userPhone,new MgCallback<JSONObject>(){
+
+			@Override
+			public void onSuccessResponse(Result<JSONObject> responseBody) {
+				if(responseBody==null ||responseBody.getBody()==null){
+					onErrorResponse("验证手机号失败",null);
+				}
+				if(responseBody.getBody().size()>0) {
+
+
+				}
+			}
+
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+				SDToast.showToast(message);
+			}
+		});
+
+
+
+	}
 	public void initRequest()
 	{
 		RequestModel model =new RequestModel();
@@ -247,7 +335,9 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 					public void onClickSendValidateButton()
 					{
 						
-						initRequest();
+
+					//	checkMobileExist();
+						doGetCaptcha();
 					}
 				});
 	}
@@ -265,7 +355,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 		//开始倒计时。
 		mBt_send_code.setmDisableTime(Contance.SEND_CODE_TIME);
 		mBt_send_code.startTickWork();
-		mFragmentHelper.doGetCaptcha(userPhone, 0, new MgCallback() {
+		mFragmentHelper.doGetCaptcha(userPhone, 1, new MgCallback() {
 
 			@Override
 			public void onSuccessResponse(Result responseBody) {
@@ -355,6 +445,12 @@ public class RegisterActivity extends BaseActivity implements CallbackView
 			SDToast.showToast("请先同意用户注册协议");
 			return false;
 		}
+	    String pwd2=pwd.getText().toString();
+		String pwd1=mEt_pwd_into.getText().toString();
+		if(!pwd2.equals(pwd1)){
+			SDToast.showToast("两次密码输入不一致。");
+		}
+		passwordStr=pwd1;
 		return true;
 	}
 
