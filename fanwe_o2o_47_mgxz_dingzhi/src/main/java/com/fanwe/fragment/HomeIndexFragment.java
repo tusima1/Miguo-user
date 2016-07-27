@@ -18,67 +18,58 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 /**
  * 首页分类fragment
- * 
+ *
  * @author js02
- * 
  */
-public class HomeIndexFragment extends BaseFragment
-{
+public class HomeIndexFragment extends BaseFragment {
 
-	@ViewInject(R.id.spv_content)
-	private SDSlidingPlayView mSpvAd;
+    @ViewInject(R.id.spv_content)
+    private SDSlidingPlayView mSpvAd;
 
-	private Index_indexActModel mIndexModel;
-	private List<IndexActIndexsModel> mListIndexsModel;
+    private Index_indexActModel mIndexModel;
+    private List<IndexActIndexsModel> mListIndexsModel;
 
-	private HomeIndexPageAdapter mAdapter;
+    private HomeIndexPageAdapter mAdapter;
 
-	public void setmIndexModel(Index_indexActModel indexModel)
-	{
-		this.mIndexModel = indexModel;
-		if (mIndexModel != null)
-		{
-			this.mListIndexsModel = mIndexModel.getIndexs();
-		}
-	}
+    public void setmIndexModel(Index_indexActModel indexModel) {
+        this.mIndexModel = indexModel;
+        if (mIndexModel != null) {
+            this.mListIndexsModel = mIndexModel.getIndexs();
+        }
+    }
 
-	@Override
-	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		return setContentView(R.layout.frag_home_index);
-	}
+    @Override
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return setContentView(R.layout.frag_home_index);
+    }
 
-	@Override
-	protected void init()
-	{
-		super.init();
-		initSlidingPlayView();
-		bindData();
-	}
-	
-	private void initSlidingPlayView()
-	{
-		mSpvAd.setmImageNormalResId(R.drawable.ic_small_dot_normal);
-		mSpvAd.setmImageSelectedResId(R.drawable.ic_small_dot_slecet);
-	}
-	
-	private void bindData()
-	{
-		if (!toggleFragmentView(mListIndexsModel))
-		{
-			return;
-		}
+    @Override
+    protected void init() {
+        super.init();
+        initSlidingPlayView();
+        bindData();
+    }
 
-		if (mListIndexsModel.size() > 10)
-		{
-			SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(10));
-		}
+    private void initSlidingPlayView() {
+        mSpvAd.setmImageNormalResId(R.drawable.ic_small_dot_normal);
+        mSpvAd.setmImageSelectedResId(R.drawable.ic_small_dot_slecet);
+    }
 
-		mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mListIndexsModel, 10), getActivity());
-		mSpvAd.setAdapter(mAdapter);
-	}
-	@Override
-	protected String setUmengAnalyticsTag() {
-		return this.getClass().getName().toString();
-	}
+    private void bindData() {
+        if (!toggleFragmentView(mListIndexsModel)) {
+            return;
+        }
+
+        if (mListIndexsModel.size() > 10) {
+            SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(10));
+        }
+
+        mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mListIndexsModel, 10), getActivity());
+        mSpvAd.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected String setUmengAnalyticsTag() {
+        return this.getClass().getName().toString();
+    }
 }
