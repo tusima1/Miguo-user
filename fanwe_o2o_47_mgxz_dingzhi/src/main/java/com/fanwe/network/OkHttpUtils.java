@@ -113,7 +113,7 @@ public class OkHttpUtils {
 
         FormBody.Builder formBody = new FormBody.Builder();
         for(Map.Entry<String,String> entry:params.entrySet()){
-            formBody.add(entry.getKey(),entry.getValue().toString());
+            formBody.add(entry.getKey(),entry.getValue());
         }
         Request request =  new Request.Builder()
                 .url(serverUrl)
@@ -152,6 +152,7 @@ public class OkHttpUtils {
         params = encryptParams(params);
         StringBuilder paramStr = new StringBuilder();
         for(Map.Entry<String,String> entry:params.entrySet()){
+
             paramStr.append(entry.getKey()+"="+entry.getValue()+"&");
         }
         serverUrl = serverUrl+"?"+paramStr.substring(0,paramStr.length()-1);
