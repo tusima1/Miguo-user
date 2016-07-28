@@ -23,10 +23,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
 }
 
 dependencies {
-
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':library_PhotoViewmaster')
     compile project(':library_PullToRefresh')

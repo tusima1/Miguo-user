@@ -1,30 +1,17 @@
 package com.fanwe.network;
 
-import android.text.TextUtils;
 import android.util.Log;
-
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
-import com.fanwe.base.Body;
 import com.fanwe.base.Result;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -57,6 +44,7 @@ public abstract class MgCallback<T> implements Callback {
             onFailure(call, new IOException());
         } else {
             String body = response.body().string();
+            onSuccessResponse(body);//标准 json
             if (ServerUrl.DEBUG) {
                 Log.e(TAG, body);
             }
@@ -76,7 +64,7 @@ public abstract class MgCallback<T> implements Callback {
                         onSuccessResponse(root.getResult());
                     }
                 }else{
-                    onSuccessResponse(body);
+
                 }
             } else {
                 String message = root.getMessage();
@@ -92,5 +80,7 @@ public abstract class MgCallback<T> implements Callback {
 
         SDToast.showToast(responseBody);
     }
-    public abstract void onErrorResponse(String message,String errorCode);
+    public void onErrorResponse(String message,String errorCode){
+        SDToast.showToast(message);
+    }
 }
