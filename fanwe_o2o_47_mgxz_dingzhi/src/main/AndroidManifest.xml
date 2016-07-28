@@ -64,7 +64,14 @@
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
-        <activity android:name="com.miguo.live.views.LiveTestActivity"></activity>
+        <activity android:name="com.miguo.live.views.LiveTestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
             android:label="@string/app_name">
@@ -74,6 +81,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.miguo.live.views.LiveActivity">
+
+        </activity>
+
 
         <!-- Splash页面后的引导页面 ,不要删除这段注释内容,以备后需 -->
         <!--
@@ -115,7 +127,9 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan">
+
+        </activity>
         <!-- Map上的附近搜索(新) -->
         <activity
             android:name="com.fanwe.MapSearchActivity"
@@ -950,13 +964,6 @@
             android:value="@string/jpush_appkey" />
         <!-- </>值来自开发者平台取得的AppKey -->
 
-<<<<<<< HEAD
-
-        <activity android:name="com.miguo.live.views.LiveActivity"></activity>
-
-=======
-        <activity android:name="com.miguo.live.views.LiveActivity"></activity>
->>>>>>> 4188dcfeb59c8ab74f25aeb32145312f2aa54981
     </application>
 
 </manifest>

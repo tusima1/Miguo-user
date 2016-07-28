@@ -89,6 +89,16 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
             public void onSuccessResponse(Result<JSONObject> responseBody) {
                 MGToast.showToast(responseBody.getBody().get(0).getString("token"));
             }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                MGToast.showToast(responseBody+"哈哈");
+            }
         });
 
     }
@@ -102,8 +112,6 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         params.put("shop_id", shop_id);
         params.put("method", "ApplyRoom");
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
-
-
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
