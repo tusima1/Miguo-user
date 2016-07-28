@@ -70,4 +70,6 @@
         <!--//改变控件大小-->
         <item name="android:textSize">14dp</item>
     </style>
+
+    <style name="TransTheme" parent="android:Theme.Holo.Light.NoActionBar"></style>
 </resources>

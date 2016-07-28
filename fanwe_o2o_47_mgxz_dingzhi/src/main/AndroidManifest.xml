@@ -64,13 +64,7 @@
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
-        <activity android:name="com.miguo.live.views.LiveTestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
@@ -81,11 +75,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.miguo.live.views.LiveTestActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name="com.miguo.live.views.LiveActivity">
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.miguo.live.views.LiveStartActivity"
+            android:theme="@style/TransTheme"></activity>
 
         <!-- Splash页面后的引导页面 ,不要删除这段注释内容,以备后需 -->
         <!--

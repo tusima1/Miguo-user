@@ -12,6 +12,7 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -61,6 +62,7 @@ public abstract class MgCallback implements Callback {
                     if (root.getResult() != null) {
                         //root.getResult() 返回结果是一个JSONARRAY ,可以直接  JsonArray()解释。
                         onSuccessListResponse(root.getResult());
+                        onSuccessResponse(body);
                     } else {
                         onSuccessResponse(body);
                     }
@@ -70,14 +72,17 @@ public abstract class MgCallback implements Callback {
                 }
 
             } catch (Exception e) {
-                Log.e(TAG,e.getMessage());
+                Log.e(TAG, e.getMessage());
                 SDToast.showToast(e.getMessage());
             }
         }
         onFinish();
     }
-    public  abstract  void onSuccessListResponse(List<Result> resultList);
-    public  void onSuccessResponse(String responseBody){
+
+    public abstract void onSuccessListResponse(List<Result> resultList);
+
+    public void onSuccessResponse(String responseBody) {
     }
-    public abstract void onErrorResponse(String message,String errorCode);
+
+    public abstract void onErrorResponse(String message, String errorCode);
 }

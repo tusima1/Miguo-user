@@ -1,37 +1,40 @@
 package com.fanwe.home.model;
 
+import java.util.List;
+
 /**
  * 主播
  * Created by Administrator on 2016/7/27.
  */
 public class Host {
+
     private String uid;
 
-    private String avatar;
+    private String nickname;
 
-    private String username;
+    private List<String> tags;
+
+    public String getUid() {
+        return uid;
+    }
 
     public void setUid(String uid) {
         this.uid = uid;
     }
 
-    public String getUid() {
-        return this.uid;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getAvatar() {
-        return this.avatar;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getUsername() {
-        return this.username;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }
