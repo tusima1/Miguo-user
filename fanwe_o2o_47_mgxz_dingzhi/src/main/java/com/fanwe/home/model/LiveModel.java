@@ -1,12 +1,14 @@
 package com.fanwe.home.model;
 
+import com.fanwe.base.Body;
+
 import java.util.List;
 
 /**
  * 请求直播列表model
  * Created by Administrator on 2016/7/27.
  */
-public class LiveModel {
+public class LiveModel extends Body {
     private int totalItem;
 
     private List<Room> recordList;

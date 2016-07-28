@@ -1,107 +1,89 @@
 package com.fanwe.home.model;
 
+import com.fanwe.base.Body;
+
 /**
  * 房间信息
  * Created by Administrator on 2016/7/27.
  */
-public class Room {
-    private int createTime;
-
-    private String title;
-
+public class Room extends Body {
     private String cover;
 
-    private Lbs lbs;
+    private String create_time;
+
+    private String chat_room_id;
 
     private Host host;
 
-    private int admireCount;
+    private String av_room_id;
 
-    private String chatRoomId;
+    private String id;
 
-    private int avRoomId;
+    private String title;
 
-    private int timeSpan;
+    private Lbs lbs;
 
-    private int watchCount;
-
-    public void setCreateTime(int createTime) {
-        this.createTime = createTime;
-    }
-
-    public int getCreateTime() {
-        return this.createTime;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTitle() {
-        return this.title;
+    public String getCover() {
+        return cover;
     }
 
     public void setCover(String cover) {
         this.cover = cover;
     }
 
-    public String getCover() {
-        return this.cover;
+    public String getCreate_time() {
+        return create_time;
     }
 
-    public void setLbs(Lbs lbs) {
-        this.lbs = lbs;
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 
-    public Lbs getLbs() {
-        return this.lbs;
+    public String getChat_room_id() {
+        return chat_room_id;
+    }
+
+    public void setChat_room_id(String chat_room_id) {
+        this.chat_room_id = chat_room_id;
+    }
+
+    public Host getHost() {
+        return host;
     }
 
     public void setHost(Host host) {
         this.host = host;
     }
 
-    public Host getHost() {
-        return this.host;
+    public String getAv_room_id() {
+        return av_room_id;
     }
 
-    public void setAdmireCount(int admireCount) {
-        this.admireCount = admireCount;
+    public void setAv_room_id(String av_room_id) {
+        this.av_room_id = av_room_id;
     }
 
-    public int getAdmireCount() {
-        return this.admireCount;
+    public String getId() {
+        return id;
     }
 
-    public void setChatRoomId(String chatRoomId) {
-        this.chatRoomId = chatRoomId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getChatRoomId() {
-        return this.chatRoomId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAvRoomId(int avRoomId) {
-        this.avRoomId = avRoomId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getAvRoomId() {
-        return this.avRoomId;
+    public Lbs getLbs() {
+        return lbs;
     }
 
-    public void setTimeSpan(int timeSpan) {
-        this.timeSpan = timeSpan;
-    }
-
-    public int getTimeSpan() {
-        return this.timeSpan;
-    }
-
-    public void setWatchCount(int watchCount) {
-        this.watchCount = watchCount;
-    }
-
-    public int getWatchCount() {
-        return this.watchCount;
+    public void setLbs(Lbs lbs) {
+        this.lbs = lbs;
     }
 }

@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.home.model.LiveModel;
+import com.fanwe.home.model.ResultLive;
+import com.fanwe.home.model.Room;
 import com.fanwe.home.presents.LiveListHelper;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
@@ -25,7 +25,6 @@ import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
@@ -33,9 +32,7 @@ import com.fanwe.model.IndexActAdvsModel;
 import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -81,6 +78,10 @@ public class HomeFragment extends BaseFragment {
     protected Index_indexActModel mActModel;
 
     private LiveListHelper mLiveListHelper;
+    private boolean isRefresh = true;
+    private int pageNum = 1;
+    private int pageSize = 3;
+    private List<Room> rooms;
 
 
     @Override
@@ -98,6 +99,11 @@ public class HomeFragment extends BaseFragment {
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
+
+        //直播列表
+        mHomeFragmentLiveList = new HomeFragmentLiveList();
+        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
+
     }
 
     private void initPageModel(int totalPage) {
@@ -115,7 +121,7 @@ public class HomeFragment extends BaseFragment {
                 pageModel.resetPage();
                 pageData_1 = null;
                 pageData_2.clear();
-//                requestIndex();
+                requestIndex();
 //                requestIndex2(false);
                 if (location != null) {
                     dealLocationSuccess();
@@ -196,23 +202,28 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void onPullDownToRefresh(
                 PullToRefreshBase<ScrollView> refreshView) {
+            isRefresh = true;
+            pageNum = 1;
             //重置数据集
             pageModel.resetPage();
             mListModel.clear();
             pageData_1 = null;
             pageData_2.clear();
 
-//            requestIndex();
-            mLiveListHelper.getLiveList();
+            requestIndex();
+            mLiveListHelper.getLiveList(pageNum, pageSize);
 //            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
 
         @Override
         public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            isRefresh = false;
+            if (!SDCollectionUtil.isEmpty(rooms)) {
+                pageNum++;
+            }
 
-            mPtrsvAll.onRefreshComplete();
-            SDDialogManager.dismissProgressDialog();
+            mLiveListHelper.getLiveList(pageNum, pageSize);
 
 //            if (pageModel.increment()) {
 //                // 添加第二页数据
@@ -417,10 +428,26 @@ public class HomeFragment extends BaseFragment {
         return this.getClass().getName().toString();
     }
 
-    public void getLiveList(JSONObject jsonObject) {
-        LiveModel liveModel = JSON.parseObject(String.valueOf(jsonObject), LiveModel.class);
-        if (liveModel != null) {
-            System.out.println("liveModel:" + liveModel.getTotalItem());
+    public void getLiveList(ResultLive resultLive) {
+        if (resultLive == null) {
+            rooms = null;
+            return;
         }
+        rooms = resultLive.getBody();
+        Message message = new Message();
+        message.what = 1;
+        mHandler.sendMessage(message);
     }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    mHomeFragmentLiveList.updateView(isRefresh, rooms);
+                    mPtrsvAll.onRefreshComplete();
+                    break;
+            }
+        }
+    };
+
 }

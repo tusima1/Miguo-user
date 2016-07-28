@@ -4,7 +4,9 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     useLibrary 'org.apache.http.legacy'
-
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.fanwe.o2o.miguo"
         minSdkVersion 19
@@ -23,10 +25,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-
 }
 
 dependencies {
+
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':library_PhotoViewmaster')
     compile project(':library_PullToRefresh')
@@ -63,7 +65,4 @@ dependencies {
     compile files('libs/UPPayPluginEx.jar')
     compile files('libs/wup-1.0.0-SNAPSHOT.jar')
     compile files('libs/x-2.6.14-src-1.4-modify.jar')
-
-
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }
