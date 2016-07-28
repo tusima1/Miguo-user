@@ -1,12 +1,18 @@
 package com.fanwe;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Result;
 import com.fanwe.constant.Constant.EnumLoginState;
@@ -15,6 +21,7 @@ import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.LoginFragment;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.jpush.JpushHelper;
+import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDTabItemCorner;
 import com.fanwe.library.customview.SDTabItemCorner.EnumTabPosition;
 import com.fanwe.library.customview.SDViewBase;
@@ -22,13 +29,24 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.LocalUserModel;
+import com.fanwe.model.User_infoModel;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.UserInfoBody;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class LoginActivity extends BaseActivity implements CallbackView
 {
@@ -53,6 +71,30 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 	private List<Integer> mListSelectIndex = new ArrayList<Integer>();
 
+	/**
+	 * qqq登录。
+	 */
+	@ViewInject(R.id.qq_login)
+	private Button qq_login;
+	/**
+	 * 微博登录
+	 */
+
+	@ViewInject(R.id.weibo_login)
+	private Button weibo_login;
+	/**
+	 * 微信登录
+	 */
+
+	@ViewInject(R.id.weixin_login)
+	private Button weixin_login;
+
+
+   private String openId;
+
+	//1:qq，2:微信，3：微博
+	String type="";
+	private UMShareAPI mShareAPI = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -60,14 +102,18 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		setmTitleType(TitleType.TITLE);
 		setContentView(R.layout.act_login);
 		init();
+		//友盟授权登录初始化。
+		mShareAPI = UMShareAPI.get(this);
 	}
 
 	private void init()
 	{
+
 		getIntentData();
 		initTitle();
 		changeViewState();
 		registerClick();
+
 	}
 
 	private void registerClick()
@@ -77,10 +123,14 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			@Override
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(mActivity, ModifyPasswordActivity.class);
+				Intent intent = new Intent(LoginActivity.this, ModifyPasswordActivity.class);
 				startActivity(intent);
 			}
 		});
+
+		qq_login.setOnClickListener(this);
+		weibo_login.setOnClickListener(this);
+		weixin_login.setOnClickListener(this);
 	}
 
 	private void getIntentData()
@@ -105,7 +155,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	@Override
 	public void onCLickRight_SDTitleSimple(SDTitleItem v, int index)
 	{
-		startRegisterActivity();
+		startRegisterActivity(false);
 	}
 
 	@Override
@@ -186,7 +236,34 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 		mViewManager.setSelectIndex(mSelectTabIndex, null, true);
 	}
+	@Override
+	public void onClick(View v) {
+		SHARE_MEDIA platform = null;
+		switch (v.getId()) {
+			case R.id.qq_login:
+				platform = SHARE_MEDIA.QQ;
+				goToAuth(platform);
+				break;
+			case R.id.weibo_login:
+				goToAuth(platform);
+				break;
+			case R.id.weixin_login:
+				platform = SHARE_MEDIA.WEIXIN;
+				goToAuth(platform);
+				break;
 
+			default:
+				break;
+		}
+	}
+	/**
+	 * 跳转到相应的授权页。
+	 *
+	 * @param platform
+	 */
+	public void goToAuth(SHARE_MEDIA platform) {
+		mShareAPI.doOauthVerify(this, platform, umAuthListener);
+	}
 	/**
 	 * 正常登录的选项卡被选中
 	 */
@@ -205,9 +282,13 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		getSDFragmentManager().toggle(R.id.act_login_fl_content, null, LoginPhoneFragment.class);
 	}
 
-	protected void startRegisterActivity()
+	protected void startRegisterActivity(boolean third)
 	{
 		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+		if(third&&!TextUtils.isEmpty(openId)) {
+			intent.putExtra(UserConstants.THIRD_OPENID, openId);
+
+		}
 		startActivity(intent);
 	}
 
@@ -226,8 +307,60 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			break;
 		}
 	}
-	
-	@Override
+
+
+
+	/**
+	 *
+	 * @param openId
+	 * @param type
+     */
+	public void thirdLogin(String openId ,String type){
+		TreeMap<String,String> params = new TreeMap<String,String>();
+		params.put("openid",openId);
+		params.put("platform",type);
+		OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+			@Override
+			public void onSuccessListResponse(List<Result> resultList) {
+				if(resultList!=null&&resultList.size()>0){
+					Result result = resultList.get(0);
+					if(result!=null&&result.getBody()!=null&&result.getBody().size()>0){
+						JSONObject object = (JSONObject) result.getBody().get(0);
+						if(object.containsKey("unRegister")){
+							startRegisterActivity(true);
+						}else {
+							UserInfoBody userinfo = JSON.parseObject(result.getBody().get(0).toString(), UserInfoBody.class);
+							User_infoModel model = new User_infoModel();
+							model.setUser_name(userinfo.getUser_name());
+							model.setUser_login_status(1);
+							model.setUser_id(userinfo.getUser_id());
+							dealLoginSuccess(model);
+						}
+					}
+				}else{
+					onErrorResponse("第三方登录失败","300");
+				}
+
+			}
+
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+
+			}
+		});
+
+	}
+	protected void dealLoginSuccess(User_infoModel actModel) {
+		LocalUserModel.dealLoginSuccess(actModel, true);
+		Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
+		if (lastActivity instanceof MainActivity) {
+			finish();
+		} else {
+			startActivity(new Intent(LoginActivity.this, MainActivity.class));
+		}
+	}
+
+		@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	}
@@ -246,4 +379,41 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	public void onFailue(String responseBody) {
 
 	}
+
+	/**
+	 * auth callback interface
+	 **/
+	private UMAuthListener umAuthListener = new UMAuthListener() {
+		@Override
+		public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+
+			//String access_token = data.get("access_token");
+			openId = data.get("openid");
+
+		 if(platform .equals(SHARE_MEDIA.WEIXIN)){
+			   type = "2";
+		  }else if(platform .equals(SHARE_MEDIA.QQ)){
+			   type = "1";
+		  }else if(platform .equals(SHARE_MEDIA.SINA)){
+			   type = "3";
+		  }
+			thirdLogin(openId,type);
+
+		}
+
+		@Override
+		public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+			Toast.makeText(LoginActivity.this, "授权登录失败", Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void onCancel(SHARE_MEDIA platform, int action) {
+			Toast.makeText(LoginActivity.this, "授权登录取消", Toast.LENGTH_SHORT).show();
+		}
+	};
+
+
+
+
+
 }

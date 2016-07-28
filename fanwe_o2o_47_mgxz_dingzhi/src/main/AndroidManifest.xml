@@ -762,7 +762,7 @@
         <!-- 正式版用正式的key -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="@string/test_umeng_key"></meta-data>
+            android:value="@string/zhoutest_umeng_key"></meta-data>
         <!-- 友盟统计分析-渠道 -->
         <meta-data
             android:name="UMENG_CHANNEL"
@@ -773,7 +773,7 @@
 
         <!-- Share edit page -->
         <activity
-            android:name=".WBShareActivity"
+            android:name="com.fanwe.o2o.miguo.WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -819,8 +819,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- <data android:scheme="tencent222222" /> -->
-                <data android:scheme="tencent1105496065" />
+                <data android:scheme="tencent1101169715" />
 
                 <!-- 100380359 100381104 222222 -->
                 <!-- <data android:scheme="tencent1101169715" /> -->
@@ -855,8 +854,7 @@
             </intent-filter>
         </activity>
         <!-- Required  SDK核心功能 -->
-        <service
-            android:name="com.sina.weibo.sdk.net.DownloadService"
+        <service android:name="com.sina.weibo.sdk.net.DownloadService"
             android:exported="false"></service>
         <service
             android:name="cn.jpush.android.service.DownloadService"

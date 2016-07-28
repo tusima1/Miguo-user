@@ -12,8 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
@@ -53,27 +51,10 @@ public class LoginFragment extends LoginBaseFragment {
 
     @ViewInject(R.id.act_login_tv_login)
     private TextView mTvLogin;
-    /**
-     * qqq登录。
-     */
-    @ViewInject(R.id.qq_login)
-    private Button qq_login;
-    /**
-     * 微博登录
-     */
 
-    @ViewInject(R.id.weibo_login)
-    private Button weibo_login;
-    /**
-     * 微信登录
-     */
-
-    @ViewInject(R.id.weixin_login)
-    private Button weixin_login;
 
     private String mStrUserName;
     private String mStrPassword;
-    private UMShareAPI mShareAPI = null;
     LoginHelper mLoginHelper;
 
 
@@ -87,14 +68,7 @@ public class LoginFragment extends LoginBaseFragment {
         super.init();
         registeClick();
         mLoginHelper = new LoginHelper(getActivity(), this);
-
-
-        //友盟授权登录初始化。
-        mShareAPI = UMShareAPI.get(getActivity());
-
     }
-
-
     private void validatePassword() {
         LocalUserModel user = AppHelper.getLocalUser();
         if (user != null) {
@@ -109,9 +83,6 @@ public class LoginFragment extends LoginBaseFragment {
 
     private void registeClick() {
         mTvLogin.setOnClickListener(this);
-        qq_login.setOnClickListener(this);
-        weibo_login.setOnClickListener(this);
-        weixin_login.setOnClickListener(this);
 
     }
 
@@ -121,19 +92,6 @@ public class LoginFragment extends LoginBaseFragment {
         switch (v.getId()) {
             case R.id.act_login_tv_login:
                 doLogin();
-               // clickLoginNormal();
-                break;
-            case R.id.qq_login:
-                platform = SHARE_MEDIA.QQ;
-                goToAuth(platform);
-                break;
-            case R.id.weibo_login:
-                platform = SHARE_MEDIA.SINA;
-                goToAuth(platform);
-                break;
-            case R.id.weixin_login:
-                platform = SHARE_MEDIA.WEIXIN;
-                goToAuth(platform);
                 break;
 
             default:
@@ -141,14 +99,6 @@ public class LoginFragment extends LoginBaseFragment {
         }
     }
 
-    /**
-     * 跳转到相应的授权页。
-     *
-     * @param platform
-     */
-    public void goToAuth(SHARE_MEDIA platform) {
-        mShareAPI.doOauthVerify(getActivity(), platform, umAuthListener);
-    }
 
     /**
      * 点击新浪微博登录,先获取个人资料，然后登录
@@ -186,28 +136,6 @@ public class LoginFragment extends LoginBaseFragment {
         InterfaceServer.getInstance().requestInterface(model, handler);
 
     }
-
-    /**
-     * auth callback interface
-     **/
-    private UMAuthListener umAuthListener = new UMAuthListener() {
-        @Override
-        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-
-            Log.d("user info", "user info:" + data.toString());
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-            Toast.makeText(getActivity().getApplicationContext(), "授权登录失败", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA platform, int action) {
-            Toast.makeText(getActivity().getApplicationContext(), "授权登录取消", Toast.LENGTH_SHORT).show();
-        }
-    };
-
 
 
 

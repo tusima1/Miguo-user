@@ -1,47 +1,34 @@
 package com.fanwe.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.fanwe.SetPwActivity;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Result;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
-import com.fanwe.library.dialog.SDDialogConfirm;
-import com.fanwe.library.dialog.SDDialogCustom;
-import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Sms_send_sms_codeActModel;
-import com.fanwe.model.UserInfoModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.UserConstants;
 import com.fanwe.utils.Contance;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.List;
+import java.util.TreeMap;
 
 public class LoginPhoneFragment extends LoginBaseFragment implements CallbackView
 {
@@ -86,9 +73,38 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		initSDSendValidateButton();
 	}
 
-	public void initRequest()
-	{
+	/**
+	 *  判断手机号是否存在。
+     */
+	public void checkMobileExist() {
 		mNumberPhone = mEtMobile.getText().toString();
+		if (TextUtils.isEmpty(mNumberPhone)) {
+			SDToast.showToast("请输入手机号码");
+			return;
+		}
+		mFragmentHelper.doCheckMobileExist(mNumberPhone, new MgCallback() {
+			@Override
+			public void onSuccessListResponse(List<Result> resultList) {
+
+			}
+			@Override
+			public void onSuccessResponse(String responseBody) {
+				requestCaptcha();
+
+			}
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+				SDToast.showToast(message);
+			}
+		});
+	}
+
+	/**
+	 *手机验证码发送。
+	 */
+	public void requestCaptcha(){
+	   mNumberPhone = mEtMobile.getText().toString();
+
 		if (TextUtils.isEmpty(mNumberPhone))
 		{
 			SDToast.showToast("请输入手机号码");
@@ -116,39 +132,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 				SDToast.showToast("验证码发送成功");
 			}
 		});
-//		model.putCtl("user");
-//		model.putAct("check_mobile");
-//		model.put("mobile", mNumberPhone);
-//		SDRequestCallBack<Check_MobActModel> handler = new SDRequestCallBack<Check_MobActModel>()
-//		{
-//					@Override
-//					public void onStart()
-//					{
-//						SDDialogManager.showProgressDialog("请稍候...");
-//					}
-//
-//					@Override
-//					public void onSuccess(ResponseInfo<String> responseInfo)
-//					{
-//						mActModel = actModel;
-//						if(actModel.getExists() == 1)
-//						{
-//							requestSendCode();
-//						}else
-//						{
-//							showChangeLocationDialog();
-//							SDViewBinder.setTextView(mBtnLogin, "提交");
-//						}
-//					}
-//
-//					@Override
-//					public void onFinish()
-//					{
-//						SDDialogManager.dismissProgressDialog();
-//					}
-//				};
-//				InterfaceServer.getInstance().requestInterface(model, handler);
-			}
+		}
 
 	protected void getIntentData()
 	{
@@ -172,11 +156,11 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			{
 				
 			}
-
 			@Override
 			public void onClickSendValidateButton()
 			{
-				initRequest();
+				checkMobileExist();
+
 			}
 		});
 	}
@@ -192,7 +176,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		switch (v.getId())
 		{
 		case R.id.btn_login:
-			clickLogin();
+			quickLogin();
 			break;
 
 		default:
@@ -201,260 +185,45 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	}
 
 	/**
-	 * 快捷登录
+	 *快捷 登录 接口。
 	 */
-	private void clickLogin()
-	{
-		if(mActModel == null)
+	private void quickLogin() {
+		mNumberPhone = mEtMobile.getText().toString();
+		if (TextUtils.isEmpty(mNumberPhone))
 		{
+			SDToast.showToast("请输入手机号码!");
 			return;
 		}
 		mStrCode = mEtCode.getText().toString();
-		if (validateParams())
-		{
-			requestShortcutLogin();
-		}else
-		{
-			requestShortSet();
-		}
-	}
-
-	/**
-	 *快捷 登录 接口。
-	 */
-	private void requestShortSet() {
-		
-		if (TextUtils.isEmpty(mNumberPhone))
-		{
-			SDToast.showToast("请输入手机号码!");
-			return;
-		}
-		
 		if (TextUtils.isEmpty(mStrCode))
 		{
 			SDToast.showToast("请输入验证码!");
 			return;
 		}
-		RequestModel model = new RequestModel();
-		model.putCtl("user");
-		model.putAct("verify_login");
-		model.put("mobile", mNumberPhone);
-		model.put("sms_verify", mStrCode);
-		SDRequestCallBack<UserInfoModel> handler = new SDRequestCallBack<UserInfoModel>()
-		{
-			
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
+
+		TreeMap<String, String> params = new TreeMap<String,String>();
+		params.put("mobile", mNumberPhone);
+		params.put("captcha", UserConstants.USER_QUICK_LOGIN);
+		OkHttpUtils.getInstance().post(null,params,new MgCallback(){
 
 			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if(actModel.getVerify_status() == 0)
-				{
-					SDToast.showToast("验证码不正确");
-				}else
-				{
-					/*if(actModel.getUser() == null)
-					{*/
-						Intent intent = new Intent(getActivity(),SetPwActivity.class);
-						Bundle bundle = new Bundle();
-						bundle.putString("mobile", mNumberPhone);
-						bundle.putString("sms_verify",mStrCode);
-						intent.putExtras(bundle);
-						startActivity(intent);
-					/*}*/
+			public void onSuccessListResponse(List<Result> resultList) {
+				SDToast.showToast("登录成功");
+				if(resultList!=null && resultList.size()>0){
+				//解析登录数据。
+
 				}
 			}
 
 			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-				
+			public void onErrorResponse(String message, String errorCode) {
+				SDToast.showToast(message);
 			}
+		});
 
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
-	private boolean validateParams()
-	{
-		if(mActModel.getExists() != 1 || mActModel.getIs_tmp() == 1)//手机号未被注册
-		{
-			return false;
-		}
-		return true;
-	}
 
-	/**
-	 * 
-	 * 验证码接口
-	 * 
-	 */
-	private void requestSendCode()
-	{
-
-		CommonInterface.requestValidateCode(mNumberPhone, 0, new SDRequestCallBack<Sms_send_sms_codeActModel>()
-				{
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo)
-					{
-						switch (actModel.getStatus())
-						{
-						case -1:
-							break;
-						case 1:
-							mBtnSendCode.setmDisableTime(actModel.getLesstime());
-							mBtnSendCode.startTickWork();
-							break;
-						default:
-							break;
-						}
-					}
-
-					@Override
-					public void onStart()
-					{
-						SDDialogManager.showProgressDialog("请稍候...");
-					}
-
-					@Override
-					public void onFinish()
-					{
-						SDDialogManager.dismissProgressDialog();
-					}
-
-					@Override
-					public void onFailure(HttpException error, String msg)
-					{
-					}
-				});
-		
-	}
-
-	private void showChangeLocationDialog()
-	{
-		((SDDialogCustom) new SDDialogConfirm().setTextContent(" 此号码未被注册，获取验证码后即同意《注册协议》"+"\n").setGrativity(Gravity.CENTER_HORIZONTAL))
-		.setTextColorTitle(R.color.gray).setTextConfirm("获取验证码").setmListener(new SDDialogCustomListener()
-		{
-			@Override
-			public void onDismiss(SDDialogCustom dialog)
-			{
-				
-			}
-			@Override
-			public void onClickConfirm(View v, SDDialogCustom dialog)
-			{
-				CommonInterface.requestValidateCode(mNumberPhone, 0, new SDRequestCallBack<Sms_send_sms_codeActModel>()
-						{
-							@Override
-							public void onSuccess(ResponseInfo<String> responseInfo)
-							{
-								switch (actModel.getStatus())
-								{
-								case -1:
-									break;
-								case 1:
-									mBtnSendCode.setmDisableTime(actModel.getLesstime());
-									mBtnSendCode.startTickWork();
-									break;
-								default:
-									break;
-								}
-							}
-
-							@Override
-							public void onStart()
-							{
-								SDDialogManager.showProgressDialog("请稍候...");
-							}
-
-							@Override
-							public void onFinish()
-							{
-								SDDialogManager.dismissProgressDialog();
-							}
-							
-							@Override
-							public void onFailure(HttpException error, String msg)
-							{
-							}
-						});
-			}
-			
-			@Override
-			public void onClickCancel(View v, SDDialogCustom dialog)
-			{
-			}
-		}).show();
-		
-	}
-	/**
-	 * 快捷登录接口
-	 */
-	private void requestShortcutLogin()
-	{
-		if (TextUtils.isEmpty(mNumberPhone))
-		{
-			SDToast.showToast("请输入手机号码!");
-			return;
-		}
-		
-		if (TextUtils.isEmpty(mStrCode))
-		{
-			SDToast.showToast("请输入验证码!");
-			return;
-		}
-		
-		RequestModel model = new RequestModel();
-		model.putCtl("user");
-		model.putAct("verify_login");
-		model.put("mobile", mNumberPhone);
-		model.put("sms_verify", mStrCode);
-		SDRequestCallBack<UserInfoModel> handler = new SDRequestCallBack<UserInfoModel>()
-		{
-			
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
-			
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if(actModel.getVerify_status() == 0)
-				{
-					SDToast.showToast("验证码不正确");
-				}else
-				{
-					
-					dealLoginNormalSuccess(actModel.getUser(), true);
-				}
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-				
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-
-	}
 
 	protected void dealLoginNormalSuccess(User_infoModel actModel, boolean postEvent)
 	{
@@ -476,18 +245,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	public void onEventMainThread(SDBaseEvent event)
 	{
 		super.onEventMainThread(event);
-		switch (EnumEventTag.valueOf(event.getTagInt()))
-		{
-		case CONFIRM_IMAGE_CODE:
-			if (SDActivityManager.getInstance().isLastActivity(getActivity()))
-			{
-				requestSendCode();
-			}
-			break;
 
-		default:
-			break;
-		}
 	}
 
 

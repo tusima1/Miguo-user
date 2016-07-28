@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -125,6 +126,29 @@ public class OkHttpUtils {
         call.enqueue(mCallback);
     }
 
+    /**
+     * 用从第三方的URL 取值。
+     * @param url
+     * @param params
+     * @param mCallback
+     */
+    public void thirdUrlGet(String url, TreeMap<String,String> params, Callback mCallback){
+
+        StringBuilder paramStr = new StringBuilder();
+        for(Map.Entry<String,String> entry:params.entrySet()){
+
+            paramStr.append(entry.getKey()+"="+entry.getValue()+"&");
+        }
+        url = url+"?"+paramStr.substring(0,paramStr.length()-1);
+        //创建一个Request
+        final Request request = new Request.Builder()
+                .url(url)
+                .build();
+        //new call
+        Call call = client.newCall(request);
+        //请求加入调度
+        call.enqueue(mCallback);
+    }
     /**
      * GET异步请求 GET方法需要用？将参数连接在URL后面，各个参数之间用&连接。
      * @param url utl

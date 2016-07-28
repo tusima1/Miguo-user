@@ -81,6 +81,7 @@
                 <!-- 设置密码 -->
 
                 <LinearLayout
+                    android:id="@+id/passline1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/layer_white_stroke_top_left_right"
@@ -109,6 +110,7 @@
                 <!-- 密码 -->
 
                 <LinearLayout
+                    android:id="@+id/passline2"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/layer_white_stroke_bot_left_right"
