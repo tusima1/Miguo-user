@@ -10,6 +10,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -51,11 +52,12 @@ public class CommonHelper extends Presenter {
 
       }else{
             mgCallback = new MgCallback(){
-                @Override
-                public void onSuccessResponse(Result responseBody) {
 
-                    mView.onSuccess(responseBody);
+                @Override
+                public void onSuccessListResponse(List<Result> resultList) {
+                    mView.onSuccess(resultList);
                 }
+
                 @Override
                 public void onSuccessResponse(String body){
                     mView.onSuccess(body);
@@ -79,7 +81,7 @@ public class CommonHelper extends Presenter {
      * 验证手机号是否已经存在。
      * @param mobile
      */
-    public void doCheckMobileExist(String mobile,MgCallback<JSONObject> callback){
+    public void doCheckMobileExist(String mobile,MgCallback callback){
 
         TreeMap<String, String> params = new TreeMap<String,String>();
         params.put("mobile",mobile);

@@ -41,6 +41,8 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.util.List;
+
 public class LoginPhoneFragment extends LoginBaseFragment implements CallbackView
 {
 
@@ -97,12 +99,10 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		mBtnSendCode.startTickWork();
 
 		mFragmentHelper.doGetCaptcha(mNumberPhone, 0, new MgCallback() {
-
 			@Override
-			public void onSuccessResponse(Result responseBody) {
+			public void onSuccessListResponse(List<Result> resultList) {
 				SDToast.showToast("验证码发送成功");
 			}
-
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
 				SDToast.showToast("验证码发送失败，请重新发送");
@@ -492,7 +492,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 
 	@Override
-	public void onSuccess(Result responseBody) {
+	public void onSuccess(List<Result> responseBody) {
 
 			SDToast.showToast("验证码发送成功");
 

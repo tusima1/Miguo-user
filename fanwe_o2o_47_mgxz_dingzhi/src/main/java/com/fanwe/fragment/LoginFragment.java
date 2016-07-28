@@ -12,11 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.Result;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;
@@ -38,6 +40,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.utils.Log;
 
+import java.util.List;
 import java.util.Map;
 
 public class LoginFragment extends LoginBaseFragment {
@@ -323,8 +326,9 @@ public class LoginFragment extends LoginBaseFragment {
     /**
      * JAVA 登录接口。
      */
-    public void   loginSucc(JSONObject jsonObject){
-        UserInfoNew userInfoNew = JSON.parseObject(String.valueOf(jsonObject), UserInfoNew.class);
+    public void   loginSucc(List<Result> jsonObject){
+
+        UserInfoNew userInfoNew = JSON.parseObject(String.valueOf(jsonObject.get(0)), UserInfoNew.class);
             if (userInfoNew != null) {
 
                 App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);

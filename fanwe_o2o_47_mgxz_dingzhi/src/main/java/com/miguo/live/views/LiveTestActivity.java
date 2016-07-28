@@ -84,22 +84,12 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         params.put("pwd", s);
         params.put("mobile", s1);
         params.put("method", "UserLogin");
-        OkHttpUtils.getInstance().get(null, params, new MgCallback<JSONObject>() {
-            @Override
-            public void onSuccessResponse(Result<JSONObject> responseBody) {
-                MGToast.showToast(responseBody.getBody().get(0).getString("token"));
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-
-            }
-
-            @Override
-            public void onSuccessResponse(String responseBody) {
-                MGToast.showToast(responseBody+"哈哈");
-            }
-        });
+//        OkHttpUtils.getInstance().get(null, params, new MgCallback<JSONObject>() {
+//            @Override
+//            public void onSuccessResponse(Result<JSONObject> responseBody) {
+//                MGToast.showToast(responseBody.getBody().get(0).getString("token"));
+//            }
+//        });
 
     }
 
@@ -111,42 +101,44 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("shop_id", shop_id);
         params.put("method", "ApplyRoom");
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                super.onResponse(call, response);
-                MGToast.showToast("onResponse");
-            }
-
-            @Override
-            public void onSuccessResponse(Result responseBody) {
-                MGToast.showToast("成功");
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                super.onFailure(call, e);
-                MGToast.showToast("onFailure");
-            }
-
-            @Override
-            public void onStart() {
-                super.onStart();
-                MGToast.showToast("onStart");
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                MGToast.showToast("onFinish");
-            }
-        });
+//        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+//
+//
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                super.onResponse(call, response);
+//                MGToast.showToast("onResponse");
+//            }
+//
+//            @Override
+//            public void onSuccessResponse(Result responseBody) {
+//                MGToast.showToast("成功");
+//            }
+//
+//            @Override
+//            public void onErrorResponse(String message, String errorCode) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                super.onFailure(call, e);
+//                MGToast.showToast("onFailure");
+//            }
+//
+//            @Override
+//            public void onStart() {
+//                super.onStart();
+//                MGToast.showToast("onStart");
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                super.onFinish();
+//                MGToast.showToast("onFinish");
+//            }
+//        });
     }
 
     void checkPermission() {

@@ -41,23 +41,23 @@ public class LiveListHelper extends Presenter {
         params.put("page_size", "1");
         params.put("method", HomeConstants.LIVE_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback<JSONObject>() {
-
-            @Override
-            public void onSuccessResponse(Result<JSONObject> responseBody) {
-                if (responseBody == null || responseBody.getBody() == null) {
-                    onErrorResponse("请求直播列表失败", null);
-                }
-                if (responseBody.getBody().size() > 0) {
-                    mHomeFragment.getLiveList(responseBody.getBody().get(0));
-                }
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
-            }
-        });
+//        OkHttpUtils.getInstance().get(null, params, new MgCallback<JSONObject>() {
+//
+//            @Override
+//            public void onSuccessResponse(Result<JSONObject> responseBody) {
+//                if (responseBody == null || responseBody.getBody() == null) {
+//                    onErrorResponse("请求直播列表失败", null);
+//                }
+//                if (responseBody.getBody().size() > 0) {
+//                    mHomeFragment.getLiveList(responseBody.getBody().get(0));
+//                }
+//            }
+//
+//            @Override
+//            public void onErrorResponse(String message, String errorCode) {
+//                SDToast.showToast(message);
+//            }
+//        });
 
     }
 
