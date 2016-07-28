@@ -66,4 +66,5 @@ dependencies {
     compile files('libs/x-2.6.14-src-1.4-modify.jar')
 
 
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

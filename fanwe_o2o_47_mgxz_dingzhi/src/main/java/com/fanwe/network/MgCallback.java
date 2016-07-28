@@ -33,7 +33,7 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/7/22.
  */
-public abstract class MgCallback<T> implements Callback {
+public abstract class MgCallback implements Callback {
     private static String TAG = MgCallback.class.getSimpleName();
 
 
@@ -61,7 +61,7 @@ public abstract class MgCallback<T> implements Callback {
                 Log.e(TAG, body);
             }
             try {
-                Root<T> root = JSON.parseObject(body, Root.class);
+                Root root = JSON.parseObject(body, Root.class);
                 String statusCode = root.getStatusCode();
                 int code = Integer.valueOf(statusCode);
                 if (code >= 200 && code <= 300) {
@@ -72,9 +72,8 @@ public abstract class MgCallback<T> implements Callback {
                         userCurrentInfo.setToken(token);
                     }
                     if (root.getResult() != null) {
-                        if (root.getResult().getBody() != null) {
-                            onSuccessResponse(root.getResult());
-                        }
+                        //root.getResult() 返回结果是一个JSONARRAY ,可以直接  JsonArray()解释。
+                        onSuccessListResponse(root.getResult());
                     } else {
                         onSuccessResponse(body);
                     }
@@ -90,9 +89,7 @@ public abstract class MgCallback<T> implements Callback {
         }
         onFinish();
     }
-    public  void onSuccessResponse(Result<T> responseBody){
-
-    }
+    public  abstract  void onSuccessListResponse(List<Result> resultList);
     public  void onSuccessResponse(String responseBody){
 
         SDToast.showToast(responseBody);

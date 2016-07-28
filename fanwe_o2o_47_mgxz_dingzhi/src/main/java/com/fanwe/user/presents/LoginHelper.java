@@ -11,6 +11,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 
+import java.util.List;
 import java.util.TreeMap;
 
 
@@ -46,18 +47,16 @@ public class LoginHelper extends Presenter {
         params.put("mobile",userName);
         params.put("pwd",password);
         params.put("method", UserConstants.USER_lOGIN);
-        OkHttpUtils.getInstance().post(null,params,new MgCallback<JSONObject>(){
-
+        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
             @Override
-            public void onSuccessResponse(Result<JSONObject> responseBody) {
-                if(responseBody==null ||responseBody.getBody()==null){
-                    onErrorResponse("登录失败",null);
-                }
-                if(responseBody.getBody().size()>0) {
+            public void onSuccessListResponse(List<Result> resultList) {
+                    if(resultList==null ||resultList.size()==0){
+                        onErrorResponse("登录失败",null);
+                        return;
+                    }
+                        mLoginView.loginSucc(resultList);
 
 
-                    mLoginView.loginSucc(responseBody.getBody().get(0));
-                }
             }
 
             @Override
@@ -78,17 +77,17 @@ public class LoginHelper extends Presenter {
         params.put("pwd",password);
         params.put("captcha",captcha);
         params.put("method", UserConstants.USER_REGISTER);
-        OkHttpUtils.getInstance().post(null,params,new MgCallback<JSONObject>(){
+        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
 
             @Override
-            public void onSuccessResponse(Result<JSONObject> responseBody) {
-               if(responseBody==null ||responseBody.getBody()==null){
-                   onErrorResponse("注册失败",null);
-               }
-                if(responseBody.getBody().size()>0) {
-
-                    mLoginView.loginSucc(responseBody.getBody().get(0));
+            public void onSuccessListResponse(List<Result> resultList) {
+                if(resultList==null ||resultList.size()==0){
+                    onErrorResponse("注册失败",null);
+                    return;
                 }
+
+                    mLoginView.loginSucc(resultList);
+
             }
 
             @Override

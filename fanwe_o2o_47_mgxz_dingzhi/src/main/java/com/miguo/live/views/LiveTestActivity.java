@@ -71,6 +71,10 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         params.put("mobile", s1);
         params.put("method", "UserLogin");
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessListResponse(List<Result> resultList) {
+
+            }
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -86,11 +90,6 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
                 super.onResponse(call, response);
                 MGToast.showToast("onResponse");
-            }
-
-            @Override
-            public void onSuccessResponse(Result responseBody) {
-
             }
 
             @Override
@@ -120,7 +119,10 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
         params.put("method", "ApplyRoom");
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 
-
+            @Override
+            public void onSuccessListResponse(List<Result> resultList) {
+                MGToast.showToast("成功");
+            }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -128,10 +130,6 @@ public class LiveTestActivity extends Activity implements View.OnClickListener {
                 MGToast.showToast("onResponse");
             }
 
-            @Override
-            public void onSuccessResponse(Result responseBody) {
-                MGToast.showToast("成功");
-            }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {

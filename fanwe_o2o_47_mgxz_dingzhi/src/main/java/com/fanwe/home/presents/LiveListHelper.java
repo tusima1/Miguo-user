@@ -10,6 +10,7 @@ import com.fanwe.home.HomeConstants;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 
+import java.util.List;
 import java.util.TreeMap;
 
 
@@ -37,7 +38,10 @@ public class LiveListHelper extends Presenter {
 //        params.put("token", "4ac83bbd1ff9183efe32276c8a56bea9");
         params.put("method", HomeConstants.LIVE_LIST);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessListResponse(List<Result> resultList) {
 
+            }
 
             @Override
             public void onSuccessResponse(String responseBody) {

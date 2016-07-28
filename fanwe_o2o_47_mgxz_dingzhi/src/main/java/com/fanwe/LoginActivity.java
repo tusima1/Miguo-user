@@ -233,7 +233,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	}
 
 	@Override
-	public void onSuccess(Result responseBody) {
+	public void onSuccess(List<Result> responseBody) {
 
 	}
 
