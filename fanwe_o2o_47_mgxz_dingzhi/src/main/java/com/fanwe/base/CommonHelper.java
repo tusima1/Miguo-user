@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fanwe.fragment.LoginFragment;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -72,6 +73,18 @@ public class CommonHelper extends Presenter {
         params.put("type",type+"");
         params.put("method", SEND_CAPTCHA);
         OkHttpUtils.getInstance().get(null,params,mgCallback);
+    }
+
+    /**
+     * 验证手机号是否已经存在。
+     * @param mobile
+     */
+    public void doCheckMobileExist(String mobile,MgCallback<JSONObject> callback){
+
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("mobile",mobile);
+        params.put("method", UserConstants.USER_CHECK_EXIST);
+        OkHttpUtils.getInstance().get(null,params,callback);
     }
     @Override
     public void onDestory() {
