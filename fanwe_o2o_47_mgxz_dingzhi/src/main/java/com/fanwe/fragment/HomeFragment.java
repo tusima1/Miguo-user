@@ -10,10 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.event.EnumEventTag;
+import com.fanwe.home.model.LiveModel;
 import com.fanwe.home.presents.LiveListHelper;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
@@ -21,6 +25,7 @@ import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
@@ -28,7 +33,9 @@ import com.fanwe.model.IndexActAdvsModel;
 import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
+import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -410,6 +417,10 @@ public class HomeFragment extends BaseFragment {
         return this.getClass().getName().toString();
     }
 
-    public void getLiveList(String responseBody) {
+    public void getLiveList(JSONObject jsonObject) {
+        LiveModel liveModel = JSON.parseObject(String.valueOf(jsonObject), LiveModel.class);
+        if (liveModel != null) {
+            System.out.println("liveModel:" + liveModel.getTotalItem());
+        }
     }
 }
