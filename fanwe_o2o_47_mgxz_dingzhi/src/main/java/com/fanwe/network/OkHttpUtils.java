@@ -2,11 +2,15 @@ package com.fanwe.network;
 
 import android.text.TextUtils;
 
+import com.alipay.share.sdk.openapi.channel.APMessage;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
+import com.lidroid.xutils.http.client.multipart.content.StringBody;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,6 +25,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
 
 /**
  *
@@ -44,7 +49,8 @@ public class OkHttpUtils {
      */
     private static final String ENCRYPT_TYPE = "MD5";
     //"http://192.168.2.43:9080/mgxz.AuthorRPC/";
-
+    public static final MediaType MEDIA_TYPE_MARKDOWN
+            = MediaType.parse("text/x-markdown; charset=utf-8");
 
 
 
@@ -92,7 +98,7 @@ public class OkHttpUtils {
             return "";
         }
     }
-    public void post(String url, TreeMap<String,String> params, MgCallback mCallback,Object tag)  {
+    public void post(String url, TreeMap<String,String> params, Callback mCallback,Object tag)  {
         String serverUrl="";
         if(ServerUrl.DEBUG){
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
@@ -112,18 +118,31 @@ public class OkHttpUtils {
         //加密所有的参数
         params = encryptParams(params);
 
-        FormBody.Builder formBody = new FormBody.Builder();
+        StringBuilder paramStr = new StringBuilder();
         for(Map.Entry<String,String> entry:params.entrySet()){
-            formBody.add(entry.getKey(),entry.getValue());
+
+            paramStr.append(entry.getKey()+"="+entry.getValue()+"&");
         }
-        Request request =  new Request.Builder()
-                .url(serverUrl)
-                .post(formBody.build())
-                .tag(tag)
-                .build();
-        Call call = client.newCall(request);
-        // 开启异步线程访问网络
-        call.enqueue(mCallback);
+        String text = paramStr.substring(0,paramStr.length()-1);
+      try {
+         // StringBody body =  StringBody.create(text, "application/x-www-form-urlencoded", Charset.forName("UTF-8"));
+
+//          FormBody.Builder formBody = new FormBody.Builder();
+//          for (Map.Entry<String, String> entry : params.entrySet()) {
+//              formBody.add(entry.getKey(), entry.getValue());
+//          }
+
+          Request request = new Request.Builder()
+                  .url(serverUrl)
+                  .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, text))
+                  .tag(tag)
+                  .build();
+          Call call = client.newCall(request);
+          // 开启异步线程访问网络
+          call.enqueue(mCallback);
+      }catch (Exception e){
+
+      }
     }
 
     /**
@@ -154,7 +173,7 @@ public class OkHttpUtils {
      * @param url utl
      * @param mCallback
      */
-    public void get(String url, TreeMap<String,String> params, MgCallback mCallback) {
+    public void get(String url, TreeMap<String,String> params, Callback mCallback) {
 
         String serverUrl="";
         if(ServerUrl.DEBUG){

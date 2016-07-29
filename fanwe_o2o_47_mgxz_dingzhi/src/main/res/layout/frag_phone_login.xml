@@ -69,11 +69,12 @@
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/text_size_normal_16sp" />
 
-            <com.fanwe.library.customview.SDSendValidateButton
+            <Button
                 android:id="@+id/btn_send_code"
                 android:layout_width="110dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
+                android:text="获取验证码"
                 android:background="@drawable/selector_main_color_corner"
                 android:textColor="@color/white"
                 android:textSize="12sp" />

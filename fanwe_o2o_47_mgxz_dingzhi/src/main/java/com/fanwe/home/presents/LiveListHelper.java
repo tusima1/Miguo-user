@@ -50,10 +50,7 @@ public class LiveListHelper extends Presenter {
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
-            @Override
-            public void onSuccessListResponse(List<Result> resultList) {
 
-            }
 
             @Override
             public void onSuccessResponse(String responseBody) {

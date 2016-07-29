@@ -17,6 +17,11 @@ public class UserConstants {
      * 快捷登录接口。
      */
     public static final String  USER_QUICK_LOGIN= "UserQuickLogin";
+    /**
+     * 第三方注册 。
+     */
+
+    public static final String THIRD_REGISTER_URL="ThirdpartyLoginB";
 
     /**
      * 第三方OPENID.
@@ -38,6 +43,8 @@ public class UserConstants {
     public static final String USER_SIGN = "user_sign";
 
     public static final String USER_AVATAR = "user_avatar";
+
+
 
     /**
      * 用户 密码。
@@ -84,4 +91,16 @@ public class UserConstants {
      * qq getuserinfo url
      */
     public static final  String  QQ_GET_USER_INFO = "https://graph.qq.com/user/get_user_info";
+
+    //返回码
+    /**
+     * 注册成功。
+     */
+    public static final  String REGISTER_URL = "211";
+    /**
+     * 注册 失败。
+     */
+    public static final String ALL_REGISTERED="311";
+    public static final String SUCCESS="200";
+    public static final String CODE_ERROR="300";
 }

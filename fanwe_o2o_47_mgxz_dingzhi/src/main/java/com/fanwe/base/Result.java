@@ -12,7 +12,7 @@ public class Result<T> {
 
     private String page;
 
-    private List<Body> body;
+    private List<T> body;
 
     private String title;
 
@@ -36,11 +36,11 @@ public class Result<T> {
         return this.page;
     }
 
-    public List<Body> getBody() {
+    public List<T> getBody() {
         return body;
     }
 
-    public void setBody(List<Body> body) {
+    public void setBody(List<T> body) {
         this.body = body;
     }
 

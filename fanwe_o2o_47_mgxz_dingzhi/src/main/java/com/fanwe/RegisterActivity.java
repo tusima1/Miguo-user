@@ -1,40 +1,58 @@
 package com.fanwe;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.baidu.mapapi.map.Text;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Result;
+import com.fanwe.base.Root;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.Check_MobActModel;
+import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.model.UserInfoModel;
+import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.UserInfoBody;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.Contance;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -57,7 +75,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     private ClearEditText mEtPwd;
 
     @ViewInject(R.id.btn_send_code)
-    private SDSendValidateButton mBt_send_code;
+    private Button mBt_send_code;
 
     @ViewInject(R.id.ch_register)
     private CheckBox mCh_register;
@@ -101,19 +119,17 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     private String passwordStr;
     protected Check_MobActModel mActModel;
     CommonHelper mFragmentHelper;
+    private TimeCount time;
     /**
      * 第三方OPENID ，用于第三方注册 。
      */
     String openid = "";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_register);
         init();
-
     }
 
     @Override
@@ -132,9 +148,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         registeClick();
         initRequest();
         initSDSendValidateButton();
-
     }
-
 
     private void initGetIntent() {
         Intent intent = getIntent();
@@ -146,7 +160,6 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         if (intent.hasExtra(UserConstants.THIRD_OPENID)) {
             openid = intent.getStringExtra(UserConstants.THIRD_OPENID);
         }
-
     }
 
     private void initTitle() {
@@ -181,38 +194,16 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
      * 第三方注册 。
      */
     private void thirdRegister(){
-
-    }
-
-    private void clickRegister() {
-        if (validateParam()) {
-            if(!TextUtils.isEmpty(openid)){
-                thirdRegister();
-
-            }else {
-                doRegister();
-            }
-            //requestShortSet();
-        }
-    }
-
-    /**
-     * 注册 。
-     */
-    public void doRegister() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", userPhone);
-        params.put("pwd", passwordStr);
+        params.put("openid", openid);
         params.put("captcha", mStrPwd);
-        params.put("method", UserConstants.USER_REGISTER);
+        params.put("method", UserConstants.THIRD_REGISTER_URL);
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 
             @Override
-            public void onSuccessListResponse(List<Result> resultList) {
-                if (resultList == null || resultList.size() == 0) {
-                    onErrorResponse("注册失败", null);
-                }
-                Log.d(TAG, resultList.toString());
+            public void onSuccessResponse(String responseBody) {
+                super.onSuccessResponse(responseBody);
             }
 
             @Override
@@ -223,49 +214,69 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         });
     }
 
-    private void requestShortSet() {
-
-        RequestModel model = new RequestModel();
-        model.putCtl("user");
-        model.putAct("verify_login");
-        model.put("mobile", userPhone);
-        model.put("sms_verify", mStrPwd);
-        SDRequestCallBack<UserInfoModel> handler = new SDRequestCallBack<UserInfoModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
+    private void clickRegister() {
+        if (validateParam()) {
+            if(!TextUtils.isEmpty(openid)){
+                thirdRegister();
+            }else {
+                doRegister();
             }
 
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getVerify_status() == 0) {
-                    SDToast.showToast("验证码不正确");
-                } else {
-                    if (actModel.getUser() == null) {
-                        Intent intent = new Intent(RegisterActivity.this, SetPwActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("mobile", userPhone);
-                        bundle.putString("sms_verify", mStrPwd);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                }
-            }
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
+        }
     }
+    /**
+     * 注册 。
+     */
+    public void doRegister() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("mobile", userPhone);
+        params.put("pwd", MD5Util.MD5(passwordStr));
+        params.put("captcha", mStrPwd);
+        params.put("method", UserConstants.USER_REGISTER);
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+           @Override
+            public void onSuccessResponse(String responseBody) {
+               Type type = new TypeToken<Root<UserInfoNew>>() {
+               }.getType();
+               Gson gson = new Gson();
+               Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+               UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
+               if (userInfoNew != null) {
+                   if (userInfoNew != null) {
+                       App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+                       User_infoModel model = new User_infoModel();
+                       model.setUser_id(userInfoNew.getUser_id());
+                       model.setMobile(userPhone);
+                       model.setUser_pwd(MD5Util.MD5(passwordStr));
+                       model.setUser_name(userInfoNew.getUser_name());
+                       dealLoginSuccess(model);
+                   }
+               }
+               String status = root.getStatusCode();
+               if(status.equals(UserConstants.REGISTER_URL)) {
+                   SDToast.showToast("注册成功。");
+                   //此处加，用户登录处理的信息。
+               }else if(status.equals(UserConstants.ALL_REGISTERED)){
+                   SDToast.showToast(root.getMessage());
+               }
+            }
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
 
+                SDToast.showToast(message);
+            }
+        });
+    }
+    protected void dealLoginSuccess(User_infoModel actModel) {
+        LocalUserModel.dealLoginSuccess(actModel, true);
+        Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
+        if (lastActivity instanceof MainActivity) {
+          finish();
+        } else {
+           startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+        }
 
-
+    }
     /**
      *  判断手机号是否存在。
      */
@@ -276,14 +287,30 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             return;
         }
         mFragmentHelper.doCheckMobileExist(userPhone, new MgCallback() {
-            @Override
-            public void onSuccessListResponse(List<Result> resultList) {
 
-            }
             @Override
             public void onSuccessResponse(String responseBody) {
-                doGetCaptcha();
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+                HashMap<String,String> infoNew = (HashMap<String,String>) validateBody(root);
+                if(infoNew!=null) {
+                  String value =   infoNew.get("exist");
+                    //如果手机号存在，并且是第三方登录。直接取验证码。
+                    if("1".equals(value)){
+                        if(!TextUtils.isEmpty(openid)) {
 
+                            time.start();
+                            doGetCaptcha();
+                        }else{
+                            goLogin();
+                        }
+                    }else{
+                        time.start();
+                        doGetCaptcha();
+                    }
+                }
             }
             @Override
             public void onErrorResponse(String message, String errorCode) {
@@ -291,7 +318,12 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             }
         });
     }
-
+    public void goLogin(){
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        intent.putExtra(LoginActivity.EXTRA_SELECT_TAG_INDEX, 1);
+        intent.putExtra(LoginPhoneFragment.EXTRA_PHONE_NUMBER, userPhone);
+        startActivity(intent);
+    }
 
 
     public void initRequest() {
@@ -332,20 +364,15 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
     private void initSDSendValidateButton() {
 
-        mBt_send_code.setmListener(new SDSendValidateButtonListener() {
+        mBt_send_code.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTick() {
-
-            }
-
-            @Override
-            public void onClickSendValidateButton() {
-
-
-                //	checkMobileExist();
-                doGetCaptcha();
+            public void onClick(View v) {
+                checkMobileExist();
             }
         });
+        time = new TimeCount(60000, 1000);//构造CountDownTimer对象
+
+
     }
 
     /**
@@ -358,23 +385,26 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             return;
         }
         //开始倒计时。
-        mBt_send_code.setmDisableTime(Contance.SEND_CODE_TIME);
-        mBt_send_code.startTickWork();
+
         mFragmentHelper.doGetCaptcha(userPhone, 1, new MgCallback() {
 
             public void onErrorResponse(String message, String errorCode) {
-
+                SDToast.showToast("验证码发送失败");
             }
-
-            @Override
-            public void onSuccessListResponse(List<Result> resultList) {
-                SDToast.showToast("验证码发送成功");
+            public void onSuccessResponse(String responseBody){
+                Type type = new TypeToken<Root<UserInfoNew>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root root = gson.fromJson(responseBody, type);
+                  String status = root.getStatusCode();
+                if(UserConstants.SUCCESS.equals(status)) {
+                    SDToast.showToast("验证码发送成功");
+                }else if(UserConstants.CODE_ERROR.equals(status)) {
+                    SDToast.showToast("验证码发送失败");
+                }
             }
-
         });
     }
-
-
     /**
      * 请求验证码
      */
@@ -392,9 +422,9 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
                     case -1:
                         break;
                     case 1:
-                        mBt_send_code.setmDisableTime(actModel.getLesstime());
-                        mBt_send_code.startTickWork();
-                        break;
+//                        mBt_send_code.setmDisableTime(actModel.getLesstime());
+//                        mBt_send_code.startTickWork();
+                     break;
 
                     default:
                         break;
@@ -462,5 +492,23 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
     }
 
+
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+        }
+
+        @Override
+        public void onFinish() {//计时完毕时触发
+            mBt_send_code.setText("重新验证");
+            mBt_send_code.setClickable(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {//计时过程显示
+            mBt_send_code.setClickable(false);
+            mBt_send_code.setText(millisUntilFinished / 1000 + "秒");
+        }
+    }
 
 }

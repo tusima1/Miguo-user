@@ -320,32 +320,37 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		params.put("openid",openId);
 		params.put("platform",type);
 		OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-			@Override
-			public void onSuccessListResponse(List<Result> resultList) {
-				if(resultList!=null&&resultList.size()>0){
-					Result result = resultList.get(0);
-					if(result!=null&&result.getBody()!=null&&result.getBody().size()>0){
-						JSONObject object = (JSONObject) result.getBody().get(0);
-						if(object.containsKey("unRegister")){
-							startRegisterActivity(true);
-						}else {
-							UserInfoBody userinfo = JSON.parseObject(result.getBody().get(0).toString(), UserInfoBody.class);
-							User_infoModel model = new User_infoModel();
-							model.setUser_name(userinfo.getUser_name());
-							model.setUser_login_status(1);
-							model.setUser_id(userinfo.getUser_id());
-							dealLoginSuccess(model);
-						}
-					}
-				}else{
-					onErrorResponse("第三方登录失败","300");
-				}
-
-			}
+//			@Override
+//			public void onSuccessListResponse(List<Result> resultList) {
+//				if(resultList!=null&&resultList.size()>0){
+//					Result result = resultList.get(0);
+//					if(result!=null&&result.getBody()!=null&&result.getBody().size()>0){
+//						JSONObject object = (JSONObject) result.getBody().get(0);
+//						if(object.containsKey("unRegister")){
+//							startRegisterActivity(true);
+//						}else {
+//							UserInfoBody userinfo = JSON.parseObject(result.getBody().get(0).toString(), UserInfoBody.class);
+//							User_infoModel model = new User_infoModel();
+//							model.setUser_name(userinfo.getUser_name());
+//							model.setUser_login_status(1);
+//							model.setUser_id(userinfo.getUser_id());
+//							dealLoginSuccess(model);
+//						}
+//					}
+//				}else{
+//					onErrorResponse("第三方登录失败","300");
+//				}
+//
+//			}
 
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
 
+			}
+
+			@Override
+			public void onSuccessResponse(String responseBody) {
+				super.onSuccessResponse(responseBody);
 			}
 		});
 

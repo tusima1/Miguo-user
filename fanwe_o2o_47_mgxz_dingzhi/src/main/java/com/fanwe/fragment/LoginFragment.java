@@ -175,7 +175,6 @@ public class LoginFragment extends LoginBaseFragment {
 
 
     public void doLogin(){
-
         if (validateParam()) {
             if (TextUtils.isEmpty(mStrUserName)) {
                 Toast.makeText(getActivity(), "name can not be empty!", Toast.LENGTH_SHORT).show();
@@ -185,8 +184,7 @@ public class LoginFragment extends LoginBaseFragment {
                 Toast.makeText(getActivity(), "password can not be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
-          //  mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
-            mLoginHelper.doLogin(mStrUserName, mStrPassword, 0);
+          mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
         }
     }
     private void clickLoginNormal() {
@@ -254,20 +252,15 @@ public class LoginFragment extends LoginBaseFragment {
     /**
      * JAVA 登录接口。
      */
-    public void   loginSucc(List<Result> jsonObject){
-
-        UserInfoNew userInfoNew = JSON.parseObject(String.valueOf(jsonObject.get(0)), UserInfoNew.class);
+    public void   loginSucc(UserInfoNew userInfoNew ){
             if (userInfoNew != null) {
-
                 App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
-
                 User_infoModel model = new User_infoModel();
                 model.setUser_id(userInfoNew.getUser_id());
                 model.setMobile(mStrUserName);
                 model.setUser_pwd(MD5Util.MD5(mStrPassword));
                 model.setUser_name(userInfoNew.getUser_name());
                 dealLoginSuccess(model);
-
             }
         }
 }

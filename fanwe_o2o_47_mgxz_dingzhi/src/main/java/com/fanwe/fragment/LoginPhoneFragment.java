@@ -1,20 +1,24 @@
 package com.fanwe.fragment;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Result;
+import com.fanwe.base.Root;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.model.LocalUserModel;
@@ -23,10 +27,14 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.Contance;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -43,7 +51,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	private ClearEditText mEtCode;
 
 	@ViewInject(R.id.btn_send_code)
-	private SDSendValidateButton mBtnSendCode;
+	private Button mBtnSendCode;
 
 	@ViewInject(R.id.btn_login)
 	private Button mBtnLogin;
@@ -55,6 +63,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	private String mNumberPhone;
 
 	CommonHelper mFragmentHelper;
+	private TimeCount time;
 
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -70,7 +79,13 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		getIntentData();
 
 		registeClick();
-		initSDSendValidateButton();
+		mBtnSendCode.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			   checkMobileExist();
+			}
+		});
+		time = new TimeCount(60000, 1000);//构造CountDownTimer对象
 	}
 
 	/**
@@ -82,18 +97,18 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			SDToast.showToast("请输入手机号码");
 			return;
 		}
-		mFragmentHelper.doCheckMobileExist(mNumberPhone, new MgCallback() {
-			@Override
-			public void onSuccessListResponse(List<Result> resultList) {
 
-			}
+		mFragmentHelper.doCheckMobileExist(mNumberPhone, new MgCallback() {
+
 			@Override
 			public void onSuccessResponse(String responseBody) {
+				time.start();//开始计时
 				requestCaptcha();
 
 			}
 			@Override
-			public void onErrorResponse(String message, String errorCode) {
+			public void onErrorResponse(String message, String errorCode)
+			{
 				SDToast.showToast(message);
 			}
 		});
@@ -110,20 +125,16 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			SDToast.showToast("请输入手机号码");
 			return;
 		}
-		//开始倒计时。
-		mBtnSendCode.setmDisableTime(Contance.SEND_CODE_TIME);
-		mBtnSendCode.startTickWork();
+
 
 		mFragmentHelper.doGetCaptcha(mNumberPhone, 0, new MgCallback() {
-			@Override
-			public void onSuccessListResponse(List<Result> resultList) {
-				SDToast.showToast("验证码发送成功");
-			}
+
+
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
 				SDToast.showToast("验证码发送失败，请重新发送");
 				mBtnSendCode.setText("重新发送验证码");
-				mBtnSendCode.stopTickWork();
+				time.onFinish();
 
 			}
 
@@ -144,26 +155,6 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		}
 	}
 
-	/**
-	 * 初始化发送验证码按钮
-	 */
-	private void initSDSendValidateButton()
-	{
-		mBtnSendCode.setmListener(new SDSendValidateButtonListener()
-		{
-			@Override
-			public void onTick()
-			{
-				
-			}
-			@Override
-			public void onClickSendValidateButton()
-			{
-				checkMobileExist();
-
-			}
-		});
-	}
 
 	private void registeClick()
 	{
@@ -183,7 +174,6 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			break;
 		}
 	}
-
 	/**
 	 *快捷 登录 接口。
 	 */
@@ -203,20 +193,32 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 		TreeMap<String, String> params = new TreeMap<String,String>();
 		params.put("mobile", mNumberPhone);
-		params.put("captcha", UserConstants.USER_QUICK_LOGIN);
+		params.put("captcha",mStrCode);
+		params.put("method", UserConstants.USER_QUICK_LOGIN);
 		OkHttpUtils.getInstance().post(null,params,new MgCallback(){
 
 			@Override
-			public void onSuccessListResponse(List<Result> resultList) {
-				SDToast.showToast("登录成功");
-				if(resultList!=null && resultList.size()>0){
-				//解析登录数据。
-
+			public void onSuccessResponse(String responseBody) {
+				Type type = new TypeToken<Root<UserInfoNew>>() {
+				}.getType();
+				Gson gson = new Gson();
+				Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+				UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
+				if (userInfoNew != null) {
+					if (userInfoNew != null) {
+						App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+						User_infoModel model = new User_infoModel();
+						model.setUser_id(userInfoNew.getUser_id());
+						model.setMobile(mNumberPhone);
+						model.setUser_name(userInfoNew.getUser_name());
+						dealLoginNormalSuccess(model,true);
+					}
 				}
 			}
 
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
+
 				SDToast.showToast(message);
 			}
 		});
@@ -234,10 +236,6 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	@Override
 	public void onDestroy()
 	{
-		if(mBtnSendCode != null)
-		{
-			mBtnSendCode.stopTickWork();
-		}
 		super.onDestroy();
 	}
 
@@ -264,5 +262,28 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	@Override
 	public void onFailue(String responseBody) {
 
+	}
+
+	class TimeCount extends CountDownTimer {
+		public TimeCount(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+		}
+
+		@Override
+		public void onFinish() {//计时完毕时触发
+			mBtnSendCode.setText("重新验证");
+			mBtnSendCode.setClickable(true);
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {//计时过程显示
+			mBtnSendCode.setClickable(false);
+			mBtnSendCode.setText(millisUntilFinished / 1000 + "秒");
+		}
+
+		public void onInit(){
+			mBtnSendCode.setText("获取验证码");
+
+		}
 	}
 }
