@@ -65,7 +65,8 @@
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
 
-
+        <activity android:name="com.fanwe.seller.views.MineShopActivity">
+        </activity>
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
             android:label="@string/app_name">
@@ -867,7 +868,8 @@
             </intent-filter>
         </activity>
         <!-- Required  SDK核心功能 -->
-        <service android:name="com.sina.weibo.sdk.net.DownloadService"
+        <service
+            android:name="com.sina.weibo.sdk.net.DownloadService"
             android:exported="false"></service>
         <service
             android:name="cn.jpush.android.service.DownloadService"

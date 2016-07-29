@@ -32,32 +32,16 @@ public class LiveStartActivity extends Activity {
                 dataBindingLiveStart.shopName.set("米果小站");
                 break;
             case R.id.iv_qq_live_start:
-                if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.NONE);
-                } else {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.QQ);
-                }
+                dataBindingLiveStart.mode.set(dataBindingLiveStart.QQ);
                 break;
             case R.id.iv_weixin_live_start:
-                if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.WEIXIN) {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.NONE);
-                } else {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.WEIXIN);
-                }
+                dataBindingLiveStart.mode.set(dataBindingLiveStart.WEIXIN);
                 break;
             case R.id.iv_friend_live_start:
-                if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.FRIEND) {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.NONE);
-                } else {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.FRIEND);
-                }
+                dataBindingLiveStart.mode.set(dataBindingLiveStart.FRIEND);
                 break;
             case R.id.iv_sina_live_start:
-                if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.SINA) {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.NONE);
-                } else {
-                    dataBindingLiveStart.mode.set(dataBindingLiveStart.SINA);
-                }
+                dataBindingLiveStart.mode.set(dataBindingLiveStart.SINA);
                 break;
             case R.id.btn_start_live_start:
                 startLive();
