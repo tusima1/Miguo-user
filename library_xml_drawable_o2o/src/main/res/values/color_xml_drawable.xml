@@ -12,12 +12,8 @@
     <color name="main_color">#FF6600</color>
     <!-- 主题颜色按下颜色 -->
     <color name="main_color_press">#ffcc66</color>
-    
+
     <color name="text_333333">#333333</color>
-    
-
-    
-
-    
+    <color name="ff_66">#66ffffff</color>
 
 </resources>
