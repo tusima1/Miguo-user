@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class Root<T> {
 
-    private List<Result> result ;
+    private List<Result<T>> result ;
 
     private String message;
 
@@ -15,10 +15,10 @@ public class Root<T> {
 
     private String token;
 
-    public void setResult(List<Result> result){
+    public void setResult(List<Result<T>> result){
         this.result = result;
     }
-    public List<Result> getResult(){
+    public List<Result<T>> getResult(){
         return this.result;
     }
     public void setMessage(String message){

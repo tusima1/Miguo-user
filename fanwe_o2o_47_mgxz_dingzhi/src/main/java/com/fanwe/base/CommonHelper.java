@@ -53,7 +53,7 @@ public class CommonHelper extends Presenter {
       }else{
             mgCallback = new MgCallback(){
 
-                @Override
+
                 public void onSuccessListResponse(List<Result> resultList) {
                     mView.onSuccess(resultList);
                 }

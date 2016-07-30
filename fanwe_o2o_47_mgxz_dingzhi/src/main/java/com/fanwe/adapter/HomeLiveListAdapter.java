@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.fanwe.home.model.Room;
 import com.fanwe.o2o.miguo.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -22,10 +23,10 @@ import java.util.ArrayList;
 public class HomeLiveListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater inflater;
-    private ArrayList<String> datas;
+    private ArrayList<Room> datas;
 
     public HomeLiveListAdapter(Context mContext,
-                               LayoutInflater layoutInflater, ArrayList<String> datas) {
+                               LayoutInflater layoutInflater, ArrayList<Room> datas) {
         this.mContext = mContext;
         this.inflater = layoutInflater;
         this.datas = datas;
@@ -63,7 +64,8 @@ public class HomeLiveListAdapter extends BaseAdapter {
     }
 
     private void setData(Holder mHolder, int position) {
-        ImageLoader.getInstance().displayImage(datas.get(position), mHolder.ivBg, null, null, null);
+        Room room = datas.get(position);
+        ImageLoader.getInstance().displayImage(room.getCover(), mHolder.ivBg, null, null, null);
     }
 
     private static class Holder {

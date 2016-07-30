@@ -92,7 +92,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_normal_16sp" />
 
-        <include layout="@layout/act_third_login"></include>
+
 
     </LinearLayout>
 

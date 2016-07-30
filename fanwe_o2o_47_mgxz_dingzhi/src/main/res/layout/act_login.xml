@@ -45,7 +45,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|left"
             android:orientation="horizontal" >
-
             <TextView
                 android:id="@+id/tv_find_password"
                 android:layout_width="wrap_content"
@@ -56,6 +55,7 @@
                 android:text="忘记密码"
                 android:textColor="@color/gray" />
         </LinearLayout>
+        <include layout="@layout/act_third_login"></include>
     </LinearLayout>
 
 </LinearLayout>

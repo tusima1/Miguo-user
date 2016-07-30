@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 
 import com.fanwe.adapter.HomeLiveListAdapter;
 import com.fanwe.customview.SDGridViewInScroll;
+import com.fanwe.home.model.Room;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/25.
@@ -19,7 +22,7 @@ public class HomeFragmentLiveList extends BaseFragment {
     private View view;
     private SDGridViewInScroll mSDGridViewInScroll;
     private HomeLiveListAdapter mLiveViewAdapter;
-    private ArrayList<String> datas = new ArrayList<>();
+    private ArrayList<Room> datas = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,17 +58,7 @@ public class HomeFragmentLiveList extends BaseFragment {
     }
 
     private void preParam() {
-        datas.clear();
-        for (int i = 0; i < 10; i++) {
-            if (i % 2 == 0)
-                datas.add("http://www.showself.com/yule/uploadfile/2015/1221/20151221055425653.jpg");
-            else if (i % 3 == 0)
-                datas.add("http://img4.imgtn.bdimg.com/it/u=2574011675,1013612477&fm=206&gp=0.jpg");
-            else if (i % 4 == 0)
-                datas.add("http://ww2.sinaimg.cn/large/775da259gw1ewh5382xidj22e836o1ky.jpg");
-            else
-                datas.add("http://img4.imgtn.bdimg.com/it/u=3839363306,3245298732&fm=206&gp=0.jpg");
-        }
+
     }
 
     private void initView(LayoutInflater inflater, ViewGroup container) {
@@ -75,13 +68,12 @@ public class HomeFragmentLiveList extends BaseFragment {
 
     }
 
-    public void updateView(boolean flag) {
-        if (flag) {
+    public void updateView(boolean isRefresh, List<Room> rooms) {
+        if (isRefresh) {
             datas.clear();
         }
-        for (int i = 0; i < 10; i++) {
-            datas.add("NO." + i);
-        }
+        if (!SDCollectionUtil.isEmpty(rooms))
+            datas.addAll(rooms);
         mLiveViewAdapter.notifyDataSetChanged();
     }
 

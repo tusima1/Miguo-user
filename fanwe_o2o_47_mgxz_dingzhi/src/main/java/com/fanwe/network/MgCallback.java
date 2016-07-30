@@ -10,6 +10,7 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +22,7 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/7/22.
  */
-public abstract class MgCallback implements Callback {
+public abstract class MgCallback<T> implements Callback {
     private static String TAG = MgCallback.class.getSimpleName();
 
 
@@ -53,33 +54,45 @@ public abstract class MgCallback implements Callback {
                 Root root = JSON.parseObject(body, Root.class);
                 String statusCode = root.getStatusCode();
                 int code = Integer.valueOf(statusCode);
-                if (code >= 200 && code <= 300) {
+                if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
                     if (root.getToken() != null) {
                         String token = root.getToken();
                         UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }
-                    if (root.getResult() != null) {
-                        //root.getResult() 返回结果是一个JSONARRAY ,可以直接  JsonArray()解释。
-                        onSuccessListResponse(root.getResult());
-                    } else {
-                        onSuccessResponse(body);
-                    }
+                    onSuccessResponse(body);
                 } else {
                     String message = root.getMessage();
                     onErrorResponse(message, statusCode);
                 }
 
             } catch (Exception e) {
-                Log.e(TAG,e.getMessage());
+                Log.e(TAG, e.getMessage());
                 SDToast.showToast(e.getMessage());
             }
         }
         onFinish();
     }
-    public  abstract  void onSuccessListResponse(List<Result> resultList);
-    public  void onSuccessResponse(String responseBody){
+
+
+    public void onSuccessResponse(String responseBody) {
     }
-    public abstract void onErrorResponse(String message,String errorCode);
+
+    /**
+     * 判断BODY对象是否存在。
+     * @param root
+     * @return
+     */
+    public T validateBody(Root<T> root) {
+
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
+        {
+            return root.getResult().get(0).getBody().get(0);
+        }
+        return null;
+
+    }
+
+    public abstract void onErrorResponse(String message, String errorCode);
 }

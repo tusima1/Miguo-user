@@ -4,20 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.base.CallbackView;
+import com.fanwe.base.Result;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.home.model.LiveModel;
+import com.fanwe.home.model.ResultLive;
+import com.fanwe.home.model.Room;
 import com.fanwe.home.presents.LiveListHelper;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
@@ -25,7 +27,6 @@ import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
@@ -33,9 +34,7 @@ import com.fanwe.model.IndexActAdvsModel;
 import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -43,14 +42,23 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.model.generateSign.ModelGenerateSign;
+import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
+import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.getHostTags.ModelHostTags;
+import com.miguo.live.presents.LiveHelper;
 import com.sunday.eventbus.SDBaseEvent;
+import com.umeng.socialize.utils.Log;
 
 /**
  * 首页fragment
  *
  * @author js02
  */
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements CallbackView {
     @ViewInject(R.id.frag_home_new_ptrsv_all)
     private PullToRefreshScrollView mPtrsvAll;
 
@@ -81,6 +89,10 @@ public class HomeFragment extends BaseFragment {
     protected Index_indexActModel mActModel;
 
     private LiveListHelper mLiveListHelper;
+    private boolean isRefresh = true;
+    private int pageNum = 1;
+    private int pageSize = 3;
+    private List<Room> rooms;
 
 
     @Override
@@ -98,6 +110,12 @@ public class HomeFragment extends BaseFragment {
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
+
+        //直播列表
+        mHomeFragmentLiveList = new HomeFragmentLiveList();
+        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
+
+        test();
     }
 
     private void initPageModel(int totalPage) {
@@ -115,7 +133,7 @@ public class HomeFragment extends BaseFragment {
                 pageModel.resetPage();
                 pageData_1 = null;
                 pageData_2.clear();
-//                requestIndex();
+                requestIndex();
 //                requestIndex2(false);
                 if (location != null) {
                     dealLocationSuccess();
@@ -196,23 +214,28 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void onPullDownToRefresh(
                 PullToRefreshBase<ScrollView> refreshView) {
+            isRefresh = true;
+            pageNum = 1;
             //重置数据集
             pageModel.resetPage();
             mListModel.clear();
             pageData_1 = null;
             pageData_2.clear();
 
-//            requestIndex();
-            mLiveListHelper.getLiveList();
+            requestIndex();
+            mLiveListHelper.getLiveList(pageNum, pageSize);
 //            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
 
         @Override
         public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+            isRefresh = false;
+            if (!SDCollectionUtil.isEmpty(rooms)) {
+                pageNum++;
+            }
 
-            mPtrsvAll.onRefreshComplete();
-            SDDialogManager.dismissProgressDialog();
+            mLiveListHelper.getLiveList(pageNum, pageSize);
 
 //            if (pageModel.increment()) {
 //                // 添加第二页数据
@@ -417,10 +440,92 @@ public class HomeFragment extends BaseFragment {
         return this.getClass().getName().toString();
     }
 
-    public void getLiveList(JSONObject jsonObject) {
-        LiveModel liveModel = JSON.parseObject(String.valueOf(jsonObject), LiveModel.class);
-        if (liveModel != null) {
-            System.out.println("liveModel:" + liveModel.getTotalItem());
+    public void getLiveList(ResultLive resultLive) {
+        if (resultLive == null) {
+            rooms = null;
+            return;
         }
+        rooms = resultLive.getBody();
+        Message message = new Message();
+        message.what = 1;
+        mHandler.sendMessage(message);
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    mHomeFragmentLiveList.updateView(isRefresh, rooms);
+                    mPtrsvAll.onRefreshComplete();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onSuccess(List<Result> responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    private void test() {
+        LiveHelper liveHelper = new LiveHelper(getActivity(), this);
+        liveHelper.getHostTags("a6d29f8c-5469-11e6-beb8-9e71128cae77", "1");
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.LIVE_LIST.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                Room room = (Room) datas.get(0);
+                Log.d("onSuccess", room.getCreate_time());
+            }
+        } else if (LiveConstants.APPLY_ROOM.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelApplyRoom modelApplyRoom = (ModelApplyRoom) datas.get(0);
+                Log.d("onSuccess", modelApplyRoom.getRoom_id());
+            }
+        } else if (LiveConstants.AUDIENCE_COUNT.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelAudienceCount modelAudienceCount = (ModelAudienceCount) datas.get(0);
+                Log.d("onSuccess", modelAudienceCount.getCount());
+            }
+        } else if (LiveConstants.AUDIENCE_LIST.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelAudienceList modelAudienceList = (ModelAudienceList) datas.get(0);
+                Log.d("onSuccess", modelAudienceList.getStart_time());
+            }
+        } else if (LiveConstants.END_INFO.equals(method)) {
+            Log.d("onSuccess", "end success");
+        } else if (LiveConstants.ENTER_ROOM.equals(method)) {
+            Log.d("onSuccess", "enter success");
+        } else if (LiveConstants.EXIT_ROOM.equals(method)) {
+            Log.d("onSuccess", "exit success");
+        } else if (LiveConstants.GENERATE_SIGN.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelGenerateSign modelGenerateSign = (ModelGenerateSign) datas.get(0);
+                Log.d("onSuccess", modelGenerateSign.getUsersig());
+            }
+        } else if (LiveConstants.HOST_INFO.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelHostInfo modelHostInfo = (ModelHostInfo) datas.get(0);
+                Log.d("onSuccess", modelHostInfo.getId());
+            }
+        } else if (LiveConstants.HOST_TAGS.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelHostTags modelHostTags = (ModelHostTags) datas.get(0);
+                Log.d("onSuccess", modelHostTags.getDic_mean());
+            }
+        }
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }

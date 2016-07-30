@@ -5,33 +5,53 @@ package com.fanwe.home.model;
  * Created by Administrator on 2016/7/27.
  */
 public class Lbs {
-    private int longitude;
+    private String geo_y;
 
-    private int latitude;
+    private String geo_x;
+
+    private String shop_id;
 
     private String address;
 
-    public void setLongitude(int longitude) {
-        this.longitude = longitude;
+    private String shop_name;
+
+    public String getGeo_y() {
+        return geo_y;
     }
 
-    public int getLongitude() {
-        return this.longitude;
+    public void setGeo_y(String geo_y) {
+        this.geo_y = geo_y;
     }
 
-    public void setLatitude(int latitude) {
-        this.latitude = latitude;
+    public String getGeo_x() {
+        return geo_x;
     }
 
-    public int getLatitude() {
-        return this.latitude;
+    public void setGeo_x(String geo_x) {
+        this.geo_x = geo_x;
+    }
+
+    public String getShop_id() {
+        return shop_id;
+    }
+
+    public void setShop_id(String shop_id) {
+        this.shop_id = shop_id;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getAddress() {
-        return this.address;
+    public String getShop_name() {
+        return shop_name;
+    }
+
+    public void setShop_name(String shop_name) {
+        this.shop_name = shop_name;
     }
 }
