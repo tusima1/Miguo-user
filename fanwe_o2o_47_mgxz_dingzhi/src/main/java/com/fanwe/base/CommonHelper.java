@@ -53,11 +53,6 @@ public class CommonHelper extends Presenter {
       }else{
             mgCallback = new MgCallback(){
 
-
-                public void onSuccessListResponse(List<Result> resultList) {
-                    mView.onSuccess(resultList);
-                }
-
                 @Override
                 public void onSuccessResponse(String body){
                     mView.onSuccess(body);

@@ -458,10 +458,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         }
     };
 
-    @Override
-    public void onSuccess(List<Result> responseBody) {
 
-    }
 
     @Override
     public void onSuccess(String responseBody) {

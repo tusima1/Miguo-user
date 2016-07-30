@@ -28,6 +28,7 @@ import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.utils.Contance;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -64,6 +65,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 	CommonHelper mFragmentHelper;
 	private TimeCount time;
+	LoginHelper mLoginHelper;
 
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -76,6 +78,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	{
 		super.init();
 		mFragmentHelper = new CommonHelper(getActivity(),this);
+		mLoginHelper = new LoginHelper(getActivity(),getActivity(),null);
 		getIntentData();
 
 		registeClick();
@@ -190,48 +193,11 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			SDToast.showToast("请输入验证码!");
 			return;
 		}
+		mLoginHelper.doQuickLogin(mNumberPhone,mStrCode);
 
-		TreeMap<String, String> params = new TreeMap<String,String>();
-		params.put("mobile", mNumberPhone);
-		params.put("captcha",mStrCode);
-		params.put("method", UserConstants.USER_QUICK_LOGIN);
-		OkHttpUtils.getInstance().post(null,params,new MgCallback(){
-
-			@Override
-			public void onSuccessResponse(String responseBody) {
-				Type type = new TypeToken<Root<UserInfoNew>>() {
-				}.getType();
-				Gson gson = new Gson();
-				Root<UserInfoNew> root = gson.fromJson(responseBody, type);
-				UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
-				if (userInfoNew != null) {
-					if (userInfoNew != null) {
-						App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
-						User_infoModel model = new User_infoModel();
-						model.setUser_id(userInfoNew.getUser_id());
-						model.setMobile(mNumberPhone);
-						model.setUser_name(userInfoNew.getUser_name());
-						dealLoginNormalSuccess(model,true);
-					}
-				}
-			}
-
-			@Override
-			public void onErrorResponse(String message, String errorCode) {
-
-				SDToast.showToast(message);
-			}
-		});
 
 	}
 
-
-
-	protected void dealLoginNormalSuccess(User_infoModel actModel, boolean postEvent)
-	{
-		LocalUserModel.dealLoginSuccess(actModel, postEvent);
-		getActivity().finish();
-	}
 
 	@Override
 	public void onDestroy()
@@ -248,15 +214,8 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 
 	@Override
-	public void onSuccess(List<Result> responseBody) {
-
-			SDToast.showToast("验证码发送成功");
-
-	}
-
-	@Override
 	public void onSuccess(String responseBody) {
-
+		SDToast.showToast("验证码发送成功");
 	}
 
 	@Override
@@ -286,9 +245,5 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			mBtnSendCode.setText(millisUntilFinished / 1000 + "秒");
 		}
 
-		public void onInit(){
-			mBtnSendCode.setText("获取验证码");
-
-		}
 	}
 }

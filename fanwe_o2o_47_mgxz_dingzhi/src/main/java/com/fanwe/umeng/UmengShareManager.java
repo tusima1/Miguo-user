@@ -28,7 +28,9 @@ public class UmengShareManager {
 	public static final String wxAppSecret = "5f29a228760302af0d85774d02390273";
 	public static final String qqAppKey = "1101169715";
 	public static final String qqAppSecret = "FtAZVvB6LZ85hjdE";
-	
+
+	public static final String sinaAppKey="3061230415";
+	public static final String sinaAppSecret="b5fe7acf5dc0eecaf23344a0f84b26e6";
 	//-------------------------------
 	public static int mTag = 0;
 	public static Activity context;
@@ -39,6 +41,7 @@ public class UmengShareManager {
 		PlatformConfig.setQQZone(qqAppKey, qqAppSecret);
 		// 初始化 微信 appid appsecret
 		PlatformConfig.setWeixin(wxAppKey, wxAppSecret);
+		PlatformConfig.setSinaWeibo(sinaAppKey, sinaAppSecret);
 	}
 
 	/**
@@ -56,7 +59,7 @@ public class UmengShareManager {
 			shareListener=getDefaultListener();
 		}
 		final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[] { SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,
-				SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE };
+				SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA };
 		
 		new ShareAction(mActivity)
 		.setDisplayList(displaylist)

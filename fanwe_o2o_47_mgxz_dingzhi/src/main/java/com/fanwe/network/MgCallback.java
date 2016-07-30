@@ -83,7 +83,7 @@ public abstract class MgCallback<T> implements Callback {
      * @param root
      * @return
      */
-    public T validateBody(Root<T> root) {
+    public  T validateBody(Root<T> root) {
 
         if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
         {

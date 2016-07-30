@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -11,10 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Result;
+import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -35,18 +35,23 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
-import com.fanwe.user.model.UserInfoBody;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.work.AppRuntimeWorker;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
-import com.umeng.socialize.UMAuthListener;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import simbest.com.sharelib.ILoginCallback;
+import simbest.com.sharelib.ShareUtils;
 
 public class LoginActivity extends BaseActivity implements CallbackView
 {
@@ -94,7 +99,16 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 	//1:qq，2:微信，3：微博
 	String type="";
-	private UMShareAPI mShareAPI = null;
+	private ShareUtils su;
+	SHARE_MEDIA platform = null;
+	/**
+	 * 头像。
+	 */
+	String icon="";
+	/**
+	 * 密码。
+	 */
+	String nick="";
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -103,7 +117,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		setContentView(R.layout.act_login);
 		init();
 		//友盟授权登录初始化。
-		mShareAPI = UMShareAPI.get(this);
+		su = new ShareUtils(this);
 	}
 
 	private void init()
@@ -155,7 +169,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	@Override
 	public void onCLickRight_SDTitleSimple(SDTitleItem v, int index)
 	{
-		startRegisterActivity(false);
+		startRegisterActivity(false,"","");
 	}
 
 	@Override
@@ -245,6 +259,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 				goToAuth(platform);
 				break;
 			case R.id.weibo_login:
+				platform = SHARE_MEDIA.SINA;
 				goToAuth(platform);
 				break;
 			case R.id.weixin_login:
@@ -261,8 +276,42 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	 *
 	 * @param platform
 	 */
-	public void goToAuth(SHARE_MEDIA platform) {
-		mShareAPI.doOauthVerify(this, platform, umAuthListener);
+	public void goToAuth(final SHARE_MEDIA platform) {
+		su.login(platform, new ILoginCallback() {
+			@Override
+			public void onSuccess(Map<String, String> data) {
+
+				if(platform .equals(SHARE_MEDIA.WEIXIN)){
+					type = "2";
+
+				}else if(platform .equals(SHARE_MEDIA.QQ)){
+					type = "1";
+					openId = data.get("openid");
+					Log.d("qqlogin",openId);
+				}else if(platform .equals(SHARE_MEDIA.SINA)){
+					type = "3";
+					String returnData = (String)data.get("result");
+					Gson gson = new Gson();
+					HashMap<String,Object> maps = gson.fromJson(returnData,HashMap.class);
+					openId = maps.get("id").toString();
+				}
+				if(TextUtils.isEmpty(openId)){
+					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				thirdLogin(openId,type,icon,nick);
+			}
+
+			@Override
+			public void onFaild(String msg) {
+				Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onCancel() {
+				Toast.makeText(LoginActivity.this, "取消登录", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 	/**
 	 * 正常登录的选项卡被选中
@@ -282,11 +331,14 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		getSDFragmentManager().toggle(R.id.act_login_fl_content, null, LoginPhoneFragment.class);
 	}
 
-	protected void startRegisterActivity(boolean third)
+	protected void startRegisterActivity(boolean third,String icon,String nick)
 	{
 		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
 		if(third&&!TextUtils.isEmpty(openId)) {
 			intent.putExtra(UserConstants.THIRD_OPENID, openId);
+			intent.putExtra(UserConstants.THIRD_PLATFORM, platform);
+			intent.putExtra(UserConstants.THIRD_ICON, icon);
+			intent.putExtra(UserConstants.THIRD_NICK, nick);
 
 		}
 		startActivity(intent);
@@ -314,35 +366,17 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	 *
 	 * @param openId
 	 * @param type
+	 * @param icon 头像地址
+	 * @param icon 昵称
      */
-	public void thirdLogin(String openId ,String type){
+	public void thirdLogin(String openId ,String type,final String icon, final String nick){
 		TreeMap<String,String> params = new TreeMap<String,String>();
 		params.put("openid",openId);
-		params.put("platform",type);
-		OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-//			@Override
-//			public void onSuccessListResponse(List<Result> resultList) {
-//				if(resultList!=null&&resultList.size()>0){
-//					Result result = resultList.get(0);
-//					if(result!=null&&result.getBody()!=null&&result.getBody().size()>0){
-//						JSONObject object = (JSONObject) result.getBody().get(0);
-//						if(object.containsKey("unRegister")){
-//							startRegisterActivity(true);
-//						}else {
-//							UserInfoBody userinfo = JSON.parseObject(result.getBody().get(0).toString(), UserInfoBody.class);
-//							User_infoModel model = new User_infoModel();
-//							model.setUser_name(userinfo.getUser_name());
-//							model.setUser_login_status(1);
-//							model.setUser_id(userinfo.getUser_id());
-//							dealLoginSuccess(model);
-//						}
-//					}
-//				}else{
-//					onErrorResponse("第三方登录失败","300");
-//				}
-//
-//			}
+		params.put("platform",type);params.put("icon",icon);
+		params.put("nick",nick);
 
+		params.put("method",UserConstants.TRHID_LOGIN_URL);
+		OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
 
@@ -350,7 +384,27 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 			@Override
 			public void onSuccessResponse(String responseBody) {
-				super.onSuccessResponse(responseBody);
+
+				Type type = new TypeToken<Root<UserInfoNew>>() {
+				}.getType();
+				Gson gson = new Gson();
+				Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+				String statusCode = root.getStatusCode();
+				if("210".equals(statusCode)) {
+					UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
+					if (userInfoNew != null) {
+						if (userInfoNew != null) {
+							App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+							User_infoModel model = new User_infoModel();
+							model.setUser_id(userInfoNew.getUser_id());
+							model.setUser_name(userInfoNew.getUser_name());
+							dealLoginSuccess(model);
+						}
+					}
+				}else if("300".equals(statusCode)){
+					startRegisterActivity(true,icon,nick);
+				}
+
 			}
 		});
 
@@ -370,10 +424,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		super.onDestroy();
 	}
 
-	@Override
-	public void onSuccess(List<Result> responseBody) {
 
-	}
 
 	@Override
 	public void onSuccess(String responseBody) {
@@ -390,37 +441,14 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 	}
 
-	/**
-	 * auth callback interface
-	 **/
-	private UMAuthListener umAuthListener = new UMAuthListener() {
-		@Override
-		public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
 
-			//String access_token = data.get("access_token");
-			openId = data.get("openid");
 
-		 if(platform .equals(SHARE_MEDIA.WEIXIN)){
-			   type = "2";
-		  }else if(platform .equals(SHARE_MEDIA.QQ)){
-			   type = "1";
-		  }else if(platform .equals(SHARE_MEDIA.SINA)){
-			   type = "3";
-		  }
-			thirdLogin(openId,type);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		su.onActivityResult(requestCode, resultCode, data);
+	}
 
-		}
-
-		@Override
-		public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-			Toast.makeText(LoginActivity.this, "授权登录失败", Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		public void onCancel(SHARE_MEDIA platform, int action) {
-			Toast.makeText(LoginActivity.this, "授权登录取消", Toast.LENGTH_SHORT).show();
-		}
-	};
 
 
 

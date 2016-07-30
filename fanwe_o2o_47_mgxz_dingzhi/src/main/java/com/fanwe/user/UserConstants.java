@@ -18,6 +18,10 @@ public class UserConstants {
      */
     public static final String  USER_QUICK_LOGIN= "UserQuickLogin";
     /**
+     * 第三方登录。
+     */
+    public static final String TRHID_LOGIN_URL="ThirdpartyLoginA";
+    /**
      * 第三方注册 。
      */
 
@@ -27,7 +31,18 @@ public class UserConstants {
      * 第三方OPENID.
      */
     public static final String THIRD_OPENID="openid";
-
+    /**
+     * 第三方platform.
+     */
+    public static final String THIRD_PLATFORM="platform";
+    /**
+     * 第三方头像地址.
+     */
+      public static final String THIRD_ICON="icon";
+    /**
+     * 第三方昵称.
+     */
+    public static final String THIRD_NICK="nick";
 
 
     public static final String BD_EXIT_APP = "bd_sxb_exit";

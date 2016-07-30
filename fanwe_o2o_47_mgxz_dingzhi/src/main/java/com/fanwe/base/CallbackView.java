@@ -7,8 +7,8 @@ import java.util.List;
  * Created by Administrator on 2016/7/26.
  */
 public interface CallbackView {
-
-    void onSuccess(List<Result> responseBody);
+//
+//    void onSuccess(List<Result> responseBody);
 
     void onSuccess(String responseBody);
 

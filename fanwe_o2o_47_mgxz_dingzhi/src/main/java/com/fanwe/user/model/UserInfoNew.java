@@ -143,6 +143,11 @@ public class UserInfoNew extends Body {
          * 个人主页地址。
          */
         private String web_site;
+    /**
+     * MD5后的密码。
+     */
+    private String password;
+
 
 
         public void setIs_locked(String is_locked){
@@ -493,5 +498,11 @@ public class UserInfoNew extends Body {
 
         }
 
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
