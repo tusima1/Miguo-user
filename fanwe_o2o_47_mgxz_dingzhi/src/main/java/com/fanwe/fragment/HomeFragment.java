@@ -44,7 +44,11 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
+import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presents.LiveHelper;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.utils.Log;
@@ -467,8 +471,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     private void test() {
         LiveHelper liveHelper = new LiveHelper(getActivity(), this);
-        liveHelper.getAudienceCount("91");
-
+        liveHelper.getHostTags("a6d29f8c-5469-11e6-beb8-9e71128cae77", "1");
     }
 
     @Override
@@ -488,7 +491,34 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                 ModelAudienceCount modelAudienceCount = (ModelAudienceCount) datas.get(0);
                 Log.d("onSuccess", modelAudienceCount.getCount());
             }
+        } else if (LiveConstants.AUDIENCE_LIST.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelAudienceList modelAudienceList = (ModelAudienceList) datas.get(0);
+                Log.d("onSuccess", modelAudienceList.getStart_time());
+            }
+        } else if (LiveConstants.END_INFO.equals(method)) {
+            Log.d("onSuccess", "end success");
+        } else if (LiveConstants.ENTER_ROOM.equals(method)) {
+            Log.d("onSuccess", "enter success");
+        } else if (LiveConstants.EXIT_ROOM.equals(method)) {
+            Log.d("onSuccess", "exit success");
+        } else if (LiveConstants.GENERATE_SIGN.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelGenerateSign modelGenerateSign = (ModelGenerateSign) datas.get(0);
+                Log.d("onSuccess", modelGenerateSign.getUsersig());
+            }
+        } else if (LiveConstants.HOST_INFO.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelHostInfo modelHostInfo = (ModelHostInfo) datas.get(0);
+                Log.d("onSuccess", modelHostInfo.getId());
+            }
+        } else if (LiveConstants.HOST_TAGS.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelHostTags modelHostTags = (ModelHostTags) datas.get(0);
+                Log.d("onSuccess", modelHostTags.getDic_mean());
+            }
         }
+
     }
 
     @Override

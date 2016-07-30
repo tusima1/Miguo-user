@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.CrashHandler;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMLogLevel;
 import com.tencent.TIMManager;
@@ -93,8 +94,8 @@ public class InitBusinessHelper {
         initTls(context);
 
         //初始化CrashReport系统
-//        CrashHandler crashHandler = CrashHandler.getInstance();
-//        crashHandler.init(context);
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(context);
 
     }
 

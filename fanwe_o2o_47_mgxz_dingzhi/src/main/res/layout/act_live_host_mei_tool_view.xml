@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+                android:gravity="center"
+              >
+    <ImageView
+        android:id="@+id/iv_mei"
+        android:layout_width="@dimen/dp36"
+        android:layout_height="@dimen/dp36"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_mei"/>
+    <ImageView
+        android:id="@+id/iv_meibai"
+        android:layout_above="@id/iv_mei"
+        android:layout_width="@dimen/dp36"
+        android:layout_height="@dimen/dp36"
+        android:layout_marginBottom="@dimen/dp11"
+        android:src="@drawable/ic_meibai"/>
+
+    <ImageView
+        android:id="@+id/iv_meiyan"
+        android:layout_width="@dimen/dp36"
+        android:layout_height="@dimen/dp36"
+        android:layout_marginBottom="@dimen/dp11"
+        android:layout_marginTop="@dimen/dp11"
+        android:layout_above="@id/iv_meibai"
+        android:src="@drawable/ic_meiyan"/>
+
+
+
+    <CheckBox
+        android:id="@+id/cb_lighting"
+        style="@style/LightingCheckboxTheme"
+        android:layout_width="@dimen/dp36"
+        android:layout_height="@dimen/dp36"
+        android:gravity="center"
+        android:layout_above="@id/iv_meiyan"
+        android:layout_marginTop="@dimen/dp11"
+        />
+
+
+
+
+
+
+
+</RelativeLayout>
