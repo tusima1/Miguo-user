@@ -31,9 +31,9 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.model.LiveChatEntity;
+import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.views.customviews.HeadTopView;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.customviews.PopWindow;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
@@ -96,10 +96,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private int thumbUp = 0;
 
     private int watchCount = 0;
-    private static boolean mBeatuy = false;
-    private static boolean mWhite = true;
     private boolean bCleanMode = false;
-    private boolean mProfile;
+    private static boolean mBeatuy = false;//美颜
+    private static boolean mWhite = true;//美白
+
+    private boolean mProfile;//默认是美白
     private boolean bFirstRender = true;
 
     private String backGroundId;
@@ -110,6 +111,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private HeadTopView mHeadTopView;
     private LiveRecordDialogHelper mRecordHelper;
     private LiveOrientationHelper mOrientationHelper;
+    private LiveCommonHelper mCommonHelper;
 
 
     @Override
@@ -139,6 +141,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
+
+        //公共功能管理类
+        mCommonHelper = new LiveCommonHelper(mLiveHelper,this);
     }
 
 
@@ -276,7 +281,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * 初始化UI
      */
     private View avView;
-    private TextView  BtnInput, Btnflash, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnHeart, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
+    private TextView  BtnInput, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnHeart, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
     private LinearLayout mHostCtrView, mVideoMemberCtrlView, mBeautySettings;
@@ -332,13 +337,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             mHostCtrView.setVisibility(View.VISIBLE);
             mNomalUserBottomTools.setVisibility(View.GONE);
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
-            Btnflash = (TextView) findViewById(R.id.flash_btn);
-            BtnSwitch = (TextView) findViewById(R.id.switch_cam);
             BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
             BtnWhite = (TextView) findViewById(R.id.white_btn);
-            BtnMic = (TextView) findViewById(R.id.mic_btn);
             mVideoChat.setVisibility(View.VISIBLE);
-            Btnflash.setOnClickListener(this);
             BtnSwitch.setOnClickListener(this);
             BtnBeauty.setOnClickListener(this);
             BtnWhite.setOnClickListener(this);
@@ -924,34 +925,17 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.flash_btn:
-                if (mLiveHelper.isFrontCamera() == true) {
-                    Toast.makeText(LiveActivity.this, "this is front cam", Toast.LENGTH_SHORT).show();
-                } else {
-                    mLiveHelper.toggleFlashLight();
-                }
-                break;
-            case R.id.switch_cam:
-                mLiveHelper.switchCamera();
-                break;
-            case R.id.mic_btn:
-//                if (mLiveHelper.isMicOpen() == true) {
-//                    BtnMic.setBackgroundResource(R.drawable.icon_mic_close);
-//                    mLiveHelper.muteMic();
-//                } else {
-//                    BtnMic.setBackgroundResource(R.drawable.icon_mic_open);
-//                    mLiveHelper.openMic();
-//                }
-                new PopWindow().show(this,R.layout.host_beauty_setting,-1,-2,0,false,root);
-                break;
+//                new PopWindow().show(this,R.layout.host_beauty_setting,-1,-2,0,false,root);
             case R.id.fullscreen_btn:
                 //显示或者清除屏幕
-                cleanScreen();
+                switchScreen();
                 break;
             case R.id.video_interact:
                 mMemberDg.setCanceledOnTouchOutside(true);
                 mMemberDg.show();
                 break;
+
+            //host2的控制台---------------
             case R.id.camera_controll:
 
                 Toast.makeText(LiveActivity.this, "切换" + backGroundId + "camrea 状态", Toast.LENGTH_SHORT).show();
@@ -970,10 +954,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 }
 
                 break;
-            case R.id.close_member_video://主动关闭成员摄像头
+            case R.id.close_member_video:
+                //主动关闭成员摄像头(他本身是被邀请的,为host2)
                 cancelMemberView(backGroundId);
                 break;
+            //host2的控制台 end-------------
             case R.id.beauty_btn:
+                //美颜
                 Log.i(TAG, "onClick " + mBeautyRate);
 
                 mProfile = mBeatuy;
@@ -992,6 +979,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
 
             case R.id.white_btn:
+                //美白
                 Log.i(TAG, "onClick " + mWhiteRate);
                 mProfile = mWhite;
                 if (mBeautySettings != null) {
@@ -1012,6 +1000,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 //                mFullControllerUi.setVisibility(View.VISIBLE);
 //                new PopWindow().show(this,R.layout.qav_beauty_setting,-1,-2,0,false,root);
                 break;
+
+            //邀请直播 start
             case R.id.invite_view1:
                 inviteView1.setVisibility(View.INVISIBLE);
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, "" + inviteView1.getTag());
@@ -1024,10 +1014,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 inviteView3.setVisibility(View.INVISIBLE);
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, "" + inviteView3.getTag());
                 break;
+            //邀请直播 end
             case R.id.push_btn:
+                //推流
                 pushStream();
                 break;
             case R.id.record_btn:
+                //录屏
                 if (!mRecord) {
                     if (mRecordHelper != null)
                         mRecordHelper.show();
@@ -1041,8 +1034,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     /**
      * 清除屏幕(清屏)
+     * 或者开启屏幕内容
      */
-    private void cleanScreen() {
+    private void switchScreen() {
         if (bCleanMode){
             mFullControllerUi.setVisibility(View.INVISIBLE);
         }else {
@@ -1360,25 +1354,4 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         }
     }
 
-
-    /**
-     * 权限检测
-     */
-//    void checkPermission() {
-//        final List<String> permissionsList = new ArrayList<>();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if ((checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED))
-//                permissionsList.add(Manifest.permission.CAMERA);
-//            if ((checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED))
-//                permissionsList.add(Manifest.permission.RECORD_AUDIO);
-//            if ((checkSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED))
-//                permissionsList.add(Manifest.permission.WAKE_LOCK);
-//            if ((checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED))
-//                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
-//            if (permissionsList.size() != 0) {
-//                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-//                        REQUEST_PHONE_PERMISSIONS);
-//            }
-//        }
-//    }
 }

@@ -18,10 +18,10 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.1.0'
     compile files('libs/alipaysdk.jar')
     compile files('libs/alipaysecsdk.jar')
     compile files('libs/alipayutdid.jar')
     compile files('libs/eventbus-1.4-src-modify.jar')
     compile files('libs/universal-image-loader-1.9.4-with-sources.jar')
+    compile files('libs/android-support-v4.jar')
 }

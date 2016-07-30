@@ -33,6 +33,7 @@ import com.sunday.eventbus.SDEventObserver;
 import com.ta.util.netstate.TANetChangeObserver;
 import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
+import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -94,7 +95,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		MobclickAgent.openActivityDurationTrack(false);
 		MobclickAgent.setCatchUncaughtExceptions(true);
 		
-		
+		//腾讯视频sdk
+		InitBusinessHelper.initApp(this);
 		
 		initBaiduMap();
 		//初始化友盟分享

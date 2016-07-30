@@ -12,6 +12,7 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,6 +45,7 @@ public abstract class MgCallback implements Callback {
             onFailure(call, new IOException());
         } else {
             String body = response.body().string();
+            onSuccessResponse(body);
             if (ServerUrl.DEBUG) {
                 Log.e(TAG, body);
             }

@@ -70,4 +70,21 @@
         <!--//改变控件大小-->
         <item name="android:textSize">14dp</item>
     </style>
+
+    <!--直播界面底部的checkbox-->
+    <style name="VoiceCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/selector_checkbox_voice</item>
+    </style>
+    <style name="DanMuCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/selector_checkbox_danmu</item>
+    </style>
+    <!--美白的闪光灯-->
+    <style name="LightingCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/selector_checkbox_lighting</item>
+    </style>
+
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/ic_mei</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

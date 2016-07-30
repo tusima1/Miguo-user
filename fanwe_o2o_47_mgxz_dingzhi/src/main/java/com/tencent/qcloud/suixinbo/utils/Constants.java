@@ -31,9 +31,13 @@ public class Constants {
 //    //    //sdk appid 由腾讯分配
 //    public static final int SDK_APPID = 1400001533;
 
-    public static final int SDK_APPID = 1400001692;
+//    public static final int SDK_APPID = 1400001692;
+//
+//    public static final int ACCOUNT_TYPE = 884;// 用户的账号类型
 
-    public static final int ACCOUNT_TYPE = 884;
+    public static final int SDK_APPID = 1400012005;//sdkappid,本应用的
+
+    public static final int ACCOUNT_TYPE = 6410;// 用户的账号类型
 
     public static final String ID_STATUS = "id_status";
 

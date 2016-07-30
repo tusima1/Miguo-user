@@ -102,13 +102,5 @@
     <color name="colorSendName7">#FF437D</color>
     <!--蒙版-->
 
-    <!--color mgxz-->
-    <!--说明,color_数字,数字代表color的透明度,例如80代表80%的透明度-->
-    <color name="gray_30">#4D999999</color>
-    <color name="orange">#ff6600</color>
-    <color name="dark_80">#CC646565</color>
-    <color name="gray_cc">#CCCCCC</color>
-    <color name="dark_30">#1E000000</color>
-    <color name="dark_14">#0E000000</color>
-    <color name="white_80">#CCFFFFFF</color>
+
 </resources>

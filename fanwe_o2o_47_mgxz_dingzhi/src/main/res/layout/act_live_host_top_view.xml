@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    android:paddingLeft="@dimen/dp12"
+    android:paddingRight="@dimen/dp12"
+    android:paddingTop="@dimen/dp28"
+    android:background="@android:color/transparent">
+<TextView
+    android:id="@+id/tv_members_num"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/dp28"
+    android:textSize="@dimen/sp13"
+    android:textColor="@color/white"
+    android:text="1256人"
+    android:layout_marginRight="@dimen/dp10"
+    android:gravity="center"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_member"
+        android:layout_toRightOf="@id/tv_members_num"
+        android:layout_toLeftOf="@id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp28"/>
+    <LinearLayout
+        android:id="@+id/location"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp30"
+        android:layout_marginLeft="@dimen/dp10"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="@dimen/dp18"
+            android:layout_height="@dimen/dp18"
+            android:layout_marginRight="@dimen/dp17"
+            android:scaleType="center"
+            android:src="@drawable/ic_share"/>
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp18"
+            android:layout_marginRight="@dimen/dp20"
+            android:scaleType="center"
+            android:src="@drawable/ic_photo_switch"/>
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:scaleType="center"
+            android:src="@drawable/ic_close"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_members_num"
+        android:layout_marginTop="@dimen/dp15"
+        android:background="@color/dark_20"
+        >
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_location"
+            android:drawablePadding="@dimen/dp5"
+            android:text="当代阳光主题酒店"
+            android:textSize="@dimen/sp13"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:id="@+id/tv_arrive_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23425人到过"
+            android:textSize="@dimen/sp11"
+            android:textColor="@color/orange"
+            android:layout_toRightOf="@id/tv_location"
+            android:layout_alignBaseline="@id/tv_location"
+            android:layout_marginLeft="@dimen/dp12"
+            />
+        <TextView
+            android:id="@+id/tv_keywords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="环境赞 口味不错 服务态度好 吃得饱 干净卫生"
+            android:textSize="@dimen/sp11"
+            android:textColor="@color/white"
+            android:layout_below="@id/tv_location"
+            android:layout_marginTop="@dimen/dp7"
+            android:layout_marginBottom="@dimen/dp9"
+            />
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
