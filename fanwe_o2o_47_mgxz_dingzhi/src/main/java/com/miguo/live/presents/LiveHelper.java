@@ -5,7 +5,6 @@ import android.content.Context;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
-import com.fanwe.home.HomeConstants;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.model.RootLive;
@@ -19,15 +18,27 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.applyRoom.ResultApplyRoom;
 import com.miguo.live.model.applyRoom.RootApplyRoom;
+import com.miguo.live.model.generateSign.ModelGenerateSign;
+import com.miguo.live.model.generateSign.ResultGenerateSign;
+import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceCount.ResultAudienceCount;
 import com.miguo.live.model.getAudienceCount.RootAudienceCount;
-import com.umeng.socialize.utils.Log;
+import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getAudienceList.ResultAudienceList;
+import com.miguo.live.model.getAudienceList.RootAudienceList;
+import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.getHostInfo.ResultHostInfo;
+import com.miguo.live.model.getHostInfo.RootHostInfo;
+import com.miguo.live.model.getHostTags.ModelHostTags;
+import com.miguo.live.model.getHostTags.ResultHostTags;
+import com.miguo.live.model.getHostTags.RootHostTags;
 
 import java.util.List;
 import java.util.TreeMap;
 
 /**
+ * 直播模块接口
  * Created by Administrator on 2016/7/30.
  */
 public class LiveHelper extends Presenter {
@@ -60,8 +71,6 @@ public class LiveHelper extends Presenter {
         params.put("method", LiveConstants.LIVE_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-
-
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
@@ -95,8 +104,6 @@ public class LiveHelper extends Presenter {
         params.put("method", LiveConstants.APPLY_ROOM);
 
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
-
-
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
@@ -130,8 +137,6 @@ public class LiveHelper extends Presenter {
         params.put("method", LiveConstants.AUDIENCE_COUNT);
 
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
-
-
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootAudienceCount rootAudienceCount = gson.fromJson(responseBody, RootAudienceCount.class);
@@ -143,7 +148,242 @@ public class LiveHelper extends Presenter {
                 ResultAudienceCount resultAudienceCount = resultAudienceCounts.get(0);
                 List<ModelAudienceCount> modelAudienceCounts = resultAudienceCount.getBody();
                 mView.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
-                Log.d("onSuccess", responseBody);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 获取观众列表
+     *
+     * @param room_id
+     */
+    public void getAudienceList(String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("room_id", room_id);
+        params.put("method", LiveConstants.AUDIENCE_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootAudienceList rootAudienceList = gson.fromJson(responseBody, RootAudienceList.class);
+                List<ResultAudienceList> resultAudienceLists = rootAudienceList.getResult();
+                if (SDCollectionUtil.isEmpty(resultAudienceLists)) {
+                    mView.onSuccess(LiveConstants.AUDIENCE_LIST, null);
+                    return;
+                }
+                ResultAudienceList resultAudienceList = resultAudienceLists.get(0);
+                List<ModelAudienceList> modelAudienceList = resultAudienceList.getBody();
+                mView.onSuccess(LiveConstants.AUDIENCE_LIST, modelAudienceList);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 结束直播
+     *
+     * @param room_id
+     */
+    public void endInfo(String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("room_id", room_id);
+        params.put("method", LiveConstants.END_INFO);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(LiveConstants.END_INFO, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 进入房间
+     *
+     * @param room_id
+     */
+    public void enterRoom(String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("room_id", room_id);
+        params.put("method", LiveConstants.ENTER_ROOM);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(LiveConstants.ENTER_ROOM, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 退出房间
+     *
+     * @param room_id
+     */
+    public void exitRoom(String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("room_id", room_id);
+        params.put("method", LiveConstants.EXIT_ROOM);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(LiveConstants.EXIT_ROOM, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 直播登录，返回用户直播签名  GenerateSign
+     */
+    public void generateSign() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("method", LiveConstants.GENERATE_SIGN);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
+                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
+                if (SDCollectionUtil.isEmpty(resultGenerateSigns)) {
+                    mView.onSuccess(LiveConstants.GENERATE_SIGN, null);
+                    return;
+                }
+                ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
+                List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
+                mView.onSuccess(LiveConstants.GENERATE_SIGN, modelGenerateSign);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 获取主播信息
+     *
+     * @param host_id
+     */
+    public void getHostInfo(String host_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("host_id", host_id);
+        params.put("method", LiveConstants.HOST_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
+                List<ResultHostInfo> resultHostInfos = rootHostInfo.getResult();
+                if (SDCollectionUtil.isEmpty(resultHostInfos)) {
+                    mView.onSuccess(LiveConstants.HOST_INFO, null);
+                    return;
+                }
+                ResultHostInfo resultHostInfo = resultHostInfos.get(0);
+                List<ModelHostInfo> modelHostInfo = resultHostInfo.getBody();
+                mView.onSuccess(LiveConstants.HOST_INFO, modelHostInfo);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 获取主播标签
+     */
+    public void getHostTags(String host_id, String tag_type) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("host_id", host_id);
+        params.put("tag_type", tag_type);
+        params.put("method", LiveConstants.HOST_TAGS);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootHostTags rootHostTags = gson.fromJson(responseBody, RootHostTags.class);
+                List<ResultHostTags> resultHostTagss = rootHostTags.getResult();
+                if (SDCollectionUtil.isEmpty(resultHostTagss)) {
+                    mView.onSuccess(LiveConstants.HOST_TAGS, null);
+                    return;
+                }
+                ResultHostTags resultHostTags = resultHostTagss.get(0);
+                List<ModelHostTags> modelHostTags = resultHostTags.getBody();
+                mView.onSuccess(LiveConstants.HOST_TAGS, modelHostTags);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 登记房间信息
+     *
+     * @param title
+     * @param cover
+     * @param room_id
+     * @param av_room_id
+     * @param chat_room_id
+     */
+    public void registerRoomInfo(String title, String cover, String room_id, String av_room_id, String chat_room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("title", title);
+        params.put("cover", cover);
+        params.put("room_id", room_id);
+        params.put("av_room_id", av_room_id);
+        params.put("chat_room_id", chat_room_id);
+        params.put("method", LiveConstants.REGISTER_ROOM_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(LiveConstants.REGISTER_ROOM_INFO, null);
             }
 
             @Override
