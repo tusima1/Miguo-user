@@ -260,6 +260,11 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	}
 
 	@Override
+	public void onSuccess(String method, List datas) {
+
+	}
+
+	@Override
 	public void onFailue(String responseBody) {
 
 	}

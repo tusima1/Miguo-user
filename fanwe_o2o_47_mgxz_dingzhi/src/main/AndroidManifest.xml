@@ -79,13 +79,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.miguo.live.views.LiveTestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name="com.miguo.live.views.LiveTestActivity"></activity>
         <activity
             android:name="com.miguo.live.views.LiveStartActivity"
             android:theme="@style/TransTheme"></activity>

@@ -381,6 +381,11 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	}
 
 	@Override
+	public void onSuccess(String method, List datas) {
+
+	}
+
+	@Override
 	public void onFailue(String responseBody) {
 
 	}

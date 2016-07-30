@@ -15,6 +15,8 @@ import android.widget.ScrollView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.base.CallbackView;
+import com.fanwe.base.Result;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
@@ -40,14 +42,19 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
+import com.miguo.live.presents.LiveHelper;
 import com.sunday.eventbus.SDBaseEvent;
+import com.umeng.socialize.utils.Log;
 
 /**
  * 首页fragment
  *
  * @author js02
  */
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements CallbackView {
     @ViewInject(R.id.frag_home_new_ptrsv_all)
     private PullToRefreshScrollView mPtrsvAll;
 
@@ -104,6 +111,7 @@ public class HomeFragment extends BaseFragment {
         mHomeFragmentLiveList = new HomeFragmentLiveList();
         getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
 
+        test();
     }
 
     private void initPageModel(int totalPage) {
@@ -450,4 +458,44 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
+    @Override
+    public void onSuccess(List<Result> responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    private void test() {
+        LiveHelper liveHelper = new LiveHelper(getActivity(), this);
+        liveHelper.getAudienceCount("91");
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.LIVE_LIST.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                Room room = (Room) datas.get(0);
+                Log.d("onSuccess", room.getCreate_time());
+            }
+        } else if (LiveConstants.APPLY_ROOM.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelApplyRoom modelApplyRoom = (ModelApplyRoom) datas.get(0);
+                Log.d("onSuccess", modelApplyRoom.getRoom_id());
+            }
+        } else if (LiveConstants.AUDIENCE_COUNT.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelAudienceCount modelAudienceCount = (ModelAudienceCount) datas.get(0);
+                Log.d("onSuccess", modelAudienceCount.getCount());
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
 }
