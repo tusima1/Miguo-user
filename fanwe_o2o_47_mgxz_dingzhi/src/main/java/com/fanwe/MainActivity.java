@@ -10,6 +10,7 @@ import com.baidu.mapapi.map.Text;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
@@ -27,14 +28,21 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.model.generateSign.ModelGenerateSign;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveStartActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.util.List;
+
 @SuppressWarnings("deprecation")
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements CallbackView {
 
     @SuppressWarnings("deprecation")
     @ViewInject(R.id.act_main_tab_0)
@@ -67,6 +75,8 @@ public class MainActivity extends BaseActivity {
     private int preHomeCityID = 0;//记录首页cityid-->0为异常
     private LoginHelper mLoginHelper;
     private String token;
+    private LiveHttpHelper http;
+    private String usersig;
 
 
     @Override
@@ -213,7 +223,8 @@ public class MainActivity extends BaseActivity {
      */
     protected void click1() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, StoreListContainerFragment.class);
+        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, StoreListContainerFragment
+                .class);
 
     }
 
@@ -225,8 +236,10 @@ public class MainActivity extends BaseActivity {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-//            getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MyDistributionFragment.class);
-            startActivity(new Intent(this, LiveStartActivity.class));
+//            getSDFragmentManager().toggle(R.id.act_main_fl_content, null,
+// MyDistributionFragment.class);
+//            startActivity(new Intent(this, LiveStartActivity.class));
+            testLive();
         }
     }
 
@@ -237,10 +250,21 @@ public class MainActivity extends BaseActivity {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_3);
         getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
         if (preTab == 0 || preTab == 2 || preTab == 3) {
-            if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle()).mPtrlv_content != null) {
-                ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle()).mPtrlv_content.setRefreshing();
+            if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+ .mPtrlv_content != null) {
+                ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+ .mPtrlv_content.setRefreshing();
             }
         }
+
+    }
+
+    private void testLive() {
+        //获取sig
+        http = new LiveHttpHelper(this, this);
+        http.generateSign();
+
+
     }
 
     /**
@@ -253,7 +277,8 @@ public class MainActivity extends BaseActivity {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            mFragMyAccount = (MyFragment) getSDFragmentManager().toggle(R.id.act_main_fl_content, null,
+            mFragMyAccount = (MyFragment) getSDFragmentManager().toggle(R.id.act_main_fl_content,
+                    null,
                     MyFragment.class);
         }
     }
@@ -308,16 +333,19 @@ public class MainActivity extends BaseActivity {
         if (requestCode == 100) {
             if (resultCode == MyCaptureActivity.RESULT_CODE_SCAN_SUCCESS) {
                 String result = data.getStringExtra("extra_result_success_string");
-                if (result.substring(0, 6).equals("https:") || result.substring(0, 6).equals("http:/")) {
+                if (result.substring(0, 6).equals("https:") || result.substring(0, 6).equals
+                        ("http:/")) {
                     if (result.contains("offline")) {
                         Intent intentStore = new Intent(this, StoreConfirmOrderActivity.class);
                         intentStore.putExtra("mID",
-                                Integer.parseInt(result.split("\\/")[result.split("\\/").length - 1]));
+                                Integer.parseInt(result.split("\\/")[result.split("\\/").length -
+                                        1]));
                         startActivity(intentStore);
 
                     } else if (result.contains(".html#") && !result.contains("offline")) {
                         String session = AppConfig.getSessionId();
-                        String url = result.replace(".html#", ".html?from=app&sess_id=" + session + "#");
+                        String url = result.replace(".html#", ".html?from=app&sess_id=" + session
+                                + "#");
                         Intent intentWeb = new Intent(this, CaptureResultWebActivity.class);
                         intentWeb.putExtra("url", url);
                         startActivity(intentWeb);
@@ -446,9 +474,41 @@ public class MainActivity extends BaseActivity {
         /** 城市变动的自动刷新 **/
         int city_id = AppRuntimeWorker.getCity_id();
         Fragment isHomeFragment = getSDFragmentManager().getmFragmentLastToggle();
-        if (preHomeCityID != 0 && preHomeCityID != city_id && isHomeFragment instanceof HomeFragment) {
+        if (preHomeCityID != 0 && preHomeCityID != city_id && isHomeFragment instanceof
+                HomeFragment) {
             ((HomeFragment) isHomeFragment).refreshData();
             preHomeCityID = city_id;
         }
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        switch (method) {
+            case LiveConstants.GENERATE_SIGN:
+                UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+                ModelGenerateSign sign = (ModelGenerateSign) datas.get(0);
+                usersig = sign.getUsersig();
+                com.tencent.qcloud.suixinbo.presenters.LoginHelper tcLogin=new com.tencent.qcloud
+                        .suixinbo.presenters.LoginHelper(MainActivity.this);
+                tcLogin.imLogin(userInfoNew.getUser_id(),usersig);
+                //请求房间号
+//                http.applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
+                break;
+            case LiveConstants.APPLY_ROOM:
+//                ModelApplyRoom room = (ModelApplyRoom) datas.get(0);
+//                String room_id = room.getRoom_id();
+                //开启直播
+
+                break;
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }

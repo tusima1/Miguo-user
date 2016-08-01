@@ -79,10 +79,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name="com.miguo.live.views.LiveTestActivity"></activity>-->
         <activity
             android:name="com.miguo.live.views.LiveStartActivity"
             android:theme="@style/TransTheme"></activity>
+
+        <activity android:name="com.miguo.live.views.LiveActivity"></activity>
 
         <!-- Splash页面后的引导页面 ,不要删除这段注释内容,以备后需 -->
         <!--
