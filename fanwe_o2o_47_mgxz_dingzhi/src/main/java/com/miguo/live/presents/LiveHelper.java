@@ -1,6 +1,7 @@
 package com.miguo.live.presents;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -54,7 +55,15 @@ public class LiveHelper extends Presenter {
         this.mView = mView;
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-        token = userCurrentInfo.getToken();
+    }
+
+    public String getToken() {
+        if (!TextUtils.isEmpty(token)) {
+            return token;
+        } else {
+            token = userCurrentInfo.getToken();
+            return token;
+        }
     }
 
     /**
@@ -64,6 +73,7 @@ public class LiveHelper extends Presenter {
      * @param pageSize
      */
     public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("page", String.valueOf(pageNum));
@@ -101,6 +111,7 @@ public class LiveHelper extends Presenter {
      * @param shop_id
      */
     public void applyRoom(String shop_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("shop_id", shop_id);
@@ -134,6 +145,7 @@ public class LiveHelper extends Presenter {
      * @param room_id
      */
     public void getAudienceCount(String room_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("room_id", room_id);
@@ -167,6 +179,7 @@ public class LiveHelper extends Presenter {
      * @param room_id
      */
     public void getAudienceList(String room_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("room_id", room_id);
@@ -200,6 +213,7 @@ public class LiveHelper extends Presenter {
      * @param room_id
      */
     public void endInfo(String room_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("room_id", room_id);
@@ -225,6 +239,7 @@ public class LiveHelper extends Presenter {
      * @param room_id
      */
     public void enterRoom(String room_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("room_id", room_id);
@@ -250,6 +265,7 @@ public class LiveHelper extends Presenter {
      * @param room_id
      */
     public void exitRoom(String room_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("room_id", room_id);
@@ -273,6 +289,7 @@ public class LiveHelper extends Presenter {
      * 直播登录，返回用户直播签名  GenerateSign
      */
     public void generateSign() {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("method", LiveConstants.GENERATE_SIGN);
@@ -305,6 +322,7 @@ public class LiveHelper extends Presenter {
      * @param host_id
      */
     public void getHostInfo(String host_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("host_id", host_id);
@@ -336,6 +354,7 @@ public class LiveHelper extends Presenter {
      * 获取主播标签
      */
     public void getHostTags(String host_id, String tag_type) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("host_id", host_id);
@@ -374,6 +393,7 @@ public class LiveHelper extends Presenter {
      * @param chat_room_id
      */
     public void registerRoomInfo(String title, String cover, String room_id, String av_room_id, String chat_room_id) {
+        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("title", title);
@@ -404,4 +424,5 @@ public class LiveHelper extends Presenter {
         gson = null;
         userCurrentInfo = null;
     }
+
 }
