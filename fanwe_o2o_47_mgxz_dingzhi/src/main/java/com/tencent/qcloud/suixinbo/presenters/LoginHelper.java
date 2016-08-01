@@ -150,7 +150,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * 向用户服务器获取自己房间号
      */
     private void getMyRoomNum() {
-        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
+//        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
             new LiveHttpHelper(mContext, new CallbackView() {
                 @Override
                 public void onSuccess(String responseBody) {
@@ -183,7 +183,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
                 }
             }).applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
-        }
+//        }
     }
 
     /**
