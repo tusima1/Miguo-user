@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/root"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    >
 
     <!--直播video-->
     <include
@@ -33,13 +34,22 @@
     <FrameLayout
         android:id="@+id/controll_ui"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
-        <com.miguo.live.views.customviews.HeadTopView
-            android:id="@+id/head_top"
+        <!--观众的顶部view-->
+        <com.miguo.live.views.customviews.UserHeadTopView
+            android:id="@+id/user_top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             />
+        <!--主播的顶部view-->
+        <com.miguo.live.views.customviews.HostTopView
+            android:id="@+id/host_top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
         <!--左上角用户头像-->
         <!--<include
             android:id="@+id/head_up_layout"
@@ -150,14 +160,30 @@
             android:layout_marginTop="15dp" />
 
         <!--主播的底部工具栏-->
-        <include
+        <!--<include
             layout="@layout/host_bottom_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp" />
-
+            android:layout_marginTop="15dp" />-->
+        <!--主播的底部工具栏1-->
+        <com.miguo.live.views.customviews.HostBottomToolView
+            android:id="@+id/host_bottom_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp34"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginBottom="@dimen/dp7"
+            android:layout_gravity="bottom"
+            />
+        <!--主播的底部工具栏1 ( 右下的美颜等功能)-->
+        <com.miguo.live.views.customviews.HostMeiToolView
+            android:id="@+id/host_mei_layout"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="@dimen/dp12"
+            android:layout_marginBottom="@dimen/dp7"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp200"/>
 
         <!--飘心-->
         <RelativeLayout
@@ -171,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="-10dp"
+                android:layout_marginRight="-15dp"
                 android:focusable="true" />
         </RelativeLayout>
 

@@ -18,7 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by didik on 2016/7/22.
  */
-public class HeadTopView extends RelativeLayout implements View.OnClickListener,IViewGroup {
+public class UserHeadTopView extends RelativeLayout implements View.OnClickListener,IViewGroup {
     private Context mContext;
     private CircleImageView mUserIamge;//用户头像
     private TextView mMembers;//头像下方人数量
@@ -29,15 +29,15 @@ public class HeadTopView extends RelativeLayout implements View.OnClickListener,
     private TextView mKeywords;//关键词
     private RecyclerView mMemberList;//room的观众头像列表(取前N位展示)
 
-    public HeadTopView(Context context) {
+    public UserHeadTopView(Context context) {
         this(context,null);
     }
 
-    public HeadTopView(Context context, AttributeSet attrs) {
+    public UserHeadTopView(Context context, AttributeSet attrs) {
         this(context, attrs,0);
     }
 
-    public HeadTopView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public UserHeadTopView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext=context;
         init();
