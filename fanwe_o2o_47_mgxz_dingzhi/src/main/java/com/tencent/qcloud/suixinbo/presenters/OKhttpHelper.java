@@ -1,7 +1,9 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
 import android.content.Context;
+import android.text.TextUtils;
 
+import com.fanwe.app.App;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -39,7 +41,16 @@ public class OKhttpHelper {
     public static final String SEND_HEARTBEAT = "http://182.254.234.225/sxb/index.php?svc=live&cmd=host_heartbeat";
     public static final String GET_COS_SIG = "http://182.254.234.225/sxb/index.php?svc=cos&cmd=get_sign";
 
+    private String token;
 
+    public String getToken() {
+        token = App.getInstance().getmUserCurrentInfo().getToken();
+        if (!TextUtils.isEmpty(token)) {
+            return token;
+        } else {
+            return "";
+        }
+    }
     public static OKhttpHelper getInstance() {
         if (instance == null) {
             instance = new OKhttpHelper();

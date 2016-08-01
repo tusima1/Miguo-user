@@ -1,19 +1,30 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
+import com.fanwe.user.model.UserInfoNew;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.LiveActivity;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMManager;
 import com.tencent.TIMUser;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
+import java.util.List;
+
 import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSPwdLoginListener;
-import tencent.tls.platform.TLSStrAccRegListener;
 import tencent.tls.platform.TLSUserInfo;
 
 /**
@@ -136,48 +147,60 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
 
     /**
-     * 在TLS模块注册一个账号
-     *
-     * @param id
-     * @param psw
-     */
-    public void tlsRegister(final String id, final String psw) {
-        int ret = InitBusinessHelper.getmAccountHelper().TLSStrAccReg(id, psw, new TLSStrAccRegListener() {
-            @Override
-            public void OnStrAccRegSuccess(TLSUserInfo tlsUserInfo) {
-                Toast.makeText(mContext, tlsUserInfo.identifier + " register a user succ !  ", Toast.LENGTH_SHORT).show();
-                //继续登录流程
-                tlsLogin(id, psw);
-            }
-
-            @Override
-            public void OnStrAccRegFail(TLSErrInfo tlsErrInfo) {
-                Toast.makeText(mContext, " register a user fail ! " + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void OnStrAccRegTimeout(TLSErrInfo tlsErrInfo) {
-                Toast.makeText(mContext, " register timeout ! " + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-        if (ret != -1001) {
-            Toast.makeText(mContext, "input invalid !", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    /**
      * 向用户服务器获取自己房间号
      */
     private void getMyRoomNum() {
-        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
-            new Thread(new Runnable() {
+//        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
+            new LiveHttpHelper(mContext, new CallbackView() {
                 @Override
-                public void run() {
-                    OKhttpHelper.getInstance().getMyRoomId(mContext);
+                public void onSuccess(String responseBody) {
+
                 }
-            }).start();
-        }
+
+                @Override
+                public void onSuccess(String method, List datas) {
+                    switch (method) {
+                        case LiveConstants.APPLY_ROOM:
+                            ModelApplyRoom room = (ModelApplyRoom) datas.get(0);
+                            String room_id = room.getRoom_id();
+                            Integer roomId=-1;
+                            try {
+                                roomId = Integer.valueOf(room_id);
+                            }catch (Exception e){
+                                MGToast.showToast("获取房间号错误!");
+                                return;
+                            }
+                            MySelfInfo.getInstance().setMyRoomNum(roomId);
+                            MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
+                            //开启直播
+                            createAvRoom();
+                            break;
+                    }
+                }
+
+                @Override
+                public void onFailue(String responseBody) {
+
+                }
+            }).applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
+//        }
+    }
+
+    /**
+     * 进入直播间
+     */
+    private void createAvRoom() {
+//        如果是自己
+        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
+        Intent intent = new Intent(mContext, LiveActivity.class);
+        intent.putExtra(Constants.ID_STATUS, Constants.HOST);
+        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
+        MySelfInfo.getInstance().setJoinRoomWay(true);
+        CurLiveInfo.setTitle("直播");
+        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
+        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
+        mContext.startActivity(intent);
     }
 
 

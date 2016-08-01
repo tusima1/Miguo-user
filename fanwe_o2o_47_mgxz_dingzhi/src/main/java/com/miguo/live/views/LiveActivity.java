@@ -32,9 +32,11 @@ import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.presenters.LiveCommonHelper;
-import com.miguo.live.views.customviews.HeadTopView;
+import com.miguo.live.views.customviews.HostMeiToolView;
+import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
+import com.miguo.live.views.customviews.UserHeadTopView;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -53,7 +55,6 @@ import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
-import com.tencent.qcloud.suixinbo.views.customviews.MembersDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private HeartLayout mHeartLayout;
     private HeartBeatTask mHeartBeatTask;//心跳
     private LinearLayout mHostLeaveLayout;
-    private final int REQUEST_PHONE_PERMISSIONS = 0;
     private long mSecond = 0;
     private Timer mHearBeatTimer, mVideoTimer;
     private VideoTimerTask mVideoTimerTask;//计时器
@@ -108,10 +108,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private ArrayList<String> mRenderUserList = new ArrayList<>();
     private View root;
     private LiveExitDialogHelper mExitDialogHelper;//直播退出详情界面
-    private HeadTopView mHeadTopView;
+    private UserHeadTopView mUserHeadTopView;
     private LiveRecordDialogHelper mRecordHelper;
     private LiveOrientationHelper mOrientationHelper;
     private LiveCommonHelper mCommonHelper;
+    private HostTopView mHostTopView;
+    private HostMeiToolView mHostBottomMeiView2;
 
 
     @Override
@@ -234,22 +236,24 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
                 if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {//自己是主播
                     if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
-                        mHostCtrView.setVisibility(View.VISIBLE);
+                        mHostBottomToolView1.setVisibility(View.VISIBLE);
+                        mHostBottomMeiView2.setVisibility(View.VISIBLE);
                         mVideoMemberCtrlView.setVisibility(View.INVISIBLE);
                     } else {//背景是其他成员
-                        mHostCtrView.setVisibility(View.INVISIBLE);
+                        mHostBottomToolView1.setVisibility(View.INVISIBLE);
+                        mHostBottomMeiView2.setVisibility(View.INVISIBLE);
                         mVideoMemberCtrlView.setVisibility(View.VISIBLE);
                     }
                 } else {//自己成员方式
                     if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
                         mVideoMemberCtrlView.setVisibility(View.VISIBLE);
-                        mNomalUserBottomTools.setVisibility(View.INVISIBLE);
+                        mUserBottomTool.setVisibility(View.INVISIBLE);
                     } else if (backGroundId.equals(CurLiveInfo.getHostID())) {//主播自己
                         mVideoMemberCtrlView.setVisibility(View.INVISIBLE);
-                        mNomalUserBottomTools.setVisibility(View.VISIBLE);
+                        mUserBottomTool.setVisibility(View.VISIBLE);
                     } else {
                         mVideoMemberCtrlView.setVisibility(View.INVISIBLE);
-                        mNomalUserBottomTools.setVisibility(View.INVISIBLE);
+                        mUserBottomTool.setVisibility(View.INVISIBLE);
                     }
 
                 }
@@ -281,11 +285,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * 初始化UI
      */
     private View avView;
-    private TextView  BtnInput, BtnSwitch, BtnBeauty, BtnWhite, BtnMic, BtnHeart, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
+    private TextView BtnBeauty, BtnWhite, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
-    private LinearLayout mHostCtrView, mVideoMemberCtrlView, mBeautySettings;
-    private UserBottomToolView mNomalUserBottomTools;
+    private LinearLayout mHostBottomToolView1, mVideoMemberCtrlView, mBeautySettings;
+    private UserBottomToolView mUserBottomTool;
     private FrameLayout mFullControllerUi, mBackgound;
     private SeekBar mBeautyBar;
     private int mBeautyRate, mWhiteRate;
@@ -308,8 +312,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * 初始化界面
      */
     private void initView() {
-        mHostCtrView = (LinearLayout) findViewById(R.id.host_bottom_layout);//主播的工具栏
-        mNomalUserBottomTools = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
+        mHostBottomToolView1 = (LinearLayout) findViewById(R.id.host_bottom_layout);//主播的工具栏1
+        mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
+
+        mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
+
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);//直播2的工具栏
         mHostLeaveLayout = (LinearLayout)findViewById(R.id.ll_host_leave);//主播离开(断开)界面
         mVideoChat = (TextView) findViewById(R.id.video_interact);//(腾讯)互动连线图标
@@ -331,20 +338,25 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 //        TextView roomId = (TextView) findViewById(R.id.room_id);//房间room id
 //        roomId.setText(CurLiveInfo.getChatRoomId());
         //顶部view
-        mHeadTopView = (HeadTopView) findViewById(R.id.head_top);
+
         //主播-->加载的view
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
-            mHostCtrView.setVisibility(View.VISIBLE);
-            mNomalUserBottomTools.setVisibility(View.GONE);
+            //host的views
+            mHostBottomToolView1.setVisibility(View.VISIBLE);
+            mHostBottomMeiView2.setVisibility(View.VISIBLE);
+            mUserBottomTool.setVisibility(View.GONE);
+            //host的topview
+            mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
+            mHostTopView.setVisibility(View.VISIBLE);
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
-            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
-            BtnWhite = (TextView) findViewById(R.id.white_btn);
-            mVideoChat.setVisibility(View.VISIBLE);
-            BtnSwitch.setOnClickListener(this);
-            BtnBeauty.setOnClickListener(this);
-            BtnWhite.setOnClickListener(this);
-            BtnMic.setOnClickListener(this);
-            mVideoChat.setOnClickListener(this);
+//            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
+//            BtnWhite = (TextView) findViewById(R.id.white_btn);
+//            mVideoChat.setVisibility(View.VISIBLE);
+//            BtnBeauty.setOnClickListener(this);
+//            BtnWhite.setOnClickListener(this);
+//            mVideoChat.setOnClickListener(this);
+
+            /*邀请直播*/
             inviteView1 = (TextView) findViewById(R.id.invite_view1);
             inviteView2 = (TextView) findViewById(R.id.invite_view2);
             inviteView3 = (TextView) findViewById(R.id.invite_view3);
@@ -379,49 +391,54 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             });
 
 
-            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
-            mBeautySettings = (LinearLayout) findViewById(R.id.qav_beauty_setting);
-            mBeautyConfirm = (TextView) findViewById(R.id.qav_beauty_setting_finish);
-            mBeautyConfirm.setOnClickListener(this);
-            mBeautyBar = (SeekBar) (findViewById(R.id.qav_beauty_progress));
-            mBeautyBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    SxbLog.d("SeekBar", "onStopTrackingTouch");
-                    if (mProfile == mBeatuy) {
-                        Toast.makeText(LiveActivity.this, "beauty " + mBeautyRate + "%", Toast.LENGTH_SHORT).show();//美颜度
-                    } else {
-                        Toast.makeText(LiveActivity.this, "white " + mWhiteRate + "%", Toast.LENGTH_SHORT).show();//美白度
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    SxbLog.d("SeekBar", "onStartTrackingTouch");
-                }
-
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress,
-                                              boolean fromUser) {
-                    Log.i(TAG, "onProgressChanged " + progress);
-                    if (mProfile == mBeatuy) {
-                        mBeautyRate = progress;
-                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputBeautyParam(LiveUtil.getBeautyProgress(progress));//美颜
-                    } else {
-                        mWhiteRate = progress;
-//                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputWhiteningParam(LiveUtil.getBeautyProgress(progress));//美白
-                    }
-                }
-            });
+//            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
+//            mBeautySettings = (LinearLayout) findViewById(R.id.qav_beauty_setting);
+//            mBeautyConfirm = (TextView) findViewById(R.id.qav_beauty_setting_finish);
+//            mBeautyConfirm.setOnClickListener(this);
+//            mBeautyBar = (SeekBar) (findViewById(R.id.qav_beauty_progress));
+//            mBeautyBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+//                @Override
+//                public void onStopTrackingTouch(SeekBar seekBar) {
+//                    SxbLog.d("SeekBar", "onStopTrackingTouch");
+//                    if (mProfile == mBeatuy) {
+//                        Toast.makeText(LiveActivity.this, "beauty " + mBeautyRate + "%", Toast.LENGTH_SHORT).show();//美颜度
+//                    } else {
+//                        Toast.makeText(LiveActivity.this, "white " + mWhiteRate + "%", Toast.LENGTH_SHORT).show();//美白度
+//                    }
+//                }
+//
+//                @Override
+//                public void onStartTrackingTouch(SeekBar seekBar) {
+//                    SxbLog.d("SeekBar", "onStartTrackingTouch");
+//                }
+//
+//                @Override
+//                public void onProgressChanged(SeekBar seekBar, int progress,
+//                                              boolean fromUser) {
+//                    Log.i(TAG, "onProgressChanged " + progress);
+//                    if (mProfile == mBeatuy) {
+//                        mBeautyRate = progress;
+//                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputBeautyParam(LiveUtil.getBeautyProgress(progress));//美颜
+//                    } else {
+//                        mWhiteRate = progress;
+////                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputWhiteningParam(LiveUtil.getBeautyProgress(progress));//美白
+//                    }
+//                }
+//            });
         } else {//普通用户加载的view
             initInviteDialog();
-            mNomalUserBottomTools.setVisibility(View.VISIBLE);
-            mHostCtrView.setVisibility(View.GONE);
+
+            mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
+            mUserHeadTopView.setVisibility(View.VISIBLE);
+
+            mUserBottomTool.setVisibility(View.VISIBLE);
+            mHostBottomToolView1.setVisibility(View.GONE);
+            mHostBottomMeiView2.setVisibility(View.GONE);
             mVideoChat.setVisibility(View.GONE);
 
-            List<String> ids = new ArrayList<>();
-            ids.add(CurLiveInfo.getHostID());
+//            List<String> ids = new ArrayList<>();
+//            ids.add(CurLiveInfo.getHostID());干嘛的???
 
             //退出的界面(用户)
             mExitDialogHelper = new LiveExitDialogHelper(this);
@@ -442,8 +459,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     private void initViewNeed() {
         //初始化底部
-        if (mNomalUserBottomTools!=null){
-            mNomalUserBottomTools.initView(this,mLiveHelper,mHeartLayout);
+        if (mUserBottomTool!=null){
+            mUserBottomTool.initView(this,mLiveHelper,mHeartLayout);
         }
     }
 
@@ -652,7 +669,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         CurLiveInfo.setMembers(CurLiveInfo.getMembers() + 1);
         //人数加1,可以设置到界面上
-        mHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
+        mUserHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
     }
 
     @Override
@@ -661,7 +678,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         if (CurLiveInfo.getMembers() > 1) {
             CurLiveInfo.setMembers(CurLiveInfo.getMembers() - 1);
-            mHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
+            mUserHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
         }
 
         //如果存在视频互动，取消
@@ -1048,11 +1065,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private void backToNormalCtrlView() {
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             backGroundId = CurLiveInfo.getHostID();
-            mHostCtrView.setVisibility(View.VISIBLE);
+            mHostBottomToolView1.setVisibility(View.VISIBLE);
+            mHostBottomMeiView2.setVisibility(View.VISIBLE);
             mVideoMemberCtrlView.setVisibility(View.GONE);
         } else {
             backGroundId = CurLiveInfo.getHostID();
-            mNomalUserBottomTools.setVisibility(View.VISIBLE);
+            mUserBottomTool.setVisibility(View.VISIBLE);
             mVideoMemberCtrlView.setVisibility(View.GONE);
         }
     }
@@ -1176,7 +1194,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             switch (requestCode) {
                 case GETPROFILE_JOIN:
                     for (TIMUserProfile user : profiles) {
-                        mHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
+                        mUserHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
                         SxbLog.w(TAG, "get nick name:" + user.getNickName());
                         SxbLog.w(TAG, "get remark name:" + user.getRemark());
                         SxbLog.w(TAG, "get avatar:" + user.getFaceUrl());

@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.miguo.live.model.DataBindingLiveStart;
+import com.miguo.live.views.customviews.MGToast;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 
 /**
  * Created by Administrator on 2016/7/28.
@@ -75,5 +80,34 @@ public class LiveStartActivity extends Activity {
             //未认证的，去认证
             startActivity(new Intent(this, LiveAuthActivity.class));
         }
+    }
+
+    /**
+     * 进入直播Activity(创建直播)
+     */
+    public void createAvRoom(){
+        ////如果是自己
+//        MySelfInfo.getInstance().setId(mUser_id);
+//        Intent intent = new Intent(this, LiveActivity.class);
+//        intent.putExtra(Constants.ID_STATUS, Constants.HOST);
+//        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
+//        MySelfInfo.getInstance().setJoinRoomWay(true);
+//        CurLiveInfo.setTitle("直播");
+//        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
+//        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
+//        startActivity(intent);
+//        this.finish();
+        if (TextUtils.isEmpty(MySelfInfo.getInstance().getId()) || MySelfInfo.getInstance().getMyRoomNum()==-1){
+            MGToast.showToast("创建房间失败,用户异常!");
+        }
+        Intent intent=new Intent(this,LiveActivity.class);
+        intent.putExtra(Constants.ID_STATUS,Constants.HOST);
+        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
+        MySelfInfo.getInstance().setJoinRoomWay(true);//创建房间
+        CurLiveInfo.setTitle("直播");
+        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
+        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
+        startActivity(intent);
+        this.finish();
     }
 }
