@@ -12,86 +12,77 @@ import com.fanwe.library.utils.SDViewBinder;
 
 /**
  * 底部菜单栏
- * 
+ *
  * @author js02
- * 
  */
 @Deprecated
-public class SDTabItemBottom extends SDViewBase
-{
+public class SDTabItemBottom extends SDViewBase {
 
-	public ImageView mIvTitle;
-	public TextView mTvTitle;
-	public TextView mTvNumbr;
+    public ImageView mIvTitle;
+    public TextView mTvTitle;
+    public TextView mTvNumbr;
 
-	public SDTabItemBottom(Context context)
-	{
-		super(context);
-		init();
-	}
+    public SDTabItemBottom(Context context) {
+        super(context);
+        init();
+    }
 
-	public SDTabItemBottom(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-		init();
-	}
+    public SDTabItemBottom(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-	private void init()
-	{
-		LayoutInflater.from(getContext()).inflate(R.layout.view_tab_item_bottom, this, true);
-		mIvTitle = (ImageView) findViewById(R.id.view_tab_item_iv_title);
-		mTvTitle = (TextView) findViewById(R.id.view_tab_item_tv_title);
-		mTvNumbr = (TextView) findViewById(R.id.view_tab_item_tv_number);
-		mTvNumbr.setVisibility(View.GONE);
-		onNormal();
-	}
+    private void init() {
+        LayoutInflater.from(getContext()).inflate(R.layout.view_tab_item_bottom, this, true);
+        mIvTitle = (ImageView) findViewById(R.id.view_tab_item_iv_title);
+        mTvTitle = (TextView) findViewById(R.id.view_tab_item_tv_title);
+        mTvNumbr = (TextView) findViewById(R.id.view_tab_item_tv_number);
+        mTvNumbr.setVisibility(View.GONE);
+        onNormal();
+    }
 
-	public void setTextTitleNumber(String content)
-	{
-		SDViewBinder.setTextViewsVisibility(mTvNumbr, content);
-	}
+    public void setTitleGone() {
+        mTvTitle.setVisibility(View.GONE);
+    }
 
-	public void setTextTitle(String content)
-	{
-		SDViewBinder.setTextViewsVisibility(mTvTitle, content);
-	}
+    public void setTextTitleNumber(String content) {
+        SDViewBinder.setTextViewsVisibility(mTvNumbr, content);
+    }
 
-	public void setImageTitle(int resId)
-	{
-		SDViewBinder.setImageViewsVisibility(mIvTitle, resId);
-	}
+    public void setTextTitle(String content) {
+        SDViewBinder.setTextViewsVisibility(mTvTitle, content);
+    }
 
-	public void setBackgroundTextTitleNumber(int resId)
-	{
-		mTvNumbr.setBackgroundResource(resId);
-	}
+    public void setImageTitle(int resId) {
+        SDViewBinder.setImageViewsVisibility(mIvTitle, resId);
+    }
 
-	public void setTextSizeTitleSp(int sizeSp)
-	{
-		setTextSizeSp(mTvTitle, sizeSp);
-	}
+    public void setBackgroundTextTitleNumber(int resId) {
+        mTvNumbr.setBackgroundResource(resId);
+    }
 
-	public void setTextSizeNumberSp(int sizeSp)
-	{
-		setTextSizeSp(mTvNumbr, sizeSp);
-	}
+    public void setTextSizeTitleSp(int sizeSp) {
+        setTextSizeSp(mTvTitle, sizeSp);
+    }
 
-	// ----------------------states
+    public void setTextSizeNumberSp(int sizeSp) {
+        setTextSizeSp(mTvNumbr, sizeSp);
+    }
 
-	@Override
-	public void onNormal()
-	{
-		setImageViewNormal(mIvTitle);
-		setTextColorNormal(mTvTitle);
-		super.onNormal();
-	}
+    // ----------------------states
 
-	@Override
-	public void onSelected()
-	{
-		setImageViewSelected(mIvTitle);
-		setTextColorSelected(mTvTitle);
-		super.onSelected();
-	}
+    @Override
+    public void onNormal() {
+        setImageViewNormal(mIvTitle);
+        setTextColorNormal(mTvTitle);
+        super.onNormal();
+    }
+
+    @Override
+    public void onSelected() {
+        setImageViewSelected(mIvTitle);
+        setTextColorSelected(mTvTitle);
+        super.onSelected();
+    }
 
 }

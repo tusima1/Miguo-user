@@ -33,13 +33,13 @@
             android:layout_weight="1"
             android:background="@drawable/selector_white_gray_stroke_top" />
 
-       <!--  <com.fanwe.library.customview.SDTabItemBottom
+        <com.fanwe.library.customview.SDTabItemBottom
             android:id="@+id/act_main_tab_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_white_gray_stroke_top" />
- -->
+
         <com.fanwe.library.customview.SDTabItemBottom
             android:id="@+id/act_main_tab_3"
             android:layout_width="0dp"
