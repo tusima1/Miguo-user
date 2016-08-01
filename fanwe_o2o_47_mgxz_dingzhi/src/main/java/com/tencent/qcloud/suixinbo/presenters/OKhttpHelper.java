@@ -1,6 +1,5 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
@@ -8,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONArray;
@@ -34,7 +32,6 @@ import okhttp3.Response;
 public class OKhttpHelper {
     private static final String TAG = OKhttpHelper.class.getSimpleName();
     private static OKhttpHelper instance = null;
-    public static final String GET_MYROOMID = "http://182.254.234.225/sxb/index.php?svc=user_av_room&cmd=get";
     public static final String NEW_ROOM_INFO = "http://182.254.234.225/sxb/index.php?svc=live&cmd=start";
     public static final String STOP_ROOM = "http://182.254.234.225/sxb/index.php?svc=live&cmd=end";
     public static final String GET_LIVELIST = "http://182.254.234.225/sxb/index.php?svc=live&cmd=list";
@@ -142,31 +139,6 @@ public class OKhttpHelper {
         return null;
     }
 
-
-    /**
-     * 获取自己的房间
-     */
-    public void getMyRoomId(final Context context) {
-        try {
-            JSONObject myId = new JSONObject();
-            myId.put("uid", MySelfInfo.getInstance().getId());
-            String response = OKhttpHelper.getInstance().post(GET_MYROOMID, myId.toString());
-            JSONTokener jsonParser = new JSONTokener(response);
-            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
-            int ret = reg_response.getInt("errorCode");
-            if (ret == 0) {
-                JSONObject data = reg_response.getJSONObject("data");
-                int id = data.getInt("avRoomId");
-                SxbLog.i(TAG, "getMyRoomId " + id);
-                MySelfInfo.getInstance().setMyRoomNum(id);
-                MySelfInfo.getInstance().writeToCache(context.getApplicationContext());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 获取直播列表

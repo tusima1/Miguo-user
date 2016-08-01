@@ -32,7 +32,7 @@
             android:layout_height="@dimen/dp18"
             android:layout_marginRight="@dimen/dp17"
             android:scaleType="center"
-            android:src="@drawable/ic_share"/>
+            android:src="@drawable/ic_share_00"/>
 
         <ImageView
             android:id="@+id/iv_photo"
