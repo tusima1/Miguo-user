@@ -506,6 +506,7 @@ public class MyAccountActivity extends BaseActivity {
 		AppConfig.setSessionId("");
 		AppConfig.setUserName("");
 		AppConfig.setRefId("");
+		App.getInstance().getmUserCurrentInfo().setToken("");
 		
 		
 	}

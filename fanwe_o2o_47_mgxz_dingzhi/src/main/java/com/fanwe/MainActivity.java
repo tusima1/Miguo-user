@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.baidu.mapapi.map.Text;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
@@ -73,7 +74,9 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 		mLoginHelper = new LoginHelper(MainActivity.this);
-		token =App.getInstance().getmUserCurrentInfo().getToken();
+		if(App.getInstance().getmUserCurrentInfo()!=null) {
+			token = App.getInstance().getmUserCurrentInfo().getToken();
+		}
 		init();
 
 	}
@@ -91,10 +94,12 @@ public class MainActivity extends BaseActivity {
 	public void initUserInfo(){
 		LocalUserModel userModel =  AppHelper.getLocalUser();
 		//当前还未登录，并且用户存储中的用户信息不为空。
-		if(token!=null&&userModel!=null){
+		if(TextUtils.isEmpty(token)&&userModel!=null){
 			String userid = userModel.getUser_mobile();
 			String password = userModel.getUser_pwd();
-			mLoginHelper.doLogin(userid,password,0);
+			if(!TextUtils.isEmpty(userid)&&!TextUtils.isEmpty(password)) {
+				mLoginHelper.doLogin(userid, password, 0);
+			}
 		}
 	}
 	private void initOthers() {
@@ -238,7 +243,7 @@ public class MainActivity extends BaseActivity {
 	 */
 	protected void click4() {
 		UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_4);
-		if (token==null)  // 未登录
+		if (TextUtils.isEmpty(token))  // 未登录
 		{
 			startActivity(new Intent(this, LoginActivity.class));
 		} else {
