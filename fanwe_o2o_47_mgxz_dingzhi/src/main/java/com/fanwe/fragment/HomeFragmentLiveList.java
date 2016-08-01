@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 
 import com.fanwe.adapter.HomeLiveListAdapter;
@@ -54,7 +56,12 @@ public class HomeFragmentLiveList extends BaseFragment {
     }
 
     private void setListener() {
-
+        mSDGridViewInScroll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "mSDGridViewInScroll:" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void preParam() {

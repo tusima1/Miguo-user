@@ -238,10 +238,8 @@ public class MainActivity extends BaseActivity implements CallbackView {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-//            getSDFragmentManager().toggle(R.id.act_main_fl_content, null,
-// MyDistributionFragment.class);
-//            startActivity(new Intent(this, LiveStartActivity.class));
-            testLive();
+            startActivity(new Intent(this, LiveStartActivity.class));
+//            testLive();
         }
     }
 
@@ -253,9 +251,9 @@ public class MainActivity extends BaseActivity implements CallbackView {
         getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
         if (preTab == 0 || preTab == 2 || preTab == 3) {
             if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
- .mPtrlv_content != null) {
+                    .mPtrlv_content != null) {
                 ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
- .mPtrlv_content.setRefreshing();
+                        .mPtrlv_content.setRefreshing();
             }
         }
 
@@ -494,9 +492,9 @@ public class MainActivity extends BaseActivity implements CallbackView {
                 UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
                 ModelGenerateSign sign = (ModelGenerateSign) datas.get(0);
                 usersig = sign.getUsersig();
-                com.tencent.qcloud.suixinbo.presenters.LoginHelper tcLogin=new com.tencent.qcloud
+                com.tencent.qcloud.suixinbo.presenters.LoginHelper tcLogin = new com.tencent.qcloud
                         .suixinbo.presenters.LoginHelper(MainActivity.this);
-                tcLogin.imLogin(userInfoNew.getUser_id(),usersig);
+                tcLogin.imLogin(userInfoNew.getUser_id(), usersig);
                 //请求房间号
 //                http.applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
                 break;
