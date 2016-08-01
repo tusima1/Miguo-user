@@ -25,4 +25,17 @@ public interface LiveDoc {
      * 8. LinearLayout : id(ll_host_leave) 主播离开时的页面(Error页面)
      *
      */
+
+
+    /**
+     * Helper类
+     *
+     * 1. EnterLiveHelper : mEnterRoomHelper 进出房间的协助类
+     * 2. LiveHelper : mLiveHelper 直播的控制类(视频核心功能控制)
+     * 3. ProfileInfoHelper : mUserInfoHelper 用户资料类(腾讯的东西比较多)
+     * 4. LiveOrientationHelper : mOrientationHelper 屏幕方向管理,初始化
+     * 5. LiveCommonHelper : mCommonHelper 公共功能管理类(主要是为了简化直播类,对逻辑代码进行二次封装)
+     *
+     *
+     * */
 }
