@@ -47,14 +47,14 @@ public class LiveHelper extends Presenter {
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
     private Context mContext;
-    private String token = "3cd3d0e49b1d8637020e1e4a90e4514a";
+    private String token;
 
     public LiveHelper(Context mContext, CallbackView mView) {
         this.mContext = mContext;
         this.mView = mView;
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-//        token = userCurrentInfo.getToken();
+        token = userCurrentInfo.getToken();
     }
 
     /**
@@ -63,11 +63,14 @@ public class LiveHelper extends Presenter {
      * @param pageNum
      * @param pageSize
      */
-    public void getLiveList(int pageNum, int pageSize) {
+    public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
+        params.put("tag", tag);
+        params.put("keyword", keyword);
+        params.put("city", city);
         params.put("method", LiveConstants.LIVE_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
