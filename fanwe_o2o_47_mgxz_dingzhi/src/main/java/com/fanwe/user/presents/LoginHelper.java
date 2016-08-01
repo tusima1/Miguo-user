@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.baidu.mapapi.map.Text;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.Presenter;
-import com.fanwe.base.Result;
 import com.fanwe.base.Root;
 import com.fanwe.fragment.LoginFragment;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
@@ -23,14 +20,9 @@ import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.TreeMap;
 
 
@@ -56,7 +48,10 @@ public class LoginHelper extends Presenter {
         mContext = context;
         mLoginView = loginView;
     }
+    public LoginHelper(Activity activity) {
+       this.mActivity = activity;
 
+    }
     /**
      * 快捷登录。
      * @param mobile
@@ -67,7 +62,7 @@ public class LoginHelper extends Presenter {
         params.put("mobile", mobile);
         params.put("captcha",captcha);
         params.put("method", UserConstants.USER_QUICK_LOGIN);
-        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -76,7 +71,6 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-
                 SDToast.showToast(message);
             }
         });
@@ -211,7 +205,11 @@ public class LoginHelper extends Presenter {
     protected void dealLoginSuccess(User_infoModel actModel) {
         LocalUserModel.dealLoginSuccess(actModel, true);
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
-        if (lastActivity instanceof MainActivity) {
+
+
+        if(mActivity!=null&& mActivity instanceof  MainActivity){
+            //当前是默认登录，不需要跳转。
+        }else  if (lastActivity instanceof MainActivity) {
             mActivity.finish();
         } else {
             mActivity. startActivity(new Intent(mActivity, MainActivity.class));

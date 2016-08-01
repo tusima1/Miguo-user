@@ -463,7 +463,6 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     };
 
 
-
     @Override
     public void onSuccess(String responseBody) {
 
@@ -471,7 +470,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     private void test() {
         LiveHelper liveHelper = new LiveHelper(getActivity(), this);
-        liveHelper.getHostTags("a6d29f8c-5469-11e6-beb8-9e71128cae77", "1");
+        liveHelper.getLiveList(1, 1, "", "", "1");
     }
 
     @Override
