@@ -4,17 +4,23 @@
 package com.fanwe.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 直播列表适配器
@@ -55,6 +61,8 @@ public class HomeLiveListAdapter extends BaseAdapter {
             convertView = inflater.inflate(
                     R.layout.item_live_view_home_list, null);
             mHolder.ivBg = (ImageView) convertView.findViewById(R.id.iv_bg_item_live);
+            mHolder.tvAdd = (TextView) convertView.findViewById(R.id.tv_shop_item_live_list_home_fragment);
+            mHolder.layoutTags = (LinearLayout) convertView.findViewById(R.id.layout_tags_item_live_list_home_fragment);
             convertView.setTag(mHolder);
         } else {
             mHolder = (Holder) convertView.getTag();
@@ -66,10 +74,44 @@ public class HomeLiveListAdapter extends BaseAdapter {
     private void setData(Holder mHolder, int position) {
         Room room = datas.get(position);
         ImageLoader.getInstance().displayImage(room.getCover(), mHolder.ivBg, null, null, null);
+        if (!TextUtils.isEmpty(room.getLbs().getAddress())) {
+            mHolder.tvAdd.setText(room.getLbs().getAddress());
+        } else {
+            mHolder.tvAdd.setText("");
+        }
+        //标签
+        mHolder.layoutTags.removeAllViews();
+        Host host = room.getHost();
+        if (host != null) {
+            List<String> tags = host.getTags();
+            if (!SDCollectionUtil.isEmpty(tags)) {
+                for (String tagName : tags) {
+                    mHolder.layoutTags.addView(generalTag(tagName));
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成标签
+     *
+     * @param tag
+     * @return
+     */
+    private View generalTag(String tag) {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        View view = inflater.inflate(R.layout.tv_tag_item_live_home, null);
+        TextView tvTag = (TextView) view.findViewById(R.id.tv_describe_item_live_list_home_fragment);
+        tvTag.setText(tag);
+        view.setLayoutParams(lp);
+        return view;
     }
 
     private static class Holder {
         private ImageView ivBg;
+        private TextView tvAdd;
+        private LinearLayout layoutTags;
     }
 
 }

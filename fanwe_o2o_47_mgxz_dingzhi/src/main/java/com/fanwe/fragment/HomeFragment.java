@@ -16,11 +16,8 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Result;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
-import com.fanwe.home.presents.LiveListHelper;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -49,7 +46,7 @@ import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
-import com.miguo.live.presents.LiveHelper;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.utils.Log;
 
@@ -88,7 +85,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     private boolean isDown = true;
     protected Index_indexActModel mActModel;
 
-    private LiveListHelper mLiveListHelper;
+    private LiveHttpHelper liveHelper;
     private boolean isRefresh = true;
     private int pageNum = 1;
     private int pageSize = 3;
@@ -105,17 +102,10 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     protected void init() {
         super.init();
 
-        mLiveListHelper = new LiveListHelper(getActivity(), this);
 //		initPageModel();
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
-
-        //直播列表
-        mHomeFragmentLiveList = new HomeFragmentLiveList();
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
-
-        test();
     }
 
     private void initPageModel(int totalPage) {
@@ -134,6 +124,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                 pageData_1 = null;
                 pageData_2.clear();
                 requestIndex();
+                requestLiveList();
 //                requestIndex2(false);
                 if (location != null) {
                     dealLocationSuccess();
@@ -201,6 +192,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     }
 
     private void initPullToRefreshListView() {
+        liveHelper = new LiveHttpHelper(getActivity(), this);
         mPtrsvAll.setMode(Mode.BOTH);
         mPtrsvAll.setOnRefreshListener(mOnRefresherListener2);
         mPtrsvAll.setRefreshing();
@@ -223,7 +215,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             pageData_2.clear();
 
             requestIndex();
-            mLiveListHelper.getLiveList(pageNum, pageSize);
+            requestLiveList();
 //            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
@@ -234,9 +226,8 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             if (!SDCollectionUtil.isEmpty(rooms)) {
                 pageNum++;
             }
-
-            mLiveListHelper.getLiveList(pageNum, pageSize);
-
+            requestLiveList();
+            mPtrsvAll.setMode(Mode.BOTH);
 //            if (pageModel.increment()) {
 //                // 添加第二页数据
 //                requestIndex2(true);
@@ -253,6 +244,10 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         }
 
     };
+
+    private void requestLiveList() {
+        liveHelper.getLiveList(pageNum, pageSize, "", "", "e1b2911e-3a23-4630-9213-d317d200d9dc");
+    }
 
 
     private void requestIndex() {
@@ -408,10 +403,6 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_coupon,
                 mFragRecommendCoupon);
 
-        //直播列表
-        mHomeFragmentLiveList = new HomeFragmentLiveList();
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
-
     }
 
     private void addTitleBarFragment() {
@@ -440,12 +431,20 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         return this.getClass().getName().toString();
     }
 
-    public void getLiveList(ResultLive resultLive) {
-        if (resultLive == null) {
-            rooms = null;
-            return;
+    /**
+     * 直播列表
+     *
+     * @param datas
+     */
+    public void getLiveList(ArrayList<Room> datas) {
+        if (mHomeFragmentLiveList == null) {
+            mHomeFragmentLiveList = new HomeFragmentLiveList();
+            getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
         }
-        rooms = resultLive.getBody();
+        if (SDCollectionUtil.isEmpty(datas)) {
+            rooms = null;
+        }
+        rooms = datas;
         Message message = new Message();
         message.what = 1;
         mHandler.sendMessage(message);
@@ -455,6 +454,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
+                    //直播列表
                     mHomeFragmentLiveList.updateView(isRefresh, rooms);
                     mPtrsvAll.onRefreshComplete();
                     break;
@@ -468,18 +468,12 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     }
 
-    private void test() {
-        LiveHelper liveHelper = new LiveHelper(getActivity(), this);
-        liveHelper.getLiveList(1, 1, "", "", "e1b2911e-3a23-4630-9213-d317d200d9dc");
-    }
 
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.LIVE_LIST.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                Room room = (Room) datas.get(0);
-                Log.d("onSuccess", room.getCreate_time());
-            }
+            //直播列表
+            getLiveList((ArrayList<Room>) datas);
         } else if (LiveConstants.APPLY_ROOM.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 ModelApplyRoom modelApplyRoom = (ModelApplyRoom) datas.get(0);

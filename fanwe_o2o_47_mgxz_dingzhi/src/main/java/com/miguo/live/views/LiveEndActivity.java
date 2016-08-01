@@ -48,6 +48,9 @@ public class LiveEndActivity extends Activity {
             case R.id.iv_sina_live_end:
                 dataBindingLiveEnd.mode.set(dataBindingLiveEnd.SINA);
                 break;
+            case R.id.iv_qqzone_live_end:
+                dataBindingLiveEnd.mode.set(dataBindingLiveEnd.QQZONE);
+                break;
             case R.id.btn_submit_live_end:
                 startLive();
                 break;
@@ -63,6 +66,8 @@ public class LiveEndActivity extends Activity {
             Toast.makeText(this, "FRIEND", Toast.LENGTH_SHORT).show();
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.SINA) {
             Toast.makeText(this, "SINA", Toast.LENGTH_SHORT).show();
+        } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
+            Toast.makeText(this, "QQZONE", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "NONE", Toast.LENGTH_SHORT).show();
         }
