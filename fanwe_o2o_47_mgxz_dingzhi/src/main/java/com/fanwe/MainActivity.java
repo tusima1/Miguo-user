@@ -1,5 +1,11 @@
 package com.fanwe;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.view.View;
+
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
@@ -17,18 +23,14 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
+import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
+import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.view.View;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity {
@@ -62,13 +64,16 @@ public class MainActivity extends BaseActivity {
 	private long mExitTime = 0;
 	private int preTab = 0;// 上次点击的tab标签页
 	private int preHomeCityID=0;//记录首页cityid-->0为异常
-	
-	
+	private LoginHelper mLoginHelper;
+	private String token;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
+		mLoginHelper = new LoginHelper(MainActivity.this);
+		token =App.getInstance().getmUserCurrentInfo().getToken();
 		init();
 	}
 
@@ -78,8 +83,18 @@ public class MainActivity extends BaseActivity {
 		JpushHelper.initJPushConfig();
 		MessageHelper.updateMessageCount();
 		initOthers();
+		initUserInfo();
 	}
-
+     //初始化用户信息。
+	public void initUserInfo(){
+		LocalUserModel userModel =  AppHelper.getLocalUser();
+		//当前还未登录，并且用户存储中的用户信息不为空。
+		if(token!=null&&userModel!=null){
+			String userid = userModel.getUser_mobile();
+			String password = userModel.getUser_pwd();
+			mLoginHelper.doLogin(userid,password,0);
+		}
+	}
 	private void initOthers() {
 		// 初始化上次的cityID
 		preHomeCityID = AppRuntimeWorker.getCity_id();
@@ -208,7 +223,7 @@ public class MainActivity extends BaseActivity {
 	 */
 	protected void click4() {
 		UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_4);
-		if (!AppHelper.isLogin()) // 未登录
+		if (token==null) // 未登录
 		{
 			startActivity(new Intent(this, LoginActivity.class));
 		} else {

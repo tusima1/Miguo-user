@@ -280,7 +280,6 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		su.login(platform, new ILoginCallback() {
 			@Override
 			public void onSuccess(Map<String, String> data) {
-
 				if(platform .equals(SHARE_MEDIA.WEIXIN)){
 					type = "2";
 
