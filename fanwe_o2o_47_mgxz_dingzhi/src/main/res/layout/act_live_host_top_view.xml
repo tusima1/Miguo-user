@@ -17,12 +17,7 @@
     android:layout_marginRight="@dimen/dp10"
     android:gravity="center"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_member"
-        android:layout_toRightOf="@id/tv_members_num"
-        android:layout_toLeftOf="@id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp28"/>
+
     <LinearLayout
         android:id="@+id/location"
         android:layout_alignParentRight="true"
@@ -54,6 +49,13 @@
             android:scaleType="center"
             android:src="@drawable/ic_close"/>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_member"
+        android:layout_toRightOf="@id/tv_members_num"
+        android:layout_toLeftOf="@id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp28"/>
 
     <RelativeLayout
         android:id="@+id/rel_layout"
