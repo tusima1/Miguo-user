@@ -32,7 +32,7 @@ public class AppHelper
 
 	public static LocalUserModel getLocalUser()
 	{
-		return App.getApplication().getmLocalUser();
+	return App.getApplication().getmLocalUser();
 	}
 	/**
 	 * 更新数据库中用户表中用户数据。
