@@ -470,7 +470,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     private void test() {
         LiveHelper liveHelper = new LiveHelper(getActivity(), this);
-        liveHelper.getLiveList(1, 1, "", "", "1");
+        liveHelper.getLiveList(1, 1, "", "", "e1b2911e-3a23-4630-9213-d317d200d9dc");
     }
 
     @Override
