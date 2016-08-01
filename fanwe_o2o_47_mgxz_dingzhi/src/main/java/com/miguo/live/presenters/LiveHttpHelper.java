@@ -34,6 +34,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.stopLive.ModelStopLive;
+import com.miguo.live.model.stopLive.ResultStopLive;
+import com.miguo.live.model.stopLive.RootStopLive;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -270,7 +273,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 进入房间
+     * 观众进入房间
      *
      * @param room_id
      */
@@ -296,7 +299,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 退出房间
+     * 观众退出房间
      *
      * @param room_id
      */
@@ -353,7 +356,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 获取主播信息
+     * get获取主播信息，post申请成为主播
      *
      * @param host_id
      */
@@ -409,6 +412,38 @@ public class LiveHttpHelper implements IHelper {
                 ResultHostTags resultHostTags = resultHostTagss.get(0);
                 List<ModelHostTags> modelHostTags = resultHostTags.getBody();
                 mView.onSuccess(LiveConstants.HOST_TAGS, modelHostTags);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 主播退出，结束直播
+     */
+    public void stopLive(String room_id) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("room_id", room_id);
+        params.put("method", LiveConstants.STOP_LIVE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootStopLive rootStopLive = gson.fromJson(responseBody, RootStopLive.class);
+                List<ResultStopLive> resultStopLives = rootStopLive.getResult();
+                if (SDCollectionUtil.isEmpty(resultStopLives)) {
+                    mView.onSuccess(LiveConstants.STOP_LIVE, null);
+                    return;
+                }
+                ResultStopLive resultStopLive = resultStopLives.get(0);
+                List<ModelStopLive> modelStopLive = resultStopLive.getBody();
+                mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
             }
 
             @Override
