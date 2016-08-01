@@ -74,11 +74,14 @@ public class MainActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_main);
 		mLoginHelper = new LoginHelper(MainActivity.this);
+
+		init();
+
+	}
+	public void getToken(){
 		if(App.getInstance().getmUserCurrentInfo()!=null) {
 			token = App.getInstance().getmUserCurrentInfo().getToken();
 		}
-		init();
-
 	}
 
 	private void init() {
@@ -93,12 +96,13 @@ public class MainActivity extends BaseActivity {
 	//初始化用户信息。
 	public void initUserInfo(){
 		LocalUserModel userModel =  AppHelper.getLocalUser();
+		getToken();
 		//当前还未登录，并且用户存储中的用户信息不为空。
 		if(TextUtils.isEmpty(token)&&userModel!=null){
 			String userid = userModel.getUser_mobile();
 			String password = userModel.getUser_pwd();
 			if(!TextUtils.isEmpty(userid)&&!TextUtils.isEmpty(password)) {
-				mLoginHelper.doLogin(userid, password, 0);
+				mLoginHelper.doLogin(userid, password, 0,true);
 			}
 		}
 	}
@@ -216,7 +220,7 @@ public class MainActivity extends BaseActivity {
 	 */
 	protected void click2() {
 
-		if (!AppHelper.isLogin(this)) // 未登录
+		if (TextUtils.isEmpty(token))// 未登录
 		{
 			mViewManager.setSelectIndexLast(false);
 		} else {
@@ -243,6 +247,7 @@ public class MainActivity extends BaseActivity {
 	 */
 	protected void click4() {
 		UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_4);
+		getToken();
 		if (TextUtils.isEmpty(token))  // 未登录
 		{
 			startActivity(new Intent(this, LoginActivity.class));

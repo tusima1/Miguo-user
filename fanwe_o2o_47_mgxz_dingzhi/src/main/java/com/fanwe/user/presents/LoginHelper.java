@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.Presenter;
@@ -35,6 +36,7 @@ public class LoginHelper extends Presenter {
     private LoginFragment mLoginView;
     private int RoomId = -1;
     private Activity mActivity;
+    private boolean notClose =false;
 
     public LoginHelper(Context context) {
         mContext = context;
@@ -76,6 +78,7 @@ public class LoginHelper extends Presenter {
         });
 
     }
+
     /**
      * 登录
      *
@@ -89,7 +92,6 @@ public class LoginHelper extends Presenter {
         params.put("pwd", password);
         params.put("method", UserConstants.USER_lOGIN);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-
 
             @Override
             public void onSuccessResponse(String responseBody)  {
@@ -105,8 +107,10 @@ public class LoginHelper extends Presenter {
         });
 
     }
-
-
+    public void doLogin(final String userName, final String password, int type,boolean notClose) {
+        this.notClose = notClose;
+        doLogin(userName,password,type);
+    }
 
     /**
      * 注册 。
@@ -205,15 +209,17 @@ public class LoginHelper extends Presenter {
     protected void dealLoginSuccess(User_infoModel actModel) {
         LocalUserModel.dealLoginSuccess(actModel, true);
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
+        if(notClose){
 
-
-        if(mActivity!=null&& mActivity instanceof  MainActivity){
-            //当前是默认登录，不需要跳转。
-        }else  if (lastActivity instanceof MainActivity) {
-            mActivity.finish();
-        } else {
-            mActivity. startActivity(new Intent(mActivity, MainActivity.class));
+            return;
         }
+
+            if (lastActivity instanceof MainActivity) {
+                mActivity.finish();
+            } else {
+                mActivity.startActivity(new Intent(mActivity, MainActivity.class));
+            }
+
 
     }
     @Override
