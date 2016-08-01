@@ -32,6 +32,7 @@ import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
 import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
@@ -132,7 +133,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
 
-        initView();
+
         registerReceiver();
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
@@ -148,6 +149,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         //公共功能管理类
         mCommonHelper = new LiveCommonHelper(mLiveHelper,this);
 
+        //初始化view
+        initView();
         //房间创建成功,向后台注册信息
         OKhttpHelper.getInstance().registerRoomInfo("","",MySelfInfo.getInstance().getMyRoomNum()+"",MySelfInfo.getInstance().getMyRoomNum()+"","");
     }
@@ -292,32 +295,22 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private TextView BtnBeauty, BtnWhite, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
-    private LinearLayout mHostBottomToolView1, mVideoMemberCtrlView, mBeautySettings;
+    private LinearLayout mVideoMemberCtrlView;
     private UserBottomToolView mUserBottomTool;
     private FrameLayout mFullControllerUi, mBackgound;
     private SeekBar mBeautyBar;
     private int mBeautyRate, mWhiteRate;
     private TextView pushBtn, recordBtn;
-
-    /**圆形头像*/
-//    private void showHeadIcon(ImageView view, String avatar) {
-//        if (TextUtils.isEmpty(avatar)) {
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_avatar);
-//            Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
-//            view.setImageBitmap(cirBitMap);
-//        } else {
-//            SxbLog.d(TAG, "load icon: " + avatar);
-//            RequestManager req = Glide.with(this);
-//            req.load(avatar).transform(new GlideCircleTransform(this)).into(view);
-//        }
-//    }
+    private HostBottomToolView mHostBottomToolView1;
 
     /**
      * 初始化界面
      */
     private void initView() {
-        mHostBottomToolView1 = (LinearLayout) findViewById(R.id.host_bottom_layout);//主播的工具栏1
+        mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
+        mHostBottomToolView1.setNeed(mCommonHelper,mLiveHelper,this);
+        mHostBottomMeiView2.setNeed(mCommonHelper);
 
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
 
@@ -352,6 +345,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             //host的topview
             mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
             mHostTopView.setVisibility(View.VISIBLE);
+            mHostTopView.setNeed(this,mCommonHelper);
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
 //            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
 //            BtnWhite = (TextView) findViewById(R.id.white_btn);
@@ -985,36 +979,36 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 Log.i(TAG, "onClick " + mBeautyRate);
 
                 mProfile = mBeatuy;
-                if (mBeautySettings != null) {
-                    if (mBeautySettings.getVisibility() == View.GONE) {
-                        mBeautySettings.setVisibility(View.VISIBLE);
-                        mFullControllerUi.setVisibility(View.INVISIBLE);
-                        mBeautyBar.setProgress(mBeautyRate);
-                    } else {
-                        mBeautySettings.setVisibility(View.GONE);
-                        mFullControllerUi.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
-                }
+//                if (mBeautySettings != null) {
+//                    if (mBeautySettings.getVisibility() == View.GONE) {
+//                        mBeautySettings.setVisibility(View.VISIBLE);
+//                        mFullControllerUi.setVisibility(View.INVISIBLE);
+//                        mBeautyBar.setProgress(mBeautyRate);
+//                    } else {
+//                        mBeautySettings.setVisibility(View.GONE);
+//                        mFullControllerUi.setVisibility(View.VISIBLE);
+//                    }
+//                } else {
+//                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
+//                }
                 break;
 
             case R.id.white_btn:
                 //美白
                 Log.i(TAG, "onClick " + mWhiteRate);
                 mProfile = mWhite;
-                if (mBeautySettings != null) {
-                    if (mBeautySettings.getVisibility() == View.GONE) {
-                        mBeautySettings.setVisibility(View.VISIBLE);
-                        mFullControllerUi.setVisibility(View.INVISIBLE);
-                        mBeautyBar.setProgress(mWhiteRate);
-                    } else {
-                        mBeautySettings.setVisibility(View.GONE);
-                        mFullControllerUi.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
-                }
+//                if (mBeautySettings != null) {
+//                    if (mBeautySettings.getVisibility() == View.GONE) {
+//                        mBeautySettings.setVisibility(View.VISIBLE);
+//                        mFullControllerUi.setVisibility(View.INVISIBLE);
+//                        mBeautyBar.setProgress(mWhiteRate);
+//                    } else {
+//                        mBeautySettings.setVisibility(View.GONE);
+//                        mFullControllerUi.setVisibility(View.VISIBLE);
+//                    }
+//                } else {
+//                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
+//                }
                 break;
             case R.id.qav_beauty_setting_finish:
 //                mBeautySettings.setVisibility(View.GONE);

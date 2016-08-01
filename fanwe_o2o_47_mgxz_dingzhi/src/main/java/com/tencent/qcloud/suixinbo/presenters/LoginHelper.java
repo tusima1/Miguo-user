@@ -22,6 +22,7 @@ import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import java.util.List;
+import java.util.Random;
 
 import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSPwdLoginListener;
@@ -151,7 +152,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      */
     private void getMyRoomNum() {
 //        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
-            new LiveHttpHelper(mContext, new CallbackView() {
+        new LiveHttpHelper(mContext, new CallbackView() {
                 @Override
                 public void onSuccess(String responseBody) {
 
@@ -182,7 +183,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 public void onFailue(String responseBody) {
 
                 }
-            }).applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
+            }).applyRoom(new Random().nextInt(9)+"cb975c9-bf4c-4a"+new Random().nextInt(9)+"3-95b1-9b7f3cc1c4b"+new Random().nextInt(9));
 //        }
     }
 

@@ -1,15 +1,21 @@
 package com.miguo.live.views.customviews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.presenters.LiveCommonHelper;
+import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
+import com.tencent.qcloud.suixinbo.views.customviews.InputTextMsgDialog;
 
 /**
  * Created by didik on 2016/7/29.
@@ -28,6 +34,9 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     private int mShopCartNum=0;////购物袋子(数字)
     private BadgeView redPacketDot;//红包的小红点
     private BadgeView redShopCartDot;//购物袋的小红点
+    private LiveCommonHelper mLiveCommonHelper;
+    private LiveHelper mLiveHelper;
+    private Activity mActivity;
 
     public HostBottomToolView(Context context) {
         super(context);
@@ -42,6 +51,12 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     public HostBottomToolView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+    }
+
+    public void setNeed(LiveCommonHelper helper, LiveHelper liveHelper, Activity activity){
+        this.mLiveCommonHelper=helper;
+        this.mLiveHelper=liveHelper;
+        this.mActivity=activity;
     }
 
     public void init(Context context) {
@@ -81,16 +96,41 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                 if (isChecked){
                     //执行关闭语音
                     MGToast.showToast("执行关闭语音");
+                    if (mLiveCommonHelper!=null){
+                        mLiveCommonHelper.closeMic();
+                    }
                 }else {
                     //执行开启语音
                     MGToast.showToast("执行开启语音");
+                    if (mLiveCommonHelper!=null){
+                        mLiveCommonHelper.openMic();
+                    }
                 }
             }
         });
 
         //test
         setRedPacketNum(99);
-        setShopCartNum(10);
+        setShopCartNum(0);
+    }
+
+    /**
+     * 发消息弹出框
+     */
+    private void inputMsgDialog() {
+        if (mActivity == null || mLiveHelper == null || mContext == null) {
+            return;
+        }
+        InputTextMsgDialog inputMsgDialog = new InputTextMsgDialog(mContext, R.style.inputdialog,
+                mLiveHelper, mActivity);
+        WindowManager windowManager = mActivity.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = inputMsgDialog.getWindow().getAttributes();
+
+        lp.width = (int) (display.getWidth()); //设置宽度
+        inputMsgDialog.getWindow().setAttributes(lp);
+        inputMsgDialog.setCancelable(true);
+        inputMsgDialog.show();
     }
 
     @Override
@@ -128,6 +168,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      */
     private void clickMsg() {
         MGToast.showToast("点击消息");
+        inputMsgDialog();
     }
 
     /**
