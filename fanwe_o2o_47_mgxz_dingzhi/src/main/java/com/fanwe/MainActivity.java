@@ -232,6 +232,8 @@ public class MainActivity extends BaseActivity implements CallbackView {
      * 直播
      */
     protected void click2() {
+        UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
+        getToken();
         if (TextUtils.isEmpty(token))// 未登录
         {
             startActivity(new Intent(this, LoginActivity.class));

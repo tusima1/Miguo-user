@@ -87,4 +87,8 @@
 
     <string name="three_login_message">第三方账号快速登录</string>
 
+    <!-- 直播 -->
+    <string name="live_start">开始直播</string>
+    <string name="live_auth">认证颜值</string>
+
 </resources>

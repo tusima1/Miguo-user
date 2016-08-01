@@ -11,6 +11,7 @@ public class DataBindingLiveEnd {
     public final int WEIXIN = 2;
     public final int FRIEND = 3;
     public final int SINA = 4;
+    public final int QQZONE = 5;
 
 
     public final ObservableInt mode = new ObservableInt();

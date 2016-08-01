@@ -1,5 +1,6 @@
 package com.miguo.live.model;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
@@ -11,7 +12,9 @@ public class DataBindingLiveStart {
     public final int WEIXIN = 2;
     public final int FRIEND = 3;
     public final int SINA = 4;
+    public final int QQZONE = 5;
 
+    public final ObservableBoolean isLiveRight = new ObservableBoolean();
 
     public final ObservableInt mode = new ObservableInt();
     //选择的店铺
