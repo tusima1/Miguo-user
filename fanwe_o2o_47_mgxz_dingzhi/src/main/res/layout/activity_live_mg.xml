@@ -84,11 +84,11 @@
         <TextView
             android:id="@+id/push_btn"
             android:layout_width="40dp"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_gravity="top|left"
             android:layout_marginLeft="240dp"
             android:visibility="invisible"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="300dp"
             android:background="@drawable/icon_push_stream"
             />
 
@@ -101,7 +101,7 @@
             android:layout_gravity="top|left"
             android:layout_marginLeft="290dp"
             android:visibility="invisible"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="300dp"
             android:background="@drawable/icon_record"
             android:gravity="center"
             android:textSize="14sp" />
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="300dp"
             android:background="@drawable/icon_video_interact" />
 
         <!--右上角关闭按钮-->
