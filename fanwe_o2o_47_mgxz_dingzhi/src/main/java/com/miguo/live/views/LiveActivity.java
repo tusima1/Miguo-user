@@ -147,6 +147,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         //公共功能管理类
         mCommonHelper = new LiveCommonHelper(mLiveHelper,this);
+
+        //房间创建成功,向后台注册信息
+        OKhttpHelper.getInstance().registerRoomInfo("","",MySelfInfo.getInstance().getMyRoomNum()+"",MySelfInfo.getInstance().getMyRoomNum()+"","");
     }
 
 

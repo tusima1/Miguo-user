@@ -419,40 +419,6 @@ public class LiveHttpHelper implements IHelper {
 
     }
 
-    /**
-     * 登记房间信息
-     *
-     * @param title
-     * @param cover
-     * @param room_id
-     * @param av_room_id
-     * @param chat_room_id
-     */
-    public void registerRoomInfo(String title, String cover, String room_id, String av_room_id, String chat_room_id) {
-        getToken();
-        TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
-        params.put("title", title);
-        params.put("cover", cover);
-        params.put("room_id", room_id);
-        params.put("av_room_id", av_room_id);
-        params.put("chat_room_id", chat_room_id);
-        params.put("method", LiveConstants.REGISTER_ROOM_INFO);
-
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-            @Override
-            public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.REGISTER_ROOM_INFO, null);
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
-            }
-        });
-
-    }
-
     @Override
     public void onDestroy() {
         mContext = null;

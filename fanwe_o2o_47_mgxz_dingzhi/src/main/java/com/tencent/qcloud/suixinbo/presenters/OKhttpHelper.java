@@ -3,9 +3,13 @@ package com.tencent.qcloud.suixinbo.presenters;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -17,6 +21,7 @@ import org.json.JSONTokener;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -221,6 +226,40 @@ public class OKhttpHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 登记房间信息
+     *
+     * @param title
+     * @param cover
+     * @param room_id
+     * @param av_room_id
+     * @param chat_room_id
+     */
+    public void registerRoomInfo(String title, String cover, String room_id, String av_room_id, String chat_room_id) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("title", title);
+        params.put("cover", cover);
+        params.put("room_id", room_id);
+        params.put("av_room_id", av_room_id);
+        params.put("chat_room_id", chat_room_id);
+        params.put("method", LiveConstants.REGISTER_ROOM_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                MGToast.showToast(responseBody);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+
     }
 
 
