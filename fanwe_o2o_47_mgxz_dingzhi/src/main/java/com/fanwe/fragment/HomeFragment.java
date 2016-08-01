@@ -88,7 +88,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     private LiveHttpHelper liveHelper;
     private boolean isRefresh = true;
     private int pageNum = 1;
-    private int pageSize = 1;
+    private int pageSize = 2;
     private List<Room> rooms;
 
 
