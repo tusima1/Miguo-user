@@ -1,5 +1,6 @@
 package com.fanwe.network;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -53,11 +54,11 @@ public abstract class MgCallback<T> implements Callback {
             try {
                 Root root = JSON.parseObject(body, Root.class);
                 String statusCode = root.getStatusCode();
+                String token = root.getToken();
                 int code = Integer.valueOf(statusCode);
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
-                    if (root.getToken() != null) {
-                        String token = root.getToken();
+                    if (!TextUtils.isEmpty(token)) {
                         UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }

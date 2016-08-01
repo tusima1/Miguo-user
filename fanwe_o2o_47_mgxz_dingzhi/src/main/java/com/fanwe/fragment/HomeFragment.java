@@ -16,7 +16,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Result;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
@@ -49,7 +48,7 @@ import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
-import com.miguo.live.presents.LiveHelper;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.utils.Log;
 
@@ -469,8 +468,8 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     }
 
     private void test() {
-        LiveHelper liveHelper = new LiveHelper(getActivity(), this);
-        liveHelper.getLiveList(1, 1, "", "", "1");
+        LiveHttpHelper liveHelper = new LiveHttpHelper(getActivity(), this);
+        liveHelper.getLiveList(1, 1, "", "", "e1b2911e-3a23-4630-9213-d317d200d9dc");
     }
 
     @Override
