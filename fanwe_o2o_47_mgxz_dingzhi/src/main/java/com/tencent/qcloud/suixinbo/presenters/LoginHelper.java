@@ -182,7 +182,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 public void onFailue(String responseBody) {
 
                 }
-            }).applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
+            }).applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b3");
 //        }
     }
 

@@ -123,7 +123,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
-        Log.e(TAG,"进入了房间!");
+        Log.e(TAG, "进入了房间!");
 //        checkPermission();
         //进出房间的协助类
         mEnterRoomHelper = new EnterLiveHelper(this, this);
@@ -146,10 +146,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mOrientationHelper = new LiveOrientationHelper();
 
         //公共功能管理类
-        mCommonHelper = new LiveCommonHelper(mLiveHelper,this);
+        mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
 
         //房间创建成功,向后台注册信息
-        OKhttpHelper.getInstance().registerRoomInfo("","",MySelfInfo.getInstance().getMyRoomNum()+"",MySelfInfo.getInstance().getMyRoomNum()+"","");
+        OKhttpHelper.getInstance().registerRoomInfo("LiveTest", "http://www.jianwang360.com/a/uploads/allimg/141216/12543I303_0.jpg",
+                MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "");
     }
 
 
@@ -195,7 +196,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 ArrayList<String> ids = intent.getStringArrayListExtra("ids");
                 //如果是自己本地直接渲染
                 for (String id : ids) {
-                    if (id.equals(backGroundId)){
+                    if (id.equals(backGroundId)) {
                         mHostLeaveLayout.setVisibility(View.GONE);
                     }
                     if (!mRenderUserList.contains(id)) {
@@ -230,11 +231,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
             if (action.equals(Constants.ACTION_SWITCH_VIDEO)) {//点击成员回调
                 backGroundId = intent.getStringExtra(Constants.EXTRA_IDENTIFIER);
-                SxbLog.v(TAG, "switch video enter with id:"+backGroundId);
+                SxbLog.v(TAG, "switch video enter with id:" + backGroundId);
 
-                if (mRenderUserList.contains(backGroundId)){
+                if (mRenderUserList.contains(backGroundId)) {
                     mHostLeaveLayout.setVisibility(View.GONE);
-                }else{
+                } else {
                     mHostLeaveLayout.setVisibility(View.VISIBLE);
                 }
 
@@ -322,7 +323,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
 
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);//直播2的工具栏
-        mHostLeaveLayout = (LinearLayout)findViewById(R.id.ll_host_leave);//主播离开(断开)界面
+        mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);//主播离开(断开)界面
         mVideoChat = (TextView) findViewById(R.id.video_interact);//(腾讯)互动连线图标
         mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);//飘心区域
 
@@ -381,7 +382,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             initPushDialog();
 //            initRecordDialog();
             //录制功能
-            mRecordHelper = new LiveRecordDialogHelper(this,mLiveHelper);
+            mRecordHelper = new LiveRecordDialogHelper(this, mLiveHelper);
             mRecordHelper.setOnLiveRecordListener(new LiveRecordListener() {
                 @Override
                 public void startRecord() {
@@ -463,8 +464,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     private void initViewNeed() {
         //初始化底部
-        if (mUserBottomTool!=null){
-            mUserBottomTool.initView(this,mLiveHelper,mHeartLayout);
+        if (mUserBottomTool != null) {
+            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout);
         }
     }
 
@@ -639,6 +640,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     /**
      * 完全退出房间了
+     *
      * @param id_status
      * @param succ
      * @param liveinfo
@@ -673,7 +675,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         CurLiveInfo.setMembers(CurLiveInfo.getMembers() + 1);
         //人数加1,可以设置到界面上
-        mUserHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
+        mUserHeadTopView.updateNum(CurLiveInfo.getMembers() + "");
     }
 
     @Override
@@ -682,7 +684,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         if (CurLiveInfo.getMembers() > 1) {
             CurLiveInfo.setMembers(CurLiveInfo.getMembers() - 1);
-            mUserHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
+            mUserHeadTopView.updateNum(CurLiveInfo.getMembers() + "");
         }
 
         //如果存在视频互动，取消
@@ -1058,12 +1060,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * 或者开启屏幕内容
      */
     private void switchScreen() {
-        if (bCleanMode){
+        if (bCleanMode) {
             mFullControllerUi.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             mFullControllerUi.setVisibility(View.VISIBLE);
         }
-        bCleanMode=!bCleanMode;
+        bCleanMode = !bCleanMode;
     }
 
     private void backToNormalCtrlView() {
@@ -1198,7 +1200,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             switch (requestCode) {
                 case GETPROFILE_JOIN:
                     for (TIMUserProfile user : profiles) {
-                        mUserHeadTopView.updateNum(CurLiveInfo.getMembers()+"");
+                        mUserHeadTopView.updateNum(CurLiveInfo.getMembers() + "");
                         SxbLog.w(TAG, "get nick name:" + user.getNickName());
                         SxbLog.w(TAG, "get remark name:" + user.getRemark());
                         SxbLog.w(TAG, "get avatar:" + user.getFaceUrl());
@@ -1350,6 +1352,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         dialog.show();
 
     }
+
     private boolean mRecord = false;
 
     /**

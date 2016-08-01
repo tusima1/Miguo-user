@@ -156,7 +156,7 @@ public class LiveHttpHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
