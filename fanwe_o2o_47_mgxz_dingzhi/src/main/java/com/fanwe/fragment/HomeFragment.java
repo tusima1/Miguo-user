@@ -196,6 +196,10 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         mPtrsvAll.setMode(Mode.BOTH);
         mPtrsvAll.setOnRefreshListener(mOnRefresherListener2);
         mPtrsvAll.setRefreshing();
+        //防止自动滚动
+        mPtrsvAll.setFocusable(true);
+        mPtrsvAll.setFocusableInTouchMode(true);
+        mPtrsvAll.requestFocus();
     }
 
     public void refreshData() {
