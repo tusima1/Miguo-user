@@ -28,12 +28,18 @@ import com.miguo.live.model.getAudienceCount.RootAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getAudienceList.ResultAudienceList;
 import com.miguo.live.model.getAudienceList.RootAudienceList;
+import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
+import com.miguo.live.model.getBussDictionInfo.ResultBussDictionInfo;
+import com.miguo.live.model.getBussDictionInfo.RootBussDictionInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostInfo.ResultHostInfo;
 import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getUpToken.ModelUpToken;
+import com.miguo.live.model.getUpToken.ResultUpToken;
+import com.miguo.live.model.getUpToken.RootUpToken;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
@@ -364,7 +370,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * get获取主播信息，post申请成为主播
+     * get获取主播信息
      *
      * @param host_id
      */
@@ -396,6 +402,49 @@ public class LiveHttpHelper implements IHelper {
         });
 
     }
+
+    /**
+     * post申请成为主播
+     *
+     * @param character
+     * @param mobile
+     * @param picture
+     * @param city
+     * @param interest
+     */
+    public void postHostInfo(String character, String mobile, String picture, String city, String interest) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("character", character);
+        params.put("mobile", mobile);
+        params.put("picture", picture);
+        params.put("city", city);
+        params.put("interest", interest);
+        params.put("method", LiveConstants.HOST_INFO);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
+                List<ResultHostInfo> resultHostInfos = rootHostInfo.getResult();
+                if (SDCollectionUtil.isEmpty(resultHostInfos)) {
+                    mView.onSuccess(LiveConstants.HOST_INFO, null);
+                    return;
+                }
+                ResultHostInfo resultHostInfo = resultHostInfos.get(0);
+                List<ModelHostInfo> modelHostInfo = resultHostInfo.getBody();
+                mView.onSuccess(LiveConstants.HOST_INFO, modelHostInfo);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
 
     /**
      * 获取主播标签
@@ -461,6 +510,68 @@ public class LiveHttpHelper implements IHelper {
         });
 
     }
+
+    /**
+     * 业务服务器的数据字典接口
+     */
+    public void getBussDictionInfo(String dic_type) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("dic_type", dic_type);
+        params.put("method", LiveConstants.BUSS_DICTION_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody, RootBussDictionInfo.class);
+                List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo.getResult();
+                if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
+                    mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
+                    return;
+                }
+                ResultBussDictionInfo resultBussDictionInfo = resultBussDictionInfos.get(0);
+                List<ModelBussDictionInfo> modelBussDictionInfo = resultBussDictionInfo.getBody();
+                mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 业务服务器的数据字典接口
+     */
+    public void getUpToken() {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("method", LiveConstants.UP_TOKEN);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootUpToken rootUpToken = gson.fromJson(responseBody, RootUpToken.class);
+                List<ResultUpToken> resultUpTokens = rootUpToken.getResult();
+                if (SDCollectionUtil.isEmpty(resultUpTokens)) {
+                    mView.onSuccess(LiveConstants.UP_TOKEN, null);
+                    return;
+                }
+                ResultUpToken resultUpToken = resultUpTokens.get(0);
+                List<ModelUpToken> modelUpToken = resultUpToken.getBody();
+                mView.onSuccess(LiveConstants.UP_TOKEN, modelUpToken);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {

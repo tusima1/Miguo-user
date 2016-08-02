@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="70dp">
+
+    <ImageView
+        android:id="@+id/iv_visit_img_item"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_add_img_item"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_add_live_auth" />
+
+    <ImageView
+        android:id="@+id/iv_delete_img_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="-2dp"
+        android:layout_marginTop="-2dp"
+        android:src="@drawable/btn_delete_img"
+        android:visibility="gone" />
+</FrameLayout>
