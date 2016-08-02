@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp115"
+        android:background="@drawable/bg_live_redpaket"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp14"
+            android:text="@string/red_time_countdown"
+            android:textColor="@color/orange_red_packet"
+            android:textSize="@dimen/sp17"
+            />
+
+        <TextView
+            android:id="@+id/tv_count_down"
+            android:layout_width="@dimen/dp105"
+            android:layout_height="@dimen/dp105"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp49"
+            android:background="@drawable/shape_bg_cricle_solid_white_30"
+            android:gravity="center"
+            android:text="9"
+            android:textColor="@color/orange_red_packet"
+            android:textSize="50sp"/>
+
+        <TextView
+            android:id="@+id/tv_time_lift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp19"
+            android:text="30s 后结束"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp15"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp10"
+            android:text="连击还会有惊喜哦!"
+            android:textColor="@color/white_60"
+            android:textSize="@dimen/sp12"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_cancle"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        android:layout_marginTop="@dimen/dp25"
+        android:src="@drawable/circle_cancel"
+        />
+</LinearLayout>

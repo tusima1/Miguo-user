@@ -99,4 +99,6 @@
     <string name="red_count_all">全部</string>
 
     <string name="red_send">发送</string>
+    <string name="red_time_countdown">抢红包倒计时</string>
+
 </resources>
