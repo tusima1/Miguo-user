@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp13"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:drawableLeft="@drawable/ic_sex_live_auth"
             android:drawablePadding="@dimen/dp5"
             android:gravity="center"
@@ -82,7 +82,7 @@
                 <ImageView
                     android:id="@+id/iv_beauty_live_auth"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
                     android:onClick="onClick"
                     android:src="@{live.mode == live.BEAUTY ? @drawable/ic_beauty_select_live_auth : @drawable/ic_beauty_normal_live_auth}" />
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_beauty_live_auth"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp2"
                     android:text="美" />
             </RelativeLayout>
 
@@ -104,7 +104,7 @@
                 <ImageView
                     android:id="@+id/iv_smart_live_auth"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="10dp"
                     android:onClick="onClick"
@@ -116,7 +116,7 @@
                     android:layout_below="@+id/iv_smart_live_auth"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp2"
                     android:text="帅" />
             </RelativeLayout>
 
@@ -128,7 +128,7 @@
                 <ImageView
                     android:id="@+id/iv_excellent_live_auth"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="10dp"
                     android:onClick="onClick"
@@ -140,7 +140,7 @@
                     android:layout_below="@+id/iv_excellent_live_auth"
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp2"
                     android:text="美又帅" />
             </RelativeLayout>
 
@@ -149,13 +149,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:background="@color/text_line" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp13">
+            android:layout_marginTop="@dimen/dp10">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,13 +185,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:background="@color/text_line" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp13">
+            android:layout_marginTop="@dimen/dp10">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -221,13 +221,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:background="@color/text_line" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:focusable="true"
             android:focusableInTouchMode="true">
 
@@ -264,7 +264,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:background="@color/text_line" />
 
         <View
@@ -277,7 +277,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/gridView_live_auth"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:drawableLeft="@drawable/ic_img_live_auth"
             android:drawablePadding="@dimen/dp5"
             android:text="@string/live_auth_img"
@@ -290,7 +290,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp13"
             android:layout_marginRight="@dimen/dp13"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:horizontalSpacing="20dp"
             android:numColumns="4"
             android:stretchMode="columnWidth"
@@ -299,7 +299,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginTop="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
             android:background="@color/text_line" />
 
         <LinearLayout
@@ -319,7 +319,7 @@
                 android:gravity="center"
                 android:onClick="onClick"
                 android:paddingBottom="@dimen/dp13"
-                android:paddingTop="@dimen/dp13"
+                android:paddingTop="@dimen/dp10"
                 android:text="提交认证"
                 android:textColor="@color/white"
                 android:textSize="17dp" />
