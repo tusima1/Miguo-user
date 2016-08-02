@@ -29,14 +29,14 @@
 
 
 
-    <CheckBox
-        android:id="@+id/cb_lighting"
-        style="@style/LightingCheckboxTheme"
+    <ImageView
+        android:id="@+id/iv_lighting"
         android:layout_width="@dimen/dp36"
         android:layout_height="@dimen/dp36"
         android:gravity="center"
         android:layout_above="@id/iv_meiyan"
         android:layout_marginTop="@dimen/dp11"
+        android:background="@drawable/ic_lighting_off"
         />
 
 

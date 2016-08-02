@@ -137,15 +137,26 @@ public class LoginHelper extends Presenter {
      * 第三方注册 。
      */
     public void doThirdRegister(final  String userPhone,String openid,String captcha,String icon,String nick,String platform){
+        if (TextUtils.isEmpty(platform)||TextUtils.isEmpty(openid)) {
+            SDToast.showToast("第三方登录失败");
+            if(mActivity!=null){
+                mActivity.finish();
+            }
+        }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", userPhone);
         params.put("openid", openid);
         params.put("captcha", captcha);
-        params.put("icon",icon);
-        params.put("nick",nick);
+        if(!TextUtils.isEmpty(icon)) {
+            params.put("icon", icon);
+        }
+
+        if(!TextUtils.isEmpty(nick)) {
+            params.put("nick", nick);
+        }
         params.put("platform",platform);
         params.put("method", UserConstants.THIRD_REGISTER_URL);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -185,7 +196,9 @@ public class LoginHelper extends Presenter {
                 }
                 if(!TextUtils.isEmpty(password)) {
                     model.setUser_pwd(password);
-
+                }
+                if(!TextUtils.isEmpty(userInfoNew.getPwd())){
+                    model.setUser_pwd(userInfoNew.getPwd());
                 }
                 model.setUser_name(userInfoNew.getUser_name());
                 dealLoginSuccess(model);

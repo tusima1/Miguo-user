@@ -31,7 +31,7 @@ public class UmengShareManager {
 
 	public static final String sinaAppKey="3061230415";
 	public static final String sinaAppSecret="b5fe7acf5dc0eecaf23344a0f84b26e6";
-	//-------------------------------
+	//-------------------------------             b5fe7acf5dc0eecaf23344a0f84b26e6
 	public static int mTag = 0;
 	public static Activity context;
 	public static int mOrder_id;

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.title.SDTitleItem;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
@@ -43,7 +45,9 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,12 +97,12 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 	@ViewInject(R.id.weixin_login)
 	private Button weixin_login;
-
-
+	@ViewInject(R.id.testViews)
+  private EditText testViews;
    private String openId;
 
 	//1:qq，2:微信，3：微博
-	String type="";
+	String platformType="";
 	private ShareUtils su;
 	SHARE_MEDIA platform = null;
 	/**
@@ -139,6 +143,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			{
 				Intent intent = new Intent(LoginActivity.this, ModifyPasswordActivity.class);
 				startActivity(intent);
+
 			}
 		});
 
@@ -169,7 +174,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	@Override
 	public void onCLickRight_SDTitleSimple(SDTitleItem v, int index)
 	{
-		startRegisterActivity(false,"","");
+		startRegisterActivity(false,"","","");
 	}
 
 	@Override
@@ -260,7 +265,8 @@ public class LoginActivity extends BaseActivity implements CallbackView
 				break;
 			case R.id.weibo_login:
 				platform = SHARE_MEDIA.SINA;
-				goToAuth(platform);
+			//	startRegisterActivity(true,"1",icon,nick);
+			goToAuth(platform);
 				break;
 			case R.id.weixin_login:
 				platform = SHARE_MEDIA.WEIXIN;
@@ -271,6 +277,13 @@ public class LoginActivity extends BaseActivity implements CallbackView
 				break;
 		}
 	}
+	public void printData(Map<String, String> data){
+		StringBuffer str = new StringBuffer();
+		for(Map.Entry<String, String> entry:data.entrySet()){
+			str.append(entry.getKey()+"--->"+entry.getValue()+"\n");
+		}
+		testViews.setText(str.toString());
+	}
 	/**
 	 * 跳转到相应的授权页。
 	 *
@@ -280,15 +293,20 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		su.login(platform, new ILoginCallback() {
 			@Override
 			public void onSuccess(Map<String, String> data) {
+				printData(data);
 				if(platform .equals(SHARE_MEDIA.WEIXIN)){
-					type = "2";
-
-				}else if(platform .equals(SHARE_MEDIA.QQ)){
-					type = "1";
+					platformType = "2";
 					openId = data.get("openid");
-					Log.d("qqlogin",openId);
+					nick = data.get("nickname");
+                    icon=data.get("headimgurl");
+				}else if(platform .equals(SHARE_MEDIA.QQ)){
+					platformType = "1";
+					openId = data.get("openid");
+					icon = data.get("profile_image_url");
+					nick = data.get("screen_name");
+
 				}else if(platform .equals(SHARE_MEDIA.SINA)){
-					type = "3";
+					platformType = "3";
 					String returnData = (String)data.get("result");
 					Gson gson = new Gson();
 					HashMap<String,Object> maps = gson.fromJson(returnData,HashMap.class);
@@ -298,7 +316,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				thirdLogin(openId,type,icon,nick);
+			 thirdLogin(openId,platformType,icon,nick);
 			}
 
 			@Override
@@ -330,17 +348,21 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		getSDFragmentManager().toggle(R.id.act_login_fl_content, null, LoginPhoneFragment.class);
 	}
 
-	protected void startRegisterActivity(boolean third,String icon,String nick)
+	protected void startRegisterActivity(boolean third,String type,String icon,  String nick)
 	{
+
 		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
 		if(third&&!TextUtils.isEmpty(openId)) {
 			intent.putExtra(UserConstants.THIRD_OPENID, openId);
-			intent.putExtra(UserConstants.THIRD_PLATFORM, platform);
+			intent.putExtra(UserConstants.THIRD_PLATFORM, type);
 			intent.putExtra(UserConstants.THIRD_ICON, icon);
 			intent.putExtra(UserConstants.THIRD_NICK, nick);
-
+			startActivity(intent);
+			finish();
+		}else{
+			SDToast.showToast("第三方登录授权失败。");
 		}
-		startActivity(intent);
+
 	}
 
 	@Override
@@ -364,15 +386,27 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	/**
 	 *
 	 * @param openId
-	 * @param type
+	 * @param platformType
 	 * @param icon 头像地址
 	 * @param icon 昵称
      */
-	public void thirdLogin(String openId ,String type,final String icon, final String nick){
+	public void thirdLogin(String openId ,final String platformType,final String icon,  final String nick){
+		if(TextUtils.isEmpty(openId)){
+			return;
+		}
 		TreeMap<String,String> params = new TreeMap<String,String>();
 		params.put("openid",openId);
-		params.put("platform",type);params.put("icon",icon);
-		params.put("nick",nick);
+		params.put("platform",platformType);
+		if(!TextUtils.isEmpty(icon)) {
+			params.put("icon", icon);
+		}
+		if(!TextUtils.isEmpty(nick)) {
+			try {
+				params.put("nick", URLEncoder.encode(nick,"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
 
 		params.put("method",UserConstants.TRHID_LOGIN_URL);
 		OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -401,7 +435,9 @@ public class LoginActivity extends BaseActivity implements CallbackView
 						}
 					}
 				}else if("300".equals(statusCode)){
-					startRegisterActivity(true,icon,nick);
+					startRegisterActivity(true,platformType,icon,nick);
+				}else{
+
 				}
 
 			}

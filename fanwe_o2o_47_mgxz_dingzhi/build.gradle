@@ -19,6 +19,8 @@ android {
         multiDexEnabled true
     }
 
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -30,6 +32,7 @@ android {
 dependencies {
 
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
+
     compile project(':library_PhotoViewmaster')
     compile project(':library_PullToRefresh')
     compile project(':library_androidshapeimageview')
@@ -70,4 +73,5 @@ dependencies {
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     //Optional: see how to use the utility.
     compile 'com.ogaclejapan.smarttablayout:utils-v13:1.6.1@aar'
+
 }

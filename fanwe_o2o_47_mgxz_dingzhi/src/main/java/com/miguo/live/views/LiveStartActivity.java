@@ -16,6 +16,9 @@ import com.miguo.live.model.DataBindingLiveStart;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 
 import java.util.List;
 
@@ -120,8 +123,19 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
     private void testLive() {
         //获取sig
-        http = new LiveHttpHelper(this, this);
-        http.generateSign();
+//        http = new LiveHttpHelper(this, this);
+//        http.generateSign();
+
+        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
+        Intent intent = new Intent(this, LiveActivity.class);
+        intent.putExtra(Constants.ID_STATUS, Constants.HOST);
+        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
+        MySelfInfo.getInstance().setJoinRoomWay(true);
+        CurLiveInfo.setTitle("直播");
+        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
+        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
+        this.startActivity(intent);
 
 
     }

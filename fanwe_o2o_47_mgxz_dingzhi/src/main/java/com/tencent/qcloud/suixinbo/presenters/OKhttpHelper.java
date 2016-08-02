@@ -41,7 +41,7 @@ public class OKhttpHelper {
     public static final String STOP_ROOM = "http://182.254.234.225/sxb/index.php?svc=live&cmd=end";
     public static final String GET_LIVELIST = "http://182.254.234.225/sxb/index.php?svc=live&cmd=list";
     public static final String SEND_HEARTBEAT = "http://182.254.234.225/sxb/index.php?svc=live&cmd=host_heartbeat";
-    public static final String GET_COS_SIG = "http://182.254.234.225/sxb/index.php?svc=cos&cmd=get_sign";
+//    public static final String GET_COS_SIG = "http://182.254.234.225/sxb/index.php?svc=cos&cmd=get_sign";
 
     private String token;
 
@@ -86,6 +86,7 @@ public class OKhttpHelper {
 
     /**
      * 同步Server 新创建房间信息
+     * TODO:同步服务
      */
     public int notifyServerNewLiveInfo(JSONObject reg) {
         try {
@@ -181,7 +182,13 @@ public class OKhttpHelper {
 
     }
 
-
+    /**
+     * 发送心跳
+     * @param userid
+     * @param watchCount
+     * @param admireCount
+     * @param timeSpan
+     */
     public void sendHeartBeat(String userid, int watchCount, int admireCount, int timeSpan) {
         try {
             JSONObject req = new JSONObject();
@@ -204,28 +211,6 @@ public class OKhttpHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String getCosSig() {
-        try {
-            String response = OKhttpHelper.getInstance().post(GET_COS_SIG, "");
-
-//            SxbLog.i(TAG, "getCosSig " + response.toString());
-            JSONTokener jsonParser = new JSONTokener(response);
-            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
-            int ret = reg_response.getInt("errorCode");
-            if (ret == 0) {
-                JSONObject data = reg_response.getJSONObject("data");
-                String sign = data.getString("sign");
-                return sign;
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**

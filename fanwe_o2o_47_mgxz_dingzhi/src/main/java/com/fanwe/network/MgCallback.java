@@ -47,6 +47,7 @@ public abstract class MgCallback<T> implements Callback {
             onFailure(call, new IOException());
         } else {
             String body = response.body().string();
+
             if (ServerUrl.DEBUG) {
                 Log.e(TAG, body);
             }
