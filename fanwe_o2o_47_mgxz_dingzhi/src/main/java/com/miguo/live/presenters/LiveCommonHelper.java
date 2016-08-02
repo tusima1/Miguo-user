@@ -23,12 +23,14 @@ public class LiveCommonHelper implements IHelper {
     /**
      * 开启闪光灯
      */
-    public void openLighting(){
+    public boolean openLighting(){
         //开启闪光灯
         if (mLiveHelper.isFrontCamera() == true) {
             Toast.makeText(mActivity, "当前为前置摄像头,无法开启闪光灯!", Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             mLiveHelper.toggleFlashLight();
+            return true;
         }
     }
 
