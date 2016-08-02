@@ -25,7 +25,8 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/7/25.
  */
-public class HomeFragmentLiveList extends BaseFragment {
+public class
+HomeFragmentLiveList extends BaseFragment {
     private View view;
     private SDGridViewInScroll mSDGridViewInScroll;
     private HomeLiveListAdapter mLiveViewAdapter;

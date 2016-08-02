@@ -3,6 +3,7 @@ package com.miguo.live.views.customviews;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -133,6 +134,12 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             mTv_arrive_num.setVisibility(View.INVISIBLE);
         }else {
             MGToast.showToast("初始化view错误!");
+        }
+    }
+    /*更新人数*/
+    public void updateNum(String num){
+        if(!TextUtils.isEmpty(num)) {
+            mAV_members_num.setText(num + "人");
         }
     }
 }

@@ -8,7 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
+import com.fanwe.library.utils.SDToast;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupManager;
@@ -29,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 
 /**
@@ -52,10 +59,12 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private static final int TYPE_MEMBER_CHANGE_HAS_SCREEN_VIDEO = 7;//有发屏幕视频事件。
     private static final int TYPE_MEMBER_CHANGE_NO_SCREEN_VIDEO = 8;//无发屏幕视频事件。
 
+    private LiveHttpHelper mLiveHttpHelper;
 
     public EnterLiveHelper(Context context, EnterQuiteRoomView view) {
         mContext = context;
         mStepInOutView = view;
+
     }
 
 
@@ -175,8 +184,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private void createIMChatRoom() {
         final ArrayList<String> list = new ArrayList<String>();
         final String roomName = "this is a  test";
+        int roomId = MySelfInfo.getInstance().getMyRoomNum();
         SxbLog.i(TAG, "createlive createIMChatRoom " + MySelfInfo.getInstance().getMyRoomNum());
-        TIMGroupManager.getInstance().createGroup("AVChatRoom", list, roomName, "" + MySelfInfo.getInstance().getMyRoomNum(), new TIMValueCallBack<String>() {
+        TIMGroupManager.getInstance().createGroup("AVChatRoom", list, roomName, "" + roomId, new TIMValueCallBack<String>() {
             @Override
             public void onError(int i, String s) {
                 SxbLog.i(TAG, "onError " + i + "   " + s);
@@ -187,7 +197,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     return;
                 }
                 // 创建IM房间失败，提示失败原因，并关闭等待对话框
-                Toast.makeText(mContext, " chatroom  error " + s + "i " + i, Toast.LENGTH_SHORT).show();
+                SDToast.showToast("创建房间失败，请重试。");
                 quiteLive();
             }
 
@@ -330,7 +340,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      */
     private void notifyServerLiveEnd() {
         liveEndTask = new NotifyServerLiveEnd();
-        liveEndTask.execute(MySelfInfo.getInstance().getId());
+        liveEndTask.execute(MySelfInfo.getInstance().getMyRoomNum()+"");
     }
 
     @Override
@@ -339,15 +349,32 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         mContext = null;
     }
 
-    class NotifyServerLiveEnd extends AsyncTask<String, Integer, LiveInfoJson> {
+    class NotifyServerLiveEnd extends AsyncTask<String, Integer, String> {
 
         @Override
-        protected LiveInfoJson doInBackground(String... strings) {
-            return OKhttpHelper.getInstance().notifyServerLiveStop(strings[0]);
+        protected String  doInBackground(String... values) {
+            String token = App.getInstance().getToken();
+            TreeMap<String, String> params = new TreeMap<String, String>();
+            params.put("token", token);
+            params.put("room_id", values[0]);
+            params.put("method", LiveConstants.EXIT_ROOM);
+
+            OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+                @Override
+                public void onSuccessResponse(String responseBody) {
+
+                    mStepInOutView.hostQuiteLive(LiveConstants.EXIT_ROOM,responseBody);
+                }
+
+                @Override
+                public void onErrorResponse(String message, String errorCode) {
+                    SDToast.showToast(message);
+                }
+            });
+            return "";
         }
-
         @Override
-        protected void onPostExecute(LiveInfoJson result) {
+        protected void onPostExecute(String  result) {
         }
     }
 
@@ -365,7 +392,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             CurLiveInfo.setCurrentRequestCount(0);
             uninitAudioService();
             //通知结束
-//            notifyServerLiveEnd();
+           notifyServerLiveEnd();
 
             mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
         }

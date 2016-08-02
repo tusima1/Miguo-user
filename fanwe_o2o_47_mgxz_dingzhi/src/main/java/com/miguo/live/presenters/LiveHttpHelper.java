@@ -37,6 +37,7 @@ import com.miguo.live.model.getHostTags.RootHostTags;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -88,6 +89,7 @@ public class LiveHttpHelper implements IHelper {
     private CallbackView mView;
     private Context mContext;
     private String token;
+    private EnterQuiteRoomView enterQuiteView;
 
     public LiveHttpHelper(Context mContext, CallbackView mView) {
         this.mContext = mContext;
@@ -96,6 +98,12 @@ public class LiveHttpHelper implements IHelper {
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
+    public LiveHttpHelper(Context mContext, EnterQuiteRoomView mView) {
+        this.mContext = mContext;
+        this.enterQuiteView = mView;
+        gson = new Gson();
+        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+    }
     public String getToken() {
         if (!TextUtils.isEmpty(token)) {
             return token;
@@ -127,7 +135,7 @@ public class LiveHttpHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
                 List<ResultLive> resultLives = rootLive.getResult();
-                if (SDCollectionUtil.isEmpty(resultLives)) {
+                if (SDCollectionUtil.isEmpty(resultLives)||resultLives.size()<1) {
                     mView.onSuccess(LiveConstants.LIVE_LIST, null);
                     return;
                 }

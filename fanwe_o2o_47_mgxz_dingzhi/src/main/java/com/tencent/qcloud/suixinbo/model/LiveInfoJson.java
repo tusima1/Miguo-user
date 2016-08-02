@@ -1,9 +1,11 @@
 package com.tencent.qcloud.suixinbo.model;
 
+import java.io.Serializable;
+
 /**
  * Gson 辅助类
  */
-public class LiveInfoJson {
+public class LiveInfoJson implements Serializable {
     private int createTime;
     private String title;
     private String cover;
@@ -13,7 +15,14 @@ public class LiveInfoJson {
     private String chatRoomId;
     private int avRoomId;
     private int timeSpan;
-    private int watchCount;
+    /**
+     * 观看 人数。
+     */
+    private String watch_count;
+    /**
+     * 直播时长，单位 毫秒。
+     */
+    private String  usetime;
 
 
 
@@ -46,9 +55,7 @@ public class LiveInfoJson {
         return timeSpan;
     }
 
-    public int getWatchCount() {
-        return watchCount;
-    }
+
 
     public int getCreateTime() {
 
@@ -75,7 +82,8 @@ public class LiveInfoJson {
                 ", admireCount=" + admireCount +
                 ", chatRoomId='" + chatRoomId + '\'' +
                 ", timeSpan=" + timeSpan +
-                ", watchCount=" + watchCount +
+                ", watch_count=" + watch_count +
+                ", usetime=" + usetime +
                 '}';
     }
 
@@ -134,4 +142,19 @@ public class LiveInfoJson {
         }
     }
 
+    public String getWatch_count() {
+        return watch_count;
+    }
+
+    public void setWatch_count(String watch_count) {
+        this.watch_count = watch_count;
+    }
+
+    public String getUsetime() {
+        return usetime;
+    }
+
+    public void setUsetime(String usetime) {
+        this.usetime = usetime;
+    }
 }

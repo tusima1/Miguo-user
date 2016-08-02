@@ -26,6 +26,7 @@ import com.fanwe.model.SettingModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.CrashHandler;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -272,6 +273,17 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 		this.mUserCurrentInfo = mUserCurrentInfo;
 	}
 
+	public String getToken(){
+		String token = "";
+		if(this.mUserCurrentInfo!=null){
+			UserInfoNew infoNew = mUserCurrentInfo.getUserInfoNew();
+			if(infoNew!=null){
+				token = mUserCurrentInfo.getToken();
+			}
+		}
+		return  token;
+
+	}
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);

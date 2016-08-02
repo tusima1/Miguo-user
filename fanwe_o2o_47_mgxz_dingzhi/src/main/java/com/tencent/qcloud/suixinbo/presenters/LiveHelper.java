@@ -115,6 +115,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     }
 
 
+    /**
+     * 关闭摄像头和MY
+     */
     public void closeCameraAndMic() {
         closeCamera();
         closeMic();
@@ -309,8 +312,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     }
 
     public void sendGroupMessage(int cmd, String param) {
-        sendGroupMessage(cmd, param, new TIMValueCallBack<TIMMessage>() {
-            @Override
+        sendGroupMessage(cmd, param, new TIMValueCallBack<TIMMessage>() {            @Override
             public void onError(int i, String s) {
                 if (i == 85) { //消息体太长
                     Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();

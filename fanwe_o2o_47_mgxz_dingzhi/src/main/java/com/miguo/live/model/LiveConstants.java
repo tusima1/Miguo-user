@@ -49,5 +49,9 @@ public class LiveConstants {
      * 主播退出，结束直播
      */
     public static final String STOP_LIVE = "StopLive";
+    /**
+     * 主播结束信息。
+     */
+    public static final String LIVEINFOJSON = "liveInfoJson";
 
 }
