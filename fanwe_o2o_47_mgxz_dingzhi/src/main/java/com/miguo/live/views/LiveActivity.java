@@ -27,10 +27,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
+import com.fanwe.base.Root;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.model.LiveChatEntity;
+import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
@@ -57,6 +65,7 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -125,15 +134,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
-        Log.e(TAG, "进入了房间!");
-//        checkPermission();
+        //checkPermission();
         //进出房间的协助类
         mEnterRoomHelper = new EnterLiveHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
-
 
         registerReceiver();
         backGroundId = CurLiveInfo.getHostID();
@@ -279,6 +286,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         intentFilter.addAction(Constants.ACTION_CAMERA_OPEN_IN_LIVE);
         intentFilter.addAction(Constants.ACTION_CAMERA_CLOSE_IN_LIVE);
         intentFilter.addAction(Constants.ACTION_SWITCH_VIDEO);
+        //主播离开 。
         intentFilter.addAction(Constants.ACTION_HOST_LEAVE);
         registerReceiver(mBroadcastReceiver, intentFilter);
 
@@ -341,10 +349,27 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
             Log.e("live","D "+i);
-            OKhttpHelper.getInstance().registerRoomInfo("D"+i, "http://www.smetalk.cn/wp-content/uploads/2016/07/FNsPLfbkmwgBgpl.jpg",
-                    MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "");
+            int roomId = MySelfInfo.getInstance().getMyRoomNum();
+            SDToast.showToast(roomId+"");
+            String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
+            String title = "米果小站";
+            if(App.getInstance().getmUserCurrentInfo()!=null){
+                UserCurrentInfo userInfoNew = App.getInstance().getmUserCurrentInfo();
+                if(userInfoNew!=null){
+                    UserInfoNew infoNew = userInfoNew.getUserInfoNew();
+                    if(infoNew!=null){
+                        if(!TextUtils.isEmpty(infoNew.getIcon())){
+                            url= infoNew.getIcon();
+                            title = TextUtils.isEmpty(infoNew.getNick())==true?infoNew.getUser_name():infoNew.getNick();
+                        }
+                    }
+                }
+
+            }
+            OKhttpHelper.getInstance().registerRoomInfo(title, url, roomId + "", roomId + "", roomId + "");
             //host的views
             mHostBottomToolView1.setVisibility(View.VISIBLE);
+
             mHostBottomMeiView2.setVisibility(View.VISIBLE);
             mUserBottomTool.setVisibility(View.GONE);
             //host的topview
@@ -552,11 +577,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             if (backDialog.isShowing() == false)
                 backDialog.show();
-
-
         } else {
-            mLiveHelper.perpareQuitRoom(true);
-//            mEnterRoomHelper.quiteLive();
+             mLiveHelper.perpareQuitRoom(true);
+             mEnterRoomHelper.quiteLive();
         }
     }
 
@@ -590,7 +613,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 backDialog.cancel();
             }
         });
-//        backDialog.show();
+        backDialog.show();
     }
 
     /**
@@ -599,7 +622,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private void quiteLivePassively() {
         Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
         mLiveHelper.perpareQuitRoom(false);
-//        mEnterRoomHelper.quiteLive();
+        mEnterRoomHelper.quiteLive();
     }
 
     @Override
@@ -650,9 +673,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             finish();
         } else {
             if ((getBaseContext() != null) && (null != mExitDialogHelper) && (mExitDialogHelper.isShowing() == false)) {
-//                mDetailTime.setText(formatTime);
-//                mDetailAdmires.setText("" + CurLiveInfo.getAdmires());
-//                mDetailWatchCount.setText("" + watchCount);
+
                 mExitDialogHelper.show();
             }
 
@@ -670,19 +691,31 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void memberJoin(String id, String name) {
         watchCount++;
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "join live", Constants.MEMBER_ENTER);
-
-        CurLiveInfo.setMembers(CurLiveInfo.getMembers() + 1);
+      int members = CurLiveInfo.getMembers() + 1;
+        CurLiveInfo.setMembers(members);
         //人数加1,可以设置到界面上
-        mUserHeadTopView.updateNum(CurLiveInfo.getMembers() + "");
+        if(mHostTopView!=null){
+            mHostTopView.updateNum(members+"");
+        }
+        if(mUserHeadTopView!=null) {
+            mUserHeadTopView.updateNum(members + "");
+        }
     }
 
     @Override
     public void memberQuit(String id, String name) {
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "quite live", Constants.MEMBER_EXIT);
+        watchCount--;
 
         if (CurLiveInfo.getMembers() > 1) {
-            CurLiveInfo.setMembers(CurLiveInfo.getMembers() - 1);
-            mUserHeadTopView.updateNum(CurLiveInfo.getMembers() + "");
+            int members = CurLiveInfo.getMembers()-1;
+            CurLiveInfo.setMembers(members);
+            if(mHostTopView!=null){
+                mHostTopView.updateNum(members+"");
+            }
+            if(mUserHeadTopView!=null) {
+                mUserHeadTopView.updateNum(members + "");
+            }
         }
 
         //如果存在视频互动，取消
@@ -706,6 +739,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     @Override
     public void memberQuiteLive(String[] list) {
+
         if (list == null) return;
         for (String id : list) {
             SxbLog.i(TAG, "memberQuiteLive id " + id);
@@ -714,6 +748,35 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     quiteLivePassively();
             }
         }
+    }
+
+    /**
+     * 主播退出 。
+     * @param type
+     * @param responseBody
+     */
+    @Override
+    public void hostQuiteLive(String type, String responseBody) {
+        if(LiveConstants.EXIT_ROOM.equals(type)){
+            Type typeJson = new TypeToken<Root<LiveInfoJson>>() {
+            }.getType();
+            Gson gson = new Gson();
+            Root<LiveInfoJson> root = gson.fromJson(responseBody, typeJson);
+            if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
+            {
+               LiveInfoJson liveInfoJson =  root.getResult().get(0).getBody().get(0);
+                Intent mIntent = new Intent();
+                mIntent.setClass(this, LiveEndActivity.class);
+                // 通过Bundle
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable(LiveConstants.LIVEINFOJSON,liveInfoJson);
+                mIntent.putExtras(mBundle);
+
+                startActivity(mIntent);
+
+            }
+        }
+
     }
 
 

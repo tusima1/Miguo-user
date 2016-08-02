@@ -5,8 +5,8 @@ package com.tencent.qcloud.suixinbo.model;
  * 当前直播信息页面
  */
 public class CurLiveInfo {
-    private static int members;//房间人数
-    private static int admires;//心的数量
+    private static int members=0;//房间人数
+    private static int admires=0;//心的数量
     private static String title;
     private static double lat1;
     private static double long1;

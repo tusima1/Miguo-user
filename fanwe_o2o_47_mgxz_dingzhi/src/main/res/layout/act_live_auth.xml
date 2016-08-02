@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="live"
+            type="com.miguo.live.model.DataBindingLiveAuth" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp45"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_arrow_left_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp13"
+                android:onClick="onClick"
+                android:src="@drawable/ic_arrow_action_bar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="直播认证"
+                android:textColor="@color/rgb_898989"
+                android:textSize="@dimen/dp17"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_line" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/c_F2F2F2"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/live_auth_title"
+            android:textColor="@color/text_hongbao_title"
+            android:textSize="@dimen/dp14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
+            android:drawableLeft="@drawable/ic_sex_live_auth"
+            android:drawablePadding="@dimen/dp5"
+            android:gravity="center"
+            android:text="我是"
+            android:textColor="@color/text_hongbao_title"
+            android:textSize="@dimen/dp14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_beauty_live_auth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:onClick="onClick"
+                    android:src="@{live.mode == live.BEAUTY ? @drawable/ic_beauty_select_live_auth : @drawable/ic_beauty_normal_live_auth}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_beauty_live_auth"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp2"
+                    android:text="美" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_smart_live_auth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="onClick"
+                    android:src="@{live.mode == live.SMART ? @drawable/ic_smart_select_live_auth : @drawable/ic_smart_normal_live_auth}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_smart_live_auth"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp2"
+                    android:text="帅" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_excellent_live_auth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:onClick="onClick"
+                    android:src="@{live.mode == live.EXCELLENT ? @drawable/ic_excellent_select_live_auth : @drawable/ic_excellent_normal_live_auth}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_excellent_live_auth"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp2"
+                    android:text="美又帅" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@color/text_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:drawableLeft="@drawable/ic_interest_live_auth"
+                android:drawablePadding="@dimen/dp5"
+                android:text="兴趣"
+                android:textColor="@color/text_hongbao_title"
+                android:textSize="@dimen/dp14" />
+
+            <TextView
+                android:id="@+id/tv_interest_live_auth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp12"
+                android:drawablePadding="@dimen/dp6"
+                android:drawableRight="@drawable/arrow_right"
+                android:text="@{live.interest}"
+                android:textColor="@color/rgb_898989"
+                android:textSize="@dimen/dp13" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@color/text_line" />
+
+        <RelativeLayout
+            android:id="@+id/layout_city_live_auth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:onClick="onClick">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:drawableLeft="@drawable/ic_location_live_auth"
+                android:drawablePadding="@dimen/dp5"
+                android:text="常驻城市"
+                android:textColor="@color/text_hongbao_title"
+                android:textSize="@dimen/dp14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp12"
+                android:drawablePadding="@dimen/dp6"
+                android:drawableRight="@drawable/arrow_right"
+                android:text="@{live.city}"
+                android:textColor="@color/rgb_898989"
+                android:textSize="@dimen/dp13" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@color/text_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:drawableLeft="@drawable/ic_location_live_auth"
+                android:drawablePadding="@dimen/dp5"
+                android:text="常用手机"
+                android:textColor="@color/text_hongbao_title"
+                android:textSize="@dimen/dp14" />
+
+            <EditText
+                android:id="@+id/et_phone_live_auth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp12"
+                android:background="@null"
+                android:drawablePadding="@dimen/dp6"
+                android:drawableRight="@drawable/arrow_right"
+                android:gravity="right"
+                android:hint="工作人员将与您联系"
+                android:inputType="number"
+                android:maxLength="11"
+                android:textColor="@color/rgb_898989"
+                android:textColorHint="@color/c_CCCCCC"
+                android:textSize="@dimen/dp13" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@color/text_line" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp10"
+            android:background="@color/c_F2F2F2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/gridView_live_auth"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="@dimen/dp10"
+            android:drawableLeft="@drawable/ic_img_live_auth"
+            android:drawablePadding="@dimen/dp5"
+            android:text="@string/live_auth_img"
+            android:textColor="@color/text_hongbao_title"
+            android:textSize="@dimen/dp14" />
+
+        <GridView
+            android:id="@+id/gridView_live_auth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp13"
+            android:layout_marginRight="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp10"
+            android:horizontalSpacing="20dp"
+            android:numColumns="4"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/dp10"
+            android:background="@color/text_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/c_F2F2F2"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_submit_live_auth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp13"
+                android:layout_marginRight="@dimen/dp13"
+                android:background="@drawable/bg_orange"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:paddingBottom="@dimen/dp13"
+                android:paddingTop="@dimen/dp10"
+                android:text="提交认证"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:gravity="center"
+                android:text="@string/live_auth_remark"
+                android:textColor="@color/text_hongbao_title"
+                android:textSize="@dimen/dp12" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

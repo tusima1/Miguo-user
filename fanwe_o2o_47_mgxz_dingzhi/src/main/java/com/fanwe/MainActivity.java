@@ -226,7 +226,7 @@ public class MainActivity extends BaseActivity {
     protected void click2() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
         getToken();
-        if (TextUtils.isEmpty(token))// 未登录
+        if (TextUtils.isEmpty(token))// 未登录 以后加入是不是主播的判断。
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {

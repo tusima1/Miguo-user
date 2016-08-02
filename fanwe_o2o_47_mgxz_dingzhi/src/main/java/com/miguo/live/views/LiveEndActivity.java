@@ -1,14 +1,20 @@
 package com.miguo.live.views;
 
 import android.app.Activity;
+
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveEndBinding;
 import com.miguo.live.model.DataBindingLiveEnd;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.utils.TimeUtils;
+import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 
 /**
  * Created by Administrator on 2016/7/28.
@@ -21,15 +27,32 @@ public class LiveEndActivity extends Activity {
         super.onCreate(savedInstanceState);
         ActLiveEndBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_end);
         dataBindingLiveEnd = new DataBindingLiveEnd();
-        dataBindingLiveEnd.shopName.set("当代时尚酒店");
-        dataBindingLiveEnd.hostName.set("纯净小资");
-        dataBindingLiveEnd.numViewers.set("32548359");
-        dataBindingLiveEnd.timeLive.set("11:25:53");
-        dataBindingLiveEnd.countMoney.set("32548359");
-        dataBindingLiveEnd.countGood.set("23");
-        dataBindingLiveEnd.countMi.set("356");
+
         binding.setLive(dataBindingLiveEnd);
     }
+
+    public void getValue(){
+        Intent intent = getIntent();
+        LiveInfoJson liveInfoJson = (LiveInfoJson)intent.getSerializableExtra(LiveConstants.LIVEINFOJSON);
+        if(liveInfoJson!=null){
+            if(!TextUtils.isEmpty(liveInfoJson.getUsetime())){
+                Integer seconds = Integer.valueOf(liveInfoJson.getUsetime());
+                String timeStr = TimeUtils.secondToHHMMSS(seconds);
+                dataBindingLiveEnd.timeLive.set(timeStr);
+                String count = liveInfoJson.getWatch_count();
+                if(!TextUtils.isEmpty(count)){
+
+                    dataBindingLiveEnd.numViewers.set(count);
+
+                    dataBindingLiveEnd.countMoney.set("32548359");
+                    dataBindingLiveEnd.countGood.set("23");
+                    dataBindingLiveEnd.countMi.set("356");
+                }
+            }
+
+        }
+    }
+
 
     public void onClick(View v) {
         int id = v.getId();

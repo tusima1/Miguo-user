@@ -49,5 +49,16 @@ public class LiveConstants {
      * 主播退出，结束直播
      */
     public static final String STOP_LIVE = "StopLive";
-
+    /**
+     * 业务服务器的数据字典接口
+     */
+    public static final String BUSS_DICTION_INFO = "BussDictionInfo";
+    /**
+     * 获取七牛UpToken
+     */
+    public static final String UP_TOKEN = "UpToken";
+ /**
+     * 主播结束信息。
+     */
+    public static final String LIVEINFOJSON = "liveInfoJson";
 }

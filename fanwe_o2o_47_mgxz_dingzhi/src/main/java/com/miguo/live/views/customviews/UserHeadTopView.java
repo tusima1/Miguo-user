@@ -3,6 +3,7 @@ package com.miguo.live.views.customviews;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,6 +130,8 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     /*更新人数*/
     public void updateNum(String num){
-        mMembers.setText(num+"人");
+        if(!TextUtils.isEmpty(num)) {
+            mMembers.setText(num + "人");
+        }
     }
 }

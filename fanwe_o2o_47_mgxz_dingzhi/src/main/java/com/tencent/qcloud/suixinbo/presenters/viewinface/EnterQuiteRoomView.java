@@ -15,6 +15,13 @@ public interface EnterQuiteRoomView extends MvpView {
 
     void memberQuiteLive(String[] list);
 
+    /**
+     * 主播退出 房间。
+     * @param type
+     * @param responseBody
+     */
+    void hostQuiteLive(String type,String responseBody);
+
     void memberJoinLive(String[] list);
 
     void alreadyInLive(String[] list);

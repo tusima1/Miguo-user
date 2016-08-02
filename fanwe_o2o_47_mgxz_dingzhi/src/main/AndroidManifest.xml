@@ -63,15 +63,11 @@
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
-        <activity
-            android:name="com.miguo.live.views.TestRedActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name="com.miguo.live.views.LiveAuthActivity">
+          
         </activity>
+
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
             android:label="@string/app_name">
@@ -81,7 +77,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+        <!--android:name="com.miguo.live.views.TestRedActivity"-->
+        <!--android:label="@string/app_name">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.MAIN" />-->
 
+        <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
             android:name="com.miguo.live.views.LiveStartActivity"
             android:theme="@style/TransTheme" />
@@ -89,9 +93,9 @@
             android:name="com.miguo.live.views.LiveEndActivity"
             android:theme="@style/TransTheme" />
         <activity android:name="com.fanwe.seller.views.MineShopActivity" />
-        <activity android:name="com.miguo.live.views.LiveAuthActivity" />
 
         <activity android:name="com.miguo.live.views.LiveActivity"></activity>
+        <activity android:name="com.miguo.live.views.ImgViewActivity"></activity>
 
         <!-- Splash页面后的引导页面 ,不要删除这段注释内容,以备后需 -->
         <!--
