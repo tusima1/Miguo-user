@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.Presenter;
@@ -22,6 +21,7 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.lang.reflect.Type;
 import java.util.TreeMap;
@@ -36,39 +36,43 @@ public class LoginHelper extends Presenter {
     private LoginFragment mLoginView;
     private int RoomId = -1;
     private Activity mActivity;
-    private boolean notClose =false;
+    private boolean notClose = false;
 
     public LoginHelper(Context context) {
         mContext = context;
     }
-    public LoginHelper(Activity activity,Context context, LoginFragment loginView) {
+
+    public LoginHelper(Activity activity, Context context, LoginFragment loginView) {
         this.mActivity = activity;
         mContext = context;
         mLoginView = loginView;
     }
+
     public LoginHelper(Context context, LoginFragment loginView) {
         mContext = context;
         mLoginView = loginView;
     }
+
     public LoginHelper(Activity activity) {
-       this.mActivity = activity;
+        this.mActivity = activity;
 
     }
+
     /**
      * 快捷登录。
      * @param mobile
      * @param captcha
      */
-    public void doQuickLogin(final String mobile,String captcha){
-        TreeMap<String, String> params = new TreeMap<String,String>();
+    public void doQuickLogin(final String mobile, String captcha) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
-        params.put("captcha",captcha);
+        params.put("captcha", captcha);
         params.put("method", UserConstants.USER_QUICK_LOGIN);
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                dealLoginInfo(responseBody,mobile,null);
+                dealLoginInfo(responseBody, mobile, null);
             }
 
             @Override
@@ -94,8 +98,8 @@ public class LoginHelper extends Presenter {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
-            public void onSuccessResponse(String responseBody)  {
-                dealLoginInfo(responseBody,userName,password);
+            public void onSuccessResponse(String responseBody) {
+                dealLoginInfo(responseBody, userName, password);
             }
 
 
@@ -107,9 +111,10 @@ public class LoginHelper extends Presenter {
         });
 
     }
-    public void doLogin(final String userName, final String password, int type,boolean notClose) {
+
+    public void doLogin(final String userName, final String password, int type, boolean notClose) {
         this.notClose = notClose;
-        doLogin(userName,password,type);
+        doLogin(userName, password, type);
     }
 
     /**
@@ -124,8 +129,9 @@ public class LoginHelper extends Presenter {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                dealLoginInfo(responseBody,userName,password);
+                dealLoginInfo(responseBody, userName, password);
             }
+
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
@@ -133,23 +139,25 @@ public class LoginHelper extends Presenter {
             }
         });
     }
+
     /**
      * 第三方注册 。
      */
-    public void doThirdRegister(final  String userPhone,String openid,String captcha,String icon,String nick,String platform){
+    public void doThirdRegister(final String userPhone, String openid, String captcha, String
+            icon, String nick, String platform) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", userPhone);
         params.put("openid", openid);
         params.put("captcha", captcha);
-        params.put("icon",icon);
-        params.put("nick",nick);
-        params.put("platform",platform);
+        params.put("icon", icon);
+        params.put("nick", nick);
+        params.put("platform", platform);
         params.put("method", UserConstants.THIRD_REGISTER_URL);
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                dealLoginInfo(responseBody,userPhone,null);
+                dealLoginInfo(responseBody, userPhone, null);
             }
 
             @Override
@@ -169,7 +177,7 @@ public class LoginHelper extends Presenter {
     }
 
 
-    public void dealLoginInfo(String responseBody,String userName,String password){
+    public void dealLoginInfo(String responseBody, String userName, String password) {
         Type type = new TypeToken<Root<UserInfoNew>>() {
         }.getType();
         Gson gson = new Gson();
@@ -180,52 +188,58 @@ public class LoginHelper extends Presenter {
                 App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
                 User_infoModel model = new User_infoModel();
                 model.setUser_id(userInfoNew.getUser_id());
-                if(!TextUtils.isEmpty(userName)) {
+                if (!TextUtils.isEmpty(userName)) {
                     model.setMobile(userName);
                 }
-                if(!TextUtils.isEmpty(password)) {
+                if (!TextUtils.isEmpty(password)) {
                     model.setUser_pwd(password);
 
                 }
                 model.setUser_name(userInfoNew.getUser_name());
+                MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
                 dealLoginSuccess(model);
             }
         }
     }
+
     /**
      * 判断BODY对象是否存在。
      * @param root
      * @return
      */
-    public  UserInfoNew validateBody(Root<UserInfoNew> root) {
+    public UserInfoNew validateBody(Root<UserInfoNew> root) {
 
-        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-        {
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) !=
+                null && root.getResult().get(0).getBody() != null && root.getResult().get(0)
+                .getBody().size() > 0) {
             return root.getResult().get(0).getBody().get(0);
         }
         return null;
 
     }
+
     protected void dealLoginSuccess(User_infoModel actModel) {
         LocalUserModel.dealLoginSuccess(actModel, true);
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
-        if(notClose){
+        if (notClose) {
 
             return;
         }
 
-            if (lastActivity instanceof MainActivity) {
-                mActivity.finish();
-            } else {
-                mActivity.startActivity(new Intent(mActivity, MainActivity.class));
-            }
+        if (lastActivity instanceof MainActivity) {
+            mActivity.finish();
+        } else {
+            mActivity.startActivity(new Intent(mActivity, MainActivity.class));
+        }
 
 
     }
+
     @Override
     public void onDestory() {
         mLoginView = null;
         mContext = null;
         mActivity = null;
     }
+
 }

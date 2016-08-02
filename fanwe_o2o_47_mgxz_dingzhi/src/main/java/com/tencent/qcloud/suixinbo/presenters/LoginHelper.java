@@ -2,6 +2,7 @@ package com.tencent.qcloud.suixinbo.presenters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
@@ -173,7 +174,8 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                             MySelfInfo.getInstance().setMyRoomNum(roomId);
                             MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
                             //开启直播
-                            createAvRoom();
+//                            createAvRoom();
+                            Log.e("live","room_id:"+room_id);
                             break;
                     }
                 }
@@ -210,6 +212,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     private void startAVSDK() {
         QavsdkControl.getInstance().setAvConfig(Constants.SDK_APPID, "" + Constants.ACCOUNT_TYPE, MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
         QavsdkControl.getInstance().startContext();
+        Log.e("live","初始化AVSDK");
     }
 
 

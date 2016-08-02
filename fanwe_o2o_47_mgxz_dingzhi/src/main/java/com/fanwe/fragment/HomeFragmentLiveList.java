@@ -75,7 +75,7 @@ public class HomeFragmentLiveList extends BaseFragment {
                 CurLiveInfo.setHostID(host.getUid());
                 CurLiveInfo.setHostName(host.getNickname());
 //                CurLiveInfo.setHostAvator(item.getHost().getAvatar());
-                CurLiveInfo.setRoomNum(Integer.valueOf(room.getChat_room_id()));
+                CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
                 CurLiveInfo.setMembers(111); // 添加自己
 //                CurLiveInfo.setAdmires(item.getAdmireCount());

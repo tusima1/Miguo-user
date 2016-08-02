@@ -59,6 +59,7 @@ import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -151,9 +152,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         //初始化view
         initView();
-        //房间创建成功,向后台注册信息
-        OKhttpHelper.getInstance().registerRoomInfo("LiveTest", "http://www.jianwang360.com/a/uploads/allimg/141216/12543I303_0.jpg",
-                MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "");
+
     }
 
 
@@ -339,6 +338,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         //主播-->加载的view
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+            //房间创建成功,向后台注册信息
+            int i = new Random().nextInt();
+            Log.e("live","D "+i);
+            OKhttpHelper.getInstance().registerRoomInfo("D"+i, "http://www.smetalk.cn/wp-content/uploads/2016/07/FNsPLfbkmwgBgpl.jpg",
+                    MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "", MySelfInfo.getInstance().getMyRoomNum() + "");
             //host的views
             mHostBottomToolView1.setVisibility(View.VISIBLE);
             mHostBottomMeiView2.setVisibility(View.VISIBLE);

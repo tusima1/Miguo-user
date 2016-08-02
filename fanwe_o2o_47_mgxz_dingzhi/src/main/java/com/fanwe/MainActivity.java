@@ -108,6 +108,7 @@ public class MainActivity extends BaseActivity {
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
                 mLoginHelper.doLogin(userid, password, 0, true);
             }
+
         }
     }
 

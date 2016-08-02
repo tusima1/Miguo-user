@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +36,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.interf.ITencentResult;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
@@ -47,8 +45,13 @@ import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.utils.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 首页fragment
@@ -88,7 +91,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     private LiveHttpHelper liveHelper;
     private boolean isRefresh = true;
     private int pageNum = 1;
-    private int pageSize = 2;
+    private int pageSize = 10;
     private List<Room> rooms;
 
 
@@ -478,6 +481,13 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         if (LiveConstants.LIVE_LIST.equals(method)) {
             //直播列表
             getLiveList((ArrayList<Room>) datas);
+            ////获取tencent相关的信息
+            new TencentHttpHelper(getActivity(), new ITencentResult() {
+                @Override
+                public void onResult(boolean succ) {
+                    MGToast.showToast(succ==true?"tencent成功!":"tencent失败");
+                }
+            }).generateSign();
         } else if (LiveConstants.APPLY_ROOM.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 ModelApplyRoom modelApplyRoom = (ModelApplyRoom) datas.get(0);
