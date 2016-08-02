@@ -53,5 +53,8 @@ public class LiveConstants {
      * 业务服务器的数据字典接口
      */
     public static final String BUSS_DICTION_INFO = "BussDictionInfo";
-
+    /**
+     * 获取七牛UpToken
+     */
+    public static final String UP_TOKEN = "UpToken";
 }

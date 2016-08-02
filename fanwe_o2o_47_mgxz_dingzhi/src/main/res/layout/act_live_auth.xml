@@ -189,9 +189,11 @@
             android:background="@color/text_line" />
 
         <RelativeLayout
+            android:id="@+id/layout_city_live_auth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp10">
+            android:layout_marginTop="@dimen/dp10"
+            android:onClick="onClick">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -205,7 +207,6 @@
                 android:textSize="@dimen/dp14" />
 
             <TextView
-                android:id="@+id/tv_city_live_auth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

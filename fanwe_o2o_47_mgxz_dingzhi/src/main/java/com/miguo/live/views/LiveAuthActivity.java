@@ -5,28 +5,55 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.fanwe.CaptureResultWebActivity;
+import com.fanwe.CityListActivity;
+import com.fanwe.MyCaptureActivity;
+import com.fanwe.StoreConfirmOrderActivity;
+import com.fanwe.app.AppConfig;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
+import com.fanwe.fragment.HomeFragment;
+import com.fanwe.fragment.MarketFragment;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveAuthBinding;
 import com.fanwe.utils.Bimp;
 import com.fanwe.utils.UriUtil;
+import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.adapters.VisitImgAdapter;
 import com.miguo.live.model.DataBindingLiveAuth;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
+import com.qiniu.android.utils.AsyncRun;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +71,8 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     private GridView mGridView;
     private VisitImgAdapter mVisitImgAdapter;
     private ArrayList<String> datas;
-    LiveHttpHelper liveHttpHelper;
+    private LiveHttpHelper liveHttpHelper;
+    private UploadManager uploadManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +80,6 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         ActLiveAuthBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_auth);
         mGridView = (GridView) findViewById(R.id.gridView_live_auth);
         dataBindingLiveAuth = new DataBindingLiveAuth();
-        dataBindingLiveAuth.interest.set("模特");
-        dataBindingLiveAuth.city.set("杭州");
         binding.setLive(dataBindingLiveAuth);
 
         preData();
@@ -63,6 +89,10 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.layout_city_live_auth:
+                Intent intent = new Intent(mContext, CityListActivity.class);
+                startActivityForResult(intent, 100);
+                break;
             case R.id.iv_arrow_left_bar:
                 finish();
                 break;
@@ -76,15 +106,17 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 dataBindingLiveAuth.mode.set(dataBindingLiveAuth.EXCELLENT);
                 break;
             case R.id.btn_submit_live_auth:
-                dataBindingLiveAuth.interest.set("电影");
-                dataBindingLiveAuth.city.set("嵊州");
 //                liveHttpHelper.getBussDictionInfo("Client");
+//                liveHttpHelper.getUpToken();
+                liveHttpHelper.postHostInfo("12b9d278-53e9-11e6-beb8-9e71128cae77", "13123211253", "http://ob23v88s3.bkt.clouddn.com/FuKbWokGhm0tzgKc5JinPh3rBdXO", "123", "f4564d66-53e8-11e6-beb8-9e72328cae77");
+//                finish();
                 break;
         }
     }
 
     private void preData() {
         liveHttpHelper = new LiveHttpHelper(mContext, this);
+        uploadManager = new UploadManager();
         datas = new ArrayList<>();
         datas.add("add");
         mVisitImgAdapter = new VisitImgAdapter(mContext, getLayoutInflater(), datas);
@@ -163,6 +195,10 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == 8888) {
+            dataBindingLiveAuth.city.set(AppRuntimeWorker.getCity_name());
+            return;
+        }
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -247,13 +283,53 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
 
     }
 
+    String uploadToken;
+
     @Override
     public void onSuccess(String method, List datas) {
+        if (LiveConstants.UP_TOKEN.equals(method)) {
+            ArrayList<ModelUpToken> tokens = (ArrayList<ModelUpToken>) datas;
+            if (!SDCollectionUtil.isEmpty(tokens)) {
+                uploadToken = tokens.get(0).getUptoken();
+                if (!TextUtils.isEmpty(uploadToken)) {
+                    uploadFile();
+                }
+            }
+        }
 
+    }
+
+    ArrayList<String> fileKeys = new ArrayList<>();
+
+    private void uploadFile() {
+        fileKeys.clear();
+        for (int i = 0; i < datas.size(); i++) {
+            File uploadFile = new File(datas.get(i));
+            uploadManager.put(uploadFile, null, uploadToken,
+                    new UpCompletionHandler() {
+                        @Override
+                        public void complete(String key, ResponseInfo respInfo,
+                                             JSONObject jsonData) {
+                            if (respInfo.isOK()) {
+                                try {
+                                    String fileKey = jsonData.getString("key");
+                                    if (!TextUtils.isEmpty(fileKey)) {
+                                        fileKeys.add(fileKey);
+                                    }
+                                } catch (JSONException e) {
+                                }
+                            } else {
+
+                            }
+                        }
+                    }, null);
+        }
+        Log.d("fileKeys", fileKeys.toString());
     }
 
     @Override
     public void onFailue(String responseBody) {
 
     }
+
 }
