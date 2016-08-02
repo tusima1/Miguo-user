@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -279,6 +280,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             @Override
             public void onError(int i, String s) {
                 //已经在是成员了
+                Log.e("live","joinIMChatRoom = code:"+i+"  msg:"+s);
                 if (i == Constants.IS_ALREADY_MEMBER) {
                     SxbLog.i(TAG, "joinLiveRoom joinIMChatRoom callback succ ");
                     joinAVRoom(CurLiveInfo.getRoomNum());
