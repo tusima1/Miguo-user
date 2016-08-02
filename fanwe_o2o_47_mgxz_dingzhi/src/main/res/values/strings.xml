@@ -90,5 +90,8 @@
     <!-- 直播 -->
     <string name="live_start">开始直播</string>
     <string name="live_auth">认证颜值</string>
+    <string name="live_auth_title">完善个人信息，成为认证网红，帮大家活得更有趣</string>
+    <string name="live_auth_img">2-3张一个月内生活照：</string>
+    <string name="live_auth_remark">无性别星探会火速勾搭你！放心，我们严禁任何形式的骚扰行为</string>
 
 </resources>

@@ -72,9 +72,11 @@
     </style>
 
     <style name="TransTheme" parent="android:Theme.Holo.Light.NoActionBar"></style>
+
     <style name="VoiceCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/selector_checkbox_voice</item>
     </style>
+
     <style name="DanMuCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/selector_checkbox_danmu</item>
     </style>
@@ -87,4 +89,10 @@
         <item name="android:background">@drawable/ic_mei</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="Translucent_NoTitle_Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:background">#00000000</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

@@ -28,6 +28,9 @@ import com.miguo.live.model.getAudienceCount.RootAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getAudienceList.ResultAudienceList;
 import com.miguo.live.model.getAudienceList.RootAudienceList;
+import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
+import com.miguo.live.model.getBussDictionInfo.ResultBussDictionInfo;
+import com.miguo.live.model.getBussDictionInfo.RootBussDictionInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostInfo.ResultHostInfo;
 import com.miguo.live.model.getHostInfo.RootHostInfo;
@@ -444,6 +447,37 @@ public class LiveHttpHelper implements IHelper {
                 ResultStopLive resultStopLive = resultStopLives.get(0);
                 List<ModelStopLive> modelStopLive = resultStopLive.getBody();
                 mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 业务服务器的数据字典接口
+     */
+    public void getBussDictionInfo(String dic_type) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("dic_type", dic_type);
+        params.put("method", LiveConstants.BUSS_DICTION_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody, RootBussDictionInfo.class);
+                List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo.getResult();
+                if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
+                    mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
+                    return;
+                }
+                ResultBussDictionInfo resultBussDictionInfo = resultBussDictionInfos.get(0);
+                List<ModelBussDictionInfo> modelBussDictionInfo = resultBussDictionInfo.getBody();
+                mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
             }
 
             @Override
