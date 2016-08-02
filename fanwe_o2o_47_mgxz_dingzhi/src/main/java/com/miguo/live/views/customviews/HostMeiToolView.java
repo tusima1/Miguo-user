@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.presenters.LiveCommonHelper;
 
 /**
  * Created by didik on 2016/7/30.
@@ -24,6 +25,7 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     private ImageView mIv_meibai;
     private ImageView mIv_mei;
     private boolean isShow=true;
+    private LiveCommonHelper mLiveCommonHelper;//工具类
 
     public HostMeiToolView(Context context) {
         super(context);
@@ -55,13 +57,16 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
         mCb_lighting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    //默认为false
-                    MGToast.showToast("关闭");
-
-                }else {
-                    //
-                    MGToast.showToast("打开");
+//                if (isChecked){
+//                    //默认为false
+//                    MGToast.showToast("关闭");
+//
+//                }else {
+//                    //
+//                    MGToast.showToast("打开");
+//                }
+                if (mLiveCommonHelper!=null){
+                    mLiveCommonHelper.openLighting();
                 }
             }
         });
@@ -75,6 +80,11 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
         mIv_mei.setOnClickListener(this);
         mIv_meiyan.setOnClickListener(this);
         mIv_meibai.setOnClickListener(this);
+    }
+
+    public void setNeed(LiveCommonHelper helper){
+        this.mLiveCommonHelper=helper;
+
     }
 
     @Override

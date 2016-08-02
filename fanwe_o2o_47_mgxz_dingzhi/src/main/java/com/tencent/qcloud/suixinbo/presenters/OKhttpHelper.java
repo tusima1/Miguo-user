@@ -1,14 +1,16 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONArray;
@@ -19,6 +21,7 @@ import org.json.JSONTokener;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
@@ -34,7 +37,6 @@ import okhttp3.Response;
 public class OKhttpHelper {
     private static final String TAG = OKhttpHelper.class.getSimpleName();
     private static OKhttpHelper instance = null;
-    public static final String GET_MYROOMID = "http://182.254.234.225/sxb/index.php?svc=user_av_room&cmd=get";
     public static final String NEW_ROOM_INFO = "http://182.254.234.225/sxb/index.php?svc=live&cmd=start";
     public static final String STOP_ROOM = "http://182.254.234.225/sxb/index.php?svc=live&cmd=end";
     public static final String GET_LIVELIST = "http://182.254.234.225/sxb/index.php?svc=live&cmd=list";
@@ -144,31 +146,6 @@ public class OKhttpHelper {
 
 
     /**
-     * 获取自己的房间
-     */
-    public void getMyRoomId(final Context context) {
-        try {
-            JSONObject myId = new JSONObject();
-            myId.put("uid", MySelfInfo.getInstance().getId());
-            String response = OKhttpHelper.getInstance().post(GET_MYROOMID, myId.toString());
-            JSONTokener jsonParser = new JSONTokener(response);
-            JSONObject reg_response = (JSONObject) jsonParser.nextValue();
-            int ret = reg_response.getInt("errorCode");
-            if (ret == 0) {
-                JSONObject data = reg_response.getJSONObject("data");
-                int id = data.getInt("avRoomId");
-                SxbLog.i(TAG, "getMyRoomId " + id);
-                MySelfInfo.getInstance().setMyRoomNum(id);
-                MySelfInfo.getInstance().writeToCache(context.getApplicationContext());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 获取直播列表
      *
      * @param page     页数
@@ -249,6 +226,40 @@ public class OKhttpHelper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 登记房间信息
+     *
+     * @param title
+     * @param cover
+     * @param room_id
+     * @param av_room_id
+     * @param chat_room_id
+     */
+    public void registerRoomInfo(String title, String cover, String room_id, String av_room_id, String chat_room_id) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("title", title);
+        params.put("cover", cover);
+        params.put("room_id", room_id);
+        params.put("av_room_id", av_room_id);
+        params.put("chat_room_id", chat_room_id);
+        params.put("method", LiveConstants.REGISTER_ROOM_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                MGToast.showToast(responseBody);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+
     }
 
 

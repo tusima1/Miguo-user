@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.widget.Toast;
 
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 
 /**
@@ -36,18 +37,32 @@ public class LiveCommonHelper implements IHelper {
      */
     public void switchCamera(){
         mLiveHelper.switchCamera();
+        MGToast.showToast("切换摄像头");
     }
 
     /**
-     * 开关录音功能
+     * 开启麦克
      */
-    public void doMic(){
-        if (mLiveHelper.isMicOpen() == true) {
-            mLiveHelper.muteMic();
-        } else {
+    public void openMic(){
+        if (mLiveHelper.isMicOpen()) {
+            MGToast.showToast("已经开启");
+        }else {
             mLiveHelper.openMic();
         }
     }
+
+    /**
+     * 关闭麦克
+     */
+    public void closeMic(){
+        if (mLiveHelper.isMicOpen()) {
+
+            mLiveHelper.muteMic();
+        }else {
+            MGToast.showToast("已经关闭");
+        }
+    }
+
     @Override
     public void onDestroy() {
         mLiveHelper=null;

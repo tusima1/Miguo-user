@@ -90,5 +90,13 @@
     <!-- 直播 -->
     <string name="live_start">开始直播</string>
     <string name="live_auth">认证颜值</string>
+    <!--直播红包-->
 
+    <string name="red_dialog_title">发红包给粉丝</string>
+    <string name="red_type_string">选择类型</string>
+    <string name="shop_name">商店名称</string>
+    <string name="red_count_string">选择数量</string>
+    <string name="red_count_all">全部</string>
+
+    <string name="red_send">发送</string>
 </resources>

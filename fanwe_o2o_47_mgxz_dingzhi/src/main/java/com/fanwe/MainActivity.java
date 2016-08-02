@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.baidu.mapapi.map.Text;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
+import com.fanwe.fragment.MyDistributionFragment;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.jpush.JpushHelper;
@@ -28,21 +27,15 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
-import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.applyRoom.ModelApplyRoom;
-import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveStartActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
-import java.util.List;
-
 @SuppressWarnings("deprecation")
-public class MainActivity extends BaseActivity implements CallbackView {
+public class MainActivity extends BaseActivity {
 
     @SuppressWarnings("deprecation")
     @ViewInject(R.id.act_main_tab_0)
@@ -187,8 +180,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 4:
                         click4();
-                    default:
-                        break;
                 }
                 preTab = index;
             }
@@ -238,10 +229,9 @@ public class MainActivity extends BaseActivity implements CallbackView {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-//            getSDFragmentManager().toggle(R.id.act_main_fl_content, null,
-// MyDistributionFragment.class);
-//            startActivity(new Intent(this, LiveStartActivity.class));
-            testLive();
+            getSDFragmentManager().toggle(R.id.act_main_fl_content, null,
+ MyDistributionFragment.class);
+            startActivity(new Intent(this, LiveStartActivity.class));
         }
     }
 
@@ -253,19 +243,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
         getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
         if (preTab == 0 || preTab == 2 || preTab == 3) {
             if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
- .mPtrlv_content != null) {
+                    .mPtrlv_content != null) {
                 ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
- .mPtrlv_content.setRefreshing();
+                        .mPtrlv_content.setRefreshing();
             }
         }
-
-    }
-
-    private void testLive() {
-        //获取sig
-        http = new LiveHttpHelper(this, this);
-        http.generateSign();
-
 
     }
 
@@ -483,34 +465,5 @@ public class MainActivity extends BaseActivity implements CallbackView {
         }
     }
 
-    @Override
-    public void onSuccess(String responseBody) {
-    }
 
-    @Override
-    public void onSuccess(String method, List datas) {
-        switch (method) {
-            case LiveConstants.GENERATE_SIGN:
-                UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
-                ModelGenerateSign sign = (ModelGenerateSign) datas.get(0);
-                usersig = sign.getUsersig();
-                com.tencent.qcloud.suixinbo.presenters.LoginHelper tcLogin=new com.tencent.qcloud
-                        .suixinbo.presenters.LoginHelper(MainActivity.this);
-                tcLogin.imLogin(userInfoNew.getUser_id(),usersig);
-                //请求房间号
-//                http.applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
-                break;
-            case LiveConstants.APPLY_ROOM:
-//                ModelApplyRoom room = (ModelApplyRoom) datas.get(0);
-//                String room_id = room.getRoom_id();
-                //开启直播
-
-                break;
-        }
-    }
-
-    @Override
-    public void onFailue(String responseBody) {
-
-    }
 }

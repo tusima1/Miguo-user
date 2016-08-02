@@ -1,16 +1,23 @@
 package com.fanwe.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.fanwe.adapter.HomeLiveListAdapter;
 import com.fanwe.customview.SDGridViewInScroll;
+import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.LiveActivity;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +61,30 @@ public class HomeFragmentLiveList extends BaseFragment {
     }
 
     private void setListener() {
+        mSDGridViewInScroll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "mSDGridViewInScroll:" + position, Toast.LENGTH_SHORT).show();
 
+                Room room = datas.get(position);
+                Host host = room.getHost();
+                Intent intent = new Intent(getActivity(), LiveActivity.class);
+                intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
+                MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+                MySelfInfo.getInstance().setJoinRoomWay(false);
+                CurLiveInfo.setHostID(host.getUid());
+                CurLiveInfo.setHostName(host.getNickname());
+//                CurLiveInfo.setHostAvator(item.getHost().getAvatar());
+                CurLiveInfo.setRoomNum(Integer.valueOf(room.getChat_room_id()));
+//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
+                CurLiveInfo.setMembers(111); // 添加自己
+//                CurLiveInfo.setAdmires(item.getAdmireCount());
+//                CurLiveInfo.setAddress(item.getLbs().getAddress());
+                CurLiveInfo.setAdmires(888);
+//                CurLiveInfo.setAddress(item.getLbs().getAddress());
+                startActivity(intent);
+            }
+        });
     }
 
     private void preParam() {

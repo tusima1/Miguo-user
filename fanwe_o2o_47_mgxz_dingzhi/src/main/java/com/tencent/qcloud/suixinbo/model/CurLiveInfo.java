@@ -13,7 +13,7 @@ public class CurLiveInfo {
     private static String address = "";
     private static String coverurl = "";
 
-    public static int roomNum;//room id
+    public static int roomNum;//room id(chatRoomId 其实就是房间id的string格式)
 
     /**主播房间id信息**/
     public static String hostID;

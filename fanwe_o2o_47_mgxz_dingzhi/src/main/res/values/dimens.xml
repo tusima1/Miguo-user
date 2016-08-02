@@ -62,6 +62,7 @@
     <!--login-->
     <dimen name="button_size">50dp</dimen>
     <dimen name="margin_top">100dp</dimen>
+    <dimen name="size_300dp">300dp</dimen>
 
     <!--自动生成的-->
     <dimen name="dp0">0dp</dimen>

@@ -22,11 +22,11 @@ public class LiveConstants {
      */
     public static final String END_INFO = "EndInfo";
     /**
-     * 进入房间
+     * 观众进入房间
      */
     public static final String ENTER_ROOM = "EnterRoom";
     /**
-     * 退出房间
+     * 观众退出房间
      */
     public static final String EXIT_ROOM = "ExitRoom";
     /**
@@ -34,7 +34,7 @@ public class LiveConstants {
      */
     public static final String GENERATE_SIGN = "GenerateSign";
     /**
-     * 获取主播信息
+     * get获取主播信息，post申请成为主播
      */
     public static final String HOST_INFO = "HostInfo";
     /**
@@ -42,8 +42,12 @@ public class LiveConstants {
      */
     public static final String HOST_TAGS = "HostTags";
     /**
-     *登记房间信息
+     * 登记房间信息
      */
     public static final String REGISTER_ROOM_INFO = "RegisterRoomInfo";
+    /**
+     * 主播退出，结束直播
+     */
+    public static final String STOP_LIVE = "StopLive";
 
 }

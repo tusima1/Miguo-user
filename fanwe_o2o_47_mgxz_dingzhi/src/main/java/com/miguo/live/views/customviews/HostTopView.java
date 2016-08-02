@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.HeadTopAdapter;
+import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.views.LiveActivity;
 
 /**
  * Created by didik on 2016/7/30.
@@ -28,6 +30,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     private TextView mTv_keywords;//关键词
     private RelativeLayout mRel_layout;
     private Context mContext;
+    private LiveActivity mActivity;//直播的引用
+    private LiveCommonHelper mLiveCommonHelper;//工具类
 
     public HostTopView(Context context) {
         super(context);
@@ -75,19 +79,34 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    public void setNeed(LiveActivity activity, LiveCommonHelper helper){
+        this.mActivity=activity;
+        this.mLiveCommonHelper=helper;
+    }
+
     @Override
     public void onDestroy() {
         mContext=null;
+        mActivity=null;
+        mLiveCommonHelper=null;
     }
 
     @Override
     public void onClick(View v) {
         if (v==iv_close){
             //关闭
+            if (mActivity!=null){
+                mActivity.onBackPressed();
+            }
         }else if(v==iv_photo){
             //切换摄像头
+            if (mLiveCommonHelper!=null){
+                mLiveCommonHelper.switchCamera();
+            }
         }else if(v==iv_share){
             //分享
+//            UmengShareManager.share();
+            MGToast.showToast("分享");
         }
     }
 

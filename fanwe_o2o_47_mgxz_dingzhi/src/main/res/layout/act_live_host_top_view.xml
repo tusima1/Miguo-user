@@ -3,8 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-    android:paddingLeft="@dimen/dp12"
-    android:paddingRight="@dimen/dp12"
     android:paddingTop="@dimen/dp28"
     android:background="@android:color/transparent">
 <TextView
@@ -15,6 +13,7 @@
     android:textColor="@color/white"
     android:text="1256人"
     android:layout_marginRight="@dimen/dp10"
+    android:layout_marginLeft="@dimen/dp12"
     android:gravity="center"/>
 
 
@@ -24,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp30"
         android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp12"
         android:gravity="center_vertical"
         android:orientation="horizontal">
         <ImageView
@@ -32,7 +32,7 @@
             android:layout_height="@dimen/dp18"
             android:layout_marginRight="@dimen/dp17"
             android:scaleType="center"
-            android:src="@drawable/ic_share"/>
+            android:src="@drawable/ic_share_00"/>
 
         <ImageView
             android:id="@+id/iv_photo"
@@ -63,7 +63,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_members_num"
         android:layout_marginTop="@dimen/dp15"
+        android:paddingLeft="@dimen/dp12"
         android:background="@color/dark_20"
+        android:paddingTop="@dimen/dp6"
         >
         <TextView
             android:id="@+id/tv_location"

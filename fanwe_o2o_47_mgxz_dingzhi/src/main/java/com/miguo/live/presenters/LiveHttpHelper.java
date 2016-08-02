@@ -34,6 +34,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.stopLive.ModelStopLive;
+import com.miguo.live.model.stopLive.ResultStopLive;
+import com.miguo.live.model.stopLive.RootStopLive;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -153,7 +156,7 @@ public class LiveHttpHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
@@ -270,7 +273,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 进入房间
+     * 观众进入房间
      *
      * @param room_id
      */
@@ -296,7 +299,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 退出房间
+     * 观众退出房间
      *
      * @param room_id
      */
@@ -353,7 +356,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 获取主播信息
+     * get获取主播信息，post申请成为主播
      *
      * @param host_id
      */
@@ -420,29 +423,27 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 登记房间信息
-     *
-     * @param title
-     * @param cover
-     * @param room_id
-     * @param av_room_id
-     * @param chat_room_id
+     * 主播退出，结束直播
      */
-    public void registerRoomInfo(String title, String cover, String room_id, String av_room_id, String chat_room_id) {
+    public void stopLive(String room_id) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
-        params.put("title", title);
-        params.put("cover", cover);
         params.put("room_id", room_id);
-        params.put("av_room_id", av_room_id);
-        params.put("chat_room_id", chat_room_id);
-        params.put("method", LiveConstants.REGISTER_ROOM_INFO);
+        params.put("method", LiveConstants.STOP_LIVE);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.REGISTER_ROOM_INFO, null);
+                RootStopLive rootStopLive = gson.fromJson(responseBody, RootStopLive.class);
+                List<ResultStopLive> resultStopLives = rootStopLive.getResult();
+                if (SDCollectionUtil.isEmpty(resultStopLives)) {
+                    mView.onSuccess(LiveConstants.STOP_LIVE, null);
+                    return;
+                }
+                ResultStopLive resultStopLive = resultStopLives.get(0);
+                List<ModelStopLive> modelStopLive = resultStopLive.getBody();
+                mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
             }
 
             @Override
