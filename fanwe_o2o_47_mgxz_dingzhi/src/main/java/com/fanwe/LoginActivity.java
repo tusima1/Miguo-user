@@ -357,10 +357,10 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			intent.putExtra(UserConstants.THIRD_PLATFORM, type);
 			intent.putExtra(UserConstants.THIRD_ICON, icon);
 			intent.putExtra(UserConstants.THIRD_NICK, nick);
+
+		}else{
 			startActivity(intent);
 			finish();
-		}else{
-			SDToast.showToast("第三方登录授权失败。");
 		}
 
 	}
