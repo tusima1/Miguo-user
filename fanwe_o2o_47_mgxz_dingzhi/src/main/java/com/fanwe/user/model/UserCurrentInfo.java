@@ -7,6 +7,10 @@ package com.fanwe.user.model;
 public class UserCurrentInfo  {
    public static   UserCurrentInfo currentInfo;
     /**
+     *签名后的USER.
+     */
+    public  String userSign;
+    /**
      * 当前用户登录信息。
      */
     public UserInfoNew userInfoNew;
@@ -35,5 +39,13 @@ public class UserCurrentInfo  {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public  String getUserSign() {
+        return userSign;
+    }
+
+    public void setUserSign(String userSign) {
+        this.userSign = userSign;
     }
 }

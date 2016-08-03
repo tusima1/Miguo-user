@@ -11,7 +11,10 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
  */
 public class MySelfInfo {
     private static final String TAG = MySelfInfo.class.getSimpleName();
-    private String id; //user id
+    /**
+     * user id
+     */
+    private String id;
     private String userSig; //获取的腾讯签名sig
     private String nickName;    // 呢称
     private String avatar;      // 头像

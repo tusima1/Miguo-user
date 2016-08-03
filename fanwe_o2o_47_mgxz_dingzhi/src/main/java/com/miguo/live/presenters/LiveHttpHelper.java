@@ -43,7 +43,6 @@ import com.miguo.live.model.getUpToken.RootUpToken;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
-import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -53,60 +52,18 @@ import java.util.TreeMap;
  */
 public class LiveHttpHelper implements IHelper {
 
-
-//    public void getAvRoomId(String shop_id,String token){
-//            TreeMap<String, String> params = new TreeMap<String, String>();
-//            params.put("shop_id", shop_id);
-//            params.put("token",token);
-//            params.put("method", "ApplyRoom");
-//            OkHttpUtils.getInstance().post(null, params, new MgCallback() {
-//
-//
-//                @Override
-//                public void onSuccessListResponse(List<Result> resultList) {
-//
-//                }
-//
-//                @Override
-//                public void onErrorResponse(String message, String errorCode) {
-//
-//                }
-//
-//                @Override
-//                public void onSuccessResponse(String responseBody) {
-//                    Gson gson=new Gson();
-//                    RoomIDEntity testModel = gson.fromJson(responseBody, RoomIDEntity.class);
-//                    if (testModel==null){
-//                        MGToast.showToast("为空了!");
-//                        return;
-//                    }
-//                    String room_id = testModel.getRoom_id();
-//                    String token1 = testModel.getToken();
-////                    MySelfInfo.getInstance().setMyRoomNum();
-////                    MySelfInfo.getInstance().writeToCache(context.getApplicationContext());
-//                    MGToast.showToast("mRoomId"+room_id);
-//                }
-//            });
-//    }
-
     private static final String TAG = LiveHttpHelper.class.getSimpleName();
     private Gson gson;
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
     private Context mContext;
     private String token;
-    private EnterQuiteRoomView enterQuiteView;
+
+    public static final String RESULT_OK="no_body_but_is_ok";
 
     public LiveHttpHelper(Context mContext, CallbackView mView) {
         this.mContext = mContext;
         this.mView = mView;
-        gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-    }
-
-    public LiveHttpHelper(Context mContext, EnterQuiteRoomView mView) {
-        this.mContext = mContext;
-        this.enterQuiteView = mView;
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
@@ -164,32 +121,14 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param shop_id
      */
-    public void applyRoom(String shop_id) {
+    public void applyRoom(String shop_id,MgCallback mgCallback) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-            @Override
-            public void onSuccessResponse(String responseBody) {
-                RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
-                List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
-                if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
-                    mView.onSuccess(LiveConstants.APPLY_ROOM, null);
-                    return;
-                }
-                ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);
-                List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
-                mView.onSuccess(LiveConstants.APPLY_ROOM, modelApplyRooms);
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
-            }
-        });
+        OkHttpUtils.getInstance().get(null, params, mgCallback);
 
     }
 
@@ -208,7 +147,8 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootAudienceCount rootAudienceCount = gson.fromJson(responseBody, RootAudienceCount.class);
+                RootAudienceCount rootAudienceCount = gson.fromJson(responseBody,
+                        RootAudienceCount.class);
                 List<ResultAudienceCount> resultAudienceCounts = rootAudienceCount.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceCounts)) {
                     mView.onSuccess(LiveConstants.AUDIENCE_COUNT, null);
@@ -242,7 +182,8 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootAudienceList rootAudienceList = gson.fromJson(responseBody, RootAudienceList.class);
+                RootAudienceList rootAudienceList = gson.fromJson(responseBody, RootAudienceList
+                        .class);
                 List<ResultAudienceList> resultAudienceLists = rootAudienceList.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceLists)) {
                     mView.onSuccess(LiveConstants.AUDIENCE_LIST, null);
@@ -351,7 +292,8 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
+                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign
+                        .class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
                 if (SDCollectionUtil.isEmpty(resultGenerateSigns)) {
                     mView.onSuccess(LiveConstants.GENERATE_SIGN, null);
@@ -413,7 +355,8 @@ public class LiveHttpHelper implements IHelper {
      * @param city
      * @param interest
      */
-    public void postHostInfo(String character, String mobile, String picture, String city, String interest) {
+    public void postHostInfo(String character, String mobile, String picture, String city, String
+            interest) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
@@ -427,7 +370,15 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.HOST_INFO, null);
+                RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
+                List<ResultHostInfo> resultHostInfos = rootHostInfo.getResult();
+                if (SDCollectionUtil.isEmpty(resultHostInfos)) {
+                    mView.onSuccess(LiveConstants.HOST_INFO, null);
+                    return;
+                }
+                ResultHostInfo resultHostInfo = resultHostInfos.get(0);
+                List<ModelHostInfo> modelHostInfo = resultHostInfo.getBody();
+                mView.onSuccess(LiveConstants.HOST_INFO, modelHostInfo);
             }
 
             @Override
@@ -516,8 +467,10 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody, RootBussDictionInfo.class);
-                List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo.getResult();
+                RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody,
+                        RootBussDictionInfo.class);
+                List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo
+                        .getResult();
                 if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
                     mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
                     return;

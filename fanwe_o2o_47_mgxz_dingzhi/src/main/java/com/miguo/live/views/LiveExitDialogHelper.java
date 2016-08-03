@@ -37,7 +37,7 @@ public class LiveExitDialogHelper implements IHelper, View.OnClickListener {
         createDialog();
     }
     private void createDialog(){
-        dialog = new Dialog(mActivity, R.style.dialog);
+        dialog = new Dialog(mActivity, R.style.floag_dialog);
         //init view
         dialog.setContentView(R.layout.pop_live_exit);
         dialog.setCancelable(false);

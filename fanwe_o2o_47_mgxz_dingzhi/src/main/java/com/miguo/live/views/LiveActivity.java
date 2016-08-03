@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -39,13 +40,18 @@ import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
+import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
 import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
+import com.miguo.utils.MGLog;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -76,7 +82,7 @@ import java.util.TimerTask;
 /**
  * 直播类(用户+主播)
  */
-public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView {
+public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
 
@@ -159,6 +165,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         //初始化view
         initView();
+
+        //自己业务数据请求控制类
+        LiveHttpHelper httpHelper=new LiveHttpHelper(this,this);
 
     }
 
@@ -508,6 +517,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
 
+
     /**
      * 直播心跳
      */
@@ -613,7 +623,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 backDialog.cancel();
             }
         });
-        backDialog.show();
     }
 
     /**
@@ -695,10 +704,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         CurLiveInfo.setMembers(members);
         //人数加1,可以设置到界面上
         if(mHostTopView!=null){
-            mHostTopView.updateNum(members+"");
+            mHostTopView.updateAudienceCount(members+"");
         }
         if(mUserHeadTopView!=null) {
-            mUserHeadTopView.updateNum(members + "");
+            mUserHeadTopView.updateAudicenceCount(members + "");
         }
     }
 
@@ -711,10 +720,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             int members = CurLiveInfo.getMembers()-1;
             CurLiveInfo.setMembers(members);
             if(mHostTopView!=null){
-                mHostTopView.updateNum(members+"");
+                mHostTopView.updateAudienceCount(members+"");
             }
             if(mUserHeadTopView!=null) {
-                mUserHeadTopView.updateNum(members + "");
+                mUserHeadTopView.updateAudicenceCount(members + "");
             }
         }
 
@@ -1261,7 +1270,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             switch (requestCode) {
                 case GETPROFILE_JOIN:
                     for (TIMUserProfile user : profiles) {
-                        mUserHeadTopView.updateNum(CurLiveInfo.getMembers() + "");
+                        mUserHeadTopView.updateAudicenceCount(CurLiveInfo.getMembers() + "");
                         SxbLog.w(TAG, "get nick name:" + user.getNickName());
                         SxbLog.w(TAG, "get remark name:" + user.getRemark());
                         SxbLog.w(TAG, "get avatar:" + user.getFaceUrl());
@@ -1439,5 +1448,76 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             recordBtn.setBackgroundResource(R.drawable.icon_record);
         }
     }
+
+    //--------------- http请求 -------------
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        switch (method){
+            case LiveConstants.AUDIENCE_LIST:
+                //观众列表
+                List<ModelAudienceList> audienceList =datas;
+                MGLog.e(audienceList);
+                break;
+            case LiveConstants.END_INFO:
+                //直播结束
+                break;
+            case LiveConstants.ENTER_ROOM:
+                //观众进入房间
+                if (checkData(datas)){
+                    //成功
+                }
+                break;
+            case LiveConstants.EXIT_ROOM:
+                //观众退出房间
+                break;
+            case LiveConstants.HOST_INFO:
+                //获取host资料
+                if (!checkData(datas)){
+                    MGLog.e("LiveConstants.HOST_INFO 返回数据失败!");
+                }
+                ModelHostInfo hostInfo = (ModelHostInfo) datas.get(0);
+                if (hostInfo!=null && mUserHeadTopView!=null){
+                    //TODO 主播的资料放哪里?
+                }
+                break;
+            case LiveConstants.HOST_TAGS:
+                //获取主播标签
+                break;
+            case LiveConstants.STOP_LIVE:
+                //主播退出(结束主播!!!)
+                break;
+            case LiveConstants.AUDIENCE_COUNT:
+                //获取观众人数
+                if (!checkData(datas)){
+                    MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                }
+                ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+                //更新观众人数
+                if (audienceCount!=null && mHostTopView!=null){
+                    mHostTopView.updateAudienceCount(audienceCount.getCount());
+                }
+                break;
+        }
+    }
+
+    /*校验数据*/
+    public boolean checkData(List datas){
+        if (datas!=null && datas.size()>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+    //-------------- http end -------------
 
 }
