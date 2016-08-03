@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.IHelper;
-import com.miguo.utils.DownTimer;
 
 import java.util.Random;
 
@@ -78,7 +77,6 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
         }
     };
 
-    private DownTimer timer = new DownTimer();
 
     private Handler mHandler = new Handler() {
         @Override

@@ -1,14 +1,20 @@
 package com.miguo.live.views.customviews;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.utils.DisplayUtil;
+import com.miguo.utils.MGLog;
 
 /**
  * Created by didik on 2016/7/30.
@@ -24,6 +30,11 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     private ImageView mIv_mei;
     private boolean isShow = true;
     private LiveCommonHelper mLiveCommonHelper;//工具类
+    private ObjectAnimator object1;
+    private ObjectAnimator object2;
+    private ObjectAnimator object3;
+
+    private float dx=0f;
 
     public HostMeiToolView(Context context) {
         super(context);
@@ -56,7 +67,12 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
         mIv_mei.setOnClickListener(this);
         mIv_meiyan.setOnClickListener(this);
         mIv_meibai.setOnClickListener(this);
+
+        dx=DisplayUtil.dp2px(mContext, 60f);
+        initExitAnimation(mIv_lighting,mIv_meiyan,mIv_meibai);
+
     }
+
 
     public void setNeed(LiveCommonHelper helper) {
         this.mLiveCommonHelper = helper;
@@ -123,12 +139,15 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     }
 
     private void clickMei() {
-        if (isShow) {
-            hide();
-        } else {
-            show();
-        }
-        isShow = !isShow;
+//        if (isShow) {
+//            hide();
+//        } else {
+//            show();
+//        }
+//        isShow = !isShow;
+        object1.start();
+        object2.start();
+        object3.start();
     }
 
     /**
@@ -144,4 +163,89 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     private void clickMeiBai() {
         MGToast.showToast("美白");
     }
+
+
+    //-------------- animation---------------
+
+    private void initStartAnimation(View view1,View view2,View view3) {
+        show();
+        float translationX = view1.getTranslationX();
+        int i = DisplayUtil.dp2px(mContext, 60f);
+        MGLog.e("initStartAnimation:"+translationX);
+        MGLog.e("dxAnimation:"+dx);
+        object1 = ObjectAnimator.ofFloat(view1,"translationX",dx,0);
+        object1.setDuration(1000);
+        object1.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
+
+        object2 = ObjectAnimator.ofFloat(view2,"translationX",dx,0);
+        object2.setDuration(1000);
+        object2.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
+
+        object3 = ObjectAnimator.ofFloat(view3,"translationX",dx,0);
+        object3.setDuration(1000);
+        object3.setInterpolator(new AnticipateOvershootInterpolator(1.0f));
+        object3.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                initExitAnimation(mIv_lighting,mIv_meiyan,mIv_meibai);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void initExitAnimation(View view1,View view2,View view3) {
+        float translationX = view1.getTranslationX();
+        MGLog.e("initExitAnimation"+translationX);
+        object1 = ObjectAnimator.ofFloat(view1,"translationX",0,dx);
+        object1.setDuration(1000);
+        object1.setInterpolator(new AnticipateInterpolator(1.0f));
+
+        object2 = ObjectAnimator.ofFloat(view2,"translationX",0,dx);
+        object2.setDuration(1000);
+        object2.setInterpolator(new AnticipateInterpolator(1.0f));
+
+        object3 = ObjectAnimator.ofFloat(view3,"translationX",0,dx);
+        object3.setDuration(1000);
+        object3.setInterpolator(new AnticipateInterpolator(1.0f));
+        object3.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                hide();
+                initStartAnimation(mIv_lighting,mIv_meiyan,mIv_meibai);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+
+
+
 }

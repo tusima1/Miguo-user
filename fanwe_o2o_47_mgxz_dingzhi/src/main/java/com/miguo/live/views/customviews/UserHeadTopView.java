@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.HeadTopAdapter;
 
@@ -18,15 +19,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by didik on 2016/7/22.
+ * 显示的是主播的数据
  */
 public class UserHeadTopView extends RelativeLayout implements View.OnClickListener,IViewGroup {
     private Context mContext;
-    private CircleImageView mUserIamge;//用户头像
+    private CircleImageView mUserIamge;//头像
     private TextView mMembers;//头像下方人数量
-    private TextView mUserName;//用户名
+    private TextView mUserName;//主播名
     private TextView mFollow;//关注
     private ImageView mClose;//关闭
-    private TextView mUserLocation;//用户的地理位置
+    private TextView mUserLocation;//地理位置
     private TextView mKeywords;//关键词
     private RecyclerView mMemberList;//room的观众头像列表(取前N位展示)
 
@@ -129,9 +131,31 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
 
     /*更新人数*/
-    public void updateNum(String num){
+    public void updateAudicenceCount(String num){
         if(!TextUtils.isEmpty(num)) {
             mMembers.setText(num + "人");
         }
+    }
+    /*设置头像*/
+    public void setHostImg(String imgurl){
+        SDViewBinder.setImageView(imgurl,mUserIamge);
+    }
+
+    /*设置名称*/
+    public void setHostName(String name){
+        if (!TextUtils.isEmpty(name)){
+            mUserName.setText(name);
+        }
+    }
+    /*设置地理位置*/
+    public void setLocation(String location){
+        if (TextUtils.isEmpty(location)){
+            mUserLocation.setText(location);
+        }
+    }
+    /*设置关键词*/
+    public void setKeyWords(){
+//        if (){}
+        mKeywords.setText("富国  明主  哈哈  大小  乌拉拉");
     }
 }
