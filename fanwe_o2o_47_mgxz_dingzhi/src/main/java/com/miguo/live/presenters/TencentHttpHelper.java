@@ -32,7 +32,10 @@ public class TencentHttpHelper implements ITencentResult {
 
     }
 
+    public TencentHttpHelper(Activity activity){
+        this.mActivity=activity;
 
+    }
     public TencentHttpHelper(Activity activity,ITencentResult iTencentResult){
         this.mActivity=activity;
         this.mListener=iTencentResult;
@@ -50,6 +53,29 @@ public class TencentHttpHelper implements ITencentResult {
 
     public void setOnTencentResult(ITencentResult iTencentResult){
         this.mListener=iTencentResult;
+    }
+    /**
+     * 身IM 注册 用户。
+     * @param usersig
+     */
+    public void requestRoomID(String usersig){
+        new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mActivity).imLogin(MySelfInfo.getInstance().getId(),usersig);
+    }
+
+    /**
+     * 获取签名。
+     * @param token
+     * @param mgCallback
+     */
+    public void getSign(String token ,MgCallback mgCallback){
+
+
+            TreeMap<String, String> params = new TreeMap<String, String>();
+            params.put("token", token);
+            params.put("method", LiveConstants.GENERATE_SIGN);
+
+            OkHttpUtils.getInstance().get(null, params, mgCallback);
+
     }
 
     /**
@@ -75,10 +101,11 @@ public class TencentHttpHelper implements ITencentResult {
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
                 List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
 //                mView.onSuccess(LiveConstants.GENERATE_SIGN, modelGenerateSign);
-                String usersig = modelGenerateSign.get(0).getUsersig();
-                MySelfInfo.getInstance().setUserSig(usersig);
-
-                new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mActivity).imLogin(MySelfInfo.getInstance().getId(),usersig);
+                if(modelGenerateSign!=null&& modelGenerateSign.size()>0) {
+                    String usersig = modelGenerateSign.get(0).getUsersig();
+                    MySelfInfo.getInstance().setUserSig(usersig);
+                    App.getInstance().setUserSign(usersig);
+                }
 
             }
 

@@ -163,32 +163,14 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param shop_id
      */
-    public void applyRoom(String shop_id) {
+    public void applyRoom(String shop_id,MgCallback mgCallback) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-            @Override
-            public void onSuccessResponse(String responseBody) {
-                RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
-                List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
-                if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
-                    mView.onSuccess(LiveConstants.APPLY_ROOM, null);
-                    return;
-                }
-                ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);
-                List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
-                mView.onSuccess(LiveConstants.APPLY_ROOM, modelApplyRooms);
-            }
-
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
-            }
-        });
+        OkHttpUtils.getInstance().get(null, params, mgCallback);
 
     }
 

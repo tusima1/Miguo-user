@@ -2,14 +2,23 @@ package com.tencent.qcloud.suixinbo.presenters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.baidu.mapapi.map.Text;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDToast;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.model.UserInfoNew;
+import com.google.gson.Gson;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.model.applyRoom.ResultApplyRoom;
+import com.miguo.live.model.applyRoom.RootApplyRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
@@ -23,6 +32,7 @@ import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import java.util.List;
+import java.util.TreeMap;
 
 import tencent.tls.platform.TLSErrInfo;
 import tencent.tls.platform.TLSPwdLoginListener;
@@ -35,12 +45,16 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     private Context mContext;
     private static final String TAG = LoginHelper.class.getSimpleName();
     private int RoomId = -1;
+    private CallbackView mView;
 
     public LoginHelper(Context context) {
         mContext = context;
     }
 
-
+    public LoginHelper(Context context,CallbackView mView) {
+        this.mView= mView;
+        mContext = context;
+    }
 
     /**
      * 登录imsdk
@@ -49,6 +63,8 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * @param userSig  用户签名
      */
     public void imLogin(String identify, String userSig) {
+        MySelfInfo.getInstance().setId(identify);
+        MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
         user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
         user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
@@ -61,22 +77,34 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 new TIMCallBack() {
                     @Override
                     public void onError(int i, String s) {
-                        SxbLog.e(TAG, "IMLogin fail ：" + i + " msg " + s);
-//                        IMLogin fail ：6012 msg operation timeout: wait server rsp timeout or no network.
                         Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
+                        mView.onFailue("IM 认证失败。");
                     }
-
                     @Override
                     public void onSuccess() {
-                        SxbLog.i(TAG, "keypath IMLogin succ !");
-//                        Toast.makeText(mContext, "IMLogin succ !", Toast.LENGTH_SHORT).show();
-                        getMyRoomNum();
+                        getRoomNum();
                         startAVSDK();
                     }
                 });
     }
 
+    /**
+     * 进入主播页。
+     */
+    private void goToLive() {
+        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
+        Intent intent = new Intent(mContext, LiveActivity.class);
+        intent.putExtra(Constants.ID_STATUS, Constants.HOST);
+        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
+        MySelfInfo.getInstance().setJoinRoomWay(true);
+        CurLiveInfo.setTitle("直播");
+        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
+        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
+        mContext.startActivity(intent);
 
+
+    }
     /**
      * 退出imsdk
      * <p>
@@ -100,93 +128,81 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         });
 
     }
-
-    /**
-     * 登录TLS账号系统
-     *
-     * @param id
-     * @param password
-     */
-    public void tlsLogin(String id, String password) {
-        int ret = InitBusinessHelper.getmLoginHelper().TLSPwdLogin(id, password.getBytes(), new TLSPwdLoginListener() {
-            @Override
-            public void OnPwdLoginSuccess(TLSUserInfo tlsUserInfo) {//获取用户信息
-//                Toast.makeText(mContext, "TLS login succ ! " + tlsUserInfo.identifier, Toast.LENGTH_SHORT).show();
-//                SxbLog.i(TAG, "TLS OnPwdLoginSuccess " + tlsUserInfo.identifier);
-                String userSig = InitBusinessHelper.getmLoginHelper().getUserSig(tlsUserInfo.identifier);
-                MySelfInfo.getInstance().setId(tlsUserInfo.identifier);
-                MySelfInfo.getInstance().setUserSig(userSig);
-                imLogin(tlsUserInfo.identifier, userSig);
-            }
-
-            @Override
-            public void OnPwdLoginReaskImgcodeSuccess(byte[] bytes) {
-
-            }
-
-            @Override
-            public void OnPwdLoginNeedImgcode(byte[] bytes, TLSErrInfo tlsErrInfo) {
-
-            }
-
-            @Override
-            public void OnPwdLoginFail(TLSErrInfo tlsErrInfo) {
-                SxbLog.e(TAG, "OnPwdLoginFail " + tlsErrInfo.Msg);
-                Toast.makeText(mContext, "OnPwdLoginFail：\n" + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void OnPwdLoginTimeout(TLSErrInfo tlsErrInfo) {
-                SxbLog.e(TAG, "OnPwdLoginTimeout " + tlsErrInfo.Msg);
-                Toast.makeText(mContext, "OnPwdLoginTimeout：\n" + tlsErrInfo.Msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-        if (ret != -1001) {
-            Toast.makeText(mContext, "input invalid !", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
     /**
      * 向用户服务器获取自己房间号
      */
-    private void getMyRoomNum() {
-//        if (MySelfInfo.getInstance().getMyRoomNum() == -1) {
-            new LiveHttpHelper(mContext, new CallbackView() {
-                @Override
-                public void onSuccess(String responseBody) {
+    private void getRoomNum( ){
 
+      MgCallback mgCallback =   new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Gson gson = new Gson();
+                RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
+                List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
+                if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
+                    SDToast.showToast("申请房间号失败");
+                    return;
                 }
+                ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);
+                List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
+                if(modelApplyRooms!=null && modelApplyRooms.size()>0&&modelApplyRooms.get(0)!=null) {
+                    String room_id = modelApplyRooms.get(0).getRoom_id();
+                    Integer roomId = -1;
+                    try {
+                        roomId = Integer.valueOf(room_id);
+                    } catch (Exception e) {
+                        MGToast.showToast("获取房间号错误!");
+                        mView.onFailue("获取房间号错误!");
+                        return;
+                    }
+                    if (roomId == -1) {
+                        MGToast.showToast("获取房间号错误!");
+                        mView.onFailue("获取房间号错误!");
+                        return;
+                    } else {
 
-                @Override
-                public void onSuccess(String method, List datas) {
-                    switch (method) {
-                        case LiveConstants.APPLY_ROOM:
-                            ModelApplyRoom room = (ModelApplyRoom) datas.get(0);
-                            String room_id = room.getRoom_id();
-                            Integer roomId=-1;
-                            try {
-                                roomId = Integer.valueOf(room_id);
-                            }catch (Exception e){
-                                MGToast.showToast("获取房间号错误!");
-                                return;
-                            }
-                            MySelfInfo.getInstance().setMyRoomNum(roomId);
-                            MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
-                            //开启直播
-//                            createAvRoom();
-                            Log.e("live","room_id:"+room_id);
-                            break;
+
+                        MySelfInfo.getInstance().setMyRoomNum(roomId);
+                        MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
+
+                        goToLive();
+                        mView.onSuccess("");
+
+                        Log.e("live", "room_id:" + room_id);
                     }
                 }
+            }
 
-                @Override
-                public void onFailue(String responseBody) {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        };
 
-                }
-            }).applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b3");
-//        }
+     applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b3",mgCallback);
     }
+
+    /**
+     * 申请直播房间ID
+     *
+     * @param shop_id
+     */
+    public void applyRoom(String shop_id,MgCallback mgCallback) {
+        String token = App.getInstance().getToken();
+        if (TextUtils.isEmpty(token)) {
+          SDToast.showToast("token为空。");
+            return ;
+        }
+
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("shop_id", shop_id);
+        params.put("method", LiveConstants.APPLY_ROOM);
+
+        OkHttpUtils.getInstance().get(null, params, mgCallback);
+
+    }
+
 
     /**
      * 进入直播间
@@ -210,13 +226,17 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * 初始化AVSDK
      */
     private void startAVSDK() {
-        QavsdkControl.getInstance().setAvConfig(Constants.SDK_APPID, "" + Constants.ACCOUNT_TYPE, MySelfInfo.getInstance().getId(), MySelfInfo.getInstance().getUserSig());
+        String userid = MySelfInfo.getInstance().getId();
+        String userSign =  MySelfInfo.getInstance().getUserSig();
+        int  appId = Constants.SDK_APPID;
+
+        int  ccType = Constants.ACCOUNT_TYPE;
+        QavsdkControl.getInstance().setAvConfig(appId, ccType+"",userid, userSign);
         QavsdkControl.getInstance().startContext();
+
         Log.e("live","初始化AVSDK");
     }
-
-
-    /**
+/**
      * 反初始化AVADK
      */
     public void stopAVSDK() {

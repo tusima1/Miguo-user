@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
@@ -43,250 +44,254 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 
 
-public class App extends Application implements SDEventObserver, TANetChangeObserver
-{
+public class App extends Application implements SDEventObserver, TANetChangeObserver {
 
-	private static App mApp = null;
+    private static App mApp = null;
 
-	public List<Class<? extends BaseActivity>> mListClassNotFinishWhenLoginState0 = new ArrayList<Class<? extends BaseActivity>>();
-	public RuntimeConfigModel mRuntimeConfig = new RuntimeConfigModel();
-	public Intent mPushIntent;
+    public List<Class<? extends BaseActivity>> mListClassNotFinishWhenLoginState0 = new ArrayList<Class<? extends BaseActivity>>();
+    public RuntimeConfigModel mRuntimeConfig = new RuntimeConfigModel();
+    public Intent mPushIntent;
 
-	public LocalUserModel getmLocalUser()
-	{
-		return LocalUserModelDao.queryModel();
-	}
+    public LocalUserModel getmLocalUser() {
+        return LocalUserModelDao.queryModel();
+    }
 
-	/**
-	 * 当前用户信息。存在于内存中。定义到2016-7-27 by  zhouhy
-	 */
-	public UserCurrentInfo mUserCurrentInfo;
-	protected String imei;
+    /**
+     * 当前用户信息。存在于内存中。定义到2016-7-27 by  zhouhy
+     */
+    public UserCurrentInfo mUserCurrentInfo;
+    protected String imei;
 
-	/**
-	 * 自我引用 .
-	 */
-	private static App myApplication;
-	public void setmLocalUser(LocalUserModel localUser)
-	{
-		if (localUser != null)
-		{
-			LocalUserModelDao.insertModel(localUser);
-		}
-	}
+    /**
+     * 自我引用 .
+     */
+    private static App myApplication;
+
+    public void setmLocalUser(LocalUserModel localUser) {
+        if (localUser != null) {
+            LocalUserModelDao.insertModel(localUser);
+        }
+    }
 
 
-	@Override
-	public void onCreate()
-	{
-		super.onCreate();
-		myApplication = this;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        myApplication = this;
 
-		init();
-	}
+        init();
+    }
 
-	private void init()
-	{
-		mApp = this;
-		ImageLoaderManager.initImageLoader();
-		initSDLibrary();
-		
+    private void init() {
+        mApp = this;
+        ImageLoaderManager.initImageLoader();
+        initSDLibrary();
+
 //		initAppCrashHandler();
-		//关闭友盟分析默认的统计方式
-		MobclickAgent.openActivityDurationTrack(false);
-		MobclickAgent.setCatchUncaughtExceptions(true);
-		
-		//腾讯视频sdk
-		InitBusinessHelper.initApp(this);
-		
-		initBaiduMap();
-		//初始化友盟分享
-		UmengShareManager.initConfig();
-	
-		SDEventManager.register(this);
-		TANetworkStateReceiver.registerObserver(this);
-		initSettingModel();
-		initJPush();
-		addClassesNotFinishWhenLoginState0();
-		SDCommandManager.getInstance().initialize();
-		LogUtil.isDebug = ServerUrl.DEBUG;
+        //关闭友盟分析默认的统计方式
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setCatchUncaughtExceptions(true);
 
-		mUserCurrentInfo = UserCurrentInfo.getInstance();
-	}
+        //腾讯视频sdk
+        InitBusinessHelper.initApp(this);
 
-	
-	private void initJPush() {
-		JPushInterface.init(this);
-		JpushHelper.registerAll();
-	}
+        initBaiduMap();
+        //初始化友盟分享
+        UmengShareManager.initConfig();
 
-	private void initSDLibrary()
-	{
-		SDLibrary.getInstance().init(getApplication());
+        SDEventManager.register(this);
+        TANetworkStateReceiver.registerObserver(this);
+        initSettingModel();
+        initJPush();
+        addClassesNotFinishWhenLoginState0();
+        SDCommandManager.getInstance().initialize();
+        LogUtil.isDebug = ServerUrl.DEBUG;
 
-		SDLibraryConfig config = new SDLibraryConfig();
+        mUserCurrentInfo = UserCurrentInfo.getInstance();
+    }
 
-		config.setmMainColor(getResources().getColor(R.color.main_color));
-		config.setmMainColorPress(getResources().getColor(R.color.main_color_press));
 
-		config.setmTitleColor(getResources().getColor(R.color.bg_title_bar));
-		config.setmTitleColorPressed(getResources().getColor(R.color.bg_title_bar_pressed));
-		config.setmTitleHeight(getResources().getDimensionPixelOffset(R.dimen.height_title_bar));
+    private void initJPush() {
+        JPushInterface.init(this);
+        JpushHelper.registerAll();
+    }
 
-		config.setmStrokeColor(getResources().getColor(R.color.stroke));
-		config.setmStrokeWidth(SDViewUtil.dp2px(1));
-		
-		config.setmCornerRadius(getResources().getDimensionPixelOffset(R.dimen.corner));
-		config.setmGrayPressColor(getResources().getColor(R.color.gray_press));
+    private void initSDLibrary() {
+        SDLibrary.getInstance().init(getApplication());
 
-		SDLibrary.getInstance().initConfig(config);
-	}
+        SDLibraryConfig config = new SDLibraryConfig();
 
-	private void addClassesNotFinishWhenLoginState0()
-	{
-		mListClassNotFinishWhenLoginState0.add(MainActivity.class);
-	}
+        config.setmMainColor(getResources().getColor(R.color.main_color));
+        config.setmMainColorPress(getResources().getColor(R.color.main_color_press));
 
-	private void initAppCrashHandler()
-	{
-		if (!ServerUrl.DEBUG)
-		{
-			CrashHandler crashHandler = CrashHandler.getInstance();
-			crashHandler.init(getApplicationContext());
-		}
-	}
+        config.setmTitleColor(getResources().getColor(R.color.bg_title_bar));
+        config.setmTitleColorPressed(getResources().getColor(R.color.bg_title_bar_pressed));
+        config.setmTitleHeight(getResources().getDimensionPixelOffset(R.dimen.height_title_bar));
 
-	private void initSettingModel()
-	{
-		// 插入成功或者数据库已经存在记录
-		SettingModelDao.insertOrCreateModel(new SettingModel());
-		mRuntimeConfig.updateIsCanLoadImage();
-		mRuntimeConfig.updateIsCanPushMessage();
-	}
+        config.setmStrokeColor(getResources().getColor(R.color.stroke));
+        config.setmStrokeWidth(SDViewUtil.dp2px(1));
 
-	private void initBaiduMap()
-	{
-		BaiduMapManager.getInstance().init(this);
-	}
+        config.setmCornerRadius(getResources().getDimensionPixelOffset(R.dimen.corner));
+        config.setmGrayPressColor(getResources().getColor(R.color.gray_press));
 
-	public static App getApplication()
-	{
-		return mApp;
-	}
+        SDLibrary.getInstance().initConfig(config);
+    }
 
-	public void exitApp(boolean isBackground)
-	{
-		AppConfig.setRefId("");
-		SDActivityManager.getInstance().finishAllActivity();
-		SDEventManager.post(EnumEventTag.EXIT_APP.ordinal());
-		if (isBackground)
-		{
+    private void addClassesNotFinishWhenLoginState0() {
+        mListClassNotFinishWhenLoginState0.add(MainActivity.class);
+    }
 
-		} else
-		{
-			System.exit(0);
-		}
-	}
+    private void initAppCrashHandler() {
+        if (!ServerUrl.DEBUG) {
+            CrashHandler crashHandler = CrashHandler.getInstance();
+            crashHandler.init(getApplicationContext());
+        }
+    }
 
-	public void clearAppsLocalUserModel()
-	{
-		
-		AppConfig.setSessionId("");
-		AppConfig.setRefId("");
-		LocalUserModelDao.deleteAllModel();
-		
-	}
+    private void initSettingModel() {
+        // 插入成功或者数据库已经存在记录
+        SettingModelDao.insertOrCreateModel(new SettingModel());
+        mRuntimeConfig.updateIsCanLoadImage();
+        mRuntimeConfig.updateIsCanPushMessage();
+    }
 
-	public static String getStringById(int resId)
-	{
-		return getApplication().getString(resId);
-	}
+    private void initBaiduMap() {
+        BaiduMapManager.getInstance().init(this);
+    }
 
-	@Override
-	public void onConnect(netType type)
-	{
-		mRuntimeConfig.updateIsCanLoadImage();
-	}
+    public static App getApplication() {
+        return mApp;
+    }
 
-	@Override
-	public void onDisConnect()
-	{
-		// TODO Auto-generated method stub
+    public void exitApp(boolean isBackground) {
+        AppConfig.setRefId("");
+        SDActivityManager.getInstance().finishAllActivity();
+        SDEventManager.post(EnumEventTag.EXIT_APP.ordinal());
+        if (isBackground) {
 
-	}
+        } else {
+            System.exit(0);
+        }
+    }
 
-	@Override
-	public void onTerminate()
-	{
-		SDEventManager.unregister(this);
-		super.onTerminate();
-	}
+    public void clearAppsLocalUserModel() {
 
-	@Override
-	public void onEvent(SDBaseEvent event)
-	{
-		// TODO Auto-generated method stub
+        AppConfig.setSessionId("");
+        AppConfig.setRefId("");
+        LocalUserModelDao.deleteAllModel();
 
-	}
+    }
 
-	@Override
-	public void onEventBackgroundThread(SDBaseEvent event)
-	{
-		// TODO Auto-generated method stub
+    public static String getStringById(int resId) {
+        return getApplication().getString(resId);
+    }
 
-	}
+    @Override
+    public void onConnect(netType type) {
+        mRuntimeConfig.updateIsCanLoadImage();
+    }
 
-	@Override
-	public void onEventAsync(SDBaseEvent event)
-	{
-		// TODO Auto-generated method stub
+    @Override
+    public void onDisConnect() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void onEventMainThread(SDBaseEvent event)
-	{
-		// TODO Auto-generated method stub
+    @Override
+    public void onTerminate() {
+        SDEventManager.unregister(this);
+        super.onTerminate();
+    }
 
-	}
+    @Override
+    public void onEvent(SDBaseEvent event) {
+        // TODO Auto-generated method stub
 
-	public String getImei() {
-		return imei;
-	}
-	public void setImei(String imei){
-		this.imei=imei;
-	}
-	/**
-	 * 返回单实例.
-	 *
-	 * @return HsApplication
-	 */
-	public static App getInstance() {
-		return myApplication;
-	}
+    }
 
-	public UserCurrentInfo getmUserCurrentInfo() {
-		return mUserCurrentInfo;
-	}
+    @Override
+    public void onEventBackgroundThread(SDBaseEvent event) {
+        // TODO Auto-generated method stub
 
-	public void setmUserCurrentInfo(UserCurrentInfo mUserCurrentInfo) {
-		this.mUserCurrentInfo = mUserCurrentInfo;
-	}
+    }
 
-	public String getToken(){
-		String token = "";
-		if(this.mUserCurrentInfo!=null){
-			UserInfoNew infoNew = mUserCurrentInfo.getUserInfoNew();
-			if(infoNew!=null){
-				token = mUserCurrentInfo.getToken();
-			}
-		}
-		return  token;
+    @Override
+    public void onEventAsync(SDBaseEvent event) {
+        // TODO Auto-generated method stub
 
-	}
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		MultiDex.install(this);
-	}
+    }
+
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    /**
+     * 返回单实例.
+     *
+     * @return HsApplication
+     */
+    public static App getInstance() {
+        return myApplication;
+    }
+
+    public UserCurrentInfo getmUserCurrentInfo() {
+        return mUserCurrentInfo;
+    }
+
+    public void setmUserCurrentInfo(UserCurrentInfo mUserCurrentInfo) {
+        this.mUserCurrentInfo = mUserCurrentInfo;
+    }
+
+    public String getToken() {
+        String token = "";
+        if (this.mUserCurrentInfo != null) {
+            UserInfoNew infoNew = mUserCurrentInfo.getUserInfoNew();
+            if (infoNew != null) {
+                token = mUserCurrentInfo.getToken();
+            }
+        }
+        return token;
+    }
+
+    public String getUserSign() {
+
+        String useSign = "";
+        if (this.mUserCurrentInfo != null) {
+
+            if (mUserCurrentInfo.getUserSign() != null) {
+                useSign = mUserCurrentInfo.getToken();
+            }
+        }
+        return useSign;
+
+    }
+
+    public void setUserSign(String useSign) {
+
+        if (TextUtils.isEmpty(useSign)) {
+            return;
+        }
+        if (this.mUserCurrentInfo != null) {
+
+            mUserCurrentInfo.setUserSign(useSign);
+        }
+
+
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 }

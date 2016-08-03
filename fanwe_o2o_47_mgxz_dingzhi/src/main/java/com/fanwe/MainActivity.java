@@ -230,8 +230,7 @@ public class MainActivity extends BaseActivity {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            getSDFragmentManager().toggle(R.id.act_main_fl_content, null,
- MyDistributionFragment.class);
+
             startActivity(new Intent(this, LiveStartActivity.class));
         }
     }

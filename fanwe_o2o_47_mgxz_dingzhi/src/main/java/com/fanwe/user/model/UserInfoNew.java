@@ -147,6 +147,10 @@ public class UserInfoNew extends Body {
      * MD5后的密码。
      */
     private String pwd;
+    /**
+     * 是否是主播。
+     */
+    private String is_host;
 
 
 
@@ -504,5 +508,13 @@ public class UserInfoNew extends Body {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public String getIs_host() {
+        return is_host;
+    }
+
+    public void setIs_host(String is_host) {
+        this.is_host = is_host;
     }
 }
