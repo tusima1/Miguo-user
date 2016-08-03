@@ -8,7 +8,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +18,7 @@ import android.widget.Button;
 
 import com.fanwe.adapter.InitAdvsPagerAdapter;
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.http.InterfaceServer;
@@ -38,6 +41,7 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.fanwe.work.RetryInitWorker;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.utils.MGLog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -53,12 +57,12 @@ public class InitAdvsMultiActivity extends BaseActivity {
     /**
      * 广告图片显示时间
      */
-    private static final long ADVS_DISPLAY_TIME = 3 * 1000;
+    private static  long ADVS_DISPLAY_TIME = 3 * 1000;
 
     /**
      * 正常初始化成功后显示时间
      */
-    private static final long NORMAL_DISPLAY_TIME = 3 * 1000;
+    private static  long NORMAL_DISPLAY_TIME = 3 * 1000;
 
     private final int REQUEST_PHONE_PERMISSIONS = 0;
 
@@ -86,12 +90,16 @@ public class InitAdvsMultiActivity extends BaseActivity {
 
     private void init() {
         checkPermission();
+
         startStatistics();
         initTimer();
         registerClick();
         initSlidingPlayView();
         requestInitInterface();
-        getDeviceId();
+
+    }
+    private void initBaiduMap() {
+        BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
     }
 
     /**
@@ -111,7 +119,10 @@ public class InitAdvsMultiActivity extends BaseActivity {
         PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
         String versionCode = String.valueOf(info.versionCode);
         if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
-            submmit();
+            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
+                ADVS_DISPLAY_TIME=Integer.MAX_VALUE;
+                NORMAL_DISPLAY_TIME=Integer.MAX_VALUE;
+            }
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
         }
@@ -378,8 +389,30 @@ public class InitAdvsMultiActivity extends BaseActivity {
             if (permissionsList.size() != 0) {
                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                         REQUEST_PHONE_PERMISSIONS);
+            }else {
+                //已经不是第一次,已经有权限
+                //初始化百度sdk
+                Log.e("init","normal");
+                initBaiduMap();
+                getDeviceId();
             }
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode==REQUEST_PHONE_PERMISSIONS){
+            if (grantResults.length!=0 && (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)){
+                //初始化百度sdk
+                //这里只会走一次
+                initBaiduMap();
+                getDeviceId();
+                submmit();//只需要一次
+                MGLog.e("成功初始化!");
+                startMainActivity();
+            }
+        }
+    }
 }
