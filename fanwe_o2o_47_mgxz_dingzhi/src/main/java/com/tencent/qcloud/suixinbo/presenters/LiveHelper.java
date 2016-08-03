@@ -8,6 +8,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
+import com.miguo.live.model.LiveConstants;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
@@ -42,9 +46,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * 直播的控制类presenter
@@ -897,6 +903,23 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 }
 
         );
+    }
+
+    /**
+     * 发送心跳
+     */
+    public void sendHeartBeat() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.HOSTPITPAT);
+
+        OkHttpUtils.getInstance().get(null, params,  new MgCallback(){
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+        });
     }
 
 

@@ -61,4 +61,8 @@ public class LiveConstants {
      * 主播结束信息。
      */
     public static final String LIVEINFOJSON = "liveInfoJson";
+    /**
+     * 主播心跳。
+     */
+    public static final String HOSTPITPAT = "HostPitpat";
 }

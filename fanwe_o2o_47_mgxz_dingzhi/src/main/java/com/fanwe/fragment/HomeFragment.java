@@ -482,12 +482,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             //直播列表
             getLiveList((ArrayList<Room>) datas);
             ////获取tencent相关的信息
-            new TencentHttpHelper(getActivity(), new ITencentResult() {
-                @Override
-                public void onResult(boolean succ) {
-                    MGToast.showToast(succ==true?"tencent成功!":"tencent失败");
-                }
-            }).generateSign();
+
         } else if (LiveConstants.APPLY_ROOM.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 ModelApplyRoom modelApplyRoom = (ModelApplyRoom) datas.get(0);

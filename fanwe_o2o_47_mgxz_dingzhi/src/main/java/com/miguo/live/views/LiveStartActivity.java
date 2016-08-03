@@ -113,7 +113,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 SDToast.showToast("获取用户签名失败。");
             }
         };
-
         tencentHttpHelper.getSign(token,mgCallback);
     }
     public void onClick(View v) {
