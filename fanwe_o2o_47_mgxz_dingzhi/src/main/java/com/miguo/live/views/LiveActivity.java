@@ -59,6 +59,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
+import com.tencent.TIMCallBack;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -149,6 +150,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
         registerReceiver();
+        avinit();
+        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this,this);
+        mEnterRoomHelper = new EnterLiveHelper(this, this);
+        //房间内的交互协助类
+        mLiveHelper = new LiveHelper(this, this);
+        // 用户资料类
+        mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
         checkUserAndPermission();
         //checkPermission();
@@ -157,19 +165,15 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     }
 
-    public void avinit(){
-
-        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this,this);
-        mEnterRoomHelper = new EnterLiveHelper(this, this);
-        //房间内的交互协助类
-        mLiveHelper = new LiveHelper(this, this);
-        // 用户资料类
-        mUserInfoHelper = new ProfileInfoHelper(this);
-
-
+    public void enterRoom(){
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
         mEnterRoomHelper.startEnterRoom();
+        //初始化view
+        initView();
+    }
+    public void avinit(){
+
         root = findViewById(R.id.root);
 
         //QavsdkControl.getInstance().setCameraPreviewChangeCallback();
@@ -181,11 +185,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         //公共功能管理类
         mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
 
-        //初始化view
-        initView();
-
-        //自己业务数据请求控制类
-        LiveHttpHelper httpHelper=new LiveHttpHelper(this,this);
     }
     /**
      * 判断用户是否已经登录，并注册 了腾讯 号。
@@ -198,6 +197,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             startActivity(intent);
             finish();
         }else{
+            //get usersign
             MgCallback mgCallback = new MgCallback() {
                 @Override
                 public void onSuccessResponse(String responseBody) {
@@ -216,8 +216,18 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                         MySelfInfo.getInstance().setUserSig(usersig);
                         App.getInstance().setUserSign(usersig);
                         String userid = MySelfInfo.getInstance().getId();
-                        avinit();
-                        mTLoginHelper.imLogin(userid,usersig,false);
+                        mTLoginHelper.imLogin(userid,usersig,new TIMCallBack() {
+                            @Override
+                            public void onError(int i, String s) {
+                             SDToast.showToast("IM 认证失败。");
+                            }
+                            @Override
+                            public void onSuccess() {
+                                startAVSDK();
+                                enterRoom();
+                            }
+                        });
+
 
                     }
 
@@ -778,7 +788,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void memberJoin(String id, String name) {
         watchCount++;
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "join live", Constants.MEMBER_ENTER);
+        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
       int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
         //人数加1,可以设置到界面上
@@ -792,7 +802,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void memberQuit(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "quite live", Constants.MEMBER_EXIT);
+        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
         watchCount--;
 
         if (CurLiveInfo.getMembers() > 1) {

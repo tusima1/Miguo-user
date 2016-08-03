@@ -162,6 +162,8 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 //        holder.sendContext.setText(spanString);
         // 设置控件实际宽度以便计算列表项实际高度
 //        holder.sendContext.fixViewWidth(mListView.getWidth());
+
+      //  holder.civ_user_image.setImageURI();
         holder.name.setText(item.getSenderName()+":");
         holder.content.setText(item.getContent());
 //        holder.name.fixViewWidth(mListView.getWidth());
@@ -173,6 +175,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
     static class ViewHolder {
 //        public LinearLayout textItem;
 //        public CustomTextView sendContext;
+        public de.hdodenhof.circleimageview.CircleImageView civ_user_image;
         public TextView name;
         public TextView content;
 
