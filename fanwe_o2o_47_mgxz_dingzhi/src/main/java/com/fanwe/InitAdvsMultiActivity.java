@@ -57,12 +57,12 @@ public class InitAdvsMultiActivity extends BaseActivity {
     /**
      * 广告图片显示时间
      */
-    private static  long ADVS_DISPLAY_TIME = 3 * 1000;
+    private static long ADVS_DISPLAY_TIME = 3 * 1000;
 
     /**
      * 正常初始化成功后显示时间
      */
-    private static  long NORMAL_DISPLAY_TIME = 3 * 1000;
+    private static long NORMAL_DISPLAY_TIME = 3 * 1000;
 
     private final int REQUEST_PHONE_PERMISSIONS = 0;
 
@@ -98,6 +98,7 @@ public class InitAdvsMultiActivity extends BaseActivity {
         requestInitInterface();
 
     }
+
     private void initBaiduMap() {
         BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
     }
@@ -106,7 +107,7 @@ public class InitAdvsMultiActivity extends BaseActivity {
      * 获取设备IMEI
      * 需要权限.6.0申请无效
      */
-    public void getDeviceId(){
+    public void getDeviceId() {
         TelephonyManager telephonyManager = (TelephonyManager) this
                 .getSystemService(Context.TELEPHONY_SERVICE);
         App.getInstance().setImei(telephonyManager.getDeviceId());
@@ -119,9 +120,11 @@ public class InitAdvsMultiActivity extends BaseActivity {
         PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
         String versionCode = String.valueOf(info.versionCode);
         if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
-            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
-                ADVS_DISPLAY_TIME=Integer.MAX_VALUE;
-                NORMAL_DISPLAY_TIME=Integer.MAX_VALUE;
+            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager
+                    .PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                ADVS_DISPLAY_TIME = Integer.MAX_VALUE;
+                NORMAL_DISPLAY_TIME = Integer.MAX_VALUE;
             }
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
@@ -150,7 +153,8 @@ public class InitAdvsMultiActivity extends BaseActivity {
         model.put("mob_imei", mob_imei);
         model.put("sys_name", sys_name);
         model.put("sys_version", sys_version);
-        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<BaseActModel>(false) {
+        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<BaseActModel>
+                (false) {
 
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -271,7 +275,8 @@ public class InitAdvsMultiActivity extends BaseActivity {
                     InitActStart_pageModel model = mAdapter.getItemModel(position);
                     if (model != null) {
                         int type = model.getType();
-                        Intent intent = AppRuntimeWorker.createIntentByType(type, model.getData(), false);
+                        Intent intent = AppRuntimeWorker.createIntentByType(type, model.getData()
+                                , false);
                         if (intent != null) {
                             try {
                                 mTimer.stopWork();
@@ -379,20 +384,23 @@ public class InitAdvsMultiActivity extends BaseActivity {
         JPushInterface.onResume(this);
         super.onResume();
     }
+
     void checkPermission() {
         final List<String> permissionsList = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED))
+            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager
+                    .PERMISSION_GRANTED))
                 permissionsList.add(Manifest.permission.READ_PHONE_STATE);
-            if ((checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
+            if ((checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED))
                 permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permissionsList.size() != 0) {
                 requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
                         REQUEST_PHONE_PERMISSIONS);
-            }else {
+            } else {
                 //已经不是第一次,已经有权限
                 //初始化百度sdk
-                Log.e("init","normal");
+                Log.e("init", "normal");
                 initBaiduMap();
                 getDeviceId();
             }
@@ -403,8 +411,11 @@ public class InitAdvsMultiActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
 
-        if (requestCode==REQUEST_PHONE_PERMISSIONS){
-            if (grantResults.length!=0 && (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)){
+        if (requestCode == REQUEST_PHONE_PERMISSIONS) {
+            if (grantResults.length != 0 && (checkSelfPermission(Manifest.permission
+                    .READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) &&
+                    (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                            PackageManager.PERMISSION_GRANTED)) {
                 //初始化百度sdk
                 //这里只会走一次
                 initBaiduMap();
