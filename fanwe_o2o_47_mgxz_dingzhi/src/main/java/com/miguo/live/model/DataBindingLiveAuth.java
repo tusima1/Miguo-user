@@ -6,9 +6,9 @@ import android.databinding.ObservableInt;
 
 public class DataBindingLiveAuth {
 
-    public final int BEAUTY = 0;
-    public final int SMART = 1;
-    public final int EXCELLENT = 2;
+    public final int BEAUTY = 1;
+    public final int SMART = 2;
+    public final int EXCELLENT = 3;
 
     public final ObservableInt mode = new ObservableInt();
     //兴趣

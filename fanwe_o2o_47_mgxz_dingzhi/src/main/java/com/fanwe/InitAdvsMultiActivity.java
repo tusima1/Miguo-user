@@ -130,7 +130,6 @@ public class InitAdvsMultiActivity extends BaseActivity {
                     submmit();//只需要一次
                 }
             }
-
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
         }

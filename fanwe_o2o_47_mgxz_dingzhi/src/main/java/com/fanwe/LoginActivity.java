@@ -97,8 +97,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 	@ViewInject(R.id.weixin_login)
 	private Button weixin_login;
-	@ViewInject(R.id.testViews)
-  private EditText testViews;
+
    private String openId;
 
 	//1:qq，2:微信，3：微博
@@ -282,7 +281,8 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		for(Map.Entry<String, String> entry:data.entrySet()){
 			str.append(entry.getKey()+"--->"+entry.getValue()+"\n");
 		}
-		testViews.setText(str.toString());
+		Log.d("11",str.toString());
+
 	}
 	/**
 	 * 跳转到相应的授权页。

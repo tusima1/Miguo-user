@@ -5,34 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.fanwe.CaptureResultWebActivity;
 import com.fanwe.CityListActivity;
-import com.fanwe.MyCaptureActivity;
-import com.fanwe.StoreConfirmOrderActivity;
-import com.fanwe.app.AppConfig;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
-import com.fanwe.fragment.HomeFragment;
-import com.fanwe.fragment.MarketFragment;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -48,14 +34,12 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
-import com.qiniu.android.utils.AsyncRun;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +56,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     public final int SELECT_FILE_CODE = 0x32;
     private GridView mGridView;
     private VisitImgAdapter mVisitImgAdapter;
-    private ArrayList<String> datas;
+    public static ArrayList<String> datas;
     private LiveHttpHelper liveHttpHelper;
     private UploadManager uploadManager;
     private EditText etPhone;
@@ -88,6 +72,19 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
 
         preData();
         setListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!datas.contains("add")) {
+            if (datas.size() != 3)
+                datas.add("add");
+        }
+        if (mVisitImgAdapter != null) {
+            mVisitImgAdapter.notifyDataSetChanged();
+        }
+
     }
 
     public void onClick(View v) {
@@ -310,12 +307,12 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
             if (!SDCollectionUtil.isEmpty(tokens)) {
                 uploadToken = tokens.get(0).getUptoken();
                 if (!TextUtils.isEmpty(uploadToken)) {
-                    SDDialogManager.showProgressDialog("请等待");
                     uploadFile();
                 }
             }
         } else if (LiveConstants.HOST_INFO.equals(method)) {
-            SDDialogManager.dismissProgressDialog();
+            SDToast.showToast("申请认证成功");
+            finish();
         }
 
     }
@@ -338,9 +335,15 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                                         sbFileKeys.append("http://ob23v88s3.bkt.clouddn.com/" + fileKey + ",");
                                     }
                                     if (sbFileKeys.toString().indexOf("http:") != -1) {
-                                        String[] strs = sbFileKeys.toString().split("http:");
-                                        if ((strs.length - 1) == datas.size()) {
-                                            liveHttpHelper.postHostInfo("12b9d278-53e9-11e6-beb8-9e71128cae77", phone, sbFileKeys.toString(), String.valueOf(cityId), "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                                        String[] strs = sbFileKeys.toString().split("ttp://");
+                                        if (datas.contains("add")) {
+                                            if ((strs.length - 1) == 2) {
+                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                                            }
+                                        } else {
+                                            if ((strs.length - 1) == 3) {
+                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                                            }
                                         }
                                     }
                                 } catch (JSONException e) {
