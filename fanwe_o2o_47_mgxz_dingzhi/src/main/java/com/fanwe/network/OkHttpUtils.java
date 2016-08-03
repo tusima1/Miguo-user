@@ -94,7 +94,7 @@ public class OkHttpUtils {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
         //袁浩 测试地址
-        serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC/";
+  //     serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC/";
         if(!TextUtils.isEmpty(url)){
             serverUrl +=url;
         }
@@ -142,56 +142,7 @@ public class OkHttpUtils {
             return "";
         }
     }
-//    public void post(String url, TreeMap<String,String> params, Callback mCallback,Object tag)  {
-//        String serverUrl="";
-//        if(ServerUrl.DEBUG){
-//            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-//        }else{
-//            serverUrl = ServerUrl.SERVER_API_URL_MID;
-//        }
-//        //袁浩 测试地址
-//        serverUrl = "http://192.168.2.220/php01/mgxz.BussRPC/";
-//        if(!TextUtils.isEmpty(url)){
-//            serverUrl +=url;
-//        }
-//        if(serverUrl.endsWith("/")){
-//            serverUrl = serverUrl.substring(0,serverUrl.length()-1);
-//        }
-//        //添加公共参数
-//        params.putAll(commonParams());
-//        //加密所有的参数
-//        params = encryptParams(params);
-//
-//        StringBuilder paramStr = new StringBuilder();
-//        for(Map.Entry<String,String> entry:params.entrySet()){
-//
-//            try {
-//                paramStr.append(entry.getKey()+"="+ URLEncoder.encode(entry.getValue(),"UTF-8")+"&");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        String text = paramStr.substring(0,paramStr.length()-1);
-//      try {
-//         // StringBody body =  StringBody.create(text, "application/x-www-form-urlencoded", Charset.forName("UTF-8"));
-//
-////          FormBody.Builder formBody = new FormBody.Builder();
-////          for (Map.Entry<String, String> entry : params.entrySet()) {
-////              formBody.add(entry.getKey(), entry.getValue());
-////          }
-//
-//          Request request = new Request.Builder()
-//                  .url(serverUrl)
-//                  .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, text))
-//                  .tag(tag)
-//                  .build();
-//          Call call = client.newCall(request);
-//          // 开启异步线程访问网络
-//          call.enqueue(mCallback);
-//      }catch (Exception e){
-//
-//      }
-//    }
+
 
     /**
      * 用从第三方的URL 取值。
@@ -230,7 +181,7 @@ public class OkHttpUtils {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
         //袁浩 测试地址
-        serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC";
+ //       serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC";
         if(!TextUtils.isEmpty(url)){
             serverUrl +=url;
         }
