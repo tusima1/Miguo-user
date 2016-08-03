@@ -188,7 +188,8 @@ public class OkHttpUtils {
         } else {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
-       
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
         }
         if (serverUrl.endsWith("/")) {
             serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
