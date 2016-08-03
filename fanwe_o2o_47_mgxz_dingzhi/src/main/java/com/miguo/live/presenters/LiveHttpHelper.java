@@ -59,7 +59,7 @@ public class LiveHttpHelper implements IHelper {
     private Context mContext;
     private String token;
 
-    public static final String RESULT_OK="no_body_but_is_ok";
+    public static final String RESULT_OK = "no_body_but_is_ok";
 
     public LiveHttpHelper(Context mContext, CallbackView mView) {
         this.mContext = mContext;
@@ -121,7 +121,7 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param shop_id
      */
-    public void applyRoom(String shop_id,MgCallback mgCallback) {
+    public void applyRoom(String shop_id, MgCallback mgCallback) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
@@ -349,18 +349,18 @@ public class LiveHttpHelper implements IHelper {
     /**
      * post申请成为主播
      *
-     * @param character
+     * @param sex
      * @param mobile
      * @param picture
      * @param city
      * @param interest
      */
-    public void postHostInfo(String character, String mobile, String picture, String city, String
+    public void postHostInfo(String sex, String mobile, String picture, String city, String
             interest) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
-        params.put("character", character);
+        params.put("sex", sex);
         params.put("mobile", mobile);
         params.put("picture", picture);
         params.put("city", city);

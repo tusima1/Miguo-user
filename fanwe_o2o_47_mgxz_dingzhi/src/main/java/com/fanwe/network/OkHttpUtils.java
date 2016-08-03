@@ -94,11 +94,6 @@ public class OkHttpUtils {
         } else {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
-
-        //袁浩 测试地址
-    serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC/";
-
-
         if (!TextUtils.isEmpty(url)) {
             serverUrl += url;
         }
@@ -118,11 +113,13 @@ public class OkHttpUtils {
             }
         }
 
+
         RequestBody requestBodyPost = build.build();
         Request requestPost = new Request.Builder()
                 .url(serverUrl)
                 .post(requestBodyPost)
                 .build();
+
 
         client.newCall(requestPost).enqueue(mCallback);
     }
@@ -191,12 +188,7 @@ public class OkHttpUtils {
         } else {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
-
-        //袁浩 测试地址
-      serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC";
-        if(!TextUtils.isEmpty(url)){
-            serverUrl +=url;
-
+       
         }
         if (serverUrl.endsWith("/")) {
             serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
@@ -207,6 +199,7 @@ public class OkHttpUtils {
         params = encryptParams(params);
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
+
             paramStr.append(entry.getKey() + "=" + entry.getValue() + "&");
         }
         serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);

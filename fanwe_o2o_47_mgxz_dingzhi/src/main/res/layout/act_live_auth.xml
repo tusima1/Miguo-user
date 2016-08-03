@@ -237,7 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
-                android:drawableLeft="@drawable/ic_location_live_auth"
+                android:drawableLeft="@drawable/ic_phone_live_auth"
                 android:drawablePadding="@dimen/dp5"
                 android:text="常用手机"
                 android:textColor="@color/text_hongbao_title"

@@ -30,6 +30,16 @@ public class ImgViewActivity extends Activity {
         setListener();
     }
 
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.layout_delete_img_view:
+                LiveAuthActivity.datas.remove(path);
+                finish();
+                break;
+        }
+    }
+
     private void preData() {
         if (getIntent() != null) {
             path = getIntent().getStringExtra("path");
