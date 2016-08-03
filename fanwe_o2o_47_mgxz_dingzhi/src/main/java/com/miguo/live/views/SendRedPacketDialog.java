@@ -79,10 +79,10 @@ public class SendRedPacketDialog extends Dialog {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // instantiate the dialog with the custom Theme
-            final SendRedPacketDialog dialog = new SendRedPacketDialog(context);
-            View layout = inflater.inflate(R.layout.send_redpacket_dialog, null);
+            final SendRedPacketDialog dialog = new SendRedPacketDialog(context,R.style.dialog);
+            View layout = inflater.inflate(R.layout.dialog_live_red_packet, null);
             dialog.addContentView(layout, new LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
             sendBtn = (Button)layout.findViewById(R.id.send_btn);
             cancelBtn = (Button)layout.findViewById(R.id.cancel_btn);
@@ -112,6 +112,8 @@ public class SendRedPacketDialog extends Dialog {
 
 
             dialog.setContentView(layout);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
             return dialog;
         }
 

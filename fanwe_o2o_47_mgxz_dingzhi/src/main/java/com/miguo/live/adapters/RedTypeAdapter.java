@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
@@ -73,14 +73,14 @@ import java.util.List;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public LinearLayout red_line;
+            public FrameLayout red_line;
             public TextView typeText;
             public TextView countText;
             public View.OnClickListener clickListener;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                red_line = (LinearLayout)itemView.findViewById(R.id.red_line);
+                red_line = (FrameLayout)itemView.findViewById(R.id.red_line);
                 typeText = (TextView)itemView.findViewById(R.id.type_text);
                 countText = (TextView) itemView.findViewById(R.id.count_text);
                 red_line.setOnClickListener(clickListener);

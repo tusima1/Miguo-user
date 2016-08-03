@@ -96,29 +96,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
      * 进入直播Activity(创建直播)
      */
     public void createAvRoom(){
-        ////如果是自己
-//        MySelfInfo.getInstance().setId(mUser_id);
-//        Intent intent = new Intent(this, LiveActivity.class);
-//        intent.putExtra(Constants.ID_STATUS, Constants.HOST);
-//        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
-//        MySelfInfo.getInstance().setJoinRoomWay(true);
-//        CurLiveInfo.setTitle("直播");
-//        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
-//        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
-//        startActivity(intent);
-//        this.finish();
-//        if (TextUtils.isEmpty(MySelfInfo.getInstance().getId()) || MySelfInfo.getInstance().getMyRoomNum()==-1){
-//            MGToast.showToast("创建房间失败,用户异常!");
-//        }
-//        Intent intent=new Intent(this,LiveActivity.class);
-//        intent.putExtra(Constants.ID_STATUS,Constants.HOST);
-//        MySelfInfo.getInstance().setIdStatus(Constants.HOST);
-//        MySelfInfo.getInstance().setJoinRoomWay(true);//创建房间
-//        CurLiveInfo.setTitle("直播");
-//        CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
-//        CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
-//        startActivity(intent);
-//        this.finish();
+
 
     }
     private void testLive() {
