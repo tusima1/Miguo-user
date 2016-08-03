@@ -92,9 +92,8 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * 腾讯登录 。
      * @param identify
      * @param userSig
-     * @param ifVisit
      */
-    public void imLogin(String identify, String userSig,boolean ifVisit) {
+    public void imLogin(String identify, String userSig,TIMCallBack callBack) {
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
@@ -106,17 +105,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 Constants.SDK_APPID,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
-                new TIMCallBack() {
-                    @Override
-                    public void onError(int i, String s) {
-                        Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
-                        mView.onFailue("IM 认证失败。");
-                    }
-                    @Override
-                    public void onSuccess() {
-                        startAVSDK();
-                    }
-                });
+                callBack);
     }
 
     /**

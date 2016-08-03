@@ -128,7 +128,6 @@ public class InitAdvsMultiActivity extends BaseActivity {
                     NORMAL_DISPLAY_TIME = Integer.MAX_VALUE;
                 }
             }
-
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
         }
