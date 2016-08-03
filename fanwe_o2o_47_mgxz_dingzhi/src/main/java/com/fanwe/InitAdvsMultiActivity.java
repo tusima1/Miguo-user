@@ -126,6 +126,8 @@ public class InitAdvsMultiActivity extends BaseActivity {
                         .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
                     ADVS_DISPLAY_TIME = Integer.MAX_VALUE;
                     NORMAL_DISPLAY_TIME = Integer.MAX_VALUE;
+                }else {
+                    submmit();//只需要一次
                 }
             }
 
@@ -407,6 +409,9 @@ public class InitAdvsMultiActivity extends BaseActivity {
                 initBaiduMap();
                 getDeviceId();
             }
+        }else {
+            initBaiduMap();
+            getDeviceId();
         }
     }
 
