@@ -8,7 +8,6 @@ import android.text.TextUtils;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
-import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
@@ -28,7 +27,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.utils.CrashHandler;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -95,7 +93,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         //腾讯视频sdk
         InitBusinessHelper.initApp(this);
 
-        initBaiduMap();
+
         //初始化友盟分享
         UmengShareManager.initConfig();
 
@@ -141,22 +139,18 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         mListClassNotFinishWhenLoginState0.add(MainActivity.class);
     }
 
-    private void initAppCrashHandler() {
-        if (!ServerUrl.DEBUG) {
-            CrashHandler crashHandler = CrashHandler.getInstance();
-            crashHandler.init(getApplicationContext());
-        }
-    }
+//    private void initAppCrashHandler() {
+//        if (!ServerUrl.DEBUG) {
+//            CrashHandler crashHandler = CrashHandler.getInstance();
+//            crashHandler.init(getApplicationContext());
+//        }
+//    }
 
     private void initSettingModel() {
         // 插入成功或者数据库已经存在记录
         SettingModelDao.insertOrCreateModel(new SettingModel());
         mRuntimeConfig.updateIsCanLoadImage();
         mRuntimeConfig.updateIsCanPushMessage();
-    }
-
-    private void initBaiduMap() {
-        BaiduMapManager.getInstance().init(this);
     }
 
     public static App getApplication() {

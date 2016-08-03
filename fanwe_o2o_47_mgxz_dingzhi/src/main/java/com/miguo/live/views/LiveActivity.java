@@ -429,7 +429,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         //顶部view
 
         //主播-->加载的view
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
             Log.e("live","D "+i);
@@ -1211,7 +1211,23 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private void switchScreen() {
         if (bCleanMode) {
             mFullControllerUi.setVisibility(View.INVISIBLE);
+            //主播清屏
+            if (LiveUtil.checkIsHost()){
+                mHostTopView.hide();
+                mListViewMsgItems.setVisibility(View.INVISIBLE);
+                if (mHostBottomMeiView2.isShow()){
+                    mHostBottomMeiView2.hide();
+                }
+            }
+
         } else {
+            if (LiveUtil.checkIsHost()){
+                mHostTopView.show();
+                mListViewMsgItems.setVisibility(View.VISIBLE);
+                if (!mHostBottomMeiView2.isShow()){
+                    mHostBottomMeiView2.show();
+                }
+            }
             mFullControllerUi.setVisibility(View.VISIBLE);
         }
         bCleanMode = !bCleanMode;
@@ -1598,5 +1614,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     }
     //-------------- http end -------------
+
+
 
 }

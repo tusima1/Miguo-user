@@ -1,5 +1,7 @@
 package com.miguo.live.views;
 
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 /**
@@ -77,5 +79,13 @@ public class LiveUtil {
             formatTime = hs + ":" + ms + ":" + ss;
         }
         return formatTime;
+    }
+
+    /**
+     * 判断是否是主播
+     * @return true 是主播
+     */
+    public static boolean checkIsHost(){
+        return  MySelfInfo.getInstance().getIdStatus() == Constants.HOST? true :false;
     }
 }

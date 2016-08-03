@@ -17,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -73,12 +75,14 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     private ArrayList<String> datas;
     private LiveHttpHelper liveHttpHelper;
     private UploadManager uploadManager;
+    private EditText etPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActLiveAuthBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_auth);
         mGridView = (GridView) findViewById(R.id.gridView_live_auth);
+        etPhone = (EditText) findViewById(R.id.et_phone_live_auth);
         dataBindingLiveAuth = new DataBindingLiveAuth();
         binding.setLive(dataBindingLiveAuth);
 
@@ -106,12 +110,23 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 dataBindingLiveAuth.mode.set(dataBindingLiveAuth.EXCELLENT);
                 break;
             case R.id.btn_submit_live_auth:
-//                liveHttpHelper.getBussDictionInfo("Client");
-                liveHttpHelper.getUpToken();
-//                liveHttpHelper.postHostInfo("12b9d278-53e9-11e6-beb8-9e71128cae77", "13123211253", "http://ob23v88s3.bkt.clouddn.com/FuKbWokGhm0tzgKc5JinPh3rBdXO", "123", "f4564d66-53e8-11e6-beb8-9e72328cae77");
-//                finish();
+                submitAuth();
                 break;
         }
+    }
+
+    private String phone;
+
+    private void submitAuth() {
+        phone = etPhone.getText().toString().trim();
+        if (cityId == 0) {
+            SDToast.showToast("请选择城市");
+        } else if (TextUtils.isEmpty(phone)) {
+            SDToast.showToast("请输入手机号");
+        } else if (datas.size() < 3) {
+            SDToast.showToast("请上传2-3张生活照");
+        } else
+            liveHttpHelper.getUpToken();
     }
 
     private void preData() {
@@ -192,11 +207,14 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         startActivityForResult(intent, SELECT_FILE_CODE);
     }
 
+    int cityId;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 8888) {
             dataBindingLiveAuth.city.set(AppRuntimeWorker.getCity_name());
+            cityId = AppRuntimeWorker.getCity_id();
             return;
         }
         if (resultCode != Activity.RESULT_OK) {
@@ -292,17 +310,20 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
             if (!SDCollectionUtil.isEmpty(tokens)) {
                 uploadToken = tokens.get(0).getUptoken();
                 if (!TextUtils.isEmpty(uploadToken)) {
+                    SDDialogManager.showProgressDialog("请等待");
                     uploadFile();
                 }
             }
+        } else if (LiveConstants.HOST_INFO.equals(method)) {
+            SDDialogManager.dismissProgressDialog();
         }
 
     }
 
-    ArrayList<String> fileKeys = new ArrayList<>();
+    private StringBuffer sbFileKeys;
 
     private void uploadFile() {
-        fileKeys.clear();
+        sbFileKeys = new StringBuffer();
         for (int i = 0; i < datas.size(); i++) {
             File uploadFile = new File(datas.get(i));
             uploadManager.put(uploadFile, null, uploadToken,
@@ -314,17 +335,21 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                                 try {
                                     String fileKey = jsonData.getString("key");
                                     if (!TextUtils.isEmpty(fileKey)) {
-                                        fileKeys.add(fileKey);
+                                        sbFileKeys.append("http://ob23v88s3.bkt.clouddn.com/" + fileKey + ",");
+                                    }
+                                    if (sbFileKeys.toString().indexOf("http:") != -1) {
+                                        String[] strs = sbFileKeys.toString().split("http:");
+                                        if ((strs.length - 1) == datas.size()) {
+                                            liveHttpHelper.postHostInfo("12b9d278-53e9-11e6-beb8-9e71128cae77", phone, sbFileKeys.toString(), String.valueOf(cityId), "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                                        }
                                     }
                                 } catch (JSONException e) {
                                 }
                             } else {
-
                             }
                         }
                     }, null);
         }
-        Log.d("fileKeys", fileKeys.toString());
     }
 
     @Override
