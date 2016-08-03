@@ -73,4 +73,17 @@ public class ModelAudienceList {
     public String getJoin_status() {
         return this.join_status;
     }
+
+    @Override
+    public String toString() {
+        return "ModelAudienceList{" +
+                "start_time='" + start_time + '\'' +
+                ", live_record_id='" + live_record_id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", end_time='" + end_time + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", id='" + id + '\'' +
+                ", join_status='" + join_status + '\'' +
+                '}';
+    }
 }

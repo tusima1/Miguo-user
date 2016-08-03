@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by admin on 16/5/24.
  */
-public class GetMemberListHelper extends Presenter {
+public class GetMemberListHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter {
     private Context mContext;
     private MembersDialogView mMembersDialogView;
     private static final String TAG = GetMemberListHelper.class.getSimpleName();

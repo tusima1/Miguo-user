@@ -137,9 +137,17 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         }
     }
     /*更新人数*/
-    public void updateNum(String num){
+    public void updateAudienceCount(String num){
         if(!TextUtils.isEmpty(num)) {
             mAV_members_num.setText(num + "人");
         }
+    }
+    /*设置地址*/
+    public void setLocation(String location){
+        mTv_location.setText(location);
+    }
+    /*设置关键字,格式还未定义*/
+    public void setKeyWords(){
+        //TODO keywords
     }
 }
