@@ -73,7 +73,7 @@ HomeFragmentLiveList extends BaseFragment {
                 intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
                 MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
                 MySelfInfo.getInstance().setJoinRoomWay(false);
-                CurLiveInfo.setHostID(host.getUid());
+                CurLiveInfo.setHostID(host.getHost_user_id());
                 CurLiveInfo.setHostName(host.getNickname());
 //                CurLiveInfo.setHostAvator(item.getHost().getAvatar());
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
