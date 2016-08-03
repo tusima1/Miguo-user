@@ -107,8 +107,8 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 break;
             case R.id.btn_submit_live_auth:
 //                liveHttpHelper.getBussDictionInfo("Client");
-//                liveHttpHelper.getUpToken();
-                liveHttpHelper.postHostInfo("12b9d278-53e9-11e6-beb8-9e71128cae77", "13123211253", "http://ob23v88s3.bkt.clouddn.com/FuKbWokGhm0tzgKc5JinPh3rBdXO", "123", "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                liveHttpHelper.getUpToken();
+//                liveHttpHelper.postHostInfo("12b9d278-53e9-11e6-beb8-9e71128cae77", "13123211253", "http://ob23v88s3.bkt.clouddn.com/FuKbWokGhm0tzgKc5JinPh3rBdXO", "123", "f4564d66-53e8-11e6-beb8-9e72328cae77");
 //                finish();
                 break;
         }

@@ -110,6 +110,7 @@ public class LiveHttpHelper implements IHelper {
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
+
     public String getToken() {
         if (!TextUtils.isEmpty(token)) {
             return token;
@@ -141,7 +142,7 @@ public class LiveHttpHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
                 List<ResultLive> resultLives = rootLive.getResult();
-                if (SDCollectionUtil.isEmpty(resultLives)||resultLives.size()<1) {
+                if (SDCollectionUtil.isEmpty(resultLives) || resultLives.size() < 1) {
                     mView.onSuccess(LiveConstants.LIVE_LIST, null);
                     return;
                 }
@@ -426,15 +427,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
-                List<ResultHostInfo> resultHostInfos = rootHostInfo.getResult();
-                if (SDCollectionUtil.isEmpty(resultHostInfos)) {
-                    mView.onSuccess(LiveConstants.HOST_INFO, null);
-                    return;
-                }
-                ResultHostInfo resultHostInfo = resultHostInfos.get(0);
-                List<ModelHostInfo> modelHostInfo = resultHostInfo.getBody();
-                mView.onSuccess(LiveConstants.HOST_INFO, modelHostInfo);
+                mView.onSuccess(LiveConstants.HOST_INFO, null);
             }
 
             @Override
