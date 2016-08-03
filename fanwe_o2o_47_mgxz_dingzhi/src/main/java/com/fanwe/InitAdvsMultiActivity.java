@@ -120,12 +120,15 @@ public class InitAdvsMultiActivity extends BaseActivity {
         PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
         String versionCode = String.valueOf(info.versionCode);
         if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
-            if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager
-                    .PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission
-                    .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-                ADVS_DISPLAY_TIME = Integer.MAX_VALUE;
-                NORMAL_DISPLAY_TIME = Integer.MAX_VALUE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if ((checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager
+                        .PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission
+                        .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                    ADVS_DISPLAY_TIME = Integer.MAX_VALUE;
+                    NORMAL_DISPLAY_TIME = Integer.MAX_VALUE;
+                }
             }
+
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
         }
