@@ -1,6 +1,7 @@
 package com.fanwe.network;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alipay.share.sdk.openapi.channel.APMessage;
 import com.fanwe.app.App;
@@ -10,8 +11,10 @@ import com.lidroid.xutils.http.client.multipart.content.StringBody;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -21,14 +24,14 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
+
 
 /**
- *
  * Created by Administrator on 2016/7/22.
  */
 public class OkHttpUtils {
@@ -36,7 +39,7 @@ public class OkHttpUtils {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-    private  static String TAG="StringRequestUrl";
+    private static String TAG = "StringRequestUrl";
     private static String APP_KEY = "app_key";
     private static String APP_SECURITY = "app_security";
     private static String TIMESTAMP = "timestamp";
@@ -50,8 +53,7 @@ public class OkHttpUtils {
     private static final String ENCRYPT_TYPE = "MD5";
     //"http://192.168.2.43:9080/mgxz.AuthorRPC/";
     public static final MediaType MEDIA_TYPE_MARKDOWN
-            = MediaType.parse("text/x-markdown; charset=utf-8");
-
+            = MediaType.parse("application/x-www-form-urlencoded");
 
 
     private OkHttpClient client = new OkHttpClient.Builder()
@@ -65,19 +67,64 @@ public class OkHttpUtils {
         }
         return mInstance;
     }
+
+    private void initOkHttp() {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .build();
+    }
+
     /**
      * 异步POST提交，带TAG 的 请求
      * POST方法发送请求时，仍然使用基本的URL，将参数信息放在请求实体中发送。
-     * @param url url 地址
-     * @param params params
+     *
+     * @param url       url 地址
+     * @param params    params
      * @param mCallback 返回
      */
-    public void post(String url, TreeMap<String,String> params, MgCallback mCallback)  {
-        post(url,params,mCallback,null);
+    public void post(String url, TreeMap<String, String> params, MgCallback mCallback) {
+        post(url, params, mCallback, null);
+    }
+
+    public void post(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+        String serverUrl = "";
+        if (ServerUrl.DEBUG) {
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
+        } else {
+            serverUrl = ServerUrl.SERVER_API_URL_MID;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
+        }
+
+        //添加公共参数
+        params.putAll(commonParams());
+        //加密所有的参数
+        params = encryptParams(params);
+
+        FormBody.Builder build = new FormBody.Builder();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                build.add(entry.getKey(), entry.getValue());
+            } else {
+                build.add(entry.getKey(), "");
+            }
+        }
+
+        RequestBody requestBodyPost = build.build();
+        Request requestPost = new Request.Builder()
+                .url(serverUrl)
+                .post(requestBodyPost)
+                .build();
+
+        client.newCall(requestPost).enqueue(mCallback);
     }
 
     /**
      * 同步请求POST。
+     *
      * @param url
      * @param json
      * @return
@@ -98,67 +145,72 @@ public class OkHttpUtils {
             return "";
         }
     }
-    public void post(String url, TreeMap<String,String> params, Callback mCallback,Object tag)  {
-        String serverUrl="";
-        if(ServerUrl.DEBUG){
-            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        }else{
-            serverUrl = ServerUrl.SERVER_API_URL_MID;
-        }
-        //袁浩 测试地址
-       // serverUrl = "http://192.168.2.41:8080/mgxz.BussRPC/";
-        if(!TextUtils.isEmpty(url)){
-            serverUrl +=url;
-        }
-        if(serverUrl.endsWith("/")){
-            serverUrl = serverUrl.substring(0,serverUrl.length()-1);
-        }
-        //添加公共参数
-        params.putAll(commonParams());
-        //加密所有的参数
-        params = encryptParams(params);
-
-        StringBuilder paramStr = new StringBuilder();
-        for(Map.Entry<String,String> entry:params.entrySet()){
-
-            paramStr.append(entry.getKey()+"="+entry.getValue()+"&");
-        }
-        String text = paramStr.substring(0,paramStr.length()-1);
-      try {
-         // StringBody body =  StringBody.create(text, "application/x-www-form-urlencoded", Charset.forName("UTF-8"));
-
-//          FormBody.Builder formBody = new FormBody.Builder();
-//          for (Map.Entry<String, String> entry : params.entrySet()) {
-//              formBody.add(entry.getKey(), entry.getValue());
-//          }
-
-          Request request = new Request.Builder()
-                  .url(serverUrl)
-                  .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, text))
-                  .tag(tag)
-                  .build();
-          Call call = client.newCall(request);
-          // 开启异步线程访问网络
-          call.enqueue(mCallback);
-      }catch (Exception e){
-
-      }
-    }
+//    public void post(String url, TreeMap<String,String> params, Callback mCallback,Object tag)  {
+//        String serverUrl="";
+//        if(ServerUrl.DEBUG){
+//            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
+//        }else{
+//            serverUrl = ServerUrl.SERVER_API_URL_MID;
+//        }
+//        //袁浩 测试地址
+//        serverUrl = "http://192.168.2.220/php01/mgxz.BussRPC/";
+//        if(!TextUtils.isEmpty(url)){
+//            serverUrl +=url;
+//        }
+//        if(serverUrl.endsWith("/")){
+//            serverUrl = serverUrl.substring(0,serverUrl.length()-1);
+//        }
+//        //添加公共参数
+//        params.putAll(commonParams());
+//        //加密所有的参数
+//        params = encryptParams(params);
+//
+//        StringBuilder paramStr = new StringBuilder();
+//        for(Map.Entry<String,String> entry:params.entrySet()){
+//
+//            try {
+//                paramStr.append(entry.getKey()+"="+ URLEncoder.encode(entry.getValue(),"UTF-8")+"&");
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        String text = paramStr.substring(0,paramStr.length()-1);
+//      try {
+//         // StringBody body =  StringBody.create(text, "application/x-www-form-urlencoded", Charset.forName("UTF-8"));
+//
+////          FormBody.Builder formBody = new FormBody.Builder();
+////          for (Map.Entry<String, String> entry : params.entrySet()) {
+////              formBody.add(entry.getKey(), entry.getValue());
+////          }
+//
+//          Request request = new Request.Builder()
+//                  .url(serverUrl)
+//                  .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, text))
+//                  .tag(tag)
+//                  .build();
+//          Call call = client.newCall(request);
+//          // 开启异步线程访问网络
+//          call.enqueue(mCallback);
+//      }catch (Exception e){
+//
+//      }
+//    }
 
     /**
      * 用从第三方的URL 取值。
+     *
      * @param url
      * @param params
      * @param mCallback
      */
-    public void thirdUrlGet(String url, TreeMap<String,String> params, Callback mCallback){
+    public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback) {
 
         StringBuilder paramStr = new StringBuilder();
-        for(Map.Entry<String,String> entry:params.entrySet()){
+        for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            paramStr.append(entry.getKey()+"="+entry.getValue()+"&");
+            paramStr.append(entry.getKey() + "=" + entry.getValue() + "&");
         }
-        url = url+"?"+paramStr.substring(0,paramStr.length()-1);
+        url = url + "?" + paramStr.substring(0, paramStr.length() - 1);
         //创建一个Request
         final Request request = new Request.Builder()
                 .url(url)
@@ -168,37 +220,36 @@ public class OkHttpUtils {
         //请求加入调度
         call.enqueue(mCallback);
     }
+
     /**
      * GET异步请求 GET方法需要用？将参数连接在URL后面，各个参数之间用&连接。
-     * @param url utl
+     *
+     * @param url       utl
      * @param mCallback
      */
-    public void get(String url, TreeMap<String,String> params, Callback mCallback) {
+    public void get(String url, TreeMap<String, String> params, Callback mCallback) {
 
-        String serverUrl="";
-        if(ServerUrl.DEBUG){
+        String serverUrl = "";
+        if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        }else{
+        } else {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
-        //袁浩 测试地址
-     //   serverUrl = "http://192.168.2.42:8080/mgxz.BussRPC";
-        if(!TextUtils.isEmpty(url)){
-            serverUrl +=url;
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
         }
-        if(serverUrl.endsWith("/")){
-            serverUrl = serverUrl.substring(0,serverUrl.length()-1);
+        if (serverUrl.endsWith("/")) {
+            serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
         }
         //添加公共参数
         params.putAll(commonParams());
         //加密所有的参数
         params = encryptParams(params);
         StringBuilder paramStr = new StringBuilder();
-        for(Map.Entry<String,String> entry:params.entrySet()){
-
-            paramStr.append(entry.getKey()+"="+entry.getValue()+"&");
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            paramStr.append(entry.getKey() + "=" + entry.getValue() + "&");
         }
-        serverUrl = serverUrl+"?"+paramStr.substring(0,paramStr.length()-1);
+        serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
 
         //创建一个Request
         final Request request = new Request.Builder()
@@ -213,6 +264,7 @@ public class OkHttpUtils {
 
     /**
      * 删除队列的请求。
+     *
      * @param tag
      */
     public void cancelTag(Object tag) {
