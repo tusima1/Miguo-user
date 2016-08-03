@@ -536,7 +536,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 业务服务器的数据字典接口
+     * 获取七牛UpToken
      */
     public void getUpToken() {
         getToken();
