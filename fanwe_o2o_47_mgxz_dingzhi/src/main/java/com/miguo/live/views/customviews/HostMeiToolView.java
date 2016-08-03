@@ -85,6 +85,21 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     }
 
     /**
+     * 是否是隐藏状态
+     * @return true 显示
+     *          false 隐藏
+     */
+    public boolean isShow(){
+        int visibility = mIv_lighting.getVisibility();
+        if (visibility==View.INVISIBLE){
+            return false;
+        }else if (visibility==View.VISIBLE){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 隐藏按钮
      */
     public void hide() {
