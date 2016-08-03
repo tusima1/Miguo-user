@@ -72,7 +72,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     public final int SELECT_FILE_CODE = 0x32;
     private GridView mGridView;
     private VisitImgAdapter mVisitImgAdapter;
-    private ArrayList<String> datas;
+    public static ArrayList<String> datas;
     private LiveHttpHelper liveHttpHelper;
     private UploadManager uploadManager;
     private EditText etPhone;
@@ -88,6 +88,17 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
 
         preData();
         setListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!datas.contains("add"))
+            datas.add("add");
+        if (mVisitImgAdapter != null) {
+            mVisitImgAdapter.notifyDataSetChanged();
+        }
+
     }
 
     public void onClick(View v) {
