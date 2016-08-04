@@ -31,7 +31,6 @@ import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Root;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -49,7 +48,9 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
@@ -139,6 +140,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private HostTopView mHostTopView;
     private HostMeiToolView mHostBottomMeiView2;
     private TencentHttpHelper tencentHttpHelper;
+    private LiveHttpHelper mLiveHttphelper;
 
 
     @Override
@@ -579,6 +581,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
+        //开启后台业务服务器请求管理类
+        mLiveHttphelper = new LiveHttpHelper(this,this);
+        //----
         initViewNeed();
     }
 
@@ -698,8 +703,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         backDialog = new Dialog(this, R.style.dialog);
         backDialog.setContentView(R.layout.dialog_live_host_exit_1);
         Window window = backDialog.getWindow();
-//        WindowManager.LayoutParams params = window.getAttributes();
         window.setGravity(Gravity.CENTER);
+
         TextView tvSure = (TextView) backDialog.findViewById(R.id.sure_action);
         tvSure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -709,6 +714,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     mLiveHelper.perpareQuitRoom(true);
                     if (isPushed) {
                         mLiveHelper.stopPushAction();
+                    }
+                    //向后台发送主播退出
+                    if (mLiveHttphelper!=null){
+                        mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum()+"");
                     }
                 }
                 backDialog.dismiss();
@@ -1582,7 +1591,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
             case LiveConstants.ENTER_ROOM:
                 //观众进入房间
-                if (checkData(datas)){
+                if (!checkDataIsNull(datas)){
                     //成功
                 }
                 break;
@@ -1591,8 +1600,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
             case LiveConstants.HOST_INFO:
                 //获取host资料
-                if (!checkData(datas)){
+                if (checkDataIsNull(datas)){
                     MGLog.e("LiveConstants.HOST_INFO 返回数据失败!");
+                    return;
                 }
                 ModelHostInfo hostInfo = (ModelHostInfo) datas.get(0);
                 if (hostInfo!=null && mUserHeadTopView!=null){
@@ -1604,27 +1614,35 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
             case LiveConstants.STOP_LIVE:
                 //主播退出(结束主播!!!)
+                if (checkDataIsNull(datas)){
+                    MGLog.e("LiveConstants.STOP_LIVE 返回数据失败!");
+                    return;
+                }
+                ModelStopLive stopLive = (ModelStopLive) datas.get(0);
+                MGToast.showToast("时间:"+stopLive.getUsetime()+"人数:"+stopLive.getWatch_count());
                 break;
             case LiveConstants.AUDIENCE_COUNT:
                 //获取观众人数
-                if (!checkData(datas)){
+                if (checkDataIsNull(datas)){
                     MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                    return;
                 }
                 ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
                 //更新观众人数
                 if (audienceCount!=null && mHostTopView!=null){
                     mHostTopView.updateAudienceCount(audienceCount.getCount());
+                    MGLog.e("LiveConstants.AUDIENCE_COUNT 更新人数");
                 }
                 break;
         }
     }
 
     /*校验数据*/
-    public boolean checkData(List datas){
+    public boolean checkDataIsNull(List datas){
         if (datas!=null && datas.size()>0){
-            return true;
+            return false;//不为空
         }else {
-            return false;
+            return true;//为null
         }
     }
 
