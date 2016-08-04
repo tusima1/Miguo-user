@@ -3,20 +3,18 @@ package com.miguo.live.views.customviews;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.LiveInputDialogHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
-import com.tencent.qcloud.suixinbo.views.customviews.InputTextMsgDialog;
 
 
 /**
@@ -152,16 +150,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         if (mAct == null || mLiveHelper == null || mContext == null) {
             return;
         }
-        InputTextMsgDialog inputMsgDialog = new InputTextMsgDialog(mContext, R.style.inputdialog,
-                mLiveHelper, mAct);
-        WindowManager windowManager = mAct.getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = inputMsgDialog.getWindow().getAttributes();
-
-        lp.width = (int) (display.getWidth()); //设置宽度
-        inputMsgDialog.getWindow().setAttributes(lp);
-        inputMsgDialog.setCancelable(true);
-        inputMsgDialog.show();
+        LiveInputDialogHelper inputDialogHelper=new LiveInputDialogHelper(mLiveHelper,mAct);
+        inputDialogHelper.show();
     }
 
 

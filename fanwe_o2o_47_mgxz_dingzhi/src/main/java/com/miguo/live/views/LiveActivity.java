@@ -132,7 +132,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
     private View root;
-    private LiveExitDialogHelper mExitDialogHelper;//直播退出详情界面
     private UserHeadTopView mUserHeadTopView;
     private LiveRecordDialogHelper mRecordHelper;
     private LiveOrientationHelper mOrientationHelper;
@@ -298,7 +297,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             //AvSurfaceView 初始化成功
             if (action.equals(Constants.ACTION_SURFACE_CREATED)) {
                 //打开摄像头
-                if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+                if (LiveUtil.checkIsHost()) {
                     mLiveHelper.openCameraAndMic();
                 }
             }
@@ -350,7 +349,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     mHostLeaveLayout.setVisibility(View.VISIBLE);
                 }
 
-                if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {//自己是主播
+                if (LiveUtil.checkIsHost()) {//自己是主播
                     if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
                         mHostBottomToolView1.setVisibility(View.VISIBLE);
                         mHostBottomMeiView2.setVisibility(View.VISIBLE);
@@ -570,8 +569,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
 
-            //退出的界面(用户)
-            mExitDialogHelper = new LiveExitDialogHelper(this);
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
         avView = findViewById(R.id.av_video_layer_ui);//surfaceView;
@@ -633,7 +630,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         public void run() {
             SxbLog.i(TAG, "timeTask ");
             ++mSecond;
-            if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST)
+            if (LiveUtil.checkIsHost())
                 mHandler.sendEmptyMessage(UPDAT_WALL_TIME_TIMER_TASK);
         }
     }
@@ -675,22 +672,31 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     @Override
     public void onBackPressed() {
-        quiteLiveByPurpose();
+        if (LiveUtil.checkIsHost()) {
+            hostExit();
+        }else {
+            userExit();
+        }
 
     }
 
     /**
-     * 右上角退出按钮
+     *
      * 主动退出直播
      */
-    private void quiteLiveByPurpose() {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+    private void hostExit() {
+        if (LiveUtil.checkIsHost()) {
             if (backDialog.isShowing() == false)
                 backDialog.show();
-        } else {
-             mLiveHelper.perpareQuitRoom(true);
-             mEnterRoomHelper.quiteLive();
         }
+    }
+
+    /**
+     * 普通用户退出
+     */
+    public void userExit(){
+        mLiveHelper.perpareQuitRoom(true);
+        mEnterRoomHelper.quiteLive();
     }
 
 
@@ -784,15 +790,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
             MGToast.showToast("主播退出!");
             finish();
         } else {
-            if ((getBaseContext() != null) && (null != mExitDialogHelper) && (mExitDialogHelper.isShowing() == false)) {
-
-                mExitDialogHelper.show();
-            }
-
+            //普通用户退出
+            LiveUserExitDialogHelper userExitDialogHelper=new LiveUserExitDialogHelper(this);
+            userExitDialogHelper.show();
         }
 
     }
@@ -935,7 +939,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             QavsdkControl.getInstance().setSelfId(MySelfInfo.getInstance().getId());
             QavsdkControl.getInstance().setLocalHasVideo(true, MySelfInfo.getInstance().getId());
             //主播通知用户服务器
-            if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+            if (LiveUtil.checkIsHost()) {
                 if (bFirstRender) {
                     mEnterRoomHelper.notifyServerCreateRoom();
 
@@ -992,7 +996,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void refreshUI(String id) {
         //当主播选中这个人，而他主动退出时需要恢复到正常状态
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST)
+        if (LiveUtil.checkIsHost())
             if (!backGroundId.equals(CurLiveInfo.getHostID()) && backGroundId.equals(id)) {
                 backToNormalCtrlView();
             }
@@ -1111,7 +1115,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void cancelMemberView(String id) {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
         } else {
             //TODO 主动下麦 下麦；
             mLiveHelper.changeAuthandRole(false, Constants.NORMAL_MEMBER_AUTH, Constants.NORMAL_MEMBER_ROLE);
@@ -1262,7 +1266,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
     private void backToNormalCtrlView() {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
             backGroundId = CurLiveInfo.getHostID();
             mHostBottomToolView1.setVisibility(View.VISIBLE);
             mHostBottomMeiView2.setVisibility(View.VISIBLE);
