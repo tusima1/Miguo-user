@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +39,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.user.presents.IMUserInfoHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
@@ -64,7 +62,6 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
-import com.tencent.TIMCallBack;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -165,7 +162,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
-        avinit();
+        
+        root = findViewById(R.id.root);
+        //屏幕方向管理,初始化
+        mOrientationHelper = new LiveOrientationHelper();
+        //公共功能管理类
+        mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
         checkUserAndPermission();
 
 
@@ -181,14 +183,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         initView();
     }
 
-    public void avinit() {
-
-        root = findViewById(R.id.root);
-        //屏幕方向管理,初始化
-        mOrientationHelper = new LiveOrientationHelper();
-        //公共功能管理类
-        mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
-    }
     /**
      * IM 登录。
      */
