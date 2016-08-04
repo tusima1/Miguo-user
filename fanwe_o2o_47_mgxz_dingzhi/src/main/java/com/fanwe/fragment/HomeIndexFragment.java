@@ -48,6 +48,8 @@ public class HomeIndexFragment extends BaseFragment {
         super.init();
         initSlidingPlayView();
         bindData();
+
+
     }
 
     private void initSlidingPlayView() {
@@ -61,7 +63,7 @@ public class HomeIndexFragment extends BaseFragment {
         }
 
         if (mListIndexsModel.size() > 10) {
-            SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(10));
+            SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(20));
         }
 
         mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mListIndexsModel, 10), getActivity());

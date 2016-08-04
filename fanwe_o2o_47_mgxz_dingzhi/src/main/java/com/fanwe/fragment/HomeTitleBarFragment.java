@@ -3,6 +3,7 @@ package com.fanwe.fragment;
 import com.fanwe.CityListActivity;
 import com.fanwe.HomeSearchActivity;
 import com.fanwe.MainActivity;
+import com.fanwe.MyMessageActivity;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.utils.SDViewBinder;
@@ -90,6 +91,7 @@ public class HomeTitleBarFragment extends BaseFragment {
                 break;
             case R.id.frag_home_title_bar_ll_msg:
                 //message
+                startActivity(new Intent(getActivity(), MyMessageActivity.class));
                 break;
             default:
                 break;

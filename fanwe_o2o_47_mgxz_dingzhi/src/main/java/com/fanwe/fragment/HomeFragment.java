@@ -29,6 +29,7 @@ import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -213,17 +214,19 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         @Override
         public void onPullDownToRefresh(
                 PullToRefreshBase<ScrollView> refreshView) {
+//            pageModel.resetPage();
+//            mListModel.clear();
+//            pageData_1 = null;
+//            pageData_2.clear();
+//            requestIndex();
+//            requestIndex2(false);
+
+//            SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), HomeFragment.this);
+//            sellerHttpHelper.getShopList(1, 2, "", "", String.valueOf(AppRuntimeWorker.getCity_id()));
+
             isRefresh = true;
             pageNum = 1;
-            //重置数据集
-            pageModel.resetPage();
-            mListModel.clear();
-            pageData_1 = null;
-            pageData_2.clear();
-
-            requestIndex();
             requestLiveList();
-//            requestIndex2(false);
             mPtrsvAll.setMode(Mode.BOTH);
         }
 
@@ -235,25 +238,13 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             }
             requestLiveList();
             mPtrsvAll.setMode(Mode.BOTH);
-//            if (pageModel.increment()) {
-//                // 添加第二页数据
-//                requestIndex2(true);
-//                if (pageModel.getPage() == 3) {
-//                    mPtrsvAll.setMode(Mode.PULL_FROM_START);
-//                }
-//            } else {
-//                mFragRecommendDeals = new HomeRecommendTuanFragment();
-//                mFragRecommendDeals.setmIndexModel(mListModel, 3);
-////                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-//                mPtrsvAll.setMode(Mode.PULL_FROM_START);
-//                mPtrsvAll.onRefreshComplete();
-//            }
         }
 
     };
 
     private void requestLiveList() {
-        liveHelper.getLiveList(pageNum, pageSize, "", "", "e1b2911e-3a23-4630-9213-d317d200d9dc");
+//        liveHelper.getLiveList(pageNum, pageSize, "", "", String.valueOf(AppRuntimeWorker.getCity_id()));
+        liveHelper.getLiveList(pageNum, pageSize, "", "", "");
     }
 
 
@@ -378,11 +369,9 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         getSDFragmentManager().replace(R.id.frag_home_new_fl_zt, mFragZt);
 
         // 推荐商家
-        mFragRecommendSupplier = new HomeRecommendStoreFragment();
-        mFragRecommendSupplier.setmIndexModel(actModel);
-        getSDFragmentManager().replace(
-                R.id.frag_home_new_fl_recommend_supplier,
-                mFragRecommendSupplier);
+//        mFragRecommendSupplier = new HomeRecommendStoreFragment();
+//        mFragRecommendSupplier.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_supplier, mFragRecommendSupplier);
 
         // 推荐活动
         mFragRecommendEvent = new HomeRecommendEvnetFragment();
@@ -424,6 +413,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
                 requestIndex();
+                requestLiveList();
                 break;
             case RETRY_INIT_SUCCESS:
                 dealLocationSuccess();
