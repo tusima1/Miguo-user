@@ -4,9 +4,6 @@ package com.miguo.live.adapters;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,12 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.UserInfoNew;
 import com.miguo.live.model.LiveChatEntity;
-import com.miguo.utils.GlideCircleTransform;
-import com.miguo.utils.UIUtils;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -172,19 +167,24 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 //        holder.sendContext.fixViewWidth(mListView.getWidth());
 
       //  holder.civ_user_image.setImageURI();
-        String url = item.getSendIcon();
-
-//        if (TextUtils.isEmpty(url)) {
-//            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
-//            Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
-//            holder.civ_user_image.setImageBitmap(cirBitMap);
-//        } else {
-//            RequestManager req = Glide.with(context);
-//            req.load(url).transform(new GlideCircleTransform(context)).into(holder.civ_user_image);
-//        }
-
-        holder.name.setText(item.getSenderName()+":");
+        //先显示电话
+        if (TextUtils.isEmpty(item.getSenderName())){
+            UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+            String user_name = userInfoNew
+                    .getUser_name();
+            String work_tel = userInfoNew.getWork_tel();
+            if (!TextUtils.isEmpty(user_name)){
+                holder.name.setText(user_name+":");
+            }else if(!TextUtils.isEmpty(work_tel)){
+                holder.name.setText(work_tel+":");
+            }else {
+                holder.name.setText("快说你是谁"+":");
+            }
+        }
+//        holder.name.setText(item.getSenderName()+":");
         holder.content.setText(item.getContent());
+//        holder.name.fixViewWidth(mListView.getWidth());
+//        holder.content.fixViewWidth(mListView.getWidth());
         return convertView;
     }
 
