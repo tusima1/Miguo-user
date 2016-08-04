@@ -168,7 +168,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 
       //  holder.civ_user_image.setImageURI();
         //先显示电话
-        if (TextUtils.isEmpty(item.getSenderName())){
+        if (TextUtils.isEmpty(item.getSenderName())||"null".equals(item.getSenderName())){
             UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
             String user_name = userInfoNew
                     .getUser_name();
@@ -181,7 +181,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
                 holder.name.setText("快说你是谁"+":");
             }
         }
-//        holder.name.setText(item.getSenderName()+":");
+       holder.name.setText(item.getSenderName()+":");
         holder.content.setText(item.getContent());
 //        holder.name.fixViewWidth(mListView.getWidth());
 //        holder.content.fixViewWidth(mListView.getWidth());

@@ -1,5 +1,6 @@
 package com.miguo.live.views;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -7,6 +8,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +40,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.user.presents.IMUserInfoHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
@@ -69,6 +74,7 @@ import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
+import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.OKhttpHelper;
 import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
@@ -97,7 +103,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private EnterLiveHelper mEnterRoomHelper;
     private ProfileInfoHelper mUserInfoHelper;
     private LiveHelper mLiveHelper;
-    private  com.tencent.qcloud.suixinbo.presenters.LoginHelper mTLoginHelper ;
+    private LoginHelper mTLoginHelper;
+    private final int REQUEST_PHONE_PERMISSIONS = 0;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
     private static final int MINFRESHINTERVAL = 500;
@@ -150,9 +157,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
+        checkPermission();
         registerReceiver();
-
-        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this,this);
+        mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
@@ -161,109 +168,160 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         tencentHttpHelper = new TencentHttpHelper(this);
         avinit();
         checkUserAndPermission();
-        //checkPermission();
-        //进出房间的协助类
 
 
     }
 
-    public void enterRoom(){
+    public void enterRoom() {
+        mLiveHelper.setCameraPreviewChangeCallback();
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
         mEnterRoomHelper.startEnterRoom();
+
         //初始化view
         initView();
     }
-    public void avinit(){
+
+    public void avinit() {
 
         root = findViewById(R.id.root);
-
-        //QavsdkControl.getInstance().setCameraPreviewChangeCallback();
-
-
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
-
         //公共功能管理类
         mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
-
     }
+    /**
+     * IM 登录。
+     */
+    public void doImLogin(String userid, String useSign) {
+        mTLoginHelper.imLogin(userid, useSign);
+    }
+    public void doImLogin(String userid, String useSign,final  MgCallback callback,boolean host) {
+        mTLoginHelper.imLogin(userid, useSign,callback,host);
+    }
+    public void goToLoginActivity() {
+        Intent intent = new Intent(LiveActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * 取签名 。
+     *
+     * @param token
+     */
+    public void getSign(String token) {
+        //get usersign
+        MgCallback mgCallback = new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Gson gson = new Gson();
+                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
+                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
+                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
+                    SDToast.showToast("获取用户签名失败。");
+                    return;
+                }
+                ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
+                List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
+
+                if (modelGenerateSign != null && modelGenerateSign.size() > 0 && modelGenerateSign.get(0) != null) {
+                    String usersig = modelGenerateSign.get(0).getUsersig();
+                    MySelfInfo.getInstance().setUserSig(usersig);
+                    App.getInstance().setUserSign(usersig);
+                    String userid = MySelfInfo.getInstance().getId();
+                    mTLoginHelper.imLogin(userid, usersig);
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast("获取用户签名失败。");
+                finish();
+            }
+        };
+        tencentHttpHelper.getSign(token, mgCallback);
+    }
+
+
     /**
      * 判断用户是否已经登录，并注册 了腾讯 号。
      */
-    public void checkUserAndPermission (){
-
+    public void checkUserAndPermission() {
         String token = App.getInstance().getToken();
+        boolean imLoginSuccess = App.getInstance().isImLoginSuccess();
+        boolean isAvStart = App.getInstance().isAvStart();
+        String useSign = App.getInstance().getUserSign();
 
 
-
-        if(TextUtils.isEmpty(token)){
-            Intent intent = new Intent(LiveActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }else{
-            String userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
-            MySelfInfo.getInstance().setId(userid);
-            //get usersign
-            MgCallback mgCallback = new MgCallback() {
-                @Override
-                public void onSuccessResponse(String responseBody) {
-                    Gson gson=new Gson();
-                    RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
-                    List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
-                    if (resultGenerateSigns==null||resultGenerateSigns.size()<1) {
-                        SDToast.showToast("获取用户签名失败。");
-                        return;
-                    }
-                    ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
-                    List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
-
-                    if(modelGenerateSign!=null&& modelGenerateSign.size()>0&&modelGenerateSign.get(0)!=null) {
-                       String usersig = modelGenerateSign.get(0).getUsersig();
-                        MySelfInfo.getInstance().setUserSig(usersig);
-                        App.getInstance().setUserSign(usersig);
-                        String userid = MySelfInfo.getInstance().getId();
-                        mTLoginHelper.imLogin(userid,usersig,new TIMCallBack() {
-                            @Override
-                            public void onError(int i, String s) {
-                             SDToast.showToast("IM 认证失败。");
-                            }
-                            @Override
-                            public void onSuccess() {
-                                startAVSDK();
-                                enterRoom();
-                                mLiveHelper.setCameraPreviewChangeCallback();
-                            }
-                        });
-
-
-                    }
-
+        if (TextUtils.isEmpty(token)) {
+            goToLoginActivity();
+        }
+        //直播已经初始化。
+        String userid = MySelfInfo.getInstance().getId();
+        if (TextUtils.isEmpty(userid)) {
+            UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+            if (userCurrentInfo != null && userCurrentInfo.getUserInfoNew() != null) {
+                userid = userCurrentInfo.getUserInfoNew().getUser_id();
+                if (TextUtils.isEmpty(userid)) {
+                    MySelfInfo.getInstance().setId(userid);
+                    goToLoginActivity();
                 }
-
-                @Override
-                public void onErrorResponse(String message, String errorCode) {
-                    SDToast.showToast("获取用户签名失败。");
-                    finish();
-                }
-            };
-            tencentHttpHelper.getSign(token,mgCallback);
+            }
         }
 
+        MgCallback imLoginSuccessCallback = new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast("进度房间失败");
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                super.onSuccessResponse(responseBody);
+                if(QavsdkControl.getInstance().getAVContext()==null){
+                    startAVSDK();
+                }
+                enterRoom();
+
+            }
+        };
+        if (isAvStart) {
+            if(QavsdkControl.getInstance().getAVContext()==null){
+                    startAVSDK();
+
+            }
+            enterRoom();
+        } else {
+            if (imLoginSuccess) {
+                boolean value =MySelfInfo.getInstance().isCreateRoom();
+               mTLoginHelper.getToRoomAndStartAV(imLoginSuccessCallback,value);
+            } else {
+                if (!TextUtils.isEmpty(useSign)) {
+                    doImLogin(userid, useSign,imLoginSuccessCallback,MySelfInfo.getInstance().isCreateRoom());
+                } else {
+                   goToLoginActivity();
+                }
+            }
+        }
+
+
     }
+
     /**
      * 初始化AVSDK
      */
+
     private void startAVSDK() {
         String userid = MySelfInfo.getInstance().getId();
-        String userSign =  MySelfInfo.getInstance().getUserSig();
-        int  appId = Constants.SDK_APPID;
+        String userSign = MySelfInfo.getInstance().getUserSig();
+        int appId = Constants.SDK_APPID;
 
-        int  ccType = Constants.ACCOUNT_TYPE;
-        QavsdkControl.getInstance().setAvConfig(appId, ccType+"",userid, userSign);
+        int ccType = Constants.ACCOUNT_TYPE;
+        QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
-
-        Log.e("live","初始化AVSDK");
+        Log.e("live", "初始化AVSDK");
     }
 
     private Handler mHandler = new Handler(new Handler.Callback() {
@@ -419,7 +477,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private void initView() {
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
-        mHostBottomToolView1.setNeed(mCommonHelper,mLiveHelper,this);
+        mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(mCommonHelper);
 
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
@@ -450,19 +508,19 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         if (LiveUtil.checkIsHost()) {
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
-            Log.e("live","D "+i);
+            Log.e("live", "D " + i);
             int roomId = MySelfInfo.getInstance().getMyRoomNum();
-            SDToast.showToast(roomId+"");
+            SDToast.showToast(roomId + "");
             String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
             String title = "米果小站";
-            if(App.getInstance().getmUserCurrentInfo()!=null){
+            if (App.getInstance().getmUserCurrentInfo() != null) {
                 UserCurrentInfo userInfoNew = App.getInstance().getmUserCurrentInfo();
-                if(userInfoNew!=null){
+                if (userInfoNew != null) {
                     UserInfoNew infoNew = userInfoNew.getUserInfoNew();
-                    if(infoNew!=null){
-                        if(!TextUtils.isEmpty(infoNew.getIcon())){
-                            url= infoNew.getIcon();
-                            title = TextUtils.isEmpty(infoNew.getNick())==true?infoNew.getUser_name():infoNew.getNick();
+                    if (infoNew != null) {
+                        if (!TextUtils.isEmpty(infoNew.getIcon())) {
+                            url = infoNew.getIcon();
+                            title = TextUtils.isEmpty(infoNew.getNick()) == true ? infoNew.getUser_name() : infoNew.getNick();
                         }
                     }
                 }
@@ -477,7 +535,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             //host的topview
             mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
             mHostTopView.setVisibility(View.VISIBLE);
-            mHostTopView.setNeed(this,mCommonHelper);
+            mHostTopView.setNeed(this, mCommonHelper);
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
 //            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
 //            BtnWhite = (TextView) findViewById(R.id.white_btn);
@@ -582,7 +640,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
         //开启后台业务服务器请求管理类
-        mLiveHttphelper = new LiveHttpHelper(this,this);
+        mLiveHttphelper = new LiveHttpHelper(this, this);
         //----
         initViewNeed();
     }
@@ -613,7 +671,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
 
-
     /**
      * 直播心跳
      */
@@ -622,7 +679,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         public void run() {
             String host = CurLiveInfo.getHostID();
             SxbLog.i(TAG, "HeartBeatTask " + host);
-           mLiveHelper.sendHeartBeat();
+            mLiveHelper.sendHeartBeat();
         }
     }
 
@@ -659,10 +716,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         CurLiveInfo.setAdmires(0);
         CurLiveInfo.setCurrentRequestCount(0);
         unregisterReceiver();
-        if(mLiveHelper!=null) {
+        if (mLiveHelper != null) {
             mLiveHelper.onDestory();
         }
-        if(mEnterRoomHelper!=null){
+        if (mEnterRoomHelper != null) {
             mEnterRoomHelper.onDestory();
         }
         QavsdkControl.getInstance().clearVideoMembers();
@@ -688,8 +745,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             if (backDialog.isShowing() == false)
                 backDialog.show();
         } else {
-             mLiveHelper.perpareQuitRoom(true);
-             mEnterRoomHelper.quiteLive();
+            mLiveHelper.perpareQuitRoom(true);
+            mEnterRoomHelper.quiteLive();
         }
     }
 
@@ -716,8 +773,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                         mLiveHelper.stopPushAction();
                     }
                     //向后台发送主播退出
-                    if (mLiveHttphelper!=null){
-                        mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum()+"");
+                    if (mLiveHttphelper != null) {
+                        mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum() + "");
                     }
                 }
                 backDialog.dismiss();
@@ -807,13 +864,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void memberJoin(String id, String name) {
         watchCount++;
         refreshTextListView(TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
-      int members = CurLiveInfo.getMembers() + 1;
+        int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
         //人数加1,可以设置到界面上
-        if(mHostTopView!=null){
-            mHostTopView.updateAudienceCount(members+"");
+        if (mHostTopView != null) {
+            mHostTopView.updateAudienceCount(members + "");
         }
-        if(mUserHeadTopView!=null) {
+        if (mUserHeadTopView != null) {
             mUserHeadTopView.updateAudicenceCount(members + "");
         }
     }
@@ -824,12 +881,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         watchCount--;
 
         if (CurLiveInfo.getMembers() > 1) {
-            int members = CurLiveInfo.getMembers()-1;
+            int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
-            if(mHostTopView!=null){
-                mHostTopView.updateAudienceCount(members+"");
+            if (mHostTopView != null) {
+                mHostTopView.updateAudienceCount(members + "");
             }
-            if(mUserHeadTopView!=null) {
+            if (mUserHeadTopView != null) {
                 mUserHeadTopView.updateAudicenceCount(members + "");
             }
         }
@@ -868,24 +925,24 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     /**
      * 主播退出 。
+     *
      * @param type
      * @param responseBody
      */
     @Override
     public void hostQuiteLive(String type, String responseBody) {
-        if(LiveConstants.EXIT_ROOM.equals(type)){
+        if (LiveConstants.EXIT_ROOM.equals(type)) {
             Type typeJson = new TypeToken<Root<LiveInfoJson>>() {
             }.getType();
             Gson gson = new Gson();
             Root<LiveInfoJson> root = gson.fromJson(responseBody, typeJson);
-            if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-            {
-               LiveInfoJson liveInfoJson =  root.getResult().get(0).getBody().get(0);
+            if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
+                LiveInfoJson liveInfoJson = root.getResult().get(0).getBody().get(0);
                 Intent mIntent = new Intent();
                 mIntent.setClass(this, LiveEndActivity.class);
                 // 通过Bundle
                 Bundle mBundle = new Bundle();
-                mBundle.putSerializable(LiveConstants.LIVEINFOJSON,liveInfoJson);
+                mBundle.putSerializable(LiveConstants.LIVEINFOJSON, liveInfoJson);
                 mIntent.putExtras(mBundle);
 
                 startActivity(mIntent);
@@ -1240,19 +1297,19 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         if (bCleanMode) {
             mFullControllerUi.setVisibility(View.INVISIBLE);
             //主播清屏
-            if (LiveUtil.checkIsHost()){
+            if (LiveUtil.checkIsHost()) {
                 mHostTopView.hide();
                 mListViewMsgItems.setVisibility(View.INVISIBLE);
-                if (mHostBottomMeiView2.isShow()){
+                if (mHostBottomMeiView2.isShow()) {
                     mHostBottomMeiView2.hide();
                 }
             }
 
         } else {
-            if (LiveUtil.checkIsHost()){
+            if (LiveUtil.checkIsHost()) {
                 mHostTopView.show();
                 mListViewMsgItems.setVisibility(View.VISIBLE);
-                if (!mHostBottomMeiView2.isShow()){
+                if (!mHostBottomMeiView2.isShow()) {
                     mHostBottomMeiView2.show();
                 }
             }
@@ -1580,10 +1637,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void onSuccess(String method, List datas) {
-        switch (method){
+        switch (method) {
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
-                List<ModelAudienceList> audienceList =datas;
+                List<ModelAudienceList> audienceList = datas;
                 MGLog.e(audienceList);
                 break;
             case LiveConstants.END_INFO:
@@ -1591,7 +1648,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
             case LiveConstants.ENTER_ROOM:
                 //观众进入房间
-                if (!checkDataIsNull(datas)){
+                if (!checkDataIsNull(datas)) {
                     //成功
                 }
                 break;
@@ -1600,12 +1657,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
             case LiveConstants.HOST_INFO:
                 //获取host资料
-                if (checkDataIsNull(datas)){
+                if (checkDataIsNull(datas)) {
                     MGLog.e("LiveConstants.HOST_INFO 返回数据失败!");
                     return;
                 }
                 ModelHostInfo hostInfo = (ModelHostInfo) datas.get(0);
-                if (hostInfo!=null && mUserHeadTopView!=null){
+                if (hostInfo != null && mUserHeadTopView != null) {
                     //TODO 主播的资料放哪里?
                 }
                 break;
@@ -1614,22 +1671,22 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 break;
             case LiveConstants.STOP_LIVE:
                 //主播退出(结束主播!!!)
-                if (checkDataIsNull(datas)){
+                if (checkDataIsNull(datas)) {
                     MGLog.e("LiveConstants.STOP_LIVE 返回数据失败!");
                     return;
                 }
                 ModelStopLive stopLive = (ModelStopLive) datas.get(0);
-                MGToast.showToast("时间:"+stopLive.getUsetime()+"人数:"+stopLive.getWatch_count());
+                MGToast.showToast("时间:" + stopLive.getUsetime() + "人数:" + stopLive.getWatch_count());
                 break;
             case LiveConstants.AUDIENCE_COUNT:
                 //获取观众人数
-                if (checkDataIsNull(datas)){
+                if (checkDataIsNull(datas)) {
                     MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
                     return;
                 }
                 ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
                 //更新观众人数
-                if (audienceCount!=null && mHostTopView!=null){
+                if (audienceCount != null && mHostTopView != null) {
                     mHostTopView.updateAudienceCount(audienceCount.getCount());
                     MGLog.e("LiveConstants.AUDIENCE_COUNT 更新人数");
                 }
@@ -1638,10 +1695,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
     /*校验数据*/
-    public boolean checkDataIsNull(List datas){
-        if (datas!=null && datas.size()>0){
+    public boolean checkDataIsNull(List datas) {
+        if (datas != null && datas.size() > 0) {
             return false;//不为空
-        }else {
+        } else {
             return true;//为null
         }
     }
@@ -1650,8 +1707,23 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void onFailue(String responseBody) {
 
     }
-    //-------------- http end -------------
-
+    void checkPermission() {
+        final List<String> permissionsList = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.CAMERA);
+            if ((checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.RECORD_AUDIO);
+            if ((checkSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.WAKE_LOCK);
+            if ((checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+            if (permissionsList.size() != 0) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_PHONE_PERMISSIONS);
+            }
+        }
+    }
 
 
 }
