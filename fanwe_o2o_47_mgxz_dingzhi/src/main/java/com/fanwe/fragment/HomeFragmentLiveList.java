@@ -75,6 +75,7 @@ HomeFragmentLiveList extends BaseFragment {
                 MySelfInfo.getInstance().setJoinRoomWay(false);
                 CurLiveInfo.setHostID(host.getHost_user_id());
                 CurLiveInfo.setHostName(host.getNickname());
+
 //                CurLiveInfo.setHostAvator(item.getHost().getAvatar());
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己

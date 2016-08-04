@@ -98,6 +98,9 @@
             android:name="com.miguo.live.views.LiveStartActivity"
             android:theme="@style/TransTheme" />
         <activity
+            android:name="com.miguo.live.views.LiveAuthActivity"
+            android:theme="@style/TransTheme" />
+        <activity
             android:name="com.miguo.live.views.LiveEndActivity"
             android:theme="@style/TransTheme" />
         <activity android:name="com.fanwe.seller.views.MineShopActivity" />

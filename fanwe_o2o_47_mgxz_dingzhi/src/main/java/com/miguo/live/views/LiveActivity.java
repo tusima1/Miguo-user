@@ -150,7 +150,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
         registerReceiver();
-        avinit();
+
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this,this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
         //房间内的交互协助类
@@ -158,6 +158,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
+        avinit();
         checkUserAndPermission();
         //checkPermission();
         //进出房间的协助类
@@ -177,7 +178,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         root = findViewById(R.id.root);
 
         //QavsdkControl.getInstance().setCameraPreviewChangeCallback();
-        mLiveHelper.setCameraPreviewChangeCallback();
+
 
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
@@ -192,11 +193,16 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void checkUserAndPermission (){
 
         String token = App.getInstance().getToken();
+
+
+
         if(TextUtils.isEmpty(token)){
             Intent intent = new Intent(LiveActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }else{
+            String userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            MySelfInfo.getInstance().setId(userid);
             //get usersign
             MgCallback mgCallback = new MgCallback() {
                 @Override
@@ -204,7 +210,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     Gson gson=new Gson();
                     RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
                     List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
-                    if (SDCollectionUtil.isEmpty(resultGenerateSigns)) {
+                    if (resultGenerateSigns==null||resultGenerateSigns.size()<1) {
                         SDToast.showToast("获取用户签名失败。");
                         return;
                     }
@@ -225,6 +231,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                             public void onSuccess() {
                                 startAVSDK();
                                 enterRoom();
+                                mLiveHelper.setCameraPreviewChangeCallback();
                             }
                         });
 

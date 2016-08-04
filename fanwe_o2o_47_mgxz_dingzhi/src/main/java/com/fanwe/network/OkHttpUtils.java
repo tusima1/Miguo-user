@@ -1,20 +1,13 @@
 package com.fanwe.network;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.alipay.share.sdk.openapi.channel.APMessage;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
-import com.lidroid.xutils.http.client.multipart.content.StringBody;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,7 +17,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -188,7 +180,8 @@ public class OkHttpUtils {
         } else {
             serverUrl = ServerUrl.SERVER_API_URL_MID;
         }
-       
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
         }
         if (serverUrl.endsWith("/")) {
             serverUrl = serverUrl.substring(0, serverUrl.length() - 1);

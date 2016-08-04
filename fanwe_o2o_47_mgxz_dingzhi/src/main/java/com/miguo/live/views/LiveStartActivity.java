@@ -72,9 +72,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
             String is_host = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIs_host();
             if("0".equals(is_host)){
                 SDToast.showToast("您还未成为主播");
-                Intent intent = new Intent(LiveStartActivity.this, LiveAuthActivity.class);
+                Intent intent = new Intent(this, LiveAuthActivity.class);
                 startActivity(intent);
-                finish();
+                 finish();
             }else{
                  dataBindingLiveStart.shopName.set("选择你的消费场所");
                  dataBindingLiveStart.isLiveRight.set(true);
@@ -190,7 +190,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             SDToast.showToast("用户名或者签名为空");
             return;
         }
-        mLoginHelper.imLogin(MySelfInfo.getInstance().getId(),usersig);
+        mLoginHelper.imLogin(userId,usersig);
 
     }
 
