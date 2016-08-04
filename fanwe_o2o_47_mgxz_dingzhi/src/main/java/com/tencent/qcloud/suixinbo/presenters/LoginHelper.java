@@ -162,18 +162,68 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
                         App.getInstance().setAvStart(true);
-                        getRoomNum();
+                        if(MySelfInfo.getInstance().isCreateRoom()==true) {
+                            getRoomNum();
+                        }
                         startAVSDK();
                     }
                 });
     }
 
+
+
+    /*登录imsdk
+    *
+            * @param identify 用户id
+    * @param userSig  用户签名
+    */
+    public void imLogin(String identify, String userSig,final MgCallback callback,final boolean host) {
+        MySelfInfo.getInstance().setId(identify);
+        MySelfInfo.getInstance().setUserSig(userSig);
+        TIMUser user = new TIMUser();
+        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
+        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+        user.setIdentifier(identify);
+        //发起登录请求
+        TIMManager.getInstance().login(
+                Constants.SDK_APPID,
+                user,
+                userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
+                new TIMCallBack() {
+                    @Override
+                    public void onError(int i, String s) {
+                        Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
+                        mView.onFailue("IM 认证失败。");
+                        if(callback!=null){
+                            callback.onErrorResponse("IM 认证失败。","400");
+                        }
+                    }
+                    @Override
+                    public void onSuccess() {
+                        imUserInfoHelper.setMyNickName("");
+                        imUserInfoHelper.setMyAvator("");
+                        App.getInstance().setImLoginSuccess(true);
+                        App.getInstance().setAvStart(true);
+                        if(host) {
+                            getRoomNum();
+                        }
+
+                        startAVSDK();
+                        if(callback!=null){
+                            callback.onSuccessResponse("");
+                        }
+                    }
+                });
+    }
     /**
      * 申请 房间号并进入房间。
      */
-    public void getToRoomAndStartAV(MgCallback callback){
+    public void getToRoomAndStartAV(MgCallback callback,boolean host){
         if(App.getInstance().isImLoginSuccess()) {
-            getRoomNum();
+            App.getInstance().setAvStart(true);
+            if(host) {
+                getRoomNum();
+            }
             startAVSDK();
             callback.onSuccessResponse("");
         }else{
@@ -277,6 +327,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     } else {
                         MySelfInfo.getInstance().setMyRoomNum(roomId);
                         MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
+
                         goToLive();
                         mView.onSuccess("");
 
