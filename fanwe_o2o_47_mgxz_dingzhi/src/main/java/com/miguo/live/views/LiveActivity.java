@@ -50,7 +50,6 @@ import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceList;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.presenters.LiveCommonHelper;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
@@ -697,8 +696,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     private void initBackDialog() {
         backDialog = new Dialog(this, R.style.dialog);
-        backDialog.setContentView(R.layout.dialog_end_live);
-        TextView tvSure = (TextView) backDialog.findViewById(R.id.btn_sure);
+        backDialog.setContentView(R.layout.dialog_live_host_exit_1);
+        Window window = backDialog.getWindow();
+//        WindowManager.LayoutParams params = window.getAttributes();
+        window.setGravity(Gravity.CENTER);
+        TextView tvSure = (TextView) backDialog.findViewById(R.id.sure_action);
         tvSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -712,7 +714,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 backDialog.dismiss();
             }
         });
-        TextView tvCancel = (TextView) backDialog.findViewById(R.id.btn_cancel);
+        TextView tvCancel = (TextView) backDialog.findViewById(R.id.cancel_action);
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

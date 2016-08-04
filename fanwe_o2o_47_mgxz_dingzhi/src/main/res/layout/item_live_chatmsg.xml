@@ -58,9 +58,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp3"
             android:layout_marginLeft="@dimen/dp3"
-            android:text="njsdjsoidosjodjsijdoijoisjojidiojsodsjiojsodjosdsd"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/sp12"
+            android:maxLines="3"
             />
     </LinearLayout>
 
