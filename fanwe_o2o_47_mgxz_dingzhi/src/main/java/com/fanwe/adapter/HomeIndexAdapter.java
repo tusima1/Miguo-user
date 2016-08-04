@@ -39,8 +39,8 @@ public class HomeIndexAdapter extends SDBaseAdapter<IndexActIndexsModel>
 		ImageView ivImage = ViewHolder.get(convertView, R.id.item_home_index_iv_image);
 		TextView tvName = ViewHolder.get(convertView, R.id.item_home_index_tv_name);
 
-		SDViewUtil.setViewWidth(ivImage, SDViewUtil.getScreenWidth() / 8);
-		SDViewUtil.setViewHeight(ivImage, SDViewUtil.getScreenWidth() / 8);
+		SDViewUtil.setViewWidth(ivImage, SDViewUtil.getScreenWidth() / 6);
+		SDViewUtil.setViewHeight(ivImage, SDViewUtil.getScreenWidth() / 6);
 
 		SDViewBinder.setTextView(tvName, model.getName());
 		SDViewBinder.setImageView(ivImage, model.getImg());
