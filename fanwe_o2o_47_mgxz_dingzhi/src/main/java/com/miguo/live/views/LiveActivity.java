@@ -162,7 +162,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
-        
+
         root = findViewById(R.id.root);
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
@@ -778,6 +778,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     }
                 }
                 backDialog.dismiss();
+                //先直接finish Activity
+                if (getParent()!=null){
+                    finish();
+                }
             }
         });
         TextView tvCancel = (TextView) backDialog.findViewById(R.id.cancel_action);
