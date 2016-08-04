@@ -5,9 +5,9 @@
 
         <variable
             name="live"
-            type="com.miguo.live.model.DataBindingLiveEnd" />
+            type="com.miguo.live.model.DataBindingLiveEnd"/>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
     </data>
 
@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#cc000000" />
+            android:background="#cc000000"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/bg_live_start" />
+                    android:src="@drawable/bg_live_start"/>
 
                 <TextView
                     android:id="@+id/tv_host_name"
@@ -47,7 +47,7 @@
                     android:layout_marginTop="4dp"
                     android:text='@{live.hostName}'
                     android:textColor="@color/white"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"/>
 
             </RelativeLayout>
 
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/tv_shop_name"
-                    android:src="@drawable/ic_location_live_start" />
+                    android:src="@drawable/ic_location_live_start"/>
 
                 <TextView
                     android:id="@+id/tv_shop_name"
@@ -72,7 +72,7 @@
                     android:gravity="center"
                     android:text='@{live.shopName}'
                     android:textColor="@color/white"
-                    android:textSize="13dp" />
+                    android:textSize="13dp"/>
 
             </RelativeLayout>
 
@@ -83,7 +83,7 @@
                 android:layout_marginTop="35dp"
                 android:text="观看人数"
                 android:textColor="@color/white"
-                android:textSize="13dp" />
+                android:textSize="13dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                 android:layout_marginTop="10dp"
                 android:text='@{live.numViewers}'
                 android:textColor="@color/main_color"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                     android:id="@+id/view_line_1"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/ff_66" />
+                    android:background="@color/ff_66"/>
 
                 <LinearLayout
                     android:id="@+id/layout_count"
@@ -127,7 +127,7 @@
                             android:layout_marginTop="12dp"
                             android:text="发出红包"
                             android:textColor="@color/white"
-                            android:textSize="13dp" />
+                            android:textSize="13dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -135,14 +135,14 @@
                             android:layout_gravity="center_horizontal"
                             android:text='@{live.countMoney}'
                             android:textColor="@color/white"
-                            android:textSize="17dp" />
+                            android:textSize="17dp"/>
                     </LinearLayout>
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/dp10"
-                        android:background="@color/ff_66" />
+                        android:background="@color/ff_66"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -157,7 +157,7 @@
                             android:layout_marginTop="12dp"
                             android:text="卖出商品"
                             android:textColor="@color/white"
-                            android:textSize="13dp" />
+                            android:textSize="13dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -165,14 +165,14 @@
                             android:layout_gravity="center_horizontal"
                             android:text='@{live.countGood}'
                             android:textColor="@color/white"
-                            android:textSize="17dp" />
+                            android:textSize="17dp"/>
                     </LinearLayout>
 
                     <View
                         android:layout_width="1px"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/dp10"
-                        android:background="@color/ff_66" />
+                        android:background="@color/ff_66"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -187,7 +187,7 @@
                             android:layout_marginTop="12dp"
                             android:text="米果币"
                             android:textColor="@color/white"
-                            android:textSize="13dp" />
+                            android:textSize="13dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -195,7 +195,7 @@
                             android:layout_gravity="center_horizontal"
                             android:text='@{live.countMi}'
                             android:textColor="@color/white"
-                            android:textSize="17dp" />
+                            android:textSize="17dp"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -204,7 +204,7 @@
                     android:layout_height="1px"
                     android:layout_below="@+id/layout_count"
                     android:layout_marginTop="@dimen/dp10"
-                    android:background="@color/ff_66" />
+                    android:background="@color/ff_66"/>
             </RelativeLayout>
 
             <TextView
@@ -214,7 +214,7 @@
                 android:layout_marginTop="22dp"
                 android:text="直播时长"
                 android:textColor="@color/white"
-                android:textSize="13dp" />
+                android:textSize="13dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                 android:layout_marginTop="10dp"
                 android:text='@{live.timeLive}'
                 android:textColor="@color/white"
-                android:textSize="17dp" />
+                android:textSize="17dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -236,7 +236,7 @@
                     android:layout_width="40dp"
                     android:layout_height="1px"
                     android:layout_centerVertical="true"
-                    android:background="@color/ff_66" />
+                    android:background="@color/ff_66"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -245,14 +245,14 @@
                     android:layout_gravity="center_horizontal"
                     android:text="分享让朋友们来关注我吧"
                     android:textColor="#99ffffff"
-                    android:textSize="13dp" />
+                    android:textSize="13dp"/>
 
                 <View
                     android:layout_width="40dp"
                     android:layout_height="1px"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@color/ff_66" />
+                    android:background="@color/ff_66"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -268,7 +268,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
                     android:padding="10dp"
-                    android:src="@{live.mode == live.SINA ? @drawable/ic_sina_selected_live_start : @drawable/ic_sina_normal_live_start}" />
+                    android:src="@{live.mode == live.SINA ? @drawable/ic_sina_selected_live_start : @drawable/ic_sina_normal_live_start}"/>
 
                 <ImageView
                     android:id="@+id/iv_weixin_live_end"
@@ -277,7 +277,7 @@
                     android:layout_marginLeft="10dp"
                     android:onClick="onClick"
                     android:padding="10dp"
-                    android:src="@{live.mode == live.WEIXIN ? @drawable/ic_weixin_selected_live_start : @drawable/ic_weixin_normal_live_start}" />
+                    android:src="@{live.mode == live.WEIXIN ? @drawable/ic_weixin_selected_live_start : @drawable/ic_weixin_normal_live_start}"/>
 
                 <ImageView
                     android:id="@+id/iv_friend_live_end"
@@ -286,7 +286,7 @@
                     android:layout_marginLeft="10dp"
                     android:onClick="onClick"
                     android:padding="10dp"
-                    android:src="@{live.mode == live.FRIEND ? @drawable/ic_friend_selected_live_start : @drawable/ic_friend_normal_live_start}" />
+                    android:src="@{live.mode == live.FRIEND ? @drawable/ic_friend_selected_live_start : @drawable/ic_friend_normal_live_start}"/>
 
                 <ImageView
                     android:id="@+id/iv_qq_live_end"
@@ -295,7 +295,7 @@
                     android:layout_marginLeft="10dp"
                     android:onClick="onClick"
                     android:padding="10dp"
-                    android:src="@{live.mode == live.QQ ? @drawable/ic_qq_selected_live_start : @drawable/ic_qq_normal_live_start}" />
+                    android:src="@{live.mode == live.QQ ? @drawable/ic_qq_selected_live_start : @drawable/ic_qq_normal_live_start}"/>
 
                 <ImageView
                     android:id="@+id/iv_qqzone_live_end"
@@ -304,7 +304,7 @@
                     android:layout_marginLeft="10dp"
                     android:onClick="onClick"
                     android:padding="10dp"
-                    android:src="@{live.mode == live.QQZONE ? @drawable/ic_qqzone_selected_live_start : @drawable/ic_qqzone_normal_live_start}" />
+                    android:src="@{live.mode == live.QQZONE ? @drawable/ic_qqzone_selected_live_start : @drawable/ic_qqzone_normal_live_start}"/>
             </LinearLayout>
 
             <Button
@@ -321,7 +321,7 @@
                 android:paddingTop="15dp"
                 android:text="确定"
                 android:textColor="@color/main_color"
-                android:textSize="17dp" />
+                android:textSize="17dp"/>
 
         </LinearLayout>
     </FrameLayout>

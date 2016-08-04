@@ -88,8 +88,11 @@ public class SDOtherUtil
 		if (clazz != null)
 		{
 			Type type = clazz.getGenericSuperclass();
+			if(!(type instanceof ParameterizedType)){
+				type = clazz.getSuperclass().getGenericSuperclass();
+			}
 			ParameterizedType parameterizedType = (ParameterizedType) type;
-			types = parameterizedType.getActualTypeArguments();
+			types= parameterizedType.getActualTypeArguments();
 		}
 		return types;
 	}

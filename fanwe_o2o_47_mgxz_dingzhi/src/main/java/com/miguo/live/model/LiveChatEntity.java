@@ -7,6 +7,10 @@ public class LiveChatEntity {
     private String grpSendName;
     private String content;
     private int  type;
+    /**
+     * 用户 头像。
+     */
+    private String sendIcon;
 
     public LiveChatEntity() {
         // TODO Auto-generated constructor stub
@@ -39,5 +43,13 @@ public class LiveChatEntity {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getSendIcon() {
+        return sendIcon;
+    }
+
+    public void setSendIcon(String sendIcon) {
+        this.sendIcon = sendIcon;
     }
 }

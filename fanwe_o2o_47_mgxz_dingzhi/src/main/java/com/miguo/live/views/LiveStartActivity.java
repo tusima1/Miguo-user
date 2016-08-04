@@ -48,6 +48,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
      * 签名后 的userid
      */
     String usersig;
+    String userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,23 +63,32 @@ public class LiveStartActivity extends Activity implements CallbackView {
         init();
 
     }
+    public void gotoAuthActivity(){
+        Intent intent = new Intent(LiveStartActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
     public  void init(){
          token = App.getApplication().getToken();
         if(TextUtils.isEmpty(token)){
-            Intent intent = new Intent(LiveStartActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+           goToLoginActivity();
         }else {
             String is_host = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIs_host();
             if("0".equals(is_host)){
                 SDToast.showToast("您还未成为主播");
-                Intent intent = new Intent(LiveStartActivity.this, LiveAuthActivity.class);
-                startActivity(intent);
-                finish();
+                gotoAuthActivity();
             }else{
                  dataBindingLiveStart.shopName.set("选择你的消费场所");
                  dataBindingLiveStart.isLiveRight.set(true);
-                getSign();
+                 userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                 usersig = App.getInstance().getUserSign();
+                //注册腾讯并申请房间号。
+                if(TextUtils.isEmpty(userid)){
+                    goToLoginActivity();
+                }
+                if(TextUtils.isEmpty(usersig)){
+                    getSign();
+                }
             }
         }
     }
@@ -166,31 +176,47 @@ public class LiveStartActivity extends Activity implements CallbackView {
             startActivity(new Intent(this, LiveAuthActivity.class));
         }
     }
-    /**
-     * 初始化AVSDK
-     */
-    private void startAVSDK() {
-        String userid = MySelfInfo.getInstance().getId();
-        String userSign =  MySelfInfo.getInstance().getUserSig();
-        int  appId = Constants.SDK_APPID;
-
-        int  ccType = Constants.ACCOUNT_TYPE;
-        QavsdkControl.getInstance().setAvConfig(appId, ccType+"",userid, userSign);
-        QavsdkControl.getInstance().startContext();
-
-        Log.e("live","初始化AVSDK");
+    public void goToLoginActivity() {
+        Intent intent = new Intent(LiveStartActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
     /**
      * 进入直播Activity(创建直播)
      */
     public void createAvRoom(){
-        String userId = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
-        //注册腾讯并申请房间号。
-        if(TextUtils.isEmpty(userId)||TextUtils.isEmpty(usersig)){
-            SDToast.showToast("用户名或者签名为空");
-            return;
+        boolean isAvStart = App.getInstance().isAvStart();
+        boolean isImlogin = App.getInstance().isImLoginSuccess();
+        if(!isImlogin) {
+            mLoginHelper.imLogin(userid, usersig, new MgCallback() {
+                @Override
+                public void onErrorResponse(String message, String errorCode) {
+                    SDToast.showToast("IM 注册失败，请重试");
+                }
+
+                @Override
+                public void onSuccessResponse(String responseBody) {
+                    super.onSuccessResponse(responseBody);
+                    goToLive();
+                }
+            });
+        }else if(!isAvStart){
+            mLoginHelper.getToRoomAndStartAV(new MgCallback() {
+                @Override
+                public void onErrorResponse(String message, String errorCode) {
+                    SDToast.showToast("进入房间失败。");
+                }
+                @Override
+                public void onSuccessResponse(String responseBody) {
+                    super.onSuccessResponse(responseBody);
+                    goToLive();
+                }
+            },true);
+
+        }else{
+            goToLive();
         }
-        mLoginHelper.imLogin(MySelfInfo.getInstance().getId(),usersig);
+
 
     }
 
@@ -214,29 +240,12 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onSuccess(String responseBody) {
-        //testLive();
+
     }
 
     @Override
     public void onSuccess(String method, List datas) {
-//        switch (method) {
-//            case LiveConstants.GENERATE_SIGN:
-//                UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
-//                ModelGenerateSign sign = (ModelGenerateSign) datas.get(0);
-//                usersig = sign.getUsersig();
-//                com.tencent.qcloud.suixinbo.presenters.LoginHelper tcLogin = new com.tencent.qcloud
-//                        .suixinbo.presenters.LoginHelper(LiveStartActivity.this);
-//                tcLogin.imLogin(userInfoNew.getUser_id(), usersig);
-//                //请求房间号
-////                http.applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b1");
-//                break;
-//            case LiveConstants.APPLY_ROOM:
-////                ModelApplyRoom room = (ModelApplyRoom) datas.get(0);
-////                String room_id = room.getRoom_id();
-//                //开启直播
-//
-//                break;
-//        }
+
     }
 
     @Override

@@ -64,6 +64,14 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 自我引用 .
      */
     private static App myApplication;
+    /**
+     * 是否腾讯IM 认证成功 。
+     */
+    public boolean imLoginSuccess = false;
+    /**
+     * 是否初始化AV.
+     */
+    public boolean isAvStart = false;
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
@@ -287,5 +295,21 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    public boolean isImLoginSuccess() {
+        return imLoginSuccess;
+    }
+
+    public void setImLoginSuccess(boolean imLoginSuccess) {
+        this.imLoginSuccess = imLoginSuccess;
+    }
+
+    public boolean isAvStart() {
+        return isAvStart;
+    }
+
+    public void setAvStart(boolean avStart) {
+        isAvStart = avStart;
     }
 }
