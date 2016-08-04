@@ -4,7 +4,11 @@ package com.miguo.live.adapters;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveChatEntity;
+import com.miguo.utils.GlideCircleTransform;
+import com.miguo.utils.UIUtils;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -164,10 +172,19 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 //        holder.sendContext.fixViewWidth(mListView.getWidth());
 
       //  holder.civ_user_image.setImageURI();
+        String url = item.getSendIcon();
+
+//        if (TextUtils.isEmpty(url)) {
+//            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar);
+//            Bitmap cirBitMap = UIUtils.createCircleImage(bitmap, 0);
+//            holder.civ_user_image.setImageBitmap(cirBitMap);
+//        } else {
+//            RequestManager req = Glide.with(context);
+//            req.load(url).transform(new GlideCircleTransform(context)).into(holder.civ_user_image);
+//        }
+
         holder.name.setText(item.getSenderName()+":");
         holder.content.setText(item.getContent());
-//        holder.name.fixViewWidth(mListView.getWidth());
-//        holder.content.fixViewWidth(mListView.getWidth());
         return convertView;
     }
 

@@ -3,6 +3,7 @@ package com.miguo.live.presenters;
 import android.app.Activity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.content.Context;
 
 import com.fanwe.app.App;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -26,6 +27,7 @@ import java.util.TreeMap;
 public class TencentHttpHelper implements ITencentResult {
     private Activity mActivity;
     private ITencentResult mListener;
+    private Context mContext;
 
     @Override
     public void onResult(boolean succ) {
@@ -34,6 +36,11 @@ public class TencentHttpHelper implements ITencentResult {
 
     public TencentHttpHelper(Activity activity){
         this.mActivity=activity;
+
+    }
+
+    public TencentHttpHelper(Context context){
+        this.mContext=context;
 
     }
     public TencentHttpHelper(Activity activity,ITencentResult iTencentResult){

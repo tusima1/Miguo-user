@@ -69,7 +69,7 @@ public abstract class MgCallback<T> implements Callback {
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+               // Log.e(TAG, e.getMessage());
                 SDToast.showToast(e.getMessage());
             }
         }

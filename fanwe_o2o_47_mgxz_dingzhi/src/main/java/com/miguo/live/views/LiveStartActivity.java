@@ -166,20 +166,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             startActivity(new Intent(this, LiveAuthActivity.class));
         }
     }
-    /**
-     * 初始化AVSDK
-     */
-    private void startAVSDK() {
-        String userid = MySelfInfo.getInstance().getId();
-        String userSign =  MySelfInfo.getInstance().getUserSig();
-        int  appId = Constants.SDK_APPID;
 
-        int  ccType = Constants.ACCOUNT_TYPE;
-        QavsdkControl.getInstance().setAvConfig(appId, ccType+"",userid, userSign);
-        QavsdkControl.getInstance().startContext();
-
-        Log.e("live","初始化AVSDK");
-    }
     /**
      * 进入直播Activity(创建直播)
      */
