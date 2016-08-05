@@ -78,6 +78,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(llmanager);
 
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(2));
+
         HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
         mRecyclerView.setAdapter(mAdapter);
     }

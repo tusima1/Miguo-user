@@ -87,17 +87,17 @@
 
     <ImageView
         android:id="@+id/iv_close"
-        android:layout_width="@dimen/dp32"
+        android:layout_width="@dimen/dp39"
         android:layout_height="@dimen/dp30"
         android:layout_alignParentRight="true"
-        android:paddingLeft="@dimen/dp5"
+        android:paddingLeft="@dimen/dp12"
         android:paddingRight="@dimen/dp12"
         android:paddingTop="@dimen/dp5"
         android:src="@drawable/ic_close"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/member_image_list"
-        android:layout_width="@dimen/dp150"
+        android:layout_width="@dimen/dp116"
         android:layout_height="@dimen/dp25"
         android:layout_marginTop="@dimen/dp5"
         android:layout_toLeftOf="@id/iv_close"/>
