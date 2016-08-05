@@ -36,6 +36,8 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private Activity mActivity;
     private LiveUserExitDialogHelper userExitDialogHelper;
 
+    public boolean isUserClose=false;//是不是用户点击的关闭
+
     public UserHeadTopView(Context context) {
         this(context,null);
     }
@@ -71,6 +73,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
     public void initNeed(Activity activity){
         this.mActivity=activity;
+        userExitDialogHelper=new LiveUserExitDialogHelper(mActivity);
     }
 
 
@@ -89,11 +92,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关闭操作
      */
     private void close() {
-        if (mActivity!=null && userExitDialogHelper==null){
-            userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
+        if (mActivity!=null && userExitDialogHelper!=null){
+            userExitDialogHelper.show();
         }
-        userExitDialogHelper.show();
-
+        isUserClose=true;
     }
 
     /**
@@ -168,5 +170,18 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void setKeyWords(){
 //        if (){}
         mKeywords.setText("富国  明主  哈哈  大小  乌拉拉");
+    }
+
+    public boolean isExitDialogShowing(){
+        if (userExitDialogHelper!=null){
+            return userExitDialogHelper.isShowing();
+        }
+        return true;
+    }
+
+    public void showExitDialog(){
+        if (userExitDialogHelper!=null){
+            userExitDialogHelper.show();
+        }
     }
 }

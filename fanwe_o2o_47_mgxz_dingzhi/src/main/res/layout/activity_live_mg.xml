@@ -87,7 +87,7 @@
             android:layout_height="30dp"
             android:layout_gravity="top|left"
             android:layout_marginLeft="240dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:layout_marginTop="300dp"
             android:background="@drawable/icon_push_stream"
             />
@@ -100,7 +100,7 @@
             android:layout_height="20dp"
             android:layout_gravity="top|left"
             android:layout_marginLeft="290dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:layout_marginTop="300dp"
             android:background="@drawable/icon_record"
             android:gravity="center"
@@ -115,6 +115,7 @@
             android:layout_gravity="left|top"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="300dp"
+            android:visibility="gone"
             android:background="@drawable/icon_video_interact" />
 
         <!--右上角关闭按钮-->

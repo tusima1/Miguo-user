@@ -108,4 +108,8 @@
         <!-- 根据自定义星星图片的大小,设置相应的值,否则可能显示不全 -->
         <item name="android:numColumns">5</item>
     </style>
+
+    <style name="MySeekBar" parent="android:Widget.Material.SeekBar">
+        <item name="android:color">@color/orange</item>
+    </style>
 </resources>

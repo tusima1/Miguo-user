@@ -32,13 +32,14 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
                 R.layout.item_act_live_headtop, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
-        ViewHolder vh = new ViewHolder((CircleImageView) v);
+        ViewHolder vh = new ViewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mCIV.setBackground(mContext.getResources().getDrawable(R.drawable.app_icon));
+//        holder.mCIV.setBackground(mContext.getResources().getDrawable(R.drawable.app_icon));
+        holder.mCIV.setImageResource(R.drawable.app_icon);
     }
 
     @Override
@@ -49,9 +50,9 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView mCIV;
 
-        public ViewHolder(CircleImageView itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            mCIV = itemView;
+            mCIV= (CircleImageView) itemView.findViewById(R.id.item_avatar);
         }
     }
 }
