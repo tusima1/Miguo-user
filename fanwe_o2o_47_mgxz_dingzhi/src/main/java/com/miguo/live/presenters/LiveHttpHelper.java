@@ -19,6 +19,9 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.applyRoom.ResultApplyRoom;
 import com.miguo.live.model.applyRoom.RootApplyRoom;
+import com.miguo.live.model.checkFocus.ModelCheckFocus;
+import com.miguo.live.model.checkFocus.ResultCheckFocus;
+import com.miguo.live.model.checkFocus.RootCheckFocus;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
@@ -518,6 +521,61 @@ public class LiveHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 校验用户是否关注该用户(主播)
+     */
+    public void checkFocus(String host_id) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("host_id", host_id);
+        params.put("method", LiveConstants.CHECK_FOCUS);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootCheckFocus rootCheckFocus = gson.fromJson(responseBody, RootCheckFocus.class);
+                List<ResultCheckFocus> resultCheckFocuss = rootCheckFocus.getResult();
+                if (SDCollectionUtil.isEmpty(resultCheckFocuss)) {
+                    mView.onSuccess(LiveConstants.CHECK_FOCUS, null);
+                    return;
+                }
+                ResultCheckFocus resultCheckFocus = resultCheckFocuss.get(0);
+                List<ModelCheckFocus> modelCheckFocus = resultCheckFocus.getBody();
+                mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 关注主播
+     */
+    public void userFocus(String host_id) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("host_id", host_id);
+        params.put("method", LiveConstants.USER_FOCUS);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(LiveConstants.USER_FOCUS, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
 
     @Override
     public void onDestroy() {
