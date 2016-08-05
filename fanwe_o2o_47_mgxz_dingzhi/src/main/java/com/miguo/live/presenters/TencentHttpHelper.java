@@ -77,6 +77,7 @@ public class TencentHttpHelper implements ITencentResult {
     public void getSign(String token ,MgCallback mgCallback){
 
 
+
             TreeMap<String, String> params = new TreeMap<String, String>();
             params.put("token", token);
             params.put("method", LiveConstants.GENERATE_SIGN);

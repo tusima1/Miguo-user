@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.fanwe.CityListActivity;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -21,20 +18,16 @@ import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.user.presents.LoginHelper;
-import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.miguo.live.model.DataBindingLiveStart;
-import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.TencentHttpHelper;
-import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
 
@@ -155,30 +148,41 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 break;
             case R.id.btn_start_live_start:
                 startLive();
-                UmengShareManager.share(this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
-                finish();
                 break;
+        }
+    }
+
+    boolean isShare;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isShare) {
+            isShare = false;
+            //创建房间号并进入主播页
+            createAvRoom();
+            finish();
         }
     }
 
     private void startLive() {
         if (dataBindingLiveStart.isLiveRight.get()) {
-            //创建房间号并进入主播页
-            createAvRoom();
+            isShare = true;
+            SHARE_MEDIA platform = SHARE_MEDIA.QQ;
             //已认证的，去直播
             if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
-                Toast.makeText(this, "QQ", Toast.LENGTH_SHORT).show();
+                platform = SHARE_MEDIA.QQ;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.WEIXIN) {
-                Toast.makeText(this, "WEIXIN", Toast.LENGTH_SHORT).show();
+                platform = SHARE_MEDIA.WEIXIN;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.FRIEND) {
-                Toast.makeText(this, "FRIEND", Toast.LENGTH_SHORT).show();
+                platform = SHARE_MEDIA.WEIXIN_CIRCLE;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.SINA) {
-                Toast.makeText(this, "SINA", Toast.LENGTH_SHORT).show();
+                platform = SHARE_MEDIA.SINA;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
-                Toast.makeText(this, "QQZONE", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "NONE", Toast.LENGTH_SHORT).show();
+                platform = SHARE_MEDIA.QZONE;
             }
+            UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+
         } else {
             //未认证的，去认证
             startActivity(new Intent(this, LiveAuthActivity.class));
