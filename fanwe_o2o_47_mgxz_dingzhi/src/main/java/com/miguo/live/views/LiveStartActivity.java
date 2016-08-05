@@ -64,7 +64,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     }
     public void gotoAuthActivity(){
-        Intent intent = new Intent(LiveStartActivity.this, LoginActivity.class);
+        Intent intent = new Intent(LiveStartActivity.this,LiveAuthActivity.class);
         startActivity(intent);
         finish();
     }

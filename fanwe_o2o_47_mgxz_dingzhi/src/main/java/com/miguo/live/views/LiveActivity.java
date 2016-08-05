@@ -460,7 +460,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * 初始化UI
      */
     private View avView;
-    private TextView BtnBeauty, BtnWhite, mVideoChat, BtnCtrlVideo, BtnCtrlMic, BtnHungup, mBeautyConfirm;
+    private TextView BtnBeauty, BtnWhite,  mBeautyConfirm;
+    private TextView  BtnCtrlVideo, BtnCtrlMic, BtnHungup;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
     private LinearLayout mVideoMemberCtrlView;
@@ -468,7 +469,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private FrameLayout mFullControllerUi, mBackgound;
     private SeekBar mBeautyBar;
     private int mBeautyRate, mWhiteRate;
-    private TextView pushBtn, recordBtn;
     private HostBottomToolView mHostBottomToolView1;
 
     /**
@@ -484,7 +484,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);//直播2的工具栏
         mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);//主播离开(断开)界面
-        mVideoChat = (TextView) findViewById(R.id.video_interact);//(腾讯)互动连线图标
+       // mVideoChat = (TextView) findViewById(R.id.video_interact);//(腾讯)互动连线图标
         mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);//飘心区域
 
         mVideoMemberCtrlView.setVisibility(View.INVISIBLE);
@@ -553,13 +553,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             inviteView3.setOnClickListener(this);
 
 
-            pushBtn = (TextView) findViewById(R.id.push_btn);
-            pushBtn.setVisibility(View.VISIBLE);
-            pushBtn.setOnClickListener(this);
-
-            recordBtn = (TextView) findViewById(R.id.record_btn);
-            recordBtn.setVisibility(View.VISIBLE);
-            recordBtn.setOnClickListener(this);
 
             initBackDialog();//退出的第一个界面,问你是否退出
             initPushDialog();
@@ -623,7 +616,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             mUserBottomTool.setVisibility(View.VISIBLE);
             mHostBottomToolView1.setVisibility(View.GONE);
             mHostBottomMeiView2.setVisibility(View.GONE);
-            mVideoChat.setVisibility(View.GONE);
+
 
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
@@ -1187,10 +1180,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 //显示或者清除屏幕
                 switchScreen();
                 break;
-            case R.id.video_interact:
-                mMemberDg.setCanceledOnTouchOutside(true);
-                mMemberDg.show();
-                break;
 
             //host2的控制台---------------
             case R.id.camera_controll:
@@ -1271,20 +1260,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 inviteView3.setVisibility(View.INVISIBLE);
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_MULTI_CANCEL_INTERACT, "" + inviteView3.getTag());
                 break;
-            //邀请直播 end
-            case R.id.push_btn:
-                //推流
-                pushStream();
-                break;
-            case R.id.record_btn:
-                //录屏
-                if (!mRecord) {
-                    if (mRecordHelper != null)
-                        mRecordHelper.show();
-                } else {
-                    mLiveHelper.stopRecord();
-                }
-                break;
+
 
         }
     }
@@ -1539,7 +1515,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void pushStreamSucc(TIMAvManager.StreamRes streamRes) {
         List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
         isPushed = true;
-        pushBtn.setBackgroundResource(R.drawable.icon_stop_push);
         int length = liveUrls.size();
         String url = null;
         String url2 = null;
@@ -1611,13 +1586,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void stopStreamSucc() {
         isPushed = false;
-        pushBtn.setBackgroundResource(R.drawable.icon_push_stream);
     }
 
     @Override
     public void startRecordCallback(boolean isSucc) {
         mRecord = true;
-        recordBtn.setBackgroundResource(R.drawable.icon_stoprecord);
+
 
     }
 
@@ -1625,7 +1599,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void stopRecordCallback(boolean isSucc, List<String> files) {
         if (isSucc == true) {
             mRecord = false;
-            recordBtn.setBackgroundResource(R.drawable.icon_record);
+
         }
     }
 

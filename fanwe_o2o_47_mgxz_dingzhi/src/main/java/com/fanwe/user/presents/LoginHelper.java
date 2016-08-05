@@ -77,7 +77,7 @@ public class LoginHelper extends Presenter {
     }
     public LoginHelper(Activity activity) {
        this.mActivity = activity;
-        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
+        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(activity);
     }
     /**
      * 快捷登录。

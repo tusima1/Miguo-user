@@ -3,8 +3,8 @@
              android:id="@+id/root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/white"
     >
-
     <!--直播video-->
     <include
         android:id="@+id/av_video_layer_ui"
@@ -81,41 +81,41 @@
 
 
         <!--开启推流-->
-        <TextView
-            android:id="@+id/push_btn"
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="240dp"
-            android:visibility="invisible"
-            android:layout_marginTop="300dp"
-            android:background="@drawable/icon_push_stream"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/push_btn"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_gravity="top|left"-->
+            <!--android:layout_marginLeft="240dp"-->
+            <!--android:visibility="invisible"-->
+            <!--android:layout_marginTop="300dp"-->
+            <!--android:background="@drawable/icon_push_stream"-->
+            <!--/>-->
 
 
         <!--录制图标(右上)-->
-        <TextView
-            android:id="@+id/record_btn"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="290dp"
-            android:visibility="invisible"
-            android:layout_marginTop="300dp"
-            android:background="@drawable/icon_record"
-            android:gravity="center"
-            android:textSize="14sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/record_btn"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="top|left"-->
+            <!--android:layout_marginLeft="290dp"-->
+            <!--android:visibility="invisible"-->
+            <!--android:layout_marginTop="300dp"-->
+            <!--android:background="@drawable/icon_record"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="14sp" />-->
 
 
         <!--互动连线图标-->
-        <TextView
-            android:id="@+id/video_interact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|top"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="300dp"
-            android:background="@drawable/icon_video_interact" />
+        <!--<TextView-->
+            <!--android:id="@+id/video_interact"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="left|top"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="300dp"-->
+            <!--android:background="@drawable/icon_video_interact" />-->
 
         <!--右上角关闭按钮-->
         <!--<TextView

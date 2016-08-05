@@ -143,7 +143,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                         }
                         Intent closeintent = new Intent(Constants.ACTION_CAMERA_CLOSE_IN_LIVE);
                         closeintent.putStringArrayListExtra("ids", close_ids);
-                        mContext.sendBroadcast(closeintent);
+                        if(mContext!=null) {
+                            mContext.sendBroadcast(closeintent);
+                        }
                     }
                     break;
                 case TYPE_MEMBER_CHANGE_HAS_AUDIO:

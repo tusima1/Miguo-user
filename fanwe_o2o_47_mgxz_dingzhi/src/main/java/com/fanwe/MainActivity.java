@@ -12,7 +12,6 @@ import com.fanwe.app.AppHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
-import com.fanwe.fragment.MyDistributionFragment;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.jpush.JpushHelper;
