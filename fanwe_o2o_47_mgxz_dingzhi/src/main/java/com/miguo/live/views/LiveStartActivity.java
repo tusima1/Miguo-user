@@ -154,8 +154,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 dataBindingLiveStart.mode.set(dataBindingLiveStart.QQZONE);
                 break;
             case R.id.btn_start_live_start:
-//                startLive();
-
+                startLive();
                 UmengShareManager.share(this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
                 break;
         }
