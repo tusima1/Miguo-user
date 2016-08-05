@@ -55,12 +55,14 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         mContext = context;
         imUserInfoHelper = new IMUserInfoHelper();
     }
+
     public LoginHelper(Activity activity) {
         this.mactivity = activity;
         imUserInfoHelper = new IMUserInfoHelper();
     }
-    public LoginHelper(Context context,CallbackView mView) {
-        this.mView= mView;
+
+    public LoginHelper(Context context, CallbackView mView) {
+        this.mView = mView;
         mContext = context;
         imUserInfoHelper = new IMUserInfoHelper();
     }
@@ -88,10 +90,11 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     @Override
                     public void onError(int i, String s) {
                         Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
-                        if(mView!=null) {
+                        if (mView != null) {
                             mView.onFailue("IM 认证失败。");
                         }
                     }
+
                     @Override
                     public void onSuccess() {
                         imUserInfoHelper.setMyNickName("");
@@ -108,7 +111,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * @param identify 用户id
      * @param userSig  用户签名
      */
-    public void imLogin(String identify, String userSig,final MgCallback callback) {
+    public void imLogin(String identify, String userSig, final MgCallback callback) {
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
@@ -125,8 +128,9 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     public void onError(int i, String s) {
                         Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
                         mView.onFailue("IM 认证失败。");
-                        callback.onErrorResponse("",null);
+                        callback.onErrorResponse("", null);
                     }
+
                     @Override
                     public void onSuccess() {
                         imUserInfoHelper.setMyNickName("");
@@ -139,6 +143,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     }
                 });
     }
+
     /**
      * 登录imsdk
      *
@@ -161,17 +166,18 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     @Override
                     public void onError(int i, String s) {
                         Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
-                        if(mView!=null) {
+                        if (mView != null) {
                             mView.onFailue("IM 认证失败。");
                         }
                     }
+
                     @Override
                     public void onSuccess() {
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
                         App.getInstance().setAvStart(true);
-                        if(MySelfInfo.getInstance().isCreateRoom()==true) {
+                        if (MySelfInfo.getInstance().isCreateRoom() == true) {
                             getRoomNum();
                         }
                         startAVSDK();
@@ -180,13 +186,12 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     }
 
 
-
     /*登录imsdk
     *
             * @param identify 用户id
     * @param userSig  用户签名
     */
-    public void imLogin(String identify, String userSig,final MgCallback callback,final boolean host) {
+    public void imLogin(String identify, String userSig, final MgCallback callback, final boolean host) {
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
@@ -203,49 +208,53 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     public void onError(int i, String s) {
 
                         mView.onFailue("IM 认证失败。");
-                        if(callback!=null){
-                            callback.onErrorResponse("IM 认证失败。","400");
+                        if (callback != null) {
+                            callback.onErrorResponse("IM 认证失败。", "400");
                         }
                     }
+
                     @Override
                     public void onSuccess() {
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
                         App.getInstance().setAvStart(true);
-                        if(host) {
+                        if (host) {
                             getRoomNum();
                         }
 
                         startAVSDK();
-                        if(callback!=null){
+                        if (callback != null) {
                             callback.onSuccessResponse("");
                         }
                     }
                 });
     }
+
     /**
      * 申请 房间号并进入房间。
      */
-    public void getToRoomAndStartAV(MgCallback callback,boolean host){
-        if(App.getInstance().isImLoginSuccess()) {
+    public void getToRoomAndStartAV(MgCallback callback, boolean host) {
+        if (App.getInstance().isImLoginSuccess()) {
             App.getInstance().setAvStart(true);
-            if(host) {
+            if (host) {
                 getRoomNum();
             }
             startAVSDK();
             callback.onSuccessResponse("");
-        }else{
-            callback.onErrorResponse("",null);
+        } else {
+            callback.onErrorResponse("", null);
             SDToast.showToast("未进行IM 注册 。");
         }
     }
+
     /**
      * 腾讯登录 。
+     *
      * @param identify
      * @param userSig
      */
-    public void imLogin(String identify, String userSig,TIMCallBack callBack) {
+    public void imLogin(String identify, String userSig, TIMCallBack callBack) {
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
@@ -275,9 +284,10 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
         mContext.startActivity(intent);
     }
+
     /**
      * 退出imsdk
-     * <p>
+     * <p/>
      * 退出成功会调用退出AVSDK
      */
     public void imLogout() {
@@ -298,16 +308,17 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         });
 
     }
+
     /**
      * 向用户服务器获取自己房间号
      */
-    private void getRoomNum( ){
-        if(MySelfInfo.getInstance().getMyRoomNum()!=-1){
+    private void getRoomNum() {
+        if (MySelfInfo.getInstance().getMyRoomNum() != -1) {
             goToLive();
             return;
         }
 
-      MgCallback mgCallback =   new MgCallback() {
+        MgCallback mgCallback = new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Gson gson = new Gson();
@@ -319,7 +330,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 }
                 ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);
                 List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
-                if(modelApplyRooms!=null && modelApplyRooms.size()>0&&modelApplyRooms.get(0)!=null) {
+                if (modelApplyRooms != null && modelApplyRooms.size() > 0 && modelApplyRooms.get(0) != null) {
                     String room_id = modelApplyRooms.get(0).getRoom_id();
                     Integer roomId = -1;
                     try {
@@ -351,7 +362,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
             }
         };
 
-     applyRoom("4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b3",mgCallback);
+        applyRoom(CurLiveInfo.modelShop.getId(), mgCallback);
     }
 
     /**
@@ -359,11 +370,11 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      *
      * @param shop_id
      */
-    public void applyRoom(String shop_id,MgCallback mgCallback) {
+    public void applyRoom(String shop_id, MgCallback mgCallback) {
         String token = App.getInstance().getToken();
         if (TextUtils.isEmpty(token)) {
-          SDToast.showToast("token为空。");
-            return ;
+            SDToast.showToast("token为空。");
+            return;
         }
 
         TreeMap<String, String> params = new TreeMap<String, String>();
@@ -399,16 +410,17 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      */
     private void startAVSDK() {
         String userid = MySelfInfo.getInstance().getId();
-        String userSign =  MySelfInfo.getInstance().getUserSig();
-        int  appId = Constants.SDK_APPID;
+        String userSign = MySelfInfo.getInstance().getUserSig();
+        int appId = Constants.SDK_APPID;
 
-        int  ccType = Constants.ACCOUNT_TYPE;
-        QavsdkControl.getInstance().setAvConfig(appId, ccType+"",userid, userSign);
+        int ccType = Constants.ACCOUNT_TYPE;
+        QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
 
-        Log.e("live","初始化AVSDK");
+        Log.e("live", "初始化AVSDK");
     }
-/**
+
+    /**
      * 反初始化AVADK
      */
     public void stopAVSDK() {

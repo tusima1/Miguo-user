@@ -1,12 +1,14 @@
 package com.tencent.qcloud.suixinbo.model;
 
 
+import com.fanwe.seller.model.getShopList.ModelShopList;
+
 /**
  * 当前直播信息页面
  */
 public class CurLiveInfo {
-    private static int members=0;//房间人数
-    private static int admires=0;//心的数量
+    private static int members = 0;//房间人数
+    private static int admires = 0;//心的数量
     private static String title;
     private static double lat1;
     private static double long1;
@@ -15,7 +17,9 @@ public class CurLiveInfo {
 
     public static int roomNum;//room id(chatRoomId 其实就是房间id的string格式)
 
-    /**主播房间id信息**/
+    /**
+     * 主播房间id信息
+     **/
     public static String hostID;
     public static String hostName;
     public static String hostAvator;
@@ -35,6 +39,8 @@ public class CurLiveInfo {
     }
 
     public static int indexView = 0;
+    ///店铺信息
+    public static ModelShopList modelShop = new ModelShopList();
 
     public static void setCurrentRequestCount(int currentRequestCount) {
         CurLiveInfo.currentRequestCount = currentRequestCount;

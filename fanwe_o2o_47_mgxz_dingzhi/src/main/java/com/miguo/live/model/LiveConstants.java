@@ -57,7 +57,7 @@ public class LiveConstants {
      * 获取七牛UpToken
      */
     public static final String UP_TOKEN = "UpToken";
- /**
+    /**
      * 主播结束信息。
      */
     public static final String LIVEINFOJSON = "liveInfoJson";
@@ -65,4 +65,12 @@ public class LiveConstants {
      * 主播心跳。
      */
     public static final String HOSTPITPAT = "HostPitpat";
+    /**
+     * 是否关注了主播
+     */
+    public static final String CHECK_FOCUS = "CheckFocus";
+    /**
+     * 关注主播
+     */
+    public static final String USER_FOCUS = "UserFocus";
 }

@@ -43,6 +43,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
+import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
@@ -471,7 +472,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
-        mHostBottomMeiView2.setNeed(mCommonHelper);
+        mHostBottomMeiView2.setNeed(this,mCommonHelper);
 
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
 
@@ -546,6 +547,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             inviteView3.setOnClickListener(this);
 
 
+//            pushBtn = (TextView) findViewById(R.id.push_btn);
+//            pushBtn.setVisibility(View.VISIBLE);
+//            pushBtn.setOnClickListener(this);
+//
+//            recordBtn = (TextView) findViewById(R.id.record_btn);
+//            recordBtn.setVisibility(View.VISIBLE);
+//            recordBtn.setOnClickListener(this);
 
             initBackDialog();//退出的第一个界面,问你是否退出
             initPushDialog();
@@ -596,15 +604,17 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 //                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputBeautyParam(LiveUtil.getBeautyProgress(progress));//美颜
 //                    } else {
 //                        mWhiteRate = progress;
-////                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputWhiteningParam(LiveUtil.getBeautyProgress(progress));//美白
+//                        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputWhiteningParam(LiveUtil.getBeautyProgress(progress));//美白
 //                    }
 //                }
 //            });
         } else {//普通用户加载的view
             initInviteDialog();
             mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
-            mUserHeadTopView.setmActivity(this);
             mUserHeadTopView.setVisibility(View.VISIBLE);
+            //普通用户退出
+//            userExitDialogHelper = new LiveUserExitDialogHelper(this);
+            mUserHeadTopView.initNeed(this);
 
             mUserBottomTool.setVisibility(View.VISIBLE);
             mHostBottomToolView1.setVisibility(View.GONE);
@@ -615,6 +625,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
+
+
 
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
@@ -628,6 +640,15 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         //开启后台业务服务器请求管理类
         mLiveHttphelper = new LiveHttpHelper(this, this);
         //----
+
+        //主播清屏操作
+        mHostBottomToolView1.setLiveSwitchScreenListener(new LiveSwitchScreenListener() {
+            @Override
+            public void onSwitchScreen() {
+                bCleanMode = !bCleanMode;
+                switchScreen();
+            }
+        });
         initViewNeed();
     }
 
@@ -683,7 +704,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     protected void onDestroy() {
-
+        MGLog.e("onDestroy");
         watchCount = 0;
         super.onDestroy();
         if (null != mHearBeatTimer) {
@@ -710,6 +731,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         }
         QavsdkControl.getInstance().clearVideoMembers();
         QavsdkControl.getInstance().onDestroy();
+
     }
 
 
@@ -846,9 +868,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             }
             finish();
         } else {
-            //普通用户退出
-            LiveUserExitDialogHelper userExitDialogHelper=new LiveUserExitDialogHelper(this);
-            userExitDialogHelper.show();
+            if (mUserHeadTopView!=null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose){
+                mUserHeadTopView.showExitDialog();
+            }
+
         }
 
     }
@@ -1285,7 +1308,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     private void switchScreen() {
         if (bCleanMode) {
-            mFullControllerUi.setVisibility(View.INVISIBLE);
+//            mFullControllerUi.setVisibility(View.INVISIBLE);
             //主播清屏
             if (LiveUtil.checkIsHost()) {
                 mHostTopView.hide();
@@ -1293,6 +1316,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 if (mHostBottomMeiView2.isShow()) {
                     mHostBottomMeiView2.hide();
                 }
+            }else {
+                //用户
             }
 
         } else {
@@ -1302,10 +1327,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 if (!mHostBottomMeiView2.isShow()) {
                     mHostBottomMeiView2.show();
                 }
+            }else {
+                //用户
             }
             mFullControllerUi.setVisibility(View.VISIBLE);
         }
-        bCleanMode = !bCleanMode;
     }
 
     private void backToNormalCtrlView() {
