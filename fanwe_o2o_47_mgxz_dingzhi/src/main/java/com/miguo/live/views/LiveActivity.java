@@ -607,7 +607,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         } else {//普通用户加载的view
             initInviteDialog();
             mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
-            mUserHeadTopView.setmActivity(this);
             mUserHeadTopView.setVisibility(View.VISIBLE);
             //普通用户退出
 //            userExitDialogHelper = new LiveUserExitDialogHelper(this);
