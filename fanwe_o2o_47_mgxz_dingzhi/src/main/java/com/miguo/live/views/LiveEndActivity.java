@@ -17,6 +17,7 @@ import com.miguo.utils.TimeUtils;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 
 /**
+ * 主播退出
  * Created by Administrator on 2016/7/28.
  */
 public class LiveEndActivity extends Activity {
@@ -31,16 +32,16 @@ public class LiveEndActivity extends Activity {
         binding.setLive(dataBindingLiveEnd);
     }
 
-    public void getValue(){
+    public void getValue() {
         Intent intent = getIntent();
-        LiveInfoJson liveInfoJson = (LiveInfoJson)intent.getSerializableExtra(LiveConstants.LIVEINFOJSON);
-        if(liveInfoJson!=null){
-            if(!TextUtils.isEmpty(liveInfoJson.getUsetime())){
+        LiveInfoJson liveInfoJson = (LiveInfoJson) intent.getSerializableExtra(LiveConstants.LIVEINFOJSON);
+        if (liveInfoJson != null) {
+            if (!TextUtils.isEmpty(liveInfoJson.getUsetime())) {
                 Integer seconds = Integer.valueOf(liveInfoJson.getUsetime());
                 String timeStr = TimeUtils.secondToHHMMSS(seconds);
                 dataBindingLiveEnd.timeLive.set(timeStr);
                 String count = liveInfoJson.getWatch_count();
-                if(!TextUtils.isEmpty(count)){
+                if (!TextUtils.isEmpty(count)) {
 
                     dataBindingLiveEnd.numViewers.set(count);
 

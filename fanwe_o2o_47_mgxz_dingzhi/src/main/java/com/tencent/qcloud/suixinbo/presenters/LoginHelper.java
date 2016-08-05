@@ -1,5 +1,6 @@
 package com.tencent.qcloud.suixinbo.presenters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -48,12 +49,16 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     private int RoomId = -1;
     private CallbackView mView;
     private IMUserInfoHelper imUserInfoHelper;
+    private Activity mactivity;
 
     public LoginHelper(Context context) {
         mContext = context;
         imUserInfoHelper = new IMUserInfoHelper();
     }
-
+    public LoginHelper(Activity activity) {
+        this.mactivity = activity;
+        imUserInfoHelper = new IMUserInfoHelper();
+    }
     public LoginHelper(Context context,CallbackView mView) {
         this.mView= mView;
         mContext = context;
@@ -83,7 +88,9 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     @Override
                     public void onError(int i, String s) {
                         Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
-                        mView.onFailue("IM 认证失败。");
+                        if(mView!=null) {
+                            mView.onFailue("IM 认证失败。");
+                        }
                     }
                     @Override
                     public void onSuccess() {
@@ -154,7 +161,9 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     @Override
                     public void onError(int i, String s) {
                         Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
-                        mView.onFailue("IM 认证失败。");
+                        if(mView!=null) {
+                            mView.onFailue("IM 认证失败。");
+                        }
                     }
                     @Override
                     public void onSuccess() {
