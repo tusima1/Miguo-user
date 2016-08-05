@@ -21,7 +21,7 @@
         android:layout_below="@id/civ_user_image"
         android:layout_marginTop="@dimen/dp5"
         android:gravity="center"
-        android:text="1100人"
+        android:text="人"
         android:textColor="@color/white"
         android:textSize="@dimen/sp12"/>
 
@@ -32,7 +32,7 @@
         android:layout_marginLeft="@dimen/dp10"
         android:layout_toRightOf="@id/civ_user_image"
         android:gravity="center_vertical"
-        android:text="userName"
+        android:text="观众"
         android:textColor="@color/white"/>
 
     <TextView

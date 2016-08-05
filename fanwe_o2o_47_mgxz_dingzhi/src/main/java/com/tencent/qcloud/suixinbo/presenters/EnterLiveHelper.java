@@ -291,21 +291,20 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         TIMGroupManager.getInstance().applyJoinGroup("" + chatRoomId, Constants.APPLY_CHATROOM + chatRoomId, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
-                //已经在是成员了
-                Log.e("live","joinIMChatRoom = code:"+i+"  msg:"+s);
+
                 if (i == Constants.IS_ALREADY_MEMBER) {
-                    SxbLog.i(TAG, "joinLiveRoom joinIMChatRoom callback succ ");
+
                     joinAVRoom(CurLiveInfo.getRoomNum());
                     isInChatRoom = true;
                 } else {
-                    Toast.makeText(mContext, "join IM room fail " + s + " " + i, Toast.LENGTH_SHORT).show();
+
                     quiteLive();
                 }
             }
 
             @Override
             public void onSuccess() {
-                SxbLog.i(TAG, "joinLiveRoom joinIMChatRoom callback succ ");
+
                 isInChatRoom = true;
                 joinAVRoom(CurLiveInfo.getRoomNum());
             }
@@ -389,14 +388,16 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         if (isInAVRoom == true) {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
             int result = avContext.exitRoom();
+          //  mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+
         } else {
             quiteIMChatRoom();
             CurLiveInfo.setCurrentRequestCount(0);
             uninitAudioService();
             //通知结束
-           notifyServerLiveEnd();
-
+            notifyServerLiveEnd();
             mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+
         }
     }
 

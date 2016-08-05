@@ -162,15 +162,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
-
         root = findViewById(R.id.root);
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
         //公共功能管理类
         mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
         checkUserAndPermission();
-
-
     }
 
     public void enterRoom() {
@@ -178,7 +175,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
         mEnterRoomHelper.startEnterRoom();
-
         //初始化view
         initView();
     }
@@ -602,8 +598,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 //            });
         } else {//普通用户加载的view
             initInviteDialog();
-
             mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
+            mUserHeadTopView.setmActivity(this);
             mUserHeadTopView.setVisibility(View.VISIBLE);
 
             mUserBottomTool.setVisibility(View.VISIBLE);
@@ -730,8 +726,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-            if (backDialog.isShowing() == false)
+            if (backDialog.isShowing() == false) {
                 backDialog.show();
+            }
         }
     }
 
@@ -770,11 +767,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                         mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum() + "");
                     }
                 }
-                backDialog.dismiss();
-                //先直接finish Activity
-                if (getParent()!=null){
-                    finish();
-                }
+
             }
         });
         TextView tvCancel = (TextView) backDialog.findViewById(R.id.cancel_action);
@@ -799,6 +792,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void readyToQuit() {
         mEnterRoomHelper.quiteLive();
     }
+
+
 
     /**
      * 完成进出房间流程
@@ -840,6 +835,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
         if (LiveUtil.checkIsHost()) {
             MGToast.showToast("主播退出!");
+            if(backDialog!=null){
+                backDialog.dismiss();
+            }
             finish();
         } else {
             //普通用户退出

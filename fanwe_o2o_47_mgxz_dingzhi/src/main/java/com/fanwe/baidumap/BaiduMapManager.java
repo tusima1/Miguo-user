@@ -382,7 +382,7 @@ public class BaiduMapManager
 	 */
 	public boolean registerLocationListener(BDLocationListener listener)
 	{
-		if (listener != null && !mListLocationListener.contains(listener))
+		if (mClient!=null &&listener != null && !mListLocationListener.contains(listener))
 		{
 			mClient.registerLocationListener(listener);
 			mListLocationListener.add(listener);

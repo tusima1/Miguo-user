@@ -37,8 +37,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private LiveUserExitDialogHelper userExitDialogHelper;
 
     public UserHeadTopView(Context context) {
-        this(context,null);
+
+        this(context,null,0);
     }
+
 
     public UserHeadTopView(Context context, AttributeSet attrs) {
         this(context, attrs,0);
@@ -89,7 +91,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关闭操作
      */
     private void close() {
-        if (mActivity!=null && userExitDialogHelper==null){
+        if (userExitDialogHelper==null){
             userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
         }
         userExitDialogHelper.show();
@@ -168,5 +170,13 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void setKeyWords(){
 //        if (){}
         mKeywords.setText("富国  明主  哈哈  大小  乌拉拉");
+    }
+
+    public Activity getmActivity() {
+        return mActivity;
+    }
+
+    public void setmActivity(Activity mActivity) {
+        this.mActivity = mActivity;
     }
 }

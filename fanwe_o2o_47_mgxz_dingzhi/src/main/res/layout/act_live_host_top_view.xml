@@ -44,8 +44,8 @@
 
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
+            android:layout_width="@dimen/dp25"
+            android:layout_height="@dimen/dp25"
             android:scaleType="center"
             android:src="@drawable/ic_close"/>
     </LinearLayout>
@@ -81,7 +81,7 @@
             android:id="@+id/tv_arrive_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="23425人到过"
+            android:text="5人到过"
             android:textSize="@dimen/sp11"
             android:textColor="@color/orange"
             android:layout_toRightOf="@id/tv_location"
