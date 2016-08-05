@@ -1,26 +1,28 @@
 package com.fanwe.seller.views.fragment;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.fanwe.adapter.MerchantListAdapter;
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.fragment.BaseFragment;
-import com.fanwe.model.StoreModel;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.adapters.ShopListAdapter;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getShopList.ModelShopList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +33,17 @@ import java.util.List;
  */
 public class FragmentMineShopList extends BaseFragment implements CallbackView {
     private View view;
-    private MerchantListAdapter mAdapter = null;
-    private List<StoreModel> mListModel = new ArrayList<StoreModel>();
+    private ShopListAdapter mAdapter = null;
+    private List<ModelShopList> mListModel = new ArrayList<>();
 
     @ViewInject(R.id.ptr_listview_fragment_mine_shop_list)
     private PullToRefreshListView mPtrlvContent = null;
 
     private SellerHttpHelper sellerHttpHelper;
+
+    int pageSize = 10;
+    int pageNum = 1;
+    boolean isRefresh = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,23 +59,28 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     @Override
     protected void init() {
         super.init();
-        preParam();
+        sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
+        getData();
         bindDefaultLvData();
         initPullRefreshLv();
+        setListener();
     }
 
-    private void preParam() {
+    private void setListener() {
+        mPtrlvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CurLiveInfo.modelShop = mListModel.get(position - 1);
+                //选择当前店铺，进行代言
+                getActivity().setResult(8888);
+                getActivity().finish();
 
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        App.getInstance().setImei(telephonyManager.getDeviceId());
+            }
+        });
+    }
 
-        sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
-        sellerHttpHelper.getShopList(1, 2, ",", "", "");
-
-        for (int i = 0; i < 10; i++) {
-            StoreModel storeModel = new StoreModel();
-            mListModel.add(storeModel);
-        }
+    private void getData() {
+        sellerHttpHelper.getShopList(pageNum, pageSize, ",", "", "");
     }
 
     private void initPullRefreshLv() {
@@ -78,33 +89,25 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                isRefresh = true;
+                pageNum = 1;
                 mListModel.clear();
-                for (int i = 0; i < 5; i++) {
-                    StoreModel storeModel = new StoreModel();
-                    mListModel.add(storeModel);
-                }
-                mAdapter.notifyDataSetChanged();
-
-                mPtrlvContent.onRefreshComplete();
+                getData();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-
-                for (int i = 0; i < 5; i++) {
-                    StoreModel storeModel = new StoreModel();
-                    mListModel.add(storeModel);
+                isRefresh = false;
+                if (!SDCollectionUtil.isEmpty(mListModel)) {
+                    pageNum++;
                 }
-                mAdapter.notifyDataSetChanged();
-                mPtrlvContent.onRefreshComplete();
+                getData();
             }
         });
-//        mPtrlvContent.setRefreshing();
     }
 
     private void bindDefaultLvData() {
-        mAdapter = new MerchantListAdapter(mListModel, getActivity());
+        mAdapter = new ShopListAdapter(mListModel, getActivity());
         mPtrlvContent.setAdapter(mAdapter);
     }
 
@@ -118,10 +121,18 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
 
     }
 
+    private ArrayList<ModelShopList> temps;
+
     @Override
     public void onSuccess(String method, List datas) {
+        Message message = new Message();
         if (SellerConstants.SHOP_LIST.equals(method)) {
-            Log.d("onSuccess", datas.toString());
+            temps = (ArrayList<ModelShopList>) datas;
+            if (!SDCollectionUtil.isEmpty(temps)) {
+                mListModel.addAll(temps);
+            }
+            message.what = 0;
+            mHandler.sendMessage(message);
         }
 
     }
@@ -130,4 +141,15 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     public void onFailue(String responseBody) {
 
     }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    mAdapter.notifyDataSetChanged();
+                    mPtrlvContent.onRefreshComplete();
+                    break;
+            }
+        }
+    };
 }
