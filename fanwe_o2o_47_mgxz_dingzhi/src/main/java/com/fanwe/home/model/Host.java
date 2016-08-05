@@ -13,6 +13,7 @@ public class Host {
     private String nickname;
 
     private List<String> tags;
+    private String avatar;
     /**
      * 主播用户id. userid
      */
@@ -48,5 +49,13 @@ public class Host {
 
     public void setHost_user_id(String host_user_id) {
         this.host_user_id = host_user_id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

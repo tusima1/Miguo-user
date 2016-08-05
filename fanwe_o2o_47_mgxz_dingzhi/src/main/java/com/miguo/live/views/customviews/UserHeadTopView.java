@@ -151,13 +151,19 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
     /*设置头像*/
     public void setHostImg(String imgurl){
-        SDViewBinder.setImageView(imgurl,mUserIamge);
+        if(TextUtils.isEmpty(imgurl)){
+            mUserIamge.setImageResource(R.drawable.bg_empty);
+        }else {
+            SDViewBinder.setImageView(imgurl, mUserIamge);
+        }
     }
 
     /*设置名称*/
     public void setHostName(String name){
         if (!TextUtils.isEmpty(name)){
             mUserName.setText(name);
+        }else{
+            mUserName.setText("主播");
         }
     }
     /*设置地理位置*/

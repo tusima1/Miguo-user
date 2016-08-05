@@ -195,6 +195,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         finish();
     }
 
+
     /**
      * 取签名 。
      *
@@ -209,7 +210,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
                 if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
+
                     SDToast.showToast("获取用户签名失败。");
+                    finish();
                     return;
                 }
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
@@ -264,7 +267,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         MgCallback imLoginSuccessCallback = new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("进度房间失败");
+                SDToast.showToast("进入房间失败");
+                finish();
             }
 
             @Override
@@ -615,7 +619,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             mUserBottomTool.setVisibility(View.VISIBLE);
             mHostBottomToolView1.setVisibility(View.GONE);
             mHostBottomMeiView2.setVisibility(View.GONE);
-
+            String hostImg = CurLiveInfo.getHostAvator();
+            mUserHeadTopView.setHostImg(hostImg);
+            mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
 
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
@@ -875,11 +881,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      *
      * @param id
      * @param name
+     * @param faceUrl
      */
     @Override
-    public void memberJoin(String id, String name) {
+    public void memberJoin(String id, String name,String faceUrl) {
         watchCount++;
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
+        refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
         int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
         //人数加1,可以设置到界面上
@@ -892,8 +899,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
     @Override
-    public void memberQuit(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
+    public void memberQuit(String id, String name,String faceUrl) {
+        refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
         watchCount--;
 
         if (CurLiveInfo.getMembers() > 1) {
@@ -912,13 +919,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
     @Override
-    public void hostLeave(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "leave for a while", Constants.HOST_LEAVE);
+    public void hostLeave(String id, String name,String faceUrl) {
+        refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "leave for a while", Constants.HOST_LEAVE);
     }
 
     @Override
-    public void hostBack(String id, String name) {
-        refreshTextListView(TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
+    public void hostBack(String id, String name,String faceUrl) {
+        refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
     }
 
     /**
@@ -1049,7 +1056,14 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void refreshText(String text, String name) {
         if (text != null) {
-            refreshTextListView(name, text, Constants.TEXT_TYPE);
+            refreshTextListView("",name, text, Constants.TEXT_TYPE);
+        }
+    }
+
+    @Override
+    public void refreshText(String text, String name, String faceUrl) {
+        if (text != null) {
+            refreshTextListView(faceUrl,name, text, Constants.TEXT_TYPE);
         }
     }
 
@@ -1378,8 +1392,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * @param context 内容
      * @param type    类型 （上线线消息和 聊天消息）
      */
-    public void refreshTextListView(String name, String context, int type) {
+    public void refreshTextListView(String faceUrl,String name, String context, int type) {
         LiveChatEntity entity = new LiveChatEntity();
+        entity.setFaceUrl(faceUrl);
         entity.setSenderName(name);
         entity.setContent(context);
         entity.setType(type);
@@ -1457,9 +1472,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                         SxbLog.w(TAG, "get remark name:" + user.getRemark());
                         SxbLog.w(TAG, "get avatar:" + user.getFaceUrl());
                         if (!TextUtils.isEmpty(user.getNickName())) {
-                            refreshTextListView(user.getNickName(), "join live", Constants.MEMBER_ENTER);
+                            refreshTextListView(user.getFaceUrl(),user.getNickName(), "加入直播", Constants.MEMBER_ENTER);
                         } else {
-                            refreshTextListView(user.getIdentifier(), "join live", Constants.MEMBER_ENTER);
+                            refreshTextListView(user.getFaceUrl(),user.getIdentifier(), "加入直播", Constants.MEMBER_ENTER);
                         }
                     }
                     break;

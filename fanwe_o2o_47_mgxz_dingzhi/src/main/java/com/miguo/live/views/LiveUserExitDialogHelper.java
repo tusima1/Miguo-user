@@ -112,6 +112,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     /**
      * 是否在显示
      */
+
     public boolean isShowing() {
         return dialog.isShowing();
     }
@@ -127,6 +128,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     public void dismiss() {
         if (dialog.isShowing()) {
             dialog.dismiss();
+      
         } else {
             return;
         }
@@ -135,13 +137,12 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     @Override
     public void onDestroy() {
         //防止内存泄漏,在这里释放资源
-        mActivity = null;
-        dialog = null;
-        gridview = null;
+    
     }
 
     @Override
     public void onClick(View v) {
+       
         int id = v.getId();
         if (id == R.id.iv_close) {
             dismiss();
