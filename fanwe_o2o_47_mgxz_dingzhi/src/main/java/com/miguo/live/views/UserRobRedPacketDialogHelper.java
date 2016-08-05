@@ -63,9 +63,9 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     };
 
     /**
-     * 总共时间
+     * 总共时间(改为需要的时间)
      */
-    private CountDownTimer totalTimer = new CountDownTimer(30 * 1000, 1000) {
+    private CountDownTimer totalTimer = new CountDownTimer(10 * 1000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
 
@@ -155,8 +155,8 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     private void clickClose() {
 //        dismiss();
 //        mHandler.sendEmptyMessage(0);
-//        robLiftTimer.start();
-//        totalTimer.start();
+        robLiftTimer.start();
+        totalTimer.start();
 
     }
 

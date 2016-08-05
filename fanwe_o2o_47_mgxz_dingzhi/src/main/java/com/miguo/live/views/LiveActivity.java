@@ -642,7 +642,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private void initViewNeed() {
         //初始化底部
         if (mUserBottomTool != null) {
-            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout);
+            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout,root);
         }
     }
 

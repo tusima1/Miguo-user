@@ -34,6 +34,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private TextView mKeywords;//关键词
     private RecyclerView mMemberList;//room的观众头像列表(取前N位展示)
     private Activity mActivity;
+    private LiveUserExitDialogHelper userExitDialogHelper;
 
     public UserHeadTopView(Context context) {
         this(context,null);
@@ -88,10 +89,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关闭操作
      */
     private void close() {
-        if (mActivity!=null){
-            LiveUserExitDialogHelper userExitDialogHelper=new LiveUserExitDialogHelper(mActivity);
-            userExitDialogHelper.show();
+        if (mActivity!=null && userExitDialogHelper==null){
+            userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
         }
+        userExitDialogHelper.show();
 
     }
 

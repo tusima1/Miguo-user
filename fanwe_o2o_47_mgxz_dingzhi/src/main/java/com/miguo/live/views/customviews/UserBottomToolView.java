@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.LiveInputDialogHelper;
+import com.miguo.live.views.LiveUserPopHelper;
+import com.miguo.live.views.UserRobRedPacketDialogHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -32,6 +34,9 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     private LiveHelper mLiveHelper;
     private HeartLayout mHeartLayout;
     private long admireTime = 0;//♥的时间
+    private View rootView;//父布局,pop定位用
+    private LiveUserPopHelper popHelper;
+    private UserRobRedPacketDialogHelper redPacketDialogHelper;
 
     public UserBottomToolView(Context context) {
         this(context, null);
@@ -69,10 +74,11 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     }
 
-    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout) {
+    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout,View rootView) {
         this.mAct = mAct;
         this.mLiveHelper = liveHelper;
         this.mHeartLayout = heartLayout;
+        this.rootView=rootView;
     }
 
     @Override
@@ -126,14 +132,24 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击抢到(红包什么的乱七八糟的)
      */
     private void clickRob() {
-        MGToast.showToast("点击了抢到");
+//        MGToast.showToast("点击了抢到");
+        if (mAct!=null && redPacketDialogHelper==null){
+            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct);
+        }
+         redPacketDialogHelper.createDialog();
+        redPacketDialogHelper.show();
     }
 
     /**
      * 点击了商品(宝贝)
      */
     private void clickGoods() {
-        MGToast.showToast("点击了商品(宝贝)");
+//        MGToast.showToast("点击了商品(宝贝)");
+        if (mAct!=null && rootView!=null && popHelper==null){
+            popHelper = new LiveUserPopHelper(mAct,rootView);
+        }
+        popHelper.show();
+
     }
 
     /**
