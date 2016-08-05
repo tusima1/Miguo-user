@@ -2,6 +2,7 @@ package com.miguo.live.views.customviews;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,9 +13,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.interf.OnMeiProgressFinishListener;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.views.LiveUtil;
 import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.MGLog;
+import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 
 /**
  * Created by didik on 2016/7/30.
@@ -35,6 +39,7 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     private ObjectAnimator object3;
 
     private float dx=0f;
+    private Activity mActivity;
 
     public HostMeiToolView(Context context) {
         super(context);
@@ -74,7 +79,8 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     }
 
 
-    public void setNeed(LiveCommonHelper helper) {
+    public void setNeed(Activity activity,LiveCommonHelper helper) {
+        this.mActivity=activity;
         this.mLiveCommonHelper = helper;
 
     }
@@ -153,6 +159,9 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
         }
     }
 
+    /**
+     * 点击了mei
+     */
     private void clickMei() {
 //        if (isShow) {
 //            hide();
@@ -160,23 +169,39 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
 //            show();
 //        }
 //        isShow = !isShow;
-        object1.start();
-        object2.start();
-        object3.start();
+        if (isShow()){
+            object1.start();
+            object2.start();
+            object3.start();
+        }
     }
 
     /**
      * 美颜
      */
     private void clickMeiYan() {
-        MGToast.showToast("美颜");
+        //判断是否支持美颜
+        if (!QavsdkControl.getInstance().getAVContext().getVideoCtrl().isEnableBeauty()){
+            MGToast.showToast("对不起,你的手机不支持美颜效果!=.=");
+            return;
+        }
+        MeiSeekBarDialog meiSeekBarDialog = new MeiSeekBarDialog(mActivity);
+        meiSeekBarDialog.setTitle("美颜");
+        meiSeekBarDialog.setOnMeiProgressFinishListener(new OnMeiProgressFinishListener() {
+            @Override
+            public void finalProgress(int finalProgress) {
+                MGToast.showToast(""+finalProgress);
+                QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputBeautyParam(LiveUtil.getBeautyProgress(finalProgress));//美颜
+            }
+        });
+        meiSeekBarDialog.show();
     }
 
     /**
      * 美白
      */
     private void clickMeiBai() {
-        MGToast.showToast("美白");
+        MGToast.showToast("sdk 暂不支持美白");
     }
 
 

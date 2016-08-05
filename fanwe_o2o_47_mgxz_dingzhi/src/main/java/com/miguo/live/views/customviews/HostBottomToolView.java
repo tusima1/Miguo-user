@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
@@ -35,6 +36,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     private LiveCommonHelper mLiveCommonHelper;
     private LiveHelper mLiveHelper;
     private Activity mActivity;
+    private LiveSwitchScreenListener mScreenListener;
 
     public HostBottomToolView(Context context) {
         super(context);
@@ -77,12 +79,16 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         mCb_DanMu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    //执行清除弹幕(类似清屏)
-                    MGToast.showToast("执行清除弹幕");
-                }else {
-                    //执行开启弹幕
-                    MGToast.showToast("执行开启弹幕");
+//                if (isChecked){
+//                    //执行清除弹幕(类似清屏)
+////                    MGToast.showToast("执行清除弹幕");
+//
+//                }else {
+//                    //执行开启弹幕
+////                    MGToast.showToast("执行开启弹幕");
+//                }
+                if (mScreenListener!=null){
+                    mScreenListener.onSwitchScreen();
                 }
             }
         });
@@ -93,13 +99,13 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     //执行关闭语音
-                    MGToast.showToast("执行关闭语音");
+//                    MGToast.showToast("执行关闭语音");
                     if (mLiveCommonHelper!=null){
                         mLiveCommonHelper.closeMic();
                     }
                 }else {
                     //执行开启语音
-                    MGToast.showToast("执行开启语音");
+//                    MGToast.showToast("执行开启语音");
                     if (mLiveCommonHelper!=null){
                         mLiveCommonHelper.openMic();
                     }
@@ -119,24 +125,13 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         if (mActivity == null || mLiveHelper == null || mContext == null) {
             return;
         }
-//        InputTextMsgDialog inputMsgDialog = new InputTextMsgDialog(mContext, R.style.inputdialog,
-//                mLiveHelper, mActivity);
-////        WindowManager windowManager = mActivity.getWindowManager();
-////        Display display = windowManager.getDefaultDisplay();
-////        WindowManager.LayoutParams lp = inputMsgDialog.getWindow().getAttributes();
-////
-////        lp.width = (int) (display.getWidth()); //设置宽度
-////        inputMsgDialog.getWindow().setAttributes(lp);
-//        inputMsgDialog.setCancelable(true);
-//        inputMsgDialog.show();
         LiveInputDialogHelper inputDialogHelper=new LiveInputDialogHelper(mLiveHelper,mActivity);
         inputDialogHelper.show();
     }
 
-//    public boolean isDialogShow(){
-//
-//    }
-
+    public void setLiveSwitchScreenListener(LiveSwitchScreenListener liveSwitchScreenListener){
+        this.mScreenListener=liveSwitchScreenListener;
+    }
     @Override
     public void onDestroy() {
         //释放资源

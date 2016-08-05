@@ -34,6 +34,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     private LiveActivity mActivity;//直播的引用
     private LiveCommonHelper mLiveCommonHelper;//工具类
 
+
     public HostTopView(Context context) {
         super(context);
         init(context);
@@ -119,6 +120,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             mRel_layout.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.VISIBLE);
             mTv_arrive_num.setVisibility(View.VISIBLE);
+            mAV_members_num.setVisibility(View.VISIBLE);
         }else {
             MGToast.showToast("初始化view错误!");
         }
@@ -132,6 +134,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             mRel_layout.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(View.INVISIBLE);
             mTv_arrive_num.setVisibility(View.INVISIBLE);
+            mAV_members_num.setVisibility(View.INVISIBLE);
         }else {
             MGToast.showToast("初始化view错误!");
         }
