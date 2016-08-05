@@ -20,6 +20,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
@@ -155,7 +156,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 break;
             case R.id.btn_start_live_start:
                 startLive();
-                UmengShareManager.share(this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+                UmengShareManager.share(LiveStartActivity.this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
                 finish();
                 break;
         }
@@ -252,6 +253,31 @@ public class LiveStartActivity extends Activity implements CallbackView {
         intent.putExtra(Constants.ID_STATUS, Constants.HOST);
         MySelfInfo.getInstance().setIdStatus(Constants.HOST);
         MySelfInfo.getInstance().setJoinRoomWay(true);
+        String nickName = "直播";
+        if(userInfoNew!=null)
+        {
+            nickName = userInfoNew.getNick();
+            if(TextUtils.isEmpty(nickName)||"null".equals(nickName)){
+                nickName = userInfoNew.getUser_name();
+            }
+            if(TextUtils.isEmpty(nickName)||"null".equals(nickName)){
+                nickName = userInfoNew.getUser_id();
+            }
+        }
+        MySelfInfo.getInstance().setNickName(nickName);
+        CurLiveInfo.setHostName(nickName);
+
+        String avatar ="";
+        if(App.getInstance().getmUserCurrentInfo()!=null){
+            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
+            if(currentInfo.getUserInfoNew()!=null){
+                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            }
+        }
+
+        if(TextUtils.isEmpty(avatar)||"null".equals(avatar.trim())){
+            MySelfInfo.getInstance().setAvatar(avatar);
+        }
         CurLiveInfo.setTitle("直播");
         CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
         CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());

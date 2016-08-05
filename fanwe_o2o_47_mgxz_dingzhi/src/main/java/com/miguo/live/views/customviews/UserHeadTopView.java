@@ -15,7 +15,10 @@ import android.widget.TextView;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.HeadTopAdapter;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.views.LiveUserExitDialogHelper;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,6 +40,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private LiveUserExitDialogHelper userExitDialogHelper;
 
     public boolean isUserClose=false;//是不是用户点击的关闭
+    private List<ModelAudienceInfo> mData;
+
+    HeadTopAdapter mAdapter=new HeadTopAdapter(null,mContext);
 
     public UserHeadTopView(Context context) {
         this(context,null);
@@ -68,8 +74,14 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         mUserIamge.setOnClickListener(this);
         mClose.setOnClickListener(this);
 
-        //绑定假数据
-        bindData();
+        mMemberList.setHasFixedSize(true);
+
+        LinearLayoutManager llmanager=new LinearLayoutManager(mContext);
+        llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mMemberList.setLayoutManager(llmanager);
+
+
+        mMemberList.setAdapter(mAdapter);
     }
     public void initNeed(Activity activity){
         this.mActivity=activity;
@@ -92,33 +104,29 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关闭操作
      */
     private void close() {
-        if (mActivity!=null && userExitDialogHelper!=null){
+        if (mActivity!=null && userExitDialogHelper!=null&&!userExitDialogHelper.isShowing()){
             userExitDialogHelper.show();
         }
         isUserClose=true;
     }
 
     /**
-     * 绑定数据(会刷新所有的数据)
+     * 更新数据。
+     * @param mData
      */
-    public void bindData(){
+    public void refreshData(List<ModelAudienceInfo> mData){
+        this.mData = mData;
+        mAdapter.setmData(mData);
+        mAdapter.notifyDataSetChanged();
 
-        /*inflate list*/
-        mMemberList.setHasFixedSize(true);
 
-        LinearLayoutManager llmanager=new LinearLayoutManager(mContext);
-        llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mMemberList.setLayoutManager(llmanager);
-
-        HeadTopAdapter mAdapter=new HeadTopAdapter(null,mContext);
-        mMemberList.setAdapter(mAdapter);
     }
-
     /**
      * 更新观众列表
      * @return
      */
     public boolean updateMemberList(){
+
         return true;
     }
 
@@ -147,6 +155,8 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void updateAudicenceCount(String num){
         if(!TextUtils.isEmpty(num)) {
             mMembers.setText(num + "人");
+        }else{
+            mMembers.setText("0 人");
         }
     }
     /*设置头像*/

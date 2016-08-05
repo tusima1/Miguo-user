@@ -42,7 +42,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
-import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presenters.LiveHttpHelper;
@@ -124,9 +124,13 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                 if (mListModel != null) {
                     mListModel.clear();
                 }
-                pageModel.resetPage();
+                if(pageModel!=null) {
+                    pageModel.resetPage();
+                }
                 pageData_1 = null;
-                pageData_2.clear();
+                if(pageData_2!=null) {
+                    pageData_2.clear();
+                }
                 requestIndex();
                 requestLiveList();
 //                requestIndex2(false);
@@ -244,7 +248,9 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     private void requestLiveList() {
 //        liveHelper.getLiveList(pageNum, pageSize, "", "", String.valueOf(AppRuntimeWorker.getCity_id()));
-        liveHelper.getLiveList(pageNum, pageSize, "", "", "");
+        if(liveHelper!=null) {
+            liveHelper.getLiveList(pageNum, pageSize, "", "", "");
+        }
     }
 
 
@@ -485,8 +491,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             }
         } else if (LiveConstants.AUDIENCE_LIST.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelAudienceList modelAudienceList = (ModelAudienceList) datas.get(0);
-                Log.d("onSuccess", modelAudienceList.getStart_time());
+                ModelAudienceInfo modelAudienceList = (ModelAudienceInfo) datas.get(0);
             }
         } else if (LiveConstants.END_INFO.equals(method)) {
             Log.d("onSuccess", "end success");

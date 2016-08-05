@@ -455,7 +455,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 TIMElemType type = elem.getType();
                 String sendId = currMsg.getSender();
                 TIMUserProfile  senderProfile = currMsg.getSenderProfile();
-                String faceUrl = senderProfile.getFaceUrl();
+                String faceUrl="";
+                if(senderProfile!=null) {
+                     faceUrl = senderProfile.getFaceUrl();
+                }
 
                 //系统消息
                 if (type == TIMElemType.GroupSystem) {

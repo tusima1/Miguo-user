@@ -50,7 +50,7 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
-import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveCommonHelper;
@@ -530,6 +530,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
             mHostTopView.setVisibility(View.VISIBLE);
             mHostTopView.setNeed(this, mCommonHelper);
+            mHostTopView.updateAudienceCount(CurLiveInfo.getMembers()+"");
+            if(CurLiveInfo.getModelShop()!=null&&!TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
+                mHostTopView.setLocation(CurLiveInfo.getModelShop().getAddress());
+            }
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
 //            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
 //            BtnWhite = (TextView) findViewById(R.id.white_btn);
@@ -622,7 +626,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             String hostImg = CurLiveInfo.getHostAvator();
             mUserHeadTopView.setHostImg(hostImg);
             mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
-
+            mUserHeadTopView.updateAudicenceCount(CurLiveInfo.getMembers()+"");
+            if(CurLiveInfo.getModelShop()!=null&&!TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
+                mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getAddress());
+            }
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
 
@@ -765,6 +772,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     public void userExit(){
         mLiveHelper.perpareQuitRoom(true);
+        App.getInstance().setAvStart(false);
         mEnterRoomHelper.quiteLive();
     }
 
@@ -889,6 +897,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
         int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
+        int roomId = CurLiveInfo.getRoomNum();
+        if(roomId!=-1&&roomId!=0) {
+            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
+        }
+
         //人数加1,可以设置到界面上
         if (mHostTopView != null) {
             mHostTopView.updateAudienceCount(members + "");
@@ -902,7 +915,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void memberQuit(String id, String name,String faceUrl) {
         refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
         watchCount--;
-
+        int roomId = CurLiveInfo.getRoomNum();
+        if(roomId!=-1&&roomId!=0) {
+            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
+        }
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
@@ -943,6 +959,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 if (MySelfInfo.getInstance().getIdStatus() == Constants.MEMBER)
                     quiteLivePassively();
             }
+        }
+        int roomId = CurLiveInfo.getRoomNum();
+        if(roomId!=-1&&roomId!=0) {
+            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
         }
     }
 
@@ -1655,8 +1675,15 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         switch (method) {
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
-                List<ModelAudienceList> audienceList = datas;
-                MGLog.e(audienceList);
+                List<ModelAudienceInfo> audienceList = datas;
+                if(audienceList!=null&&audienceList.size()>0) {
+                    if (LiveUtil.checkIsHost()) {
+                        mHostTopView.refreshData(datas);
+                    } else {
+                        mUserHeadTopView.refreshData(datas);
+                    }
+                }
+
                 break;
             case LiveConstants.END_INFO:
                 //直播结束

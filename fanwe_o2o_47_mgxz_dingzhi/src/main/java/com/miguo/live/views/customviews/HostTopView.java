@@ -14,8 +14,11 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.adapters.HeadTopAdapter;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.views.LiveActivity;
+
+import java.util.List;
 
 /**
  * Created by didik on 2016/7/30.
@@ -34,8 +37,9 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     private Context mContext;
     private LiveActivity mActivity;//直播的引用
     private LiveCommonHelper mLiveCommonHelper;//工具类
+    private List<ModelAudienceInfo> mData;
 
-
+    HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
     public HostTopView(Context context) {
         super(context);
         init(context);
@@ -77,8 +81,6 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         LinearLayoutManager llmanager = new LinearLayoutManager(mContext);
         llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(llmanager);
-
-        HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -144,9 +146,21 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     public void updateAudienceCount(String num) {
         if (!TextUtils.isEmpty(num)) {
             mAV_members_num.setText(num + "人");
+        }else{
+            mAV_members_num.setText( "0 人");
         }
     }
+    /**
+     * 更新数据。
+     * @param mData
+     */
+    public void refreshData(List<ModelAudienceInfo> mData){
+        this.mData = mData;
+        mAdapter.setmData(mData);
+        mAdapter.notifyDataSetChanged();
 
+
+    }
     /*设置地址*/
     public void setLocation(String location) {
         mTv_location.setText(location);
