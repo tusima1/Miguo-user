@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
 import com.miguo.live.views.UserRobRedPacketDialogHelper;
@@ -74,11 +75,11 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     }
 
-    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout,View rootView) {
+    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout, View rootView) {
         this.mAct = mAct;
         this.mLiveHelper = liveHelper;
         this.mHeartLayout = heartLayout;
-        this.rootView=rootView;
+        this.rootView = rootView;
     }
 
     @Override
@@ -118,7 +119,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 分享
      */
     private void clickShare() {
-        MGToast.showToast("点击了分享");
+        UmengShareManager.share(mAct, "", "用户直播分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(mContext, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 
     /**
@@ -133,10 +134,10 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      */
     private void clickRob() {
 //        MGToast.showToast("点击了抢到");
-        if (mAct!=null && redPacketDialogHelper==null){
+        if (mAct != null && redPacketDialogHelper == null) {
             redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct);
         }
-         redPacketDialogHelper.createDialog();
+        redPacketDialogHelper.createDialog();
         redPacketDialogHelper.show();
     }
 
@@ -145,8 +146,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      */
     private void clickGoods() {
 //        MGToast.showToast("点击了商品(宝贝)");
-        if (mAct!=null && rootView!=null && popHelper==null){
-            popHelper = new LiveUserPopHelper(mAct,rootView);
+        if (mAct != null && rootView != null && popHelper == null) {
+            popHelper = new LiveUserPopHelper(mAct, rootView);
         }
         popHelper.show();
 
@@ -166,7 +167,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         if (mAct == null || mLiveHelper == null || mContext == null) {
             return;
         }
-        LiveInputDialogHelper inputDialogHelper=new LiveInputDialogHelper(mLiveHelper,mAct);
+        LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mAct);
         inputDialogHelper.show();
     }
 
