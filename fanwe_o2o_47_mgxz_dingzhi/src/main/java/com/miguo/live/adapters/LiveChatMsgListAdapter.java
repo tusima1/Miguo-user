@@ -190,8 +190,6 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 
 
     static class ViewHolder {
-//        public LinearLayout textItem;
-//        public CustomTextView sendContext;
         public de.hdodenhof.circleimageview.CircleImageView civ_user_image;
         public TextView name;
         public TextView content;

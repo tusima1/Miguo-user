@@ -22,7 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/7/26.
  * 直播退出界面
  */
-public class LiveExitDialogHelper implements IHelper, View.OnClickListener {
+public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener {
 
     private  Activity mActivity;
     private CircleImageView civ_user_image;
@@ -32,7 +32,7 @@ public class LiveExitDialogHelper implements IHelper, View.OnClickListener {
     private MaxHeightGridView gridview;
     private Dialog dialog;
 
-    public LiveExitDialogHelper(Activity activity){
+    public LiveUserExitDialogHelper(Activity activity){
         this.mActivity=activity;
         createDialog();
     }
@@ -94,7 +94,6 @@ public class LiveExitDialogHelper implements IHelper, View.OnClickListener {
 
     /**
      * 是否在显示
-     * @return
      */
     public boolean isShowing(){
         return dialog.isShowing();
@@ -118,6 +117,9 @@ public class LiveExitDialogHelper implements IHelper, View.OnClickListener {
     @Override
     public void onDestroy() {
         //防止内存泄漏,在这里释放资源
+        mActivity=null;
+        dialog=null;
+        gridview=null;
     }
 
     @Override
@@ -125,6 +127,7 @@ public class LiveExitDialogHelper implements IHelper, View.OnClickListener {
         int id=v.getId();
         if (id==R.id.iv_close){
             dismiss();
+            ((LiveActivity)mActivity).userExit();
             mActivity.finish();
         }else if (id==R.id.tv_youhuiquan){
             clickYouHui();

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +39,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.user.presents.IMUserInfoHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
@@ -64,7 +62,6 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
-import com.tencent.TIMCallBack;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -139,7 +136,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
     private View root;
-    private LiveExitDialogHelper mExitDialogHelper;//直播退出详情界面
     private UserHeadTopView mUserHeadTopView;
     private LiveRecordDialogHelper mRecordHelper;
     private LiveOrientationHelper mOrientationHelper;
@@ -166,7 +162,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
-        avinit();
+
+        root = findViewById(R.id.root);
+        //屏幕方向管理,初始化
+        mOrientationHelper = new LiveOrientationHelper();
+        //公共功能管理类
+        mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
         checkUserAndPermission();
 
 
@@ -182,14 +183,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         initView();
     }
 
-    public void avinit() {
-
-        root = findViewById(R.id.root);
-        //屏幕方向管理,初始化
-        mOrientationHelper = new LiveOrientationHelper();
-        //公共功能管理类
-        mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
-    }
     /**
      * IM 登录。
      */
@@ -356,7 +349,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             //AvSurfaceView 初始化成功
             if (action.equals(Constants.ACTION_SURFACE_CREATED)) {
                 //打开摄像头
-                if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+                if (LiveUtil.checkIsHost()) {
                     mLiveHelper.openCameraAndMic();
                 }
             }
@@ -408,7 +401,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     mHostLeaveLayout.setVisibility(View.VISIBLE);
                 }
 
-                if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {//自己是主播
+                if (LiveUtil.checkIsHost()) {//自己是主播
                     if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//背景是自己
                         mHostBottomToolView1.setVisibility(View.VISIBLE);
                         mHostBottomMeiView2.setVisibility(View.VISIBLE);
@@ -621,8 +614,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
 
-            //退出的界面(用户)
-            mExitDialogHelper = new LiveExitDialogHelper(this);
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
         avView = findViewById(R.id.av_video_layer_ui);//surfaceView;
@@ -644,7 +635,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     private void initViewNeed() {
         //初始化底部
         if (mUserBottomTool != null) {
-            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout);
+            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout,root);
         }
     }
 
@@ -683,7 +674,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         public void run() {
             SxbLog.i(TAG, "timeTask ");
             ++mSecond;
-            if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST)
+            if (LiveUtil.checkIsHost())
                 mHandler.sendEmptyMessage(UPDAT_WALL_TIME_TIMER_TASK);
         }
     }
@@ -725,22 +716,31 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     @Override
     public void onBackPressed() {
-        quiteLiveByPurpose();
+        if (LiveUtil.checkIsHost()) {
+            hostExit();
+        }else {
+            userExit();
+        }
 
     }
 
     /**
-     * 右上角退出按钮
+     *
      * 主动退出直播
      */
-    private void quiteLiveByPurpose() {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+    private void hostExit() {
+        if (LiveUtil.checkIsHost()) {
             if (backDialog.isShowing() == false)
                 backDialog.show();
-        } else {
-            mLiveHelper.perpareQuitRoom(true);
-            mEnterRoomHelper.quiteLive();
         }
+    }
+
+    /**
+     * 普通用户退出
+     */
+    public void userExit(){
+        mLiveHelper.perpareQuitRoom(true);
+        mEnterRoomHelper.quiteLive();
     }
 
 
@@ -771,6 +771,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     }
                 }
                 backDialog.dismiss();
+                //先直接finish Activity
+                if (getParent()!=null){
+                    finish();
+                }
             }
         });
         TextView tvCancel = (TextView) backDialog.findViewById(R.id.cancel_action);
@@ -834,15 +838,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
             MGToast.showToast("主播退出!");
             finish();
         } else {
-            if ((getBaseContext() != null) && (null != mExitDialogHelper) && (mExitDialogHelper.isShowing() == false)) {
-
-                mExitDialogHelper.show();
-            }
-
+            //普通用户退出
+            LiveUserExitDialogHelper userExitDialogHelper=new LiveUserExitDialogHelper(this);
+            userExitDialogHelper.show();
         }
 
     }
@@ -985,7 +987,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             QavsdkControl.getInstance().setSelfId(MySelfInfo.getInstance().getId());
             QavsdkControl.getInstance().setLocalHasVideo(true, MySelfInfo.getInstance().getId());
             //主播通知用户服务器
-            if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+            if (LiveUtil.checkIsHost()) {
                 if (bFirstRender) {
                     mEnterRoomHelper.notifyServerCreateRoom();
 
@@ -1042,7 +1044,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void refreshUI(String id) {
         //当主播选中这个人，而他主动退出时需要恢复到正常状态
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST)
+        if (LiveUtil.checkIsHost())
             if (!backGroundId.equals(CurLiveInfo.getHostID()) && backGroundId.equals(id)) {
                 backToNormalCtrlView();
             }
@@ -1161,7 +1163,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void cancelMemberView(String id) {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
         } else {
             //TODO 主动下麦 下麦；
             mLiveHelper.changeAuthandRole(false, Constants.NORMAL_MEMBER_AUTH, Constants.NORMAL_MEMBER_ROLE);
@@ -1295,7 +1297,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     }
 
     private void backToNormalCtrlView() {
-        if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
+        if (LiveUtil.checkIsHost()) {
             backGroundId = CurLiveInfo.getHostID();
             mHostBottomToolView1.setVisibility(View.VISIBLE);
             mHostBottomMeiView2.setVisibility(View.VISIBLE);

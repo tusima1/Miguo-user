@@ -19,6 +19,8 @@ import android.widget.GridView;
 import com.fanwe.CityListActivity;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
+import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.dialog.SDDialogProgress;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -29,6 +31,7 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.adapters.VisitImgAdapter;
 import com.miguo.live.model.DataBindingLiveAuth;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.qiniu.android.http.ResponseInfo;
@@ -122,8 +125,9 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
             SDToast.showToast("请输入手机号");
         } else if (datas.size() < 3) {
             SDToast.showToast("请上传2-3张生活照");
-        } else
-            liveHttpHelper.getUpToken();
+        } else {
+            liveHttpHelper.getBussDictionInfo("Client");
+        }
     }
 
     private void preData() {
@@ -299,10 +303,18 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     }
 
     String uploadToken;
+    String urlQiNiu;
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (LiveConstants.UP_TOKEN.equals(method)) {
+        if (LiveConstants.BUSS_DICTION_INFO.equals(method)) {
+            for (ModelBussDictionInfo modelBussDictionInfo : (ArrayList<ModelBussDictionInfo>) datas) {
+                if ("DomainName".equals(modelBussDictionInfo.getDic_value())) {
+                    urlQiNiu = modelBussDictionInfo.getDic_mean();
+                }
+            }
+            liveHttpHelper.getUpToken();
+        } else if (LiveConstants.UP_TOKEN.equals(method)) {
             ArrayList<ModelUpToken> tokens = (ArrayList<ModelUpToken>) datas;
             if (!SDCollectionUtil.isEmpty(tokens)) {
                 uploadToken = tokens.get(0).getUptoken();
@@ -332,7 +344,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                                 try {
                                     String fileKey = jsonData.getString("key");
                                     if (!TextUtils.isEmpty(fileKey)) {
-                                        sbFileKeys.append("http://ob23v88s3.bkt.clouddn.com/" + fileKey + ",");
+                                        sbFileKeys.append(urlQiNiu + fileKey + ",");
                                     }
                                     if (sbFileKeys.toString().indexOf("http:") != -1) {
                                         String[] strs = sbFileKeys.toString().split("ttp://");

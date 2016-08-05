@@ -3,12 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <com.fanwe.library.customview.SDSlidingPlayView
         android:id="@+id/spv_content"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="12dp"
         android:padding="1dp" />
 
     <View
