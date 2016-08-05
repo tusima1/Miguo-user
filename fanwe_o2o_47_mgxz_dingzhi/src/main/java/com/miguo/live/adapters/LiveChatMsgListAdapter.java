@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 /**
  * 消息列表的Adapter
@@ -135,6 +137,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_live_chatmsg, null);
+            holder.faceUrl = (CircleImageView)convertView.findViewById(R.id.civ_user_image);
             holder.name = (TextView) convertView.findViewById(R.id.tv_name);
             holder.content = (TextView) convertView.findViewById(R.id.tv_content);
             convertView.setTag(R.id.tag_first, holder);
@@ -181,16 +184,20 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
                 holder.name.setText("快说你是谁"+":");
             }
         }
-       holder.name.setText(item.getSenderName()+":");
+        holder.name.setText(item.getSenderName()+":");
         holder.content.setText(item.getContent());
-//        holder.name.fixViewWidth(mListView.getWidth());
-//        holder.content.fixViewWidth(mListView.getWidth());
+        String faceUrl = item.getFaceUrl();
+        if(!TextUtils.isEmpty(faceUrl)){
+            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(faceUrl,holder.faceUrl);
+        }else{
+            holder.faceUrl.setImageResource(R.drawable.bg_empty);
+        }
         return convertView;
     }
 
 
     static class ViewHolder {
-        public de.hdodenhof.circleimageview.CircleImageView civ_user_image;
+        public CircleImageView faceUrl;
         public TextView name;
         public TextView content;
 

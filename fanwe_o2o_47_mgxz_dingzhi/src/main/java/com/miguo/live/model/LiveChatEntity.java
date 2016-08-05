@@ -10,7 +10,7 @@ public class LiveChatEntity {
     /**
      * 用户 头像。
      */
-    private String sendIcon;
+    private String faceUrl;
 
     public LiveChatEntity() {
         // TODO Auto-generated constructor stub
@@ -45,11 +45,19 @@ public class LiveChatEntity {
         this.type = type;
     }
 
-    public String getSendIcon() {
-        return sendIcon;
+    public String getGrpSendName() {
+        return grpSendName;
     }
 
-    public void setSendIcon(String sendIcon) {
-        this.sendIcon = sendIcon;
+    public void setGrpSendName(String grpSendName) {
+        this.grpSendName = grpSendName;
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
+    }
+
+    public void setFaceUrl(String faceUrl) {
+        this.faceUrl = faceUrl;
     }
 }

@@ -15,6 +15,7 @@ public interface LiveView extends MvpView {
     void showInviteDialog();
 
     void refreshText(String text, String name);
+    void refreshText(String text, String name,String faceUrl);
 
     void refreshThumbUp();
 
@@ -25,10 +26,12 @@ public interface LiveView extends MvpView {
     void cancelInviteView(String id);
 
     void cancelMemberView(String id);
+    void memberJoin(String id, String name,String faceUrl);
 
-    void memberJoin(String id, String name);
+   // void memberJoin(String id, String name);
 
-    void memberQuit(String id, String name);
+    void memberQuit(String id, String name,String faceUrl);
+   // void memberQuit(String id, String name);
 
     void readyToQuit();
 
@@ -42,7 +45,7 @@ public interface LiveView extends MvpView {
 
     void stopRecordCallback(boolean isSucc, List<String> files);
 
-    void hostLeave(String id, String name);
+    void hostLeave(String id, String name,String faceUrl);
 
-    void hostBack(String id, String name);
+    void hostBack(String id, String name,String faceUrl);
 }

@@ -51,14 +51,14 @@ public class LoginHelper extends Presenter {
 
     private TencentHttpHelper mTencentHttpHelper;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mTLoginHelper;
-    private   IMUserInfoHelper mIMUserInfoHelper;
+
 
     public LoginHelper(Context context) {
 
         mContext = context;
         mTencentHttpHelper = new TencentHttpHelper(mContext);
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
-        mIMUserInfoHelper = new IMUserInfoHelper();
+
     }
     public LoginHelper(Activity activity,Context context, LoginFragment loginView) {
         this.mActivity = activity;
@@ -77,6 +77,7 @@ public class LoginHelper extends Presenter {
     }
     public LoginHelper(Activity activity) {
        this.mActivity = activity;
+        mTencentHttpHelper = new TencentHttpHelper(mContext);
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(activity);
     }
     /**

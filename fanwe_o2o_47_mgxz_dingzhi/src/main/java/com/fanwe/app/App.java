@@ -72,6 +72,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 是否初始化AV.
      */
     public boolean isAvStart = false;
+    /**
+     * 当前用户的昵称。
+     */
+    public String nickName;
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
@@ -290,6 +294,25 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
 
     }
+    public String getUserNickName() {
+
+
+        if (this.mUserCurrentInfo != null) {
+
+            if (mUserCurrentInfo.getUserInfoNew() != null) {
+                nickName = mUserCurrentInfo.getUserInfoNew().getNick();
+                if(TextUtils.isEmpty(nickName)||"null".equals(nickName.trim())){
+                    nickName = mUserCurrentInfo.getUserInfoNew().getUser_name();
+                }
+                if(TextUtils.isEmpty(nickName)||"null".equals(nickName.trim())){
+                    nickName = mUserCurrentInfo.getUserInfoNew().getUser_id();
+                }
+            }
+        }
+        return nickName;
+
+    }
+
 
     @Override
     protected void attachBaseContext(Context base) {
