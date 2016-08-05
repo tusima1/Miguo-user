@@ -2,6 +2,7 @@ package com.miguo.live.views;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -49,13 +50,13 @@ public class LiveUserPopHelper implements IHelper {
         popupWindow.setTouchable(true);
         //设置背景
 //        ColorDrawable background=new ColorDrawable(0x4F000000);
-//        BitmapDrawable background=new BitmapDrawable();
-//        //设置背景+
-//        popupWindow.setBackgroundDrawable(background);
+        BitmapDrawable background=new BitmapDrawable();
+        //设置背景+
+        popupWindow.setBackgroundDrawable(background);
 //
         popupWindow.setFocusable(true);
 
-        popupWindow.setOutsideTouchable(false);
+        popupWindow.setOutsideTouchable(true);
 
     }
     /*显示*/
