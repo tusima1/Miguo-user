@@ -100,9 +100,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener {
     };
 
     public void show(){
-        if (dialog.isShowing()){
-            //
-        }else {
+        if (dialog!=null&&!dialog.isShowing()){
             dialog.show();
         }
     }

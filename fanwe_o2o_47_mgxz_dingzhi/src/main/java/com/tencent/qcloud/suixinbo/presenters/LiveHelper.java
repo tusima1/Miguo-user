@@ -278,9 +278,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     for (int j = 0; j < timMessage.getElementCount(); j++) {
                         TIMElem elem = (TIMElem) timMessage.getElement(0);
                         if (timMessage.isSelf()) {
-                            handleTextMessage(elem, MySelfInfo.getInstance().getNickName());
+                            handleTextMessage(elem, MySelfInfo.getInstance().getNickName(),MySelfInfo.getInstance().getAvatar());
                         } else {
                             TIMUserProfile sendUser = timMessage.getSenderProfile();
+                            String faceUrl = sendUser.getFaceUrl();
                             String name;
                             if (sendUser != null) {
                                 name = sendUser.getNickName();
@@ -288,7 +289,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                                 name = timMessage.getSender();
                             }
                             //String sendId = timMessage.getSender();
-                            handleTextMessage(elem, name);
+                            handleTextMessage(elem, name,faceUrl);
                         }
                     }
                     SxbLog.i(TAG, "Send text Msg ok");
@@ -453,6 +454,8 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 TIMElem elem = currMsg.getElement(j);
                 TIMElemType type = elem.getType();
                 String sendId = currMsg.getSender();
+                TIMUserProfile  senderProfile = currMsg.getSenderProfile();
+                String faceUrl = senderProfile.getFaceUrl();
 
                 //系统消息
                 if (type == TIMElemType.GroupSystem) {
@@ -472,7 +475,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                         id = sendId;
                         nickname = sendId;
                     }
-                    handleCustomMsg(elem, id, nickname);
+                    handleCustomMsg(elem, id, nickname,faceUrl);
                     continue;
                 }
 
@@ -486,7 +489,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 //最后处理文本消息
                 if (type == TIMElemType.Text) {
                     if (currMsg.isSelf()) {
-                        handleTextMessage(elem, MySelfInfo.getInstance().getNickName());
+                        handleTextMessage(elem, MySelfInfo.getInstance().getNickName(),faceUrl);
                     } else {
                         String nickname;
                         if (currMsg.getSenderProfile() != null && (!currMsg.getSenderProfile().getNickName().equals(""))) {
@@ -494,7 +497,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                         } else {
                             nickname = sendId;
                         }
-                        handleTextMessage(elem, nickname);
+                        handleTextMessage(elem, nickname,faceUrl);
                     }
                 }
             }
@@ -507,11 +510,11 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      * @param elem
      * @param name
      */
-    private void handleTextMessage(TIMElem elem, String name) {
+    private void handleTextMessage(TIMElem elem, String name,String faceUrl) {
         TIMTextElem textElem = (TIMTextElem) elem;
 //        Toast.makeText(mContext, "" + textElem.getText(), Toast.LENGTH_SHORT).show();
 
-        mLiveView.refreshText(textElem.getText(), name);
+        mLiveView.refreshText(textElem.getText(), name,faceUrl);
 //        sendToUIThread(REFRESH_TEXT, textElem.getText(), sendId);
     }
 
@@ -521,7 +524,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      *
      * @param elem
      */
-    private void handleCustomMsg(TIMElem elem, String identifier, String nickname) {
+    private void handleCustomMsg(TIMElem elem, String identifier, String nickname,String faceUrl) {
         try {
             String customText = new String(((TIMCustomElem) elem).getData(), "UTF-8");
             SxbLog.i(TAG, "cumstom msg  " + customText);
@@ -549,12 +552,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 case Constants.AVIMCMD_EnterLive:
                     //mLiveView.refreshText("Step in live", sendId);
                     if (mLiveView != null)
-                        mLiveView.memberJoin(identifier, nickname);
+                        mLiveView.memberJoin(identifier, nickname,faceUrl);
                     break;
                 case Constants.AVIMCMD_ExitLive:
                     //mLiveView.refreshText("quite live", sendId);
                     if (mLiveView != null)
-                        mLiveView.memberQuit(identifier, nickname);
+                        mLiveView.memberQuit(identifier, nickname,faceUrl);
                     break;
                 case Constants.AVIMCMD_MULTI_CANCEL_INTERACT://主播关闭摄像头命令
                     //如果是自己关闭Camera和Mic
@@ -579,10 +582,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     toggleMic();
                     break;
                 case Constants.AVIMCMD_Host_Leave:
-                    mLiveView.hostLeave(identifier, nickname);
+                    mLiveView.hostLeave(identifier, nickname,faceUrl);
                     break;
                 case Constants.AVIMCMD_Host_Back:
-                    mLiveView.hostBack(identifier, nickname);
+                    mLiveView.hostBack(identifier, nickname,faceUrl);
                 default:
                     break;
             }

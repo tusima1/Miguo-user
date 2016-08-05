@@ -201,7 +201,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 new TIMCallBack() {
                     @Override
                     public void onError(int i, String s) {
-                        Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
+
                         mView.onFailue("IM 认证失败。");
                         if(callback!=null){
                             callback.onErrorResponse("IM 认证失败。","400");

@@ -2,17 +2,20 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.fanwe.adapter.HomeLiveListAdapter;
+import com.fanwe.app.App;
 import com.fanwe.customview.SDGridViewInScroll;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.UserCurrentInfo;
 import com.miguo.live.views.LiveActivity;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -69,12 +72,28 @@ HomeFragmentLiveList extends BaseFragment {
                 Intent intent = new Intent(getActivity(), LiveActivity.class);
                 intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
                 MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+                String nickName =App.getInstance().getUserNickName();
+                String avatar ="";
+                if(App.getInstance().getmUserCurrentInfo()!=null){
+                    UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
+                    if(currentInfo.getUserInfoNew()!=null){
+                         avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+                    }
+                }
+
+                if(TextUtils.isEmpty(avatar)||"null".equals(avatar.trim())){
+                    MySelfInfo.getInstance().setAvatar(avatar);
+                }
+
+                MySelfInfo.getInstance().setNickName(nickName);
                 MySelfInfo.getInstance().setJoinRoomWay(false);
                 CurLiveInfo.setHostID(host.getHost_user_id());
                 CurLiveInfo.setHostName(host.getNickname());
 
-//                CurLiveInfo.setHostAvator(item.getHost().getAvatar());
+                CurLiveInfo.setHostAvator(room.getHost().getAvatar());
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
+
+
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
                 CurLiveInfo.setMembers(111); // 添加自己
 //                CurLiveInfo.setAdmires(item.getAdmireCount());
