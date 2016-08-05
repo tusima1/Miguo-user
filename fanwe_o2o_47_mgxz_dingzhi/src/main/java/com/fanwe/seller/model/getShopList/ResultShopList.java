@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class ResultShopList {
 
-    private List<String> quan_list;
+    private List<Quan_list> quan_list;
 
     private List<ModelShopList> item;
 
     private String city_name;
 
-    private List<String> bcate_list;
+    private List<Bcate_list> bcate_list;
 
     private List<Navs> navs;
 
@@ -29,12 +29,20 @@ public class ResultShopList {
 
     private String city_id;
 
-    public void setQuan_list(List<String> quan_list) {
+    public List<Quan_list> getQuan_list() {
+        return quan_list;
+    }
+
+    public void setQuan_list(List<Quan_list> quan_list) {
         this.quan_list = quan_list;
     }
 
-    public List<String> getQuan_list() {
-        return this.quan_list;
+    public List<Bcate_list> getBcate_list() {
+        return bcate_list;
+    }
+
+    public void setBcate_list(List<Bcate_list> bcate_list) {
+        this.bcate_list = bcate_list;
     }
 
     public void setItem(List<ModelShopList> item) {
@@ -53,13 +61,6 @@ public class ResultShopList {
         return this.city_name;
     }
 
-    public void setBcate_list(List<String> bcate_list) {
-        this.bcate_list = bcate_list;
-    }
-
-    public List<String> getBcate_list() {
-        return this.bcate_list;
-    }
 
     public void setNavs(List<Navs> navs) {
         this.navs = navs;

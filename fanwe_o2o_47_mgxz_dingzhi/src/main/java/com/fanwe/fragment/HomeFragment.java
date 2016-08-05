@@ -221,8 +221,8 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 //            requestIndex();
 //            requestIndex2(false);
 
-//            SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), HomeFragment.this);
-//            sellerHttpHelper.getShopList(1, 2, "", "", String.valueOf(AppRuntimeWorker.getCity_id()));
+            SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), HomeFragment.this);
+            sellerHttpHelper.getShopList(1, 2, "", "", "");
 
             isRefresh = true;
             pageNum = 1;

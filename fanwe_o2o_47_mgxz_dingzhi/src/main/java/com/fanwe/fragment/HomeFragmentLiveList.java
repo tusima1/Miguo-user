@@ -64,7 +64,6 @@ HomeFragmentLiveList extends BaseFragment {
         mSDGridViewInScroll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Room room = datas.get(position);
                 Host host = room.getHost();
                 Intent intent = new Intent(getActivity(), LiveActivity.class);
