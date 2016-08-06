@@ -45,6 +45,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
+
         createDialog();
         setView();
     }
@@ -54,8 +55,11 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
     }
 
+
+
     private void createDialog() {
         dialog = new Dialog(mActivity, R.style.floag_dialog);
+
         //init view
         dialog.setContentView(R.layout.pop_live_exit);
         dialog.setCancelable(false);

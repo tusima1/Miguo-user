@@ -63,6 +63,12 @@ public class Constants {
 
     public static final String ROOT_DIR = "/sdcard/Suixinbo/";
 
+    /**
+     * 自定义消息 类型开始
+     */
+    public static final int AVIMCMD_CUSTOM=0x100;
+    public static final int AVIMCMD_RED_PACKET=0x100;  //红包
+
 
     public static final int AVIMCMD_MULTI = 0x800;             // 多人互动消息类型
 

@@ -3,6 +3,7 @@ package com.tencent.qcloud.suixinbo.presenters;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -236,12 +237,14 @@ public class OKhttpHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                MGToast.showToast(responseBody);
+                SDToast.showToast("注册房间信息成功");
+             //   MGToast.showToast(responseBody);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+                SDToast.showToast("注册房间信息失败，请退出重试");
+             //   MGToast.showToast(message);
             }
         });
 

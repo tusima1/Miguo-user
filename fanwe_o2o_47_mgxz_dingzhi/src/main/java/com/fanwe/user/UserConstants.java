@@ -26,7 +26,11 @@ public class UserConstants {
      */
 
     public static final String THIRD_REGISTER_URL="ThirdpartyLoginB";
+    /**
+     * 取用户信息。
+     */
 
+    public static final String USER_INFO_URL="UserInfo";
     /**
      * 第三方OPENID.
      */

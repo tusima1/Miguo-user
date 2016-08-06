@@ -632,8 +632,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             }
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
-
-
+        if(mLiveHttphelper!=null) {
+            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "");
+        }
 
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
@@ -773,6 +774,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void userExit(){
         mLiveHelper.perpareQuitRoom(true);
         App.getInstance().setAvStart(false);
+        if(mLiveHttphelper!=null) {
+            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "");
+        }
         mEnterRoomHelper.quiteLive();
     }
 
@@ -874,6 +878,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             if(backDialog!=null){
                 backDialog.dismiss();
             }
+
             finish();
         } else {
             if (mUserHeadTopView!=null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose){
@@ -881,6 +886,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             }
 
         }
+        App.getInstance().setAvStart(false);
 
     }
 
@@ -899,7 +905,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         CurLiveInfo.setMembers(members);
         int roomId = CurLiveInfo.getRoomNum();
         if(roomId!=-1&&roomId!=0) {
-            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
 
         //人数加1,可以设置到界面上
@@ -917,7 +923,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         watchCount--;
         int roomId = CurLiveInfo.getRoomNum();
         if(roomId!=-1&&roomId!=0) {
-            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;

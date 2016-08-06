@@ -235,12 +235,15 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * 申请 房间号并进入房间。
      */
     public void getToRoomAndStartAV(MgCallback callback, boolean host) {
+        boolean oldAvStart = App.getInstance().isAvStart();
         if (App.getInstance().isImLoginSuccess()) {
             App.getInstance().setAvStart(true);
             if (host) {
                 getRoomNum();
             }
-            startAVSDK();
+            if(!oldAvStart) {
+                startAVSDK();
+            }
             callback.onSuccessResponse("");
         } else {
             callback.onErrorResponse("", null);
