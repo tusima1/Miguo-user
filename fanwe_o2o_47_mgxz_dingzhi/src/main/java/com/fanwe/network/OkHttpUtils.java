@@ -117,6 +117,50 @@ public class OkHttpUtils {
     }
 
     /**
+     * 异步PUT提交
+     *
+     * @param url
+     * @param params
+     * @param mCallback
+     * @param tag
+     */
+    public void put(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+        String serverUrl = "";
+        if (ServerUrl.DEBUG) {
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
+        } else {
+            serverUrl = ServerUrl.SERVER_API_URL_MID;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
+        }
+
+        //添加公共参数
+        params.putAll(commonParams());
+        //加密所有的参数
+        params = encryptParams(params);
+
+        FormBody.Builder build = new FormBody.Builder();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                build.add(entry.getKey(), entry.getValue());
+            } else {
+                build.add(entry.getKey(), "");
+            }
+        }
+
+        RequestBody requestBodyPut = build.build();
+        Request requestPut = new Request.Builder()
+                .url(serverUrl)
+                .put(requestBodyPut)
+                .build();
+
+        client.newCall(requestPut).enqueue(mCallback);
+    }
+
+
+    /**
      * 同步请求POST。
      *
      * @param url
