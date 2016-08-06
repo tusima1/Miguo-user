@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.fanwe.LoginActivity;
@@ -21,10 +22,14 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.miguo.live.model.DataBindingLiveStart;
+import com.miguo.live.model.applyRoom.ModelApplyRoom;
+import com.miguo.live.model.applyRoom.ResultApplyRoom;
+import com.miguo.live.model.applyRoom.RootApplyRoom;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -37,15 +42,19 @@ import java.util.List;
  */
 public class LiveStartActivity extends Activity implements CallbackView {
 
-    DataBindingLiveStart dataBindingLiveStart;
+    private DataBindingLiveStart dataBindingLiveStart;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mLoginHelper;
     private TencentHttpHelper tencentHttpHelper;
     private String token;
     /**
      * 签名后 的userid
      */
-    String usersig;
-    String userid;
+    private String usersig;
+    private String userid;
+    /**
+     * 是否分享。
+     */
+    private boolean isShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         binding.setLive(dataBindingLiveStart);
         mLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this, this);
         tencentHttpHelper = new TencentHttpHelper(this);
+        CurLiveInfo.modelShop = null;
         init();
 
     }
@@ -148,22 +158,26 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 dataBindingLiveStart.mode.set(dataBindingLiveStart.QQZONE);
                 break;
             case R.id.btn_start_live_start:
-                startLive();
+                if (CurLiveInfo.modelShop==null ||TextUtils.isEmpty(CurLiveInfo.modelShop.getId()) ) {
+                    SDToast.showToast("请选择你的消费场所");
+                    return;
+                } else {
+                    if(!TextUtils.isEmpty(usersig)) {
+                        startLive();
+                    }else{
+                        goToLoginActivity();
+                    }
+                }
                 break;
         }
     }
 
-    boolean isShare;
-
     @Override
     protected void onResume() {
         super.onResume();
-        if (isShare) {
-            isShare = false;
-            //创建房间号并进入主播页
-            createAvRoom();
-            finish();
-        }
+        isShare = false;
+
+
     }
 
     private void startLive() {
@@ -183,7 +197,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 platform = SHARE_MEDIA.QZONE;
             }
             UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
-
+            createAvRoom();
         } else {
             //未认证的，去认证
             startActivity(new Intent(this, LiveAuthActivity.class));
@@ -226,22 +240,52 @@ public class LiveStartActivity extends Activity implements CallbackView {
                     goToLive();
                 }
             });
-        } else if (!isAvStart) {
-            mLoginHelper.getToRoomAndStartAV(new MgCallback() {
-                @Override
-                public void onErrorResponse(String message, String errorCode) {
-                    SDToast.showToast("进入房间失败。");
-                }
-
-                @Override
-                public void onSuccessResponse(String responseBody) {
-                    super.onSuccessResponse(responseBody);
-                    goToLive();
-                }
-            }, true);
-
         } else {
-            goToLive();
+            if (!TextUtils.isEmpty(CurLiveInfo.modelShop.getId()) &&!"null".equals(CurLiveInfo.modelShop.getId())) {
+                //------向业务服务器申请房间号-------------------------------------
+                MgCallback mgCallback = new MgCallback() {
+                    @Override
+                    public void onSuccessResponse(String responseBody) {
+                        Gson gson = new Gson();
+                        RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
+                        List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
+                        if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
+                            SDToast.showToast("申请房间号失败");
+                            return;
+                        }
+                        ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);
+                        List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
+                        if (modelApplyRooms != null && modelApplyRooms.size() > 0 && modelApplyRooms.get(0) != null) {
+                            String room_id = modelApplyRooms.get(0).getRoom_id();
+                            Integer roomId = -1;
+                            try {
+                                roomId = Integer.valueOf(room_id);
+                            } catch (Exception e) {
+                                SDToast.showToast("获取房间号错误!");
+                                return;
+                            }
+                            if (roomId == -1) {
+                                SDToast.showToast("获取房间号错误!");
+                                return;
+                            } else {
+                                App.getInstance().setAvStart(true);
+                                MySelfInfo.getInstance().setMyRoomNum(roomId);
+                                MySelfInfo.getInstance().writeToCache(getApplicationContext());
+
+                                goToLive();
+                            }
+                        }
+                    }
+                    @Override
+                    public void onErrorResponse(String message, String errorCode) {
+                        SDToast.showToast(message);
+                    }
+                };
+                mLoginHelper.applyRoom(CurLiveInfo.modelShop.getId(), mgCallback);
+                //--------------------向业务服务器申请房间号-------------------------
+            }else{
+                SDToast.showToast("请先选择一个直播场所。");
+            }
         }
 
 
@@ -258,28 +302,27 @@ public class LiveStartActivity extends Activity implements CallbackView {
         MySelfInfo.getInstance().setIdStatus(Constants.HOST);
         MySelfInfo.getInstance().setJoinRoomWay(true);
         String nickName = "直播";
-        if(userInfoNew!=null)
-        {
+        if (userInfoNew != null) {
             nickName = userInfoNew.getNick();
-            if(TextUtils.isEmpty(nickName)||"null".equals(nickName)){
+            if (TextUtils.isEmpty(nickName) || "null".equals(nickName)) {
                 nickName = userInfoNew.getUser_name();
             }
-            if(TextUtils.isEmpty(nickName)||"null".equals(nickName)){
+            if (TextUtils.isEmpty(nickName) || "null".equals(nickName)) {
                 nickName = userInfoNew.getUser_id();
             }
         }
         MySelfInfo.getInstance().setNickName(nickName);
         CurLiveInfo.setHostName(nickName);
 
-        String avatar ="";
-        if(App.getInstance().getmUserCurrentInfo()!=null){
+        String avatar = "";
+        if (App.getInstance().getmUserCurrentInfo() != null) {
             UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if(currentInfo.getUserInfoNew()!=null){
+            if (currentInfo.getUserInfoNew() != null) {
                 avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
             }
         }
 
-        if(TextUtils.isEmpty(avatar)||"null".equals(avatar.trim())){
+        if (TextUtils.isEmpty(avatar) || "null".equals(avatar.trim())) {
             MySelfInfo.getInstance().setAvatar(avatar);
         }
         CurLiveInfo.setTitle("直播");

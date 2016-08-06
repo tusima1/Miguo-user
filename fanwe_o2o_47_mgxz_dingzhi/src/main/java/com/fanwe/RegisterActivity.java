@@ -316,6 +316,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         String pwd1 = mEt_pwd_into.getText().toString();
         if (!pwd2.equals(pwd1)) {
             SDToast.showToast("两次密码输入不一致。");
+            return false;
         }
         passwordStr = pwd1;
         return true;

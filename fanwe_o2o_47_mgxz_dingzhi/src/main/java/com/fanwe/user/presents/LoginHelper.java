@@ -94,6 +94,7 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+
                 dealLoginInfo(responseBody,mobile,null);
 
             }
@@ -122,7 +123,10 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody)  {
-                dealLoginInfo(responseBody,userName,password);
+
+
+                    dealLoginInfo(responseBody, userName, password);
+
 
             }
 
@@ -188,7 +192,9 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                dealLoginInfo(responseBody,userPhone,null);
+
+                    dealLoginInfo(responseBody, userPhone, null);
+
             }
 
             @Override
@@ -277,9 +283,11 @@ public class LoginHelper extends Presenter {
         }.getType();
         Gson gson = new Gson();
         Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+        String status = root.getStatusCode();
+        String message = root.getMessage();
+
         UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
         if (userInfoNew != null) {
-            if (userInfoNew != null) {
                 App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
                 User_infoModel model = new User_infoModel();
                 model.setUser_id(userInfoNew.getUser_id());
@@ -295,7 +303,8 @@ public class LoginHelper extends Presenter {
                 }
                 model.setUser_name(userInfoNew.getUser_name());
                 dealLoginSuccess(model);
-            }
+        }else{
+            SDToast.showToast(TextUtils.isEmpty(message)==true?"登录失败。":message);
         }
     }
     /**

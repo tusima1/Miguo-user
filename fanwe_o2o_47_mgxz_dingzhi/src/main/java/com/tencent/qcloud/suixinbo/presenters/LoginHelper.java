@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.baidu.mapapi.map.Text;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -21,7 +20,6 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.applyRoom.ResultApplyRoom;
 import com.miguo.live.model.applyRoom.RootApplyRoom;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.tencent.TIMCallBack;
@@ -35,10 +33,6 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import java.util.List;
 import java.util.TreeMap;
-
-import tencent.tls.platform.TLSErrInfo;
-import tencent.tls.platform.TLSPwdLoginListener;
-import tencent.tls.platform.TLSUserInfo;
 
 /**
  * 登录的数据处理类
@@ -173,6 +167,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
                     @Override
                     public void onSuccess() {
+                        startAVSDK();
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
@@ -180,7 +175,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         if (MySelfInfo.getInstance().isCreateRoom() == true) {
                             getRoomNum();
                         }
-                        startAVSDK();
+
                     }
                 });
     }
@@ -316,10 +311,6 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * 向用户服务器获取自己房间号
      */
     private void getRoomNum() {
-        if (MySelfInfo.getInstance().getMyRoomNum() != -1) {
-            goToLive();
-            return;
-        }
 
         MgCallback mgCallback = new MgCallback() {
             @Override
@@ -351,7 +342,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         MySelfInfo.getInstance().setMyRoomNum(roomId);
                         MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
 
-                        goToLive();
+                       // goToLive();
                         mView.onSuccess("");
 
                         Log.e("live", "room_id:" + room_id);
@@ -411,7 +402,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     /**
      * 初始化AVSDK
      */
-    private void startAVSDK() {
+    public void startAVSDK() {
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
         int appId = Constants.SDK_APPID;

@@ -278,13 +278,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     startAVSDK();
                 }
                 enterRoom();
-
             }
         };
         if (isAvStart) {
             if(QavsdkControl.getInstance().getAVContext()==null){
                     startAVSDK();
-
             }
             enterRoom();
         } else {
@@ -798,6 +796,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             public void onClick(View v) {
                 //如果是直播，发消息
                 if (null != mLiveHelper) {
+                    MySelfInfo.getInstance().setMyRoomNum(-1);
                     mLiveHelper.perpareQuitRoom(true);
                     if (isPushed) {
                         mLiveHelper.stopPushAction();
@@ -905,6 +904,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         CurLiveInfo.setMembers(members);
         int roomId = CurLiveInfo.getRoomNum();
         if(roomId!=-1&&roomId!=0) {
+            mLiveHttphelper.enterRoom(roomId+"");
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
 
@@ -1048,7 +1048,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     //主播心跳
                     mHearBeatTimer = new Timer(true);
                     mHeartBeatTask = new HeartBeatTask();
-                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 3 * 1000);
+                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 10 * 1000);
 
                     //直播时间
                     mVideoTimer = new Timer(true);

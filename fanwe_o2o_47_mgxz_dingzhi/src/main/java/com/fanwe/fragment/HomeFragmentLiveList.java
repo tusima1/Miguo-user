@@ -1,5 +1,6 @@
 package com.fanwe.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.miguo.live.views.LiveActivity;
+import com.tencent.imcore.Context;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -33,10 +35,13 @@ HomeFragmentLiveList extends BaseFragment {
     private SDGridViewInScroll mSDGridViewInScroll;
     private HomeLiveListAdapter mLiveViewAdapter;
     private ArrayList<Room> datas = new ArrayList<>();
+    private Context mContext;
+    private Activity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = getActivity();
         // 可以初始化除了view之外的东西
     }
 
@@ -80,11 +85,9 @@ HomeFragmentLiveList extends BaseFragment {
                          avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
                     }
                 }
-
                 if(TextUtils.isEmpty(avatar)||"null".equals(avatar.trim())){
                     MySelfInfo.getInstance().setAvatar(avatar);
                 }
-
                 MySelfInfo.getInstance().setNickName(nickName);
                 MySelfInfo.getInstance().setJoinRoomWay(false);
                 CurLiveInfo.setHostID(host.getHost_user_id());
@@ -92,13 +95,11 @@ HomeFragmentLiveList extends BaseFragment {
 
                 CurLiveInfo.setHostAvator(room.getHost().getAvatar());
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
-
-
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-                CurLiveInfo.setMembers(111); // 添加自己
+                CurLiveInfo.setMembers(1); // 添加自己
 //                CurLiveInfo.setAdmires(item.getAdmireCount());
 //                CurLiveInfo.setAddress(item.getLbs().getAddress());
-                CurLiveInfo.setAdmires(888);
+                CurLiveInfo.setAdmires(1);
 //                CurLiveInfo.setAddress(item.getLbs().getAddress());
                 startActivity(intent);
             }

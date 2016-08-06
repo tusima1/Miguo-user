@@ -135,9 +135,13 @@ class AVContextControl {
         if (result) {
             mAVContext = AVContext.createInstance(mContext, mConfig);
             mSelfIdentifier = mConfig.identifier;
-            int ret = mAVContext.start(mStartContextCompleteCallback);
-            SxbLog.i(TAG, "onAVSDKCreate ret "+ret);
-            mIsInStartContext = true;
+            if(mSelfIdentifier!=null) {
+                int ret = mAVContext.start(mStartContextCompleteCallback);
+                SxbLog.i(TAG, "onAVSDKCreate ret " + ret);
+                mIsInStartContext = true;
+            }else{
+                mStartContextCompleteCallback.OnComplete(errorCode);
+            }
         } else {
             mStartContextCompleteCallback.OnComplete(errorCode);
         }
