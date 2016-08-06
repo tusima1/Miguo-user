@@ -37,15 +37,16 @@ import java.util.List;
  */
 public class LiveStartActivity extends Activity implements CallbackView {
 
-    DataBindingLiveStart dataBindingLiveStart;
+    private DataBindingLiveStart dataBindingLiveStart;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mLoginHelper;
     private TencentHttpHelper tencentHttpHelper;
     private String token;
     /**
      * 签名后 的userid
      */
-    String usersig;
-    String userid;
+    private String usersig;
+    private String userid;
+    private boolean isShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         binding.setLive(dataBindingLiveStart);
         mLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this, this);
         tencentHttpHelper = new TencentHttpHelper(this);
+        CurLiveInfo.modelShop = null;
         init();
 
     }
@@ -148,12 +150,14 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 dataBindingLiveStart.mode.set(dataBindingLiveStart.QQZONE);
                 break;
             case R.id.btn_start_live_start:
-                startLive();
+                if (CurLiveInfo.modelShop == null) {
+                    SDToast.showToast("请选择你的消费场所");
+                } else {
+                    startLive();
+                }
                 break;
         }
     }
-
-    boolean isShare;
 
     @Override
     protected void onResume() {
@@ -258,28 +262,27 @@ public class LiveStartActivity extends Activity implements CallbackView {
         MySelfInfo.getInstance().setIdStatus(Constants.HOST);
         MySelfInfo.getInstance().setJoinRoomWay(true);
         String nickName = "直播";
-        if(userInfoNew!=null)
-        {
+        if (userInfoNew != null) {
             nickName = userInfoNew.getNick();
-            if(TextUtils.isEmpty(nickName)||"null".equals(nickName)){
+            if (TextUtils.isEmpty(nickName) || "null".equals(nickName)) {
                 nickName = userInfoNew.getUser_name();
             }
-            if(TextUtils.isEmpty(nickName)||"null".equals(nickName)){
+            if (TextUtils.isEmpty(nickName) || "null".equals(nickName)) {
                 nickName = userInfoNew.getUser_id();
             }
         }
         MySelfInfo.getInstance().setNickName(nickName);
         CurLiveInfo.setHostName(nickName);
 
-        String avatar ="";
-        if(App.getInstance().getmUserCurrentInfo()!=null){
+        String avatar = "";
+        if (App.getInstance().getmUserCurrentInfo() != null) {
             UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if(currentInfo.getUserInfoNew()!=null){
+            if (currentInfo.getUserInfoNew() != null) {
                 avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
             }
         }
 
-        if(TextUtils.isEmpty(avatar)||"null".equals(avatar.trim())){
+        if (TextUtils.isEmpty(avatar) || "null".equals(avatar.trim())) {
             MySelfInfo.getInstance().setAvatar(avatar);
         }
         CurLiveInfo.setTitle("直播");
