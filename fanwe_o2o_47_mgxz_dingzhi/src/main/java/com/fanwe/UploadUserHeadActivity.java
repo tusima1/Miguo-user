@@ -1,11 +1,5 @@
 package com.fanwe;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import uk.co.senab.photoview.PhotoView;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,22 +8,14 @@ import android.widget.ImageView.ScaleType;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.ImageFileCompresser;
-import com.fanwe.library.utils.ImageFileCompresser.ImageFileCompresserListener;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_account_upload_avatarActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
@@ -37,10 +23,15 @@ import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
-import com.sunday.eventbus.SDEventManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import uk.co.senab.photoview.PhotoView;
 
 public class UploadUserHeadActivity extends BaseActivity implements CallbackView {
 
@@ -51,7 +42,6 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
 
     private String mStrUrl;
     private File mFileOriginal;
-    private ImageFileCompresser mCompresser;
     private LiveHttpHelper liveHttpHelper;
     private UserHttpHelper userHttpHelper;
     private UploadManager uploadManager;
@@ -72,77 +62,6 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
         initImageView();
 //        initImageFileCompresser();
         getIntentData();
-    }
-
-    private void initImageFileCompresser() {
-        mCompresser = new ImageFileCompresser();
-        mCompresser.setmListener(new ImageFileCompresserListener() {
-
-            @Override
-            public void onSuccess(File fileCompressed) {
-                requestUpload(fileCompressed);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                if (!TextUtils.isEmpty(msg)) {
-                    SDToast.showToast(msg);
-                }
-            }
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("正在处理图片");
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-
-            }
-        });
-    }
-
-    protected void requestUpload(File fileCompressed) {
-        if (fileCompressed == null) {
-            return;
-        }
-
-        if (!fileCompressed.exists()) {
-            return;
-        }
-
-//		RequestModel model = new RequestModel();
-//		model.putUser();
-//		model.putCtl("uc_account");
-//		model.putAct("upload_avatar");
-//		model.putFile("file", fileCompressed);
-//
-//		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_account_upload_avatarActModel>()
-//		{
-//
-//			@Override
-//			public void onStart()
-//			{
-//				SDDialogManager.showProgressDialog("正在上传");
-//			}
-//
-//			@Override
-//			public void onFinish()
-//			{
-//				SDDialogManager.dismissProgressDialog();
-//			}
-//
-//			@Override
-//			public void onSuccess(ResponseInfo<String> responseInfo)
-//			{
-//				if (actModel.getStatus() > 0)
-//				{
-//					SDEventManager.post(EnumEventTag.UPLOAD_USER_HEAD_SUCCESS.ordinal());
-//					finish();
-//				}
-//			}
-//		});
     }
 
     private void initImageView() {
@@ -175,12 +94,12 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
         liveHttpHelper.getBussDictionInfo("Client");
+        SDDialogManager.showProgressDialog("正在上传");
     }
 
 
     @Override
     protected void onDestroy() {
-        mCompresser.deleteCompressedImageFile();
         super.onDestroy();
     }
 
@@ -234,8 +153,6 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
             Message message = new Message();
             message.what = 1;
             mHandler.sendMessage(message);
-//            SDToast.showToast("修改头像成功");
-//            finish();
         }
     }
 
@@ -244,6 +161,7 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
+                    SDDialogManager.dismissProgressDialog();
                     SDToast.showToast("修改头像成功");
                     finish();
                     break;
