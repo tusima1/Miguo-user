@@ -64,6 +64,13 @@
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
 
+        <!--<activity android:name="com.miguo.live.views.TestRedActivity"
+                  android:label="哈哈">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
             android:label="@string/app_name">

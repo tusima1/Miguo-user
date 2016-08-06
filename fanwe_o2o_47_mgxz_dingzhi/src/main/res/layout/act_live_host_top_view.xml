@@ -11,7 +11,7 @@
     android:layout_height="@dimen/dp28"
     android:textSize="@dimen/sp13"
     android:textColor="@color/white"
-    android:text="人"
+    android:text="0人"
     android:layout_marginRight="@dimen/dp10"
     android:layout_marginLeft="@dimen/dp12"
     android:gravity="center"/>
@@ -54,6 +54,8 @@
         android:id="@+id/recycler_member"
         android:layout_toRightOf="@id/tv_members_num"
         android:layout_toLeftOf="@id/location"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp28"/>
 

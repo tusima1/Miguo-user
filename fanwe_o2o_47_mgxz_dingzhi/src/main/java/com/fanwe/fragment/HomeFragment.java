@@ -30,6 +30,7 @@ import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -124,11 +125,11 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                 if (mListModel != null) {
                     mListModel.clear();
                 }
-                if(pageModel!=null) {
+                if (pageModel != null) {
                     pageModel.resetPage();
                 }
                 pageData_1 = null;
-                if(pageData_2!=null) {
+                if (pageData_2 != null) {
                     pageData_2.clear();
                 }
                 requestIndex();
@@ -225,9 +226,6 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 //            requestIndex();
 //            requestIndex2(false);
 
-            SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), HomeFragment.this);
-            sellerHttpHelper.getShopList(1, 2, "", "", "");
-
             isRefresh = true;
             pageNum = 1;
             requestLiveList();
@@ -243,12 +241,11 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             requestLiveList();
             mPtrsvAll.setMode(Mode.BOTH);
         }
-
     };
 
     private void requestLiveList() {
 //        liveHelper.getLiveList(pageNum, pageSize, "", "", String.valueOf(AppRuntimeWorker.getCity_id()));
-        if(liveHelper!=null) {
+        if (liveHelper != null) {
             liveHelper.getLiveList(pageNum, pageSize, "", "", "");
         }
     }

@@ -1,161 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/send_red_dialog"
-             xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:backgroundDimEnabled="true"
              android:windowBackground="@color/transparent"
              android:windowIsFloating="true"
              android:windowIsTranslucent="false">
 
-    <LinearLayout
-        android:id="@+id/location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp48"
-        android:layout_marginLeft="@dimen/dp48"
-        android:layout_marginRight="@dimen/dp48"
-        android:layout_marginTop="@dimen/dp80"
-        android:background="@drawable/shape_cricle_gray_solid_white"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
 
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:gravity="center"
-            android:text="@string/red_dialog_title"
-            android:textColor="@color/orange"
-            android:textSize="@dimen/sp17"/>
-
-
-        <TextView
-            android:id="@+id/shop_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:gravity="center"
-            android:text="@string/shop_name"
-            android:textColor="@color/text_fenxiao"
-            android:textSize="@dimen/sp13"/>
+    <RelativeLayout
+        android:id="@+id/send_red_dialog"
+        android:layout_width="@dimen/dp273"
+        android:layout_height="475dp"
+        android:layout_gravity="center"
+        >
 
         <LinearLayout
+            android:id="@+id/location"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_40_px2dp"
-            android:orientation="horizontal">
+            android:layout_height="400dp"
+            android:paddingLeft="@dimen/dp14"
+            android:paddingRight="@dimen/dp14"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/shape_cricle_gray_solid_white"
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp1"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_weight="1"
-                android:background="@color/bg_activity_gray"
-                android:gravity="center"/>
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/red_type_string"
-                android:textColor="@color/text_fenxiao"
-                android:textSize="@dimen/sp13"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp1"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_weight="1"
-                android:background="@color/bg_activity_gray"
-                android:gravity="center"/>
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/type_grid"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp120"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_40_px2dp"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp1"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_weight="2"
-                android:background="@color/bg_activity_gray"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/red_count_string"
-                android:textColor="@color/text_fenxiao"
-                android:textSize="@dimen/sp13"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp1"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_weight="2"
-                android:background="@color/bg_activity_gray"
-                android:gravity="center"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_23_px2dp">
-
-            <EditText
-                android:id="@+id/red_count"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"/>
-
-            <Button
-                android:id="@+id/all_btn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/red_count_all"
-                android:textColor="@color/orange"
-                android:textSize="@dimen/sp17"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_23_px2dp">
-
-            <Button
-                android:id="@+id/send_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/red_send"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:gravity="center"
+                android:text="@string/red_dialog_title"
                 android:textColor="@color/orange"
+                android:layout_marginTop="@dimen/dp24"
                 android:textSize="@dimen/sp17"/>
+
+
+            <TextView
+                android:id="@+id/shop_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp6"
+                android:text="@string/shop_name"
+                android:textColor="@color/text_fenxiao"
+                android:textSize="@dimen/sp13"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_40_px2dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp1"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/bg_activity_gray"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/red_type_string"
+                    android:textColor="@color/text_fenxiao"
+                    android:textSize="@dimen/sp13"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp1"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/bg_activity_gray"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <!--item 间距 -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/type_grid"
+                android:paddingLeft="@dimen/dp2"
+                android:paddingRight="@dimen/dp2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp126"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_40_px2dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp1"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/bg_activity_gray"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/red_count_string"
+                    android:textColor="@color/text_fenxiao"
+                    android:textSize="@dimen/sp13"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp1"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/bg_activity_gray"
+                    android:gravity="center"/>
+            </LinearLayout>
+            <!--item2 间距 -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/num_grid"
+                android:paddingLeft="@dimen/dp2"
+                android:paddingRight="@dimen/dp2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp86"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:text="选择数量直接发送"
+                android:layout_marginTop="@dimen/dp10"
+                android:textColor="@color/text_fenxiao"
+                android:textSize="@dimen/sp13"/>
+
+
         </LinearLayout>
 
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="@dimen/dp40"
+            android:layout_height="@dimen/dp40"
+            android:layout_below="@id/location"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp25"
+            android:background="@drawable/circle_cancel"
+            />
 
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/cancel_btn"
-        android:layout_width="@dimen/dp40"
-        android:layout_height="@dimen/dp40"
-        android:layout_marginTop="@dimen/dp25"
-        android:background="@drawable/circle_cancel"
-        android:layout_below="@id/location"
-        android:layout_centerHorizontal="true"
-        />
-
-</RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>
