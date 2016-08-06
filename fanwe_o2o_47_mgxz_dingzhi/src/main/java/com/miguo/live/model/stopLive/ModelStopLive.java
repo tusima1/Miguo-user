@@ -1,9 +1,11 @@
 package com.miguo.live.model.stopLive;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/7/30.
  */
-public class ModelStopLive {
+public class ModelStopLive implements Serializable {
     private String watch_count;
 
     private String usetime;

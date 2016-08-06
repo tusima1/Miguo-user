@@ -9,27 +9,56 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveEndBinding;
+import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.user.model.UserCurrentInfo;
 import com.miguo.live.model.DataBindingLiveEnd;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.utils.TimeUtils;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
  * 主播退出
  * Created by Administrator on 2016/7/28.
  */
 public class LiveEndActivity extends Activity {
-    DataBindingLiveEnd dataBindingLiveEnd;
+    private DataBindingLiveEnd dataBindingLiveEnd;
+    private boolean isShare;
+    private ModelStopLive modelStopLive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActLiveEndBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_end);
         dataBindingLiveEnd = new DataBindingLiveEnd();
-
+        preData();
         binding.setLive(dataBindingLiveEnd);
+    }
+
+    private void preData() {
+        if (getIntent() != null) {
+            modelStopLive = (ModelStopLive) getIntent().getSerializableExtra("modelStopLive");
+            if (modelStopLive != null) {
+                dataBindingLiveEnd.numViewers.set(modelStopLive.getWatch_count());
+                dataBindingLiveEnd.timeLive.set(TimeUtils.millisecondToHHMMSS(Long.valueOf(modelStopLive.getUsetime())));
+            }
+        }
+        dataBindingLiveEnd.hostName.set(App.getInstance().getUserNickName());
+        dataBindingLiveEnd.shopName.set(CurLiveInfo.modelShop.getShop_name());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isShare) {
+            isShare = false;
+            finish();
+        }
     }
 
     public void getValue() {
@@ -54,7 +83,6 @@ public class LiveEndActivity extends Activity {
         }
     }
 
-
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -76,24 +104,26 @@ public class LiveEndActivity extends Activity {
                 dataBindingLiveEnd.mode.set(dataBindingLiveEnd.QQZONE);
                 break;
             case R.id.btn_submit_live_end:
-                startLive();
+                isShare = true;
+                endLive();
                 break;
         }
     }
 
-    private void startLive() {
+    private void endLive() {
+        SHARE_MEDIA platform = SHARE_MEDIA.QQ;
+        //已认证的，去直播
         if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQ) {
-            Toast.makeText(this, "QQ", Toast.LENGTH_SHORT).show();
+            platform = SHARE_MEDIA.QQ;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.WEIXIN) {
-            Toast.makeText(this, "WEIXIN", Toast.LENGTH_SHORT).show();
+            platform = SHARE_MEDIA.WEIXIN;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.FRIEND) {
-            Toast.makeText(this, "FRIEND", Toast.LENGTH_SHORT).show();
+            platform = SHARE_MEDIA.WEIXIN_CIRCLE;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.SINA) {
-            Toast.makeText(this, "SINA", Toast.LENGTH_SHORT).show();
+            platform = SHARE_MEDIA.SINA;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
-            Toast.makeText(this, "QQZONE", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "NONE", Toast.LENGTH_SHORT).show();
+            platform = SHARE_MEDIA.QZONE;
         }
+        UmengShareManager.share(platform, this, "", "直播结束分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 }

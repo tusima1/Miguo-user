@@ -16,9 +16,6 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.applyRoom.ModelApplyRoom;
-import com.miguo.live.model.applyRoom.ResultApplyRoom;
-import com.miguo.live.model.applyRoom.RootApplyRoom;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.checkFocus.ResultCheckFocus;
 import com.miguo.live.model.checkFocus.RootCheckFocus;
@@ -28,7 +25,7 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceCount.ResultAudienceCount;
 import com.miguo.live.model.getAudienceCount.RootAudienceCount;
-import com.miguo.live.model.getAudienceList.ModelAudienceList;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getAudienceList.ResultAudienceList;
 import com.miguo.live.model.getAudienceList.RootAudienceList;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
@@ -171,7 +168,7 @@ public class LiveHttpHelper implements IHelper {
     }
 
     /**
-     * 获取观众列表
+     * 获取当前房间的观众列表
      *
      * @param room_id
      */
@@ -193,7 +190,7 @@ public class LiveHttpHelper implements IHelper {
                     return;
                 }
                 ResultAudienceList resultAudienceList = resultAudienceLists.get(0);
-                List<ModelAudienceList> modelAudienceList = resultAudienceList.getBody();
+                List<ModelAudienceInfo> modelAudienceList = resultAudienceList.getBody();
                 mView.onSuccess(LiveConstants.AUDIENCE_LIST, modelAudienceList);
             }
 

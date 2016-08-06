@@ -138,4 +138,12 @@ public class CurLiveInfo {
     public static String getChatRoomId() {
         return "" + roomNum;
     }
+
+    public static ModelShopList getModelShop() {
+        return modelShop;
+    }
+
+    public static void setModelShop(ModelShopList modelShop) {
+        CurLiveInfo.modelShop = modelShop;
+    }
 }

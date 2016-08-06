@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class ResultAudienceList {
     private String title;
-    private List<ModelAudienceList> body;
+    private List<ModelAudienceInfo> body;
 
     public String getTitle() {
         return title;
@@ -17,11 +17,11 @@ public class ResultAudienceList {
         this.title = title;
     }
 
-    public List<ModelAudienceList> getBody() {
+    public List<ModelAudienceInfo> getBody() {
         return body;
     }
 
-    public void setBody(List<ModelAudienceList> body) {
+    public void setBody(List<ModelAudienceInfo> body) {
         this.body = body;
     }
 }

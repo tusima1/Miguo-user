@@ -294,6 +294,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
 
     }
+
     public String getUserNickName() {
 
 
@@ -301,10 +302,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
             if (mUserCurrentInfo.getUserInfoNew() != null) {
                 nickName = mUserCurrentInfo.getUserInfoNew().getNick();
-                if(TextUtils.isEmpty(nickName)||"null".equals(nickName.trim())){
+                if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
                     nickName = mUserCurrentInfo.getUserInfoNew().getUser_name();
                 }
-                if(TextUtils.isEmpty(nickName)||"null".equals(nickName.trim())){
+                if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
                     nickName = mUserCurrentInfo.getUserInfoNew().getUser_id();
                 }
             }
@@ -313,6 +314,16 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     }
 
+    public String getUserIcon() {
+        String icon = "";
+        if (this.mUserCurrentInfo != null) {
+            if (mUserCurrentInfo.getUserInfoNew() != null) {
+                icon = mUserCurrentInfo.getUserInfoNew().getIcon();
+            }
+        }
+        return icon;
+
+    }
 
     @Override
     protected void attachBaseContext(Context base) {
