@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 
 /**
@@ -23,32 +24,33 @@ public class TestRedActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               helper.dismiss();
+//               helper.dismiss();
+                dialog.show();
             }
         });
 
     }
     public void createDialog(){
-//        if(dialog==null){
-//            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(this);
-//            builder.setSendListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    SDToast.showToast("红包已经发出去了。");
-//                }
-//            });
-//            builder.setCancelListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(dialog.isShowing()){
-//                        dialog.dismiss();
-//                    }
-//                }
-//            });
-//            dialog = builder.create();
-//        }
-        helper = new UserRobRedPacketDialogHelper(this);
-        helper.createDialog();
-        helper.show();
+        if(dialog==null){
+            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(this);
+            builder.setSendListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SDToast.showToast("红包已经发出去了。");
+                }
+            });
+            builder.setCancelListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(dialog.isShowing()){
+                        dialog.dismiss();
+                    }
+                }
+            });
+            dialog = builder.create();
+        }
+//        helper = new UserRobRedPacketDialogHelper(this);
+//        helper.createDialog();
+//        helper.show();
     }
 }
