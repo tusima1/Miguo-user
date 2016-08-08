@@ -9,6 +9,7 @@ import android.view.View;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
@@ -74,6 +75,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
         setContentView(R.layout.act_main);
         mLoginHelper = new LoginHelper(MainActivity.this);
 
