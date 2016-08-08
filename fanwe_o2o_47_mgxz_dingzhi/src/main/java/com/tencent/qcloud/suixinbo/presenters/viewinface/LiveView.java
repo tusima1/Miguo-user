@@ -3,6 +3,7 @@ package com.tencent.qcloud.suixinbo.presenters.viewinface;
 
 import com.tencent.av.TIMAvManager;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -48,4 +49,9 @@ public interface LiveView extends MvpView {
     void hostLeave(String id, String name,String faceUrl);
 
     void hostBack(String id, String name,String faceUrl);
+
+    /**
+     * 收到红包。
+     */
+    void getHostRedPacket(HashMap<String,String> params);
 }

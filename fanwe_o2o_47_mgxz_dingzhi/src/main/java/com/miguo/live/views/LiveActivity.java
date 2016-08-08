@@ -85,6 +85,7 @@ import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -923,6 +924,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         watchCount--;
         int roomId = CurLiveInfo.getRoomNum();
         if(roomId!=-1&&roomId!=0) {
+            mLiveHttphelper.exitRoom(roomId+"");
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
         if (CurLiveInfo.getMembers() > 1) {
@@ -948,6 +950,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void hostBack(String id, String name,String faceUrl) {
         refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
+    }
+
+    @Override
+    public void getHostRedPacket(HashMap<String, String> params) {
+        SDToast.showToast("id:"+params.get(Constants.RED_PACKET_ID) +",duration:"+params.get(Constants.RED_PACKET_DURATION));
+
     }
 
     /**
@@ -1683,10 +1691,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 //观众列表
                 List<ModelAudienceInfo> audienceList = datas;
                 if(audienceList!=null&&audienceList.size()>0) {
-                    if (LiveUtil.checkIsHost()) {
-//                        mHostTopView.refreshData(datas);
+                    boolean isHost = LiveUtil.checkIsHost();
+                    if (isHost) {
+                        mHostTopView.refreshData(datas);
                     } else {
-//                        mUserHeadTopView.refreshData(datas);
+                        mUserHeadTopView.refreshData(datas);
                     }
                 }
 
