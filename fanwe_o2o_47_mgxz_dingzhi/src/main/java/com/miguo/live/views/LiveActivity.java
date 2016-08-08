@@ -1684,9 +1684,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 List<ModelAudienceInfo> audienceList = datas;
                 if(audienceList!=null&&audienceList.size()>0) {
                     if (LiveUtil.checkIsHost()) {
-                        mHostTopView.refreshData(datas);
+//                        mHostTopView.refreshData(datas);
                     } else {
-                        mUserHeadTopView.refreshData(datas);
+//                        mUserHeadTopView.refreshData(datas);
                     }
                 }
 
