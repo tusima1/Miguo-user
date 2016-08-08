@@ -73,4 +73,15 @@ public class LiveConstants {
      * 关注主播
      */
     public static final String USER_FOCUS = "UserFocus";
+    /**
+     * 主播红包列表，发红包
+     */
+    public static final String HAND_OUT_RED_PACKET = "HandOutRedPacket";
+    public static final String HAND_OUT_RED_PACKET_GET = "HandOutRedPacketGet";
+    public static final String HAND_OUT_RED_PACKET_POST = "HandOutRedPacketPost";
+    /**
+     * 抢红包
+     */
+    public static final String GET_RED_PACKETS = "GetRedPackets";
+
 }

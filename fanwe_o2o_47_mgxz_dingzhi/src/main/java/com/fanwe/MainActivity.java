@@ -135,13 +135,13 @@ public class MainActivity extends BaseActivity {
 
         mTab0.getmAttr().setmImageNormalResId(R.drawable.tab_home_normal);
         mTab1.getmAttr().setmImageNormalResId(R.drawable.tab_seller_normal);
-        mTab2.getmAttr().setmImageNormalResId(R.drawable.tab_market_normal);
+        mTab2.getmAttr().setmImageNormalResId(R.drawable.tab_live_normal);
         mTab3.getmAttr().setmImageNormalResId(R.drawable.tab_market_normal);
         mTab4.getmAttr().setmImageNormalResId(R.drawable.tab_my_normal);
 
         mTab0.getmAttr().setmImageSelectedResId(R.drawable.tab_home_pressed);
         mTab1.getmAttr().setmImageSelectedResId(R.drawable.tab_seller_pressed);
-        mTab2.getmAttr().setmImageSelectedResId(R.drawable.tab_market_pressed);
+        mTab2.getmAttr().setmImageSelectedResId(R.drawable.tab_live_pressed);
         mTab3.getmAttr().setmImageSelectedResId(R.drawable.tab_market_pressed);
         mTab4.getmAttr().setmImageSelectedResId(R.drawable.tab_my_pressed);
 

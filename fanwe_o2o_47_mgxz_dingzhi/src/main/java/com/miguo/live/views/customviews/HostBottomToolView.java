@@ -2,6 +2,9 @@ package com.miguo.live.views.customviews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +13,31 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.LiveSwitchScreenListener;
+import com.miguo.live.interf.MyItemClickListenerRedNum;
+import com.miguo.live.interf.MyItemClickListenerRedType;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveInputDialogHelper;
+import com.miguo.live.views.SendRedPacketDialog;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by didik on 2016/7/29.
  * 主播的底部工具栏
  */
-public class HostBottomToolView extends LinearLayout implements IViewGroup, View.OnClickListener {
+public class HostBottomToolView extends LinearLayout implements IViewGroup, View.OnClickListener, CallbackView, MyItemClickListenerRedType, MyItemClickListenerRedNum {
 
     private Context mContext;
     private ImageView mIv_Msg;//消息按钮
@@ -29,14 +46,15 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     private CheckBox mCb_Voice;//checkbox 默认为false,false时开启,true为关闭,下同
     private CheckBox mCb_DanMu;//checkbox 弹幕状态
 
-    private int mRedNum=0;//红包按钮(数字)
-    private int mShopCartNum=0;////购物袋子(数字)
+    private int mRedNum = 0;//红包按钮(数字)
+    private int mShopCartNum = 0;////购物袋子(数字)
     private BadgeView redPacketDot;//红包的小红点
     private BadgeView redShopCartDot;//购物袋的小红点
     private LiveCommonHelper mLiveCommonHelper;
     private LiveHelper mLiveHelper;
     private Activity mActivity;
     private LiveSwitchScreenListener mScreenListener;
+    private LiveHttpHelper liveHttpHelper;
 
     public HostBottomToolView(Context context) {
         super(context);
@@ -53,10 +71,10 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         init(context);
     }
 
-    public void setNeed(LiveCommonHelper helper, LiveHelper liveHelper, Activity activity){
-        this.mLiveCommonHelper=helper;
-        this.mLiveHelper=liveHelper;
-        this.mActivity=activity;
+    public void setNeed(LiveCommonHelper helper, LiveHelper liveHelper, Activity activity) {
+        this.mLiveCommonHelper = helper;
+        this.mLiveHelper = liveHelper;
+        this.mActivity = activity;
     }
 
     public void init(Context context) {
@@ -87,7 +105,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 //                    //执行开启弹幕
 ////                    MGToast.showToast("执行开启弹幕");
 //                }
-                if (mScreenListener!=null){
+                if (mScreenListener != null) {
                     mScreenListener.onSwitchScreen();
                 }
             }
@@ -97,16 +115,16 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         mCb_Voice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     //执行关闭语音
 //                    MGToast.showToast("执行关闭语音");
-                    if (mLiveCommonHelper!=null){
+                    if (mLiveCommonHelper != null) {
                         mLiveCommonHelper.closeMic();
                     }
-                }else {
+                } else {
                     //执行开启语音
 //                    MGToast.showToast("执行开启语音");
-                    if (mLiveCommonHelper!=null){
+                    if (mLiveCommonHelper != null) {
                         mLiveCommonHelper.openMic();
                     }
                 }
@@ -125,13 +143,14 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         if (mActivity == null || mLiveHelper == null || mContext == null) {
             return;
         }
-        LiveInputDialogHelper inputDialogHelper=new LiveInputDialogHelper(mLiveHelper,mActivity);
+        LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mActivity);
         inputDialogHelper.show();
     }
 
-    public void setLiveSwitchScreenListener(LiveSwitchScreenListener liveSwitchScreenListener){
-        this.mScreenListener=liveSwitchScreenListener;
+    public void setLiveSwitchScreenListener(LiveSwitchScreenListener liveSwitchScreenListener) {
+        this.mScreenListener = liveSwitchScreenListener;
     }
+
     @Override
     public void onDestroy() {
         //释放资源
@@ -155,11 +174,37 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         MGToast.showToast("点击那个长的像购物车的袋子");
     }
 
+    private SendRedPacketDialog dialogSendRedPacket;
+
     /**
      * 点击红包
      */
     private void clickRedpacket() {
-        MGToast.showToast("点击红包");
+        if (liveHttpHelper == null) {
+            liveHttpHelper = new LiveHttpHelper(mContext, HostBottomToolView.this);
+        }
+        liveHttpHelper.getHandOutRedPacket(CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        if (dialogSendRedPacket == null) {
+            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(mActivity);
+            builder.setItemClickType(this);
+            builder.setItemClickNum(this);
+            builder.setSendListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SDToast.showToast("红包已经发出去了。");
+                }
+            });
+            builder.setCancelListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (dialogSendRedPacket.isShowing()) {
+                        dialogSendRedPacket.dismiss();
+                    }
+                }
+            });
+            dialogSendRedPacket = builder.create();
+        }
+        dialogSendRedPacket.show();
 
         //调用服务器的红包发送接口成功后调IM 接口。。
         if(mLiveHelper!=null){
@@ -178,47 +223,145 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 
     /**
      * 设置红包的数量
+     *
      * @param num 数量为0不显示
      */
-    public void setRedPacketNum(int num){
-        if (redPacketDot==null){
-            redPacketDot = new BadgeView(mContext,mIv_redpacket);
+    public void setRedPacketNum(int num) {
+        if (redPacketDot == null) {
+            redPacketDot = new BadgeView(mContext, mIv_redpacket);
         }
         redPacketDot.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
         redPacketDot.setTextSize(9);
-        if (num==0){
+        if (num == 0) {
             redPacketDot.hide();
             return;
         }
 
-        if (num>=99){
+        if (num >= 99) {
             redPacketDot.setText("99+");
-        }else {
-            redPacketDot.setText(""+num);
+        } else {
+            redPacketDot.setText("" + num);
         }
         redPacketDot.show();
     }
 
     /**
      * 设置红包的数量
+     *
      * @param num 0不显示
      */
-    public void setShopCartNum(int num){
-        if (redShopCartDot==null){
-            redShopCartDot = new BadgeView(mContext,mIv_shopCart);
+    public void setShopCartNum(int num) {
+        if (redShopCartDot == null) {
+            redShopCartDot = new BadgeView(mContext, mIv_shopCart);
         }
         redShopCartDot.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
         redShopCartDot.setTextSize(9);
-        if (num==0){
+        if (num == 0) {
             redShopCartDot.hide();
             return;
         }
 
-        if (num>=99){
+        if (num >= 99) {
             redShopCartDot.setText("99+");
-        }else {
-            redShopCartDot.setText(""+num);
+        } else {
+            redShopCartDot.setText("" + num);
         }
         redShopCartDot.show();
     }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    ArrayList<ModelHandOutRedPacket> datas;
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.HAND_OUT_RED_PACKET_GET.equals(method)) {
+            this.datas = (ArrayList<ModelHandOutRedPacket>) datas;
+            Message message = new Message();
+            message.what = 1;
+            mHandler.sendMessage(message);
+        } else if (LiveConstants.HAND_OUT_RED_PACKET_POST.equals(method)) {
+            Message message = new Message();
+            message.what = 3;
+            mHandler.sendMessage(message);
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    if (dialogSendRedPacket != null) {
+                        dialogSendRedPacket.updateDatas(datas);
+                    }
+                    break;
+                case 2:
+                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
+                        SDToast.showToast("strNum:" + strNum);
+                        if (dialogSendRedPacket != null) {
+                            dialogSendRedPacket.dismiss();
+                        }
+                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                                currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
+                    }
+                    break;
+                case 3:
+                    SDToast.showToast("发送红包成功");
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onItemClickType(View view, int postion) {
+        if (!SDCollectionUtil.isEmpty(datas)) {
+            for (ModelHandOutRedPacket model : datas) {
+                model.setChecked(false);
+            }
+            currModelHandOutRedPacket = datas.get(postion);
+            currModelHandOutRedPacket.setChecked(true);
+        }
+        Message message = new Message();
+        message.what = 1;
+        mHandler.sendMessage(message);
+    }
+
+    private String strNum;
+    private ModelHandOutRedPacket currModelHandOutRedPacket;
+
+    @Override
+    public void onItemClickNum(View view, int postion) {
+        switch (postion) {
+            case 0:
+                strNum = "1";
+                break;
+            case 1:
+                strNum = "10";
+                break;
+            case 2:
+                strNum = "20";
+                break;
+            case 3:
+                strNum = "30";
+                break;
+            case 4:
+                strNum = "40";
+                break;
+            case 5:
+                strNum = "全部";
+                break;
+        }
+        Message message = new Message();
+        message.what = 2;
+        mHandler.sendMessage(message);
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.miguo.live.views;
 
-import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -8,8 +7,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -155,7 +152,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
-        checkPermission();
         registerReceiver();
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
@@ -1685,7 +1681,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
                 List<ModelAudienceInfo> audienceList = datas;
-                if(audienceList!=null&&audienceList.size()>0) {
+                if(audienceList!=null&&audienceList.size()>=0) {
                     boolean isHost = LiveUtil.checkIsHost();
                     if (isHost) {
                         mHostTopView.refreshData(datas);
@@ -1725,6 +1721,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 //主播退出(结束主播!!!)
                 if (checkDataIsNull(datas)) {
                     MGLog.e("LiveConstants.STOP_LIVE 返回数据失败!");
+                    MGToast.showToast("异常退出!");
+                    finish();
                     return;
                 }
                 ModelStopLive stopLive = (ModelStopLive) datas.get(0);
@@ -1763,23 +1761,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void onFailue(String responseBody) {
 
-    }
-    void checkPermission() {
-        final List<String> permissionsList = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if ((checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED))
-                permissionsList.add(Manifest.permission.CAMERA);
-            if ((checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED))
-                permissionsList.add(Manifest.permission.RECORD_AUDIO);
-            if ((checkSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED))
-                permissionsList.add(Manifest.permission.WAKE_LOCK);
-            if ((checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED))
-                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
-            if (permissionsList.size() != 0) {
-                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
-                        REQUEST_PHONE_PERMISSIONS);
-            }
-        }
     }
 
 
