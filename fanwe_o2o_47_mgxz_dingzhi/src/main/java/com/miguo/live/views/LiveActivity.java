@@ -950,9 +950,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void getHostRedPacket(HashMap<String, String> params) {
-        SDToast.showToast("id:"+params.get(Constants.RED_PACKET_ID) +",duration:"+params.get(Constants.RED_PACKET_DURATION));
-
+        //SDToast.showToast("id:"+params.get(Constants.RED_PACKET_ID) +",duration:"+params.get(Constants.RED_PACKET_DURATION));
+        if(mUserBottomTool!=null) {
+            mUserBottomTool.clickRob();
+        }
     }
+
+
 
     /**
      * 有成员退群

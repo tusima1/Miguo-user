@@ -150,14 +150,17 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     }
 
     /**
+     * 开启计时器。
+     */
+    public void startTimeTask(){
+        robLiftTimer.start();
+        totalTimer.start();
+    }
+    /**
      * 关闭
      */
     private void clickClose() {
-//        dismiss();
-//        mHandler.sendEmptyMessage(0);
-        robLiftTimer.start();
-        totalTimer.start();
-
+        dismiss();
     }
 
     /**

@@ -132,24 +132,26 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     /**
      * 点击抢到(红包什么的乱七八糟的)
      */
-    private void clickRob() {
+    public void clickRob() {
 //        MGToast.showToast("点击了抢到");
         if (mAct != null && redPacketDialogHelper == null) {
             redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct);
         }
         redPacketDialogHelper.createDialog();
         redPacketDialogHelper.show();
+        redPacketDialogHelper.startTimeTask();
     }
 
     /**
      * 点击了商品(宝贝)
      */
-    private void clickGoods() {
+    public void clickGoods() {
 //        MGToast.showToast("点击了商品(宝贝)");
         if (mAct != null && rootView != null && popHelper == null) {
             popHelper = new LiveUserPopHelper(mAct, rootView);
         }
         popHelper.show();
+
 
     }
 
