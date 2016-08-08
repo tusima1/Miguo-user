@@ -15,7 +15,10 @@ import android.widget.TextView;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.HeadTopAdapter;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.views.LiveUserExitDialogHelper;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,6 +40,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private LiveUserExitDialogHelper userExitDialogHelper;
 
     public boolean isUserClose=false;//是不是用户点击的关闭
+    private List<ModelAudienceInfo> mData;
+
+    HeadTopAdapter mAdapter=new HeadTopAdapter(null,mContext);
 
     public UserHeadTopView(Context context) {
         this(context,null);
@@ -92,15 +98,21 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关闭操作
      */
     private void close() {
-        if (mActivity!=null && userExitDialogHelper!=null){
+
+        if (mActivity!=null && userExitDialogHelper!=null&&!userExitDialogHelper.isShowing()){
             userExitDialogHelper.show();
         }
         isUserClose=true;
     }
+    public void refreshData(List<ModelAudienceInfo> mData) {
+        this.mData = mData;
+        mAdapter.setmData(mData);
+        mAdapter.notifyDataSetChanged();
+    }
 
-    /**
-     * 绑定数据(会刷新所有的数据)
-     */
+        /**
+         * 绑定数据(会刷新所有的数据)
+         */
     public void bindData(){
 
         /*inflate list*/
@@ -150,6 +162,8 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void updateAudicenceCount(String num){
         if(!TextUtils.isEmpty(num)) {
             mMembers.setText(num + "人");
+        }else{
+            mMembers.setText("0 人");
         }
     }
     /*设置头像*/
@@ -187,6 +201,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         }
         return true;
     }
+
 
     public void showExitDialog(){
         if (userExitDialogHelper!=null){
