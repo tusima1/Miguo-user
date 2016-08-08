@@ -378,8 +378,13 @@ public class BaiduMapManager
 	public void startLocation(BDLocationListener listener)
 	{
 		registerLocationListener(listener);
-		mClient.start();
-		LogUtil.e("startLocation");
+		if (mClient!=null){
+			mClient.start();
+			LogUtil.e("startLocation");
+		}else {
+			MGLog.e("百度地图Location变量为null");
+		}
+
 	}
 
 	/**

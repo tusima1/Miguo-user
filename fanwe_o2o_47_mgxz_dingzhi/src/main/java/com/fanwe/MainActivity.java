@@ -30,7 +30,6 @@ import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveStartActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -68,8 +67,6 @@ public class MainActivity extends BaseActivity {
     private int preHomeCityID = 0;//记录首页cityid-->0为异常
     private LoginHelper mLoginHelper;
     private String token;
-    private LiveHttpHelper http;
-    private String usersig;
 
 
     @Override

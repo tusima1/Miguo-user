@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.LoginActivity;
@@ -17,7 +16,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
-import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -29,7 +27,6 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
-import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -196,7 +193,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-            UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+            //UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
             createAvRoom();
         } else {
             //未认证的，去认证
