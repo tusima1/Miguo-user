@@ -18,6 +18,7 @@ import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.views.LiveActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,10 +38,9 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     private Context mContext;
     private LiveActivity mActivity;//直播的引用
     private LiveCommonHelper mLiveCommonHelper;//工具类
-    private List<ModelAudienceInfo> mData;
+    private List<ModelAudienceInfo> mData= new ArrayList<ModelAudienceInfo>();
+    private HeadTopAdapter mAdapter;
 
-
-    HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
     public HostTopView(Context context) {
         super(context);
         init(context);
@@ -82,10 +82,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         LinearLayoutManager llmanager = new LinearLayoutManager(mContext);
         llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(llmanager);
-
+        mAdapter = new HeadTopAdapter(mData, mContext);
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(2));
-
-        HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
         mRecyclerView.setAdapter(mAdapter);
     }
 

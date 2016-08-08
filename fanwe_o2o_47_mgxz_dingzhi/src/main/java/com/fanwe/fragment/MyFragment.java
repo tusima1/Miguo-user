@@ -772,11 +772,16 @@ public class MyFragment extends BaseFragment {
     }
 
     private void ll_myXiaomi() {
-        Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
-        intent.putExtra("up_name", mActModel.getUp_name());
-        //
-        intent.putExtra("up_id", mActModel.getUp_id());
-        startActivity(intent);
+        if(mActModel!=null) {
+            Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
+
+            intent.putExtra("up_name", mActModel.getUp_name());
+            //
+            intent.putExtra("up_id", mActModel.getUp_id());
+            startActivity(intent);
+        }else{
+            return;
+        }
     }
 
     private void ll_erweima() {

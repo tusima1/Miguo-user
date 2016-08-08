@@ -58,7 +58,7 @@ public abstract class MgCallback<T> implements Callback {
                 int code = Integer.valueOf(statusCode);
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
-                    if (!TextUtils.isEmpty(token)) {
+                    if (!TextUtils.isEmpty(token) && !"null".equals(token)) {
                         UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }
