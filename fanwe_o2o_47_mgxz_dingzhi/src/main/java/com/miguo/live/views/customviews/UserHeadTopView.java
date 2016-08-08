@@ -125,7 +125,6 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         //设置间距
         mMemberList.addItemDecoration(new SpaceItemDecoration(2));
 
-        HeadTopAdapter mAdapter=new HeadTopAdapter(null,mContext);
         mMemberList.setAdapter(mAdapter);
     }
 

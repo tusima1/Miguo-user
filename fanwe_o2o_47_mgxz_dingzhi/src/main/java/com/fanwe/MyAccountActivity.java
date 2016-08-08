@@ -521,7 +521,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         AppConfig.setSessionId("");
         AppConfig.setUserName("");
         AppConfig.setRefId("");
-        App.getInstance().getmUserCurrentInfo().setToken("");
+        App.getInstance().clearAllData();
+
 
 
     }

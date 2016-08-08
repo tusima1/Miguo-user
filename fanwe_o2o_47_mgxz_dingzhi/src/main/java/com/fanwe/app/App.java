@@ -251,6 +251,9 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public UserCurrentInfo getmUserCurrentInfo() {
+        if(mUserCurrentInfo==null){
+            mUserCurrentInfo = UserCurrentInfo.getInstance();
+        }
         return mUserCurrentInfo;
     }
 
@@ -329,6 +332,13 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+    public void clearAllData(){
+        this.imLoginSuccess = false;
+        this.isAvStart = false;
+        this.nickName = "";
+        this.mUserCurrentInfo.clearData();
+
     }
 
     public boolean isImLoginSuccess() {
