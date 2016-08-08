@@ -76,5 +76,4 @@ dependencies {
     compile 'com.qiniu:happy-dns:0.2.9'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
 
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

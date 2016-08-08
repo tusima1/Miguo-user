@@ -40,7 +40,6 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//        holder.mCIV.setBackground(mContext.getResources().getDrawable(R.drawable.app_icon));
         ModelAudienceInfo modelAudienceInfo = mData.get(position);
         if(modelAudienceInfo!=null&&!TextUtils.isEmpty(modelAudienceInfo.getIcon())){
             ImageLoader.getInstance().displayImage(modelAudienceInfo.getIcon(),holder.mCIV);
@@ -58,8 +57,13 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
         return mData;
     }
 
+    /**
+     * 设置数据即刷新adapter
+     * @param mData
+     */
     public void setmData(List<ModelAudienceInfo> mData) {
         this.mData = mData;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
