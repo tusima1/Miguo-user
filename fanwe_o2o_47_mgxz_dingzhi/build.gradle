@@ -55,12 +55,13 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0'
     /*888*/
     compile files('libs/BaiduLBS_Android.jar')
-    compile files('libs/beacon_1.5.3_imsdk_release.jar')
+    compile files('libs/beacon_android_v1.9.9.jar')
     compile files('libs/bugly_1.3.0_imsdk_release.jar')
     compile files('libs/fastjson-1.1.45.android.jar')
     compile files('libs/imsdk.jar')
     compile files('libs/jpush-android-2.1.5.jar')
     compile files('libs/mobilepb.jar')
+    //compile files('libs/open_sdk.jar')
     compile files('libs/qalsdk.jar')
     compile files('libs/qavsdk.jar')
     compile files('libs/tls_sdk.jar')
@@ -76,5 +77,4 @@ dependencies {
     compile 'com.qiniu:happy-dns:0.2.9'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
 
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

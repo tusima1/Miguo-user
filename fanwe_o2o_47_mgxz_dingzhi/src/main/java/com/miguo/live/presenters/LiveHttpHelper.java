@@ -69,12 +69,8 @@ public class LiveHttpHelper implements IHelper {
     }
 
     public String getToken() {
-        if (!TextUtils.isEmpty(token)) {
-            return token;
-        } else {
-            token = userCurrentInfo.getToken();
-            return token;
-        }
+            token  = App.getInstance().getToken();
+       return token;
     }
 
     /**
@@ -86,7 +82,8 @@ public class LiveHttpHelper implements IHelper {
     public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        String tokenValue = getToken();
+        params.put("token",tokenValue);
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("tag", tag);
@@ -138,11 +135,13 @@ public class LiveHttpHelper implements IHelper {
      * @param room_id
      */
     public void getAudienceCount(String room_id) {
-        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token",  getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.AUDIENCE_COUNT);
+        if(TextUtils.isEmpty(token)||TextUtils.isEmpty(room_id)){
+            return;
+        }
 
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override

@@ -41,6 +41,7 @@ import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.MembersDialogView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.tencent.qcloud.suixinbo.utils.HashmapToJson;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONException;

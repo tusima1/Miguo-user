@@ -158,7 +158,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
 
     /*更新人数*/
-    public void updateAudicenceCount(String num){
+    public void updateAudienceCount(String num){
         if(!TextUtils.isEmpty(num)) {
             mMembers.setText(num + "人");
         }else{
