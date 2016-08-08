@@ -31,6 +31,9 @@ import com.miguo.live.model.getAudienceList.RootAudienceList;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getBussDictionInfo.ResultBussDictionInfo;
 import com.miguo.live.model.getBussDictionInfo.RootBussDictionInfo;
+import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
+import com.miguo.live.model.getHandOutRedPacket.ResultHandOutRedPacket;
+import com.miguo.live.model.getHandOutRedPacket.RootHandOutRedPacket;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostInfo.ResultHostInfo;
 import com.miguo.live.model.getHostInfo.RootHostInfo;
@@ -40,6 +43,9 @@ import com.miguo.live.model.getHostTags.RootHostTags;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
+import com.miguo.live.model.postHandOutRedPacket.ModelHandOutRedPacketPost;
+import com.miguo.live.model.postHandOutRedPacket.ResultHandOutRedPacketPost;
+import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
@@ -573,6 +579,111 @@ public class LiveHttpHelper implements IHelper {
         });
 
     }
+
+    /**
+     * 获取主播红包列表
+     *
+     * @param shop_id
+     * @param host_id
+     */
+    public void getHandOutRedPacket(String shop_id, String host_id) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("id", shop_id);
+        params.put("spokesman_id", host_id);
+        params.put("method", LiveConstants.HAND_OUT_RED_PACKET);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootHandOutRedPacket rootHandOutRedPacket = gson.fromJson(responseBody, RootHandOutRedPacket.class);
+                List<ResultHandOutRedPacket> resultHandOutRedPackets = rootHandOutRedPacket.getResult();
+                if (SDCollectionUtil.isEmpty(resultHandOutRedPackets)) {
+                    mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_GET, null);
+                    return;
+                }
+                ResultHandOutRedPacket resultHandOutRedPacket = resultHandOutRedPackets.get(0);
+                List<ModelHandOutRedPacket> modelHandOutRedPacket = resultHandOutRedPacket.getBody();
+                mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_GET, modelHandOutRedPacket);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 主播发红包
+     *
+     * @param room_id
+     * @param shop_id
+     * @param host_id
+     * @param red_packet_type
+     * @param red_packet_count
+     * @param red_packet_amount
+     */
+    public void postHandOutRedPacket(String room_id, String shop_id, String host_id, String red_packet_type, String red_packet_count, String red_packet_amount) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("tencent_room_id", room_id);
+        params.put("id", shop_id);
+        params.put("spokesman_id", host_id);
+        params.put("red_packet_type", red_packet_type);
+        params.put("red_packets", red_packet_count);
+        params.put("red_packet_amount", red_packet_amount);
+
+        params.put("method", LiveConstants.HAND_OUT_RED_PACKET);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootHandOutRedPacketPost rootHandOutRedPacketPost = gson.fromJson(responseBody, RootHandOutRedPacketPost.class);
+                List<ResultHandOutRedPacketPost> resultHandOutRedPacketPosts = rootHandOutRedPacketPost.getResult();
+                if (SDCollectionUtil.isEmpty(resultHandOutRedPacketPosts)) {
+                    mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_POST, null);
+                    return;
+                }
+                ResultHandOutRedPacketPost resultHandOutRedPacketPost = resultHandOutRedPacketPosts.get(0);
+                List<ModelHandOutRedPacketPost> modelHandOutRedPacketPost = resultHandOutRedPacketPost.getBody();
+                mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_POST, modelHandOutRedPacketPost);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    public void getRedPackets(String user_id, String red_packets_key) {
+        getToken();
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", token);
+        params.put("user_id", user_id);
+        params.put("red_packets_key", red_packets_key);
+
+        params.put("method", LiveConstants.GET_RED_PACKETS);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(LiveConstants.GET_RED_PACKETS, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {
