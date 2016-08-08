@@ -1,8 +1,5 @@
 package com.fanwe.baidumap;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -11,6 +8,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.VersionInfo;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.core.RouteNode;
@@ -39,6 +37,10 @@ import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
+import com.miguo.utils.MGLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaiduMapManager
 {
@@ -212,11 +214,17 @@ public class BaiduMapManager
 		this.mCtx = context;
 		if (!mIsInit)
 		{
+			MGLog.e("baiduSDK init");
 			SDKInitializer.initialize(mCtx);
 			mClient = new LocationClient(mCtx);
 			mClient.setLocOption(getLocationClientOption());
 			mClient.registerLocationListener(mDdefaultBDLocationListener);
 			mIsInit = true;
+
+			String apiVersion = VersionInfo.getApiVersion();
+			String versionDesc = VersionInfo.getVersionDesc();
+			String versionInfo = VersionInfo.VERSION_INFO;
+			MGLog.e("apiVersion:"+apiVersion+"  versionDesc:"+versionDesc+"  versionInfo:"+versionInfo);
 		}
 	}
 
@@ -370,8 +378,13 @@ public class BaiduMapManager
 	public void startLocation(BDLocationListener listener)
 	{
 		registerLocationListener(listener);
-		mClient.start();
-		LogUtil.e("startLocation");
+		if (mClient!=null){
+			mClient.start();
+			LogUtil.e("startLocation");
+		}else {
+			MGLog.e("百度地图Location变量为null");
+		}
+
 	}
 
 	/**

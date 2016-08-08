@@ -3,6 +3,7 @@
     android:id="@+id/tv_name_tab_mine_shop"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+          android:textColor="@color/colorTextG2"
     android:gravity="center"
     android:textSize="15dp" />
 

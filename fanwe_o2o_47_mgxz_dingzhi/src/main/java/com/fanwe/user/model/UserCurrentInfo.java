@@ -25,6 +25,12 @@ public class UserCurrentInfo  {
         return currentInfo;
     }
 
+    public void clearData(){
+        userSign="";
+        userInfoNew = new UserInfoNew();
+        token="";
+
+    }
     public UserInfoNew getUserInfoNew() {
         return userInfoNew;
     }

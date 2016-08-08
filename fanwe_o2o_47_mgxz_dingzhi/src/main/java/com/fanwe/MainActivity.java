@@ -9,6 +9,7 @@ import android.view.View;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
@@ -29,7 +30,6 @@ import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveStartActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -67,13 +67,12 @@ public class MainActivity extends BaseActivity {
     private int preHomeCityID = 0;//记录首页cityid-->0为异常
     private LoginHelper mLoginHelper;
     private String token;
-    private LiveHttpHelper http;
-    private String usersig;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
         setContentView(R.layout.act_main);
         mLoginHelper = new LoginHelper(MainActivity.this);
 
@@ -136,13 +135,13 @@ public class MainActivity extends BaseActivity {
 
         mTab0.getmAttr().setmImageNormalResId(R.drawable.tab_home_normal);
         mTab1.getmAttr().setmImageNormalResId(R.drawable.tab_seller_normal);
-        mTab2.getmAttr().setmImageNormalResId(R.drawable.tab_market_normal);
+        mTab2.getmAttr().setmImageNormalResId(R.drawable.tab_live_normal);
         mTab3.getmAttr().setmImageNormalResId(R.drawable.tab_market_normal);
         mTab4.getmAttr().setmImageNormalResId(R.drawable.tab_my_normal);
 
         mTab0.getmAttr().setmImageSelectedResId(R.drawable.tab_home_pressed);
         mTab1.getmAttr().setmImageSelectedResId(R.drawable.tab_seller_pressed);
-        mTab2.getmAttr().setmImageSelectedResId(R.drawable.tab_market_pressed);
+        mTab2.getmAttr().setmImageSelectedResId(R.drawable.tab_live_pressed);
         mTab3.getmAttr().setmImageSelectedResId(R.drawable.tab_market_pressed);
         mTab4.getmAttr().setmImageSelectedResId(R.drawable.tab_my_pressed);
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.miguo.live.model.LiveConstants;
@@ -40,15 +41,16 @@ import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.MembersDialogView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.tencent.qcloud.suixinbo.utils.HashmapToJson;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -278,7 +280,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     for (int j = 0; j < timMessage.getElementCount(); j++) {
                         TIMElem elem = (TIMElem) timMessage.getElement(0);
                         if (timMessage.isSelf()) {
-                            handleTextMessage(elem, MySelfInfo.getInstance().getNickName(),MySelfInfo.getInstance().getAvatar());
+                            handleTextMessage(elem, MySelfInfo.getInstance().getNickName(), MySelfInfo.getInstance().getAvatar());
                         } else {
                             TIMUserProfile sendUser = timMessage.getSenderProfile();
                             String faceUrl = sendUser.getFaceUrl();
@@ -289,13 +291,45 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                                 name = timMessage.getSender();
                             }
                             //String sendId = timMessage.getSender();
-                            handleTextMessage(elem, name,faceUrl);
+                            handleTextMessage(elem, name, faceUrl);
                         }
                     }
                     SxbLog.i(TAG, "Send text Msg ok");
 
                 }
             });
+    }
+
+    /**
+     * 发红包。
+     *
+     * @param red_packet_id       红包场次
+     * @param red_packet_duration 红包间隔时间
+     */
+    public void sendHostSendRedPacketMessage(String red_packet_id, String red_packet_duration) {
+        HashMap<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put(Constants.RED_PACKET_ID, red_packet_id);
+        paramsMap.put(Constants.RED_PACKET_DURATION, red_packet_duration);
+
+        String jsonParams = HashmapToJson.hashMapToJson(paramsMap);
+        sendGroupMessage(Constants.AVIMCMD_RED_PACKET, jsonParams, new TIMValueCallBack<TIMMessage>() {
+            @Override
+            public void onError(int i, String s) {
+                if (i == 85) { //消息体太长
+                    Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();
+                } else if (i == 6011) {//群主不存在
+                    Toast.makeText(mContext, "Host don't exit ", Toast.LENGTH_SHORT).show();
+                }
+                SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
+            }
+
+            @Override
+            public void onSuccess(TIMMessage timMessage) {
+                Log.d(TAG,"红包发送成功!");
+                SDToast.showToast("红包发送成功!");
+            }
+        });
+
     }
 
     public void sendGroupMessage(int cmd, String param, TIMValueCallBack<TIMMessage> callback) {
@@ -319,7 +353,8 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     }
 
     public void sendGroupMessage(int cmd, String param) {
-        sendGroupMessage(cmd, param, new TIMValueCallBack<TIMMessage>() {            @Override
+        sendGroupMessage(cmd, param, new TIMValueCallBack<TIMMessage>() {
+            @Override
             public void onError(int i, String s) {
                 if (i == 85) { //消息体太长
                     Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();
@@ -454,10 +489,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 TIMElem elem = currMsg.getElement(j);
                 TIMElemType type = elem.getType();
                 String sendId = currMsg.getSender();
-                TIMUserProfile  senderProfile = currMsg.getSenderProfile();
-                String faceUrl="";
-                if(senderProfile!=null) {
-                     faceUrl = senderProfile.getFaceUrl();
+                TIMUserProfile senderProfile = currMsg.getSenderProfile();
+                String faceUrl = "";
+                if (senderProfile != null) {
+                    faceUrl = senderProfile.getFaceUrl();
                 }
 
                 //系统消息
@@ -478,7 +513,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                         id = sendId;
                         nickname = sendId;
                     }
-                    handleCustomMsg(elem, id, nickname,faceUrl);
+                    handleCustomMsg(elem, id, nickname, faceUrl);
                     continue;
                 }
 
@@ -492,7 +527,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 //最后处理文本消息
                 if (type == TIMElemType.Text) {
                     if (currMsg.isSelf()) {
-                        handleTextMessage(elem, MySelfInfo.getInstance().getNickName(),faceUrl);
+                        handleTextMessage(elem, MySelfInfo.getInstance().getNickName(), faceUrl);
                     } else {
                         String nickname;
                         if (currMsg.getSenderProfile() != null && (!currMsg.getSenderProfile().getNickName().equals(""))) {
@@ -500,7 +535,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                         } else {
                             nickname = sendId;
                         }
-                        handleTextMessage(elem, nickname,faceUrl);
+                        handleTextMessage(elem, nickname, faceUrl);
                     }
                 }
             }
@@ -513,11 +548,11 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      * @param elem
      * @param name
      */
-    private void handleTextMessage(TIMElem elem, String name,String faceUrl) {
+    private void handleTextMessage(TIMElem elem, String name, String faceUrl) {
         TIMTextElem textElem = (TIMTextElem) elem;
 //        Toast.makeText(mContext, "" + textElem.getText(), Toast.LENGTH_SHORT).show();
 
-        mLiveView.refreshText(textElem.getText(), name,faceUrl);
+        mLiveView.refreshText(textElem.getText(), name, faceUrl);
 //        sendToUIThread(REFRESH_TEXT, textElem.getText(), sendId);
     }
 
@@ -527,7 +562,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      *
      * @param elem
      */
-    private void handleCustomMsg(TIMElem elem, String identifier, String nickname,String faceUrl) {
+    private void handleCustomMsg(TIMElem elem, String identifier, String nickname, String faceUrl) {
         try {
             String customText = new String(((TIMCustomElem) elem).getData(), "UTF-8");
             SxbLog.i(TAG, "cumstom msg  " + customText);
@@ -555,12 +590,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 case Constants.AVIMCMD_EnterLive:
                     //mLiveView.refreshText("Step in live", sendId);
                     if (mLiveView != null)
-                        mLiveView.memberJoin(identifier, nickname,faceUrl);
+                        mLiveView.memberJoin(identifier, nickname, faceUrl);
                     break;
                 case Constants.AVIMCMD_ExitLive:
                     //mLiveView.refreshText("quite live", sendId);
                     if (mLiveView != null)
-                        mLiveView.memberQuit(identifier, nickname,faceUrl);
+                        mLiveView.memberQuit(identifier, nickname, faceUrl);
                     break;
                 case Constants.AVIMCMD_MULTI_CANCEL_INTERACT://主播关闭摄像头命令
                     //如果是自己关闭Camera和Mic
@@ -585,10 +620,14 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     toggleMic();
                     break;
                 case Constants.AVIMCMD_Host_Leave:
-                    mLiveView.hostLeave(identifier, nickname,faceUrl);
+                    mLiveView.hostLeave(identifier, nickname, faceUrl);
                     break;
                 case Constants.AVIMCMD_Host_Back:
-                    mLiveView.hostBack(identifier, nickname,faceUrl);
+                    mLiveView.hostBack(identifier, nickname, faceUrl);
+                case Constants.AVIMCMD_RED_PACKET:
+                    String datas =    json.getString(Constants.CMD_PARAM);
+                    HashMap<String,String> params = parseRedPacket(datas);
+                    mLiveView.getHostRedPacket(params);
                 default:
                     break;
             }
@@ -600,6 +639,21 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         }
     }
 
+    public HashMap<String,String> parseRedPacket(String datas){
+        HashMap<String,String>map = new HashMap<String,String>();
+        try {
+            JSONObject json = new JSONObject(datas);
+            if(json!=null){
+                String id = json.getString(Constants.RED_PACKET_ID);
+                String duration = json.getString(Constants.RED_PACKET_DURATION);
+                map.put(Constants.RED_PACKET_ID,id);
+                map.put(Constants.RED_PACKET_DURATION,duration);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
 
     public boolean isFrontCamera() {
         return mIsFrontCamera;
@@ -919,7 +973,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.HOSTPITPAT);
 
-        OkHttpUtils.getInstance().get(null, params,  new MgCallback(){
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {

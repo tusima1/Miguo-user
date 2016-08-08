@@ -205,6 +205,12 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             dialogSendRedPacket = builder.create();
         }
         dialogSendRedPacket.show();
+
+        //调用服务器的红包发送接口成功后调IM 接口。。
+        if(mLiveHelper!=null){
+            mLiveHelper.sendHostSendRedPacketMessage("1","30");
+        }
+        //发送自定义消息 。
     }
 
     /**

@@ -37,10 +37,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     private Context mContext;
     private LiveActivity mActivity;//直播的引用
     private LiveCommonHelper mLiveCommonHelper;//工具类
-    private List<ModelAudienceInfo> mData;
+    private HeadTopAdapter mAdapter;
 
-
-    HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
     public HostTopView(Context context) {
         super(context);
         init(context);
@@ -82,10 +80,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         LinearLayoutManager llmanager = new LinearLayoutManager(mContext);
         llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(llmanager);
-
+        mAdapter = new HeadTopAdapter(null, mContext);
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(2));
-
-        HeadTopAdapter mAdapter = new HeadTopAdapter(null, mContext);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -160,11 +156,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
      * @param mData
      */
     public void refreshData(List<ModelAudienceInfo> mData){
-        this.mData = mData;
         mAdapter.setmData(mData);
-        mAdapter.notifyDataSetChanged();
-
-
     }
     /*设置地址*/
     public void setLocation(String location) {

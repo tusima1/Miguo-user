@@ -67,8 +67,7 @@ public class Constants {
      * 自定义消息 类型开始
      */
     public static final int AVIMCMD_CUSTOM=0x100;
-    public static final int AVIMCMD_RED_PACKET=0x100;  //红包
-
+    public static final int AVIMCMD_RED_PACKET=AVIMCMD_CUSTOM+1;  //红包
 
     public static final int AVIMCMD_MULTI = 0x800;             // 多人互动消息类型
 
@@ -216,4 +215,13 @@ public class Constants {
     public static final String HOST_ROLE = "Host";
     public static final String VIDEO_MEMBER_ROLE = "VideoMember";
     public static final String NORMAL_MEMBER_ROLE = "NormalMember";
+    /**
+     * red_packet_id   红包场次
+
+     */
+    public static final  String  RED_PACKET_ID="red_packet_id";
+    /**
+     *  red_packet_duration  红包间隔时间
+     */
+    public static final  String  RED_PACKET_DURATION="red_packet_duration";
 }

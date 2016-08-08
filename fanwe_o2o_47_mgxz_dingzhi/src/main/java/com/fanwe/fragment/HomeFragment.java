@@ -22,15 +22,12 @@ import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.IndexActAdvsModel;
 import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -38,7 +35,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.interf.ITencentResult;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
@@ -47,8 +43,6 @@ import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.live.presenters.TencentHttpHelper;
-import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.utils.Log;
 
@@ -191,13 +185,6 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                     public void onClickCancel(View v, SDDialogCustom dialog) {
                     }
                 }).show();
-    }
-
-    public void scrollToTop() {
-        if (isResumed() && mPtrsvAll != null) {
-            SDViewUtil.scrollToViewY(mPtrsvAll.getRefreshableView(), 0, 0);
-
-        }
     }
 
     private void initPullToRefreshListView() {
