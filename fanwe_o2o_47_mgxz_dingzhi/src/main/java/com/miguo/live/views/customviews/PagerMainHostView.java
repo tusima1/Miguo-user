@@ -1,6 +1,8 @@
 package com.miguo.live.views.customviews;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerDetailInfo;
+import com.miguo.live.interf.ItemChangeListener;
 
 
 /**
  * Created by didik on 2016/7/29.
  * 主场页面
  */
-public class PagerMainHostView extends ScrollView implements View.OnClickListener {
+public class PagerMainHostView extends ScrollView implements View.OnClickListener,ItemChangeListener{
     private Context mContext;
     private ImageView mIv_img;//主图片
     private TextView mTv_title;//大标题
@@ -29,6 +33,11 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
     private TextView mTv_phone_num;//电话号码
     private TextView mCollect;//按钮,收藏
     private RatingBar mRatingBar;//评分
+
+    /**
+     * 门店详情。
+     */
+    private SellerDetailInfo mSellerDetailInfo;
 
     public PagerMainHostView(Context context) {
         super(context);
@@ -60,9 +69,8 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
         mTv_keywords = ((TextView) this.findViewById(R.id.tv_keywords));
         mTv_location = ((TextView) this.findViewById(R.id.tv_location));
         mTv_phone_num = ((TextView) this.findViewById(R.id.tv_phone_num));
-
         mCollect.setOnClickListener(this);
-
+        updateViewValue();
     }
 
     @Override
@@ -72,10 +80,40 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
         }
     }
 
+
+    public void updateViewValue(){
+        if(mSellerDetailInfo!=null){
+            String img = mSellerDetailInfo.getImg();
+            if(!TextUtils.isEmpty(img)){
+                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(img,mIv_img);
+            }else{
+                mIv_img.setImageResource(R.drawable.nopic);
+            }
+            mTv_title.setText(mSellerDetailInfo.getTitle());
+            mTv_num.setText(mSellerDetailInfo.getAvg_grade_num()+"条");
+            mTv_location_type.setText(mSellerDetailInfo.getAreaName());
+            mTv_keywords.setText(Html.fromHtml(mSellerDetailInfo.getMain_buss()));
+            mTv_location.setText(mSellerDetailInfo.getAddress());
+            mTv_phone_num.setText(mSellerDetailInfo.getTel());
+            String price = mSellerDetailInfo.getRef_avg_price();
+            if(!TextUtils.isEmpty(price)){
+                mTv_price.setText("Y "+price+"元/人");
+            }
+        }
+    }
     /**
      * 点击了收藏
      */
     private void clickCollection() {
         Toast.makeText(mContext, "收藏", Toast.LENGTH_SHORT).show();
+    }
+
+    public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
+        this.mSellerDetailInfo = mSellerDetailInfo;
+    }
+
+    @Override
+    public void onEntityChange() {
+        updateViewValue();
     }
 }

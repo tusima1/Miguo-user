@@ -34,6 +34,9 @@ import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.SellerDetailInfo;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -52,6 +55,7 @@ import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
@@ -71,7 +75,6 @@ import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.OKhttpHelper;
-import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.ProfileView;
@@ -92,12 +95,15 @@ import java.util.TimerTask;
 /**
  * 直播类(用户+主播)
  */
-public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
+public class LiveActivity extends BaseActivity implements ShopAndProductView,EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
 
+    /**
+     * 取商品和门店相关信息。
+     */
+    private SellerHttpHelper mSellerHttpHelper;
     private EnterLiveHelper mEnterRoomHelper;
-    private ProfileInfoHelper mUserInfoHelper;
     private LiveHelper mLiveHelper;
     private LoginHelper mTLoginHelper;
     private final int REQUEST_PHONE_PERMISSIONS = 0;
@@ -157,9 +163,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mEnterRoomHelper = new EnterLiveHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
-        // 用户资料类
-        mUserInfoHelper = new ProfileInfoHelper(this);
         tencentHttpHelper = new TencentHttpHelper(this);
+        mSellerHttpHelper = new SellerHttpHelper(this,this);
         root = findViewById(R.id.root);
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
@@ -663,6 +668,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout,root);
         }
+        if(!TextUtils.isEmpty(CurLiveInfo.shopID)) {
+            getShopDetail(CurLiveInfo.shopID);
+        }
     }
 
 
@@ -680,6 +688,16 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         QavsdkControl.getInstance().onPause();
     }
 
+    /**
+     * 发起请求商店详情和商品列表的请求。
+     * @param shopId 门店ID
+     */
+    @Override
+    public void getShopDetail(String shopId) {
+        mSellerHttpHelper.getSellerDetail(shopId);
+
+    }
+
 
     /**
      * 直播心跳
@@ -688,8 +706,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         @Override
         public void run() {
             String host = CurLiveInfo.getHostID();
-            SxbLog.i(TAG, "HeartBeatTask " + host);
             mLiveHelper.sendHeartBeat();
+            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
     }
 
@@ -698,7 +716,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     private class VideoTimerTask extends TimerTask {
         public void run() {
-            SxbLog.i(TAG, "timeTask ");
             ++mSecond;
             if (LiveUtil.checkIsHost())
                 mHandler.sendEmptyMessage(UPDAT_WALL_TIME_TIMER_TASK);
@@ -707,7 +724,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     protected void onDestroy() {
-        MGLog.e("onDestroy");
         watchCount = 0;
         super.onDestroy();
         if (null != mHearBeatTimer) {
@@ -819,7 +835,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * 被动退出直播
      */
     private void quiteLivePassively() {
-        Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
         mLiveHelper.perpareQuitRoom(false);
         mEnterRoomHelper.quiteLive();
     }
@@ -839,7 +854,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
-        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
 
@@ -851,7 +865,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
             if (id_status == Constants.HOST) {//主播方式加入房间成功
                 //开启摄像头渲染画面
-                SxbLog.i(TAG, "createlive enterRoomComplete isSucc" + isSucc);
+              //  SxbLog.i(TAG, "createlive enterRoomComplete isSucc" + isSucc);
             } else {
                 //发消息通知上线
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
@@ -899,12 +913,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
         int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
-        int roomId = CurLiveInfo.getRoomNum();
-        if(roomId!=-1&&roomId!=0) {
-            mLiveHttphelper.enterRoom(roomId+"");
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
-        }
-
         //人数加1,可以设置到界面上
         if (mHostTopView != null) {
             mHostTopView.updateAudienceCount(members + "");
@@ -918,11 +926,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     public void memberQuit(String id, String name,String faceUrl) {
         refreshTextListView(faceUrl,TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
         watchCount--;
-        int roomId = CurLiveInfo.getRoomNum();
-        if(roomId!=-1&&roomId!=0) {
-            mLiveHttphelper.exitRoom(roomId+"");
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
-        }
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
@@ -1724,13 +1727,11 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             case LiveConstants.STOP_LIVE:
                 //主播退出(结束主播!!!)
                 if (checkDataIsNull(datas)) {
-                    MGLog.e("LiveConstants.STOP_LIVE 返回数据失败!");
-                    MGToast.showToast("异常退出!");
                     finish();
                     return;
                 }
                 ModelStopLive stopLive = (ModelStopLive) datas.get(0);
-                MGToast.showToast("时间:" + stopLive.getUsetime() + "人数:" + stopLive.getWatch_count());
+
                 break;
             case LiveConstants.AUDIENCE_COUNT:
                 //获取观众人数
@@ -1750,6 +1751,14 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                 }
                 break;
+            case SellerConstants.LIVE_BIZ_SHOP:
+                if(datas!=null&&datas.size()>0){
+                    mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                    mUserBottomTool.notifyDataChange();
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -1765,6 +1774,10 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     public void onFailue(String responseBody) {
 
+    }
+    @Override
+    public  void tokenInvalidateAndQuit(){
+        onBackPressed();
     }
 
 

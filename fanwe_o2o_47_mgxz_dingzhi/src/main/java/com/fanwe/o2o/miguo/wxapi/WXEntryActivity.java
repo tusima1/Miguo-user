@@ -1,4 +1,4 @@
-package com.fanwe.wxapi;
+package com.fanwe.o2o.miguo.wxapi;
 
 
 import com.umeng.socialize.weixin.view.WXCallbackActivity;

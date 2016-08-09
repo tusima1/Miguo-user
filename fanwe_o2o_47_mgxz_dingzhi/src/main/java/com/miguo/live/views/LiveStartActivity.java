@@ -228,6 +228,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         boolean isAvStart = App.getInstance().isAvStart();
         boolean isImlogin = App.getInstance().isImLoginSuccess();
         if (!isImlogin) {
+            //
             mLoginHelper.imLogin(userid, usersig, new MgCallback() {
                 @Override
                 public void onErrorResponse(String message, String errorCode) {
@@ -237,7 +238,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 @Override
                 public void onSuccessResponse(String responseBody) {
                     super.onSuccessResponse(responseBody);
-                    goToLive();
+
                 }
             });
         } else {
@@ -321,21 +322,19 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
             }
         }
-
-        if (TextUtils.isEmpty(avatar) || "null".equals(avatar.trim())) {
-            MySelfInfo.getInstance().setAvatar(avatar);
-        }
+        MySelfInfo.getInstance().setAvatar(avatar);
         CurLiveInfo.setTitle("直播");
         CurLiveInfo.setHostID(MySelfInfo.getInstance().getId());
         CurLiveInfo.setRoomNum(MySelfInfo.getInstance().getMyRoomNum());
         this.startActivity(intent);
+        finish();
 
 
     }
 
     @Override
     public void onSuccess(String responseBody) {
-
+        goToLive();
     }
 
     @Override
@@ -345,6 +344,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-
+        SDToast.showToast(responseBody);
     }
 }

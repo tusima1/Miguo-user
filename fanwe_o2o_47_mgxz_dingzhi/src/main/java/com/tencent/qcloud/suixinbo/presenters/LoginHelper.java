@@ -130,8 +130,8 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
-                        getRoomNum();
                         startAVSDK();
+                        getRoomNum();
                         App.getInstance().setAvStart(true);
                         callback.onSuccessResponse("");
                     }
@@ -320,6 +320,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
                 if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
                     SDToast.showToast("申请房间号失败");
+                    mView.onFailue("获取房间号错误!");
                     return;
                 }
                 ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);

@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.Root;
+import com.fanwe.constant.Constant;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.model.RootLive;
@@ -13,14 +15,19 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.model.getShopList.ModelShopList;
 import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.model.getShopList.RootShopList;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -58,9 +65,9 @@ public class SellerHttpHelper implements IHelper {
      * 请求门店列表
      */
     public void getShopList(int pageNum, int pageSize, String type, String keyword, String city) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token",  getToken());
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("keyword", keyword);
@@ -89,6 +96,50 @@ public class SellerHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 获取门店详情信息。
+      * @param sellerId
+     */
+    public void getSellerDetail(String sellerId){
+        if(TextUtils.isEmpty(sellerId)){
+            return;
+        }
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("biz_id", sellerId);
+        params.put("method", SellerConstants.LIVE_BIZ_SHOP);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+
+                Type type = new TypeToken<Root<SellerDetailInfo>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<SellerDetailInfo> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
+                //200为正常的返回 。
+                if(Constant.RESULT_SUCCESS.equals(status)){
+                    SellerDetailInfo sellerDetailInfo = (SellerDetailInfo) validateBody(root);
+                    if(sellerDetailInfo!=null){
+                        List<SellerDetailInfo> datas = new ArrayList<SellerDetailInfo>();
+                        datas.add(sellerDetailInfo);
+                        mView.onSuccess(SellerConstants.LIVE_BIZ_SHOP,datas);
+                    }
+                }else{
+                    onErrorResponse(message,status);
+                }
+
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
 
     @Override
     public void onDestroy() {

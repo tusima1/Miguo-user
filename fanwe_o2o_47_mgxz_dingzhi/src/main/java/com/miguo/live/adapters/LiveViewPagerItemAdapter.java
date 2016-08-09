@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fanwe.seller.model.SellerDetailInfo;
 import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.live.views.customviews.PagerRedPacketView;
@@ -22,6 +23,11 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
     private final ViewPagerItems pages;
     private final SparseArrayCompat<WeakReference<View>> holder;
     private final LayoutInflater inflater;
+    /**
+     * 门店详情。
+     */
+    private SellerDetailInfo mSellerDetailInfo;
+    private View currentView;
 
     public LiveViewPagerItemAdapter(ViewPagerItems pages) {
         this.pages = pages;
@@ -43,6 +49,9 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
             break;
             case 1:
                 view=new PagerMainHostView(container.getContext());
+                if(mSellerDetailInfo!=null){
+                    (( PagerMainHostView) view).setmSellerDetailInfo(mSellerDetailInfo);
+                }
                 break;
             case 2:
                 view=new PagerRedPacketView(container.getContext());
@@ -57,6 +66,7 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
 
                 break;
         }
+        currentView = view;
         container.addView(view);
         holder.put(position, new WeakReference<View>(view));
         return view;
@@ -90,5 +100,14 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
 
     protected ViewPagerItem getPagerItem(int position) {
         return pages.get(position);
+    }
+    public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
+        this.mSellerDetailInfo = mSellerDetailInfo;
+    }
+    public void refreshSellerDetailInfo(){
+        if(currentView!=null&&currentView instanceof PagerMainHostView ) {
+            ((PagerMainHostView)currentView).setmSellerDetailInfo(mSellerDetailInfo);
+            ((PagerMainHostView)currentView).onEntityChange();
+        }
     }
 }
