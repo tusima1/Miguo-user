@@ -19,8 +19,6 @@ import android.widget.GridView;
 import com.fanwe.CityListActivity;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.dialog.SDDialogProgress;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -125,7 +123,9 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
 
     private void submitAuth() {
         phone = etPhone.getText().toString().trim();
-        if (cityId == 0) {
+        if (TextUtils.isEmpty(dataBindingLiveAuth.interest.get())) {
+            SDToast.showToast("请选择兴趣");
+        } else if (cityId == 0) {
             SDToast.showToast("请选择城市");
         } else if (TextUtils.isEmpty(phone)) {
             SDToast.showToast("请输入手机号");
@@ -360,11 +360,11 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                                         String[] strs = sbFileKeys.toString().split("ttp://");
                                         if (datas.contains("add")) {
                                             if ((strs.length - 1) == 2) {
-                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), dataBindingLiveAuth.interest.get());
                                             }
                                         } else {
                                             if ((strs.length - 1) == 3) {
-                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), "f4564d66-53e8-11e6-beb8-9e72328cae77");
+                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), dataBindingLiveAuth.interest.get());
                                             }
                                         }
                                     }

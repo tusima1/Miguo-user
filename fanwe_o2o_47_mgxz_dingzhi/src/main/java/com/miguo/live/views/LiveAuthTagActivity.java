@@ -5,19 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 
+import com.fanwe.base.CallbackView;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.AuthTagAdapter;
 import com.miguo.live.interf.MyItemClickListener;
-import com.miguo.live.model.getAuthTag.ModelAuthTag;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getHostTags.ModelHostTags;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;
@@ -26,14 +31,16 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/8/9.
  */
-public class LiveAuthTagActivity extends Activity implements MyItemClickListener {
+public class LiveAuthTagActivity extends Activity implements MyItemClickListener, CallbackView {
     private Context mContext = LiveAuthTagActivity.this;
     private AuthTagAdapter mAuthTagAdapter;
-    private List<ModelAuthTag> datas = new ArrayList<>();
+    private List<ModelHostTags> datas = new ArrayList<>();
     private RecyclerView recyclerView;
     private EditText et_tags;
     private Button btnSubmit;
     private String strTags;
+    private LiveHttpHelper liveHttpHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +68,8 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
     }
 
     private void preParam() {
-        datas.clear();
-        for (int i = 0; i < 14; i++) {
-            ModelAuthTag modelAuthTag = new ModelAuthTag();
-            modelAuthTag.setId("" + i);
-            modelAuthTag.setName("Tag:" + i);
-            datas.add(modelAuthTag);
-        }
-        //换一批
-        ModelAuthTag modelAuthTag = new ModelAuthTag();
-        modelAuthTag.setName("换一批");
-        datas.add(modelAuthTag);
+        liveHttpHelper = new LiveHttpHelper(this, this);
+        liveHttpHelper.getHostTags("14");
 
         mAuthTagAdapter = new AuthTagAdapter(mContext, datas);
         mAuthTagAdapter.setOnItemClickListener(this);
@@ -106,11 +104,11 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
     public void onItemClick(View view, int postion) {
         if (postion == (datas.size() - 1)) {
             //换一批
-            preParam();
+            liveHttpHelper.getHostTags("14");
         } else {
             strTags = et_tags.getText().toString().trim();
-            ModelAuthTag modelAuthTag = datas.get(postion);
-            String name = modelAuthTag.getName();
+            ModelHostTags ModelHostTags = datas.get(postion);
+            String name = ModelHostTags.getDic_mean();
             if (TextUtils.isEmpty(strTags)) {
                 et_tags.setText(name);
                 btnSubmit.setBackgroundResource(R.drawable.bg_orange);
@@ -126,4 +124,40 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
             mAuthTagAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List res) {
+        if (LiveConstants.HOST_TAGS.equals(method)) {
+            datas.clear();
+            datas.addAll(res);
+            //换一批
+            ModelHostTags ModelHostTags = new ModelHostTags();
+            ModelHostTags.setDic_mean("换一批");
+            datas.add(ModelHostTags);
+            Message message = new Message();
+            message.what = 1;
+            mHandler.sendMessage(message);
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    mAuthTagAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+
 }

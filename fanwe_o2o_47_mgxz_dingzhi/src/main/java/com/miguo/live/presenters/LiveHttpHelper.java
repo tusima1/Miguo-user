@@ -88,7 +88,7 @@ public class LiveHttpHelper implements IHelper {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         String tokenValue = getToken();
-        params.put("token",tokenValue);
+        params.put("token", tokenValue);
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("tag", tag);
@@ -141,10 +141,10 @@ public class LiveHttpHelper implements IHelper {
      */
     public void getAudienceCount(String room_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token",  getToken());
+        params.put("token", getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.AUDIENCE_COUNT);
-        if(TextUtils.isEmpty(token)||TextUtils.isEmpty(room_id)){
+        if (TextUtils.isEmpty(token) || TextUtils.isEmpty(room_id)) {
             return;
         }
 
@@ -397,12 +397,11 @@ public class LiveHttpHelper implements IHelper {
     /**
      * 获取主播标签
      */
-    public void getHostTags(String host_id, String tag_type) {
+    public void getHostTags(String tag_count) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);
-        params.put("host_id", host_id);
-        params.put("tag_type", tag_type);
+        params.put("tag_count", tag_count);
         params.put("method", LiveConstants.HOST_TAGS);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

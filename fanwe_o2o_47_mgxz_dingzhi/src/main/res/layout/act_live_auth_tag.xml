@@ -63,7 +63,7 @@
         android:gravity="top"
         android:hint="@string/live_auth_tags_hint"
         android:padding="@dimen/dp5"
-        android:textColor="@color/black"
+        android:textColor="@color/text_fenxiao"
         android:textColorHint="@color/c_CCCCCC" />
 
     <Button
