@@ -112,7 +112,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                mView.onFailue(message);
             }
         });
 
