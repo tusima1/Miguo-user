@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.LoginActivity;
@@ -17,7 +16,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
-import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -29,7 +27,6 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
-import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -71,33 +68,21 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     }
 
-    public void gotoAuthActivity() {
-        Intent intent = new Intent(LiveStartActivity.this, LiveAuthActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     public void init() {
         token = App.getApplication().getToken();
         if (TextUtils.isEmpty(token)) {
             goToLoginActivity();
         } else {
-            String is_host = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIs_host();
-            if ("0".equals(is_host)) {
-                SDToast.showToast("您还未成为主播");
-                gotoAuthActivity();
-            } else {
-                dataBindingLiveStart.shopName.set("选择你的消费场所");
-                dataBindingLiveStart.isLiveRight.set(true);
-                userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
-                usersig = App.getInstance().getUserSign();
-                //注册腾讯并申请房间号。
-                if (TextUtils.isEmpty(userid)) {
-                    goToLoginActivity();
-                }
-                if (TextUtils.isEmpty(usersig)) {
-                    getSign();
-                }
+            dataBindingLiveStart.shopName.set("选择你的消费场所");
+            dataBindingLiveStart.isLiveRight.set(true);
+            userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            usersig = App.getInstance().getUserSign();
+            //注册腾讯并申请房间号。
+            if (TextUtils.isEmpty(userid)) {
+                goToLoginActivity();
+            }
+            if (TextUtils.isEmpty(usersig)) {
+                getSign();
             }
         }
     }
@@ -158,13 +143,13 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 dataBindingLiveStart.mode.set(dataBindingLiveStart.QQZONE);
                 break;
             case R.id.btn_start_live_start:
-                if (CurLiveInfo.modelShop==null ||TextUtils.isEmpty(CurLiveInfo.modelShop.getId()) ) {
+                if (CurLiveInfo.modelShop == null || TextUtils.isEmpty(CurLiveInfo.modelShop.getId())) {
                     SDToast.showToast("请选择你的消费场所");
                     return;
                 } else {
-                    if(!TextUtils.isEmpty(usersig)) {
+                    if (!TextUtils.isEmpty(usersig)) {
                         startLive();
-                    }else{
+                    } else {
                         goToLoginActivity();
                     }
                 }
@@ -196,7 +181,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-          //  UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+            //  UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
             createAvRoom();
         } else {
             //未认证的，去认证
@@ -241,7 +226,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 }
             });
         } else {
-            if (!TextUtils.isEmpty(CurLiveInfo.modelShop.getId()) &&!"null".equals(CurLiveInfo.modelShop.getId())) {
+            if (!TextUtils.isEmpty(CurLiveInfo.modelShop.getId()) && !"null".equals(CurLiveInfo.modelShop.getId())) {
                 //------向业务服务器申请房间号-------------------------------------
                 MgCallback mgCallback = new MgCallback() {
                     @Override
@@ -276,6 +261,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                             }
                         }
                     }
+
                     @Override
                     public void onErrorResponse(String message, String errorCode) {
                         SDToast.showToast(message);
@@ -283,7 +269,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 };
                 mLoginHelper.applyRoom(CurLiveInfo.modelShop.getId(), mgCallback);
                 //--------------------向业务服务器申请房间号-------------------------
-            }else{
+            } else {
                 SDToast.showToast("请先选择一个直播场所。");
             }
         }

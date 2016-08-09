@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,12 +16,12 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/iv_close_start_auth"
+            android:id="@+id/iv_close_wait_auth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:padding="15dp"
             android:onClick="onClick"
+            android:padding="15dp"
             android:src="@drawable/ic_close" />
 
         <ImageView
@@ -30,33 +29,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="60dp"
-            android:src="@drawable/ic_face_auth" />
+            android:src="@drawable/ic_face_auth_wait" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
-            android:text="谁美谁认证，我美我认证！！！"
+            android:layout_marginTop="60dp"
+            android:text="00:00:00"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/dp40"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:text="红人认证等待中"
             android:textColor="@color/white"
             android:textSize="@dimen/dp12" />
-
-        <Button
-            android:id="@+id/btn_start_live_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
-            android:layout_marginTop="100dp"
-            android:background="@drawable/bg_orange_line"
-            android:gravity="center"
-            android:onClick="onClick"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
-            android:text="前往认证"
-            android:textColor="@color/main_color"
-            android:textSize="17dp" />
-
     </LinearLayout>
-
 </FrameLayout>
+
+
