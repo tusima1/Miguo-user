@@ -112,7 +112,9 @@
         </activity>
         <activity android:name="com.miguo.live.views.ImgViewActivity"></activity>
         <activity android:name="com.miguo.live.views.LiveAuthActivity"></activity>
-
+        <activity
+            android:name="com.miguo.live.views.LiveAuthTagActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
         <!-- Splash页面后的引导页面 ,不要删除这段注释内容,以备后需 -->
         <!--
         <activity

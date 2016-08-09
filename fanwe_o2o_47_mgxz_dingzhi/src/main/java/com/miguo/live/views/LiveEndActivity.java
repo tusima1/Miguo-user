@@ -1,19 +1,16 @@
 package com.miguo.live.views;
 
 import android.app.Activity;
-
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveEndBinding;
 import com.fanwe.umeng.UmengShareManager;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.miguo.live.model.DataBindingLiveEnd;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.stopLive.ModelStopLive;
@@ -74,9 +71,9 @@ public class LiveEndActivity extends Activity {
 
                     dataBindingLiveEnd.numViewers.set(count);
 
-                    dataBindingLiveEnd.countMoney.set("32548359");
-                    dataBindingLiveEnd.countGood.set("23");
-                    dataBindingLiveEnd.countMi.set("356");
+                    dataBindingLiveEnd.countMoney.set("");
+                    dataBindingLiveEnd.countGood.set("");
+                    dataBindingLiveEnd.countMi.set("");
                 }
             }
 

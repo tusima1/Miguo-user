@@ -91,10 +91,11 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     }
 
     public void onClick(View v) {
+        Intent intent;
         int id = v.getId();
         switch (id) {
             case R.id.layout_city_live_auth:
-                Intent intent = new Intent(mContext, CityListActivity.class);
+                intent = new Intent(mContext, CityListActivity.class);
                 startActivityForResult(intent, 100);
                 break;
             case R.id.iv_arrow_left_bar:
@@ -111,6 +112,11 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 break;
             case R.id.btn_submit_live_auth:
                 submitAuth();
+                break;
+            case R.id.layout_interest_live_auth:
+                //兴趣
+                intent = new Intent(mContext, LiveAuthTagActivity.class);
+                startActivityForResult(intent, 200);
                 break;
         }
     }
@@ -216,6 +222,10 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         if (requestCode == 100 && resultCode == 8888) {
             dataBindingLiveAuth.city.set(AppRuntimeWorker.getCity_name());
             cityId = AppRuntimeWorker.getCity_id();
+            return;
+        }
+        if (requestCode == 200 && resultCode == 8888) {
+            dataBindingLiveAuth.interest.set(data.getStringExtra("tags"));
             return;
         }
         if (resultCode != Activity.RESULT_OK) {
