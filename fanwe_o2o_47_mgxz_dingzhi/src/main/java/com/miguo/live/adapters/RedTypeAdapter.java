@@ -6,89 +6,86 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.model.RedPacketInfo;
+import com.miguo.live.interf.MyItemClickListenerRedType;
+import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
+import com.miguo.live.viewHolder.ViewHolderRedType;
 
 import java.util.List;
 
 
-    /**
-     * Created by didik on 2016/7/22.
-     */
-    public class RedTypeAdapter extends RecyclerView.Adapter<RedTypeAdapter.ViewHolder> {
+/**
+ * Created by didik on 2016/7/22.
+ */
+public class RedTypeAdapter extends RecyclerView.Adapter<ViewHolderRedType> {
 
-        private Context mContext;
-        private List<RedPacketInfo> mData;
+    private Context mContext;
+    private List<ModelHandOutRedPacket> mData;
 
-        private View.OnClickListener  mOnclickListener;
+    private MyItemClickListenerRedType mItemClickListener;
 
-        public RedTypeAdapter(List<RedPacketInfo> data, Context context){
-            this.mContext=context;
-            this.mData=data;
+    public RedTypeAdapter(List<ModelHandOutRedPacket> data, Context context) {
+        this.mContext = context;
+        this.mData = data;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mData.size();
+    }
+
+
+    @Override
+    public void onBindViewHolder(ViewHolderRedType holder, int position) {
+        ModelHandOutRedPacket modelHandOutRedPacket = mData.get(position);
+        String countTextValue = "";
+        String count = modelHandOutRedPacket.getRed_packets();
+        String type = modelHandOutRedPacket.getRed_packet_type();
+        String amount = modelHandOutRedPacket.getRed_packet_amount();
+        if ("1".equals(type)) {
+            holder.typeText.setText(amount + "折");
+        } else if ("2".equals(type)) {
+            holder.typeText.setText(amount + "元");
+        } else {
+            return;
         }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.red_packet_item, parent, false);
-
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
+        if (Integer.valueOf(count) > 999) {
+            countTextValue = "余(999+)";
+        } else {
+            countTextValue = "余(" + count + "+)";
         }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-
-            if(mData.get(position)!=null) {
-                String typeTextValue = "";
-                String countTextValue="";
-                int count = mData.get(position).getCount();
-                if (mData.get(position).getType() > 0) {
-                    typeTextValue= mData.get(position).getType()+"折";
-                }
-                if(count >999){
-                    countTextValue ="余(999+)";
-                }else{
-                    countTextValue ="余(" +count +"+)";
-                }
-                holder.typeText.setText(typeTextValue);
-                holder.countText.setText(countTextValue);
-                if(count<=0){
-                    mData.get(position).setClickable(false);
-                    holder.itemView.setBackgroundColor(Color.GRAY);
-                }
-                holder.setClickListener(mOnclickListener);
-            }
-
-
+        holder.countText.setText(countTextValue);
+        if (modelHandOutRedPacket.isChecked()) {
+            //橙色
+            holder.itemView.setBackgroundResource(R.drawable.bg_orange);
+            holder.typeText.setTextColor(mContext.getResources().getColor(R.color.white));
+            holder.countText.setTextColor(mContext.getResources().getColor(R.color.white));
+        } else {
+            //白色
+            holder.itemView.setBackgroundResource(R.drawable.shape_cricle_bg_white_gray);
+            holder.typeText.setTextColor(mContext.getResources().getColor(R.color.text_line));
+            holder.countText.setTextColor(mContext.getResources().getColor(R.color.text_line));
         }
-
-        @Override
-        public int getItemCount() {
-            return mData.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public FrameLayout red_line;
-            public TextView typeText;
-            public TextView countText;
-            public View.OnClickListener clickListener;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                red_line = (FrameLayout)itemView.findViewById(R.id.red_line);
-                typeText = (TextView)itemView.findViewById(R.id.type_text);
-                countText = (TextView) itemView.findViewById(R.id.count_text);
-                red_line.setOnClickListener(clickListener);
-
-            }
-
-            public void setClickListener(View.OnClickListener clickListener) {
-                this.clickListener = clickListener;
-            }
+        if (Integer.valueOf(count) <= 0) {
+            holder.itemView.setBackgroundColor(Color.GRAY);
         }
     }
+
+    @Override
+    public ViewHolderRedType onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.red_packet_item, parent, false);
+        ViewHolderRedType vh = new ViewHolderRedType(itemView, mItemClickListener);
+        return vh;
+    }
+
+    /**
+     * 设置Item点击监听
+     *
+     * @param listener
+     */
+    public void setOnItemClickListener(MyItemClickListenerRedType listener) {
+        this.mItemClickListener = listener;
+    }
+
+}

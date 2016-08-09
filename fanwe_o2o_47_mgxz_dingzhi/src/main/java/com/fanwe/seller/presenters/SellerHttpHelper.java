@@ -46,17 +46,13 @@ public class SellerHttpHelper implements IHelper {
     }
 
     public String getToken() {
-        if (!TextUtils.isEmpty(token)) {
-            return token;
-        } else {
-            token = userCurrentInfo.getToken();
-            return token;
-        }
+        return userCurrentInfo.getToken();
     }
 
     /**
      * 请求门店列表
      */
+
     public void getShopList(int pageNum, int pageSize, String type, String keyword, String city) {
         getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();

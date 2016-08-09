@@ -43,12 +43,7 @@ public class UserHttpHelper implements IHelper {
     }
 
     public String getToken() {
-        if (!TextUtils.isEmpty(token)) {
-            return token;
-        } else {
-            token = userCurrentInfo.getToken();
-            return token;
-        }
+        return userCurrentInfo.getToken();
     }
 
     /**

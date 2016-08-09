@@ -92,8 +92,10 @@
     <string name="live_auth">认证颜值</string>
     <!--直播红包-->
     <string name="live_auth_title">完善个人信息，成为认证网红，帮大家活得更有趣</string>
+    <string name="live_auth_title_tag">描述一下自己吧，更容易上热门</string>
     <string name="live_auth_img">2-3张一个月内生活照：</string>
     <string name="live_auth_remark">无性别星探会火速勾搭你！放心，我们严禁任何形式的骚扰行为</string>
+    <string name="live_auth_tags_hint">描述一下自己吧，并用\",\"隔开</string>
 
     <string name="red_dialog_title">发红包给粉丝</string>
     <string name="red_type_string">选择类型</string>
