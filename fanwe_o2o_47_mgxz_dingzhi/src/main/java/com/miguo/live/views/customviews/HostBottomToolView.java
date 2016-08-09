@@ -23,6 +23,7 @@ import com.miguo.live.interf.MyItemClickListenerRedNum;
 import com.miguo.live.interf.MyItemClickListenerRedType;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
+import com.miguo.live.model.postHandOutRedPacket.ModelHandOutRedPacketPost;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveInputDialogHelper;
@@ -206,11 +207,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         }
         dialogSendRedPacket.show();
 
-        //调用服务器的红包发送接口成功后调IM 接口。。
-        if(mLiveHelper!=null){
-            mLiveHelper.sendHostSendRedPacketMessage("1","30");
-        }
-        //发送自定义消息 。
+
     }
 
     /**
@@ -284,9 +281,20 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             message.what = 1;
             mHandler.sendMessage(message);
         } else if (LiveConstants.HAND_OUT_RED_PACKET_POST.equals(method)) {
-            Message message = new Message();
-            message.what = 3;
-            mHandler.sendMessage(message);
+            if(datas!=null&&datas.size()>0) {
+                ModelHandOutRedPacketPost entity = (ModelHandOutRedPacketPost)datas.get(0);
+                //调用服务器的红包发送接口成功后调IM 接口。。
+                String id = entity.getRed_packets_key();
+                String duration  = entity.getRedPacketEventime();
+                if (mLiveHelper != null) {
+                  //  mLiveHelper.sendHostSendRedPacketMessage(id, duration);
+                    mLiveHelper.sendHostSendRedPacketMessage("1", "30");
+                }
+                //发送自定义消息 。
+                SDToast.showToast("发送红包成功");
+            }else{
+                SDToast.showToast("发送红包失败");
+            }
         }
     }
 
@@ -313,9 +321,8 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                                 currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
                     }
                     break;
-                case 3:
-                    SDToast.showToast("发送红包成功");
-                    break;
+               default:
+                   break;
             }
         }
     };

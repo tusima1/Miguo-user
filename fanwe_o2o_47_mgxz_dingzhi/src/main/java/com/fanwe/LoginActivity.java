@@ -112,6 +112,8 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	 * 密码。
 	 */
 	String nick="";
+	@ViewInject(R.id.testViews)
+	EditText testViews;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -282,6 +284,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			str.append(entry.getKey()+"--->"+entry.getValue()+"\n");
 		}
 		Log.d("11",str.toString());
+		testViews.setText(str.toString());
 
 	}
 	/**
@@ -294,29 +297,29 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			@Override
 			public void onSuccess(Map<String, String> data) {
 				printData(data);
-				if(platform .equals(SHARE_MEDIA.WEIXIN)){
-					platformType = "2";
-					openId = data.get("openid");
-					nick = data.get("nickname");
-                    icon=data.get("headimgurl");
-				}else if(platform .equals(SHARE_MEDIA.QQ)){
-					platformType = "1";
-					openId = data.get("openid");
-					icon = data.get("profile_image_url");
-					nick = data.get("screen_name");
-
-				}else if(platform .equals(SHARE_MEDIA.SINA)){
-					platformType = "3";
-					String returnData = (String)data.get("result");
-					Gson gson = new Gson();
-					HashMap<String,Object> maps = gson.fromJson(returnData,HashMap.class);
-					openId = maps.get("id").toString();
-				}
-				if(TextUtils.isEmpty(openId)){
-					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-					return;
-				}
-			 thirdLogin(openId,platformType,icon,nick);
+//				if(platform .equals(SHARE_MEDIA.WEIXIN)){
+//					platformType = "2";
+//					openId = data.get("openid");
+//					nick = data.get("nickname");
+//                    icon=data.get("headimgurl");
+//				}else if(platform .equals(SHARE_MEDIA.QQ)){
+//					platformType = "1";
+//					openId = data.get("openid");
+//					icon = data.get("profile_image_url");
+//					nick = data.get("screen_name");
+//
+//				}else if(platform .equals(SHARE_MEDIA.SINA)){
+//					platformType = "3";
+//					String returnData = (String)data.get("result");
+//					Gson gson = new Gson();
+//					HashMap<String,Object> maps = gson.fromJson(returnData,HashMap.class);
+//					openId = maps.get("id").toString();
+//				}
+//				if(TextUtils.isEmpty(openId)){
+//					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+//					return;
+//				}
+//			 thirdLogin(openId,platformType,icon,nick);
 			}
 
 			@Override

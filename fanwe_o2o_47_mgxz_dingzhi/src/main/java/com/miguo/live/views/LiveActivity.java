@@ -527,7 +527,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             mHostTopView.setNeed(this, mCommonHelper);
             mHostTopView.updateAudienceCount(CurLiveInfo.getMembers()+"");
             if(CurLiveInfo.getModelShop()!=null&&!TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
-                mHostTopView.setLocation(CurLiveInfo.getModelShop().getAddress());
+                mHostTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             }
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
 //            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
@@ -621,9 +621,9 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             String hostImg = CurLiveInfo.getHostAvator();
             mUserHeadTopView.setHostImg(hostImg);
             mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
-            mUserHeadTopView.updateAudicenceCount(CurLiveInfo.getMembers()+"");
+            mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers()+"");
             if(CurLiveInfo.getModelShop()!=null&&!TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
-                mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getAddress());
+                mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             }
 //            List<String> ids = new ArrayList<>();
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
@@ -643,7 +643,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         //开启后台业务服务器请求管理类
         mLiveHttphelper = new LiveHttpHelper(this, this);
         //----
-
+         mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum()+"");
         //主播清屏操作
         mHostBottomToolView1.setLiveSwitchScreenListener(new LiveSwitchScreenListener() {
             @Override
@@ -910,7 +910,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             mHostTopView.updateAudienceCount(members + "");
         }
         if (mUserHeadTopView != null) {
-            mUserHeadTopView.updateAudicenceCount(members + "");
+            mUserHeadTopView.updateAudienceCount(members + "");
         }
     }
 
@@ -930,7 +930,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 mHostTopView.updateAudienceCount(members + "");
             }
             if (mUserHeadTopView != null) {
-                mUserHeadTopView.updateAudicenceCount(members + "");
+                mUserHeadTopView.updateAudienceCount(members + "");
             }
         }
 
@@ -950,9 +950,13 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
 
     @Override
     public void getHostRedPacket(HashMap<String, String> params) {
-        SDToast.showToast("id:"+params.get(Constants.RED_PACKET_ID) +",duration:"+params.get(Constants.RED_PACKET_DURATION));
-
+        //SDToast.showToast("id:"+params.get(Constants.RED_PACKET_ID) +",duration:"+params.get(Constants.RED_PACKET_DURATION));
+        if(mUserBottomTool!=null) {
+            mUserBottomTool.clickRob();
+        }
     }
+
+
 
     /**
      * 有成员退群
@@ -1497,10 +1501,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
             switch (requestCode) {
                 case GETPROFILE_JOIN:
                     for (TIMUserProfile user : profiles) {
-                        mUserHeadTopView.updateAudicenceCount(CurLiveInfo.getMembers() + "");
-                        SxbLog.w(TAG, "get nick name:" + user.getNickName());
-                        SxbLog.w(TAG, "get remark name:" + user.getRemark());
-                        SxbLog.w(TAG, "get avatar:" + user.getFaceUrl());
+                        mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
                         if (!TextUtils.isEmpty(user.getNickName())) {
                             refreshTextListView(user.getFaceUrl(),user.getNickName(), "加入直播", Constants.MEMBER_ENTER);
                         } else {
@@ -1608,8 +1609,6 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
      * @param url2
      */
     private void ClipToBoard(final String url, final String url2) {
-        SxbLog.i(TAG, "ClipToBoard url " + url);
-        SxbLog.i(TAG, "ClipToBoard url2 " + url2);
         if (url == null) return;
         final Dialog dialog = new Dialog(this, R.style.dialog);
         dialog.setContentView(R.layout.clip_dialog);
@@ -1741,9 +1740,14 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                 }
                 ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
                 //更新观众人数
-                if (audienceCount != null && mHostTopView != null) {
-                    mHostTopView.updateAudienceCount(audienceCount.getCount());
-                    MGLog.e("LiveConstants.AUDIENCE_COUNT 更新人数");
+                if (audienceCount != null&&!TextUtils.isEmpty(audienceCount.getCount())) {
+                    boolean isHost = LiveUtil.checkIsHost();
+                    if (isHost) {
+                        mHostTopView.updateAudienceCount(audienceCount.getCount());
+                    } else {
+                        mUserHeadTopView.updateAudienceCount(audienceCount.getCount());
+                    }
+                    CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                 }
                 break;
         }
