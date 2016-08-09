@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:text="专属优惠"
+        android:textColor="@color/green"
         android:layout_toRightOf="@id/tv_price"
         android:layout_marginLeft="5dp"
         android:layout_alignBaseline="@id/tv_price"
@@ -42,7 +43,8 @@
         android:id="@+id/add"
         android:layout_width="27dp"
         android:layout_height="27dp"
-        android:src="@drawable/ic_add"
+        android:scaleType="centerInside"
+        android:layout_marginRight="@dimen/dp10"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"/>
 
@@ -61,7 +63,7 @@
             android:layout_height="25dp"
             android:text="加购物车"
             android:gravity="center"
-            android:background="@color/colorAccent"
+            android:background="@drawable/bg_bt_add_2_shopcart"
             />
         <TextView
             android:id="@+id/buy"
@@ -70,7 +72,7 @@
             android:text="立即购买"
             android:gravity="center"
             android:layout_marginTop="10dp"
-            android:background="@color/colorAccent"
+            android:background="@drawable/bg_bt_buy"
             />
     </LinearLayout>
 

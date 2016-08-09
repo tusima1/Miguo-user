@@ -1,5 +1,6 @@
 package com.miguo.live.adapters;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.model.pagermodel.BaoBaoEntity;
+
+import java.util.List;
 
 
 /**
@@ -19,6 +23,7 @@ import com.fanwe.o2o.miguo.R;
 public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.ViewHolder> {
 
     private Context mContext;
+    private List<BaoBaoEntity> mData;
 
     /**
      * 构造函数确定填充数据
@@ -35,18 +40,45 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.ll_two_bt.setVisibility(View.VISIBLE);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+//        holder.ll_two_bt.setVisibility(View.VISIBLE);
+        final BaoBaoEntity baoBaoEntity = mData.get(position);
+        boolean clicked = baoBaoEntity.isClicked();
+        if (clicked){
+            holder.add.setImageResource(R.drawable.ic_close_small);
+            holder.ll_two_bt.setVisibility(View.VISIBLE);
+        }else {
+            holder.add.setImageResource(R.drawable.ic_add);
+            holder.ll_two_bt.setVisibility(View.GONE);
+        }
 
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.ll_two_bt.getVisibility()==View.GONE){
                     holder.ll_two_bt.setVisibility(View.VISIBLE);
-                }else {
-                    holder.ll_two_bt.setVisibility(View.GONE);
-                }
+                    startAnimation(v,0f,45f);
+                    mData.get(position).setClicked(true);
+//                    holder.add.setImageResource(R.drawable.ic_close_small);
+                    holder.add.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.add.setImageResource(R.drawable.ic_add);
 
+                        }
+                    },500);
+                }else {
+                    startAnimation(v,0f,45f);
+                    holder.ll_two_bt.setVisibility(View.GONE);
+                    mData.get(position).setClicked(false);
+//                    holder.add.setImageResource(R.drawable.ic_add);
+                    holder.add.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.add.setImageResource(R.drawable.ic_close_small);
+                        }
+                    },500);
+                }
             }
         });
         holder.add2cart.setOnClickListener(new View.OnClickListener() {
@@ -64,9 +96,24 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
 
     }
 
+    public void startAnimation(View view,float from,float to){
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "rotation", from, to);
+        animator.setDuration(500);
+        animator.start();
+    }
+
+    /**
+     * 设置数据,并刷新
+     * @param data
+     */
+    public void setData(List<BaoBaoEntity> data){
+        this.mData=data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return 100;
+        return mData==null?0:mData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,7 +137,7 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
 
             ll_two_bt=(LinearLayout)itemView.findViewById(R.id.ll_two_bt);
             add2cart = ((TextView) itemView.findViewById(R.id.add2cart));
-            buy = ((TextView) itemView.findViewById(R.id.add2cart));
+            buy = ((TextView) itemView.findViewById(R.id.buy));
         }
     }
 }

@@ -242,7 +242,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
             callback.onSuccessResponse("");
         } else {
             callback.onErrorResponse("", null);
-            SDToast.showToast("未进行IM 注册 。");
+            SDToast.showToast("未进行IM 注册");
         }
     }
 

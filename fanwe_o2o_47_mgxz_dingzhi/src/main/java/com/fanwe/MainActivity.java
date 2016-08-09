@@ -185,12 +185,6 @@ public class MainActivity extends BaseActivity {
         });
         // 如果要加入guideActivity请注释这行代码,并打开initGuideResult();方法...=.=
         mViewManager.setSelectIndex(0, mTab0, true);
-
-        mTab0.setTitleGone();
-        mTab1.setTitleGone();
-        mTab2.setTitleGone();
-        mTab3.setTitleGone();
-        mTab4.setTitleGone();
     }
 
     public void setSelectIndex(int index, View view, boolean notify) {

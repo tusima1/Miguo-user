@@ -2,10 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="400dp"
-              android:layout_alignParentBottom="true"
-              android:background="#00000000"
+              android:layout_height="500dp"
               android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent">
+
+        <ImageView
+            android:id="@+id/iv_shop_cart"
+            android:layout_width="@dimen/dp24"
+            android:layout_height="@dimen/dp24"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/dp4"
+            android:scaleType="centerInside"
+            android:src="@drawable/app_icon"/>
+    </RelativeLayout>
 
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         android:id="@+id/viewpagertab"
@@ -34,7 +47,8 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/dark_80"
         />
 
 </LinearLayout>
