@@ -34,6 +34,9 @@ import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.SellerDetailInfo;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -52,6 +55,7 @@ import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
@@ -60,6 +64,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.test.MGTimer;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -92,15 +97,17 @@ import java.util.TimerTask;
 /**
  * 直播类(用户+主播)
  */
-public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
+public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
     private static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
-
+    /**
+     * 取商品和门店相关信息。
+     */
+    private SellerHttpHelper mSellerHttpHelper;
     private EnterLiveHelper mEnterRoomHelper;
     private ProfileInfoHelper mUserInfoHelper;
     private LiveHelper mLiveHelper;
     private LoginHelper mTLoginHelper;
-    private final int REQUEST_PHONE_PERMISSIONS = 0;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
     private static final int MINFRESHINTERVAL = 500;
@@ -148,6 +155,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MGTimer.showTime();
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
@@ -155,6 +163,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         registerReceiver();
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
+        mSellerHttpHelper = new SellerHttpHelper(this,this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
         // 用户资料类
@@ -254,7 +263,8 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         String userid = MySelfInfo.getInstance().getId();
         if (TextUtils.isEmpty(userid)) {
             UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-            if (userCurrentInfo != null && userCurrentInfo.getUserInfoNew() != null) {
+            //userCurrentInfo 一定不为null
+            if (userCurrentInfo.getUserInfoNew() != null) {
                 userid = userCurrentInfo.getUserInfoNew().getUser_id();
                 if (TextUtils.isEmpty(userid)) {
                     MySelfInfo.getInstance().setId(userid);
@@ -665,12 +675,17 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root);
         }
+        if(!TextUtils.isEmpty(CurLiveInfo.shopID)) {
+            getShopDetail(CurLiveInfo.shopID);
+        }
     }
+
 
 
     @Override
     protected void onResume() {
         super.onResume();
+        MGTimer.showTime();
         mLiveHelper.resume();
         QavsdkControl.getInstance().onResume();
     }
@@ -681,6 +696,18 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         mLiveHelper.pause();
         QavsdkControl.getInstance().onPause();
     }
+
+    /**
+     * 发起请求商店详情和商品列表的请求。
+     * @param shopId 门店ID
+     */
+    @Override
+    public void getShopDetail(String shopId) {
+
+        mSellerHttpHelper.getSellerDetail(shopId);
+
+    }
+
 
 
     /**
@@ -900,10 +927,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
         int roomId = CurLiveInfo.getRoomNum();
-        if (roomId != -1 && roomId != 0) {
-            mLiveHttphelper.enterRoom(roomId + "");
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
-        }
+
 
         //人数加1,可以设置到界面上
         if (mHostTopView != null) {
@@ -919,10 +943,7 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
         watchCount--;
         int roomId = CurLiveInfo.getRoomNum();
-        if (roomId != -1 && roomId != 0) {
-            mLiveHttphelper.exitRoom(roomId + "");
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
-        }
+
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
@@ -954,6 +975,12 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
         if (mUserBottomTool != null) {
             mUserBottomTool.clickRob();
         }
+    }
+
+    @Override
+    public void tokenInvalidateAndQuit() {
+        onBackPressed();
+
     }
 
 
@@ -1752,6 +1779,15 @@ public class LiveActivity extends BaseActivity implements EnterQuiteRoomView, Li
                     }
                     CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                 }
+                break;
+
+            case SellerConstants.LIVE_BIZ_SHOP:
+                if(datas!=null&&datas.size()>0){
+                    mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                    mUserBottomTool.notifyDataChange();
+                }
+                break;
+            default:
                 break;
         }
     }

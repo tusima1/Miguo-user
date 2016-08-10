@@ -6,6 +6,7 @@ import com.fanwe.o2o.miguo.R;
 public class Constant
 {
 
+	public static final String RESULT_SUCCESS="200";
 	public static final String DOWN_LOAD_DIR_NAME = "fanwe";
 
 	public static final String EARN_SUB_CHAR = "市";

@@ -7,6 +7,8 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -99,7 +101,11 @@ public class OkHttpUtils {
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
-                build.add(entry.getKey(), entry.getValue());
+                try {
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             } else {
                 build.add(entry.getKey(), "");
             }
@@ -144,7 +150,11 @@ public class OkHttpUtils {
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
-                build.add(entry.getKey(), entry.getValue());
+                try {
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             } else {
                 build.add(entry.getKey(), "");
             }
@@ -197,7 +207,15 @@ public class OkHttpUtils {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            paramStr.append(entry.getKey() + "=" + entry.getValue() + "&");
+            if(entry.getValue()==null){
+                paramStr.append(entry.getKey()+ "=" +""+"&");
+            }else {
+                try {
+                    paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         url = url + "?" + paramStr.substring(0, paramStr.length() - 1);
         //创建一个Request
@@ -237,7 +255,15 @@ public class OkHttpUtils {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            paramStr.append(entry.getKey() + "=" + entry.getValue() + "&");
+            if(entry.getValue()==null){
+                paramStr.append(entry.getKey()+ "=" +""+"&");
+            }else {
+                try {
+                    paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
 

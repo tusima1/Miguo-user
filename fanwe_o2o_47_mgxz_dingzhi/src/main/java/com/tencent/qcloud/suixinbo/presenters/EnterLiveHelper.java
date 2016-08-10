@@ -363,8 +363,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             OkHttpUtils.getInstance().get(null, params, new MgCallback() {
                 @Override
                 public void onSuccessResponse(String responseBody) {
-
-                    mStepInOutView.hostQuiteLive(LiveConstants.EXIT_ROOM,responseBody);
+                    if(mStepInOutView!=null) {
+                        mStepInOutView.hostQuiteLive(LiveConstants.EXIT_ROOM, responseBody);
+                    }
                 }
 
                 @Override
@@ -396,7 +397,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             uninitAudioService();
             //通知结束
             notifyServerLiveEnd();
-            mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            if (mStepInOutView != null) {
+                mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            }
 
         }
     }

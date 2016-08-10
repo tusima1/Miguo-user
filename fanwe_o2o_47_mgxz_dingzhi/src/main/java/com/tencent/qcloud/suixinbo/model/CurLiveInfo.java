@@ -25,6 +25,10 @@ public class CurLiveInfo {
     public static String hostAvator;
 
     public static int currentRequestCount = 0;
+    /**
+     * 门店ID.
+     */
+    public static String shopID;
 
     public static int getCurrentRequestCount() {
         return currentRequestCount;
@@ -145,5 +149,13 @@ public class CurLiveInfo {
 
     public static void setModelShop(ModelShopList modelShop) {
         CurLiveInfo.modelShop = modelShop;
+    }
+
+    public static String getShopID() {
+        return shopID;
+    }
+
+    public static void setShopID(String shopID) {
+        CurLiveInfo.shopID = shopID;
     }
 }
