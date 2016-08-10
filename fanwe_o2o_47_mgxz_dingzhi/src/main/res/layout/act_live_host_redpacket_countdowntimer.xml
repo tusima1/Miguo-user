@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="64dp"
+                android:layout_height="34dp"
+                android:background="@drawable/bg_live_host_redpacket_countdowntimer">
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp4"
+        android:layout_marginLeft="@dimen/dp25"
+        android:text="00:00"
+        android:textColor="#ea2b0c"
+        android:textSize="@dimen/sp12"/>
+
+</RelativeLayout>
