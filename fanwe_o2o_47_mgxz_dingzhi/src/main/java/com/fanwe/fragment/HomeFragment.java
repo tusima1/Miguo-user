@@ -445,6 +445,9 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                     mHomeFragmentLiveList.updateView(isRefresh, rooms);
                     mPtrsvAll.onRefreshComplete();
                     break;
+                case 2:
+                    mPtrsvAll.onRefreshComplete();
+                    break;
             }
         }
     };
@@ -461,49 +464,14 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         if (LiveConstants.LIVE_LIST.equals(method)) {
             //直播列表
             getLiveList((ArrayList<Room>) datas);
-            ////获取tencent相关的信息
-
-        } else if (LiveConstants.APPLY_ROOM.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelApplyRoom modelApplyRoom = (ModelApplyRoom) datas.get(0);
-                Log.d("onSuccess", modelApplyRoom.getRoom_id());
-            }
-        } else if (LiveConstants.AUDIENCE_COUNT.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelAudienceCount modelAudienceCount = (ModelAudienceCount) datas.get(0);
-                Log.d("onSuccess", modelAudienceCount.getCount());
-            }
-        } else if (LiveConstants.AUDIENCE_LIST.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelAudienceInfo modelAudienceList = (ModelAudienceInfo) datas.get(0);
-            }
-        } else if (LiveConstants.END_INFO.equals(method)) {
-            Log.d("onSuccess", "end success");
-        } else if (LiveConstants.ENTER_ROOM.equals(method)) {
-            Log.d("onSuccess", "enter success");
-        } else if (LiveConstants.EXIT_ROOM.equals(method)) {
-            Log.d("onSuccess", "exit success");
-        } else if (LiveConstants.GENERATE_SIGN.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelGenerateSign modelGenerateSign = (ModelGenerateSign) datas.get(0);
-                Log.d("onSuccess", modelGenerateSign.getUsersig());
-            }
-        } else if (LiveConstants.HOST_INFO.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelHostInfo modelHostInfo = (ModelHostInfo) datas.get(0);
-                Log.d("onSuccess", modelHostInfo.getId());
-            }
-        } else if (LiveConstants.HOST_TAGS.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelHostTags modelHostTags = (ModelHostTags) datas.get(0);
-                Log.d("onSuccess", modelHostTags.getDic_mean());
-            }
         }
-
     }
 
     @Override
     public void onFailue(String responseBody) {
-
+        //刷新页面
+        Message message = new Message();
+        message.what = 2;
+        mHandler.sendMessage(message);
     }
 }
