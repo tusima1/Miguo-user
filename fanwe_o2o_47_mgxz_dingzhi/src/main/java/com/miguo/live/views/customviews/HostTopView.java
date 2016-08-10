@@ -41,20 +41,20 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
 
     public HostTopView(Context context) {
         super(context);
-        init(context);
+        //init(context);
     }
 
     public HostTopView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+       // init(context);
     }
 
     public HostTopView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+       // init(context);
     }
 
-    private void init(Context context) {
+    public void init(Context context) {
         this.mContext = context;
         LayoutInflater.from(mContext).inflate(R.layout.act_live_host_top_view, this);
         mRel_layout = ((RelativeLayout) this.findViewById(R.id.rel_layout));//文字布局界面的容器
@@ -80,7 +80,6 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         LinearLayoutManager llmanager = new LinearLayoutManager(mContext);
         llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(llmanager);
-        mAdapter = new HeadTopAdapter(null, mContext);
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(2));
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -156,7 +155,6 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
      * @param mData
      */
     public void refreshData(List<ModelAudienceInfo> mData){
-
         mAdapter.setmData(mData);
     }
     /*设置地址*/
@@ -167,5 +165,13 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     /*设置关键字,格式还未定义*/
     public void setKeyWords() {
         //TODO keywords
+    }
+
+    public HeadTopAdapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public void setmAdapter(HeadTopAdapter mAdapter) {
+        this.mAdapter = mAdapter;
     }
 }

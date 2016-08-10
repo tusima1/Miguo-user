@@ -1,6 +1,7 @@
 package com.fanwe.network;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
@@ -96,13 +97,15 @@ public class OkHttpUtils {
         params.putAll(commonParams());
         //加密所有的参数
         params = encryptParams(params);
+        StringBuilder requestStr = new StringBuilder("");
 
         FormBody.Builder build = new FormBody.Builder();
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
+                    requestStr.append("key:"+entry.getKey()+"  value:"+entry.getValue());
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -117,7 +120,9 @@ public class OkHttpUtils {
                 .url(serverUrl)
                 .post(requestBodyPost)
                 .build();
-
+        if (ServerUrl.DEBUG) {
+            Log.e(TAG, "get:"+requestStr.toString());
+        }
 
         client.newCall(requestPost).enqueue(mCallback);
     }
@@ -159,7 +164,9 @@ public class OkHttpUtils {
                 build.add(entry.getKey(), "");
             }
         }
-
+        if (ServerUrl.DEBUG) {
+            Log.e(TAG, "get:"+build.toString());
+        }
         RequestBody requestBodyPut = build.build();
         Request requestPut = new Request.Builder()
                 .url(serverUrl)
@@ -313,7 +320,9 @@ public class OkHttpUtils {
             }
         }
         serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
-
+        if (ServerUrl.DEBUG) {
+            Log.e(TAG, "get:"+serverUrl);
+        }
         //创建一个Request
         final Request request = new Request.Builder()
                 .url(serverUrl)

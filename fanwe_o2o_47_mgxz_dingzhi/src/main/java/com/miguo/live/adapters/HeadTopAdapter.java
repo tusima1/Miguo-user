@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -63,10 +64,7 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
      */
     public void setmData(List<ModelAudienceInfo> mData) {
         //数据不一致才刷新。
-        if(this.mData!=mData) {
             this.mData = mData;
-            notifyDataSetChanged();
-        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
