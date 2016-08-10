@@ -102,7 +102,7 @@ public class OkHttpUtils {
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -151,7 +151,7 @@ public class OkHttpUtils {
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -164,6 +164,53 @@ public class OkHttpUtils {
         Request requestPut = new Request.Builder()
                 .url(serverUrl)
                 .put(requestBodyPut)
+                .build();
+
+        client.newCall(requestPut).enqueue(mCallback);
+    }
+
+
+    /**
+     * 异步delete提交
+     *
+     * @param url
+     * @param params
+     * @param mCallback
+     */
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
+        String serverUrl = "";
+        if (ServerUrl.DEBUG) {
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
+        } else {
+            serverUrl = ServerUrl.SERVER_API_URL_MID;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
+        }
+
+        //添加公共参数
+        params.putAll(commonParams());
+        //加密所有的参数
+        params = encryptParams(params);
+
+        FormBody.Builder build = new FormBody.Builder();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                try {
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                build.add(entry.getKey(), "");
+            }
+        }
+
+        RequestBody requestBodyPut = build.build();
+        Request requestPut = new Request.Builder()
+                .url(serverUrl)
+                .delete(requestBodyPut)
                 .build();
 
         client.newCall(requestPut).enqueue(mCallback);
@@ -207,9 +254,9 @@ public class OkHttpUtils {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            if(entry.getValue()==null){
-                paramStr.append(entry.getKey()+ "=" +""+"&");
-            }else {
+            if (entry.getValue() == null) {
+                paramStr.append(entry.getKey() + "=" + "" + "&");
+            } else {
                 try {
                     paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
                 } catch (UnsupportedEncodingException e) {
@@ -255,9 +302,9 @@ public class OkHttpUtils {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            if(entry.getValue()==null){
-                paramStr.append(entry.getKey()+ "=" +""+"&");
-            }else {
+            if (entry.getValue() == null) {
+                paramStr.append(entry.getKey() + "=" + "" + "&");
+            } else {
                 try {
                     paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
                 } catch (UnsupportedEncodingException e) {
@@ -326,7 +373,7 @@ public class OkHttpUtils {
         while (sgIt.hasNext()) {
             String key = (String) sgIt.next();
             String value = (String) treeMap.get(key);
-            if(value==null){
+            if (value == null) {
                 value = "";
             }
             if (key.equals("sign")) {
@@ -338,7 +385,7 @@ public class OkHttpUtils {
                 signString = signString + "|" + key + ":" + value;
             }
         }
-//		System.err.println(signString.toLowerCase());
+//        System.err.println(signString.toLowerCase());
         String checkSignString = "";
         switch (ENCRYPT_TYPE) {
             case "MD5":

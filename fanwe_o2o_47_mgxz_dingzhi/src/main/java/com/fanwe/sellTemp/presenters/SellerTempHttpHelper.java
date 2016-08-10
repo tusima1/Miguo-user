@@ -118,6 +118,60 @@ public class SellerTempHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 商家删除某一批次的红包
+     *
+     * @param shopId
+     * @param redKey
+     */
+    public void deleteRedPacket(String shopId, String redKey) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("id", shopId);
+        params.put("red_packet_batch_number", redKey);
+        params.put("method", SellerTempConstants.CREATE_RED_PACKET);
+
+        OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerTempConstants.DELETE_CREATE_RED_PACKET, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 商家分配指定批次的红包给旗下的代言人（先平均后随机）
+     *
+     * @param shopId
+     * @param redKey
+     */
+    public void distributionRedPacket(String shopId, String redKey) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("id", shopId);
+        params.put("red_packet_batch_number", redKey);
+        params.put("method", SellerTempConstants.DISTRIBUTION_RED_PACKET);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerTempConstants.DISTRIBUTION_RED_PACKET, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {

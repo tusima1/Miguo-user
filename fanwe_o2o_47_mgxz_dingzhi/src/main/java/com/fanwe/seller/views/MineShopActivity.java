@@ -35,6 +35,15 @@ public class MineShopActivity extends FragmentActivity {
         setListener();
     }
 
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.iv_arrow_left_bar_mine_shop:
+                finish();
+                break;
+        }
+    }
+
     private void setListener() {
         tab.setCustomTabView(new SmartTabLayout.TabProvider() {
             @Override
