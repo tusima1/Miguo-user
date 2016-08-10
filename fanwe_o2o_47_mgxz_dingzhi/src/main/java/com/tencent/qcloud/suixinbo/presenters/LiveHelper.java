@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
+import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -978,6 +980,21 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                super.onSuccessResponse(responseBody);
+                Root root = JSON.parseObject(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                String token = root.getToken();
+                if("200".equals(statusCode)){
+
+                }else if("320".equals(statusCode)){
+                    SDToast.showToast("账户已失效");
+                   mLiveView.tokenInvalidateAndQuit();
+
+                }
             }
         });
     }

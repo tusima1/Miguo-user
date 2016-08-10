@@ -396,7 +396,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             uninitAudioService();
             //通知结束
             notifyServerLiveEnd();
-            mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            if (mStepInOutView != null) {
+                mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            }
 
         }
     }

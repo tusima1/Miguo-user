@@ -85,9 +85,8 @@ HomeFragmentLiveList extends BaseFragment {
                          avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
                     }
                 }
-                if(TextUtils.isEmpty(avatar)||"null".equals(avatar.trim())){
-                    MySelfInfo.getInstance().setAvatar(avatar);
-                }
+                MySelfInfo.getInstance().setAvatar(avatar);
+
                 MySelfInfo.getInstance().setNickName(nickName);
                 MySelfInfo.getInstance().setJoinRoomWay(false);
                 CurLiveInfo.setHostID(host.getHost_user_id());
@@ -97,10 +96,12 @@ HomeFragmentLiveList extends BaseFragment {
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
                 CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAdmires(item.getAdmireCount());
 //                CurLiveInfo.setAddress(item.getLbs().getAddress());
+                if(room.getLbs()!=null&&!TextUtils.isEmpty(room.getLbs().getShop_id()))
+                {
+                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
+                }
                 CurLiveInfo.setAdmires(1);
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
                 startActivity(intent);
             }
         });

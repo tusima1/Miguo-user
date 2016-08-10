@@ -156,6 +156,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
      * @param mData
      */
     public void refreshData(List<ModelAudienceInfo> mData){
+
         mAdapter.setmData(mData);
     }
     /*设置地址*/

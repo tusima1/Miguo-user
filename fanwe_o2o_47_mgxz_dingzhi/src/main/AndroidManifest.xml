@@ -132,7 +132,12 @@
         </activity>
         -->
 
-
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <!-- 主界面 -->
         <activity
             android:name="com.fanwe.MainActivity"
@@ -844,12 +849,6 @@
             android:windowSoftInputMode="stateVisible|adjustResize"></activity>
 
         <!-- 微信回调activity -->
-        <activity
-            android:name=".WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- QQ登录start -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

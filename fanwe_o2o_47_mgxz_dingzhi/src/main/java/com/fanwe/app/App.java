@@ -278,7 +278,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         if (this.mUserCurrentInfo != null) {
 
             if (mUserCurrentInfo.getUserSign() != null) {
-                useSign = mUserCurrentInfo.getToken();
+                useSign = mUserCurrentInfo.getUserSign();
             }
         }
         return useSign;

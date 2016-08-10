@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerDetailInfo;
 import com.miguo.live.adapters.LiveViewPagerItemAdapter;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -32,8 +33,11 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     private Activity mActivity;
     private int prePosition = 0;//之前一个位置
     private PopupWindow popupWindow;
-    private ImageView mShopCart;
-
+    LiveViewPagerItemAdapter adapter1;
+    /**
+     * 门店详情。
+     */
+    private SellerDetailInfo mSellerDetailInfo;
     public LiveUserPopHelper(Activity activity,View rootView) {
         this.mActivity=activity;
         this.rootView=rootView;
@@ -84,9 +88,10 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         pagerItems.add(item3);
         pagerItems.add(item4);
 
-
-        LiveViewPagerItemAdapter adapter1 = new LiveViewPagerItemAdapter(pagerItems);
-
+        adapter1 = new LiveViewPagerItemAdapter(pagerItems);
+        if(mSellerDetailInfo!=null){
+            adapter1.setmSellerDetailInfo(mSellerDetailInfo);
+        }
 
         final ViewPager viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter1);
@@ -104,7 +109,6 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
                 switch (position) {
                     case 0:
                         textView.setText("镇店之宝");
-
                         break;
                     case 1:
                         textView.setText("主场");
@@ -165,7 +169,15 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     public void onDestroy() {
 
     }
-
+ public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
+        this.mSellerDetailInfo = mSellerDetailInfo;
+    }
+    public void refreshSellerDetailInfo(){
+        if(adapter1!=null) {
+            adapter1.setmSellerDetailInfo(mSellerDetailInfo);
+            adapter1.refreshSellerDetailInfo();
+        }
+    }
     @Override
     public void onClick(View v) {
         if (v==mShopCart){

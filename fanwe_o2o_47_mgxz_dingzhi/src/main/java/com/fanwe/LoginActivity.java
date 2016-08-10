@@ -112,8 +112,8 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	 * 密码。
 	 */
 	String nick="";
-	@ViewInject(R.id.testViews)
-	EditText testViews;
+//	@ViewInject(R.id.testViews)
+//	EditText testViews;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -284,7 +284,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			str.append(entry.getKey()+"--->"+entry.getValue()+"\n");
 		}
 		Log.d("11",str.toString());
-		testViews.setText(str.toString());
+		//testViews.setText(str.toString());
 
 	}
 	/**
@@ -296,30 +296,40 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		su.login(platform, new ILoginCallback() {
 			@Override
 			public void onSuccess(Map<String, String> data) {
-				printData(data);
-//				if(platform .equals(SHARE_MEDIA.WEIXIN)){
-//					platformType = "2";
-//					openId = data.get("openid");
-//					nick = data.get("nickname");
-//                    icon=data.get("headimgurl");
-//				}else if(platform .equals(SHARE_MEDIA.QQ)){
-//					platformType = "1";
-//					openId = data.get("openid");
-//					icon = data.get("profile_image_url");
-//					nick = data.get("screen_name");
-//
-//				}else if(platform .equals(SHARE_MEDIA.SINA)){
-//					platformType = "3";
-//					String returnData = (String)data.get("result");
-//					Gson gson = new Gson();
-//					HashMap<String,Object> maps = gson.fromJson(returnData,HashMap.class);
-//					openId = maps.get("id").toString();
-//				}
-//				if(TextUtils.isEmpty(openId)){
-//					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-//					return;
-//				}
-//			 thirdLogin(openId,platformType,icon,nick);
+				//printData(data);
+				if(platform .equals(SHARE_MEDIA.WEIXIN)){
+					platformType = "2";
+					openId = data.get("unionid");
+					nick = data.get("nickname");
+                    icon=data.get("headimgurl");
+				}else if(platform .equals(SHARE_MEDIA.QQ)){
+					platformType = "1";
+					openId = data.get("openid");
+					icon = data.get("profile_image_url");
+					nick = data.get("screen_name");
+
+				}else if(platform .equals(SHARE_MEDIA.SINA)){
+					platformType = "3";
+					String returnData = (String)data.get("result");
+					Gson gson = new Gson();
+					HashMap<String,Object> maps = gson.fromJson(returnData,HashMap.class);
+					if(maps.get("id")!=null) {
+						openId = maps.get("id").toString();
+					}
+					if(maps.get("profile_image_url")!=null) {
+						icon = maps.get("profile_image_url").toString();
+					}
+					if(maps.get("screen_name")!=null) {
+						nick = maps.get("screen_name").toString();
+					}
+
+				}
+				if(TextUtils.isEmpty(openId)){
+					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+					return;
+				}
+			//	SDToast.showToast("openid:"+openId+" icon:"+icon+" nick:"+nick+"",Toast.LENGTH_LONG);
+			  thirdLogin(openId,platformType,icon,nick);
 			}
 
 			@Override
@@ -360,11 +370,9 @@ public class LoginActivity extends BaseActivity implements CallbackView
 			intent.putExtra(UserConstants.THIRD_PLATFORM, type);
 			intent.putExtra(UserConstants.THIRD_ICON, icon);
 			intent.putExtra(UserConstants.THIRD_NICK, nick);
-
-		}else{
-			startActivity(intent);
-			finish();
 		}
+		startActivity(intent);
+		finish();
 
 	}
 
@@ -403,13 +411,9 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		if(!TextUtils.isEmpty(icon)) {
 			params.put("icon", icon);
 		}
-		if(!TextUtils.isEmpty(nick)) {
-			try {
-				params.put("nick", URLEncoder.encode(nick,"UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
+		params.put("nick", nick);
+
+
 
 		params.put("method",UserConstants.TRHID_LOGIN_URL);
 		OkHttpUtils.getInstance().get(null, params, new MgCallback() {

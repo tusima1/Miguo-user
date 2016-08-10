@@ -68,7 +68,7 @@
             android:layout_alignTop="@id/location_ic_location"
             android:layout_marginLeft="@dimen/dp5"
             android:layout_toRightOf="@id/location_ic_location"
-            android:text="我家就在黄图高坡啊"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/sp12"/>
     </LinearLayout>

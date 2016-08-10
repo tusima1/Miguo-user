@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
@@ -38,6 +39,10 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     private View rootView;//父布局,pop定位用
     private LiveUserPopHelper popHelper;
     private UserRobRedPacketDialogHelper redPacketDialogHelper;
+    /**
+     * 门店详情。
+     */
+    private SellerDetailInfo mSellerDetailInfo;
 
     public UserBottomToolView(Context context) {
         this(context, null);
@@ -149,10 +154,11 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 //        MGToast.showToast("点击了商品(宝贝)");
         if (mAct != null && rootView != null && popHelper == null) {
             popHelper = new LiveUserPopHelper(mAct, rootView);
+            if(mSellerDetailInfo!=null) {
+                popHelper.setmSellerDetailInfo(mSellerDetailInfo);
+            }
         }
         popHelper.show();
-
-
     }
 
     /**
@@ -170,6 +176,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             return;
         }
         LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mAct);
+
         inputDialogHelper.show();
     }
 
@@ -185,5 +192,22 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             return true;
         }
         return false;
+    }
+
+    public SellerDetailInfo getmSellerDetailInfo() {
+        return mSellerDetailInfo;
+    }
+
+    public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
+        this.mSellerDetailInfo = mSellerDetailInfo;
+        if(popHelper!=null){
+            popHelper.setmSellerDetailInfo(this.mSellerDetailInfo );
+        }
+    }
+    public void notifyDataChange(){
+        if(popHelper!=null){
+            popHelper.setmSellerDetailInfo(this.mSellerDetailInfo );
+            popHelper.refreshSellerDetailInfo();
+        }
     }
 }
