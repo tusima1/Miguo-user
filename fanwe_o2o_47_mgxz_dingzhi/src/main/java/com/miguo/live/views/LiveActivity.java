@@ -39,6 +39,7 @@ import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
+import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
@@ -151,6 +152,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private TencentHttpHelper tencentHttpHelper;
     private LiveHttpHelper mLiveHttphelper;
     private HostRedPacketTimeView mHostRedPacketCountDownView;
+
+    /**
+     * 头部头像adapter.
+     */
+    private HeadTopAdapter mHeadTopAdapter;
 
 
     @Override
@@ -507,6 +513,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //顶部view
 
         //主播-->加载的view
+        mHeadTopAdapter = new HeadTopAdapter(null,this);
         if (LiveUtil.checkIsHost()) {
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
@@ -536,6 +543,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserBottomTool.setVisibility(View.GONE);
             //host的topview
             mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
+            mHostTopView.setmAdapter(mHeadTopAdapter);
+            mHostTopView.init(this);
             mHostTopView.setVisibility(View.VISIBLE);
             mHostTopView.setNeed(this, mCommonHelper);
             mHostTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
@@ -628,6 +637,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         } else {//普通用户加载的view
             initInviteDialog();
             mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
+            mUserHeadTopView.setmAdapter(mHeadTopAdapter);
+            mUserHeadTopView.init();
+
             mUserHeadTopView.setVisibility(View.VISIBLE);
             //普通用户退出
 //            userExitDialogHelper = new LiveUserExitDialogHelper(this);
@@ -657,6 +669,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mArrayListChatEntity = new ArrayList<LiveChatEntity>();
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
+
+
 
         //开启后台业务服务器请求管理类
         mLiveHttphelper = new LiveHttpHelper(this, this);
@@ -1066,7 +1080,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     }
 
-
     /**
      * 加载视频数据
      *
@@ -1097,14 +1110,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     bFirstRender = false;
                 }
             }
-            mAudienceTimer = new Timer(true);
-            mGetAudienceTask = new GetAudienceTask();
-            mAudienceTimer.schedule(mGetAudienceTask, 1000, 5* 1000);
+
         } else {
 
 //            QavsdkControl.getInstance().addRemoteVideoMembers(id);
             QavsdkControl.getInstance().setRemoteHasVideo(true, id, AVView.VIDEO_SRC_TYPE_CAMERA);
         }
+        mAudienceTimer = new Timer(true);
+        mGetAudienceTask = new GetAudienceTask();
+        mAudienceTimer.schedule(mGetAudienceTask, 1000, 30* 1000);
 
     }
 
@@ -1727,7 +1741,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                         mHostTopView.refreshData(datas);
                     } else {
                         mUserHeadTopView.refreshData(datas);
+
                     }
+                    mHeadTopAdapter.notifyDataSetChanged();
                 }
 
                 break;
