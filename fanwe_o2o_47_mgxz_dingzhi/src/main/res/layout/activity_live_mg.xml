@@ -185,6 +185,14 @@
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp200"/>
 
+        <com.miguo.live.views.customviews.HostRedPacketTimeView
+            android:id="@+id/host_red_countdown"
+            android:layout_gravity="left|top"
+            android:layout_width="@dimen/dp64"
+            android:layout_height="@dimen/dp34"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginTop="160dp"/>
+
         <!--飘心-->
         <RelativeLayout
             android:layout_width="match_parent"

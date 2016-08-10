@@ -59,6 +59,7 @@ import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
+import com.miguo.live.views.customviews.HostRedPacketTimeView;
 import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
@@ -150,6 +151,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private HostMeiToolView mHostBottomMeiView2;
     private TencentHttpHelper tencentHttpHelper;
     private LiveHttpHelper mLiveHttphelper;
+    private HostRedPacketTimeView mHostRedPacketCountDownView;
 
 
     @Override
@@ -541,6 +543,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
                 mHostTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             }
+
+            //红包倒计时小view
+            mHostRedPacketCountDownView = ((HostRedPacketTimeView) findViewById(R.id
+                    .host_red_countdown));
+            mHostRedPacketCountDownView.setVisibility(View.VISIBLE);
 //            mRecordBall = (ImageView) findViewById(R.id.record_ball);
 //            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
 //            BtnWhite = (TextView) findViewById(R.id.white_btn);
