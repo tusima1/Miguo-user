@@ -30,6 +30,7 @@ import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.SendRedPacketDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,8 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     private Activity mActivity;
     private LiveSwitchScreenListener mScreenListener;
     private LiveHttpHelper liveHttpHelper;
+    private LiveView mLiveView;
+    private boolean clickable =true;
 
     public HostBottomToolView(Context context) {
         super(context);
@@ -181,6 +184,10 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击红包
      */
     private void clickRedpacket() {
+        if(!clickable){
+            SDToast.showToast("红包发的太快了，请过会再发。");
+            return;
+        }
         if (liveHttpHelper == null) {
             liveHttpHelper = new LiveHttpHelper(mContext, HostBottomToolView.this);
         }
@@ -289,6 +296,10 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                 if (mLiveHelper != null) {
                     mLiveHelper.sendHostSendRedPacketMessage(id, duration);
                 }
+                if(mLiveView!=null){
+                 mLiveView.sendHostRedPacket(id,duration);
+                }
+
                 //发送自定义消息 。
                 SDToast.showToast("发送红包成功");
             }else{
@@ -370,4 +381,21 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         mHandler.sendMessage(message);
     }
 
+    public LiveView getmLiveView() {
+        return mLiveView;
+    }
+
+    public void setmLiveView(LiveView mLiveView) {
+        this.mLiveView = mLiveView;
+    }
+
+    @Override
+    public boolean isClickable() {
+        return clickable;
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
 }

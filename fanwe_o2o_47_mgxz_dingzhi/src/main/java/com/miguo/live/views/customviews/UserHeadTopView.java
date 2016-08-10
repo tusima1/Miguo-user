@@ -125,7 +125,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
         //设置间距
         mMemberList.addItemDecoration(new SpaceItemDecoration(2));
-
+        mMemberList.setHasFixedSize(true);
         mMemberList.setAdapter(mAdapter);
     }
 
@@ -215,5 +215,6 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     public void setmAdapter(HeadTopAdapter mAdapter) {
         this.mAdapter = mAdapter;
+
     }
 }

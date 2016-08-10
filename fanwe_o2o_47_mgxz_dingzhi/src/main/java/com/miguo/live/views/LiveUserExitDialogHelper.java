@@ -19,6 +19,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.MaxHeightGridView;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +43,10 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private MaxHeightGridView gridview;
     private Dialog dialog;
     private LiveHttpHelper liveHttpHelper;
+    private LiveView mLiveView;
 
-    public LiveUserExitDialogHelper(Activity activity) {
+    public LiveUserExitDialogHelper(Activity activity,LiveView liveView) {
+        this.mLiveView = liveView;
         this.mActivity = activity;
 
         createDialog();
@@ -149,8 +152,10 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         int id = v.getId();
         if (id == R.id.iv_close) {
             dismiss();
-            ((LiveActivity) mActivity).userExit();
-            mActivity.finish();
+            if(mLiveView!=null) {
+               mLiveView.userExit();
+            }
+
         } else if (id == R.id.tv_youhuiquan) {
             clickYouHui();
         } else if (id == R.id.tv_follow) {

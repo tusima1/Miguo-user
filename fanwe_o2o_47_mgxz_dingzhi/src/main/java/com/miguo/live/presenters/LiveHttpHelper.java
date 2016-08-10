@@ -585,7 +585,6 @@ public class LiveHttpHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("id", shop_id);
-        params.put("spokesman_id", host_id);
         params.put("method", LiveConstants.HAND_OUT_RED_PACKET);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
