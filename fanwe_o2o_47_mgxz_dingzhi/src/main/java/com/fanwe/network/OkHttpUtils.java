@@ -326,6 +326,9 @@ public class OkHttpUtils {
         while (sgIt.hasNext()) {
             String key = (String) sgIt.next();
             String value = (String) treeMap.get(key);
+            if(value==null){
+                value = "";
+            }
             if (key.equals("sign")) {
                 continue;
             }

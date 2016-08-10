@@ -324,11 +324,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 }
                 SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
             }
-
             @Override
             public void onSuccess(TIMMessage timMessage) {
-                Log.d(TAG,"红包发送成功!");
-                SDToast.showToast("红包发送成功!");
+//                Log.d(TAG,"红包发送成功!");
+//                SDToast.showToast("红包发送成功!");
             }
         });
 

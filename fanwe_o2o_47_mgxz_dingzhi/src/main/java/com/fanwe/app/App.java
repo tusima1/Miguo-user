@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.fanwe.BaseActivity;
