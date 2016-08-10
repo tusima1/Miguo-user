@@ -1,6 +1,7 @@
 package com.miguo.live.views.customviews;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -13,6 +14,11 @@ import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
+import com.miguo.live.model.pagermodel.BaoBaoEntity;
+import com.miguo.utils.DisplayUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -62,9 +68,30 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycler.setLayoutManager(linearLayoutManager);
+        final int offset = DisplayUtil.dp2px(mContext, 2);
+        mRecycler.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView
+                    .State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.top=offset;
+                outRect.bottom=offset;
+            }
+        });
 //        mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        List<BaoBaoEntity> data=new ArrayList<BaoBaoEntity>();
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        data.add(new BaoBaoEntity());
+        mAdapter.setData(data);
     }
 
     @Override

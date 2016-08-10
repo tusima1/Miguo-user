@@ -112,4 +112,17 @@
     <style name="MySeekBar" parent="android:Widget.Material.SeekBar">
         <item name="android:color">@color/orange</item>
     </style>
+
+    <!--popup scale 动画-->
+    <style name="pop_scale">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_enter_scale</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_exit_scale</item>
+    </style>
+
+    <!--popup translate 动画-->
+    <style name="pop_translate">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_enter_translate</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_exit_translate</item>
+    </style>
+
 </resources>

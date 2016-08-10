@@ -17,6 +17,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.miguo.live.adapters.LiveViewPagerItemAdapter;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
@@ -26,7 +27,7 @@ import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
  * Created by didik on 2016/8/4.
  * 商品等viewpager界面
  */
-public class LiveUserPopHelper implements IHelper {
+public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     private View rootView;
     private ViewPager.OnPageChangeListener listener;
     private Activity mActivity;
@@ -46,14 +47,17 @@ public class LiveUserPopHelper implements IHelper {
 
     private void createPopWindow() {
         View contentView = LayoutInflater.from(mActivity).inflate(R.layout.act_live_pop_viewpager, null);
+        mShopCart = ((ImageView) contentView.findViewById(R.id.iv_shop_cart));
+        mShopCart.setOnClickListener(this);
         initContentView(contentView);
         //设置窗体的宽高属性
-        int height = DisplayUtil.dp2px(mActivity, 300);
+        int height = DisplayUtil.dp2px(mActivity, 350);
         popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams
                 .MATCH_PARENT, height);
         //设置可以点击
         popupWindow.setTouchable(true);
         //设置背景
+        popupWindow.setAnimationStyle(R.style.pop_translate);
 //        ColorDrawable background=new ColorDrawable(0x4F000000);
         BitmapDrawable background=new BitmapDrawable();
         //设置背景+
@@ -78,15 +82,11 @@ public class LiveUserPopHelper implements IHelper {
         ViewPagerItem item2 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
         ViewPagerItem item3 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
         ViewPagerItem item4 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
-        ViewPagerItem item5 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
-        ViewPagerItem item6 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
 
         pagerItems.add(item1);
         pagerItems.add(item2);
         pagerItems.add(item3);
         pagerItems.add(item4);
-        pagerItems.add(item5);
-        pagerItems.add(item6);
 
         adapter1 = new LiveViewPagerItemAdapter(pagerItems);
         if(mSellerDetailInfo!=null){
@@ -117,13 +117,7 @@ public class LiveUserPopHelper implements IHelper {
                         textView.setText("红包");
                         break;
                     case 3:
-                        textView.setText(4444 + "");
-                        break;
-                    case 4:
-                        textView.setText(5555 + "");
-                        break;
-                    case 5:
-                        textView.setText(6666 + "");
+                        textView.setText("服务");
                         break;
                 }
                 return inflate;
@@ -140,17 +134,19 @@ public class LiveUserPopHelper implements IHelper {
             @Override
             public void onPageSelected(int position) {
                 if (position != prePosition) {
+                    //不可见
                     TextView tv = (TextView) viewPagerTab.getTabAt(prePosition).findViewById(R.id
                             .tv_show);
                     ImageView iv = (ImageView) viewPagerTab.getTabAt(prePosition).findViewById(R
                             .id.iv_show);
-                    tv.setTextColor(Color.WHITE);
+                    tv.setTextColor(Color.parseColor("#989898"));
                     iv.setVisibility(View.GONE);
                 }
+                //可见
                 TextView tv = (TextView) viewPagerTab.getTabAt(position).findViewById(R.id.tv_show);
                 ImageView iv = (ImageView) viewPagerTab.getTabAt(position).findViewById(R.id
                         .iv_show);
-                tv.setTextColor(Color.RED);
+                tv.setTextColor(Color.WHITE);
                 iv.setVisibility(View.VISIBLE);
                 prePosition = position;
             }
@@ -173,7 +169,7 @@ public class LiveUserPopHelper implements IHelper {
     public void onDestroy() {
 
     }
-    public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
+ public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
         this.mSellerDetailInfo = mSellerDetailInfo;
     }
     public void refreshSellerDetailInfo(){
@@ -181,5 +177,18 @@ public class LiveUserPopHelper implements IHelper {
             adapter1.setmSellerDetailInfo(mSellerDetailInfo);
             adapter1.refreshSellerDetailInfo();
         }
+    }
+    @Override
+    public void onClick(View v) {
+        if (v==mShopCart){
+            clickShopCart();
+        }
+    }
+
+    /**
+     * 点击了购物车
+     */
+    private void clickShopCart() {
+        MGToast.showToast("购物车");
     }
 }

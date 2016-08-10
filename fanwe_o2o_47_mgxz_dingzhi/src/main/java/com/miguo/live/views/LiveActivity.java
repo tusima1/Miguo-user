@@ -64,6 +64,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.test.MGTimer;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -107,7 +108,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private ProfileInfoHelper mUserInfoHelper;
     private LiveHelper mLiveHelper;
     private LoginHelper mTLoginHelper;
-    private final int REQUEST_PHONE_PERMISSIONS = 0;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
     private static final int MINFRESHINTERVAL = 500;
@@ -155,6 +155,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MGTimer.showTime();
         requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
@@ -262,7 +263,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         String userid = MySelfInfo.getInstance().getId();
         if (TextUtils.isEmpty(userid)) {
             UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-            if (userCurrentInfo != null && userCurrentInfo.getUserInfoNew() != null) {
+            //userCurrentInfo 一定不为null
+            if (userCurrentInfo.getUserInfoNew() != null) {
                 userid = userCurrentInfo.getUserInfoNew().getUser_id();
                 if (TextUtils.isEmpty(userid)) {
                     MySelfInfo.getInstance().setId(userid);
@@ -683,6 +685,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     protected void onResume() {
         super.onResume();
+        MGTimer.showTime();
         mLiveHelper.resume();
         QavsdkControl.getInstance().onResume();
     }
