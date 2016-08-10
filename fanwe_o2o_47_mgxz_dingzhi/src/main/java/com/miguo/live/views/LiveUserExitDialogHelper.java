@@ -19,6 +19,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.MaxHeightGridView;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

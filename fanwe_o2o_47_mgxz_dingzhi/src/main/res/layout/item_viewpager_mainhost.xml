@@ -55,7 +55,7 @@
                         android:minHeight="15dp"
                         android:rating="3"
                         android:stepSize="0.5"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:isIndicator="false"
                         />
 

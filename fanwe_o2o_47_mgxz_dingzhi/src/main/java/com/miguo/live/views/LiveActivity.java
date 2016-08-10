@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -38,6 +39,7 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.utils.SDDateUtil;
 import com.google.gson.Gson;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
@@ -118,14 +120,22 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private ArrayList<LiveChatEntity> mTmpChatList = new ArrayList<LiveChatEntity>();//缓冲队列
     private TimerTask mTimerTask = null;
     private static final int REFRESH_LISTVIEW = 5;
+    /**
+     * 更新红包上面的时间 。
+     */
+    private static final int REFRESH_RED_TIME= 20;
     private Dialog mMemberDg, inviteDg;
     private HeartLayout mHeartLayout;
     private HeartBeatTask mHeartBeatTask;//心跳
     private GetAudienceTask mGetAudienceTask;//取观众 列表。
+    /**
+     * 红包上时间显示
+     */
+    private RedPacketTask mRedPacketTask;
 
     private LinearLayout mHostLeaveLayout;
     private long mSecond = 0;
-    private Timer mHearBeatTimer, mVideoTimer,mAudienceTimer;
+    private Timer mHearBeatTimer, mVideoTimer,mAudienceTimer,mRedPacketTimer;
     private VideoTimerTask mVideoTimerTask;//计时器
     private ObjectAnimator mObjAnim;
     private ImageView mRecordBall;
@@ -351,6 +361,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     cancelInviteView(id);
                     mLiveHelper.sendGroupMessage(Constants.AVIMCMD_MULTI_HOST_CANCELINVITE, id);
                     break;
+                case REFRESH_RED_TIME:
+                    Long timeLong = (Long) msg.obj;
+                    String timeStr = SDDateUtil.milToStringlong(timeLong);
+                    mHostRedPacketCountDownView.setTime(timeStr);
+                    break;
+
             }
             return false;
         }
@@ -825,7 +841,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-            if (backDialog.isShowing() == false) {
+            if (backDialog!=null&&!backDialog.isShowing()) {
                 backDialog.show();
             }
         }
@@ -1015,6 +1031,60 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             if (mUserBottomTool != null) {
                 mUserBottomTool.clickRob();
             }
+        }
+    }
+
+
+
+    @Override
+    public void sendHostRedPacket(String id, String duration) {
+        if(!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)){
+            //启动红包倒计时。
+            Integer values = Integer.valueOf(duration)+10*1000;
+
+            CountDownTimer robLiftTimer = new CountDownTimer(values, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                    Message msg = Message.obtain();
+                    msg.what = REFRESH_RED_TIME;
+                    float v = millisUntilFinished * 1.0f / 1000f;
+                    int round = Math.round(v);
+                    msg.arg1 = round;
+                    Log.e("live", millisUntilFinished + "--" + round + "==" + v);
+                    mHandler.sendMessage(msg);
+                    if (round == 2) {
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Message msg = Message.obtain();
+                                msg.what = REFRESH_RED_TIME;
+                                msg.arg1=1;
+                                mHandler.sendMessage(msg);
+                            }
+                        }, 1000);
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    mHostRedPacketCountDownView.setTime("00:00");
+                    mHostBottomToolView1.setClickable(true);
+                }
+            };
+            robLiftTimer.start();
+            mHostBottomToolView1.setClickable(false);
+        }
+    }
+
+
+    /**
+     * 取观众 列表
+     */
+    private class RedPacketTask extends TimerTask {
+        @Override
+        public void run() {
+            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
     }
 
@@ -1745,7 +1815,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     }
                     mHeadTopAdapter.notifyDataSetChanged();
                 }
-
                 break;
             case LiveConstants.END_INFO:
                 //直播结束

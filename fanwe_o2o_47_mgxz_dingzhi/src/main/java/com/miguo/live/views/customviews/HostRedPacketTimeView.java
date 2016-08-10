@@ -37,7 +37,6 @@ public class HostRedPacketTimeView extends RelativeLayout {
         this.mContext = context;
         LayoutInflater.from(mContext).inflate(R.layout.act_live_host_redpacket_countdowntimer,
                 this);
-
         //init view
         mTv_CountTime = ((TextView) findViewById(R.id.tv_time));
 

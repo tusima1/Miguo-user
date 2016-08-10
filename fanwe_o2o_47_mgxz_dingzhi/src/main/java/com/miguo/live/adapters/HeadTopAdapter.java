@@ -65,6 +65,7 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
     public void setmData(List<ModelAudienceInfo> mData) {
         //数据不一致才刷新。
             this.mData = mData;
+         notifyItemInserted(getItemCount());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

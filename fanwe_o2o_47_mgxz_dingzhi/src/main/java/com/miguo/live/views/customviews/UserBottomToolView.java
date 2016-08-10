@@ -154,9 +154,9 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 //        MGToast.showToast("点击了商品(宝贝)");
         if (mAct != null && rootView != null && popHelper == null) {
             popHelper = new LiveUserPopHelper(mAct, rootView);
-            if(mSellerDetailInfo!=null) {
-                popHelper.setmSellerDetailInfo(mSellerDetailInfo);
-            }
+        }
+        if(mSellerDetailInfo!=null) {
+            popHelper.setmSellerDetailInfo(mSellerDetailInfo);
         }
         popHelper.show();
     }
