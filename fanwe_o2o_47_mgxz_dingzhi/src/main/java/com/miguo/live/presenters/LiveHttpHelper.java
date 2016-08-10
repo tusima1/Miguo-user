@@ -682,6 +682,21 @@ public class LiveHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 取用户所得到的红包列表。
+     * @param roomID
+     */
+    public void getUserRedPacketList(String roomID,MgCallback callback){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("user_id", App.getInstance().getToken());
+        if(!TextUtils.isEmpty(roomID)) {
+            params.put("tencent_room_id", roomID);
+        }
+        params.put("method", LiveConstants.GET_USER_RED_PACKETS);
+
+        OkHttpUtils.getInstance().post(null, params, callback);
+    }
+
 
     @Override
     public void onDestroy() {

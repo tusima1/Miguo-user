@@ -20,6 +20,7 @@ public class PagerRedPacketView extends LinearLayout {
     private Context mContext;
     private TextView mTv_redNum;
     private RecyclerView mRecyclerRed;
+  
 
 
 

@@ -18,6 +18,7 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.miguo.live.adapters.LiveViewPagerItemAdapter;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.utils.DisplayUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
@@ -39,6 +40,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
      * 门店详情。
      */
     private SellerDetailInfo mSellerDetailInfo;
+
     public LiveUserPopHelper(Activity activity,View rootView) {
         this.mActivity=activity;
         this.rootView=rootView;
@@ -134,6 +136,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
 
             @Override
             public void onPageSelected(int position) {
+
                 if (position != prePosition) {
                     //不可见
                     TextView tv = (TextView) viewPagerTab.getTabAt(prePosition).findViewById(R.id
@@ -150,6 +153,15 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
                 tv.setTextColor(Color.WHITE);
                 iv.setVisibility(View.VISIBLE);
                 prePosition = position;
+
+                //------------------------处理adapter里面的内容-----------------
+                View currentView=  adapter1.getPage(position);
+                if(currentView!=null&&currentView instanceof PagerMainHostView){
+                    if(mSellerDetailInfo!=null){
+                        ((PagerMainHostView)currentView).setmSellerDetailInfo(mSellerDetailInfo);
+                        ((PagerMainHostView)currentView).onEntityChange();
+                    }
+                }
             }
 
             @Override
@@ -172,6 +184,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     }
  public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
         this.mSellerDetailInfo = mSellerDetailInfo;
+        adapter1.setmSellerDetailInfo(mSellerDetailInfo);
     }
     public void refreshSellerDetailInfo(){
         if(adapter1!=null) {

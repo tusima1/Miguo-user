@@ -35,6 +35,9 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
         this.inflater = LayoutInflater.from(pages.getContext());
     }
 
+    public void init(){
+
+    }
     @Override
     public int getCount() {
         return pages.size();
@@ -49,9 +52,6 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
             break;
             case 1:
                 view=new PagerMainHostView(container.getContext());
-                if(mSellerDetailInfo!=null){
-                    (( PagerMainHostView) view).setmSellerDetailInfo(mSellerDetailInfo);
-                }
                 break;
             case 2:
                 view=new PagerRedPacketView(container.getContext());

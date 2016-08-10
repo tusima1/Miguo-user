@@ -91,6 +91,13 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
             }
             mTv_title.setText(mSellerDetailInfo.getTitle());
             mTv_num.setText(mSellerDetailInfo.getAvg_grade_num()+"条");
+            String avg_grage = mSellerDetailInfo.getAvg_grade();
+            if(!TextUtils.isEmpty(avg_grage)){
+                mRatingBar.setRating(3);
+            }else{
+                float value = Float.valueOf(avg_grage);
+                mRatingBar.setRating(value);
+            }
             mTv_location_type.setText(mSellerDetailInfo.getAreaName());
             mTv_keywords.setText(Html.fromHtml(mSellerDetailInfo.getMain_buss()));
             mTv_location.setText(mSellerDetailInfo.getAddress());
