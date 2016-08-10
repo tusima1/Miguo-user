@@ -43,10 +43,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private MaxHeightGridView gridview;
     private Dialog dialog;
     private LiveHttpHelper liveHttpHelper;
-    private LiveView mLiveView;
 
-    public LiveUserExitDialogHelper(Activity activity,LiveView liveView) {
-        this.mLiveView = liveView;
+    public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
 
         createDialog();
@@ -152,10 +150,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         int id = v.getId();
         if (id == R.id.iv_close) {
             dismiss();
-            if(mLiveView!=null) {
-               mLiveView.userExit();
-            }
-
+            ((LiveActivity) mActivity).userExit();
+            mActivity.finish();
         } else if (id == R.id.tv_youhuiquan) {
             clickYouHui();
         } else if (id == R.id.tv_follow) {
