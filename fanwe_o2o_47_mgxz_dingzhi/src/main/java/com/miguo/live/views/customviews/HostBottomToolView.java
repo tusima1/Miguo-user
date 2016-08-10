@@ -287,8 +287,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                 String id = entity.getRed_packets_key();
                 String duration  = entity.getRedPacketEventime();
                 if (mLiveHelper != null) {
-                  //  mLiveHelper.sendHostSendRedPacketMessage(id, duration);
-                    mLiveHelper.sendHostSendRedPacketMessage("1", "30");
+                    mLiveHelper.sendHostSendRedPacketMessage(id, duration);
                 }
                 //发送自定义消息 。
                 SDToast.showToast("发送红包成功");

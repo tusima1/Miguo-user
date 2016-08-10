@@ -101,6 +101,7 @@ public class SellerHttpHelper implements IHelper {
             return;
         }
         TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
         params.put("biz_id", sellerId);
         params.put("method", SellerConstants.LIVE_BIZ_SHOP);
 

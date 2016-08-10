@@ -30,7 +30,6 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -40,7 +39,6 @@ import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
@@ -85,7 +83,6 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,9 +119,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private Dialog mMemberDg, inviteDg;
     private HeartLayout mHeartLayout;
     private HeartBeatTask mHeartBeatTask;//心跳
+    private GetAudienceTask mGetAudienceTask;//取观众 列表。
+
     private LinearLayout mHostLeaveLayout;
     private long mSecond = 0;
-    private Timer mHearBeatTimer, mVideoTimer;
+    private Timer mHearBeatTimer, mVideoTimer,mAudienceTimer;
     private VideoTimerTask mVideoTimerTask;//计时器
     private ObjectAnimator mObjAnim;
     private ImageView mRecordBall;
@@ -163,7 +162,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         registerReceiver();
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
-        mSellerHttpHelper = new SellerHttpHelper(this,this);
+        mSellerHttpHelper = new SellerHttpHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
         // 用户资料类
@@ -675,11 +674,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root);
         }
-        if(!TextUtils.isEmpty(CurLiveInfo.shopID)) {
+        if (!TextUtils.isEmpty(CurLiveInfo.shopID)) {
             getShopDetail(CurLiveInfo.shopID);
         }
     }
-
 
 
     @Override
@@ -699,6 +697,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 发起请求商店详情和商品列表的请求。
+     *
      * @param shopId 门店ID
      */
     @Override
@@ -707,7 +706,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mSellerHttpHelper.getSellerDetail(shopId);
 
     }
-
 
 
     /**
@@ -719,9 +717,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             String host = CurLiveInfo.getHostID();
             SxbLog.i(TAG, "HeartBeatTask " + host);
             mLiveHelper.sendHeartBeat();
+
         }
     }
 
+    /**
+     * 取观众 列表
+     */
+    private class GetAudienceTask extends TimerTask {
+        @Override
+        public void run() {
+            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
+        }
+    }
     /**
      * 记时器
      */
@@ -747,6 +755,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mVideoTimer.cancel();
             mVideoTimer = null;
         }
+        if(null!=mAudienceTimer){
+            mAudienceTimer.cancel();;
+            mAudienceTimer = null;
+        }
 
 
         inviteViewCount = 0;
@@ -760,6 +772,13 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         if (mEnterRoomHelper != null) {
             mEnterRoomHelper.onDestory();
+        }
+        //mLiveHelper;
+        if(mTLoginHelper!=null){
+            mTLoginHelper.onDestory();
+        }
+        if(tencentHttpHelper!=null){
+            tencentHttpHelper.onDestroy();
         }
         QavsdkControl.getInstance().clearVideoMembers();
         QavsdkControl.getInstance().onDestroy();
@@ -956,7 +975,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
 
         //如果存在视频互动，取消
-        QavsdkControl.getInstance().closeMemberView(id);
+      //  QavsdkControl.getInstance().closeMemberView(id);
     }
 
     @Override
@@ -971,9 +990,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     public void getHostRedPacket(HashMap<String, String> params) {
-        //SDToast.showToast("id:"+params.get(Constants.RED_PACKET_ID) +",duration:"+params.get(Constants.RED_PACKET_DURATION));
-        if (mUserBottomTool != null) {
-            mUserBottomTool.clickRob();
+        if (!LiveUtil.checkIsHost()) {
+            if (mUserBottomTool != null) {
+                mUserBottomTool.clickRob();
+            }
         }
     }
 
@@ -1014,25 +1034,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void hostQuiteLive(String type, String responseBody) {
-        if (LiveConstants.EXIT_ROOM.equals(type)) {
-            Type typeJson = new TypeToken<Root<LiveInfoJson>>() {
-            }.getType();
-            Gson gson = new Gson();
-            Root<LiveInfoJson> root = gson.fromJson(responseBody, typeJson);
-            if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
-                LiveInfoJson liveInfoJson = root.getResult().get(0).getBody().get(0);
-                Intent mIntent = new Intent();
-                mIntent.setClass(this, LiveEndActivity.class);
-                // 通过Bundle
-                Bundle mBundle = new Bundle();
-                mBundle.putSerializable(LiveConstants.LIVEINFOJSON, liveInfoJson);
-                mIntent.putExtras(mBundle);
-
-//                startActivity(mIntent);
-
-            }
-        }
-
     }
 
 
@@ -1067,7 +1068,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void showVideoView(boolean isLocal, String id) {
-        SxbLog.i(TAG, "showVideoView " + id);
 
         //渲染本地Camera
         if (isLocal == true) {
@@ -1078,7 +1078,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             if (LiveUtil.checkIsHost()) {
                 if (bFirstRender) {
                     mEnterRoomHelper.notifyServerCreateRoom();
-
                     //主播心跳
                     mHearBeatTimer = new Timer(true);
                     mHeartBeatTask = new HeartBeatTask();
@@ -1091,7 +1090,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     bFirstRender = false;
                 }
             }
+            mAudienceTimer = new Timer(true);
+            mGetAudienceTask = new GetAudienceTask();
+            mAudienceTimer.schedule(mGetAudienceTask, 1000, 5* 1000);
         } else {
+
 //            QavsdkControl.getInstance().addRemoteVideoMembers(id);
             QavsdkControl.getInstance().setRemoteHasVideo(true, id, AVView.VIDEO_SRC_TYPE_CAMERA);
         }
@@ -1782,7 +1785,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 break;
 
             case SellerConstants.LIVE_BIZ_SHOP:
-                if(datas!=null&&datas.size()>0){
+                if (datas != null && datas.size() > 0) {
                     mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
                     mUserBottomTool.notifyDataChange();
                 }
