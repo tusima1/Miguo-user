@@ -58,7 +58,7 @@ public class RedTypeAdapter extends RecyclerView.Adapter<ViewHolderRedType> {
         holder.countText.setText(countTextValue);
         if (modelHandOutRedPacket.isChecked()) {
             //橙色
-            holder.itemView.setBackgroundResource(R.drawable.bg_orange);
+            holder.itemView.setBackgroundResource(R.drawable.bg_orange_small);
             holder.typeText.setTextColor(mContext.getResources().getColor(R.color.white));
             holder.countText.setTextColor(mContext.getResources().getColor(R.color.white));
         } else {
