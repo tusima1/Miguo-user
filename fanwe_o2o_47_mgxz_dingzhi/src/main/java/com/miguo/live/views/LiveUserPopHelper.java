@@ -34,6 +34,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     private int prePosition = 0;//之前一个位置
     private PopupWindow popupWindow;
     LiveViewPagerItemAdapter adapter1;
+    private ImageView mShopCart;
     /**
      * 门店详情。
      */

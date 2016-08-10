@@ -363,8 +363,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             OkHttpUtils.getInstance().get(null, params, new MgCallback() {
                 @Override
                 public void onSuccessResponse(String responseBody) {
-
-                    mStepInOutView.hostQuiteLive(LiveConstants.EXIT_ROOM,responseBody);
+                    if(mStepInOutView!=null) {
+                        mStepInOutView.hostQuiteLive(LiveConstants.EXIT_ROOM, responseBody);
+                    }
                 }
 
                 @Override
