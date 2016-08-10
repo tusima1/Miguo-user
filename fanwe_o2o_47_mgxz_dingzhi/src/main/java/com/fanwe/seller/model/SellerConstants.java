@@ -7,10 +7,10 @@ public class SellerConstants {
     /**
      * 获取门店列表
      */
-    public static final String SHOP_LIST = "ShopList";
+    public static final String STORE_LIST = "StoreList";
 
     /**
      * 直播页面获取门店详情。
      */
-    public static final String  LIVE_BIZ_SHOP= "LiveBizShop";
+    public static final String LIVE_BIZ_SHOP = "LiveBizShop";
 }

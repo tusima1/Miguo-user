@@ -15,13 +15,13 @@ import com.fanwe.library.customview.SDWeightLinearLayout.CalculateWidthListener;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getShopList.ModelShopList;
+import com.fanwe.seller.model.getStoreList.ModelStoreList;
 
 import java.util.List;
 
-public class ShopListAdapter extends SDSimpleBaseAdapter<ModelShopList> {
+public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
 
-    public ShopListAdapter(List<ModelShopList> listModel, Activity activity) {
+    public ShopListAdapter(List<ModelStoreList> listModel, Activity activity) {
         super(listModel, activity);
     }
 
@@ -31,7 +31,7 @@ public class ShopListAdapter extends SDSimpleBaseAdapter<ModelShopList> {
     }
 
     @Override
-    public void bindData(int position, View convertView, ViewGroup parent, final ModelShopList model) {
+    public void bindData(int position, View convertView, ViewGroup parent, final ModelStoreList model) {
         ImageView iv_image = get(R.id.iv_image, convertView);
         LinearLayout ll_name_bar = get(R.id.ll_name_bar, convertView);
         ImageView iv_tag_tuan = get(R.id.iv_tag_tuan, convertView);

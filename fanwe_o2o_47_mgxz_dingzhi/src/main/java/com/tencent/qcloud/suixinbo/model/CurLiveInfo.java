@@ -1,7 +1,7 @@
 package com.tencent.qcloud.suixinbo.model;
 
 
-import com.fanwe.seller.model.getShopList.ModelShopList;
+import com.fanwe.seller.model.getStoreList.ModelStoreList;
 
 /**
  * 当前直播信息页面
@@ -44,7 +44,7 @@ public class CurLiveInfo {
 
     public static int indexView = 0;
     ///店铺信息
-    public static ModelShopList modelShop = new ModelShopList();
+    public static ModelStoreList modelShop = new ModelStoreList();
 
     public static void setCurrentRequestCount(int currentRequestCount) {
         CurLiveInfo.currentRequestCount = currentRequestCount;
@@ -143,11 +143,11 @@ public class CurLiveInfo {
         return "" + roomNum;
     }
 
-    public static ModelShopList getModelShop() {
+    public static ModelStoreList getModelShop() {
         return modelShop;
     }
 
-    public static void setModelShop(ModelShopList modelShop) {
+    public static void setModelShop(ModelStoreList modelShop) {
         CurLiveInfo.modelShop = modelShop;
     }
 

@@ -1,4 +1,4 @@
-package com.fanwe.seller.model.getShopList;
+package com.fanwe.seller.model.getStoreList;
 
 
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/7/28.
  */
-public class RootShopList {
-    private List<ResultShopList> result;
+public class RootStoreList {
+    private List<ResultStoreList> result;
 
     private String message;
 
@@ -15,11 +15,11 @@ public class RootShopList {
 
     private String token;
 
-    public List<ResultShopList> getResult() {
+    public List<ResultStoreList> getResult() {
         return result;
     }
 
-    public void setResult(List<ResultShopList> result) {
+    public void setResult(List<ResultStoreList> result) {
         this.result = result;
     }
 

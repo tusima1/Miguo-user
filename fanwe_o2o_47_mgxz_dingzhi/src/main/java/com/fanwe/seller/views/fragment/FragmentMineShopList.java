@@ -1,6 +1,5 @@
 package com.fanwe.seller.views.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +16,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.ShopListAdapter;
 import com.fanwe.seller.model.SellerConstants;
-import com.fanwe.seller.model.getShopList.ModelShopList;
+import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -34,7 +33,7 @@ import java.util.List;
 public class FragmentMineShopList extends BaseFragment implements CallbackView {
     private View view;
     private ShopListAdapter mAdapter = null;
-    private List<ModelShopList> mListModel = new ArrayList<>();
+    private List<ModelStoreList> mListModel = new ArrayList<>();
 
     @ViewInject(R.id.ptr_listview_fragment_mine_shop_list)
     private PullToRefreshListView mPtrlvContent = null;
@@ -44,6 +43,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     int pageSize = 10;
     int pageNum = 1;
     boolean isRefresh = true;
+    private int type;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     @Override
     protected void init() {
         super.init();
+        type = getArguments().getInt("type");
         sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         getData();
         bindDefaultLvData();
@@ -80,7 +81,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     }
 
     private void getData() {
-        sellerHttpHelper.getShopList(pageNum, pageSize, ",", "", "");
+        sellerHttpHelper.getStoreList(pageNum, pageSize, type + "");
     }
 
     private void initPullRefreshLv() {
@@ -121,13 +122,13 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
 
     }
 
-    private ArrayList<ModelShopList> temps;
+    private ArrayList<ModelStoreList> temps;
 
     @Override
     public void onSuccess(String method, List datas) {
         Message message = new Message();
-        if (SellerConstants.SHOP_LIST.equals(method)) {
-            temps = (ArrayList<ModelShopList>) datas;
+        if (SellerConstants.STORE_LIST.equals(method)) {
+            temps = (ArrayList<ModelStoreList>) datas;
             if (!SDCollectionUtil.isEmpty(temps)) {
                 mListModel.addAll(temps);
             }

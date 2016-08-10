@@ -312,7 +312,6 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                     break;
                 case 2:
                     if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
-                        SDToast.showToast("strNum:" + strNum);
                         if (dialogSendRedPacket != null) {
                             dialogSendRedPacket.dismiss();
                         }
