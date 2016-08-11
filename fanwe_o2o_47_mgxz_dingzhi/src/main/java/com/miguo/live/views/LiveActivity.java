@@ -53,7 +53,6 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
-import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
@@ -738,9 +737,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void getShopDetail(String shopId) {
-
         mSellerHttpHelper.getSellerDetail(shopId);
-
     }
 
 
@@ -794,10 +791,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         if (null != mAudienceTimer) {
             mAudienceTimer.cancel();
-            ;
             mAudienceTimer = null;
         }
-
 
         inviteViewCount = 0;
         thumbUp = 0;
@@ -832,7 +827,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (LiveUtil.checkIsHost()) {
             hostExit();
         } else {
-            userExit();
+            finish();
         }
 
     }
@@ -878,15 +873,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             public void onClick(View v) {
                 //如果是直播，发消息
                 if (null != mLiveHelper) {
-                    MySelfInfo.getInstance().setMyRoomNum(-1);
+                    //向后台发送主播退出
                     mLiveHelper.perpareQuitRoom(true);
                     if (isPushed) {
                         mLiveHelper.stopPushAction();
                     }
-                    //向后台发送主播退出
-                    if (mLiveHttphelper != null) {
-                        mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum() + "");
-                    }
+                    startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
                 }
 
             }
@@ -1841,21 +1833,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 break;
             case LiveConstants.HOST_TAGS:
                 //获取主播标签
-                break;
-            case LiveConstants.STOP_LIVE:
-                //主播退出(结束主播!!!)
-                if (checkDataIsNull(datas)) {
-                    finish();
-                    return;
-                }
-                ModelStopLive stopLive = (ModelStopLive) datas.get(0);
-                Intent mIntent = new Intent();
-                mIntent.setClass(this, LiveEndActivity.class);
-                // 通过Bundle
-                Bundle mBundle = new Bundle();
-                mBundle.putSerializable(LiveConstants.LIVEINFOJSON, stopLive);
-                mIntent.putExtras(mBundle);
-                startActivity(mIntent);
                 break;
             case LiveConstants.AUDIENCE_COUNT:
                 //获取观众人数
