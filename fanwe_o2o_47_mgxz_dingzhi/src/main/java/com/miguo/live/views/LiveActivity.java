@@ -530,6 +530,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         //主播-->加载的view
         mHeadTopAdapter = new HeadTopAdapter(null,this);
+        mLiveHttphelper = new LiveHttpHelper(this, this);
         if (LiveUtil.checkIsHost()) {
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
@@ -689,7 +690,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
 
         //开启后台业务服务器请求管理类
-        mLiveHttphelper = new LiveHttpHelper(this, this);
+
         //----
         mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
         //主播清屏操作
@@ -1034,15 +1035,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
     }
 
-
+    CountDownTimer robLiftTimer ;
 
     @Override
     public void sendHostRedPacket(String id, String duration) {
         if(!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)){
             //启动红包倒计时。
             Integer values = Integer.valueOf(duration)+10*1000;
-
-            CountDownTimer robLiftTimer = new CountDownTimer(values, 1000) {
+            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
+             robLiftTimer = new CountDownTimer(values, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
 
@@ -1052,6 +1053,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     int round = Math.round(v);
                     msg.arg1 = round;
                     Log.e("live", millisUntilFinished + "--" + round + "==" + v);
+
+                    mHostRedPacketCountDownView.setTime(timeStr);
                     mHandler.sendMessage(msg);
                     if (round == 2) {
                         mHandler.postDelayed(new Runnable() {

@@ -5,47 +5,46 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="12dp"
                 android:paddingTop="10dp">
-
-    <ImageView
-        android:id="@+id/iv_baobao"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/bg_live_quan"
-        />
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/iv_baobao"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="12dp"
-        android:textSize="14sp"
-        android:textColor="@color/white"
-        android:text="专属优惠券"/>
-    <TextView
-        android:id="@+id/tv_title_append"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/tv_title"
-        android:layout_below="@id/tv_title"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"
-        android:text="只限粉丝使用"
-        android:textSize="10sp"/>
-    <TextView
-        android:id="@+id/get"
-        android:layout_width="55dp"
-        android:layout_height="25dp"
-        android:text="领取"
-        android:textSize="15sp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="12.5dp"
-        android:gravity="center"
-        android:background="@drawable/selector_bg_bt_orange_stroke"
-        />
+<!--暂无专属优惠-->
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_baobao"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:src="@drawable/bg_live_quan"-->
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/tv_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@id/iv_baobao"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="12dp"-->
+        <!--android:textSize="14sp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="专属优惠券"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/tv_title_append"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignLeft="@id/tv_title"-->
+        <!--android:layout_below="@id/tv_title"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="只限粉丝使用"-->
+        <!--android:textSize="10sp"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/get"-->
+        <!--android:layout_width="55dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:text="领取"-->
+        <!--android:textSize="15sp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginTop="12.5dp"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@drawable/selector_bg_bt_orange_stroke"-->
+        <!--/>-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bao_recyler"
-        android:layout_below="@id/iv_baobao"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

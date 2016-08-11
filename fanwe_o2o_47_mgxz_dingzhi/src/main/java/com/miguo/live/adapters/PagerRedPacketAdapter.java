@@ -77,5 +77,6 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
     public void setMdatas(List<UserRedPacketInfo> mdatas) {
         this.mdatas = mdatas;
+        notifyItemRangeChanged(0,getItemCount());
     }
 }

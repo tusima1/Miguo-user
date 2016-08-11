@@ -12,10 +12,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
+import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.utils.DisplayUtil;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +28,16 @@ import java.util.List;
 /**
  * Created by didik on 2016/7/28.
  */
-public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListener {
+public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListener,CallbackView {
 
-    private ImageView mIv_img;//商品图片
-    private TextView mTv_title;//标题
-    private TextView mIv_title_append;//标题说明
-    private TextView mGet;//获取按钮
+//    private ImageView mIv_img;//商品图片
+//    private TextView mTv_title;//标题
+//    private TextView mIv_title_append;//标题说明
+//    private TextView mGet;//获取按钮
     private RecyclerView mRecycler;
     private Context mContext;
+    private LiveHttpHelper mLiveHttpHelper;
+    PagerBaoBaoAdapter mAdapter;
 
     public PagerBaoBaoView(Context context) {
         super(context);
@@ -54,16 +60,17 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
     private void init(Context context) {
         this.mContext=context;
         LayoutInflater.from(context).inflate(R.layout.item_pager_baobao,this);
-
-        mIv_img = ((ImageView) this.findViewById(R.id.iv_baobao));
-        mTv_title = ((TextView) this.findViewById(R.id.tv_title));
-        mIv_title_append = ((TextView) this.findViewById(R.id.tv_title_append));
-        mGet = ((TextView) this.findViewById(R.id.get));
+        mLiveHttpHelper = new LiveHttpHelper(mContext,this);
+        mLiveHttpHelper.getGoodsDetailList(CurLiveInfo.shopID);
+//        mIv_img = ((ImageView) this.findViewById(R.id.iv_baobao));
+//        mTv_title = ((TextView) this.findViewById(R.id.tv_title));
+//        mIv_title_append = ((TextView) this.findViewById(R.id.tv_title_append));
+//        mGet = ((TextView) this.findViewById(R.id.get));
         mRecycler = ((RecyclerView) findViewById(R.id.bao_recyler));
 
-        mGet.setOnClickListener(this);
+      //  mGet.setOnClickListener(this);
 
-        PagerBaoBaoAdapter mAdapter=new PagerBaoBaoAdapter(mContext);
+        mAdapter=new PagerBaoBaoAdapter(mContext);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -80,25 +87,13 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
         });
 //        mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
-        List<BaoBaoEntity> data=new ArrayList<BaoBaoEntity>();
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        data.add(new BaoBaoEntity());
-        mAdapter.setData(data);
     }
 
     @Override
     public void onClick(View v) {
-        if (v==mGet){
-            clickGet();
-        }
+//        if (v==mGet){
+//            clickGet();
+//        }
     }
 
     /**
@@ -106,5 +101,30 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
      */
     private void clickGet() {
         Toast.makeText(mContext, "点击了获取", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        switch (method){
+            case LiveConstants.LIST_OF_STORES:
+                if(mAdapter==null){
+                    mAdapter=new PagerBaoBaoAdapter(mContext);
+                    mAdapter.setData(datas);
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }

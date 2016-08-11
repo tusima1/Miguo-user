@@ -94,6 +94,10 @@ HomeFragmentLiveList extends BaseFragment {
 
                 CurLiveInfo.setHostAvator(room.getHost().getAvatar());
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
+                if(room.getLbs()!=null){
+                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
+                }
+                CurLiveInfo.setHostUserID(room.getHost().getUid());
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
                 CurLiveInfo.setMembers(1); // 添加自己
 //                CurLiveInfo.setAddress(item.getLbs().getAddress());

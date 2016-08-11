@@ -3,6 +3,7 @@ package com.miguo.live.adapters;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -43,6 +45,17 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 //        holder.ll_two_bt.setVisibility(View.VISIBLE);
         final BaoBaoEntity baoBaoEntity = mData.get(position);
+        if(baoBaoEntity!=null){
+            if(!TextUtils.isEmpty(baoBaoEntity.getImg())){
+                ImageLoader.getInstance().displayImage(baoBaoEntity.getImg(),holder.iv_img);
+            }else {
+                holder.iv_img.setImageResource(R.drawable.nopic_lo);
+            }
+            holder.tv_title .setText(baoBaoEntity.getName());
+            holder.tv_price.setText(baoBaoEntity.getTuan_price());
+
+
+        }
         boolean clicked = baoBaoEntity.isClicked();
         if (clicked){
             holder.add.setImageResource(R.drawable.ic_close_small);
@@ -108,7 +121,8 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
      */
     public void setData(List<BaoBaoEntity> data){
         this.mData=data;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0,getItemCount());
+
     }
 
     @Override

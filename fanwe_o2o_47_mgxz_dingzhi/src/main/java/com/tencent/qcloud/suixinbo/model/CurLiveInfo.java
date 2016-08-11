@@ -21,6 +21,10 @@ public class CurLiveInfo {
      * 主播房间id信息
      **/
     public static String hostID;
+    /**
+     * 主播USERID.
+     */
+    public static String hostUserID;
     public static String hostName;
     public static String hostAvator;
 
@@ -157,5 +161,13 @@ public class CurLiveInfo {
 
     public static void setShopID(String shopID) {
         CurLiveInfo.shopID = shopID;
+    }
+
+    public static String getHostUserID() {
+        return hostUserID;
+    }
+
+    public static void setHostUserID(String hostUserID) {
+        CurLiveInfo.hostUserID = hostUserID;
     }
 }

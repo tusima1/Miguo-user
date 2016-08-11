@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.Root;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.model.RootLive;
@@ -12,10 +13,13 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.seller.model.GoodsDetailInfo;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.checkFocus.ResultCheckFocus;
 import com.miguo.live.model.checkFocus.RootCheckFocus;
@@ -43,6 +47,7 @@ import com.miguo.live.model.getHostTags.RootHostTags;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
+import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.model.postHandOutRedPacket.ModelHandOutRedPacketPost;
 import com.miguo.live.model.postHandOutRedPacket.ResultHandOutRedPacketPost;
 import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
@@ -50,6 +55,7 @@ import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -686,7 +692,7 @@ public class LiveHttpHelper implements IHelper {
      * 取用户所得到的红包列表。
      * @param roomID
      */
-    public void getUserRedPacketList(String roomID,MgCallback callback){
+    public void getUserRedPacketList(String roomID){
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("user_id", App.getInstance().getToken());
         if(!TextUtils.isEmpty(roomID)) {
@@ -694,7 +700,74 @@ public class LiveHttpHelper implements IHelper {
         }
         params.put("method", LiveConstants.GET_USER_RED_PACKETS);
 
-        OkHttpUtils.getInstance().post(null, params, callback);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<UserRedPacketInfo>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<UserRedPacketInfo> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
+                if(LiveConstants.RESULT_SUCCESS.equals(status)){
+                    if(root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0)!=null) {
+                        List<UserRedPacketInfo> datas = root.getResult().get(0).getBody();
+                        mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, datas);
+                    }else{
+                        mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, null);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+                mView.onFailue(message);
+            }
+        });
+    }
+
+    /**
+     * 取直播门店的镇店之宝。
+     * @param shop_id 门店 ID。
+     */
+
+    public void getGoodsDetailList(String shop_id){
+        if(TextUtils.isEmpty(shop_id)){
+            return ;
+        }
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("shop_id", shop_id);
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.LIST_OF_STORES);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<BaoBaoEntity>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<BaoBaoEntity> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
+                if(LiveConstants.RESULT_SUCCESS.equals(status)){
+                    if(root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0)!=null) {
+                        List<BaoBaoEntity> datas = root.getResult().get(0).getBody();
+                        mView.onSuccess(LiveConstants.LIST_OF_STORES, datas);
+                    }else{
+                        mView.onSuccess(LiveConstants.LIST_OF_STORES, null);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+                mView.onFailue(message);
+            }
+        });
     }
 
 
