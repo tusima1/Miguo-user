@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 
+import com.fanwe.home.views.customerView.XCRoundRectImageView;
 import com.fanwe.o2o.miguo.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -66,7 +67,7 @@ public class VisitImgAdapter extends BaseAdapter {
             mHolder = new Holder();
             convertView = inflater.inflate(
                     R.layout.layout_visit_img_item, null);
-            mHolder.ivImg = (ImageView) convertView.findViewById(R.id.iv_visit_img_item);
+            mHolder.ivImg = (XCRoundRectImageView) convertView.findViewById(R.id.iv_visit_img_item);
             mHolder.ivAdd = (ImageView) convertView.findViewById(R.id.iv_add_img_item);
             mHolder.ivDelete = (ImageView) convertView.findViewById(R.id.iv_delete_img_item);
             convertView.setTag(mHolder);
@@ -107,7 +108,8 @@ public class VisitImgAdapter extends BaseAdapter {
     }
 
     private static class Holder {
-        ImageView ivImg, ivAdd, ivDelete;
+        XCRoundRectImageView ivImg;
+        ImageView ivAdd, ivDelete;
     }
 
 }
