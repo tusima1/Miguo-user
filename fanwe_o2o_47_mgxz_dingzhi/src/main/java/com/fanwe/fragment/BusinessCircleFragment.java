@@ -3,18 +3,14 @@ package com.fanwe.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.adapter.HoltelSearchAdapter;
 import com.fanwe.adapter.HoltelSearchAdapter.OnResultSearchListener;
-import com.fanwe.adapter.HomeRecommendEventAdapter;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;

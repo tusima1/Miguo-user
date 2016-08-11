@@ -15,6 +15,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.Room;
+import com.fanwe.home.views.FragmentHomeTimeLimit;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -70,7 +71,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     private HomeZtFragment mFragZt;
     private HomeRecommendStoreFragment mFragRecommendSupplier;
     //限时优惠
-    private HomeRecommendEvnetFragment mFragRecommendEvent;
+    private FragmentHomeTimeLimit mFragmentHomeTimeLimit;
     private HomeRecommendTuanFragment mFragRecommendDeals;
     private HomeRecommendGoodsFragment mFragRecommendGoods;
     private HomeRecommendYouhuiFragment mFragRecommendCoupon;
@@ -363,11 +364,11 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 //        mFragRecommendSupplier.setmIndexModel(actModel);
 //        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_supplier, mFragRecommendSupplier);
 
-        // 推荐活动
-        mFragRecommendEvent = new HomeRecommendEvnetFragment();
-        mFragRecommendEvent.setmIndexModel(actModel);
+        // 限时特惠
+        mFragmentHomeTimeLimit = new FragmentHomeTimeLimit();
+        mFragmentHomeTimeLimit.setmIndexModel(actModel);
         getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_event,
-                mFragRecommendEvent);
+                mFragmentHomeTimeLimit);
 
         // 推荐团购
         if (pageModel.getPage() == 1) {

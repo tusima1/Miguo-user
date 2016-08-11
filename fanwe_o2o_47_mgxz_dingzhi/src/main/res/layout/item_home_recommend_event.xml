@@ -7,103 +7,41 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="124dp"
+        android:layout_height="80dp">
 
-        <FrameLayout
+
+        <com.fanwe.home.views.customerView.XCRoundRectImageView
+            android:id="@+id/item_home_recommend_event_iv_image"
             android:layout_width="match_parent"
-            android:layout_height="85dp">
-
-            <ImageView
-                android:id="@+id/item_home_recommend_event_iv_image"
-                android:layout_width="wrap_content"
-                android:layout_height="85dp"
-                android:background="@drawable/nopic"
-                android:scaleType="centerCrop" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="限时"
-                    android:textColor="@color/white"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
-
-                <com.fanwe.customview.SnapUpCountDownTimerView
-                    android:id="@+id/item_home_recommend_event_tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    app:viewSize="11" />
-
-            </RelativeLayout>
-
-        </FrameLayout>
-
-
-        <TextView
-            android:id="@+id/item_event_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/item_home_recommend_event_iv_image"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text=""
-            android:textColor="@color/text_fenxiao"
-            android:textSize="12sp"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
-            android:id="@+id/ll_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/item_event_title"
-            android:layout_marginBottom="6dp"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="￥"
-                android:textColor="@color/home_event"
-                android:textSize="9sp" />
+                android:layout_gravity="center"
+                android:text="限时特惠结束时间"
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_money"
+            <com.fanwe.customview.SnapUpCountDownTimerView
+                android:id="@+id/item_home_recommend_event_tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="128.0"
-                android:textColor="@color/home_event"
-                android:textSize="15sp" />
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp5"
+                app:viewSize="11" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="￥"
-                android:textColor="@color/text_hongbao_title"
-                android:textSize="10sp" />
-
-            <TextView
-                android:id="@+id/tv_totalmoney"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="210.0"
-                android:textColor="@color/text_hongbao_title"
-                android:textSize="10sp" />
         </LinearLayout>
-    </LinearLayout>
-
+    </FrameLayout>
 </LinearLayout>
