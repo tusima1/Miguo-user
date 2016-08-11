@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/bg_activity_gray"
-    android:orientation="vertical">
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/bg_activity_gray"
+              android:orientation="vertical">
+    <!--<include layout="@layout/title_my"/>-->
 
-    <include layout="@layout/title_my" />
-
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
         android:id="@+id/frag_my_account_ptrsv_all"
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scrollbars="none"
-        ptr:ptrHeaderBackground="@color/main_color"
+        ptr:ptrHeaderBackground="@drawable/bg_my_top"
         ptr:ptrHeaderSubTextColor="@color/white"
         ptr:ptrHeaderTextColor="@color/white">
 
@@ -20,139 +20,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <!-- 顶部会员信息 -->
-
-            <LinearLayout
-                android:id="@+id/ll_user_info"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_my_account"
-                android:gravity="center_vertical"
-                android:minHeight="100dp"
-                android:orientation="vertical"
-                android:paddingLeft="11.5dp"
-                android:paddingRight="11.5dp">
-
-                <com.github.siyamed.shapeimageview.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/iv_user_avatar"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    app:siBorderColor="@color/white" />
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="17.5dp"
-                    android:layout_marginTop="17.5dp"
-                    android:gravity="center"
-                    android:maxHeight="40dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/ll_member"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/frag_my_account_tv_username"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="loading..."
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_item_title" />
-
-                        <TextView
-                            android:id="@+id/tv_vip"
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="25dp"
-                            android:background="@drawable/bg_vip"
-                            android:gravity="center"
-                            android:textColor="@color/white"
-                            android:textSize="9sp"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1px"
-                        android:layout_height="fill_parent"
-                        android:background="@color/white" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="总佣金："
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_item_title" />
-
-                        <TextView
-                            android:id="@+id/frag_my_account"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_item_title" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
-                android:minHeight="60dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/layer_white_stroke_bot"
-                    android:orientation="horizontal">
-
-                    <include
-                        android:id="@+id/frag_my_account_ll_group_voucher"
-                        layout="@layout/item_my_orders" />
-
-                    <include
-                        android:id="@+id/ll_look_dianpu"
-                        layout="@layout/item_my_orders" />
-
-                    <include
-                        android:id="@+id/ll_my_xiaomi"
-                        layout="@layout/item_my_orders" />
-
-                    <include
-                        android:id="@+id/ll_erweima"
-                        layout="@layout/item_my_orders" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <include layout="@layout/separator_list_full" />
-
+            <include layout="@layout/item_my_frag_user_top"/>
             <!-- 我的资产 -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/layer_white_stroke_top_bot"
                 android:orientation="vertical">
 
@@ -166,7 +40,7 @@
                         android:layout_width="19dp"
                         android:layout_height="19dp"
                         android:layout_marginLeft="12dp"
-                        android:src="@drawable/ic_my_capital" />
+                        android:src="@drawable/ic_my_capital"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -174,10 +48,10 @@
                         android:layout_marginLeft="10dp"
                         android:text="我的资产"
                         android:textColor="@color/text_fenxiao"
-                        android:textSize="@dimen/text_size_base" />
+                        android:textSize="@dimen/text_size_base"/>
                 </LinearLayout>
 
-                <include layout="@layout/separator_list_indent" />
+                <include layout="@layout/separator_list_indent"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -191,11 +65,11 @@
                         <TextView
                             android:id="@+id/frag_my_account_tv_balance"
                             style="@style/item_value_my_asset_my"
-                            android:text="" />
+                            android:text=""/>
 
                         <TextView
                             style="@style/item_name_my_asset_my"
-                            android:text="余额(元)" />
+                            android:text="余额(元)"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -205,11 +79,11 @@
                         <TextView
                             android:id="@+id/frag_my_account_tv_coupons"
                             style="@style/item_value_my_asset_my"
-                            android:text="" />
+                            android:text=""/>
 
                         <TextView
                             style="@style/item_name_my_asset_my"
-                            android:text="总佣金(元)" />
+                            android:text="总佣金(元)"/>
                     </LinearLayout>
 
                     <LinearLayout style="@style/item_my_asset_my">
@@ -217,11 +91,11 @@
                         <TextView
                             android:id="@+id/frag_my_account_tv_user_score"
                             style="@style/item_value_my_asset_my"
-                            android:text="" />
+                            android:text=""/>
 
                         <TextView
                             style="@style/item_name_my_asset_my"
-                            android:text="积分(分)" />
+                            android:text="积分(分)"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -231,11 +105,11 @@
                         <TextView
                             android:id="@+id/hongbao_count"
                             style="@style/item_value_my_asset_my"
-                            android:text="" />
+                            android:text=""/>
 
                         <TextView
                             style="@style/item_name_my_asset_my"
-                            android:text="红包(个)" />
+                            android:text="红包(个)"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -256,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:text="预计可提现金额:" />
+                    android:text="预计可提现金额:"/>
 
                 <TextView
                     android:id="@+id/frag_my_account_tv_user_money"
@@ -265,23 +139,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/fenxiao_money"
                     android:layout_weight="1"
-                    android:textColor="@color/main_color" />
+                    android:textColor="@color/main_color"/>
 
                 <TextView
                     style="@style/text_base"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="查看" />
+                    android:text="查看"/>
 
-                <include layout="@layout/arrow_right" />
+                <include layout="@layout/arrow_right"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginLeft="12dp"
-                android:background="@color/stroke" />
+                android:background="@color/stroke"/>
 
             <LinearLayout
                 android:id="@+id/ll_tixian_Actual"
@@ -305,7 +179,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:text="可提现:" />
+                        android:text="可提现:"/>
 
                     <TextView
                         android:id="@+id/my_account_tv_user_score"
@@ -313,7 +187,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/fenxiao_money"
-                        android:textColor="@color/main_color" />
+                        android:textColor="@color/main_color"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -327,7 +201,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:text="已使用:" />
+                        android:text="已使用:"/>
 
                     <TextView
                         android:id="@+id/my_account_tv_user_score_2"
@@ -336,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/fenxiao_money"
                         android:text=""
-                        android:textColor="@color/main_color" />
+                        android:textColor="@color/main_color"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -357,16 +231,16 @@
                         android:layout_marginLeft="6dp"
                         android:gravity="center_vertical"
                         android:text="@string/commit"
-                        android:textColor="@color/gray" />
+                        android:textColor="@color/gray"/>
                 </LinearLayout>
 
-                <include layout="@layout/arrow_right" />
+                <include layout="@layout/arrow_right"/>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#cccccc" />
+                android:background="#cccccc"/>
             <!-- 我的订单 -->
 
             <LinearLayout
@@ -390,7 +264,7 @@
                         android:layout_width="19dp"
                         android:layout_height="19dp"
                         android:layout_alignParentLeft="true"
-                        android:src="@drawable/ic_my_orders" />
+                        android:src="@drawable/ic_my_orders"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -399,11 +273,11 @@
                         android:layout_toRightOf="@id/ic_my_orders"
                         android:text="我的订单"
                         android:textColor="@color/text_fenxiao"
-                        android:textSize="@dimen/text_size_base" />
+                        android:textSize="@dimen/text_size_base"/>
 
                     <include
                         android:id="@+id/arrow_my_orders"
-                        layout="@layout/arrow_right" />
+                        layout="@layout/arrow_right"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -412,10 +286,10 @@
                         android:layout_toLeftOf="@id/arrow_my_orders"
                         android:text="查看所有订单"
                         android:textColor="@color/text_hongbao_title"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
                 </RelativeLayout>
 
-                <include layout="@layout/separator_list_indent" />
+                <include layout="@layout/separator_list_indent"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -426,26 +300,26 @@
 
                     <include
                         android:id="@+id/order_not_paid"
-                        layout="@layout/item_my_orders" />
+                        layout="@layout/item_my_orders"/>
 
                     <include
                         android:id="@+id/order_not_used"
-                        layout="@layout/item_my_orders" />
+                        layout="@layout/item_my_orders"/>
 
                     <include
                         android:id="@+id/order_not_commented"
-                        layout="@layout/item_my_orders" />
+                        layout="@layout/item_my_orders"/>
 
                     <include
                         android:id="@+id/order_to_refund"
-                        layout="@layout/item_my_orders" />
+                        layout="@layout/item_my_orders"/>
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/stroke_deep" />
+                android:background="@color/stroke_deep"/>
             <!-- 已付款订单 -->
 
             <LinearLayout
@@ -461,12 +335,12 @@
                 android:paddingRight="11.5dp"
                 android:visibility="gone">
 
-                <include layout="@layout/separator_list_full" />
+                <include layout="@layout/separator_list_full"/>
 
                 <ImageView
                     android:layout_width="@dimen/width_set_item_icon"
                     android:layout_height="@dimen/width_set_item_icon"
-                    android:src="@drawable/ic_my_account_order_has_pay" />
+                    android:src="@drawable/ic_my_account_order_has_pay"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -475,7 +349,7 @@
                     android:layout_weight="1"
                     android:text="已付款订单"
                     android:textColor="@color/gray"
-                    android:textSize="@dimen/text_size_normal_16sp" />
+                    android:textSize="@dimen/text_size_normal_16sp"/>
 
                 <TextView
                     android:id="@+id/tv_order_not_comment"
@@ -486,9 +360,9 @@
                     android:padding="5dp"
                     android:textColor="@color/main_color"
                     android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
-                <include layout="@layout/arrow_right" />
+                <include layout="@layout/arrow_right"/>
             </LinearLayout>
 
             <!-- 外卖预定订单 -->
@@ -508,7 +382,7 @@
                 <ImageView
                     android:layout_width="@dimen/width_set_item_icon"
                     android:layout_height="@dimen/width_set_item_icon"
-                    android:src="@drawable/ic_my_account_order_takeaway_reservation" />
+                    android:src="@drawable/ic_my_account_order_takeaway_reservation"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -517,21 +391,17 @@
                     android:layout_weight="1"
                     android:text="外卖预定订单"
                     android:textColor="@color/gray"
-                    android:textSize="@dimen/text_size_normal_16sp" />
+                    android:textSize="@dimen/text_size_normal_16sp"/>
 
-                <include layout="@layout/arrow_right" />
+                <include layout="@layout/arrow_right"/>
             </LinearLayout>
             <!-- 提现 my_distribution_tixian -->
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/text_jiange" />
+                android:background="@color/text_jiange"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#cccccc" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -554,7 +424,7 @@
                     <ImageView
                         android:layout_width="@dimen/width_set_item_icon"
                         android:layout_height="@dimen/width_set_item_icon"
-                        android:src="@drawable/ic_my_account_shopping_cart" />
+                        android:src="@drawable/ic_my_account_shopping_cart"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -563,16 +433,16 @@
                         android:layout_weight="1"
                         android:text="购物车"
                         android:textColor="@color/text_fenxiao"
-                        android:textSize="@dimen/text_size_content" />
+                        android:textSize="@dimen/text_size_content"/>
 
-                    <include layout="@layout/arrow_right" />
+                    <include layout="@layout/arrow_right"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_marginLeft="12dp"
-                    android:background="@color/stroke" />
+                    android:background="@color/stroke"/>
 
                 <!-- 评价 -->
 
@@ -591,7 +461,7 @@
                         android:layout_width="@dimen/width_set_item_icon"
                         android:layout_height="@dimen/width_set_item_icon"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/bg_pingjia" />
+                        android:src="@drawable/bg_pingjia"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -600,7 +470,7 @@
                         android:layout_weight="1"
                         android:text="评价"
                         android:textColor="@color/text_fenxiao"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:id="@+id/tv_comments_number"
@@ -609,16 +479,16 @@
                         android:layout_marginRight="15dp"
                         android:text=""
                         android:textColor="@color/gray"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"/>
 
-                    <include layout="@layout/arrow_right" />
+                    <include layout="@layout/arrow_right"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_marginLeft="12dp"
-                    android:background="@color/stroke" />
+                    android:background="@color/stroke"/>
                 <!-- 收藏 -->
 
                 <LinearLayout
@@ -636,7 +506,7 @@
                         android:layout_width="@dimen/width_set_item_icon"
                         android:layout_height="@dimen/width_set_item_icon"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/bg_collect" />
+                        android:src="@drawable/bg_collect"/>
 
                     <TextView
                         android:layout_width="0dp"
@@ -645,7 +515,7 @@
                         android:layout_weight="1"
                         android:text="收藏"
                         android:textColor="@color/text_fenxiao"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:id="@+id/tv_collect_number"
@@ -654,16 +524,16 @@
                         android:layout_marginRight="15dp"
                         android:text=""
                         android:textColor="@color/gray"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"/>
 
-                    <include layout="@layout/arrow_right" />
+                    <include layout="@layout/arrow_right"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_marginBottom="25dp"
-                    android:background="@color/stroke" />
+                    android:background="@color/stroke"/>
             </LinearLayout>
         </LinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>

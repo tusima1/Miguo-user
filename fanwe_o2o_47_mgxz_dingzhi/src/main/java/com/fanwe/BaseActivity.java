@@ -1,21 +1,5 @@
 package com.fanwe;
 
-import com.fanwe.app.App;
-import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.activity.SDBaseActivity;
-import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.title.SDTitleSimple;
-import com.fanwe.library.title.SDTitleSimple.SDTitleSimpleListener;
-import com.fanwe.library.utils.SDActivityUtil;
-import com.fanwe.o2o.miguo.R;
-import com.fanwe.work.ScanResultHandler;
-import com.fanwe.work.SystemBarTintManager;
-import com.lidroid.xutils.ViewUtils;
-import com.sunday.eventbus.SDBaseEvent;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.UMShareAPI;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +18,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.fanwe.app.App;
+import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.event.EnumEventTag;
+import com.fanwe.library.activity.SDBaseActivity;
+import com.fanwe.library.title.SDTitleItem;
+import com.fanwe.library.title.SDTitleSimple;
+import com.fanwe.library.title.SDTitleSimple.SDTitleSimpleListener;
+import com.fanwe.library.utils.SDActivityUtil;
+import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.ScanResultHandler;
+import com.fanwe.work.SystemBarTintManager;
+import com.lidroid.xutils.ViewUtils;
+import com.sunday.eventbus.SDBaseEvent;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.UMShareAPI;
 
 public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListener
 {

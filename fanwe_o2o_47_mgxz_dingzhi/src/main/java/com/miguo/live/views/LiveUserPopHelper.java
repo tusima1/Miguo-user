@@ -162,7 +162,6 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         listener.onPageSelected(0);
 
 
-
     }
 
 
