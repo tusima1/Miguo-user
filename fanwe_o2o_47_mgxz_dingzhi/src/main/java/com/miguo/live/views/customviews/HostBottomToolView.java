@@ -23,6 +23,7 @@ import com.miguo.live.interf.MyItemClickListenerRedNum;
 import com.miguo.live.interf.MyItemClickListenerRedType;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
+import com.miguo.live.model.getHandOutRedPacket.ModelRedNum;
 import com.miguo.live.model.postHandOutRedPacket.ModelHandOutRedPacketPost;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
@@ -30,6 +31,7 @@ import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.SendRedPacketDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,8 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     private Activity mActivity;
     private LiveSwitchScreenListener mScreenListener;
     private LiveHttpHelper liveHttpHelper;
+    private LiveView mLiveView;
+    private boolean clickable =true;
 
     public HostBottomToolView(Context context) {
         super(context);
@@ -181,6 +185,10 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击红包
      */
     private void clickRedpacket() {
+        if(!clickable){
+            SDToast.showToast("红包发的太快了，请过会再发。");
+            return;
+        }
         if (liveHttpHelper == null) {
             liveHttpHelper = new LiveHttpHelper(mContext, HostBottomToolView.this);
         }
@@ -192,7 +200,15 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             builder.setSendListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SDToast.showToast("红包已经发出去了。");
+                    //点击确定按钮，发送红包
+                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
+                        if (dialogSendRedPacket != null) {
+                            dialogSendRedPacket.dismiss();
+                        }
+                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                                currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
+                    }
+                    dialogSendRedPacket.dismiss();
                 }
             });
             builder.setCancelListener(new View.OnClickListener() {
@@ -206,8 +222,33 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             dialogSendRedPacket = builder.create();
         }
         dialogSendRedPacket.show();
+        initNum();
+        dialogSendRedPacket.updateDatasNum(redNumDatas);
+    }
 
+    ArrayList<ModelRedNum> redNumDatas;
 
+    private void initNum() {
+        redNumDatas = new ArrayList<ModelRedNum>();
+        ModelRedNum modelRedNum;
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("1");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("10");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("20");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("30");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("40");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("全部");
+        redNumDatas.add(modelRedNum);
     }
 
     /**
@@ -281,18 +322,21 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             message.what = 1;
             mHandler.sendMessage(message);
         } else if (LiveConstants.HAND_OUT_RED_PACKET_POST.equals(method)) {
-            if(datas!=null&&datas.size()>0) {
-                ModelHandOutRedPacketPost entity = (ModelHandOutRedPacketPost)datas.get(0);
+            if (datas != null && datas.size() > 0) {
+                ModelHandOutRedPacketPost entity = (ModelHandOutRedPacketPost) datas.get(0);
                 //调用服务器的红包发送接口成功后调IM 接口。。
                 String id = entity.getRed_packets_key();
-                String duration  = entity.getRedPacketEventime();
+                String duration = entity.getRedPacketEventime();
                 if (mLiveHelper != null) {
-                  //  mLiveHelper.sendHostSendRedPacketMessage(id, duration);
-                    mLiveHelper.sendHostSendRedPacketMessage("1", "30");
+                    mLiveHelper.sendHostSendRedPacketMessage(id, duration);
                 }
+                if(mLiveView!=null){
+                 mLiveView.sendHostRedPacket(id,duration);
+                }
+
                 //发送自定义消息 。
                 SDToast.showToast("发送红包成功");
-            }else{
+            } else {
                 SDToast.showToast("发送红包失败");
             }
         }
@@ -308,27 +352,23 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             switch (msg.what) {
                 case 1:
                     if (dialogSendRedPacket != null) {
-                        dialogSendRedPacket.updateDatas(datas);
+                        dialogSendRedPacket.updateDatasType(datas);
                     }
                     break;
                 case 2:
-                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
-                        SDToast.showToast("strNum:" + strNum);
-                        if (dialogSendRedPacket != null) {
-                            dialogSendRedPacket.dismiss();
-                        }
-                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-                                currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
+                    if (dialogSendRedPacket != null) {
+                        dialogSendRedPacket.updateDatasNum(redNumDatas);
                     }
                     break;
-               default:
-                   break;
+                default:
+                    break;
             }
         }
     };
 
     @Override
     public void onItemClickType(View view, int postion) {
+        //改变红包类型的选中状态
         if (!SDCollectionUtil.isEmpty(datas)) {
             for (ModelHandOutRedPacket model : datas) {
                 model.setChecked(false);
@@ -346,29 +386,35 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 
     @Override
     public void onItemClickNum(View view, int postion) {
-        switch (postion) {
-            case 0:
-                strNum = "1";
-                break;
-            case 1:
-                strNum = "10";
-                break;
-            case 2:
-                strNum = "20";
-                break;
-            case 3:
-                strNum = "30";
-                break;
-            case 4:
-                strNum = "40";
-                break;
-            case 5:
-                strNum = "全部";
-                break;
+        //改变红包数量的选中状态
+        ModelRedNum tempBean = redNumDatas.get(postion);
+        strNum = tempBean.getName();
+
+        for (ModelRedNum modelRedNum : redNumDatas) {
+            modelRedNum.setChecked(false);
         }
+        tempBean.setChecked(true);
+
         Message message = new Message();
         message.what = 2;
         mHandler.sendMessage(message);
     }
 
+    public LiveView getmLiveView() {
+        return mLiveView;
+    }
+
+    public void setmLiveView(LiveView mLiveView) {
+        this.mLiveView = mLiveView;
+    }
+
+    @Override
+    public boolean isClickable() {
+        return clickable;
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
 }

@@ -125,4 +125,11 @@ public class TencentHttpHelper implements ITencentResult {
         });
 
     }
+
+    @Override
+    public void onDestroy() {
+        mContext = null;
+        mActivity = null;
+
+    }
 }

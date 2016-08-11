@@ -54,8 +54,19 @@ public interface LiveView extends MvpView {
      * 收到红包。
      */
     void getHostRedPacket(HashMap<String,String> params);
+
+    /**
+     * 主播发送红包。
+     *
+     */
+    void sendHostRedPacket(String id,String duration);
     /*
     token 失效 ，主动退出主播页
      */
     void tokenInvalidateAndQuit();
+
+    /**
+     * 用户退出 。
+     */
+    void userExit();
 }

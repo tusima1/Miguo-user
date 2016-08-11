@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -187,6 +188,7 @@
 
         <com.miguo.live.views.customviews.HostRedPacketTimeView
             android:id="@+id/host_red_countdown"
+            android:visibility="gone"
             android:layout_gravity="left|top"
             android:layout_width="@dimen/dp64"
             android:layout_height="@dimen/dp34"

@@ -63,7 +63,6 @@ public class LiveHttpHelper implements IHelper {
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
     private Context mContext;
-    private String token;
 
     public static final String RESULT_OK = "no_body_but_is_ok";
 
@@ -74,9 +73,7 @@ public class LiveHttpHelper implements IHelper {
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
-    public String getToken() {
-        return userCurrentInfo.getToken();
-    }
+
 
     /**
      * 请求直播列表
@@ -85,10 +82,10 @@ public class LiveHttpHelper implements IHelper {
      * @param pageSize
      */
     public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        String tokenValue = getToken();
-        params.put("token", tokenValue);
+
+        params.put("token", App.getInstance().getToken());
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("tag", tag);
@@ -112,7 +109,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                mView.onFailue(message);
             }
         });
 
@@ -124,9 +121,9 @@ public class LiveHttpHelper implements IHelper {
      * @param shop_id
      */
     public void applyRoom(String shop_id, MgCallback mgCallback) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
@@ -140,13 +137,14 @@ public class LiveHttpHelper implements IHelper {
      * @param room_id
      */
     public void getAudienceCount(String room_id) {
-        TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", getToken());
-        params.put("room_id", room_id);
-        params.put("method", LiveConstants.AUDIENCE_COUNT);
-        if (TextUtils.isEmpty(token) || TextUtils.isEmpty(room_id)) {
+        if (TextUtils.isEmpty(App.getInstance().getToken()) || TextUtils.isEmpty(room_id)) {
             return;
         }
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("room_id", room_id);
+        params.put("method", LiveConstants.AUDIENCE_COUNT);
+
 
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
@@ -177,9 +175,9 @@ public class LiveHttpHelper implements IHelper {
      * @param room_id
      */
     public void getAudienceList(String room_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.AUDIENCE_LIST);
 
@@ -212,9 +210,9 @@ public class LiveHttpHelper implements IHelper {
      * @param room_id
      */
     public void endInfo(String room_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.END_INFO);
 
@@ -238,9 +236,9 @@ public class LiveHttpHelper implements IHelper {
      * @param room_id
      */
     public void enterRoom(String room_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.ENTER_ROOM);
 
@@ -264,9 +262,8 @@ public class LiveHttpHelper implements IHelper {
      * @param room_id
      */
     public void exitRoom(String room_id) {
-        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.EXIT_ROOM);
 
@@ -288,9 +285,9 @@ public class LiveHttpHelper implements IHelper {
      * 直播登录，返回用户直播签名  GenerateSign
      */
     public void generateSign() {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.GENERATE_SIGN);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -322,9 +319,9 @@ public class LiveHttpHelper implements IHelper {
      * @param host_id
      */
     public void getHostInfo(String host_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("host_id", host_id);
         params.put("method", LiveConstants.HOST_INFO);
 
@@ -361,9 +358,9 @@ public class LiveHttpHelper implements IHelper {
      */
     public void postHostInfo(String sex, String mobile, String picture, String city, String
             interest) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("sex", sex);
         params.put("mobile", mobile);
         params.put("picture", picture);
@@ -398,9 +395,9 @@ public class LiveHttpHelper implements IHelper {
      * 获取主播标签
      */
     public void getHostTags(String tag_count) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("tag_count", tag_count);
         params.put("method", LiveConstants.HOST_TAGS);
 
@@ -430,9 +427,9 @@ public class LiveHttpHelper implements IHelper {
      * 主播退出，结束直播
      */
     public void stopLive(String room_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("method", LiveConstants.STOP_LIVE);
 
@@ -462,7 +459,7 @@ public class LiveHttpHelper implements IHelper {
      * 业务服务器的数据字典接口
      */
     public void getBussDictionInfo(String dic_type) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("dic_type", dic_type);
         params.put("method", LiveConstants.BUSS_DICTION_INFO);
@@ -495,7 +492,7 @@ public class LiveHttpHelper implements IHelper {
      * 获取七牛UpToken
      */
     public void getUpToken() {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("method", LiveConstants.UP_TOKEN);
 
@@ -525,9 +522,9 @@ public class LiveHttpHelper implements IHelper {
      * 校验用户是否关注该用户(主播)
      */
     public void checkFocus(String host_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("host_id", host_id);
         params.put("method", LiveConstants.CHECK_FOCUS);
 
@@ -557,9 +554,9 @@ public class LiveHttpHelper implements IHelper {
      * 关注主播
      */
     public void userFocus(String host_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("host_id", host_id);
         params.put("method", LiveConstants.USER_FOCUS);
 
@@ -584,11 +581,10 @@ public class LiveHttpHelper implements IHelper {
      * @param host_id
      */
     public void getHandOutRedPacket(String shop_id, String host_id) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("id", shop_id);
-        params.put("spokesman_id", host_id);
         params.put("method", LiveConstants.HAND_OUT_RED_PACKET);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -624,9 +620,9 @@ public class LiveHttpHelper implements IHelper {
      * @param red_packet_amount
      */
     public void postHandOutRedPacket(String room_id, String shop_id, String host_id, String red_packet_type, String red_packet_count, String red_packet_amount) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("tencent_room_id", room_id);
         params.put("id", shop_id);
         params.put("spokesman_id", host_id);
@@ -658,10 +654,15 @@ public class LiveHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 抢红包接口。
+     * @param user_id
+     * @param red_packets_key
+     */
     public void getRedPackets(String user_id, String red_packets_key) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put("user_id", user_id);
         params.put("red_packets_key", red_packets_key);
 
@@ -679,6 +680,21 @@ public class LiveHttpHelper implements IHelper {
             }
         });
 
+    }
+
+    /**
+     * 取用户所得到的红包列表。
+     * @param roomID
+     */
+    public void getUserRedPacketList(String roomID,MgCallback callback){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("user_id", App.getInstance().getToken());
+        if(!TextUtils.isEmpty(roomID)) {
+            params.put("tencent_room_id", roomID);
+        }
+        params.put("method", LiveConstants.GET_USER_RED_PACKETS);
+
+        OkHttpUtils.getInstance().post(null, params, callback);
     }
 
 

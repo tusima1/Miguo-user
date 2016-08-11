@@ -12,13 +12,13 @@
     <RelativeLayout
         android:id="@+id/send_red_dialog"
         android:layout_width="@dimen/dp273"
-        android:layout_height="475dp"
+        android:layout_height="510dp"
         android:layout_gravity="center">
 
         <LinearLayout
             android:id="@+id/location"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="435dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/shape_cricle_gray_solid_white"
             android:orientation="vertical"
@@ -126,15 +126,23 @@
                 android:paddingLeft="@dimen/dp2"
                 android:paddingRight="@dimen/dp2" />
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <Button
+                android:id="@+id/btn_submit_dialog_red"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/dp13"
+                android:layout_marginRight="@dimen/dp13"
                 android:layout_marginTop="@dimen/dp10"
+                android:background="@drawable/bg_grey_big"
+                android:clickable="false"
                 android:gravity="center"
-                android:text="选择数量直接发送"
-                android:textColor="@color/text_fenxiao"
-                android:textSize="@dimen/sp13" />
+                android:onClick="onClick"
+                android:paddingBottom="@dimen/dp10"
+                android:paddingTop="@dimen/dp10"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="17dp" />
 
 
         </LinearLayout>

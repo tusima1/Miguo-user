@@ -5,4 +5,5 @@ package com.miguo.live.interf;
  */
 public interface ITencentResult {
     void onResult(boolean succ);
+    void onDestroy();
 }

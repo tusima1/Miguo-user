@@ -22,6 +22,7 @@ import com.miguo.live.adapters.RedTypeAdapter;
 import com.miguo.live.interf.MyItemClickListenerRedNum;
 import com.miguo.live.interf.MyItemClickListenerRedType;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
+import com.miguo.live.model.getHandOutRedPacket.ModelRedNum;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.RedPacketHelper;
 import com.miguo.utils.DisplayUtil;
@@ -38,6 +39,9 @@ public class SendRedPacketDialog extends Dialog {
     private static RedTypeAdapter redTypeAdapter;
     private static List<ModelHandOutRedPacket> redList;
 
+    private static RedNumGridAdapter redNumGridAdapter;
+    private static List<ModelRedNum> redNumDatas;
+
     public SendRedPacketDialog(Context context) {
         super(context);
     }
@@ -47,7 +51,7 @@ public class SendRedPacketDialog extends Dialog {
 
     }
 
-    public void updateDatas(ArrayList<ModelHandOutRedPacket> datas) {
+    public void updateDatasType(ArrayList<ModelHandOutRedPacket> datas) {
         redList.clear();
         if (!SDCollectionUtil.isEmpty(datas)) {
             for (ModelHandOutRedPacket temp : datas) {
@@ -57,7 +61,48 @@ public class SendRedPacketDialog extends Dialog {
             }
         }
         redTypeAdapter.notifyDataSetChanged();
+        checkBtnSure();
     }
+
+    public void updateDatasNum(ArrayList<ModelRedNum> datas) {
+        redNumDatas.clear();
+        if (!SDCollectionUtil.isEmpty(datas)) {
+            redNumDatas.addAll(datas);
+        }
+        redNumGridAdapter.notifyDataSetChanged();
+        checkBtnSure();
+    }
+
+    /**
+     * 设置按钮状态
+     */
+    private void checkBtnSure() {
+        boolean flag = false;
+        for (ModelHandOutRedPacket bean : redList) {
+            if (bean.isChecked()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            flag = false;
+            for (ModelRedNum bean : redNumDatas) {
+                if (bean.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (flag) {
+            btnSure.setClickable(true);
+            btnSure.setBackgroundResource(R.drawable.bg_orange);
+        } else {
+            btnSure.setClickable(false);
+            btnSure.setBackgroundResource(R.drawable.bg_grey_big);
+        }
+    }
+
+    private static Button btnSure;
 
     public static class Builder {
         private Context context;
@@ -114,6 +159,7 @@ public class SendRedPacketDialog extends Dialog {
             View layout = inflater.inflate(R.layout.dialog_live_red_packet, null);
             dialog.addContentView(layout, new LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            btnSure = (Button) layout.findViewById(R.id.btn_submit_dialog_red);
             tvShopName = (TextView) layout.findViewById(R.id.shop_name_dialog_live_red_packet);
             cancelBtn = (Button) layout.findViewById(R.id.cancel_btn);
             mTypeGridView = (RecyclerView) layout.findViewById(R.id.type_grid);
@@ -156,7 +202,6 @@ public class SendRedPacketDialog extends Dialog {
             //设置适配器
             mTypeGridView.setAdapter(redTypeAdapter);
 
-
             //---设置数量gridview--
             mNumGridView.setLayoutManager(new GridLayoutManager(context, 3));
             mNumGridView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -176,20 +221,15 @@ public class SendRedPacketDialog extends Dialog {
                     outRect.top = dp12;
                 }
             });
+            redNumDatas = new ArrayList<ModelRedNum>();
 
-            List<String> redNumData = new ArrayList<String>();
-            redNumData.add("1");
-            redNumData.add("10");
-            redNumData.add("20");
-            redNumData.add("30");
-            redNumData.add("40");
-            redNumData.add("全部");
-            RedNumGridAdapter redNumGridAdapter = new RedNumGridAdapter(context, redNumData);
+            redNumGridAdapter = new RedNumGridAdapter(context, redNumDatas);
             if (myItemClickListenerNum != null) {
                 redNumGridAdapter.setOnItemClickListener(myItemClickListenerNum);
             }
             mNumGridView.setAdapter(redNumGridAdapter);
             cancelBtn.setOnClickListener(cancelListener);
+            btnSure.setOnClickListener(sendListener);
 
             dialog.setContentView(layout);
             dialog.setCanceledOnTouchOutside(false);

@@ -42,7 +42,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public boolean isUserClose=false;//是不是用户点击的关闭
     private List<ModelAudienceInfo> mData;
 
-    HeadTopAdapter mAdapter=new HeadTopAdapter(null,mContext);
+    private   HeadTopAdapter mAdapter;
 
     public UserHeadTopView(Context context) {
         this(context,null);
@@ -55,10 +55,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public UserHeadTopView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext=context;
-        init();
+
     }
 
-    private void init() {
+    public void init() {
         LayoutInflater.from(mContext).inflate(R.layout.head_top_layout,this);
         mUserIamge = ((CircleImageView) findViewById(R.id.civ_user_image));
         mMembers = ((TextView) findViewById(R.id.tv_members));
@@ -105,9 +105,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         isUserClose=true;
     }
     public void refreshData(List<ModelAudienceInfo> mData) {
-        this.mData = mData;
-        mAdapter.setmData(mData);
-        mAdapter.notifyDataSetChanged();
+        if(this.mData!=mData) {
+            this.mData = mData;
+            mAdapter.setmData(mData);
+        }
     }
 
         /**
@@ -124,7 +125,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
         //设置间距
         mMemberList.addItemDecoration(new SpaceItemDecoration(2));
-
+        mMemberList.setHasFixedSize(true);
         mMemberList.setAdapter(mAdapter);
     }
 
@@ -206,5 +207,14 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         if (userExitDialogHelper!=null){
             userExitDialogHelper.show();
         }
+    }
+
+    public HeadTopAdapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public void setmAdapter(HeadTopAdapter mAdapter) {
+        this.mAdapter = mAdapter;
+
     }
 }

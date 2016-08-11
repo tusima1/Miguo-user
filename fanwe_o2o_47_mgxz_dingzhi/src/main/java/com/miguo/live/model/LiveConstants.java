@@ -83,5 +83,8 @@ public class LiveConstants {
      * 抢红包
      */
     public static final String GET_RED_PACKETS = "GetRedPackets";
-
+    /**
+     *用户 抢到的红包列表。
+     */
+    public static final String GET_USER_RED_PACKETS = "GetUserRedPackets";
 }

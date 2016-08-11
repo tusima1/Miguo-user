@@ -1,6 +1,7 @@
 package com.fanwe.network;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
@@ -96,12 +97,14 @@ public class OkHttpUtils {
         params.putAll(commonParams());
         //加密所有的参数
         params = encryptParams(params);
+        StringBuilder requestStr = new StringBuilder("");
 
         FormBody.Builder build = new FormBody.Builder();
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
+                    requestStr.append("key:"+entry.getKey()+"  value:"+entry.getValue());
                     build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -117,7 +120,9 @@ public class OkHttpUtils {
                 .url(serverUrl)
                 .post(requestBodyPost)
                 .build();
-
+        if (ServerUrl.DEBUG) {
+            Log.e(TAG, "get:"+requestStr.toString());
+        }
 
         client.newCall(requestPost).enqueue(mCallback);
     }
@@ -151,7 +156,56 @@ public class OkHttpUtils {
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                build.add(entry.getKey(), "");
+            }
+        }
+        if (ServerUrl.DEBUG) {
+            Log.e(TAG, "get:"+build.toString());
+        }
+        RequestBody requestBodyPut = build.build();
+        Request requestPut = new Request.Builder()
+                .url(serverUrl)
+                .put(requestBodyPut)
+                .build();
+
+        client.newCall(requestPut).enqueue(mCallback);
+    }
+
+
+    /**
+     * 异步delete提交
+     *
+     * @param url
+     * @param params
+     * @param mCallback
+     */
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
+        String serverUrl = "";
+        if (ServerUrl.DEBUG) {
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
+        } else {
+            serverUrl = ServerUrl.SERVER_API_URL_MID;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
+        }
+
+        //添加公共参数
+        params.putAll(commonParams());
+        //加密所有的参数
+        params = encryptParams(params);
+
+        FormBody.Builder build = new FormBody.Builder();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                try {
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -163,7 +217,7 @@ public class OkHttpUtils {
         RequestBody requestBodyPut = build.build();
         Request requestPut = new Request.Builder()
                 .url(serverUrl)
-                .put(requestBodyPut)
+                .delete(requestBodyPut)
                 .build();
 
         client.newCall(requestPut).enqueue(mCallback);
@@ -207,9 +261,9 @@ public class OkHttpUtils {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            if(entry.getValue()==null){
-                paramStr.append(entry.getKey()+ "=" +""+"&");
-            }else {
+            if (entry.getValue() == null) {
+                paramStr.append(entry.getKey() + "=" + "" + "&");
+            } else {
                 try {
                     paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
                 } catch (UnsupportedEncodingException e) {
@@ -255,9 +309,9 @@ public class OkHttpUtils {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
-            if(entry.getValue()==null){
-                paramStr.append(entry.getKey()+ "=" +""+"&");
-            }else {
+            if (entry.getValue() == null) {
+                paramStr.append(entry.getKey() + "=" + "" + "&");
+            } else {
                 try {
                     paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
                 } catch (UnsupportedEncodingException e) {
@@ -266,7 +320,9 @@ public class OkHttpUtils {
             }
         }
         serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
-
+        if (ServerUrl.DEBUG) {
+            Log.e(TAG, "get:"+serverUrl);
+        }
         //创建一个Request
         final Request request = new Request.Builder()
                 .url(serverUrl)
@@ -326,6 +382,9 @@ public class OkHttpUtils {
         while (sgIt.hasNext()) {
             String key = (String) sgIt.next();
             String value = (String) treeMap.get(key);
+            if (value == null) {
+                value = "";
+            }
             if (key.equals("sign")) {
                 continue;
             }
@@ -335,7 +394,7 @@ public class OkHttpUtils {
                 signString = signString + "|" + key + ":" + value;
             }
         }
-//		System.err.println(signString.toLowerCase());
+//        System.err.println(signString.toLowerCase());
         String checkSignString = "";
         switch (ENCRYPT_TYPE) {
             case "MD5":

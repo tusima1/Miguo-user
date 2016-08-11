@@ -5,6 +5,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_arrow_left_bar_mine_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:onClick="onClick"
+            android:padding="@dimen/dp13"
+            android:src="@drawable/ic_arrow_action_bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="选择场所"
+            android:textColor="@color/rgb_898989"
+            android:textSize="@dimen/dp17"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/text_line" />
+
     <com.ogaclejapan.smarttablayout.SmartTabLayout
         android:id="@+id/tab_mine_shop"
         android:layout_width="match_parent"

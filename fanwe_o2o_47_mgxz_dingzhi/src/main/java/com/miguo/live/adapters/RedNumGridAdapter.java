@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.MyItemClickListenerRedNum;
+import com.miguo.live.model.getHandOutRedPacket.ModelRedNum;
 import com.miguo.live.viewHolder.ViewHolderRedNum;
 
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.List;
  */
 public class RedNumGridAdapter extends RecyclerView.Adapter<ViewHolderRedNum> {
     private Context mContext;
-    private List<String> datas;
+    private List<ModelRedNum> datas;
 
     private MyItemClickListenerRedNum mItemClickListener;
 
-    public RedNumGridAdapter(Context context, List<String> datas) {
+    public RedNumGridAdapter(Context context, List<ModelRedNum> datas) {
         this.mContext = context;
         this.datas = datas;
     }
@@ -41,8 +42,20 @@ public class RedNumGridAdapter extends RecyclerView.Adapter<ViewHolderRedNum> {
 
     @Override
     public void onBindViewHolder(ViewHolderRedNum holder, int position) {
-        String num = datas.get(position);
+        ModelRedNum modelRedNum = datas.get(position);
+        String num = modelRedNum.getName();
         holder.tv_num.setText(num);
+
+        if (modelRedNum.isChecked()) {
+            //橙色
+            holder.itemView.setBackgroundResource(R.drawable.bg_orange_small);
+            holder.tv_num.setTextColor(mContext.getResources().getColor(R.color.white));
+        } else {
+            //白色
+            holder.itemView.setBackgroundResource(R.drawable.shape_cricle_bg_white_gray);
+            holder.tv_num.setTextColor(mContext.getResources().getColor(R.color.text_line));
+        }
+
     }
 
     /**
