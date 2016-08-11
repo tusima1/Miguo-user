@@ -40,6 +40,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
+import com.miguo.live.model.getStoresRandomComment.ResultStoresRandomComment;
+import com.miguo.live.model.getStoresRandomComment.RootStoresRandomComment;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
@@ -72,7 +75,6 @@ public class LiveHttpHelper implements IHelper {
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
-
 
 
     /**
@@ -136,13 +138,14 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param room_id
      */
-    public void getAudienceCount(String room_id) {
+    public void getAudienceCount(String room_id, String type) {
         if (TextUtils.isEmpty(App.getInstance().getToken()) || TextUtils.isEmpty(room_id)) {
             return;
         }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
+        params.put("type", type);
         params.put("method", LiveConstants.AUDIENCE_COUNT);
 
 
@@ -656,6 +659,7 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 抢红包接口。
+     *
      * @param user_id
      * @param red_packets_key
      */
@@ -684,17 +688,54 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 取用户所得到的红包列表。
+     *
      * @param roomID
      */
-    public void getUserRedPacketList(String roomID,MgCallback callback){
+    public void getUserRedPacketList(String roomID, MgCallback callback) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("user_id", App.getInstance().getToken());
-        if(!TextUtils.isEmpty(roomID)) {
+        if (!TextUtils.isEmpty(roomID)) {
             params.put("tencent_room_id", roomID);
         }
         params.put("method", LiveConstants.GET_USER_RED_PACKETS);
 
         OkHttpUtils.getInstance().post(null, params, callback);
+    }
+
+    /**
+     * 获取门店随机评价
+     *
+     * @param shop_id
+     * @param comment_count
+     */
+    public void getStoresRandomComment(String shop_id, String comment_count) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("shop_id", shop_id);
+        params.put("comment_count", comment_count);
+
+        params.put("method", LiveConstants.STORES_RANDOM_COMMENT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootStoresRandomComment rootStoresRandomComment = gson.fromJson(responseBody, RootStoresRandomComment.class);
+                List<ResultStoresRandomComment> resultStoresRandomComments = rootStoresRandomComment.getResult();
+                if (SDCollectionUtil.isEmpty(resultStoresRandomComments)) {
+                    mView.onSuccess(LiveConstants.STORES_RANDOM_COMMENT, null);
+                    return;
+                }
+                ResultStoresRandomComment resultStoresRandomComment = resultStoresRandomComments.get(0);
+                List<ModelStoresRandomComment> modelStoresRandomComment = resultStoresRandomComment.getBody();
+                mView.onSuccess(LiveConstants.STORES_RANDOM_COMMENT, modelStoresRandomComment);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
     }
 
 
