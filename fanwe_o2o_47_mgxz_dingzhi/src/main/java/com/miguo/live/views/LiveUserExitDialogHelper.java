@@ -176,10 +176,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                 datasList.clear();
                 //请求了5个room，需要剔除当前观看的房间，并最后保留4个
                 for (Room room : (ArrayList<Room>) datas) {
-//                    if (!room.getId().equals(CurLiveInfo.getRoomNum()) && datasList.size() < 5) {
-//                        datasList.add(room);
-//                    }
-                    if ( datasList.size() < 5) {
+                    if (!room.getHost().getHost_user_id().equals(CurLiveInfo.getHostID()) && datasList.size() < 5) {
                         datasList.add(room);
                     }
                 }
@@ -213,7 +210,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                     tv_follow.setOnClickListener(null);
                     break;
                 case 2:
-                    tv_count.setText(count);
+                    tv_count.setText("观看人数：" + count);
                     break;
                 case 3:
                     mUserExitAdapter.notifyDataSetChanged();
