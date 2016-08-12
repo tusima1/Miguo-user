@@ -5,12 +5,13 @@ import android.app.Dialog;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.adapters.UserExitAdapter;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
@@ -22,9 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,6 +43,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private Dialog dialog;
     private LiveHttpHelper liveHttpHelper;
     private String count = "";
+    private List<Room> datasList = new ArrayList<>();
+    private UserExitAdapter mUserExitAdapter;
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
@@ -56,6 +57,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         liveHttpHelper = new LiveHttpHelper(mActivity, this);
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
         liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
+        liveHttpHelper.getLiveList(1, 5, "", "", "");
         ImageLoader.getInstance().displayImage(CurLiveInfo.getHostAvator(), civ_user_image);
         tv_username.setText(CurLiveInfo.getHostName());
         tv_user_location.setText(CurLiveInfo.modelShop.getAddress());
@@ -88,27 +90,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         tv_youhuiquan.setOnClickListener(this);
         tv_follow.setOnClickListener(this);
 
-        //init gridview
-        int[] imageIds = new int[]{
-                R.drawable.app_icon,
-                R.drawable.app_icon,
-                R.drawable.app_icon,
-                R.drawable.app_icon,
-        };
-        //创建一个List对象，List对象的元素是Map
-        List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < imageIds.length; i++) {
-            Map<String, Object> listItem = new HashMap<String, Object>();
-            listItem.put("image", imageIds[i]);
-            listItems.add(listItem);
-        }
-        //创建一个SimpleAdapter
-        SimpleAdapter simpleAdapter = new SimpleAdapter(mActivity,
-                listItems,
-                R.layout.item_pop_live_exit,
-                new String[]{"image"},
-                new int[]{R.id.iv_ren});
-        gridview.setAdapter(simpleAdapter);
+        mUserExitAdapter = new UserExitAdapter(mActivity, mActivity.getLayoutInflater(), datasList);
+        gridview.setAdapter(mUserExitAdapter);
     }
 
     /**
@@ -188,6 +171,20 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                 count = bean.getCount();
             }
             message.what = 2;
+        } else if (LiveConstants.LIVE_LIST.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                datasList.clear();
+                //请求了5个room，需要剔除当前观看的房间，并最后保留4个
+                for (Room room : (ArrayList<Room>) datas) {
+//                    if (!room.getId().equals(CurLiveInfo.getRoomNum()) && datasList.size() < 5) {
+//                        datasList.add(room);
+//                    }
+                    if ( datasList.size() < 5) {
+                        datasList.add(room);
+                    }
+                }
+            }
+            message.what = 3;
         }
         mHandler.sendMessage(message);
     }
@@ -217,6 +214,9 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                     break;
                 case 2:
                     tv_count.setText(count);
+                    break;
+                case 3:
+                    mUserExitAdapter.notifyDataSetChanged();
                     break;
             }
         }

@@ -55,7 +55,7 @@ public class SellerHttpHelper implements IHelper {
      * 请求门店列表
      */
 
-    public void getStoreList(int pageNum, int pageSize, String type) {
+    public void getStoreList(int pageNum, int pageSize, String type, String cityId) {
 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
