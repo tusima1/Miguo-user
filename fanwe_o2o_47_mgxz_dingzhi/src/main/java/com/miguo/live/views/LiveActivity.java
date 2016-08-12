@@ -1796,15 +1796,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 List<ModelAudienceInfo> audienceList = datas;
                 if (audienceList != null && audienceList.size() >= 0) {
                     boolean isHost = LiveUtil.checkIsHost();
+                    int size = datas.size();
                     if (isHost) {
                         if(mHostTopView!=null) {
                             mHostTopView.refreshData(datas);
+                            mHostTopView.updateAudienceCount(size+"");
                         }
                     } else {
                         if(mUserHeadTopView!=null) {
                             mUserHeadTopView.refreshData(datas);
+                            mUserHeadTopView.updateAudienceCount(size+"");
                         }
-
                     }
                     mHeadTopAdapter.notifyDataSetChanged();
                 }

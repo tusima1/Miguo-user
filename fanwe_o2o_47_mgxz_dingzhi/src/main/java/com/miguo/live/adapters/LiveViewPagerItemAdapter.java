@@ -67,6 +67,9 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
                 break;
         }
         currentView = view;
+        if(currentView instanceof  PagerRedPacketView){
+            ((PagerRedPacketView)currentView).refreshData();
+        }
         container.addView(view);
         holder.put(position, new WeakReference<View>(view));
         return view;
@@ -99,7 +102,9 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
     }
 
     protected ViewPagerItem getPagerItem(int position) {
-        return pages.get(position);
+        return  pages.get(position);
+
+
     }
     public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
         this.mSellerDetailInfo = mSellerDetailInfo;

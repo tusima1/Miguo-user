@@ -37,7 +37,25 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
     @Override
     public void onBindViewHolder(PagerRedPacketAdapter.ViewHolder holder, int position) {
-        holder.mTv_BigNum.setText(getItemCount());
+        UserRedPacketInfo userRedPacketInfo = mdatas.get(position);
+        //红包类型 1 折扣券。2 优惠券。"red_packet_type":"1",
+        if(userRedPacketInfo!=null) {
+            String str = "";
+            holder.mTv_BigNum.setText(userRedPacketInfo.getRed_packet_amount());
+            switch (userRedPacketInfo.getRed_packet_type()){
+                case "1":
+                    str="折";
+                    break;
+                case "2":
+                    str="优惠券";
+                    break;
+                default:
+                    break;
+            }
+            holder.packet_type.setText(str);
+            holder.mTv_Title.setText(userRedPacketInfo.getRed_packet_name()==null?"":userRedPacketInfo.getRed_packet_name());
+            holder.mTv_Time.setText(userRedPacketInfo.getAvailable_time_start()==null?"":userRedPacketInfo.getAvailable_time_start()+"-"+userRedPacketInfo.getAvailable_time_end()==null?"":userRedPacketInfo.getAvailable_time_end());
+        }
     }
 
     @Override

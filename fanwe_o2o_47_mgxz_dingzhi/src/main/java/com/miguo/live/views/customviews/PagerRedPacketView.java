@@ -59,7 +59,7 @@ public class PagerRedPacketView extends LinearLayout implements CallbackView{
 
     private void initView() {
         mLiveHttpHelper = new LiveHttpHelper(mContext,this);
-        mLiveHttpHelper.getUserRedPacketList(CurLiveInfo.getRoomNum()+"");
+        refreshData();
         LayoutInflater.from(mContext).inflate(R.layout.item_viewpager_red_packet,this);
         mTv_redNum = ((TextView) this.findViewById(R.id.tv_red_num));
         mRecyclerRed = ((RecyclerView) findViewById(R.id.recycler_red));
@@ -74,6 +74,9 @@ public class PagerRedPacketView extends LinearLayout implements CallbackView{
 
     }
 
+    public void refreshData(){
+        mLiveHttpHelper.getUserRedPacketList(CurLiveInfo.getRoomNum()+"");
+    }
     @Override
     public void onSuccess(String responseBody) {
 
@@ -83,7 +86,7 @@ public class PagerRedPacketView extends LinearLayout implements CallbackView{
     @Override
     public void onSuccess(String method, List datas) {
         switch (method) {
-            case LiveConstants.AUDIENCE_LIST:
+            case LiveConstants.GET_USER_RED_PACKETS:
                 if (mAdapter != null) {
                     mAdapter = new PagerRedPacketAdapter();
                 }

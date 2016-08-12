@@ -16,6 +16,7 @@ import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.miguo.live.views.LiveActivity;
 import com.tencent.imcore.Context;
@@ -96,7 +97,14 @@ HomeFragmentLiveList extends BaseFragment {
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
                 if(room.getLbs()!=null){
                     CurLiveInfo.setShopID(room.getLbs().getShop_id());
+                    ModelStoreList modelStoreList=new ModelStoreList();
+                     modelStoreList.setShop_name(room.getLbs().getShop_name());
+                     modelStoreList.setId(room.getLbs().getShop_id());
+                    CurLiveInfo.setModelShop(modelStoreList);
                 }
+
+
+
                 CurLiveInfo.setHostUserID(room.getHost().getUid());
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
                 CurLiveInfo.setMembers(1); // 添加自己

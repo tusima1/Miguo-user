@@ -722,7 +722,7 @@ public class LiveHttpHelper implements IHelper {
      */
     public void getUserRedPacketList(String roomID){
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("user_id", App.getInstance().getToken());
+        params.put("token", App.getInstance().getToken());
         if(!TextUtils.isEmpty(roomID)) {
             params.put("tencent_room_id", roomID);
         }
