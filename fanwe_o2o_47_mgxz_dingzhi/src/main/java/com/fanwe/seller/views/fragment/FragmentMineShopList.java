@@ -81,7 +81,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     }
 
     private void getData() {
-        sellerHttpHelper.getStoreList(pageNum, pageSize, type + "");
+        sellerHttpHelper.getStoreList(pageNum, pageSize, type + "", "");
     }
 
     private void initPullRefreshLv() {
