@@ -53,7 +53,6 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
-import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
@@ -123,7 +122,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     /**
      * 更新红包上面的时间 。
      */
-    private static final int REFRESH_RED_TIME= 20;
+    private static final int REFRESH_RED_TIME = 20;
     private Dialog mMemberDg, inviteDg;
     private HeartLayout mHeartLayout;
     private HeartBeatTask mHeartBeatTask;//心跳
@@ -135,7 +134,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private LinearLayout mHostLeaveLayout;
     private long mSecond = 0;
-    private Timer mHearBeatTimer, mVideoTimer,mAudienceTimer,mRedPacketTimer;
+    private Timer mHearBeatTimer, mVideoTimer, mAudienceTimer, mRedPacketTimer;
     private VideoTimerTask mVideoTimerTask;//计时器
     private ObjectAnimator mObjAnim;
     private ImageView mRecordBall;
@@ -529,7 +528,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //顶部view
 
         //主播-->加载的view
-        mHeadTopAdapter = new HeadTopAdapter(null,this);
+        mHeadTopAdapter = new HeadTopAdapter(null, this);
         if (LiveUtil.checkIsHost()) {
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
@@ -687,11 +686,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
 
-
         //开启后台业务服务器请求管理类
         mLiveHttphelper = new LiveHttpHelper(this, this);
         //----
-        mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
+        mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
         //主播清屏操作
         mHostBottomToolView1.setLiveSwitchScreenListener(new LiveSwitchScreenListener() {
             @Override
@@ -739,9 +737,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void getShopDetail(String shopId) {
-
         mSellerHttpHelper.getSellerDetail(shopId);
-
     }
 
 
@@ -767,6 +763,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
     }
+
     /**
      * 记时器
      */
@@ -792,11 +789,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mVideoTimer.cancel();
             mVideoTimer = null;
         }
-        if(null!=mAudienceTimer){
-            mAudienceTimer.cancel();;
+        if (null != mAudienceTimer) {
+            mAudienceTimer.cancel();
             mAudienceTimer = null;
         }
-
 
         inviteViewCount = 0;
         thumbUp = 0;
@@ -811,10 +807,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mEnterRoomHelper.onDestory();
         }
         //mLiveHelper;
-        if(mTLoginHelper!=null){
+        if (mTLoginHelper != null) {
             mTLoginHelper.onDestory();
         }
-        if(tencentHttpHelper!=null){
+        if (tencentHttpHelper != null) {
             tencentHttpHelper.onDestroy();
         }
         QavsdkControl.getInstance().clearVideoMembers();
@@ -831,7 +827,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (LiveUtil.checkIsHost()) {
             hostExit();
         } else {
-            userExit();
+            finish();
         }
 
     }
@@ -841,7 +837,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-            if (backDialog!=null&&!backDialog.isShowing()) {
+            if (backDialog != null && !backDialog.isShowing()) {
                 backDialog.show();
             }
         }
@@ -877,15 +873,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             public void onClick(View v) {
                 //如果是直播，发消息
                 if (null != mLiveHelper) {
-                    MySelfInfo.getInstance().setMyRoomNum(-1);
+                    //向后台发送主播退出
                     mLiveHelper.perpareQuitRoom(true);
                     if (isPushed) {
                         mLiveHelper.stopPushAction();
                     }
-                    //向后台发送主播退出
-                    if (mLiveHttphelper != null) {
-                        mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum() + "");
-                    }
+                    startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
                 }
 
             }
@@ -1012,7 +1005,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
 
         //如果存在视频互动，取消
-      //  QavsdkControl.getInstance().closeMemberView(id);
+        //  QavsdkControl.getInstance().closeMemberView(id);
     }
 
     @Override
@@ -1035,12 +1028,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
 
-
     @Override
     public void sendHostRedPacket(String id, String duration) {
-        if(!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)){
+        if (!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)) {
             //启动红包倒计时。
-            Integer values = Integer.valueOf(duration)+10*1000;
+            Integer values = Integer.valueOf(duration) + 10 * 1000;
 
             CountDownTimer robLiftTimer = new CountDownTimer(values, 1000) {
                 @Override
@@ -1059,7 +1051,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                             public void run() {
                                 Message msg = Message.obtain();
                                 msg.what = REFRESH_RED_TIME;
-                                msg.arg1=1;
+                                msg.arg1 = 1;
                                 mHandler.sendMessage(msg);
                             }
                         }, 1000);
@@ -1113,7 +1105,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         int roomId = CurLiveInfo.getRoomNum();
         if (roomId != -1 && roomId != 0) {
-            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
         }
     }
 
@@ -1188,7 +1180,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         mAudienceTimer = new Timer(true);
         mGetAudienceTask = new GetAudienceTask();
-        mAudienceTimer.schedule(mGetAudienceTask, 1000, 30* 1000);
+        mAudienceTimer.schedule(mGetAudienceTask, 1000, 30 * 1000);
 
     }
 
@@ -1841,21 +1833,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 break;
             case LiveConstants.HOST_TAGS:
                 //获取主播标签
-                break;
-            case LiveConstants.STOP_LIVE:
-                //主播退出(结束主播!!!)
-                if (checkDataIsNull(datas)) {
-                    finish();
-                    return;
-                }
-                ModelStopLive stopLive = (ModelStopLive) datas.get(0);
-                Intent mIntent = new Intent();
-                mIntent.setClass(this, LiveEndActivity.class);
-                // 通过Bundle
-                Bundle mBundle = new Bundle();
-                mBundle.putSerializable(LiveConstants.LIVEINFOJSON, stopLive);
-                mIntent.putExtras(mBundle);
-                startActivity(mIntent);
                 break;
             case LiveConstants.AUDIENCE_COUNT:
                 //获取观众人数

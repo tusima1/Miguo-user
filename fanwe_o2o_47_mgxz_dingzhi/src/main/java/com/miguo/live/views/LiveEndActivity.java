@@ -8,25 +8,32 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveEndBinding;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.model.DataBindingLiveEnd;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.stopLive.ModelStopLive;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.utils.TimeUtils;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.List;
 
 /**
  * 主播退出
  * Created by Administrator on 2016/7/28.
  */
-public class LiveEndActivity extends Activity {
+public class LiveEndActivity extends Activity implements CallbackView {
     private DataBindingLiveEnd dataBindingLiveEnd;
     private boolean isShare;
     private ModelStopLive modelStopLive;
+    private LiveHttpHelper mLiveHttphelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +45,9 @@ public class LiveEndActivity extends Activity {
     }
 
     private void preData() {
-        if (getIntent() != null) {
-            modelStopLive = (ModelStopLive) getIntent().getSerializableExtra("modelStopLive");
-            if (modelStopLive != null) {
-                dataBindingLiveEnd.numViewers.set(modelStopLive.getWatch_count());
-                dataBindingLiveEnd.timeLive.set(TimeUtils.millisecondToHHMMSS(Long.valueOf(modelStopLive.getUsetime())));
-            }
-        }
+        mLiveHttphelper = new LiveHttpHelper(this, this);
+        mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum() + "");
+
         dataBindingLiveEnd.hostName.set(App.getInstance().getUserNickName());
         dataBindingLiveEnd.shopName.set(CurLiveInfo.modelShop.getShop_name());
     }
@@ -68,9 +71,7 @@ public class LiveEndActivity extends Activity {
                 dataBindingLiveEnd.timeLive.set(timeStr);
                 String count = liveInfoJson.getWatch_count();
                 if (!TextUtils.isEmpty(count)) {
-
                     dataBindingLiveEnd.numViewers.set(count);
-
                     dataBindingLiveEnd.countMoney.set("");
                     dataBindingLiveEnd.countGood.set("");
                     dataBindingLiveEnd.countMi.set("");
@@ -122,5 +123,28 @@ public class LiveEndActivity extends Activity {
             platform = SHARE_MEDIA.QZONE;
         }
         UmengShareManager.share(platform, this, "", "直播结束分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.STOP_LIVE.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                modelStopLive = (ModelStopLive) datas.get(0);
+                dataBindingLiveEnd.numViewers.set(modelStopLive.getWatch_count());
+                dataBindingLiveEnd.timeLive.set(TimeUtils.millisecondToHHMMSS(Long.valueOf(modelStopLive.getUsetime())));
+            }
+        }
+        MySelfInfo.getInstance().setMyRoomNum(-1);
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }

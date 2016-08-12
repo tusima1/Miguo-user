@@ -2,6 +2,8 @@ package com.miguo.live.views.customviews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,11 +14,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.HeadTopAdapter;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUserExitDialogHelper;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.List;
 
@@ -26,7 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/7/22.
  * 显示的是主播的数据
  */
-public class UserHeadTopView extends RelativeLayout implements View.OnClickListener,IViewGroup {
+public class UserHeadTopView extends RelativeLayout implements View.OnClickListener, IViewGroup, CallbackView {
     private Context mContext;
     private CircleImageView mUserIamge;//头像
     private TextView mMembers;//头像下方人数量
@@ -39,27 +47,31 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private Activity mActivity;
     private LiveUserExitDialogHelper userExitDialogHelper;
 
-    public boolean isUserClose=false;//是不是用户点击的关闭
+    public boolean isUserClose = false;//是不是用户点击的关闭
     private List<ModelAudienceInfo> mData;
 
-    private   HeadTopAdapter mAdapter;
+    private HeadTopAdapter mAdapter;
+    private LiveHttpHelper liveHttpHelper;
 
     public UserHeadTopView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public UserHeadTopView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public UserHeadTopView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.mContext=context;
+        this.mContext = context;
 
     }
 
     public void init() {
-        LayoutInflater.from(mContext).inflate(R.layout.head_top_layout,this);
+        liveHttpHelper = new LiveHttpHelper(mActivity, this);
+        liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
+
+        LayoutInflater.from(mContext).inflate(R.layout.head_top_layout, this);
         mUserIamge = ((CircleImageView) findViewById(R.id.civ_user_image));
         mMembers = ((TextView) findViewById(R.id.tv_members));
         mUserName = ((TextView) findViewById(R.id.tv_username));
@@ -77,19 +89,20 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         //绑定假数据
         bindData();
     }
-    public void initNeed(Activity activity){
-        this.mActivity=activity;
-        userExitDialogHelper=new LiveUserExitDialogHelper(mActivity);
+
+    public void initNeed(Activity activity) {
+        this.mActivity = activity;
+        userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
     }
 
 
     @Override
     public void onClick(View v) {
-        if (v==mFollow){
+        if (v == mFollow) {
             follow();
-        }else if(v==mUserIamge){
+        } else if (v == mUserIamge) {
             userInfo();
-        }else if(v==mClose){
+        } else if (v == mClose) {
             close();
         }
     }
@@ -98,28 +111,31 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关闭操作
      */
     private void close() {
-
-        if (mActivity!=null && userExitDialogHelper!=null&&!userExitDialogHelper.isShowing()){
-            userExitDialogHelper.show();
-        }
-        isUserClose=true;
+        //用户主动退出，不需要弹窗
+//        if (mActivity != null && userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
+//            userExitDialogHelper.show();
+//        }
+        if (mActivity != null)
+            mActivity.finish();
+        isUserClose = true;
     }
+
     public void refreshData(List<ModelAudienceInfo> mData) {
-        if(this.mData!=mData) {
+        if (this.mData != mData) {
             this.mData = mData;
             mAdapter.setmData(mData);
         }
     }
 
-        /**
-         * 绑定数据(会刷新所有的数据)
-         */
-    public void bindData(){
+    /**
+     * 绑定数据(会刷新所有的数据)
+     */
+    public void bindData() {
 
         /*inflate list*/
         mMemberList.setHasFixedSize(true);
 
-        LinearLayoutManager llmanager=new LinearLayoutManager(mContext);
+        LinearLayoutManager llmanager = new LinearLayoutManager(mContext);
         llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mMemberList.setLayoutManager(llmanager);
 
@@ -131,9 +147,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     /**
      * 更新观众列表
+     *
      * @return
      */
-    public boolean updateMemberList(){
+    public boolean updateMemberList() {
         return true;
     }
 
@@ -149,7 +166,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 关注主播
      */
     private void follow() {
-        MGToast.showToast("关注");
+        liveHttpHelper.userFocus(CurLiveInfo.getHostID());
     }
 
 
@@ -159,52 +176,55 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
 
     /*更新人数*/
-    public void updateAudienceCount(String num){
-        if(!TextUtils.isEmpty(num)) {
+    public void updateAudienceCount(String num) {
+        if (!TextUtils.isEmpty(num)) {
             mMembers.setText(num + "人");
-        }else{
+        } else {
             mMembers.setText("0 人");
         }
     }
+
     /*设置头像*/
-    public void setHostImg(String imgurl){
-        if(TextUtils.isEmpty(imgurl)){
+    public void setHostImg(String imgurl) {
+        if (TextUtils.isEmpty(imgurl)) {
             mUserIamge.setImageResource(R.drawable.bg_empty);
-        }else {
+        } else {
             SDViewBinder.setImageView(imgurl, mUserIamge);
         }
     }
 
     /*设置名称*/
-    public void setHostName(String name){
-        if (!TextUtils.isEmpty(name)){
+    public void setHostName(String name) {
+        if (!TextUtils.isEmpty(name)) {
             mUserName.setText(name);
-        }else{
+        } else {
             mUserName.setText("主播");
         }
     }
+
     /*设置地理位置*/
-    public void setLocation(String location){
-        if (TextUtils.isEmpty(location)){
+    public void setLocation(String location) {
+        if (TextUtils.isEmpty(location)) {
             mUserLocation.setText(location);
         }
     }
+
     /*设置关键词*/
-    public void setKeyWords(){
+    public void setKeyWords() {
 //        if (){}
         mKeywords.setText("富国  明主  哈哈  大小  乌拉拉");
     }
 
-    public boolean isExitDialogShowing(){
-        if (userExitDialogHelper!=null){
+    public boolean isExitDialogShowing() {
+        if (userExitDialogHelper != null) {
             return userExitDialogHelper.isShowing();
         }
         return true;
     }
 
 
-    public void showExitDialog(){
-        if (userExitDialogHelper!=null){
+    public void showExitDialog() {
+        if (userExitDialogHelper != null) {
             userExitDialogHelper.show();
         }
     }
@@ -217,4 +237,49 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         this.mAdapter = mAdapter;
 
     }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        Message message = new Message();
+        if (LiveConstants.CHECK_FOCUS.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelCheckFocus modelCheckFocus = (ModelCheckFocus) datas.get(0);
+                if ("1".equals(modelCheckFocus.getFocus())) {
+                    //已关注
+                    message.what = 1;
+                } else {
+                    //去关注
+                    message.what = 0;
+                }
+            }
+        } else if (LiveConstants.USER_FOCUS.equals(method)) {
+            message.what = 1;
+        }
+        mHandler.sendMessage(message);
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    //关注主播
+                    mFollow.setVisibility(VISIBLE);
+                    break;
+                case 1:
+                    //已关注
+                    mFollow.setVisibility(GONE);
+                    break;
+            }
+        }
+    };
 }
