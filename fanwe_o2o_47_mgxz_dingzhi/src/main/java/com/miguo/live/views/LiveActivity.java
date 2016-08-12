@@ -128,10 +128,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private HeartLayout mHeartLayout;
     private HeartBeatTask mHeartBeatTask;//心跳
     private GetAudienceTask mGetAudienceTask;//取观众 列表。
-    /**
-     * 红包上时间显示
-     */
-    private RedPacketTask mRedPacketTask;
+
 
     private LinearLayout mHostLeaveLayout;
     private long mSecond = 0;
@@ -500,6 +497,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void initView() {
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
+        mHostBottomToolView1.setmLiveView(this);
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(this, mCommonHelper);
@@ -765,6 +763,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private class GetAudienceTask extends TimerTask {
         @Override
         public void run() {
+
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
     }
@@ -817,6 +816,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         if(tencentHttpHelper!=null){
             tencentHttpHelper.onDestroy();
+        }
+        if(backDialog!=null){
+            backDialog.dismiss();
+        }
+        if(mUserHeadTopView!=null){
+            mUserHeadTopView = null;
+        }
+        if(mHostTopView!=null){
+            mHostTopView = null;
         }
         QavsdkControl.getInstance().clearVideoMembers();
         QavsdkControl.getInstance().onDestroy();
@@ -1035,61 +1043,38 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
     }
 
-    CountDownTimer robLiftTimer ;
+    CountDownTimer robLiftTimer  = new CountDownTimer(60*1000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            float v = millisUntilFinished * 1.0f / 1000f;
+            int round = Math.round(v);
+
+            mHostRedPacketCountDownView.setTime("00:"+round+"");
+
+        }
+
+        @Override
+        public void onFinish() {
+            mHostRedPacketCountDownView.setTime("00:00");
+            mHostBottomToolView1.setClickable(true);
+        }
+    };
 
     @Override
     public void sendHostRedPacket(String id, String duration) {
         if(!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)){
             //启动红包倒计时。
             Integer values = Integer.valueOf(duration)+10*1000;
-            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
-             robLiftTimer = new CountDownTimer(values, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
+//            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
 
-                    Message msg = Message.obtain();
-                    msg.what = REFRESH_RED_TIME;
-                    float v = millisUntilFinished * 1.0f / 1000f;
-                    int round = Math.round(v);
-                    msg.arg1 = round;
-                    Log.e("live", millisUntilFinished + "--" + round + "==" + v);
-
-                    mHostRedPacketCountDownView.setTime(timeStr);
-                    mHandler.sendMessage(msg);
-                    if (round == 2) {
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Message msg = Message.obtain();
-                                msg.what = REFRESH_RED_TIME;
-                                msg.arg1=1;
-                                mHandler.sendMessage(msg);
-                            }
-                        }, 1000);
-                    }
-                }
-
-                @Override
-                public void onFinish() {
-                    mHostRedPacketCountDownView.setTime("00:00");
-                    mHostBottomToolView1.setClickable(true);
-                }
-            };
             robLiftTimer.start();
             mHostBottomToolView1.setClickable(false);
         }
     }
 
 
-    /**
-     * 取观众 列表
-     */
-    private class RedPacketTask extends TimerTask {
-        @Override
-        public void run() {
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
-        }
-    }
+
 
     @Override
     public void tokenInvalidateAndQuit() {
@@ -1811,9 +1796,13 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 if (audienceList != null && audienceList.size() >= 0) {
                     boolean isHost = LiveUtil.checkIsHost();
                     if (isHost) {
-                        mHostTopView.refreshData(datas);
+                        if(mHostTopView!=null) {
+                            mHostTopView.refreshData(datas);
+                        }
                     } else {
-                        mUserHeadTopView.refreshData(datas);
+                        if(mUserHeadTopView!=null) {
+                            mUserHeadTopView.refreshData(datas);
+                        }
 
                     }
                     mHeadTopAdapter.notifyDataSetChanged();
