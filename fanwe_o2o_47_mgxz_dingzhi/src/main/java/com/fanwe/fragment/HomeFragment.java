@@ -37,15 +37,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.applyRoom.ModelApplyRoom;
-import com.miguo.live.model.generateSign.ModelGenerateSign;
-import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
-import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
-import com.miguo.live.model.getHostInfo.ModelHostInfo;
-import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.sunday.eventbus.SDBaseEvent;
-import com.umeng.socialize.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -236,8 +229,12 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         if (liveHelper != null) {
             liveHelper.getLiveList(pageNum, pageSize, "", "", "");
         }
+//        SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
+//        sellerHttpHelper.getBusinessCircleList("");
+//        sellerHttpHelper.getClassifyList();
+//        sellerHttpHelper.getShopList("d811a8c34a8b0", "d811a8c3ea7b", "", "default", "", "1", "55c27457-57df-11e6-bbcc-a0d3c1ef5681", "");
+//        sellerHttpHelper.getCityList();
     }
-
 
     private void requestIndex() {
         RequestModel model = new RequestModel();
