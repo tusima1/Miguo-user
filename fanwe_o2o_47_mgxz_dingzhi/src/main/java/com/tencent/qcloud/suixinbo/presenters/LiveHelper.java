@@ -621,14 +621,20 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     toggleMic();
                     break;
                 case Constants.AVIMCMD_Host_Leave:
-                    mLiveView.hostLeave(identifier, nickname, faceUrl);
+                    if(mLiveView!=null) {
+                        mLiveView.hostLeave(identifier, nickname, faceUrl);
+                    }
                     break;
                 case Constants.AVIMCMD_Host_Back:
-                    mLiveView.hostBack(identifier, nickname, faceUrl);
+                    if(mLiveView!=null) {
+                        mLiveView.hostBack(identifier, nickname, faceUrl);
+                    }
                 case Constants.AVIMCMD_RED_PACKET:
                     String datas =    json.getString(Constants.CMD_PARAM);
                     HashMap<String,String> params = parseRedPacket(datas);
-                    mLiveView.getHostRedPacket(params);
+                    if(mLiveView!=null) {
+                        mLiveView.getHostRedPacket(params);
+                    }
                 default:
                     break;
             }

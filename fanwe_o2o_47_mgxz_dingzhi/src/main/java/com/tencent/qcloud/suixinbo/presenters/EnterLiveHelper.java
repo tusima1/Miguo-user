@@ -15,6 +15,7 @@ import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.LiveUtil;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupManager;
@@ -135,24 +136,25 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     intent.putStringArrayListExtra("ids", video_ids);
                     mContext.sendBroadcast(intent);
                     break;
-                case TYPE_MEMBER_CHANGE_NO_CAMERA_VIDEO:
-                    {
-                        ArrayList<String> close_ids = new ArrayList<String>();
-                        for (String id : updateList) {
-                            close_ids.add(id);
-                        }
-                        Intent closeintent = new Intent(Constants.ACTION_CAMERA_CLOSE_IN_LIVE);
-                        closeintent.putStringArrayListExtra("ids", close_ids);
-                        if(mContext!=null) {
-                            mContext.sendBroadcast(closeintent);
-                        }
+                case TYPE_MEMBER_CHANGE_NO_CAMERA_VIDEO: {
+                    ArrayList<String> close_ids = new ArrayList<String>();
+                    for (String id : updateList) {
+                        close_ids.add(id);
                     }
-                    break;
+                    Intent closeintent = new Intent(Constants.ACTION_CAMERA_CLOSE_IN_LIVE);
+                    closeintent.putStringArrayListExtra("ids", close_ids);
+                    if (mContext != null) {
+                        mContext.sendBroadcast(closeintent);
+                    }
+                }
+                break;
                 case TYPE_MEMBER_CHANGE_HAS_AUDIO:
                     break;
 
                 case TYPE_MEMBER_CHANGE_OUT:
-                    mStepInOutView.memberQuiteLive(updateList);
+                    if(mStepInOutView!=null) {
+                        mStepInOutView.memberQuiteLive(updateList);
+                    }
                     break;
                 default:
                     break;
@@ -341,7 +343,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      */
     private void notifyServerLiveEnd() {
         liveEndTask = new NotifyServerLiveEnd();
-        liveEndTask.execute(MySelfInfo.getInstance().getMyRoomNum()+"");
+        liveEndTask.execute(MySelfInfo.getInstance().getMyRoomNum() + "");
     }
 
     @Override
@@ -353,7 +355,10 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     class NotifyServerLiveEnd extends AsyncTask<String, Integer, String> {
 
         @Override
-        protected String  doInBackground(String... values) {
+        protected String doInBackground(String... values) {
+            if (LiveUtil.checkIsHost()) {
+                return "";
+            }
             String token = App.getInstance().getToken();
             TreeMap<String, String> params = new TreeMap<String, String>();
             params.put("token", token);
@@ -363,7 +368,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             OkHttpUtils.getInstance().get(null, params, new MgCallback() {
                 @Override
                 public void onSuccessResponse(String responseBody) {
-                    if(mStepInOutView!=null) {
+                    if (mStepInOutView != null) {
                         mStepInOutView.hostQuiteLive(LiveConstants.EXIT_ROOM, responseBody);
                     }
                 }
@@ -375,8 +380,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             });
             return "";
         }
+
         @Override
-        protected void onPostExecute(String  result) {
+        protected void onPostExecute(String result) {
         }
     }
 
@@ -389,7 +395,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         if (isInAVRoom == true) {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
             int result = avContext.exitRoom();
-          //  mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            //  mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
 
         } else {
             quiteIMChatRoom();

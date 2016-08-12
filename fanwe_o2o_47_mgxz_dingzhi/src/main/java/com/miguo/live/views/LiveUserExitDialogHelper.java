@@ -14,12 +14,12 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
+import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.MaxHeightGridView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +43,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private MaxHeightGridView gridview;
     private Dialog dialog;
     private LiveHttpHelper liveHttpHelper;
+    private String count = "";
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
@@ -54,8 +55,11 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private void setView() {
         liveHttpHelper = new LiveHttpHelper(mActivity, this);
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
+        liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
+        ImageLoader.getInstance().displayImage(CurLiveInfo.getHostAvator(), civ_user_image);
+        tv_username.setText(CurLiveInfo.getHostName());
+        tv_user_location.setText(CurLiveInfo.modelShop.getAddress());
     }
-
 
 
     private void createDialog() {
@@ -107,13 +111,6 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         gridview.setAdapter(simpleAdapter);
     }
 
-    public void bindData() {
-//        civ_user_image
-//        tv_username
-//        tv_user_location
-//        tv_count
-    }
-
     /**
      * 是否在显示
      */
@@ -123,7 +120,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     }
 
     public void show() {
-        if (dialog!=null&&!dialog.isShowing()) {
+        if (dialog != null && !dialog.isShowing()) {
             dialog.show();
         }
     }
@@ -131,7 +128,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     public void dismiss() {
         if (dialog.isShowing()) {
             dialog.dismiss();
-      
+
         } else {
             return;
         }
@@ -140,13 +137,12 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     @Override
     public void onDestroy() {
         //防止内存泄漏,在这里释放资源
-        dialog= null;
-        gridview=null;
+        dialog = null;
+        gridview = null;
     }
 
     @Override
     public void onClick(View v) {
-       
         int id = v.getId();
         if (id == R.id.iv_close) {
             dismiss();
@@ -154,15 +150,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
             mActivity.finish();
         } else if (id == R.id.tv_youhuiquan) {
             clickYouHui();
-        } else if (id == R.id.tv_follow) {
         }
-    }
-
-    /**
-     * 关注
-     */
-    private void clickFollow() {
-        MGToast.showToast("关注");
     }
 
     /**
@@ -176,6 +164,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     public void onSuccess(String responseBody) {
 
     }
+
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -193,6 +182,12 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
             }
         } else if (LiveConstants.USER_FOCUS.equals(method)) {
             message.what = 1;
+        } else if (LiveConstants.AUDIENCE_COUNT.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelAudienceCount bean = (ModelAudienceCount) datas.get(0);
+                count = bean.getCount();
+            }
+            message.what = 2;
         }
         mHandler.sendMessage(message);
     }
@@ -219,6 +214,9 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                     //已关注
                     tv_follow.setText("已关注");
                     tv_follow.setOnClickListener(null);
+                    break;
+                case 2:
+                    tv_count.setText(count);
                     break;
             }
         }

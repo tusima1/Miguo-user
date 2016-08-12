@@ -338,7 +338,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         this.imLoginSuccess = false;
         this.isAvStart = false;
         this.nickName = "";
-        this.mUserCurrentInfo.clearData();
+        this.mUserCurrentInfo=null;
 
     }
 

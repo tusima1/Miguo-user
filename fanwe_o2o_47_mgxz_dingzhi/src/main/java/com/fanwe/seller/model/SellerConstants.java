@@ -13,4 +13,8 @@ public class SellerConstants {
      * 直播页面获取门店详情。
      */
     public static final String LIVE_BIZ_SHOP = "LiveBizShop";
+    /**
+     * 收藏门店 。
+     */
+    public static final String GROUP_BUY_COLLECT = "GroupBuyCollect";
 }

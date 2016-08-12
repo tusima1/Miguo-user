@@ -133,6 +133,8 @@ public class SellerHttpHelper implements IHelper {
         });
     }
 
+
+
     @Override
     public void onDestroy() {
         mContext = null;

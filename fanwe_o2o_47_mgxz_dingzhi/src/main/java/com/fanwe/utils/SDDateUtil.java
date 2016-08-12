@@ -13,6 +13,25 @@ public class SDDateUtil
 {
 
 	/**
+	 * 整 数转成 HH:mm:ss
+	 * @param seconds
+	 * @return
+     */
+	public static String secondesToMMSS(long seconds){
+		String hms ="00:00";
+		long hour = 3600*1000;
+		String formatStr = "mm:ss";
+		if(seconds/hour >0){
+			formatStr = "HH:mm:ss";
+		}
+		SimpleDateFormat formatter = new SimpleDateFormat(formatStr);//初始化Formatter的转换格式。
+
+		 hms = formatter.format(seconds);
+
+		return hms;
+	}
+
+	/**
 	 * 将字符串的yyyy-MM-dd HH:mm:ss 转化为毫秒
 	 * 
 	 * @param dateStrlong
@@ -264,7 +283,6 @@ public class SDDateUtil
 	 * ����ʱ���ʽʱ��ת��Ϊ�ַ� yyyy-MM-dd
 	 * 
 	 * @param dateDate
-	 * @param k
 	 * @return
 	 */
 	public static String dateToStr(java.util.Date dateDate)
@@ -731,7 +749,7 @@ public class SDDateUtil
 
 	/**
 	 * 
-	 * @param args
+	 * @param date
 	 */
 	public static boolean RightDate(String date)
 	{

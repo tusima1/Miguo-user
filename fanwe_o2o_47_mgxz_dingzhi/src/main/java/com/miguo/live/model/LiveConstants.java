@@ -89,7 +89,7 @@ public class LiveConstants {
      */
     public static final String GET_RED_PACKETS = "GetRedPackets";
     /**
-     *用户 抢到的红包列表。
+     * 用户 抢到的红包列表。
      */
     public static final String GET_USER_RED_PACKETS = "GetUserRedPackets";
     /**
@@ -97,4 +97,8 @@ public class LiveConstants {
      */
     public static final String LIST_OF_STORES = "ListOfStores";
 
+    /**
+     * 获取门店随机评价
+     */
+    public static final String STORES_RANDOM_COMMENT = "StoresRandomComment";
 }

@@ -1,5 +1,6 @@
 package com.miguo.live.presenters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -15,6 +16,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.GoodsDetailInfo;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -44,6 +46,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
+import com.miguo.live.model.getStoresRandomComment.ResultStoresRandomComment;
+import com.miguo.live.model.getStoresRandomComment.RootStoresRandomComment;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
@@ -56,6 +61,7 @@ import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -69,6 +75,7 @@ public class LiveHttpHelper implements IHelper {
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
     private Context mContext;
+    private Activity mActivity;
 
     public static final String RESULT_OK = "no_body_but_is_ok";
 
@@ -79,8 +86,12 @@ public class LiveHttpHelper implements IHelper {
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
-
-
+    public LiveHttpHelper(Activity mActivity, CallbackView mView) {
+        this.mActivity = mActivity;
+        this.mView = mView;
+        gson = new Gson();
+        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+    }
     /**
      * 请求直播列表
      *
@@ -142,13 +153,14 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param room_id
      */
-    public void getAudienceCount(String room_id) {
+    public void getAudienceCount(String room_id, String type) {
         if (TextUtils.isEmpty(App.getInstance().getToken()) || TextUtils.isEmpty(room_id)) {
             return;
         }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
+        params.put("type", type);
         params.put("method", LiveConstants.AUDIENCE_COUNT);
 
 
@@ -662,6 +674,7 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 抢红包接口。
+     *
      * @param user_id
      * @param red_packets_key
      */
@@ -677,7 +690,21 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.GET_RED_PACKETS, null);
+                Type type = new TypeToken<Root<UserRedPacketInfo>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<UserRedPacketInfo> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
+
+                UserRedPacketInfo userRedPacketInfo = (UserRedPacketInfo) validateBody(root);
+                if(userRedPacketInfo == null){
+                    mView.onFailue(message);
+                }else{
+                    List<UserRedPacketInfo> datas = new ArrayList<UserRedPacketInfo>();
+                    datas.add(userRedPacketInfo);
+                    mView.onSuccess(LiveConstants.GET_RED_PACKETS, datas);
+                }
             }
 
             @Override
@@ -690,6 +717,7 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 取用户所得到的红包列表。
+     *
      * @param roomID
      */
     public void getUserRedPacketList(String roomID){
@@ -727,6 +755,43 @@ public class LiveHttpHelper implements IHelper {
             }
         });
     }
+
+    /**
+     * 获取门店随机评价
+     *
+     * @param shop_id
+     * @param comment_count
+     */
+    public void getStoresRandomComment(String shop_id, String comment_count) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("shop_id", shop_id);
+        params.put("comment_count", comment_count);
+
+        params.put("method", LiveConstants.STORES_RANDOM_COMMENT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootStoresRandomComment rootStoresRandomComment = gson.fromJson(responseBody, RootStoresRandomComment.class);
+                List<ResultStoresRandomComment> resultStoresRandomComments = rootStoresRandomComment.getResult();
+                if (SDCollectionUtil.isEmpty(resultStoresRandomComments)) {
+                    mView.onSuccess(LiveConstants.STORES_RANDOM_COMMENT, null);
+                    return;
+                }
+                ResultStoresRandomComment resultStoresRandomComment = resultStoresRandomComments.get(0);
+                List<ModelStoresRandomComment> modelStoresRandomComment = resultStoresRandomComment.getBody();
+                mView.onSuccess(LiveConstants.STORES_RANDOM_COMMENT, modelStoresRandomComment);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
 
     /**
      * 取直播门店的镇店之宝。
@@ -777,5 +842,6 @@ public class LiveHttpHelper implements IHelper {
         mView = null;
         gson = null;
         userCurrentInfo = null;
+        mActivity = null;
     }
 }
