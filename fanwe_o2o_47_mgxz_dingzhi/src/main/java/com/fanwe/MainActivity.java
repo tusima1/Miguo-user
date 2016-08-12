@@ -82,11 +82,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public void getToken() {
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            token = App.getInstance().getmUserCurrentInfo().getToken();
-        }
-    }
+
 
     private void init() {
         startUpgradeService();
@@ -100,9 +96,9 @@ public class MainActivity extends BaseActivity {
     //初始化用户信息。
     public void initUserInfo() {
         LocalUserModel userModel = AppHelper.getLocalUser();
-        getToken();
+
         //当前还未登录，并且用户存储中的用户信息不为空。
-        if (TextUtils.isEmpty(token) && userModel != null) {
+        if (TextUtils.isEmpty(App.getInstance().getToken()) && userModel != null) {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
@@ -219,8 +215,8 @@ public class MainActivity extends BaseActivity {
      */
     protected void click2() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
-        getToken();
-        if (TextUtils.isEmpty(token))// 未登录 以后加入是不是主播的判断。
+
+        if (TextUtils.isEmpty(App.getInstance().getToken()))// 未登录 以后加入是不是主播的判断。
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
@@ -259,8 +255,8 @@ public class MainActivity extends BaseActivity {
      */
     protected void click4() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_4);
-        getToken();
-        if (TextUtils.isEmpty(token))  // 未登录
+
+        if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {

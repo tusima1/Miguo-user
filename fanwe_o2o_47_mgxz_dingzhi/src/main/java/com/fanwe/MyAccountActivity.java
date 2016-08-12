@@ -489,6 +489,19 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     }
 
     private void clickLogout(View v) {
+
+        App.getInstance().setmUserCurrentInfo(null);
+        App.getInstance().setImLoginSuccess(false);
+
+
+        App.getApplication().setmLocalUser(new LocalUserModel());
+        App.getApplication().clearAppsLocalUserModel();
+        AppConfig.setSessionId("");
+        AppConfig.setUserName("");
+        AppConfig.setRefId("");
+
+        App.getInstance().clearAllData();
+        App.getInstance().setmUserCurrentInfo(null);
         //调服务器退出登录接口。
         RequestModel model = new RequestModel();
         model.putCtl("user");
@@ -516,12 +529,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
 
         CommonInterface.requestLogout(null);
-        App.getApplication().setmLocalUser(new LocalUserModel());
-        App.getApplication().clearAppsLocalUserModel();
-        AppConfig.setSessionId("");
-        AppConfig.setUserName("");
-        AppConfig.setRefId("");
-        App.getInstance().clearAllData();
+
 
 
 

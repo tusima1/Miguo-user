@@ -93,9 +93,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             talk2host();
         } else if (v == mGoods) {
             clickGoods();
-        } else if (v == mRob) {
-            clickRob();
-        } else if (v == mGift) {
+        }  else if (v == mGift) {
             clickGift();
         } else if (v == mShare) {
             clickShare();
@@ -137,9 +135,9 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     /**
      * 点击抢到
      */
-    public void clickRob() {
+    public void clickRob(String red_packet_key,int duration) {
         if (mAct != null && redPacketDialogHelper == null) {
-            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct);
+            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct,red_packet_key,duration);
             redPacketDialogHelper.createDialog();
             redPacketDialogHelper.show();
             redPacketDialogHelper.startTimeTask();

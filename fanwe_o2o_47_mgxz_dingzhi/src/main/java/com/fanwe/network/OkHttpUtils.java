@@ -121,7 +121,8 @@ public class OkHttpUtils {
                 .post(requestBodyPost)
                 .build();
         if (ServerUrl.DEBUG) {
-            Log.e(TAG, "get:"+requestStr.toString());
+            String method  = params.get("method");
+            Log.e(TAG, "method :+="+method+" post:"+requestStr.toString());
         }
 
         client.newCall(requestPost).enqueue(mCallback);
@@ -165,7 +166,8 @@ public class OkHttpUtils {
             }
         }
         if (ServerUrl.DEBUG) {
-            Log.e(TAG, "get:"+build.toString());
+            String method  = params.get("method");
+            Log.e(TAG, "method :+="+method+" put:"+build.toString());
         }
         RequestBody requestBodyPut = build.build();
         Request requestPut = new Request.Builder()
@@ -321,7 +323,9 @@ public class OkHttpUtils {
         }
         serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
         if (ServerUrl.DEBUG) {
-            Log.e(TAG, "get:"+serverUrl);
+            String method  = params.get("method");
+            Log.e(TAG, "method :+="+method+" get:"+serverUrl);
+
         }
         //创建一个Request
         final Request request = new Request.Builder()

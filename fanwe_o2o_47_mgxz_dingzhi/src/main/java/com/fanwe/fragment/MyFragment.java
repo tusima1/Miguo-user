@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,6 +69,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 我的fragment
@@ -256,8 +258,12 @@ public class MyFragment extends BaseFragment {
     private void setView() {
         mUserFaceString = App.getInstance().getUserIcon();
         SDViewBinder.setTextView(mTvUsername, App.getInstance().getUserNickName(), "");
-        SDViewBinder.setImageView(App.getInstance().getUserIcon(), mIv_user_avatar,
-                ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+
+        if(!TextUtils.isEmpty(App.getInstance().getUserIcon())){
+            ImageLoader.getInstance().displayImage(App.getInstance().getUserIcon(),mIv_user_avatar);
+        }else {
+            mIv_user_avatar.setImageResource(R.drawable.default_avatar);
+        }
     }
 
     private void addTopView() {
