@@ -6,20 +6,32 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.base.CallbackView;
 import com.fanwe.common.CommonInterface;
+import com.fanwe.dao.InitActModelDao;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.library.utils.SDTimer;
 import com.fanwe.model.BaseActModel;
+import com.fanwe.model.CitylistModel;
 import com.fanwe.model.Init_indexActModel;
+import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getCityList.ModelCityList;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.RetryInitWorker;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -27,12 +39,17 @@ import com.miguo.utils.MGLog;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import cn.jpush.android.api.JPushInterface;
 
 /**
  * 初始化Activity
  */
-public class InitAdvsMultiActivity extends BaseActivity {
+public class InitAdvsMultiActivity extends BaseActivity implements CallbackView {
+    private SellerHttpHelper sellerHttpHelper;
 
     // app所需要的全部危险权限
     static final String[] PERMISSIONS = new String[]{
@@ -65,19 +82,20 @@ public class InitAdvsMultiActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_init_advs_multi);
-        if (Build.VERSION.SDK_INT>=23){
+        if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
-        }else {
+        } else {
             init();
         }
     }
+
     private void checkPermissions() {
-        permissionsHelper = new PermissionsHelper(this,PERMISSIONS);
-        if (permissionsHelper.checkAllPermissions(PERMISSIONS)){
+        permissionsHelper = new PermissionsHelper(this, PERMISSIONS);
+        if (permissionsHelper.checkAllPermissions(PERMISSIONS)) {
             permissionsHelper.onDestroy();
             //do nomarl
             init();
-        }else {
+        } else {
             //申请权限
             permissionsHelper.startRequestNeedPermissions();
         }
@@ -112,6 +130,7 @@ public class InitAdvsMultiActivity extends BaseActivity {
     }
 
     private void init() {
+        sellerHttpHelper = new SellerHttpHelper(this, this);
 //        initBaiduMap();
         startStatistics();
         initTimer();
@@ -189,35 +208,38 @@ public class InitAdvsMultiActivity extends BaseActivity {
     }
 
     private void requestInitInterface() {
-        CommonInterface.requestInit(new SDRequestCallBack<Init_indexActModel>() {
-            private boolean nSuccess = false;
+        //请求城市列表
+        sellerHttpHelper.getCityList();
 
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    nSuccess = true;
-                    startMainActivity();
-                }
-
-            }
-
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onFinish() {
-                if (!nSuccess) {
-                    startMainActivity();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                nSuccess = false;
-                RetryInitWorker.getInstance().start(); // 如果初始化失败重试
-            }
-        });
+//        CommonInterface.requestInit(new SDRequestCallBack<Init_indexActModel>() {
+//            private boolean nSuccess = false;
+//
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                if (actModel.getStatus() == 1) {
+//                    nSuccess = true;
+//                    startMainActivity();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onStart() {
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                if (!nSuccess) {
+//                    startMainActivity();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//                nSuccess = false;
+//                RetryInitWorker.getInstance().start(); // 如果初始化失败重试
+//            }
+//        });
     }
 
     private void startMainActivity() {
@@ -246,4 +268,69 @@ public class InitAdvsMultiActivity extends BaseActivity {
         super.onResume();
     }
 
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    private List<CitylistModel> citylist = new ArrayList<>();
+    private List<CitylistModel> hot_city = new ArrayList<>();
+    private ArrayList<ModelCityList> tempDatas;
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (SellerConstants.CITY_LIST.equals(method)) {
+            tempDatas = (ArrayList<ModelCityList>) datas;
+            Message message = new Message();
+            message.what = 0;
+            mHandler.sendMessage(message);
+        }
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    if (!SDCollectionUtil.isEmpty(tempDatas)) {
+                        generalCityList();
+                        Init_indexActModel actModel = new Init_indexActModel();
+                        actModel.setCitylist(citylist);
+                        actModel.setHot_city(hot_city);
+                        InitActModelDao.insertOrUpdateModel(actModel);
+                        startMainActivity();
+                    }
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 生成有效城市
+     */
+    private void generalCityList() {
+        citylist.clear();
+        hot_city.clear();
+        for (int i = 0; i < tempDatas.size(); i++) {
+            ModelCityList bean = tempDatas.get(i);
+            CitylistModel city = new CitylistModel();
+            if (TextUtils.isEmpty(bean.getUname())) {
+                //拼音为空，过滤掉
+                continue;
+            } else {
+                city.setId(bean.getId());
+                city.setName(bean.getName());
+                city.setPy(bean.getUname());
+                citylist.add(city);
+                if ("1".equals(bean.getIs_hot())) {
+                    hot_city.add(city);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
 }

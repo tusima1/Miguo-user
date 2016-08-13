@@ -29,6 +29,7 @@ import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -140,8 +141,8 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             return;
         }
         String dist = BaiduMapManager.getInstance().getDistrictShort();
-        int cityId = AppRuntimeWorker.getCityIdByCityName(dist);
-        if (cityId > 0) // 区域存在于城市列表中
+        String cityId = AppRuntimeWorker.getCityIdByCityName(dist);
+        if (!TextUtils.isEmpty(cityId)) // 区域存在于城市列表中
         {
             if (!dist.equals(defaultCity)) // 区域不是默认的
             {
@@ -150,7 +151,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         } else {
             String city = BaiduMapManager.getInstance().getCityShort();
             cityId = AppRuntimeWorker.getCityIdByCityName(city);
-            if (cityId > 0) // 城市存在于城市列表中
+            if (!TextUtils.isEmpty(cityId)) // 城市存在于城市列表中
             {
                 if (!city.equals(defaultCity)) // 城市不是默认的
                 {

@@ -125,7 +125,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         phone = etPhone.getText().toString().trim();
         if (TextUtils.isEmpty(dataBindingLiveAuth.interest.get())) {
             SDToast.showToast("请选择兴趣");
-        } else if (cityId == 0) {
+        } else if (TextUtils.isEmpty(cityId)) {
             SDToast.showToast("请选择城市");
         } else if (TextUtils.isEmpty(phone)) {
             SDToast.showToast("请输入手机号");
@@ -214,7 +214,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         startActivityForResult(intent, SELECT_FILE_CODE);
     }
 
-    int cityId;
+    String cityId;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

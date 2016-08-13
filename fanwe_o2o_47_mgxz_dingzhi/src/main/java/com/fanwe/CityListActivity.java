@@ -175,7 +175,7 @@ public class CityListActivity extends BaseActivity {
     private void updateLocationTextView() {
         if (BaiduMapManager.getInstance().hasLocationSuccess()) {
             String dist = BaiduMapManager.getInstance().getDistrictShort();
-            if (AppRuntimeWorker.getCityIdByCityName(dist) > 0) {
+            if (!TextUtils.isEmpty(AppRuntimeWorker.getCityIdByCityName(dist))) {
                 mTv_location.setText(dist);
             } else {
                 String city = BaiduMapManager.getInstance().getCityShort();
@@ -272,8 +272,8 @@ public class CityListActivity extends BaseActivity {
             public void onClick(View v) {
                 if (BaiduMapManager.getInstance().hasLocationSuccess()) {
                     String locationCity = mTv_location.getText().toString();
-                    int cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
-                    if (cityId < 0) {
+                    String cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
+                    if (TextUtils.isEmpty(cityId)) {
                         SDToast.showToast("不支持当前城市:" + locationCity);
                     } else {
                         AppRuntimeWorker.setCity_name(locationCity);
