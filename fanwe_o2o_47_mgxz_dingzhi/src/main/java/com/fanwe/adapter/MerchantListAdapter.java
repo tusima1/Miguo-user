@@ -132,7 +132,7 @@ public class MerchantListAdapter extends SDSimpleBaseAdapter<StoreModel>
 			{
 				Intent itemintent = new Intent();
 				Bundle bundle = new Bundle();
-				bundle.putInt(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+				bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
 				bundle.putInt("type",0);
 				itemintent.putExtras(bundle);
 				itemintent.setClass(App.getApplication(), StoreDetailActivity.class);

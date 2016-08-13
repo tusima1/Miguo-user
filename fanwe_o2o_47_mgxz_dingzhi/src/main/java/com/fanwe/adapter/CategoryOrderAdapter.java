@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,73 +11,62 @@ import com.fanwe.library.customview.SDLvCategoryViewHelper.SDLvCategoryViewHelpe
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.CategoryOrderModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 
-public class CategoryOrderAdapter extends SDBaseAdapter<CategoryOrderModel> implements SDLvCategoryViewHelperAdapterInterface
-{
+import java.util.List;
 
-	public CategoryOrderAdapter(List<CategoryOrderModel> listModel, Activity activity)
-	{
-		super(listModel, activity);
-	}
+public class CategoryOrderAdapter extends SDBaseAdapter<ModelShopListNavs> implements SDLvCategoryViewHelperAdapterInterface {
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = mInflater.inflate(R.layout.item_category_single, null);
-		}
-		TextView tvTitle = ViewHolder.get(convertView, R.id.item_category_single_tv_title);
+    public CategoryOrderAdapter(List<ModelShopListNavs> listModel, Activity activity) {
+        super(listModel, activity);
+    }
 
-		CategoryOrderModel model = getItem(position);
-		if (model != null)
-		{
-			SDViewBinder.setTextView(tvTitle, model.getName());
-			if (model.isSelect())
-			{
-				convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.bg_gray_categoryview_item_select));
-			} else
-			{
-				convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.white));
-			}
-		}
-		return convertView;
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_category_single, null);
+        }
+        TextView tvTitle = ViewHolder.get(convertView, R.id.item_category_single_tv_title);
 
-	@Override
-	public void setPositionSelectState(int position, boolean select, boolean notify)
-	{
-		getItem(position).setSelect(select);
-		if (notify)
-		{
-			notifyDataSetChanged();
-		}
-	}
+        ModelShopListNavs model = getItem(position);
+        if (model != null) {
+            SDViewBinder.setTextView(tvTitle, model.getName());
+            if (model.isSelect()) {
+                convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.bg_gray_categoryview_item_select));
+            } else {
+                convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.white));
+            }
+        }
+        return convertView;
+    }
 
-	@Override
-	public String getTitleNameFromPosition(int position)
-	{
-		return getItem(position).getName();
-	}
+    @Override
+    public void setPositionSelectState(int position, boolean select, boolean notify) {
+        getItem(position).setSelect(select);
+        if (notify) {
+            notifyDataSetChanged();
+        }
+    }
 
-	@Override
-	public BaseAdapter getAdapter()
-	{
-		return this;
-	}
+    @Override
+    public String getTitleNameFromPosition(int position) {
+        return getItem(position).getName();
+    }
 
-	@Override
-	public Object getSelectModelFromPosition(int position)
-	{
-		return getItem(position);
-	}
+    @Override
+    public BaseAdapter getAdapter() {
+        return this;
+    }
 
-	@Override
-	public int getTitleIndex()
-	{
-		return -1;
-	}
+    @Override
+    public Object getSelectModelFromPosition(int position) {
+        return getItem(position);
+    }
+
+    @Override
+    public int getTitleIndex() {
+        return -1;
+    }
 
 }

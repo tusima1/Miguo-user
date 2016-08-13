@@ -19,6 +19,9 @@ import com.fanwe.seller.model.getBusinessCircleList.RootBusinessCircleList;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.model.getCityList.ResultCityList;
 import com.fanwe.seller.model.getCityList.RootCityList;
+import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
+import com.fanwe.seller.model.getClassifyList.ResultClassifyList;
+import com.fanwe.seller.model.getClassifyList.RootClassifyList;
 import com.fanwe.seller.model.getGroupBuyCollect.ModelGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyCollect.ResultGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyCollect.RootGroupBuyCollect;
@@ -324,13 +327,13 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootBusinessCircleList root = gson.fromJson(responseBody, RootBusinessCircleList.class);
-                List<ResultBusinessCircleList> result = root.getResult();
+                RootClassifyList root = gson.fromJson(responseBody, RootClassifyList.class);
+                List<ResultClassifyList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
                     mView.onSuccess(SellerConstants.CLASSIFY_LIST, null);
                     return;
                 }
-                List<ModelBusinessCircleList> items = result.get(0).getBody();
+                List<ModelClassifyList> items = result.get(0).getBody();
                 mView.onSuccess(SellerConstants.CLASSIFY_LIST, items);
             }
 
