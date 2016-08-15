@@ -11,12 +11,11 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
-import com.fanwe.common.CommonInterface;
+import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.dao.InitActModelDao;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
@@ -26,21 +25,17 @@ import com.fanwe.library.utils.SDTimer;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.model.Init_indexActModel;
-import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.fanwe.work.RetryInitWorker;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
@@ -130,12 +125,33 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     }
 
     private void init() {
+        loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
 //        initBaiduMap();
         startStatistics();
         initTimer();
         getDeviceId();
         requestInitInterface();
+    }
+
+    /**
+     * 加载用户选择的城市
+     */
+    private void loadCurrCity() {
+        Init_indexActModel actModel = InitActModelDao.queryModel();
+        if (actModel == null) {
+            actModel = new Init_indexActModel();
+        }
+        //当前选择的城市
+        CitylistModel currCity = CurrCityModelDao.queryModel();
+        if (currCity != null) {
+            String id = currCity.getId();
+            String name = currCity.getName();
+            actModel.setCity_id(id);
+            actModel.setCity_name(name);
+        }
+        InitActModelDao.insertOrUpdateModel(actModel);
+        startMainActivity();
     }
 
     private void initBaiduMap() {
@@ -293,11 +309,13 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
                 case 0:
                     if (!SDCollectionUtil.isEmpty(tempDatas)) {
                         generalCityList();
-                        Init_indexActModel actModel = new Init_indexActModel();
+                        Init_indexActModel actModel = InitActModelDao.queryModel();
+                        if (actModel == null) {
+                            actModel = new Init_indexActModel();
+                        }
                         actModel.setCitylist(citylist);
                         actModel.setHot_city(hot_city);
                         InitActModelDao.insertOrUpdateModel(actModel);
-                        startMainActivity();
                     }
                     break;
             }

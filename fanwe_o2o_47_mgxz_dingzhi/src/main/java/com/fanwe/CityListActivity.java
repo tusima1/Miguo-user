@@ -1,16 +1,9 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,9 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.adapter.CityListAdapter;
@@ -29,6 +19,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SideBar;
 import com.fanwe.customview.SideBar.OnTouchingLetterChangedListener;
+import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
@@ -42,6 +33,14 @@ import com.fanwe.utils.CharacterParser;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 /**
  * 城市列表
@@ -139,6 +138,8 @@ public class CityListActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     if (AppRuntimeWorker.setCity_name(model.getName())) {
+                        //缓存数据
+                        CurrCityModelDao.insertModel(model);
                         setActivityResult();
                     } else {
                         SDToast.showToast("设置失败");
@@ -295,6 +296,11 @@ public class CityListActivity extends BaseActivity {
 
                             }
                         });
+                        //缓存数据
+                        CitylistModel tempBean = new CitylistModel();
+                        tempBean.setId(cityId);
+                        tempBean.setName(locationCity);
+                        CurrCityModelDao.insertModel(tempBean);
                         setActivityResult();
                     }
                 } else {
