@@ -8,7 +8,7 @@ import com.fanwe.library.utils.SDTypeParseUtil;
 public class CommentModel implements Serializable
 {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 

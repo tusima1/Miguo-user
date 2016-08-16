@@ -45,11 +45,11 @@ public class StoreListContainerFragment extends BaseFragment {
 
         mFragAll = new StoreListFragment();
         mFragAll.setArguments(bundle);
-        mFragAll.getArguments().putInt(StoreListFragment.EXTRA_STORE_TYPE, 2);
+        mFragAll.getArguments().putString(StoreListFragment.EXTRA_STORE_TYPE, "2");
 
         mFragYouhui = new StoreListFragment();
         mFragYouhui.setArguments(bundle);
-        mFragYouhui.getArguments().putInt(StoreListFragment.EXTRA_STORE_TYPE, 1);
+        mFragYouhui.getArguments().putString(StoreListFragment.EXTRA_STORE_TYPE, "1");
 
     }
 

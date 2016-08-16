@@ -14,9 +14,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.fanwe.seller.model.GoodsDetailInfo;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -40,6 +38,9 @@ import com.miguo.live.model.getBussDictionInfo.RootBussDictionInfo;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
 import com.miguo.live.model.getHandOutRedPacket.ResultHandOutRedPacket;
 import com.miguo.live.model.getHandOutRedPacket.RootHandOutRedPacket;
+import com.miguo.live.model.getHostAuthTime.ModelHostAuthTime;
+import com.miguo.live.model.getHostAuthTime.ResultHostAuthTime;
+import com.miguo.live.model.getHostAuthTime.RootHostAuthTime;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostInfo.ResultHostInfo;
 import com.miguo.live.model.getHostInfo.RootHostInfo;
@@ -92,6 +93,7 @@ public class LiveHttpHelper implements IHelper {
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
+
     /**
      * 请求直播列表
      *
@@ -698,9 +700,9 @@ public class LiveHttpHelper implements IHelper {
                 String message = root.getMessage();
 
                 UserRedPacketInfo userRedPacketInfo = (UserRedPacketInfo) validateBody(root);
-                if(userRedPacketInfo == null){
+                if (userRedPacketInfo == null) {
                     mView.onFailue(message);
-                }else{
+                } else {
                     List<UserRedPacketInfo> datas = new ArrayList<UserRedPacketInfo>();
                     datas.add(userRedPacketInfo);
                     mView.onSuccess(LiveConstants.GET_RED_PACKETS, datas);
@@ -720,10 +722,10 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param roomID
      */
-    public void getUserRedPacketList(String roomID){
+    public void getUserRedPacketList(String roomID) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        if(!TextUtils.isEmpty(roomID)) {
+        if (!TextUtils.isEmpty(roomID)) {
             params.put("tencent_room_id", roomID);
         }
         params.put("method", LiveConstants.GET_USER_RED_PACKETS);
@@ -737,11 +739,11 @@ public class LiveHttpHelper implements IHelper {
                 Root<UserRedPacketInfo> root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
                 String message = root.getMessage();
-                if(LiveConstants.RESULT_SUCCESS.equals(status)){
-                    if(root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0)!=null) {
+                if (LiveConstants.RESULT_SUCCESS.equals(status)) {
+                    if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
                         List<UserRedPacketInfo> datas = root.getResult().get(0).getBody();
                         mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, datas);
-                    }else{
+                    } else {
                         mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, null);
                     }
                 }
@@ -795,12 +797,13 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 取直播门店的镇店之宝。
+     *
      * @param shop_id 门店 ID。
      */
 
-    public void getGoodsDetailList(String shop_id){
-        if(TextUtils.isEmpty(shop_id)){
-            return ;
+    public void getGoodsDetailList(String shop_id) {
+        if (TextUtils.isEmpty(shop_id)) {
+            return;
         }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("shop_id", shop_id);
@@ -816,15 +819,14 @@ public class LiveHttpHelper implements IHelper {
                 Root<BaoBaoEntity> root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
                 String message = root.getMessage();
-                if(LiveConstants.RESULT_SUCCESS.equals(status)){
-                    if(root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0)!=null) {
+                if (LiveConstants.RESULT_SUCCESS.equals(status)) {
+                    if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
                         List<BaoBaoEntity> datas = root.getResult().get(0).getBody();
                         mView.onSuccess(LiveConstants.LIST_OF_STORES, datas);
-                    }else{
+                    } else {
                         mView.onSuccess(LiveConstants.LIST_OF_STORES, null);
                     }
                 }
-
             }
 
             @Override
@@ -835,6 +837,36 @@ public class LiveHttpHelper implements IHelper {
         });
     }
 
+
+    /**
+     * 获取用户主播认证时间
+     */
+    public void getHostAuthTime() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.HOST_AUTH_TIME);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootHostAuthTime rootHostAuthTime = gson.fromJson(responseBody, RootHostAuthTime.class);
+                List<ResultHostAuthTime> resultHostAuthTimes = rootHostAuthTime.getResult();
+                if (SDCollectionUtil.isEmpty(resultHostAuthTimes)) {
+                    mView.onSuccess(LiveConstants.HOST_AUTH_TIME, null);
+                    return;
+                }
+                ResultHostAuthTime resultHostAuthTime = resultHostAuthTimes.get(0);
+                List<ModelHostAuthTime> modelHostAuthTime = resultHostAuthTime.getBody();
+                mView.onSuccess(LiveConstants.HOST_AUTH_TIME, modelHostAuthTime);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
 
     @Override
     public void onDestroy() {

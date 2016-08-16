@@ -28,12 +28,7 @@ import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
@@ -43,6 +38,7 @@ import com.fanwe.seller.model.getShopList.ModelShopListItem;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -135,13 +131,18 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     /**
      * 排序类型
      */
-    private String order_type;
+    private String order_type = "default";
     /**
      * 米果定制
      */
-    private int store_type = 2;
+    private String store_type;
 
-    private PageModel mPage = new PageModel();
+    /**
+     * 大区id
+     */
+    private String pid;
+    private int pageNum = 1;
+    private int pageSize = 5;
     private SellerHttpHelper sellerHttpHelper;
 
     @Override
@@ -163,13 +164,16 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         initData();
     }
 
+    private void getShopList() {
+        sellerHttpHelper.getShopList(tid, cate_id, AppRuntimeWorker.getCity_id(), order_type, pid, store_type, qid, keyword, pageNum, pageSize);
+    }
+
     private void initData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getBusinessCircleList("");
+        sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
         sellerHttpHelper.getClassifyList();
-        sellerHttpHelper.getShopList("d811a8c34a8b0", "d811a8c3ea7b", "", "default", "", "1", "55c27457-57df-11e6-bbcc-a0d3c1ef5681", "");
     }
 
     private void bindLocationData() {
@@ -186,12 +190,11 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     }
 
     private void getIntentData() {
-
         cate_id = getArguments().getString(EXTRA_CATE_ID);
         tid = getArguments().getString(EXTRA_TID);
         qid = getArguments().getString(EXTRA_QID);
         keyword = getArguments().getString(EXTRA_KEY_WORD);
-        store_type = getArguments().getInt(EXTRA_STORE_TYPE);
+        store_type = getArguments().getString(EXTRA_STORE_TYPE);
 
         if (TextUtils.isEmpty(keyword)) {
             mLlCurrentLocation.setVisibility(View.VISIBLE);
@@ -206,27 +209,29 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         }
     }
 
+    private boolean isRefresh;
+
     private void initPullRefreshLv() {
         mPtrlvContent.setMode(Mode.BOTH);
         mPtrlvContent.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPage.resetPage();
-//                requestData(false);
+                pageNum = 1;
+                isRefresh = true;
+                getShopList();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (!mPage.increment()) {
-                    SDToast.showToast("没有更多数据了");
-                    mPtrlvContent.onRefreshComplete();
-                } else {
-//                    requestData(true);
+                isRefresh = false;
+                if (!SDCollectionUtil.isEmpty(resultShopLists)) {
+                    pageNum++;
                 }
+                getShopList();
             }
         });
-//        mPtrlvContent.setRefreshing();
+        mPtrlvContent.setRefreshing();
     }
 
     private void bindDefaultLvData() {
@@ -318,70 +323,6 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                 }
             }
         });
-    }
-
-    protected void fillRequestParams(RequestModel model) {
-        model.putCtl("stores");
-        model.putAct("index_v1");
-        model.put("keyword", keyword);
-        model.put("order_type", order_type); // 排序类型
-        model.put("tid", tid);// 小分类ID
-        model.put("cate_id", cate_id);// 大分类ID
-        model.put("qid", qid);
-        model.put("store_type", store_type);
-        model.putPage(mPage.getPage());
-
-        model.put("city_id", 18);
-    }
-
-    private void requestData(final boolean isLoadMore) {
-//        RequestModel model = new RequestModel();
-//        fillRequestParams(model);
-//        SDRequestCallBack<Stores_indexActModel> handler = new SDRequestCallBack<Stores_indexActModel>() {
-//
-//            @Override
-//            public void onStart() {
-//                SDDialogManager.showProgressDialog("请稍候...");
-//            }
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                if (actModel.getStatus() == 1) {
-//                    mPage.update(actModel.getPage());
-//                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-//                    if (mIsFirstBindCategoryViewData) {
-//                        bindLeftCategoryViewData(actModel.getBcate_list());
-//                        bindMiddleCategoryViewData(actModel.getQuan_list());
-//                        bindRightCategoryViewData(actModel.getNavs());
-//                        mIsFirstBindCategoryViewData = false;
-//                        SDHandlerUtil.runOnUiThreadDelayed(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                mAdapter.notifyDataSetChanged();
-//                            }
-//                        }, 100);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                dealFinishRequest();
-//            }
-//        };
-//        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
-
-    protected void dealFinishRequest() {
-        SDDialogManager.dismissProgressDialog();
-        mPtrlvContent.onRefreshComplete();
-        SDViewUtil.toggleEmptyMsgByList(mListModel, mLlEmpty);
     }
 
     private void bindLeftCategoryViewData(List<ModelClassifyList> listModel) {
@@ -488,6 +429,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
+                initData();
                 mPtrlvContent.setRefreshing();
                 break;
 
@@ -554,17 +496,25 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                         bindRightCategoryViewData(navs);
                         //店铺数据
                         List<StoreModel> listNewData = new ArrayList<>();
-                        if (!SDCollectionUtil.isEmpty(resultShopList.getModelShopListItem())) {
-                            for (ModelShopListItem bean : resultShopList.getModelShopListItem()) {
+                        if (!SDCollectionUtil.isEmpty(resultShopList.getItem())) {
+                            for (ModelShopListItem bean : resultShopList.getItem()) {
                                 StoreModel storeModel = new StoreModel();
                                 //设置数据
                                 storeModel.setId(bean.getId());
                                 storeModel.setName(bean.getShop_name());
+                                storeModel.setPreview(bean.getPreview());
+                                storeModel.setAddress(bean.getAddress());
+                                storeModel.setTel(bean.getTel());
                                 listNewData.add(storeModel);
                             }
                         }
-                        SDViewUtil.updateAdapterByList(mListModel, listNewData, mAdapter, false);
+                        //加载数据
+                        if (isRefresh) {
+                            mListModel.clear();
+                        }
+                        mListModel.addAll(listNewData);
                         mAdapter.notifyDataSetChanged();
+                        mPtrlvContent.onRefreshComplete();
                         break;
                     }
             }

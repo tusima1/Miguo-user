@@ -30,9 +30,8 @@ import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.views.LiveAuthStartActivity;
-import com.miguo.live.views.LiveAuthWaitActivity;
 import com.miguo.live.views.LiveStartActivity;
+import com.miguo.live.views.LiveStartAuthActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
 @SuppressWarnings("deprecation")
@@ -222,13 +221,17 @@ public class MainActivity extends BaseActivity {
             String is_host = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIs_host();
             if ("0".equals(is_host)) {
                 //未认证
-                startActivity(new Intent(this, LiveAuthStartActivity.class));
+                Intent intent = new Intent(this, LiveStartAuthActivity.class);
+                intent.putExtra("pageType", "start");
+                startActivity(intent);
             } else if ("1".equals(is_host)) {
                 //已认证
                 startActivity(new Intent(this, LiveStartActivity.class));
             } else {
                 //认证中
-                startActivity(new Intent(this, LiveAuthWaitActivity.class));
+                Intent intent = new Intent(this, LiveStartAuthActivity.class);
+                intent.putExtra("pageType", "wait");
+                startActivity(intent);
             }
         }
     }

@@ -5,7 +5,7 @@ public class LiveConstants {
      * 请求成功 。
      */
 
-    public static final String RESULT_SUCCESS="200";
+    public static final String RESULT_SUCCESS = "200";
     /**
      * 获取直播列表
      */
@@ -93,7 +93,7 @@ public class LiveConstants {
      */
     public static final String GET_USER_RED_PACKETS = "GetUserRedPackets";
     /**
-     *镇店之宝。
+     * 镇店之宝。
      */
     public static final String LIST_OF_STORES = "ListOfStores";
 
@@ -101,4 +101,8 @@ public class LiveConstants {
      * 获取门店随机评价
      */
     public static final String STORES_RANDOM_COMMENT = "StoresRandomComment";
+    /**
+     * HostAuthTime
+     */
+    public static final String HOST_AUTH_TIME = "HostAuthTime";
 }

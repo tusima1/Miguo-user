@@ -29,7 +29,6 @@ import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -226,15 +225,9 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     };
 
     private void requestLiveList() {
-//        liveHelper.getLiveList(pageNum, pageSize, "", "", String.valueOf(AppRuntimeWorker.getCity_id()));
         if (liveHelper != null) {
-            liveHelper.getLiveList(pageNum, pageSize, "", "", "");
+            liveHelper.getLiveList(pageNum, pageSize, "", "", AppRuntimeWorker.getCity_id());
         }
-//        SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
-//        sellerHttpHelper.getBusinessCircleList("");
-//        sellerHttpHelper.getClassifyList();
-//        sellerHttpHelper.getShopList("d811a8c34a8b0", "d811a8c3ea7b", "", "default", "", "1", "55c27457-57df-11e6-bbcc-a0d3c1ef5681", "");
-//        sellerHttpHelper.getCityList();
     }
 
     private void requestIndex() {

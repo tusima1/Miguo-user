@@ -18,6 +18,7 @@ import com.fanwe.seller.adapters.ShopListAdapter;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -81,7 +82,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     }
 
     private void getData() {
-        sellerHttpHelper.getStoreList(pageNum, pageSize, type + "", "");
+        sellerHttpHelper.getStoreList(pageNum, pageSize, type + "", AppRuntimeWorker.getCity_id());
     }
 
     private void initPullRefreshLv() {
