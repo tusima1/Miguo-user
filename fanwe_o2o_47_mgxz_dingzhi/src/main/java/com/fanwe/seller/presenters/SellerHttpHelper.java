@@ -36,12 +36,14 @@ import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -321,6 +323,48 @@ public class SellerHttpHelper implements IHelper {
         });
     }
 
+    /**
+     *
+     * @param shop_id
+     */
+    public void CheckShopCollect(String shop_id){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("shop_id", shop_id);
+        params.put("method", SellerConstants.CHECK_SHOP_COLLECT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
+                HashMap<String,String> map=null ;
+                if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
+                {
+                    map= root.getResult().get(0).getBody().get(0);
+                }
+                List<HashMap<String,String>> datas = new ArrayList<HashMap<String, String>>();
+                //"0"  0表示未收藏 1表示已收藏
+                String collected ="0";
+                if (map != null) {
+                    datas.add(map);
+                    mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, datas);
+
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
     /**
      * 获取分类列表
      */

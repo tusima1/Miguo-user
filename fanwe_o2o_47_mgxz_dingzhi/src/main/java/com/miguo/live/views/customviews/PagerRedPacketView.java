@@ -9,25 +9,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Root;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.model.UserInfoNew;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
-import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 
 /**
  * Created by didik on 2016/7/29.
  */
-public class PagerRedPacketView extends LinearLayout implements CallbackView{
+public class PagerRedPacketView extends LinearLayout {
 
     private Context mContext;
     private TextView mTv_redNum;
@@ -35,10 +28,34 @@ public class PagerRedPacketView extends LinearLayout implements CallbackView{
     private LiveHttpHelper mLiveHttpHelper;
 
     private PagerRedPacketAdapter mAdapter;
+    private CallbackView mCallbackView;
+    public PagerRedPacketAdapter.CountChangeListner  mCountChangeListener = new PagerRedPacketAdapter.CountChangeListner(){
+        public void onChange(int count){
+            updateCount(count);
+        }
+    };
 
+    private CallbackView thisCallBack=new CallbackView() {
+        @Override
+        public void onSuccess(String responseBody) {
+            MGToast.showToast(""+responseBody);
+        }
 
-    public PagerRedPacketView(Context context) {
+        @Override
+        public void onSuccess(String method, List datas) {
+            MGToast.showToast(""+method);
+        }
+
+        @Override
+        public void onFailue(String responseBody) {
+            MGToast.showToast(""+responseBody);
+        }
+    };
+    public PagerRedPacketView(Context context,CallbackView mCallbackView,PagerRedPacketAdapter mAdapter) {
         super(context);
+        this.mCallbackView  = mCallbackView;
+        this.mAdapter = mAdapter;
+        this.mAdapter.setmCountChangeListener(mCountChangeListener);
         init(context);
     }
 
@@ -57,15 +74,13 @@ public class PagerRedPacketView extends LinearLayout implements CallbackView{
         initView();
     }
 
+
     private void initView() {
-        mLiveHttpHelper = new LiveHttpHelper(mContext,this);
-        refreshData();
+        mLiveHttpHelper = new LiveHttpHelper(mContext,mCallbackView);
+//        refreshData();
         LayoutInflater.from(mContext).inflate(R.layout.item_viewpager_red_packet,this);
         mTv_redNum = ((TextView) this.findViewById(R.id.tv_red_num));
         mRecyclerRed = ((RecyclerView) findViewById(R.id.recycler_red));
-
-        /*init RecyclerView*/
-        mAdapter=new PagerRedPacketAdapter();
         LinearLayoutManager layoutManager=new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerRed.setLayoutManager(layoutManager);
@@ -77,36 +92,16 @@ public class PagerRedPacketView extends LinearLayout implements CallbackView{
     public void refreshData(){
         mLiveHttpHelper.getUserRedPacketList(CurLiveInfo.getRoomNum()+"");
     }
-    @Override
-    public void onSuccess(String responseBody) {
 
-
+    public void updateCount(int size){
+        mTv_redNum.setText("已经抢到"+size+"个红包");
     }
 
-    @Override
-    public void onSuccess(String method, List datas) {
-        switch (method) {
-            case LiveConstants.GET_USER_RED_PACKETS:
-                if (mAdapter != null) {
-                    mAdapter = new PagerRedPacketAdapter();
-                }
-
-                int size = datas==null?0:datas.size();
-                if (datas == null) {
-                    mAdapter.setMdatas(null);
-                } else {
-                     mAdapter.setMdatas(datas);
-                }
-                mTv_redNum.setText("已经抢到"+size+"个红包");
-                break;
-            default:
-                break;
-        }
-
+    public CallbackView getmCallbackView() {
+        return mCallbackView;
     }
 
-    @Override
-    public void onFailue(String responseBody) {
-
+    public void setmCallbackView(CallbackView mCallbackView) {
+        this.mCallbackView = mCallbackView;
     }
 }

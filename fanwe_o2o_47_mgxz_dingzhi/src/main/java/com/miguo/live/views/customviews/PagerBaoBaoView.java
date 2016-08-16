@@ -18,6 +18,7 @@ import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.utils.DisplayUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
@@ -36,11 +37,14 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 //    private TextView mGet;//获取按钮
     private RecyclerView mRecycler;
     private Context mContext;
-    private LiveHttpHelper mLiveHttpHelper;
-    PagerBaoBaoAdapter mAdapter;
+    private  PagerBaoBaoAdapter mAdapter;
+    private  List<BaoBaoEntity> baoBaoEntityList;
+    private ShoppingCartHelper mShoppingCartHelper;
+
 
     public PagerBaoBaoView(Context context) {
         super(context);
+        mShoppingCartHelper= new ShoppingCartHelper(context,this);
         init(context);
     }
 
@@ -60,8 +64,7 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
     private void init(Context context) {
         this.mContext=context;
         LayoutInflater.from(context).inflate(R.layout.item_pager_baobao,this);
-        mLiveHttpHelper = new LiveHttpHelper(mContext,this);
-        mLiveHttpHelper.getGoodsDetailList(CurLiveInfo.shopID);
+
 //        mIv_img = ((ImageView) this.findViewById(R.id.iv_baobao));
 //        mTv_title = ((TextView) this.findViewById(R.id.tv_title));
 //        mIv_title_append = ((TextView) this.findViewById(R.id.tv_title_append));
@@ -70,7 +73,10 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 
       //  mGet.setOnClickListener(this);
 
-        mAdapter=new PagerBaoBaoAdapter(mContext);
+        mAdapter=new PagerBaoBaoAdapter(mContext,mShoppingCartHelper);
+        if(baoBaoEntityList!=null&&baoBaoEntityList.size()>0){
+            mAdapter.setData(baoBaoEntityList);
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -100,7 +106,23 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
      * 点击了获取按钮
      */
     private void clickGet() {
+
         Toast.makeText(mContext, "点击了获取", Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * 更新商品列表数据。
+     */
+    public void onRefreshData(){
+        if(baoBaoEntityList!=null&&baoBaoEntityList.size()>0){
+            mAdapter.setData(baoBaoEntityList);
+        }
+    }
+
+
+    public void setBaoBaoEntityList(List<BaoBaoEntity> baoBaoEntityList) {
+        this.baoBaoEntityList = baoBaoEntityList;
     }
 
     @Override
@@ -110,16 +132,6 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onSuccess(String method, List datas) {
-        switch (method){
-            case LiveConstants.LIST_OF_STORES:
-                if(mAdapter==null){
-                    mAdapter=new PagerBaoBaoAdapter(mContext);
-                    mAdapter.setData(datas);
-                }
-                break;
-            default:
-                break;
-        }
 
     }
 

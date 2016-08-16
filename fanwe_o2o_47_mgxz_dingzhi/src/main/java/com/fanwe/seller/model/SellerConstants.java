@@ -50,4 +50,8 @@ public class SellerConstants {
      *
      */
     public static final String SHOP_INFO = "ShopInfo";
+   /**
+     * 判断是否收藏。
+     */
+    public static final String  CHECK_SHOP_COLLECT  ="CheckShopCollect";
 }

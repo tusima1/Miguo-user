@@ -2,6 +2,7 @@ package com.miguo.live.adapters;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,9 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.ShopCartActivity;
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
+import com.miguo.live.presenters.ShoppingCartHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.List;
 
@@ -26,12 +31,16 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
 
     private Context mContext;
     private List<BaoBaoEntity> mData;
+    private ShoppingCartHelper mShoppingCartHelper;
 
     /**
      * 构造函数确定填充数据
      */
-    public PagerBaoBaoAdapter(Context mContext){
+    public PagerBaoBaoAdapter(Context mContext, ShoppingCartHelper mShoppingCartHelper)
+    {
         this.mContext=mContext;
+        this.mShoppingCartHelper = mShoppingCartHelper;
+
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -97,13 +106,14 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
         holder.add2cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "添加到购物车", Toast.LENGTH_SHORT).show();
+                addGoodsToShoppingPacket(baoBaoEntity);
+
             }
         });
         holder.buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "立即购买", Toast.LENGTH_SHORT).show();
+                quickBuyGoods(baoBaoEntity);
             }
         });
 
@@ -120,8 +130,10 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
      * @param data
      */
     public void setData(List<BaoBaoEntity> data){
-        this.mData=data;
-        notifyItemRangeChanged(0,getItemCount());
+        if(this.mData!=data) {
+            this.mData = data;
+            notifyItemRangeChanged(0, getItemCount());
+        }
 
     }
 
@@ -130,6 +142,32 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
         return mData==null?0:mData.size();
     }
 
+    /**
+     *  添加到购物车。
+     * @param entity
+     */
+    public void addGoodsToShoppingPacket(final BaoBaoEntity entity){
+        if(entity!=null){
+            String roomId = CurLiveInfo.getRoomNum()+"";
+            String fx_user_id = CurLiveInfo.getHostID();
+            String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            String goods_id = entity.getId();
+            String cart_type = "1";
+            String add_goods_num = "1";
+            mShoppingCartHelper.addToShoppingCart(roomId,fx_user_id,lgn_user_id,goods_id,cart_type,add_goods_num);
+        }
+    }
+
+    /**
+     * 立即购买。
+     * @param entity
+     */
+    public void quickBuyGoods(final BaoBaoEntity entity){
+        addGoodsToShoppingPacket(entity);
+        Intent bintent = new Intent(mContext, ShopCartActivity.class);
+        mContext.startActivity(bintent);
+
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView add2cart;
         public TextView buy;
