@@ -42,4 +42,8 @@ public class SellerConstants {
      * 城市列表
      */
     public static final String CITY_LIST = "CityList";
+    /**
+     * 判断是否收藏。
+     */
+    public static final String  CHECK_SHOP_COLLECT  ="CheckShopCollect";
 }

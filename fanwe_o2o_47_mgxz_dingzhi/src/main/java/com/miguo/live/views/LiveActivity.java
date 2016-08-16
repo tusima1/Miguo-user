@@ -686,8 +686,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
             mRedPacketAdapter = new PagerRedPacketAdapter();
             mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
-            mRedPacketAdapter.setMdatas(testDatas());
-            mRedPacketAdapter.notifyDataSetChanged();
+
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
         avView = findViewById(R.id.av_video_layer_ui);//surfaceView;
@@ -727,8 +726,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             getShopDetail(CurLiveInfo.shopID);
         }
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -1881,15 +1878,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
+                mRedPacketAdapter.setMdatas(datas);
+                mRedPacketAdapter.notifyDataSetChanged();
 
-                int size = datas == null ? 0 : datas.size();
-                if (datas == null) {
-                    datas = testDatas();
-                    mRedPacketAdapter.setMdatas(datas);
-                } else {
-                    mRedPacketAdapter.setMdatas(datas);
-                    mRedPacketAdapter.notifyDataSetChanged();
-                }
+//                int size = datas == null ? 0 : datas.size();
+//                if (datas == null) {
+//                    datas = testDatas();
+//                    mRedPacketAdapter.setMdatas(datas);
+//                } else {
+//                    mRedPacketAdapter.setMdatas(datas);
+//                    mRedPacketAdapter.notifyDataSetChanged();
+//                }
                 break;
             default:
                 break;
