@@ -499,8 +499,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 //系统消息
                 if (type == TIMElemType.GroupSystem) {
                     if (TIMGroupSystemElemType.TIM_GROUP_SYSTEM_DELETE_GROUP_TYPE == ((TIMGroupSystemElem) elem).getSubtype()) {
-                        mContext.sendBroadcast(new Intent(
-                                Constants.ACTION_HOST_LEAVE));
+                        if(mContext!=null) {
+                            mContext.sendBroadcast(new Intent(
+                                    Constants.ACTION_HOST_LEAVE));
+                        }
                     }
 
                 }

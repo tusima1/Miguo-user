@@ -100,8 +100,8 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
             }
             mTv_location_type.setText(mSellerDetailInfo.getAreaName());
             mTv_keywords.setText(Html.fromHtml(mSellerDetailInfo.getMain_buss()));
-            mTv_location.setText(mSellerDetailInfo.getAddress());
-            mTv_phone_num.setText(mSellerDetailInfo.getTel());
+            mTv_location.setText("地址："+mSellerDetailInfo.getAddress());
+            mTv_phone_num.setText("联系电话:"+mSellerDetailInfo.getTel());
             String price = mSellerDetailInfo.getRef_avg_price();
             if(!TextUtils.isEmpty(price)){
                 mTv_price.setText("Y "+price+"元/人");

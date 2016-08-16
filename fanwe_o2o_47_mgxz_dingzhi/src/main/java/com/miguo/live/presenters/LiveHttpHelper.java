@@ -737,9 +737,21 @@ public class LiveHttpHelper implements IHelper {
                 Root<UserRedPacketInfo> root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
                 String message = root.getMessage();
+                List<UserRedPacketInfo>datatest = new ArrayList<UserRedPacketInfo>();
+                for(int i = 0 ; i < 4 ; i ++){
+                    UserRedPacketInfo test1 = new UserRedPacketInfo();
+                    test1.setId("00"+i);
+                    test1.setAmount_limit("500");
+                    test1.setRed_packet_type("1");
+                    datatest.add(test1);
+                }
+                mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, datatest);
                 if(LiveConstants.RESULT_SUCCESS.equals(status)){
                     if(root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0)!=null) {
                         List<UserRedPacketInfo> datas = root.getResult().get(0).getBody();
+                        if(datas==null){
+                            datas = datatest;
+                        }
                         mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, datas);
                     }else{
                         mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, null);
@@ -824,7 +836,7 @@ public class LiveHttpHelper implements IHelper {
                         mView.onSuccess(LiveConstants.LIST_OF_STORES, null);
                     }
                 }
-
+                mView.onSuccess(LiveConstants.LIST_OF_STORES, null);
             }
 
             @Override
@@ -843,5 +855,13 @@ public class LiveHttpHelper implements IHelper {
         gson = null;
         userCurrentInfo = null;
         mActivity = null;
+    }
+
+    public CallbackView getmView() {
+        return mView;
+    }
+
+    public void setmView(CallbackView mView) {
+        this.mView = mView;
     }
 }

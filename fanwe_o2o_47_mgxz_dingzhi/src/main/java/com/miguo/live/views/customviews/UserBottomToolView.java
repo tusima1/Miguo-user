@@ -9,9 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
+import com.miguo.live.adapters.PagerRedPacketAdapter;
+import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
 import com.miguo.live.views.UserRobRedPacketDialogHelper;
@@ -20,11 +23,22 @@ import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
+import java.util.List;
+
 
 /**
  * Created by didik on 2016/7/22.
  */
 public class UserBottomToolView extends LinearLayout implements IViewGroup, View.OnClickListener {
+    /**
+     * 红包所在的VIEWPAGER 位置。
+     */
+    private final  int RED_TYPE=2;
+    /**
+     * 商品类型。
+     */
+    private final  int GOODS_TYPE=0;
+
     private Context mContext;
     private View mTvTalk2host;
     private TextView mGoods;
@@ -39,10 +53,23 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     private View rootView;//父布局,pop定位用
     private LiveUserPopHelper popHelper;
     private UserRobRedPacketDialogHelper redPacketDialogHelper;
+    private CallbackView  mCallbackView;
+
     /**
      * 门店详情。
      */
     private SellerDetailInfo mSellerDetailInfo;
+
+    /**
+     * 门店商品列表。
+     * @param context
+     */
+    private List<BaoBaoEntity>  baoBaoEntities;
+
+    /**
+     * 用户取得的红包列表。
+     */
+    private PagerRedPacketAdapter mRedPacketAdapter;
 
     public UserBottomToolView(Context context) {
         this(context, null);
@@ -80,11 +107,12 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     }
 
-    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout, View rootView) {
+    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout, View rootView,CallbackView mCallbackView) {
         this.mAct = mAct;
         this.mLiveHelper = liveHelper;
         this.mHeartLayout = heartLayout;
         this.rootView = rootView;
+        this.mCallbackView = mCallbackView;
     }
 
     @Override
@@ -92,13 +120,17 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         if (v == mTvTalk2host) {
             talk2host();
         } else if (v == mGoods) {
-            clickGoods();
+            clickGoods(GOODS_TYPE);
+        }else if(v==mRob){
+            clickGoods(RED_TYPE);
         }  else if (v == mGift) {
             clickGift();
         } else if (v == mShare) {
             clickShare();
         } else if (v == mLike) {
             clickLike2ShowHeart();
+        }else{
+            return;
         }
     }
 
@@ -148,13 +180,16 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     /**
      * 点击了商品(宝贝)
      */
-    public void clickGoods() {
-//        MGToast.showToast("点击了商品(宝贝)");
+    public void clickGoods(int type) {
         if (mAct != null && rootView != null && popHelper == null) {
-            popHelper = new LiveUserPopHelper(mAct, rootView);
+            popHelper = new LiveUserPopHelper(mAct, rootView,mCallbackView,mRedPacketAdapter);
         }
+        popHelper.setCurrentPosition(type);
         if(mSellerDetailInfo!=null) {
             popHelper.setmSellerDetailInfo(mSellerDetailInfo);
+        }
+        if(baoBaoEntities!=null){
+            popHelper.setBaoBaoEntityList(baoBaoEntities);
         }
         popHelper.show();
     }
@@ -207,5 +242,27 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             popHelper.setmSellerDetailInfo(this.mSellerDetailInfo );
             popHelper.refreshSellerDetailInfo();
         }
+    }
+
+    public void notifyGoodListChange(){
+        if(popHelper!=null){
+            popHelper.setBaoBaoEntityList(this.baoBaoEntities);
+            popHelper.refreshGoodsList();
+        }
+    }
+    public List<BaoBaoEntity> getBaoBaoEntities() {
+        return baoBaoEntities;
+    }
+
+    public void setBaoBaoEntities(List<BaoBaoEntity> baoBaoEntities) {
+        this.baoBaoEntities = baoBaoEntities;
+    }
+
+    public PagerRedPacketAdapter getmRedPacketAdapter() {
+        return mRedPacketAdapter;
+    }
+
+    public void setmRedPacketAdapter(PagerRedPacketAdapter mRedPacketAdapter) {
+        this.mRedPacketAdapter = mRedPacketAdapter;
     }
 }

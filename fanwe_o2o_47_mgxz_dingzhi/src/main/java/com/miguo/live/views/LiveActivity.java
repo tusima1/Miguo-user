@@ -43,10 +43,12 @@ import com.fanwe.utils.SDDateUtil;
 import com.google.gson.Gson;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
+import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
@@ -65,6 +67,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
@@ -164,6 +167,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private HeadTopAdapter mHeadTopAdapter;
 
+    /**
+     * 用户的红包列表。
+     *
+     * @param savedInstanceState
+     */
+    private PagerRedPacketAdapter mRedPacketAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -673,8 +682,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
             if (mLiveHttphelper != null) {
                 mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "");
-            }
 
+            }
+            mRedPacketAdapter = new PagerRedPacketAdapter();
+            mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
+            mRedPacketAdapter.setMdatas(testDatas());
+            mRedPacketAdapter.notifyDataSetChanged();
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
         avView = findViewById(R.id.av_video_layer_ui);//surfaceView;
@@ -684,6 +697,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
+        //获取商品列表。
+        mLiveHttphelper.getGoodsDetailList(CurLiveInfo.shopID);
 
         //开启后台业务服务器请求管理类
 
@@ -701,12 +716,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
     /**
-     * 给一些view需要的参数
+     * 观众 底部操作view需要的参数
      */
     private void initViewNeed() {
         //初始化底部
         if (mUserBottomTool != null) {
-            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root);
+            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
         }
         if (!TextUtils.isEmpty(CurLiveInfo.shopID)) {
             getShopDetail(CurLiveInfo.shopID);
@@ -759,7 +774,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private class GetAudienceTask extends TimerTask {
         @Override
         public void run() {
-
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
         }
     }
@@ -789,8 +803,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mVideoTimer.cancel();
             mVideoTimer = null;
         }
-        if(null!=mAudienceTimer){
-            mAudienceTimer.cancel();;
+        if (null != mAudienceTimer) {
+            mAudienceTimer.cancel();
+            ;
             mAudienceTimer = null;
         }
         inviteViewCount = 0;
@@ -806,19 +821,20 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mEnterRoomHelper.onDestory();
         }
         //mLiveHelper;
-        if(mTLoginHelper!=null){
+        if (mTLoginHelper != null) {
             mTLoginHelper.onDestory();
         }
-        if(tencentHttpHelper!=null){
+        if (tencentHttpHelper != null) {
             tencentHttpHelper.onDestroy();
         }
-        if(backDialog!=null){
+        if (backDialog != null) {
             backDialog.dismiss();
         }
-        if(mUserHeadTopView!=null){
+        if (mUserHeadTopView != null) {
+            mUserHeadTopView.ondestroy();
             mUserHeadTopView = null;
         }
-        if(mHostTopView!=null){
+        if (mHostTopView != null) {
             mHostTopView = null;
         }
         QavsdkControl.getInstance().clearVideoMembers();
@@ -846,9 +862,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-                backDialog.show();
-            }
+            backDialog.show();
         }
+    }
 
 
     /**
@@ -887,7 +903,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                         mLiveHelper.stopPushAction();
                     }
                     startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
-                    if(backDialog!=null&&backDialog.isShowing()){
+                    if (backDialog != null && backDialog.isShowing()) {
                         backDialog.dismiss();
                     }
                 }
@@ -1035,22 +1051,20 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 String red_packet_key = params.get("red_packet_id");
                 String durationStr = params.get("red_packet_duration");
                 int duration = 30;
-                if(!TextUtils.isEmpty(durationStr))
-                {
+                if (!TextUtils.isEmpty(durationStr)) {
                     duration = Integer.valueOf(duration);
                 }
-                mUserBottomTool.clickRob(red_packet_key,duration);
+                mUserBottomTool.clickRob(red_packet_key, duration);
             }
         }
     }
 
-    CountDownTimer robLiftTimer = new CountDownTimer(20*1000, 1000) {
+    CountDownTimer robLiftTimer = new CountDownTimer(20 * 1000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
 
 
-
-            mHostRedPacketCountDownView.setTime(SDDateUtil.secondesToMMSS(millisUntilFinished) );
+            mHostRedPacketCountDownView.setTime(SDDateUtil.secondesToMMSS(millisUntilFinished));
 
         }
 
@@ -1059,13 +1073,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mHostRedPacketCountDownView.setTime("00:00");
             mHostBottomToolView1.setClickable(true);
         }
-    };;
+    };
+    ;
 
     @Override
     public void sendHostRedPacket(String id, String duration) {
-        if(!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)){
+        if (!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)) {
             //启动红包倒计时。
-            Integer values = Integer.valueOf(duration)+10*1000;
+            Integer values = Integer.valueOf(duration) + 10 * 1000;
 //            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
 
 
@@ -1073,8 +1088,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mHostBottomToolView1.setClickable(false);
         }
     }
-
-
 
 
     @Override
@@ -1798,14 +1811,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     boolean isHost = LiveUtil.checkIsHost();
                     int size = datas.size();
                     if (isHost) {
-                        if(mHostTopView!=null) {
+                        if (mHostTopView != null) {
                             mHostTopView.refreshData(datas);
-                            mHostTopView.updateAudienceCount(size+"");
+                            mHostTopView.updateAudienceCount(size + "");
                         }
                     } else {
-                        if(mUserHeadTopView!=null) {
+                        if (mUserHeadTopView != null) {
                             mUserHeadTopView.refreshData(datas);
-                            mUserHeadTopView.updateAudienceCount(size+"");
+                            mUserHeadTopView.updateAudienceCount(size + "");
                         }
                     }
                     mHeadTopAdapter.notifyDataSetChanged();
@@ -1855,16 +1868,49 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                 }
                 break;
-
+            case LiveConstants.LIST_OF_STORES:
+                if (datas != null && datas.size() > 0) {
+                    mUserBottomTool.setBaoBaoEntities(datas);
+                    mUserBottomTool.notifyGoodListChange();
+                }
+                break;
             case SellerConstants.LIVE_BIZ_SHOP:
                 if (datas != null && datas.size() > 0) {
                     mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
                     mUserBottomTool.notifyDataChange();
                 }
                 break;
+            case LiveConstants.GET_USER_RED_PACKETS:
+
+                int size = datas == null ? 0 : datas.size();
+                if (datas == null) {
+                    datas = testDatas();
+                    mRedPacketAdapter.setMdatas(datas);
+                } else {
+                    mRedPacketAdapter.setMdatas(datas);
+                    mRedPacketAdapter.notifyDataSetChanged();
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    public List<UserRedPacketInfo> testDatas() {
+
+
+        List<UserRedPacketInfo> mdatas = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+
+        {
+            UserRedPacketInfo data1 = new UserRedPacketInfo();
+            data1.setId("001");
+            data1.setRed_packet_type("1");
+            data1.setAmount_limit(100 + i + "");
+            data1.setRed_packet_amount("10");
+            mdatas.add(data1);
+        }
+        return mdatas;
     }
 
     /*校验数据*/

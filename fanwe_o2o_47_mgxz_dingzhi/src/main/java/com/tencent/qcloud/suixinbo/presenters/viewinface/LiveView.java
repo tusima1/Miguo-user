@@ -69,4 +69,6 @@ public interface LiveView extends MvpView {
      * 用户退出 。
      */
     void userExit();
+
+
 }

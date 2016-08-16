@@ -101,4 +101,11 @@ public class LiveConstants {
      * 获取门店随机评价
      */
     public static final String STORES_RANDOM_COMMENT = "StoresRandomComment";
+    /**
+     * 购物车
+     * */
+
+    public static final String SHOPPING_CART = "ShopingCart";
+
+
 }

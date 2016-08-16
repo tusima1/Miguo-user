@@ -97,19 +97,12 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         mIv_redpacket.setOnClickListener(this);
         mIv_shopCart.setOnClickListener(this);
 
-        //checkbox
+
         //弹幕
         mCb_DanMu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked){
-//                    //执行清除弹幕(类似清屏)
-////                    MGToast.showToast("执行清除弹幕");
-//
-//                }else {
-//                    //执行开启弹幕
-////                    MGToast.showToast("执行开启弹幕");
-//                }
+
                 if (mScreenListener != null) {
                     mScreenListener.onSwitchScreen();
                 }
@@ -417,4 +410,6 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     public void setClickable(boolean clickable) {
         this.clickable = clickable;
     }
+
+
 }
