@@ -129,9 +129,6 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
         Message message = new Message();
         if (SellerConstants.STORE_LIST.equals(method)) {
             temps = (ArrayList<ModelStoreList>) datas;
-            if (!SDCollectionUtil.isEmpty(temps)) {
-                mListModel.addAll(temps);
-            }
             message.what = 0;
             mHandler.sendMessage(message);
         }
@@ -147,6 +144,10 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
+                    //在主线程线程中更新数据
+                    if (!SDCollectionUtil.isEmpty(temps)) {
+                        mListModel.addAll(temps);
+                    }
                     mAdapter.notifyDataSetChanged();
                     mPtrlvContent.onRefreshComplete();
                     break;

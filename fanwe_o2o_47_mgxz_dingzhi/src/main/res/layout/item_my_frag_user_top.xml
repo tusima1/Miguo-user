@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_my_top">
+
+    <com.github.siyamed.shapeimageview.CircularImageView
+        android:id="@+id/iv_user_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/app_icon"
+        app:siBorderColor="@color/white"/>
+
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="32dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_setting"/>
+
+    <TextView
+        android:id="@+id/frag_my_account_tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_user_avatar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="村头一枝花"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"/>
+
+    <ImageView
+        android:id="@+id/iv_vip"
+        android:layout_width="16dp"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@id/frag_my_account_tv_username"
+        android:layout_marginLeft="@dimen/dp5"
+        android:layout_toRightOf="@id/frag_my_account_tv_username"
+        android:scaleType="center"
+        android:src="@drawable/ic_rank_1"
+        />
+
+    <View
+        android:id="@+id/location"
+        android:layout_width="@dimen/dp1"
+        android:layout_height="@dimen/dp14"
+        android:layout_below="@id/frag_my_account_tv_username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp10"
+        android:background="@android:color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_fans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frag_my_account_tv_username"
+        android:layout_marginRight="@dimen/dp15"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_toLeftOf="@id/location"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="粉丝"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_fans_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:text="1000"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+
+            />
+
+    </LinearLayout>
+
+
+    <!--之所以使用ll,是想让点击区域变大-->
+    <LinearLayout
+        android:id="@+id/ll_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frag_my_account_tv_username"
+        android:layout_marginLeft="@dimen/dp15"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_toRightOf="@id/location"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="消息"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp10"
+            android:text="10"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/location"
+        android:layout_marginTop="20dp"
+        android:background="@color/transparent"
+        android:gravity="center_vertical"
+        android:minHeight="60dp"
+        android:orientation="horizontal">
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_consume"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_my_shop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_my_friend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_my_name_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

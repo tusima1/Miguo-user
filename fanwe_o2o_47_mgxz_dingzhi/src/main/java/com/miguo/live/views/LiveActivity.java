@@ -686,7 +686,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
             mRedPacketAdapter = new PagerRedPacketAdapter();
             mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
-
+//            mRedPacketAdapter.setMdatas(testDatas());
+//            mRedPacketAdapter.notifyDataSetChanged();
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
         avView = findViewById(R.id.av_video_layer_ui);//surfaceView;
@@ -726,6 +727,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             getShopDetail(CurLiveInfo.shopID);
         }
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -802,7 +805,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         if (null != mAudienceTimer) {
             mAudienceTimer.cancel();
-            ;
             mAudienceTimer = null;
         }
         inviteViewCount = 0;
@@ -812,6 +814,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         CurLiveInfo.setCurrentRequestCount(0);
         unregisterReceiver();
         if (mLiveHelper != null) {
+            mLiveHelper.closeCameraAndMic();
             mLiveHelper.onDestory();
         }
         if (mEnterRoomHelper != null) {
@@ -1799,7 +1802,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
     @Override
-    public void onSuccess(String method, List datas) {
+    public void onSuccess(String method, final List datas) {
         switch (method) {
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
@@ -1878,17 +1881,21 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
-                mRedPacketAdapter.setMdatas(datas);
-                mRedPacketAdapter.notifyDataSetChanged();
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int size = datas == null ? 0 : datas.size();
+                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+                        if (datas == null) {
+                            mRedPacketAdapter.setMdatas(userRedPacketInfos);
+                        } else {
+                            mRedPacketAdapter.setMdatas(userRedPacketInfos);
 
-//                int size = datas == null ? 0 : datas.size();
-//                if (datas == null) {
-//                    datas = testDatas();
-//                    mRedPacketAdapter.setMdatas(datas);
-//                } else {
-//                    mRedPacketAdapter.setMdatas(datas);
-//                    mRedPacketAdapter.notifyDataSetChanged();
-//                }
+                        }
+                        mRedPacketAdapter.notifyDataSetChanged();
+                    }
+                });
+
                 break;
             default:
                 break;
@@ -1896,7 +1903,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
     public List<UserRedPacketInfo> testDatas() {
-
 
         List<UserRedPacketInfo> mdatas = new ArrayList<>();
         for (int i = 0; i < 4; i++)
@@ -1906,7 +1912,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             data1.setId("001");
             data1.setRed_packet_type("1");
             data1.setAmount_limit(100 + i + "");
-            data1.setRed_packet_amount("10");
+            data1.setRed_packet_amount("12");
             mdatas.add(data1);
         }
         return mdatas;
