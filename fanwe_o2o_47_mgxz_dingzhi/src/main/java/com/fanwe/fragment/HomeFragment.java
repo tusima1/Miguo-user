@@ -29,6 +29,7 @@ import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -37,15 +38,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.applyRoom.ModelApplyRoom;
-import com.miguo.live.model.generateSign.ModelGenerateSign;
-import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
-import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
-import com.miguo.live.model.getHostInfo.ModelHostInfo;
-import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.sunday.eventbus.SDBaseEvent;
-import com.umeng.socialize.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,8 +141,8 @@ public class HomeFragment extends BaseFragment implements CallbackView {
             return;
         }
         String dist = BaiduMapManager.getInstance().getDistrictShort();
-        int cityId = AppRuntimeWorker.getCityIdByCityName(dist);
-        if (cityId > 0) // 区域存在于城市列表中
+        String cityId = AppRuntimeWorker.getCityIdByCityName(dist);
+        if (!TextUtils.isEmpty(cityId)) // 区域存在于城市列表中
         {
             if (!dist.equals(defaultCity)) // 区域不是默认的
             {
@@ -157,7 +151,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         } else {
             String city = BaiduMapManager.getInstance().getCityShort();
             cityId = AppRuntimeWorker.getCityIdByCityName(city);
-            if (cityId > 0) // 城市存在于城市列表中
+            if (!TextUtils.isEmpty(cityId)) // 城市存在于城市列表中
             {
                 if (!city.equals(defaultCity)) // 城市不是默认的
                 {
@@ -236,8 +230,12 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         if (liveHelper != null) {
             liveHelper.getLiveList(pageNum, pageSize, "", "", "");
         }
+//        SellerHttpHelper sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
+//        sellerHttpHelper.getBusinessCircleList("");
+//        sellerHttpHelper.getClassifyList();
+//        sellerHttpHelper.getShopList("d811a8c34a8b0", "d811a8c3ea7b", "", "default", "", "1", "55c27457-57df-11e6-bbcc-a0d3c1ef5681", "");
+//        sellerHttpHelper.getCityList();
     }
-
 
     private void requestIndex() {
         RequestModel model = new RequestModel();

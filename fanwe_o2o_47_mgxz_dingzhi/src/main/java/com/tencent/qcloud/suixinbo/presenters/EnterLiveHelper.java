@@ -152,7 +152,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     break;
 
                 case TYPE_MEMBER_CHANGE_OUT:
-                    mStepInOutView.memberQuiteLive(updateList);
+                    if(mStepInOutView!=null) {
+                        mStepInOutView.memberQuiteLive(updateList);
+                    }
                     break;
                 default:
                     break;

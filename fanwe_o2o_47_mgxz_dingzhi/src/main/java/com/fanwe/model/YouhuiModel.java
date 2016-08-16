@@ -1,168 +1,138 @@
 package com.fanwe.model;
 
-import java.io.Serializable;
-
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.utils.SDDistanceUtil;
 
-public class YouhuiModel implements Serializable
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int id;
-	private int cid; // 收藏记录id
-	private String name;
-	private String list_brief;
-	private String icon;
-	private int down_count;// 下载量
-	private String begin_time; // 起止时间
-	private String youhui_type;// 0:满立减 1:折扣券
-	private double xpoint;
-	private double ypoint;
-	private String distance;
-	private String address;
+import java.io.Serializable;
 
-	// add
-	private String distanceFormat;
+public class YouhuiModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String id;
+    private int cid; // 收藏记录id
+    private String name;
+    private String list_brief;
+    private String icon;
+    private int down_count;// 下载量
+    private String begin_time; // 起止时间
+    private String youhui_type;// 0:满立减 1:折扣券
+    private double xpoint;
+    private double ypoint;
+    private String distance;
+    private String address;
 
-	public void setDistance(String distance)
-	{
-		this.distance = distance;
-	}
+    // add
+    private String distanceFormat;
 
-	public String getDistance()
-	{
-		return distance;
-	}
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
-	public String getDistanceFormat()
-	{
-		return distanceFormat;
-	}
+    public String getDistance() {
+        return distance;
+    }
 
-	public int getCid()
-	{
-		return cid;
-	}
+    public String getDistanceFormat() {
+        return distanceFormat;
+    }
 
-	public void setCid(int cid)
-	{
-		this.cid = cid;
-	}
+    public int getCid() {
+        return cid;
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getList_brief()
-	{
-		return list_brief;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setList_brief(String list_brief)
-	{
-		this.list_brief = list_brief;
-	}
+    public String getList_brief() {
+        return list_brief;
+    }
 
-	public String getIcon()
-	{
-		return icon;
-	}
+    public void setList_brief(String list_brief) {
+        this.list_brief = list_brief;
+    }
 
-	public void setIcon(String icon)
-	{
-		this.icon = icon;
-	}
+    public String getIcon() {
+        return icon;
+    }
 
-	public int getDown_count()
-	{
-		return down_count;
-	}
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
 
-	public void setDown_count(int down_count)
-	{
-		this.down_count = down_count;
-	}
+    public int getDown_count() {
+        return down_count;
+    }
 
-	public int getId()
-	{
-		return id;
-	}
+    public void setDown_count(int down_count) {
+        this.down_count = down_count;
+    }
 
-	public void setId(int id)
-	{
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getBegin_time()
-	{
-		return begin_time;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setBegin_time(String begin_time)
-	{
-		this.begin_time = begin_time;
-	}
+    public String getBegin_time() {
+        return begin_time;
+    }
 
-	public String getYouhui_type()
-	{
-		return youhui_type;
-	}
+    public void setBegin_time(String begin_time) {
+        this.begin_time = begin_time;
+    }
 
-	public void setYouhui_type(String youhui_type)
-	{
-		this.youhui_type = youhui_type;
-	}
+    public String getYouhui_type() {
+        return youhui_type;
+    }
 
-	public double getXpoint()
-	{
-		return xpoint;
-	}
+    public void setYouhui_type(String youhui_type) {
+        this.youhui_type = youhui_type;
+    }
 
-	public void setXpoint(double xpoint)
-	{
-		this.xpoint = xpoint;
-		calculateDistance();
-	}
+    public double getXpoint() {
+        return xpoint;
+    }
 
-	public double getYpoint()
-	{
-		return ypoint;
-	}
+    public void setXpoint(double xpoint) {
+        this.xpoint = xpoint;
+        calculateDistance();
+    }
 
-	public void setYpoint(double ypoint)
-	{
-		this.ypoint = ypoint;
-		calculateDistance();
-	}
+    public double getYpoint() {
+        return ypoint;
+    }
 
-	public void calculateDistance()
-	{
-		double dis = 0;
-		if (xpoint != 0 && ypoint != 0)
-		{
-			dis = BaiduMapManager.getInstance().getDistanceFromMyLocation(ypoint, xpoint);
-		}
-		this.distanceFormat = SDDistanceUtil.getFormatDistance(dis);
-	}
+    public void setYpoint(double ypoint) {
+        this.ypoint = ypoint;
+        calculateDistance();
+    }
 
-	public MapSearchBaseModel createMapSearchModel()
-	{
-		MapSearchBaseModel model = new MapSearchBaseModel();
-		model.setId(id);
-		model.setName(name);
-		model.setXpoint(xpoint);
-		model.setYpoint(ypoint);
-		model.setAddress(address);
-		return model;
-	}
+    public void calculateDistance() {
+        double dis = 0;
+        if (xpoint != 0 && ypoint != 0) {
+            dis = BaiduMapManager.getInstance().getDistanceFromMyLocation(ypoint, xpoint);
+        }
+        this.distanceFormat = SDDistanceUtil.getFormatDistance(dis);
+    }
+
+    public MapSearchBaseModel createMapSearchModel() {
+        MapSearchBaseModel model = new MapSearchBaseModel();
+        model.setId(id);
+        model.setName(name);
+        model.setXpoint(xpoint);
+        model.setYpoint(ypoint);
+        model.setAddress(address);
+        return model;
+    }
 
 }

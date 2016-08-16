@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
@@ -42,303 +43,249 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
-public class HoltelSearchCityActivity extends BaseActivity 
-{
+public class HoltelSearchCityActivity extends BaseActivity {
 
-	@ViewInject(R.id.ll_location_city)
-	private LinearLayout mLl_location_city;
-	
-	@ViewInject(R.id.ll_hot_city)
-	private LinearLayout mLl_hot_city;
+    @ViewInject(R.id.ll_location_city)
+    private LinearLayout mLl_location_city;
 
-	@ViewInject(R.id.flow_hot_city)
-	private FlowLayout mFlow_hot_city;
+    @ViewInject(R.id.ll_hot_city)
+    private LinearLayout mLl_hot_city;
 
-	@ViewInject(R.id.tv_location)
-	private TextView mTv_location;
+    @ViewInject(R.id.flow_hot_city)
+    private FlowLayout mFlow_hot_city;
 
-	@ViewInject(R.id.act_city_list_et_search)
-	private ClearEditText mEtSearch;
+    @ViewInject(R.id.tv_location)
+    private TextView mTv_location;
 
-	@ViewInject(R.id.act_city_list_lv_citys)
-	private ListView mLvCitys;
+    @ViewInject(R.id.act_city_list_et_search)
+    private ClearEditText mEtSearch;
 
-	@ViewInject(R.id.act_city_list_tv_touched_letter)
-	private TextView mTvTouchedLetter;
+    @ViewInject(R.id.act_city_list_lv_citys)
+    private ListView mLvCitys;
 
-	@ViewInject(R.id.act_city_list_sb_letters)
-	private SideBar mSbLetters;
-	
-	public static int result_Code = 675;
+    @ViewInject(R.id.act_city_list_tv_touched_letter)
+    private TextView mTvTouchedLetter;
 
-	private List<CitylistModel> mListModel = new ArrayList<CitylistModel>();
-	private List<CitylistModel> mListModelHotCity;
-	private List<CitylistModel> mListFilterModel = new ArrayList<CitylistModel>();
+    @ViewInject(R.id.act_city_list_sb_letters)
+    private SideBar mSbLetters;
 
-	private CityListAdapter mAdapter;
+    public static int result_Code = 675;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setmTitleType(TitleType.TITLE);
-		setContentView(R.layout.act_city_list);
-		init();
-	}
+    private List<CitylistModel> mListModel = new ArrayList<CitylistModel>();
+    private List<CitylistModel> mListModelHotCity;
+    private List<CitylistModel> mListFilterModel = new ArrayList<CitylistModel>();
 
-	private void init()
-	{
-		initTitle();
-		bindDefaultData();
-		initViewState();
-		bindDataFromDb();
-		initSlideBar();
-		initCurrentLocation();
-		registeEtSearchListener();
-		registeClick();
-	}
+    private CityListAdapter mAdapter;
 
-	private void initViewState()
-	{
-		mListModelHotCity = AppRuntimeWorker.getCitylistHot();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setmTitleType(TitleType.TITLE);
+        setContentView(R.layout.act_city_list);
+        init();
+    }
 
-		if (!SDCollectionUtil.isEmpty(mListModelHotCity))
-		{
-			SDViewUtil.show(mLl_hot_city);
-			mFlow_hot_city.removeAllViews();
-			for (CitylistModel model : mListModelHotCity)
-			{
-				View cityView = createHotCityButton(model);
-				if (cityView != null)
-				{
-					mFlow_hot_city.addView(cityView);
-				}
-			}
-		} else
-		{
-			SDViewUtil.hide(mLl_hot_city);
-		}
-	}
+    private void init() {
+        initTitle();
+        bindDefaultData();
+        initViewState();
+        bindDataFromDb();
+        initSlideBar();
+        initCurrentLocation();
+        registeEtSearchListener();
+        registeClick();
+    }
 
-	private TextView createHotCityButton(final CitylistModel model)
-	{
-		TextView btn = null;
-		if (model != null)
-		{
-			ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SDViewUtil.dp2px(50), SDViewUtil.dp2px(40));
-			btn = new TextView(getApplicationContext());
-			btn.setLayoutParams(params);
-			btn.setGravity(Gravity.CENTER);
-			btn.setText(model.getName());
-			SDViewUtil.setTextSizeSp(btn, 13);
-			btn.setTextColor(SDResourcesUtil.getColor(R.color.gray));
-			btn.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
-			btn.setOnClickListener(new OnClickListener()
-			{
+    private void initViewState() {
+        mListModelHotCity = AppRuntimeWorker.getCitylistHot();
 
-				@Override
-				public void onClick(View v)
-				{
-					Intent intent = new Intent();
-					intent.putExtra("city", model.getName());
-					setResult(result_Code, intent);
-					finish();
-				}
-			});
-		}
-		return btn;
-	}
+        if (!SDCollectionUtil.isEmpty(mListModelHotCity)) {
+            SDViewUtil.show(mLl_hot_city);
+            mFlow_hot_city.removeAllViews();
+            for (CitylistModel model : mListModelHotCity) {
+                View cityView = createHotCityButton(model);
+                if (cityView != null) {
+                    mFlow_hot_city.addView(cityView);
+                }
+            }
+        } else {
+            SDViewUtil.hide(mLl_hot_city);
+        }
+    }
 
-	private void initCurrentLocation()
-	{
-		if (!BaiduMapManager.getInstance().hasLocationSuccess())
-		{
-			locationCity();
-		} else
-		{
-			updateLocationTextView();
-		}
-	}
+    private TextView createHotCityButton(final CitylistModel model) {
+        TextView btn = null;
+        if (model != null) {
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SDViewUtil.dp2px(50), SDViewUtil.dp2px(40));
+            btn = new TextView(getApplicationContext());
+            btn.setLayoutParams(params);
+            btn.setGravity(Gravity.CENTER);
+            btn.setText(model.getName());
+            SDViewUtil.setTextSizeSp(btn, 13);
+            btn.setTextColor(SDResourcesUtil.getColor(R.color.gray));
+            btn.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
+            btn.setOnClickListener(new OnClickListener() {
 
-	protected void locationCity()
-	{
-		mTv_location.setText("定位中");
-		BaiduMapManager.getInstance().startLocation(new BDLocationListener()
-		{
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra("city", model.getName());
+                    setResult(result_Code, intent);
+                    finish();
+                }
+            });
+        }
+        return btn;
+    }
 
-			@Override
-			public void onReceiveLocation(BDLocation location)
-			{
-				updateLocationTextView();
-				BaiduMapManager.getInstance().stopLocation();
-			}
-		});
-	}
+    private void initCurrentLocation() {
+        if (!BaiduMapManager.getInstance().hasLocationSuccess()) {
+            locationCity();
+        } else {
+            updateLocationTextView();
+        }
+    }
 
-	private void updateLocationTextView()
-	{
-		if (BaiduMapManager.getInstance().hasLocationSuccess())
-		{
-			String dist = BaiduMapManager.getInstance().getDistrictShort();
-			if (AppRuntimeWorker.getCityIdByCityName(dist) > 0)
-			{
-				mTv_location.setText(dist);
-			} else
-			{
-				String city = BaiduMapManager.getInstance().getCityShort();
-				mTv_location.setText(city);
-			}
-		} else
-		{
-			mTv_location.setText("定位失败，点击重试");
-		}
-	}
+    protected void locationCity() {
+        mTv_location.setText("定位中");
+        BaiduMapManager.getInstance().startLocation(new BDLocationListener() {
 
-	private void registeEtSearchListener()
-	{
-		mEtSearch.addTextChangedListener(new TextWatcher()
-		{
+            @Override
+            public void onReceiveLocation(BDLocation location) {
+                updateLocationTextView();
+                BaiduMapManager.getInstance().stopLocation();
+            }
+        });
+    }
 
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
+    private void updateLocationTextView() {
+        if (BaiduMapManager.getInstance().hasLocationSuccess()) {
+            String dist = BaiduMapManager.getInstance().getDistrictShort();
+            if (!TextUtils.isEmpty(AppRuntimeWorker.getCityIdByCityName(dist))) {
+                mTv_location.setText(dist);
+            } else {
+                String city = BaiduMapManager.getInstance().getCityShort();
+                mTv_location.setText(city);
+            }
+        } else {
+            mTv_location.setText("定位失败，点击重试");
+        }
+    }
 
-			}
+    private void registeEtSearchListener() {
+        mEtSearch.addTextChangedListener(new TextWatcher() {
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after)
-			{
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-			}
+            }
 
-			@Override
-			public void afterTextChanged(Editable s)
-			{
-				filterData(s.toString());
-			}
-		});
-	}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-	protected void filterData(String key)
-	{
-		mListFilterModel.clear();
-		if (TextUtils.isEmpty(key))
-		{
-			mListFilterModel.addAll(mListModel);
-		} else
-		{
-			for (CitylistModel city : mListModel)
-			{
-				String name = city.getName();
-				if (name.indexOf(key) != -1 || CharacterParser.convertChs2PinYin(name).startsWith(key))
-				{
-					mListFilterModel.add(city);
-				}
-			}
-		}
-		mAdapter.updateData(mListFilterModel);
-	}
+            }
 
-	private void initSlideBar()
-	{
-		mSbLetters.setTextView(mTvTouchedLetter);
-		mSbLetters.setOnTouchingLetterChangedListener(new CityListActivity_OnTouchingLetterChangedListener());
-	}
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterData(s.toString());
+            }
+        });
+    }
 
-	private void bindDataFromDb()
-	{
-		List<CitylistModel> listDbModel = AppRuntimeWorker.getCitylist();
-		if (listDbModel != null && listDbModel.size() > 0)
-		{
-			mListModel.addAll(listDbModel);
-		} else
-		{
-			mListModel.clear();
-		}
-		mAdapter.updateData(mListModel);
-	}
+    protected void filterData(String key) {
+        mListFilterModel.clear();
+        if (TextUtils.isEmpty(key)) {
+            mListFilterModel.addAll(mListModel);
+        } else {
+            for (CitylistModel city : mListModel) {
+                String name = city.getName();
+                if (name.indexOf(key) != -1 || CharacterParser.convertChs2PinYin(name).startsWith(key)) {
+                    mListFilterModel.add(city);
+                }
+            }
+        }
+        mAdapter.updateData(mListFilterModel);
+    }
 
-	private void bindDefaultData()
-	{
-		mAdapter = new CityListAdapter(mListModel, this,2);
-		mLvCitys.setAdapter(mAdapter);
-	}
+    private void initSlideBar() {
+        mSbLetters.setTextView(mTvTouchedLetter);
+        mSbLetters.setOnTouchingLetterChangedListener(new CityListActivity_OnTouchingLetterChangedListener());
+    }
 
-	private void initTitle()
-	{
-		String title = null;
-		String city = AppRuntimeWorker.getCity_name();
-		if (TextUtils.isEmpty(city))
-		{
-			title = "城市列表";
-		} else
-		{
-			title = "当前城市 - " + city;
-		}
-		mTitle.setMiddleTextTop(title);
-	}
+    private void bindDataFromDb() {
+        List<CitylistModel> listDbModel = AppRuntimeWorker.getCitylist();
+        if (listDbModel != null && listDbModel.size() > 0) {
+            mListModel.addAll(listDbModel);
+        } else {
+            mListModel.clear();
+        }
+        mAdapter.updateData(mListModel);
+    }
 
-	private void registeClick()
-	{
-		mLl_location_city.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				if (BaiduMapManager.getInstance().hasLocationSuccess())
-				{
-					String locationCity = mTv_location.getText().toString();
-					int cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
-					if (cityId < 0)
-					{
-						SDToast.showToast("不支持当前城市:" + locationCity);
-					} else
-					{
-						Intent intent = new Intent();
-						intent.putExtra("city", locationCity);
-						setResult(result_Code, intent);
-						finish();
-					}
-				} else
-				{
-					locationCity();
-				}
-			}
-		});
-	}
+    private void bindDefaultData() {
+        mAdapter = new CityListAdapter(mListModel, this, 2);
+        mLvCitys.setAdapter(mAdapter);
+    }
 
-	@Override
-	public void onClick(View v)
-	{
-		
-	}
+    private void initTitle() {
+        String title = null;
+        String city = AppRuntimeWorker.getCity_name();
+        if (TextUtils.isEmpty(city)) {
+            title = "城市列表";
+        } else {
+            title = "当前城市 - " + city;
+        }
+        mTitle.setMiddleTextTop(title);
+    }
 
-	class CityListActivity_OnTouchingLetterChangedListener implements OnTouchingLetterChangedListener
-	{
-		@Override
-		public void onTouchingLetterChanged(String s)
-		{
-			int position = mAdapter.getLettersAsciisFirstPosition(s.charAt(0));
-			if (position != -1)
-			{
-				mLvCitys.setSelection(position);
-			}
-		}
+    private void registeClick() {
+        mLl_location_city.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (BaiduMapManager.getInstance().hasLocationSuccess()) {
+                    String locationCity = mTv_location.getText().toString();
+                    String cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
+                    if (TextUtils.isEmpty(cityId)) {
+                        SDToast.showToast("不支持当前城市:" + locationCity);
+                    } else {
+                        Intent intent = new Intent();
+                        intent.putExtra("city", locationCity);
+                        setResult(result_Code, intent);
+                        finish();
+                    }
+                } else {
+                    locationCity();
+                }
+            }
+        });
+    }
 
-	}
+    @Override
+    public void onClick(View v) {
 
-	@Override
-	public void onEventMainThread(SDBaseEvent event)
-	{
-		super.onEventMainThread(event);
-		switch (EnumEventTag.valueOf(event.getTagInt()))
-		{
-		case CITY_CHANGE:
-			initTitle();
-			break;
+    }
 
-		default:
-			break;
-		}
-	}
+    class CityListActivity_OnTouchingLetterChangedListener implements OnTouchingLetterChangedListener {
+        @Override
+        public void onTouchingLetterChanged(String s) {
+            int position = mAdapter.getLettersAsciisFirstPosition(s.charAt(0));
+            if (position != -1) {
+                mLvCitys.setSelection(position);
+            }
+        }
+
+    }
+
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case CITY_CHANGE:
+                initTitle();
+                break;
+
+            default:
+                break;
+        }
+    }
 }

@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,111 +11,93 @@ import com.fanwe.library.customview.SD2LvCategoryViewHelper.SD2LvCategoryViewHel
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.Bcate_listModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
 
-public class CategoryCateLeftAdapter extends SDBaseAdapter<Bcate_listModel> implements SD2LvCategoryViewHelperAdapterInterface
-{
+import java.util.List;
 
-	private int mDefaultIndex;
+public class CategoryCateLeftAdapter extends SDBaseAdapter<ModelClassifyList> implements SD2LvCategoryViewHelperAdapterInterface {
 
-	public CategoryCateLeftAdapter(List<Bcate_listModel> listModel, Activity activity)
-	{
-		super(listModel, activity);
-	}
+    private int mDefaultIndex;
 
-	public void setmDefaultIndex(int rightIndex)
-	{
-		this.mDefaultIndex = rightIndex;
-	}
+    public CategoryCateLeftAdapter(List<ModelClassifyList> listModel, Activity activity) {
+        super(listModel, activity);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = mInflater.inflate(R.layout.item_category_left, null);
-		}
-		TextView tvTitle = ViewHolder.get(convertView, R.id.item_category_left_tv_title);
-		TextView tvArrowRight = ViewHolder.get(convertView, R.id.item_category_left_tv_arrow_right);
+    public void setmDefaultIndex(int rightIndex) {
+        this.mDefaultIndex = rightIndex;
+    }
 
-		Bcate_listModel model = getItem(position);
-		if (model != null)
-		{
-			SDViewBinder.setTextView(tvTitle, model.getName());
-			if (model.isSelect())
-			{
-				convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.bg_gray_categoryview_item_select));
-			} else
-			{
-				convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.white));
-			}
-			if (model.isHasChild())
-			{
-				tvArrowRight.setVisibility(View.VISIBLE);
-			} else
-			{
-				tvArrowRight.setVisibility(View.GONE);
-			}
-		}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_category_left, null);
+        }
+        TextView tvTitle = ViewHolder.get(convertView, R.id.item_category_left_tv_title);
+        TextView tvArrowRight = ViewHolder.get(convertView, R.id.item_category_left_tv_arrow_right);
 
-		return convertView;
-	}
+        ModelClassifyList model = getItem(position);
+        if (model != null) {
+            SDViewBinder.setTextView(tvTitle, model.getName());
+            if (model.isSelect()) {
+                convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.bg_gray_categoryview_item_select));
+            } else {
+                convertView.setBackgroundColor(SDResourcesUtil.getColor(R.color.white));
+            }
+            if (model.isHasChild()) {
+                tvArrowRight.setVisibility(View.VISIBLE);
+            } else {
+                tvArrowRight.setVisibility(View.GONE);
+            }
+        }
 
-	@Override
-	public void setPositionSelectState(int position, boolean select, boolean notify)
-	{
-		getItem(position).setSelect(select);
-		if (notify)
-		{
-			notifyDataSetChanged();
-		}
-	}
+        return convertView;
+    }
 
-	@Override
-	public String getTitleNameFromPosition(int position)
-	{
-		return getItem(position).getName();
-	}
+    @Override
+    public void setPositionSelectState(int position, boolean select, boolean notify) {
+        getItem(position).setSelect(select);
+        if (notify) {
+            notifyDataSetChanged();
+        }
+    }
 
-	@Override
-	public BaseAdapter getAdapter()
-	{
-		return this;
-	}
+    @Override
+    public String getTitleNameFromPosition(int position) {
+        return getItem(position).getName();
+    }
 
-	@Override
-	public Object getSelectModelFromPosition(int position)
-	{
-		return getItem(position);
-	}
+    @Override
+    public BaseAdapter getAdapter() {
+        return this;
+    }
 
-	@Override
-	public int getTitleIndex()
-	{
-		return mDefaultIndex;
-	}
+    @Override
+    public Object getSelectModelFromPosition(int position) {
+        return getItem(position);
+    }
 
-	@Override
-	public Object getRightListModelFromPosition_left(int position)
-	{
-		return getItem(position).getBcate_type();
-	}
+    @Override
+    public int getTitleIndex() {
+        return mDefaultIndex;
+    }
 
-	@Override
-	public void updateRightListModel_right(Object rightListModel)
-	{
+    @Override
+    public Object getRightListModelFromPosition_left(int position) {
+        return getItem(position).getBcate_type();
+    }
 
-	}
+    @Override
+    public void updateRightListModel_right(Object rightListModel) {
 
-	@Override
-	public void setPositionSelectState_left(int positionLeft, int positionRight, boolean select)
-	{
-		List<Bcate_listModel> listRight = getItem(positionLeft).getBcate_type();
-		if (listRight != null && positionRight >= 0 && positionRight < listRight.size())
-		{
-			listRight.get(positionRight).setSelect(select);
-		}
-	}
+    }
+
+    @Override
+    public void setPositionSelectState_left(int positionLeft, int positionRight, boolean select) {
+        List<ModelClassifyList> listRight = getItem(positionLeft).getBcate_type();
+        if (listRight != null && positionRight >= 0 && positionRight < listRight.size()) {
+            listRight.get(positionRight).setSelect(select);
+        }
+    }
 
 }

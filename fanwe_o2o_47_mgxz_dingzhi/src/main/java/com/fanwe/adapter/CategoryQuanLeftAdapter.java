@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +11,17 @@ import com.fanwe.library.customview.SD2LvCategoryViewHelper.SD2LvCategoryViewHel
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.Quan_listModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 
-public class CategoryQuanLeftAdapter extends SDBaseAdapter<Quan_listModel> implements SD2LvCategoryViewHelperAdapterInterface
+import java.util.List;
+
+public class CategoryQuanLeftAdapter extends SDBaseAdapter<ModelBusinessCircleList> implements SD2LvCategoryViewHelperAdapterInterface
 {
 
 	private int mDefaultIndex;
 
-	public CategoryQuanLeftAdapter(List<Quan_listModel> listModel, Activity activity)
+	public CategoryQuanLeftAdapter(List<ModelBusinessCircleList> listModel, Activity activity)
 	{
 		super(listModel, activity);
 	}
@@ -41,7 +41,7 @@ public class CategoryQuanLeftAdapter extends SDBaseAdapter<Quan_listModel> imple
 		TextView tvTitle = ViewHolder.get(convertView, R.id.item_category_left_tv_title);
 		TextView tvArrowRight = ViewHolder.get(convertView, R.id.item_category_left_tv_arrow_right);
 
-		Quan_listModel model = getItem(position);
+		ModelBusinessCircleList model = getItem(position);
 		if (model != null)
 		{
 			SDViewBinder.setTextView(tvTitle, model.getName());
@@ -113,7 +113,7 @@ public class CategoryQuanLeftAdapter extends SDBaseAdapter<Quan_listModel> imple
 	@Override
 	public void setPositionSelectState_left(int positionLeft, int positionRight, boolean select)
 	{
-		List<Quan_listModel> listRight = getItem(positionLeft).getQuan_sub();
+		List<ModelBusinessCircleList> listRight = getItem(positionLeft).getQuan_sub();
 		if (listRight != null && positionRight >= 0 && positionRight < listRight.size())
 		{
 			listRight.get(positionRight).setSelect(select);

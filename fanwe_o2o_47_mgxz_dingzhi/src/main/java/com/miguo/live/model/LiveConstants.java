@@ -2,6 +2,11 @@ package com.miguo.live.model;
 
 public class LiveConstants {
     /**
+     * 请求成功 。
+     */
+
+    public static final String RESULT_SUCCESS="200";
+    /**
      * 获取直播列表
      */
     public static final String LIVE_LIST = "LiveList";
@@ -88,7 +93,19 @@ public class LiveConstants {
      */
     public static final String GET_USER_RED_PACKETS = "GetUserRedPackets";
     /**
+     *镇店之宝。
+     */
+    public static final String LIST_OF_STORES = "ListOfStores";
+
+    /**
      * 获取门店随机评价
      */
     public static final String STORES_RANDOM_COMMENT = "StoresRandomComment";
+    /**
+     * 购物车
+     * */
+
+    public static final String SHOPPING_CART = "ShopingCart";
+
+
 }

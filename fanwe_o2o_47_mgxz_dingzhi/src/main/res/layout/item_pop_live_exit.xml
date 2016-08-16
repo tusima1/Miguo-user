@@ -6,6 +6,7 @@
     <ImageView
         android:id="@+id/iv_ren"
         android:layout_width="@dimen/dp65"
-        android:layout_height="@dimen/dp65" />
+        android:layout_height="@dimen/dp65"
+        android:scaleType="centerCrop" />
 
 </FrameLayout>

@@ -46,283 +46,261 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class MarketFragment extends BaseFragment{
-	
-
-	/** 要搜索的商品的id (int) */
-	public static final String EXTRA_ID = "extra_id";
-	/** 商品分类id (int) */
-	public static final String EXTRA_CATE_ID = "extra_cate_id";
-	/** 要搜索的商品的关键字 (String) */
-	public static final String EXTRA_KEY_WORD = "extra_key_word";
-	public static final int CITY_RESULT = 10086;
-
-	@ViewInject(R.id.et_search)
-	private EditText mEt_search;
-
-	@ViewInject(R.id.ptrlv_content)
-	public PullToRefreshListView mPtrlv_content;
-	
-	@ViewInject(R.id.ll_tip_text)
-	private LinearLayout ll_tipTextLayout;//tip
-	
-	@ViewInject(R.id.ll_empty)
-	private RelativeLayout ll_emptyLayout;//无数据展示的空白页
-
-	private DistributionMarketCateView mCateView;
-	private boolean mNeedBindCate = true;
-
-	private List<Supplier_fx> mListModel = new ArrayList<Supplier_fx>();
-	private DistributionMarketAdapter mAdapter;
-
-	private PageModel mPage = new PageModel();
-
-	private String mStrKeyword="";
-	private int mId;
-	private int mCate_id = 0;
-	
-	private  int city_id=-1;//城市id
-	
-	
-	private MarketTitleFragment marketTitleFragment;
-
-	@Override
-	protected View onCreateContentView(LayoutInflater inflater,
-			ViewGroup container, Bundle savedInstanceState) {
-		return setContentView(R.layout.frag_market);
-	}
-	
-	@Override
-	protected void init() {
-		super.init();
-		initView();
-		initFragment();
-		getIntentData();
-		registerClick();
-		bindDefaultData();
-		addHeaderView();
-		initPullToRefreshListView();
-	}
-
-	private void initView() {
-		
-	}
-
-	private void initFragment() {
-		marketTitleFragment = new MarketTitleFragment();
-		getSDFragmentManager().replace(R.id.frag_market_titleBar, marketTitleFragment);
-		
-	}
-	private void addHeaderView()
-	{
-		mCateView = new DistributionMarketCateView(getActivity());
-		SDViewUtil.hide(mCateView);
-		mPtrlv_content.getRefreshableView().addHeaderView(mCateView);
-	}
-
-	private void getIntentData()
-	{
-		mId = getArguments().getInt(EXTRA_ID);
-		mCate_id = getArguments().getInt(EXTRA_CATE_ID);
-		mStrKeyword = getArguments().getString(EXTRA_KEY_WORD);
-		if (!isEmpty(mStrKeyword))
-		{
-			mEt_search.setText(mStrKeyword);
-		}else {
-			mStrKeyword="";
-		}
-	}
+public class MarketFragment extends BaseFragment {
 
 
-	private void registerClick()
-	{
-		mEt_search.setOnEditorActionListener(new OnEditorActionListener() 
-		{
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if(actionId == EditorInfo.IME_ACTION_SEARCH)
-				{
-					SDViewUtil.hideInputMethod(mEt_search,getActivity());
-					mStrKeyword = mEt_search.getText().toString();
-					requestData(false);
-					return true;
-				}
-				return false;
-			}
-		});
-		mEt_search.addTextChangedListener(new TextWatcher() {
-			
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				
-			}
-			
-			@Override
-			public void afterTextChanged(Editable s) {
-				mStrKeyword= s.toString().trim();
-				if (mStrKeyword.length()>0) {
-					ll_tipTextLayout.setVisibility(View.GONE);
-				}else {
-					ll_tipTextLayout.setVisibility(View.VISIBLE);
-				}
-			}
-		});
-		
-	}
+    /**
+     * 要搜索的商品的id (int)
+     */
+    public static final String EXTRA_ID = "extra_id";
+    /**
+     * 商品分类id (int)
+     */
+    public static final String EXTRA_CATE_ID = "extra_cate_id";
+    /**
+     * 要搜索的商品的关键字 (String)
+     */
+    public static final String EXTRA_KEY_WORD = "extra_key_word";
+    public static final int CITY_RESULT = 10086;
 
-	private void bindDefaultData()
-	{
-		city_id=AppRuntimeWorker.getCity_id();
-		mAdapter = new DistributionMarketAdapter(mListModel, getActivity());
-		mPtrlv_content.setAdapter(mAdapter);
-	}
+    @ViewInject(R.id.et_search)
+    private EditText mEt_search;
 
-	private void initPullToRefreshListView()
-	{
-		mPtrlv_content.setMode(Mode.BOTH);
-		mPtrlv_content.setOnRefreshListener(new OnRefreshListener2<ListView>()
-		{
-			@Override
-			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView)
-			{
-				refreshData();
-			}
+    @ViewInject(R.id.ptrlv_content)
+    public PullToRefreshListView mPtrlv_content;
 
-			@Override
-			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView)
-			{
-				if (mPage.increment())
-				{
-					requestData(true);
-				} else
-				{
-					SDToast.showToast("没有更多数据了");
-					mPtrlv_content.onRefreshComplete();
-				}
-			}
-		});
-		mPtrlv_content.setRefreshing();
-	}
+    @ViewInject(R.id.ll_tip_text)
+    private LinearLayout ll_tipTextLayout;//tip
 
-	public void refreshData()
-	{
-		mPage.resetPage();
-		requestData(false);
-	}
+    @ViewInject(R.id.ll_empty)
+    private RelativeLayout ll_emptyLayout;//无数据展示的空白页
 
-	protected void requestData(final boolean isLoadMore)
-	{
-		
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_fx");
-		model.putAct("supplier_fx");
-		model.put("cate_id",mCate_id);
-		model.putPage(mPage.getPage());
-		model.put("fx_seach_key",mStrKeyword);
-		model.put("city2_id", city_id);
-		
-		InterfaceServer.getInstance().requestInterface(HttpMethod.POST,model, null,false,new SDRequestCallBack<Uc_fx_deal_fxActModel>()
-		{
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				
-				if (actModel.getStatus() == 1)
-				{
-					if (isLoadMore) {
-						
-					}
-					mPage.update(actModel.getPage());
-					List<Supplier_fx> list = actModel.getList();
-					if (list==null || list.size()==0) {
-						ll_emptyLayout.setVisibility(View.VISIBLE);
-					}else {
-						ll_emptyLayout.setVisibility(View.GONE);
-					}
-					mAdapter.updateData(list);
-					bindData(actModel, isLoadMore);
-				}
-			}
+    private DistributionMarketCateView mCateView;
+    private boolean mNeedBindCate = true;
 
-			@Override
-			public void onFinish()
-			{
-				mPtrlv_content.onRefreshComplete();
-			}
-		});
-	}
+    private List<Supplier_fx> mListModel = new ArrayList<Supplier_fx>();
+    private DistributionMarketAdapter mAdapter;
 
-	protected void bindData(Uc_fx_deal_fxActModel actModel, boolean isLoadMore)
-	{
-		if (actModel == null)
-		{
-			return;
-		}
-		if (mNeedBindCate)
-		{
-			List<List<DistributionMarketCateModel>> listModel = SDCollectionUtil.splitList(actModel.getCate_list(), 10);
-			if (isEmpty(listModel))
-			{
-				SDViewUtil.hide(mCateView);
-			} else
-			{
-				SDViewUtil.show(mCateView);
-				DistributionMarketCatePageAdapter adapter = new DistributionMarketCatePageAdapter(listModel, getActivity());
-				adapter.setmListenerOnClickCateItem(new OnClickCateItemListener()
-				{
-					@Override
-					public void onClickItem(int position, View view, DistributionMarketCateModel model)
-					{
-						mCate_id = model.getId();
-						if(mCate_id == -1)
-						{
-							Intent intent = new Intent(getActivity(),ShoppingMallActivity.class);
-							startActivity(intent);
-						}else
-						{
-							mCateView.mNow_Selected.setText(model.getName());
-							mPtrlv_content.setRefreshing();
-						}
-					}
-				});
-				mCateView.mSpv_content.setAdapter(adapter);
-				mNeedBindCate = false;
-			}
-		}
-		SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
-	}
+    private PageModel mPage = new PageModel();
 
-	@Override
-	public void onEventMainThread(SDBaseEvent event)
-	{
-		super.onEventMainThread(event);
-		switch (EnumEventTag.valueOf(event.getTagInt()))
-		{
-		case DELETE_DISTRIBUTION_GOODS_SUCCESS:
-			refreshData();
-			break;
-		case ADD_DISTRIBUTION_GOODS_SUCCESS:
-			refreshData();
-			break;
+    private String mStrKeyword = "";
+    private int mId;
+    private int mCate_id = 0;
 
-		default:
-			break;
-		}
-	}
-	@Override
-	protected String setUmengAnalyticsTag() {
-		return this.getClass().getName().toString();
-	}
-	
-	public void setCityIdTitle(String cityName,int cityId) {
-		marketTitleFragment.setShowCity(cityName);
-		city_id=cityId;
-		requestData(false);
-	}
+    private String city_id = "";//城市id
+
+
+    private MarketTitleFragment marketTitleFragment;
+
+    @Override
+    protected View onCreateContentView(LayoutInflater inflater,
+                                       ViewGroup container, Bundle savedInstanceState) {
+        return setContentView(R.layout.frag_market);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        initView();
+        initFragment();
+        getIntentData();
+        registerClick();
+        bindDefaultData();
+        addHeaderView();
+        initPullToRefreshListView();
+    }
+
+    private void initView() {
+
+    }
+
+    private void initFragment() {
+        marketTitleFragment = new MarketTitleFragment();
+        getSDFragmentManager().replace(R.id.frag_market_titleBar, marketTitleFragment);
+
+    }
+
+    private void addHeaderView() {
+        mCateView = new DistributionMarketCateView(getActivity());
+        SDViewUtil.hide(mCateView);
+        mPtrlv_content.getRefreshableView().addHeaderView(mCateView);
+    }
+
+    private void getIntentData() {
+        mId = getArguments().getInt(EXTRA_ID);
+        mCate_id = getArguments().getInt(EXTRA_CATE_ID);
+        mStrKeyword = getArguments().getString(EXTRA_KEY_WORD);
+        if (!isEmpty(mStrKeyword)) {
+            mEt_search.setText(mStrKeyword);
+        } else {
+            mStrKeyword = "";
+        }
+    }
+
+
+    private void registerClick() {
+        mEt_search.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    SDViewUtil.hideInputMethod(mEt_search, getActivity());
+                    mStrKeyword = mEt_search.getText().toString();
+                    requestData(false);
+                    return true;
+                }
+                return false;
+            }
+        });
+        mEt_search.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mStrKeyword = s.toString().trim();
+                if (mStrKeyword.length() > 0) {
+                    ll_tipTextLayout.setVisibility(View.GONE);
+                } else {
+                    ll_tipTextLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void bindDefaultData() {
+        city_id = AppRuntimeWorker.getCity_id();
+        mAdapter = new DistributionMarketAdapter(mListModel, getActivity());
+        mPtrlv_content.setAdapter(mAdapter);
+    }
+
+    private void initPullToRefreshListView() {
+        mPtrlv_content.setMode(Mode.BOTH);
+        mPtrlv_content.setOnRefreshListener(new OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                refreshData();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (mPage.increment()) {
+                    requestData(true);
+                } else {
+                    SDToast.showToast("没有更多数据了");
+                    mPtrlv_content.onRefreshComplete();
+                }
+            }
+        });
+        mPtrlv_content.setRefreshing();
+    }
+
+    public void refreshData() {
+        mPage.resetPage();
+        requestData(false);
+    }
+
+    protected void requestData(final boolean isLoadMore) {
+
+        RequestModel model = new RequestModel();
+        model.putCtl("uc_fx");
+        model.putAct("supplier_fx");
+        model.put("cate_id", mCate_id);
+        model.putPage(mPage.getPage());
+        model.put("fx_seach_key", mStrKeyword);
+        model.put("city2_id", city_id);
+
+        InterfaceServer.getInstance().requestInterface(HttpMethod.POST, model, null, false, new SDRequestCallBack<Uc_fx_deal_fxActModel>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+
+                if (actModel.getStatus() == 1) {
+                    if (isLoadMore) {
+
+                    }
+                    mPage.update(actModel.getPage());
+                    List<Supplier_fx> list = actModel.getList();
+                    if (list == null || list.size() == 0) {
+                        ll_emptyLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        ll_emptyLayout.setVisibility(View.GONE);
+                    }
+                    mAdapter.updateData(list);
+                    bindData(actModel, isLoadMore);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                mPtrlv_content.onRefreshComplete();
+            }
+        });
+    }
+
+    protected void bindData(Uc_fx_deal_fxActModel actModel, boolean isLoadMore) {
+        if (actModel == null) {
+            return;
+        }
+        if (mNeedBindCate) {
+            List<List<DistributionMarketCateModel>> listModel = SDCollectionUtil.splitList(actModel.getCate_list(), 10);
+            if (isEmpty(listModel)) {
+                SDViewUtil.hide(mCateView);
+            } else {
+                SDViewUtil.show(mCateView);
+                DistributionMarketCatePageAdapter adapter = new DistributionMarketCatePageAdapter(listModel, getActivity());
+                adapter.setmListenerOnClickCateItem(new OnClickCateItemListener() {
+                    @Override
+                    public void onClickItem(int position, View view, DistributionMarketCateModel model) {
+                        mCate_id = model.getId();
+                        if (mCate_id == -1) {
+                            Intent intent = new Intent(getActivity(), ShoppingMallActivity.class);
+                            startActivity(intent);
+                        } else {
+                            mCateView.mNow_Selected.setText(model.getName());
+                            mPtrlv_content.setRefreshing();
+                        }
+                    }
+                });
+                mCateView.mSpv_content.setAdapter(adapter);
+                mNeedBindCate = false;
+            }
+        }
+        SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
+    }
+
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case DELETE_DISTRIBUTION_GOODS_SUCCESS:
+                refreshData();
+                break;
+            case ADD_DISTRIBUTION_GOODS_SUCCESS:
+                refreshData();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected String setUmengAnalyticsTag() {
+        return this.getClass().getName().toString();
+    }
+
+    public void setCityIdTitle(String cityName, String cityId) {
+        marketTitleFragment.setShowCity(cityName);
+        city_id = cityId;
+        requestData(false);
+    }
 }

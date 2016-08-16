@@ -2,6 +2,8 @@ package com.miguo.live.views.customviews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,9 +13,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.StoreDetailActivity;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
@@ -46,6 +51,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private RecyclerView mMemberList;//room的观众头像列表(取前N位展示)
     private Activity mActivity;
     private LiveUserExitDialogHelper userExitDialogHelper;
+    private LinearLayout location_ic_location;
 
     public boolean isUserClose = false;//是不是用户点击的关闭
     private List<ModelAudienceInfo> mData;
@@ -80,7 +86,17 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         mKeywords = ((TextView) findViewById(R.id.tv_keywords));
         mClose = ((ImageView) findViewById(R.id.iv_close));
         mMemberList = ((RecyclerView) findViewById(R.id.member_image_list));
+        location_ic_location = (LinearLayout)findViewById(R.id.location_ic_location);
 
+        final String shop_id = CurLiveInfo.shopID;
+        if(!TextUtils.isEmpty(shop_id)){
+            location_ic_location.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gotoShopDetailActivity(shop_id);
+                }
+            });
+        }
         //onclick
         mFollow.setOnClickListener(this);
         mUserIamge.setOnClickListener(this);
@@ -204,7 +220,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     /*设置地理位置*/
     public void setLocation(String location) {
-        if (TextUtils.isEmpty(location)) {
+        if (!TextUtils.isEmpty(location)) {
             mUserLocation.setText(location);
         }
     }
@@ -224,7 +240,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
 
     public void showExitDialog() {
-        if (userExitDialogHelper != null) {
+        if (userExitDialogHelper != null&&!userExitDialogHelper.isShowing()) {
             userExitDialogHelper.show();
         }
     }
@@ -282,4 +298,23 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
             }
         }
     };
+
+    public void gotoShopDetailActivity(String shop_id){
+        Intent itemintent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, shop_id);
+        bundle.putInt("type",0);
+        itemintent.putExtras(bundle);
+        itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+        if(mActivity!=null) {
+            mActivity.startActivity(itemintent);
+        }
+    }
+
+    public void ondestroy(){
+        if(userExitDialogHelper!=null){
+            userExitDialogHelper.dismiss();;
+            userExitDialogHelper = null;
+        }
+    }
 }

@@ -1,13 +1,19 @@
 package com.fanwe.fragment;
 
+import java.io.File;
+import java.util.Arrays;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -23,6 +29,7 @@ import com.fanwe.MyCommentActivity;
 import com.fanwe.MyCouponListActivity;
 import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
+import com.fanwe.MyMessageActivity;
 import com.fanwe.MyOrderListActivity;
 import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.ShopCartActivity;
@@ -52,7 +59,6 @@ import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.User_center_indexActModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MoneyFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -63,20 +69,19 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.views.customviews.MGToast;
-
-import java.io.File;
-import java.util.Arrays;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 我的fragment
  *
  * @author js02
  */
-public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewClickListener {
+public class MyFragment extends BaseFragment {
     @ViewInject(R.id.frag_my_account_ptrsv_all)
     private PullToRefreshScrollView mPtrsvAll = null;
 
+    @ViewInject(R.id.ll_user_info)
+    private LinearLayout mLl_user_info;
 
     @ViewInject(R.id.iv_user_avatar)
     private ImageView mIv_user_avatar = null; // 用户头像
@@ -90,6 +95,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.frag_my_account_tv_user_score)
     private TextView mTv_user_score = null;// 积分
 
+    @ViewInject(R.id.frag_my_account_ll_group_voucher)
+    private FrameLayout mLlGroupVoucher = null;
 
     @ViewInject(R.id.frag_my_account_ll_group_coupons)
     private LinearLayout mLlGroupCoupons = null;
@@ -100,8 +107,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.hongbao_count)
     private TextView mHongbaoCount;//红包
 
-    @ViewInject(R.id.iv_vip)
-    private ImageView mIv_vip;//vip等级的图标
+    @ViewInject(R.id.tv_vip)
+    private TextView mTv_vip;
 
     /*
      * @ViewInject(R.id.ll_my_friend_circle) private LinearLayout
@@ -122,6 +129,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.order_to_refund)
     private View orderToRefundView;// 待退款订单
 
+    @ViewInject(R.id.frag_my_account_ll_group_voucher)
+    private View ll_groupVoucher;
 
     @ViewInject(R.id.ll_look_dianpu)
     private View ll_lookDianpu;
@@ -172,15 +181,15 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     //	@ViewInject(R.id.iv_redDot)
 //	private ImageView mRedDot;
-//    @ViewInject(R.id.iv_red_big)
-//    private ImageView redBig;
-//
-//    @ViewInject(R.id.iv_red_more)
-//    private ImageView redMore;
-//
-//    @ViewInject(R.id.tv_red_count)
-//    private TextView redCount;
-//    private BadgeView redDot;
+    @ViewInject(R.id.iv_red_big)
+    private ImageView redBig;
+
+    @ViewInject(R.id.iv_red_more)
+    private ImageView redMore;
+
+    @ViewInject(R.id.tv_red_count)
+    private TextView redCount;
+    private BadgeView redDot;
 
     private BadgeView orderNotPaidBadge;
     private BadgeView orderReadyForUseBadge;
@@ -193,7 +202,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     private TextView orderRefundCountView;
 
     private PageModel mPage = new PageModel();
-//    private TextView mTv_totalMomey;// 总佣金
+    private TextView mTv_totalMomey;// 总佣金
     private TextView mTv_tixian;// 提现现金
     private TextView mTv_used;// 已使用现金
     // private TextView mTv_place;
@@ -208,15 +217,23 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     protected User_center_indexActModel mActModel;
 
+    private BadgeView groupVoucherBadge;
+
+    private TextView groupVoucherCountView;
+
+    private BadgeView dianPuBadge;
+
+    private TextView dianPuCountView;
+
+    private BadgeView xiaomiBadge;
+
+    private TextView xiaomiCountView;
+
+    private BadgeView erweimaBadge;
+
+    private TextView erweimaCountView;
 
     private String mUserFaceString = "";
-    private RedDotView mRDV_Comsume;//消费券
-    private RedDotView mRDV_MyShop;//我的小店
-    private RedDotView mRDV_MyFriend;//我的战队
-    private RedDotView mRDV_MyNameCard;//我的名片
-    private TextView mTv_FansNum;//粉丝数量
-    private TextView mTv_Msg;//消息数量
-
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -227,7 +244,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @Override
     protected void init() {
         super.init();
-        initUserTopView();
+        initTitle();
         initPhotoHandler();
         registerClick();
         initViewState();
@@ -241,14 +258,18 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     private void setView() {
         mUserFaceString = App.getInstance().getUserIcon();
         SDViewBinder.setTextView(mTvUsername, App.getInstance().getUserNickName(), "");
-        SDViewBinder.setImageView(App.getInstance().getUserIcon(), mIv_user_avatar,
-                ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+
+        if(!TextUtils.isEmpty(App.getInstance().getUserIcon())){
+            ImageLoader.getInstance().displayImage(App.getInstance().getUserIcon(),mIv_user_avatar);
+        }else {
+            mIv_user_avatar.setImageResource(R.drawable.default_avatar);
+        }
     }
 
     private void addTopView() {
-//        redDot = (BadgeView) findViewById(R.id.badge_red_dot);
+        redDot = (BadgeView) findViewById(R.id.badge_red_dot);
         // mTv_place=(TextView)findViewById(R.id.frag_my_tv_place);
-//        mTv_totalMomey = (TextView) findViewById(R.id.frag_my_account);//总资产
+        mTv_totalMomey = (TextView) findViewById(R.id.frag_my_account);
         LinearLayout mLl_Predict = (LinearLayout) findViewById(R.id.ll_tixian_Predict);
         mTv_Predict = (TextView) findViewById(R.id.frag_my_account_tv_user_money);
         LinearLayout mll_tixian = (LinearLayout) findViewById(R.id.ll_tixian_Actual);
@@ -258,18 +279,18 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
          * mll_hongbao=(LinearLayout)findViewById(R.id.ll_my_hongbao);
 		 * mTv_hongbao=(TextView) findViewById(R.id.tv_my_hongbao);
 		 */
-//        LinearLayout mLl_member = (LinearLayout) findViewById(R.id.ll_member);
+        LinearLayout mLl_member = (LinearLayout) findViewById(R.id.ll_member);
         /**
          * 总佣金
          */
-//        mTv_totalMomey.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), WithdrawLogActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        mTv_totalMomey.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WithdrawLogActivity.class);
+                startActivity(intent);
+            }
+        });
         /**
          * 实际提现
          */
@@ -315,49 +336,61 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         /**
          * 我的会员
          */
-//        mLl_member.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), MemberRankActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        mLl_member.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MemberRankActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initMyOrders() {
         ImageView icon;
         TextView textView;
-        int colorId = getResources().getColor(R.color.white);
-        //--------------------------------------------
+        int colorId = getResources().getColor(R.color.text_333333);
 
-        mRDV_Comsume = ((RedDotView) findViewById(R.id.rdv_consume));
-        mRDV_MyShop = ((RedDotView) findViewById(R.id.rdv_my_shop));
-        mRDV_MyFriend = ((RedDotView) findViewById(R.id.rdv_my_friend));
-        mRDV_MyNameCard = ((RedDotView) findViewById(R.id.rdv_my_name_card));
+        icon = (ImageView) ll_groupVoucher.findViewById(R.id.icon);
+        icon.setMinimumWidth(27);
+        icon.setMinimumHeight(27);
+        icon.setImageResource(R.drawable.bg_groupvacher);
+        textView = (TextView) ll_groupVoucher.findViewById(R.id.text);
 
-        mRDV_Comsume.setTitle("消费券");
-        mRDV_MyShop.setTitle("我的小店");
-        mRDV_MyFriend.setTitle("我的战队");
-        mRDV_MyNameCard.setTitle("我的名片");
+        textView.setTextColor(colorId);
+        textView.setText("消费券");
+        groupVoucherBadge = (BadgeView) ll_groupVoucher.findViewById(R.id.badge);
+        groupVoucherCountView = (TextView) ll_groupVoucher.findViewById(R.id.count);
 
-        mRDV_Comsume.setIcon(R.drawable.bg_groupvacher);
-        mRDV_MyShop.setIcon(R.drawable.bg_xiaodian);
-        mRDV_MyFriend.setIcon(R.drawable.bg_xiaomi);
-        mRDV_MyNameCard.setIcon(R.drawable.bg_erweima);
+        icon = (ImageView) ll_lookDianpu.findViewById(R.id.icon);
+        icon.setMinimumWidth(27);
+        icon.setMinimumHeight(27);
+        icon.setImageResource(R.drawable.bg_xiaodian);
+        textView = (TextView) ll_lookDianpu.findViewById(R.id.text);
+        textView.setTextColor(colorId);
+        textView.setText("我的小店");
+        dianPuBadge = (BadgeView) ll_lookDianpu.findViewById(R.id.badge);
+        dianPuCountView = (TextView) ll_lookDianpu.findViewById(R.id.count);
 
-        mRDV_Comsume.setRedNum(0);
-        mRDV_MyShop.setRedNum(0);
-        mRDV_MyFriend.setRedNum(0);
-        mRDV_MyNameCard.setRedNum(0);
+        icon = (ImageView) ll_myXiaomi.findViewById(R.id.icon);
+        icon.setMinimumWidth(27);
+        icon.setMinimumHeight(27);
+        icon.setImageResource(R.drawable.bg_xiaomi);
+        textView = (TextView) ll_myXiaomi.findViewById(R.id.text);
+        textView.setTextColor(colorId);
+        textView.setText("我的战队");
+        xiaomiBadge = (BadgeView) ll_myXiaomi.findViewById(R.id.badge);
+        xiaomiCountView = (TextView) ll_myXiaomi.findViewById(R.id.count);
 
-        mRDV_Comsume.setOnRedDotViewClickListener(this);
-        mRDV_MyShop.setOnRedDotViewClickListener(this);
-        mRDV_MyFriend.setOnRedDotViewClickListener(this);
-        mRDV_MyNameCard.setOnRedDotViewClickListener(this);
-
-
-        //_______________
+        icon = (ImageView) ll_erWeima.findViewById(R.id.icon);
+        icon.setMinimumWidth(27);
+        icon.setMinimumHeight(27);
+        icon.setImageResource(R.drawable.bg_erweima);
+        textView = (TextView) ll_erWeima.findViewById(R.id.text);
+        textView.setTextColor(colorId);
+        textView.setText("我的名片");
+        erweimaBadge = (BadgeView) ll_erWeima.findViewById(R.id.badge);
+        erweimaCountView = (TextView) ll_erWeima.findViewById(R.id.count);
 
         int color = getResources().getColor(R.color.text_fenxiao);
         icon = (ImageView) orderNotPaidView.findViewById(R.id.icon);
@@ -505,18 +538,15 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             return;
         }
         if (mActModel.getLevel_id() == 1) {
-//            SDViewBinder.setTextView(mTv_vip, "青铜", "未找到");
-            mIv_vip.setImageResource(R.drawable.ic_rank_3);
+            SDViewBinder.setTextView(mTv_vip, "青铜", "未找到");
         } else if (mActModel.getLevel_id() == 2) {
-            mIv_vip.setImageResource(R.drawable.ic_rank_2);
-//            SDViewBinder.setTextView(mTv_vip, "白金", "未找到");
+            SDViewBinder.setTextView(mTv_vip, "白金", "未找到");
         } else if (mActModel.getLevel_id() == 3) {
-//            SDViewBinder.setTextView(mTv_vip, "钻石", "未找到");
-            mIv_vip.setImageResource(R.drawable.ic_rank_1);
+            SDViewBinder.setTextView(mTv_vip, "钻石", "未找到");
         }
 
         SDViewBinder.setTextView(mTv_tixian, MoneyFormat.format(userData.getFx_money()));
-//        SDViewBinder.setTextView(mTv_totalMomey, MoneyFormat.format(userData.getFx_total_balance()));
+        SDViewBinder.setTextView(mTv_totalMomey, MoneyFormat.format(userData.getFx_total_balance()));
 
         SDViewBinder.setTextView(mTv_used, MoneyFormat.format(userData.getFx_total_money() - userData.getFx_money()), "￥ 0.00");
 
@@ -568,11 +598,33 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         // 消费券
         String groupVoucherCountStr = actModel.getCoupon_count();
         Integer groupVoucherCount = Integer.parseInt(groupVoucherCountStr);
-        mRDV_Comsume.setRedNum(groupVoucherCount);
+        if (groupVoucherCount != null) {
+            groupVoucherBadge.setCount(groupVoucherCount);
+            if (groupVoucherCount > 0) {
+                if (groupVoucherCount > 99) {
+                    groupVoucherCountStr = "99+";
+                }
+                groupVoucherCountView.setVisibility(View.VISIBLE);
+                groupVoucherCountView.setText(groupVoucherCountStr);
+            } else {
+                groupVoucherCountView.setVisibility(View.INVISIBLE);
+            }
+        }
         // 我的战队
         String xiaomiCountStr = String.valueOf(actModel.getUser_num());
         Integer xiaomiCount = Integer.parseInt(xiaomiCountStr);
-        mRDV_MyFriend.setRedNum(xiaomiCount);
+        if (xiaomiCount != null) {
+            xiaomiBadge.setCount(xiaomiCount);
+            if (xiaomiCount > 0) {
+                if (xiaomiCount > 99) {
+                    xiaomiCountStr = "99+";
+                }
+                xiaomiCountView.setVisibility(View.VISIBLE);
+                xiaomiCountView.setText(xiaomiCountStr);
+            } else {
+                xiaomiCountView.setVisibility(View.INVISIBLE);
+            }
+        }
 
         String readyForUseCountStr = actModel.getWait_use_count();
         Integer readyForUseCount = Integer.parseInt(readyForUseCountStr);
@@ -619,29 +671,11 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         }
     }
 
-    private void initUserTopView() {
-        ImageView mIvSettings = (ImageView) findViewById(R.id.settings);
-        /*粉丝的数量*/
-        mTv_FansNum = ((TextView) findViewById(R.id.tv_fans_num));
-        /*消息数量*/
-        mTv_Msg = ((TextView) findViewById(R.id.tv_msg));
-
-        /*点击了粉丝*/
-        findViewById(R.id.ll_fans).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MGToast.showToast("粉丝");
-            }
-        });
-
-        findViewById(R.id.ll_msg).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MGToast.showToast("消息");
-            }
-        });
-
-        mIvSettings.setOnClickListener(new View.OnClickListener() {
+    private void initTitle() {
+        RelativeLayout settingsButton = (RelativeLayout) findViewById(R.id.settings);
+        TextView tv_title = (TextView) findViewById(R.id.tv_title);
+        SDViewBinder.setTextView(tv_title, "我的");
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MyAccountActivity.class);
@@ -652,18 +686,19 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             }
         });
         // 消息
-//        findViewById(R.id.messages).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = (new Intent(getActivity(), MyMessageActivity.class));
-//                startActivity(intent);
-//            }
-//        });
+        findViewById(R.id.messages).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = (new Intent(getActivity(), MyMessageActivity.class));
+                startActivity(intent);
+            }
+        });
     }
 
     private void registerClick() {
         mIv_user_avatar.setOnClickListener(this);
         // mLl_user_info.setOnClickListener(this);
+        ll_groupVoucher.setOnClickListener(this);
         mLlGroupCoupons.setOnClickListener(this);
 
         // mLl_my_friend_circle.setOnClickListener(this);
@@ -683,12 +718,17 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         orderNotUsedView.setOnClickListener(this);
         orderNotCommentedView.setOnClickListener(this);
         orderToRefundView.setOnClickListener(this);
+        ll_myXiaomi.setOnClickListener(this);
+        ll_erWeima.setOnClickListener(this);
+        ll_lookDianpu.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (v == mIv_user_avatar) {
             clickUserAvatar();
+        } else if (v == ll_groupVoucher) {
+            clickGroupVoucher();
         } else if (v == mLlGroupCoupons) {
             clickGoupCoupons();
         } else if (v == mLl_order_has_pay) {
@@ -724,20 +764,20 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mLl_my_asset) {
             clickWithdraw();
         } else if (v == ll_lookDianpu) {
-
+            ll_lookDianpu();
         } else if (v == ll_myXiaomi) {
-
+            ll_myXiaomi();
         } else if (v == ll_erWeima) {
-
+            ll_erweima();
         }
     }
 
-    private void clickMyShop() {
+    private void ll_lookDianpu() {
         Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
         startActivity(intent);
     }
 
-    private void clickMyFriends() {
+    private void ll_myXiaomi() {
         if(mActModel!=null) {
             Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
 
@@ -750,7 +790,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         }
     }
 
-    private void clickErWeiMa() {
+    private void ll_erweima() {
         Intent intent = new Intent(getActivity(), DistributionMyQRCodeActivity.class);
         Bundle bundle = new Bundle();
         if (mActModel == null) {
@@ -956,25 +996,25 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 			redCount.setText("");
 		}*/
         //目前的消息是显示总数量
-//        int tempCount = 0;
-//        if (MessageHelper.msg_All >= 99) {
-//            tempCount = 99;
-//        } else {
-//            tempCount = MessageHelper.msg_All;
-//        }
-//        if (tempCount == 0) {
-//            redCount.setVisibility(View.INVISIBLE);
-//            redDot.setCount(0);
-//            redBig.setVisibility(View.GONE);
-//            redMore.setVisibility(View.GONE);
-//            redCount.setText("");
-//        } else {
-//            redCount.setVisibility(View.VISIBLE);
-//            redCount.setText("" + tempCount);
-//            redDot.setCount(tempCount);
-//            redMore.setVisibility(View.GONE);
-//            redBig.setVisibility(View.GONE);
-//        }
+        int tempCount = 0;
+        if (MessageHelper.msg_All >= 99) {
+            tempCount = 99;
+        } else {
+            tempCount = MessageHelper.msg_All;
+        }
+        if (tempCount == 0) {
+            redCount.setVisibility(View.INVISIBLE);
+            redDot.setCount(0);
+            redBig.setVisibility(View.GONE);
+            redMore.setVisibility(View.GONE);
+            redCount.setText("");
+        } else {
+            redCount.setVisibility(View.VISIBLE);
+            redCount.setText("" + tempCount);
+            redDot.setCount(tempCount);
+            redMore.setVisibility(View.GONE);
+            redBig.setVisibility(View.GONE);
+        }
     }
 
     private void updateMessageCount() {
@@ -1038,26 +1078,5 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @Override
     protected String setUmengAnalyticsTag() {
         return this.getClass().getName().toString();
-    }
-
-    @Override
-    public void onRedDotViewClick(View v) {
-        mRDV_Comsume.setRedNum(0);
-        mRDV_MyShop.setRedNum(0);
-        mRDV_MyFriend.setRedNum(0);
-        mRDV_MyNameCard.setRedNum(0);
-        if (v==mRDV_Comsume){
-            //团购消费券
-            clickGroupVoucher();
-        }else if (v==mRDV_MyShop){
-            //我的小店
-            clickMyShop();
-        }else if (v==mRDV_MyFriend){
-            //我的战队
-            clickMyFriends();
-        }else if (v==mRDV_MyNameCard){
-            //我的名片
-            clickErWeiMa();
-        }
     }
 }

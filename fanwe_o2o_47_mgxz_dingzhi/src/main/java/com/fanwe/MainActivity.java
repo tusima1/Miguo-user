@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity {
 
     private long mExitTime = 0;
     private int preTab = 0;// 上次点击的tab标签页
-    private int preHomeCityID = 0;//记录首页cityid-->0为异常
+    private String preHomeCityID = "";//记录首页cityid-->0为异常
     private LoginHelper mLoginHelper;
     private String token;
 
@@ -82,11 +82,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public void getToken() {
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            token = App.getInstance().getmUserCurrentInfo().getToken();
-        }
-    }
 
     private void init() {
         startUpgradeService();
@@ -100,9 +95,9 @@ public class MainActivity extends BaseActivity {
     //初始化用户信息。
     public void initUserInfo() {
         LocalUserModel userModel = AppHelper.getLocalUser();
-        getToken();
+
         //当前还未登录，并且用户存储中的用户信息不为空。
-        if (TextUtils.isEmpty(token) && userModel != null) {
+        if (TextUtils.isEmpty(App.getInstance().getToken()) && userModel != null) {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
@@ -219,8 +214,8 @@ public class MainActivity extends BaseActivity {
      */
     protected void click2() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
-        getToken();
-        if (TextUtils.isEmpty(token))// 未登录 以后加入是不是主播的判断。
+
+        if (TextUtils.isEmpty(App.getInstance().getToken()))// 未登录 以后加入是不是主播的判断。
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
@@ -259,8 +254,8 @@ public class MainActivity extends BaseActivity {
      */
     protected void click4() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_4);
-        getToken();
-        if (TextUtils.isEmpty(token))  // 未登录
+
+        if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
@@ -365,9 +360,9 @@ public class MainActivity extends BaseActivity {
                 return;
             }
             String cityName = cityData.getString("city", "");
-            int cityID = cityData.getInt("cityID", -1);
-            preHomeCityID = -1;
-            if (!TextUtils.isEmpty(cityName) && cityID != -1) {
+            String cityID = cityData.getString("cityID", "");
+            preHomeCityID = "";
+            if (!TextUtils.isEmpty(cityName) && !TextUtils.isEmpty(cityID)) {
                 // 通知城市的name和id获取正常
                 Fragment lastToggle = getSDFragmentManager().getmFragmentLastToggle();
                 if (lastToggle instanceof MarketFragment) {
@@ -459,9 +454,9 @@ public class MainActivity extends BaseActivity {
 
     private void refreshHomeFragment() {
         /** 城市变动的自动刷新 **/
-        int city_id = AppRuntimeWorker.getCity_id();
+        String city_id = AppRuntimeWorker.getCity_id();
         Fragment isHomeFragment = getSDFragmentManager().getmFragmentLastToggle();
-        if (preHomeCityID != 0 && preHomeCityID != city_id && isHomeFragment instanceof
+        if (!TextUtils.isEmpty(preHomeCityID) && !preHomeCityID.equals(city_id) && isHomeFragment instanceof
                 HomeFragment) {
             ((HomeFragment) isHomeFragment).refreshData();
             preHomeCityID = city_id;

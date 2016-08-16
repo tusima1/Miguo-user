@@ -43,10 +43,12 @@ import com.fanwe.utils.SDDateUtil;
 import com.google.gson.Gson;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
+import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
@@ -65,6 +67,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
@@ -127,10 +130,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private HeartLayout mHeartLayout;
     private HeartBeatTask mHeartBeatTask;//心跳
     private GetAudienceTask mGetAudienceTask;//取观众 列表。
-    /**
-     * 红包上时间显示
-     */
-    private RedPacketTask mRedPacketTask;
+
 
     private LinearLayout mHostLeaveLayout;
     private long mSecond = 0;
@@ -167,6 +167,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private HeadTopAdapter mHeadTopAdapter;
 
+    /**
+     * 用户的红包列表。
+     *
+     * @param savedInstanceState
+     */
+    private PagerRedPacketAdapter mRedPacketAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -499,6 +505,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void initView() {
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
+        mHostBottomToolView1.setmLiveView(this);
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(this, mCommonHelper);
@@ -529,6 +536,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         //主播-->加载的view
         mHeadTopAdapter = new HeadTopAdapter(null, this);
+        mLiveHttphelper = new LiveHttpHelper(this, this);
         if (LiveUtil.checkIsHost()) {
             //房间创建成功,向后台注册信息
             int i = new Random().nextInt();
@@ -674,8 +682,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //            ids.add(CurLiveInfo.getHostID());干嘛的???
             if (mLiveHttphelper != null) {
                 mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "");
-            }
 
+            }
+            mRedPacketAdapter = new PagerRedPacketAdapter();
+            mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
+            mRedPacketAdapter.setMdatas(testDatas());
+            mRedPacketAdapter.notifyDataSetChanged();
         }
         mFullControllerUi = (FrameLayout) findViewById(R.id.controll_ui);
         avView = findViewById(R.id.av_video_layer_ui);//surfaceView;
@@ -685,9 +697,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
+        //获取商品列表。
+        mLiveHttphelper.getGoodsDetailList(CurLiveInfo.shopID);
 
         //开启后台业务服务器请求管理类
-        mLiveHttphelper = new LiveHttpHelper(this, this);
+
         //----
         mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
         //主播清屏操作
@@ -702,12 +716,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
     /**
-     * 给一些view需要的参数
+     * 观众 底部操作view需要的参数
      */
     private void initViewNeed() {
         //初始化底部
         if (mUserBottomTool != null) {
-            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root);
+            mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
         }
         if (!TextUtils.isEmpty(CurLiveInfo.shopID)) {
             getShopDetail(CurLiveInfo.shopID);
@@ -791,9 +805,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         if (null != mAudienceTimer) {
             mAudienceTimer.cancel();
+            ;
             mAudienceTimer = null;
         }
-
         inviteViewCount = 0;
         thumbUp = 0;
         CurLiveInfo.setMembers(0);
@@ -813,8 +827,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (tencentHttpHelper != null) {
             tencentHttpHelper.onDestroy();
         }
+        if (backDialog != null) {
+            backDialog.dismiss();
+        }
+        if (mUserHeadTopView != null) {
+            mUserHeadTopView.ondestroy();
+            mUserHeadTopView = null;
+        }
+        if (mHostTopView != null) {
+            mHostTopView = null;
+        }
         QavsdkControl.getInstance().clearVideoMembers();
         QavsdkControl.getInstance().onDestroy();
+        MySelfInfo.getInstance().setMyRoomNum(-1);
 
     }
 
@@ -837,11 +862,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-            if (backDialog != null && !backDialog.isShowing()) {
-                backDialog.show();
-            }
+            backDialog.show();
         }
     }
+
 
     /**
      * 普通用户退出
@@ -879,6 +903,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                         mLiveHelper.stopPushAction();
                     }
                     startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
+                    if (backDialog != null && backDialog.isShowing()) {
+                        backDialog.dismiss();
+                    }
                 }
 
             }
@@ -950,7 +977,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             if (backDialog != null) {
                 backDialog.dismiss();
             }
-
             finish();
         } else {
             if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
@@ -1022,63 +1048,47 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     public void getHostRedPacket(HashMap<String, String> params) {
         if (!LiveUtil.checkIsHost()) {
             if (mUserBottomTool != null) {
-                mUserBottomTool.clickRob();
+                String red_packet_key = params.get("red_packet_id");
+                String durationStr = params.get("red_packet_duration");
+                int duration = 30;
+                if (!TextUtils.isEmpty(durationStr)) {
+                    duration = Integer.valueOf(duration);
+                }
+                mUserBottomTool.clickRob(red_packet_key, duration);
             }
         }
     }
 
+    CountDownTimer robLiftTimer = new CountDownTimer(20 * 1000, 1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+
+            mHostRedPacketCountDownView.setTime(SDDateUtil.secondesToMMSS(millisUntilFinished));
+
+        }
+
+        @Override
+        public void onFinish() {
+            mHostRedPacketCountDownView.setTime("00:00");
+            mHostBottomToolView1.setClickable(true);
+        }
+    };
+    ;
 
     @Override
     public void sendHostRedPacket(String id, String duration) {
         if (!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)) {
             //启动红包倒计时。
             Integer values = Integer.valueOf(duration) + 10 * 1000;
+//            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
 
-            CountDownTimer robLiftTimer = new CountDownTimer(values, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
 
-                    Message msg = Message.obtain();
-                    msg.what = REFRESH_RED_TIME;
-                    float v = millisUntilFinished * 1.0f / 1000f;
-                    int round = Math.round(v);
-                    msg.arg1 = round;
-                    Log.e("live", millisUntilFinished + "--" + round + "==" + v);
-                    mHandler.sendMessage(msg);
-                    if (round == 2) {
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Message msg = Message.obtain();
-                                msg.what = REFRESH_RED_TIME;
-                                msg.arg1 = 1;
-                                mHandler.sendMessage(msg);
-                            }
-                        }, 1000);
-                    }
-                }
-
-                @Override
-                public void onFinish() {
-                    mHostRedPacketCountDownView.setTime("00:00");
-                    mHostBottomToolView1.setClickable(true);
-                }
-            };
             robLiftTimer.start();
             mHostBottomToolView1.setClickable(false);
         }
     }
 
-
-    /**
-     * 取观众 列表
-     */
-    private class RedPacketTask extends TimerTask {
-        @Override
-        public void run() {
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
-        }
-    }
 
     @Override
     public void tokenInvalidateAndQuit() {
@@ -1799,11 +1809,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 List<ModelAudienceInfo> audienceList = datas;
                 if (audienceList != null && audienceList.size() >= 0) {
                     boolean isHost = LiveUtil.checkIsHost();
+                    int size = datas.size();
                     if (isHost) {
-                        mHostTopView.refreshData(datas);
+                        if (mHostTopView != null) {
+                            mHostTopView.refreshData(datas);
+                            mHostTopView.updateAudienceCount(size + "");
+                        }
                     } else {
-                        mUserHeadTopView.refreshData(datas);
-
+                        if (mUserHeadTopView != null) {
+                            mUserHeadTopView.refreshData(datas);
+                            mUserHeadTopView.updateAudienceCount(size + "");
+                        }
                     }
                     mHeadTopAdapter.notifyDataSetChanged();
                 }
@@ -1852,16 +1868,49 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                 }
                 break;
-
+            case LiveConstants.LIST_OF_STORES:
+                if (datas != null && datas.size() > 0) {
+                    mUserBottomTool.setBaoBaoEntities(datas);
+                    mUserBottomTool.notifyGoodListChange();
+                }
+                break;
             case SellerConstants.LIVE_BIZ_SHOP:
                 if (datas != null && datas.size() > 0) {
                     mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
                     mUserBottomTool.notifyDataChange();
                 }
                 break;
+            case LiveConstants.GET_USER_RED_PACKETS:
+
+                int size = datas == null ? 0 : datas.size();
+                if (datas == null) {
+                    datas = testDatas();
+                    mRedPacketAdapter.setMdatas(datas);
+                } else {
+                    mRedPacketAdapter.setMdatas(datas);
+                    mRedPacketAdapter.notifyDataSetChanged();
+                }
+                break;
             default:
                 break;
         }
+    }
+
+    public List<UserRedPacketInfo> testDatas() {
+
+
+        List<UserRedPacketInfo> mdatas = new ArrayList<>();
+        for (int i = 0; i < 4; i++)
+
+        {
+            UserRedPacketInfo data1 = new UserRedPacketInfo();
+            data1.setId("001");
+            data1.setRed_packet_type("1");
+            data1.setAmount_limit(100 + i + "");
+            data1.setRed_packet_amount("10");
+            mdatas.add(data1);
+        }
+        return mdatas;
     }
 
     /*校验数据*/

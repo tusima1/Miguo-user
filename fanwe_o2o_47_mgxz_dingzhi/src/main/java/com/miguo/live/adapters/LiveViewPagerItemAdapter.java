@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fanwe.base.CallbackView;
 import com.fanwe.seller.model.SellerDetailInfo;
+import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.live.views.customviews.PagerRedPacketView;
@@ -14,6 +16,7 @@ import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 
 /**
@@ -27,9 +30,14 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
      * 门店详情。
      */
     private SellerDetailInfo mSellerDetailInfo;
+    private List<BaoBaoEntity> baoBaoEntityList;
     private View currentView;
+    private CallbackView mCallbackview;
+    private PagerRedPacketAdapter mRedPacketAdapter;
 
-    public LiveViewPagerItemAdapter(ViewPagerItems pages) {
+    public LiveViewPagerItemAdapter(ViewPagerItems pages,CallbackView mCallbackview,PagerRedPacketAdapter mRedPacketAdapter) {
+        this.mRedPacketAdapter = mRedPacketAdapter;
+        this.mCallbackview = mCallbackview;
         this.pages = pages;
         this.holder = new SparseArrayCompat<>(pages.size());
         this.inflater = LayoutInflater.from(pages.getContext());
@@ -54,19 +62,12 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
                 view=new PagerMainHostView(container.getContext());
                 break;
             case 2:
-                view=new PagerRedPacketView(container.getContext());
+                view=new PagerRedPacketView(container.getContext(),mCallbackview,mRedPacketAdapter);
                 break;
-            case 3:
-
-                break;
-            case 4:
-
-                break;
-            case 6:
-
+            default:
                 break;
         }
-        currentView = view;
+
         container.addView(view);
         holder.put(position, new WeakReference<View>(view));
         return view;
@@ -99,7 +100,9 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
     }
 
     protected ViewPagerItem getPagerItem(int position) {
-        return pages.get(position);
+        return  pages.get(position);
+
+
     }
     public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
         this.mSellerDetailInfo = mSellerDetailInfo;
@@ -110,4 +113,24 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
             ((PagerMainHostView)currentView).onEntityChange();
         }
     }
+
+    /**
+     * 刷新产品列表。
+     */
+    public void refreshGoodList(){
+        if(currentView!=null&&currentView instanceof PagerBaoBaoView ) {
+            ((PagerBaoBaoView)currentView).setBaoBaoEntityList(baoBaoEntityList);
+            ((PagerBaoBaoView)currentView).onRefreshData();
+        }
+    }
+
+    public List<BaoBaoEntity> getBaoBaoEntityList() {
+        return baoBaoEntityList;
+    }
+
+    public void setBaoBaoEntityList(List<BaoBaoEntity> baoBaoEntityList) {
+        this.baoBaoEntityList = baoBaoEntityList;
+    }
+
+
 }

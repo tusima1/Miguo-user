@@ -7,7 +7,8 @@ package com.miguo.live.model;
 public class UserRedPacketInfo {
     public String tencent_room_id;
     /**
-     * 红包类型 1 折扣券。2 优惠券。
+     * 红包类型 1 折扣券。2 优惠券。"red_packet_type":"1",
+     "red_packet_amount":"1"
      */
     public String red_packet_type;
     public String available_time_end;

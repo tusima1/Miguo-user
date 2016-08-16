@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,16 @@ import com.fanwe.library.customview.SD2LvCategoryViewHelper.SD2LvCategoryViewHel
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.Quan_listModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 
-public class CategoryQuanRightAdapter extends SDBaseAdapter<Quan_listModel> implements SD2LvCategoryViewHelperAdapterInterface
+import java.util.List;
+
+public class CategoryQuanRightAdapter extends SDBaseAdapter<ModelBusinessCircleList> implements SD2LvCategoryViewHelperAdapterInterface
 {
 	private int mDefaultIndex;
 
-	public CategoryQuanRightAdapter(List<Quan_listModel> listModel, Activity activity)
+	public CategoryQuanRightAdapter(List<ModelBusinessCircleList> listModel, Activity activity)
 	{
 		super(listModel, activity);
 	}
@@ -40,7 +40,7 @@ public class CategoryQuanRightAdapter extends SDBaseAdapter<Quan_listModel> impl
 
 		TextView tvTitle = ViewHolder.get(convertView, R.id.item_category_right_tv_title);
 
-		Quan_listModel model = getItem(position);
+		ModelBusinessCircleList model = getItem(position);
 		if (model != null)
 		{
 			SDViewBinder.setTextView(tvTitle, model.getName());
@@ -101,7 +101,7 @@ public class CategoryQuanRightAdapter extends SDBaseAdapter<Quan_listModel> impl
 	@Override
 	public void updateRightListModel_right(Object rightListModel)
 	{
-		List<Quan_listModel> listRight = (List<Quan_listModel>) rightListModel;
+		List<ModelBusinessCircleList> listRight = (List<ModelBusinessCircleList>) rightListModel;
 		updateData(listRight);
 	}
 

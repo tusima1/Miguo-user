@@ -20,12 +20,9 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
 
     public List<UserRedPacketInfo> mdatas;
-    /**
-     * 填充数据
-     */
-    public PagerRedPacketAdapter() {
 
-    }
+    public  CountChangeListner mCountChangeListener;
+
 
     @Override
     public PagerRedPacketAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -37,12 +34,35 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
     @Override
     public void onBindViewHolder(PagerRedPacketAdapter.ViewHolder holder, int position) {
-        holder.mTv_BigNum.setText(getItemCount());
+        UserRedPacketInfo userRedPacketInfo = mdatas.get(position);
+        //红包类型 1 折扣券。2 优惠券。"red_packet_type":"1",
+        if(userRedPacketInfo!=null) {
+            String str = "";
+            holder.mTv_BigNum.setText(userRedPacketInfo.getRed_packet_amount());
+            switch (userRedPacketInfo.getRed_packet_type()){
+                case "1":
+                    str="折";
+                    break;
+                case "2":
+                    str="优惠券";
+                    break;
+                default:
+                    break;
+            }
+            holder.packet_type.setText(str);
+            holder.mTv_Title.setText(userRedPacketInfo.getRed_packet_name()==null?"":userRedPacketInfo.getRed_packet_name());
+            holder.mTv_Time.setText(userRedPacketInfo.getAvailable_time_start()==null?"":userRedPacketInfo.getAvailable_time_start()+"-"+userRedPacketInfo.getAvailable_time_end()==null?"":userRedPacketInfo.getAvailable_time_end());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return this.mdatas==null?0:mdatas.size();
+        if(this.mdatas==null){
+            return 0;
+        }else{
+            return mdatas.size();
+        }
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,5 +97,24 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
     public void setMdatas(List<UserRedPacketInfo> mdatas) {
         this.mdatas = mdatas;
+        if(mCountChangeListener!=null) {
+            mCountChangeListener.onChange(getItemCount());
+        }
+        notifyItemRangeChanged(0,getItemCount());
+
+
+    }
+
+    public CountChangeListner getmCountChangeListener() {
+        return mCountChangeListener;
+    }
+
+    public void setmCountChangeListener(CountChangeListner mCountChangeListener) {
+        this.mCountChangeListener = mCountChangeListener;
+    }
+
+    public interface CountChangeListner{
+        void onChange(int count);
+
     }
 }
