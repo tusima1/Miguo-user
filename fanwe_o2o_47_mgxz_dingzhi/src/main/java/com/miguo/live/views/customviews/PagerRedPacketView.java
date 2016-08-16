@@ -1,6 +1,5 @@
 package com.miguo.live.views.customviews;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,20 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Root;
-import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.model.UserInfoNew;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
-import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.utils.MGUIUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -42,6 +32,23 @@ public class PagerRedPacketView extends LinearLayout {
     public PagerRedPacketAdapter.CountChangeListner  mCountChangeListener = new PagerRedPacketAdapter.CountChangeListner(){
         public void onChange(int count){
             updateCount(count);
+        }
+    };
+
+    private CallbackView thisCallBack=new CallbackView() {
+        @Override
+        public void onSuccess(String responseBody) {
+            MGToast.showToast(""+responseBody);
+        }
+
+        @Override
+        public void onSuccess(String method, List datas) {
+            MGToast.showToast(""+method);
+        }
+
+        @Override
+        public void onFailue(String responseBody) {
+            MGToast.showToast(""+responseBody);
         }
     };
     public PagerRedPacketView(Context context,CallbackView mCallbackView,PagerRedPacketAdapter mAdapter) {
