@@ -13,6 +13,7 @@ import com.miguo.live.interf.IHelper;
 
 /**
  * Created by didik on 2016/8/17.
+ * 用户抢完红包后结果展示界面
  */
 public class UserRobRedPacketEndDialogHelper implements IHelper {
 
@@ -22,6 +23,11 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
     private TextView mTv_num;//数字
     private TextView mTv_tag;//折扣券  拼接为 数字+折扣券
 
+    /**
+     *
+     * @param activity bindRoot
+     * @param isRob 有没有抢到红包
+     */
     public UserRobRedPacketEndDialogHelper(Activity activity, boolean isRob) {
         this.mActivity = activity;
         this.mRob = isRob;
