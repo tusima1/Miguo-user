@@ -3,214 +3,182 @@ package com.fanwe.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class Store_infoModel implements Serializable
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String preview;
-	private int id;
-	private int supplier_id;
-	private int is_verify;
-	private int is_auto_order;
-	private String distance;
-	private String avg_point;
-	private double xpoint;
-	private double ypoint;
-	private String address;
-	private String name;
-	private String tel;
-	private int discount_pay;
-	private String dp_count;
-	private String brief;
-	private int offline;
-	private List<Store_imagesModel> store_images;
-	private String share_url;
-	private Float salary_money;
-	
-	
-	
-	public int getOffline() {
-		return offline;
-	}
+public class Store_infoModel implements Serializable {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private String preview;
+    private int id;
+    private int supplier_id;
+    private int is_verify;
+    private int is_auto_order;
+    private String distance;
+    private String avg_point;
+    private double xpoint;
+    private double ypoint;
+    private String address;
+    private String name;
+    private String tel;
+    private int discount_pay;
+    private String dp_count;
+    private String brief;
+    private int offline;
+    private List<Store_imagesModel> store_images;
+    private String share_url;
+    private Float salary_money = 0f;
 
-	public void setOffline(int offline) {
-		this.offline = offline;
-	}
 
-	public Float getSalary_money() {
-		return salary_money;
-	}
+    public int getOffline() {
+        return offline;
+    }
 
-	public void setSalary_money(Float salary_money) {
-		this.salary_money = salary_money;
-	}
+    public void setOffline(int offline) {
+        this.offline = offline;
+    }
 
-	public String getDp_count() {
-		return dp_count;
-	}
+    public Float getSalary_money() {
+        return salary_money;
+    }
 
-	public void setDp_count(String dp_count) {
-		this.dp_count = dp_count;
-	}
+    public void setSalary_money(Float salary_money) {
+        this.salary_money = salary_money;
+    }
 
-	public int getDiscount_pay() {
-		return discount_pay;
-	}
+    public String getDp_count() {
+        return dp_count;
+    }
 
-	public void setDiscount_pay(int discount_pay) {
-		this.discount_pay = discount_pay;
-	}
+    public void setDp_count(String dp_count) {
+        this.dp_count = dp_count;
+    }
 
-	public double getXpoint()
-	{
-		return xpoint;
-	}
+    public int getDiscount_pay() {
+        return discount_pay;
+    }
 
-	public void setXpoint(double xpoint)
-	{
-		this.xpoint = xpoint;
-	}
+    public void setDiscount_pay(int discount_pay) {
+        this.discount_pay = discount_pay;
+    }
 
-	public double getYpoint()
-	{
-		return ypoint;
-	}
+    public double getXpoint() {
+        return xpoint;
+    }
 
-	public void setYpoint(double ypoint)
-	{
-		this.ypoint = ypoint;
-	}
+    public void setXpoint(double xpoint) {
+        this.xpoint = xpoint;
+    }
 
-	public String getShare_url()
-	{
-		return share_url;
-	}
+    public double getYpoint() {
+        return ypoint;
+    }
 
-	public void setShare_url(String share_url)
-	{
-		this.share_url = share_url;
-	}
+    public void setYpoint(double ypoint) {
+        this.ypoint = ypoint;
+    }
 
-	public String getPreview()
-	{
-		return preview;
-	}
+    public String getShare_url() {
+        return share_url;
+    }
 
-	public void setPreview(String preview)
-	{
-		this.preview = preview;
-	}
+    public void setShare_url(String share_url) {
+        this.share_url = share_url;
+    }
 
-	public int getId()
-	{
-		return id;
-	}
+    public String getPreview() {
+        return preview;
+    }
 
-	public void setId(int id)
-	{
-		this.id = id;
-	}
+    public void setPreview(String preview) {
+        this.preview = preview;
+    }
 
-	public int getSupplier_id()
-	{
-		return supplier_id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setSupplier_id(int supplier_id)
-	{
-		this.supplier_id = supplier_id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public int getIs_verify()
-	{
-		return is_verify;
-	}
+    public int getSupplier_id() {
+        return supplier_id;
+    }
 
-	public void setIs_verify(int is_verify)
-	{
-		this.is_verify = is_verify;
-	}
+    public void setSupplier_id(int supplier_id) {
+        this.supplier_id = supplier_id;
+    }
 
-	public int getIs_auto_order()
-	{
-		return is_auto_order;
-	}
+    public int getIs_verify() {
+        return is_verify;
+    }
 
-	public void setIs_auto_order(int is_auto_order)
-	{
-		this.is_auto_order = is_auto_order;
-	}
+    public void setIs_verify(int is_verify) {
+        this.is_verify = is_verify;
+    }
 
-	public String getDistance()
-	{
-		return distance;
-	}
+    public int getIs_auto_order() {
+        return is_auto_order;
+    }
 
-	public void setDistance(String distance)
-	{
-		this.distance = distance;
-	}
+    public void setIs_auto_order(int is_auto_order) {
+        this.is_auto_order = is_auto_order;
+    }
 
-	public String getAvg_point()
-	{
-		return avg_point;
-	}
+    public String getDistance() {
+        return distance;
+    }
 
-	public void setAvg_point(String avg_point)
-	{
-		this.avg_point = avg_point;
-	}
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
-	public String getAddress()
-	{
-		return address;
-	}
+    public String getAvg_point() {
+        return avg_point;
+    }
 
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
+    public void setAvg_point(String avg_point) {
+        this.avg_point = avg_point;
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getTel()
-	{
-		return tel;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setTel(String tel)
-	{
-		this.tel = tel;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getBrief()
-	{
-		return brief;
-	}
+    public String getTel() {
+        return tel;
+    }
 
-	public void setBrief(String brief)
-	{
-		this.brief = brief;
-	}
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 
-	public List<Store_imagesModel> getStore_images()
-	{
-		return store_images;
-	}
+    public String getBrief() {
+        return brief;
+    }
 
-	public void setStore_images(List<Store_imagesModel> store_images)
-	{
-		this.store_images = store_images;
-	}
+    public void setBrief(String brief) {
+        this.brief = brief;
+    }
+
+    public List<Store_imagesModel> getStore_images() {
+        return store_images;
+    }
+
+    public void setStore_images(List<Store_imagesModel> store_images) {
+        this.store_images = store_images;
+    }
 
 }

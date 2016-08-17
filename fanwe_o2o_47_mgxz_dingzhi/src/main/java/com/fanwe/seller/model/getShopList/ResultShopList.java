@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Administrator on 2016/7/28.
  */
 public class ResultShopList {
-    private List<ModelShopListItem> modelShopListItem;
+    private List<ModelShopListItem> item;
 
     private List<ModelShopListNavs> navs;
 
@@ -26,12 +26,12 @@ public class ResultShopList {
 
     private String city_id;
 
-    public void setModelShopListItem(List<ModelShopListItem> modelShopListItem) {
-        this.modelShopListItem = modelShopListItem;
+    public List<ModelShopListItem> getItem() {
+        return item;
     }
 
-    public List<ModelShopListItem> getModelShopListItem() {
-        return this.modelShopListItem;
+    public void setItem(List<ModelShopListItem> item) {
+        this.item = item;
     }
 
     public void setNavs(List<ModelShopListNavs> navs) {

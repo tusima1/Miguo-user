@@ -360,11 +360,11 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                                         String[] strs = sbFileKeys.toString().split("ttp://");
                                         if (datas.contains("add")) {
                                             if ((strs.length - 1) == 2) {
-                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), dataBindingLiveAuth.interest.get());
+                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), cityId, dataBindingLiveAuth.interest.get());
                                             }
                                         } else {
                                             if ((strs.length - 1) == 3) {
-                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), String.valueOf(cityId), dataBindingLiveAuth.interest.get());
+                                                liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), cityId, dataBindingLiveAuth.interest.get());
                                             }
                                         }
                                     }

@@ -91,10 +91,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.miguo.live.views.LiveAuthStartActivity"
-            android:theme="@style/TransTheme" />
-        <activity
-            android:name="com.miguo.live.views.LiveAuthWaitActivity"
+            android:name="com.miguo.live.views.LiveStartAuthActivity"
             android:theme="@style/TransTheme" />
 
         <activity

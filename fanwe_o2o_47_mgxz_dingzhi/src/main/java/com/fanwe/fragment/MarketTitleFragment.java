@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MarketTitleFragment extends BaseFragment{
-	
+
 	@ViewInject(R.id.frag_home_title_bar_tv_app_name)
 	private TextView mTvAppName;
 
@@ -29,13 +29,13 @@ public class MarketTitleFragment extends BaseFragment{
 	@ViewInject(R.id.frag_home_title_bar_tv_earn)
 	private TextView mTvCurrentCity;
 
-	
+
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
 		return setContentView(R.layout.frag_market_title_bar);
 	}
-	
+
 	@Override
 	protected void init() {
 		super.init();
@@ -44,14 +44,14 @@ public class MarketTitleFragment extends BaseFragment{
 	}
 	private void registeClick() {
 		mLlEarn.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				clickEarn(v);
 			}
-		});	
+		});
 	}
-	
+
 	/**
 	 * 设置城市
 	 * @param city
@@ -69,7 +69,7 @@ public class MarketTitleFragment extends BaseFragment{
 		SDViewBinder.setTextView(mTvCurrentCity, AppRuntimeWorker.getCity_name(), "未找到");
 		JpushHelper.setTag("city_"+AppRuntimeWorker.getCity_id());
 	}
-	
+
 	/**
 	 * 点击区域
 	 */
@@ -78,7 +78,7 @@ public class MarketTitleFragment extends BaseFragment{
 		Intent intent = new Intent(getActivity(), MarketCityListActivity.class);
 		startActivityForResult(intent, 200);
 	}
-	
+
 	@Override
 	public void onEventMainThread(SDBaseEvent event)
 	{

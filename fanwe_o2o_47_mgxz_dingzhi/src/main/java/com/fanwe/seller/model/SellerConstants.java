@@ -42,4 +42,16 @@ public class SellerConstants {
      * 城市列表
      */
     public static final String CITY_LIST = "CityList";
+    /**
+     * 市场商家代言列表
+     */
+    public static final String MARKET_LIST = "MarketList";
+    /**
+     *
+     */
+    public static final String SHOP_INFO = "ShopInfo";
+   /**
+     * 判断是否收藏。
+     */
+    public static final String  CHECK_SHOP_COLLECT  ="CheckShopCollect";
 }

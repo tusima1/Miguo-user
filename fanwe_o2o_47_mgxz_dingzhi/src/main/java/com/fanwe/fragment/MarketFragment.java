@@ -1,37 +1,9 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fanwe.ShoppingMallActivity;
-import com.fanwe.adapter.DistributionMarketAdapter;
-import com.fanwe.adapter.DistributionMarketCatePageAdapter;
-import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
-import com.fanwe.customview.app.DistributionMarketCateView;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.DistributionMarketCateModel;
-import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Supplier_fx;
-import com.fanwe.model.Uc_fx_deal_fxActModel;
-import com.fanwe.o2o.miguo.R;
-import com.fanwe.work.AppRuntimeWorker;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.sunday.eventbus.SDBaseEvent;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -46,7 +18,40 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class MarketFragment extends BaseFragment {
+import com.fanwe.ShoppingMallActivity;
+import com.fanwe.adapter.DistributionMarketAdapter;
+import com.fanwe.adapter.DistributionMarketCatePageAdapter;
+import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
+import com.fanwe.base.CallbackView;
+import com.fanwe.customview.app.DistributionMarketCateView;
+import com.fanwe.event.EnumEventTag;
+import com.fanwe.http.InterfaceServer;
+import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.DistributionMarketCateModel;
+import com.fanwe.model.PageModel;
+import com.fanwe.model.RequestModel;
+import com.fanwe.model.Supplier_fx;
+import com.fanwe.model.Uc_fx_deal_fxActModel;
+import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getMarketList.ModelMarketListItem;
+import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.work.AppRuntimeWorker;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.sunday.eventbus.SDBaseEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MarketFragment extends BaseFragment implements CallbackView {
 
 
     /**
@@ -83,14 +88,17 @@ public class MarketFragment extends BaseFragment {
 
     private PageModel mPage = new PageModel();
 
-    private String mStrKeyword = "";
     private int mId;
     private int mCate_id = 0;
 
     private String city_id = "";//城市id
-
-
     private MarketTitleFragment marketTitleFragment;
+    private SellerHttpHelper sellerHttpHelper;
+
+    private int pageNum = 1;
+    private int pageSize = 10;
+    private String buss_type;
+    private String keyword;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -108,6 +116,9 @@ public class MarketFragment extends BaseFragment {
         bindDefaultData();
         addHeaderView();
         initPullToRefreshListView();
+
+        requestData(false);
+        getMarketList();
     }
 
     private void initView() {
@@ -129,11 +140,11 @@ public class MarketFragment extends BaseFragment {
     private void getIntentData() {
         mId = getArguments().getInt(EXTRA_ID);
         mCate_id = getArguments().getInt(EXTRA_CATE_ID);
-        mStrKeyword = getArguments().getString(EXTRA_KEY_WORD);
-        if (!isEmpty(mStrKeyword)) {
-            mEt_search.setText(mStrKeyword);
+        keyword = getArguments().getString(EXTRA_KEY_WORD);
+        if (!isEmpty(keyword)) {
+            mEt_search.setText(keyword);
         } else {
-            mStrKeyword = "";
+            keyword = "";
         }
     }
 
@@ -144,8 +155,11 @@ public class MarketFragment extends BaseFragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     SDViewUtil.hideInputMethod(mEt_search, getActivity());
-                    mStrKeyword = mEt_search.getText().toString();
-                    requestData(false);
+                    keyword = mEt_search.getText().toString();
+
+                    isRefresh = true;
+                    pageNum = 1;
+                    getMarketList();
                     return true;
                 }
                 return false;
@@ -166,8 +180,8 @@ public class MarketFragment extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                mStrKeyword = s.toString().trim();
-                if (mStrKeyword.length() > 0) {
+                keyword = s.toString().trim();
+                if (keyword.length() > 0) {
                     ll_tipTextLayout.setVisibility(View.GONE);
                 } else {
                     ll_tipTextLayout.setVisibility(View.VISIBLE);
@@ -188,25 +202,28 @@ public class MarketFragment extends BaseFragment {
         mPtrlv_content.setOnRefreshListener(new OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                refreshData();
+                isRefresh = true;
+                pageNum = 1;
+                getMarketList();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (mPage.increment()) {
-                    requestData(true);
-                } else {
-                    SDToast.showToast("没有更多数据了");
-                    mPtrlv_content.onRefreshComplete();
+                isRefresh = false;
+                if (!SDCollectionUtil.isEmpty(items)) {
+                    pageNum++;
                 }
+                getMarketList();
             }
         });
         mPtrlv_content.setRefreshing();
     }
 
-    public void refreshData() {
-        mPage.resetPage();
-        requestData(false);
+    private void getMarketList() {
+        if (sellerHttpHelper == null) {
+            sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
+        }
+        sellerHttpHelper.getMarketList(pageNum, pageSize, buss_type, keyword, AppRuntimeWorker.getCity_id());
     }
 
     protected void requestData(final boolean isLoadMore) {
@@ -216,7 +233,7 @@ public class MarketFragment extends BaseFragment {
         model.putAct("supplier_fx");
         model.put("cate_id", mCate_id);
         model.putPage(mPage.getPage());
-        model.put("fx_seach_key", mStrKeyword);
+        model.put("fx_seach_key", keyword);
         model.put("city2_id", city_id);
 
         InterfaceServer.getInstance().requestInterface(HttpMethod.POST, model, null, false, new SDRequestCallBack<Uc_fx_deal_fxActModel>() {
@@ -224,17 +241,6 @@ public class MarketFragment extends BaseFragment {
             public void onSuccess(ResponseInfo<String> responseInfo) {
 
                 if (actModel.getStatus() == 1) {
-                    if (isLoadMore) {
-
-                    }
-                    mPage.update(actModel.getPage());
-                    List<Supplier_fx> list = actModel.getList();
-                    if (list == null || list.size() == 0) {
-                        ll_emptyLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        ll_emptyLayout.setVisibility(View.GONE);
-                    }
-                    mAdapter.updateData(list);
                     bindData(actModel, isLoadMore);
                 }
             }
@@ -274,7 +280,6 @@ public class MarketFragment extends BaseFragment {
                 mNeedBindCate = false;
             }
         }
-        SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
     }
 
     @Override
@@ -282,10 +287,10 @@ public class MarketFragment extends BaseFragment {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case DELETE_DISTRIBUTION_GOODS_SUCCESS:
-                refreshData();
+                getMarketList();
                 break;
             case ADD_DISTRIBUTION_GOODS_SUCCESS:
-                refreshData();
+                getMarketList();
                 break;
 
             default:
@@ -303,4 +308,58 @@ public class MarketFragment extends BaseFragment {
         city_id = cityId;
         requestData(false);
     }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    private List<ModelMarketListItem> items;
+    private boolean isRefresh;
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (SellerConstants.MARKET_LIST.equals(method)) {
+            items = datas;
+            Message msg = new Message();
+            msg.what = 0;
+            mHandler.sendMessage(msg);
+        }
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    mPtrlv_content.onRefreshComplete();
+                    if (isRefresh) {
+                        mListModel.clear();
+                    }
+                    for (ModelMarketListItem bean : items) {
+                        Supplier_fx supplier_fx = new Supplier_fx();
+                        supplier_fx.setId(bean.getId());
+                        supplier_fx.setPreview(bean.getEnt_logo());
+                        supplier_fx.setBuy_count(Integer.valueOf(bean.getRq()));
+                        supplier_fx.setName(bean.getBuss_name());
+                        supplier_fx.setIs_delete(1);
+                        mListModel.add(supplier_fx);
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                    if (SDCollectionUtil.isEmpty(mListModel)) {
+                        ll_emptyLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        ll_emptyLayout.setVisibility(View.GONE);
+                    }
+
+                    break;
+            }
+        }
+    };
 }

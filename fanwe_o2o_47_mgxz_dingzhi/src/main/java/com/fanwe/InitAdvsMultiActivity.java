@@ -315,12 +315,20 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
                         }
                         actModel.setCitylist(citylist);
                         actModel.setHot_city(hot_city);
+                        if (TextUtils.isEmpty(actModel.getCity_id())) {
+                            if (defaultCity != null) {
+                                actModel.setCity_id(defaultCity.getId());
+                                actModel.setCity_name(defaultCity.getName());
+                            }
+                        }
                         InitActModelDao.insertOrUpdateModel(actModel);
                     }
                     break;
             }
         }
     };
+
+    ModelCityList defaultCity;
 
     /**
      * 生成有效城市
@@ -341,6 +349,9 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
                 citylist.add(city);
                 if ("1".equals(bean.getIs_hot())) {
                     hot_city.add(city);
+                }
+                if ("1".equals(bean.getIs_default())) {
+                    defaultCity = bean;
                 }
             }
         }

@@ -25,18 +25,25 @@ import com.fanwe.seller.model.getClassifyList.RootClassifyList;
 import com.fanwe.seller.model.getGroupBuyCollect.ModelGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyCollect.ResultGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyCollect.RootGroupBuyCollect;
+import com.fanwe.seller.model.getMarketList.ModelMarketListItem;
+import com.fanwe.seller.model.getMarketList.ResultMarketList;
+import com.fanwe.seller.model.getMarketList.RootMarketList;
+import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
+import com.fanwe.seller.model.getShopInfo.RootShopInfo;
 import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.model.getShopList.RootShopList;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -317,6 +324,48 @@ public class SellerHttpHelper implements IHelper {
     }
 
     /**
+     *
+     * @param shop_id
+     */
+    public void CheckShopCollect(String shop_id){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("shop_id", shop_id);
+        params.put("method", SellerConstants.CHECK_SHOP_COLLECT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
+                HashMap<String,String> map=null ;
+                if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
+                {
+                    map= root.getResult().get(0).getBody().get(0);
+                }
+                List<HashMap<String,String>> datas = new ArrayList<HashMap<String, String>>();
+                //"0"  0表示未收藏 1表示已收藏
+                String collected ="0";
+                if (map != null) {
+                    datas.add(map);
+                    mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, datas);
+
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+    /**
      * 获取分类列表
      */
     public void getClassifyList() {
@@ -345,9 +394,20 @@ public class SellerHttpHelper implements IHelper {
     }
 
     /**
-     * 获取门店列表
+     * 获取商家列表
+     *
+     * @param tid        二级分类ID
+     * @param cate_id    大分类ID
+     * @param city_id    城市
+     * @param order_type 排序
+     * @param pid        大区id
+     * @param store_type 1优惠商家2全部商家
+     * @param quan_id    商圈id
+     * @param keyword    关键字
+     * @param pageNum
+     * @param pageSize
      */
-    public void getShopList(String tid, String cate_id, String city_id, String order_type, String pid, String store_type, String quan_id, String keyword) {
+    public void getShopList(String tid, String cate_id, String city_id, String order_type, String pid, String store_type, String quan_id, String keyword, int pageNum, int pageSize) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("tid", tid);
@@ -358,6 +418,8 @@ public class SellerHttpHelper implements IHelper {
         params.put("store_type", store_type);
         params.put("quan_id", quan_id);
         params.put("keyword", keyword);
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
         params.put("method", SellerConstants.SHOP_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -398,6 +460,68 @@ public class SellerHttpHelper implements IHelper {
                 }
                 List<ModelCityList> items = result.get(0).getBody();
                 mView.onSuccess(SellerConstants.CITY_LIST, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 市场商家代言列表
+     */
+    public void getMarketList(int pageNum, int pageSize, String buss_type, String keyword, String city_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("buss_type", buss_type);
+        params.put("keyword", keyword);
+        params.put("city_id", city_id);
+        params.put("method", SellerConstants.MARKET_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootMarketList root = gson.fromJson(responseBody, RootMarketList.class);
+                List<ResultMarketList> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.MARKET_LIST, null);
+                    return;
+                }
+                List<ModelMarketListItem> items = result.get(0).getList();
+                mView.onSuccess(SellerConstants.MARKET_LIST, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 门店信息
+     */
+    public void getShopInfo(String shop_id, String city_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("shop_id", shop_id);
+        params.put("city_id", city_id);
+        params.put("method", SellerConstants.SHOP_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootShopInfo root = gson.fromJson(responseBody, RootShopInfo.class);
+                List<ResultShopInfo> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.SHOP_INFO, null);
+                    return;
+                }
+                mView.onSuccess(SellerConstants.SHOP_INFO, result);
             }
 
             @Override
