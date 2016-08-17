@@ -12,16 +12,23 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.miguo.live.interf.ItemChangeListener;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
  * Created by didik on 2016/7/29.
  * 主场页面
  */
-public class PagerMainHostView extends ScrollView implements View.OnClickListener,ItemChangeListener{
+public class PagerMainHostView extends ScrollView implements View.OnClickListener,ItemChangeListener,CallbackView{
     private Context mContext;
     private ImageView mIv_img;//主图片
     private TextView mTv_title;//大标题
@@ -38,6 +45,11 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
      * 门店详情。
      */
     private SellerDetailInfo mSellerDetailInfo;
+    private SellerHttpHelper mSellerHttpHelper;
+    /***
+     * 当前是否收藏的状态。
+     */
+    private String collectState = "0";
 
     public PagerMainHostView(Context context) {
         super(context);
@@ -58,6 +70,8 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
     }
 
     private void initView() {
+        mSellerHttpHelper = new SellerHttpHelper(mContext,this);
+        mSellerHttpHelper.CheckShopCollect(CurLiveInfo.getShopID());
         LayoutInflater.from(mContext).inflate(R.layout.item_viewpager_mainhost,this);
         mIv_img = ((ImageView) this.findViewById(R.id.iv_img));
         mTv_title = ((TextView) this.findViewById(R.id.tv_title));
@@ -101,7 +115,7 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
             mTv_location_type.setText(mSellerDetailInfo.getAreaName());
             mTv_keywords.setText(Html.fromHtml(mSellerDetailInfo.getMain_buss()));
             mTv_location.setText("地址："+mSellerDetailInfo.getAddress());
-            mTv_phone_num.setText("联系电话:"+mSellerDetailInfo.getTel());
+            mTv_phone_num.setText("电话:"+mSellerDetailInfo.getTel());
             String price = mSellerDetailInfo.getRef_avg_price();
             if(!TextUtils.isEmpty(price)){
                 mTv_price.setText("Y "+price+"元/人");
@@ -112,7 +126,14 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
      * 点击了收藏
      */
     private void clickCollection() {
-        Toast.makeText(mContext, "收藏", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(CurLiveInfo.getShopID())){
+            return;
+        }
+       if("1".equals(this.collectState)) {
+          mSellerHttpHelper.deleteShopCollect(CurLiveInfo.getShopID());
+       }else{
+           mSellerHttpHelper.postShopCollect(CurLiveInfo.getShopID());
+       }
     }
 
     public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
@@ -122,5 +143,44 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
     @Override
     public void onEntityChange() {
         updateViewValue();
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+    public void setCollectState(String collectState){
+        if(!TextUtils.isEmpty(collectState)&&"1".equals(collectState)){
+            mCollect.setText("已收藏");
+        }else{
+            mCollect.setText("收藏");
+        }
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+  switch (method){
+      case SellerConstants.CHECK_SHOP_COLLECT:
+          String value ="0";
+          if(datas!=null) {
+              value = ((HashMap<String, String>) datas.get(0)).get("collect");
+          }
+          setCollectState(value);
+          break;
+      case SellerConstants.SHOP_COLLECT_DELETE:
+          setCollectState("0");
+          break;
+      case SellerConstants.SHOP_COLLECT_POST:
+          setCollectState("1");
+          break;
+      default:
+          break;
+  }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }

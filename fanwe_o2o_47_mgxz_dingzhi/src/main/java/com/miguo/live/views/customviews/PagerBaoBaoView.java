@@ -76,6 +76,7 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
         mAdapter=new PagerBaoBaoAdapter(mContext,mShoppingCartHelper);
         if(baoBaoEntityList!=null&&baoBaoEntityList.size()>0){
             mAdapter.setData(baoBaoEntityList);
+            mAdapter.notifyDataSetChanged();
         }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
@@ -93,6 +94,7 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
         });
 //        mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
+
     }
 
     @Override
