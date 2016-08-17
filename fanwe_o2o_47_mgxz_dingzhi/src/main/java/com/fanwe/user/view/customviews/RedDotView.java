@@ -106,4 +106,19 @@ public class RedDotView extends LinearLayout {
         void onRedDotViewClick(View v);
     }
 
+    /**
+     * 设置文字颜色
+     * @param color
+     */
+    public void setTextColor(int color){
+        mTitle.setTextColor(color);
+    }
+
+    public void setAllParams(String title,int iconResId,int redNum,int textColor){
+        setTitle(title);
+        setIcon(iconResId);
+        setRedNum(redNum);
+        setTextColor(textColor);
+    }
+
 }

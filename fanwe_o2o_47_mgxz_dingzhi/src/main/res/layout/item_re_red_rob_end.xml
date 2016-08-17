@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    android:minHeight="@dimen/dp45">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_user_image"
+        android:layout_width="@dimen/dp25"
+        android:layout_height="@dimen/dp25"
+        android:src="@drawable/app_icon"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_gravity="center_vertical"
+        />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="李天王"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp12"
+        android:layout_marginLeft="@dimen/dp44"/>
+
+    <TextView
+        android:id="@+id/tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:text="8折"
+        android:textSize="14sp"
+        android:textColor="#ffcc00"
+        android:layout_marginRight="@dimen/dp16"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#b4111e"
+        android:layout_gravity="bottom"/>
+
+</FrameLayout>
