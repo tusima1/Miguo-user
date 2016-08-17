@@ -15,10 +15,12 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
+import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
 import com.miguo.live.views.UserRobRedPacketDialogHelper;
+import com.miguo.live.views.UserRobRedPacketEndDialogHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -73,6 +75,11 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     private PagerRedPacketAdapter mRedPacketAdapter;
 
     private PagerBaoBaoAdapter  mBaobaoAdapter;
+    /**
+     * 红包结束页。
+     */
+    private UserRobRedPacketEndDialogHelper userRobRedPacketEndDialogHelper;
+
 
     public UserBottomToolView(Context context) {
         this(context, null);
@@ -172,14 +179,29 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      */
     public void clickRob(String red_packet_key,int duration) {
         if (mAct != null && redPacketDialogHelper == null) {
-            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct,red_packet_key,duration);
+            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct,red_packet_key,duration,mCallbackView);
             redPacketDialogHelper.createDialog();
-            redPacketDialogHelper.show();
-            redPacketDialogHelper.startTimeTask();
         }
+        redPacketDialogHelper.show();
+        redPacketDialogHelper.startTimeTask();
 
     }
 
+    /**
+     * 显示红包结果。
+     * @param datas
+     */
+    public void showRedPacketResult(List<UserRedPacketInfo> datas){
+        if(redPacketDialogHelper!=null&&redPacketDialogHelper.isShowing()){
+            redPacketDialogHelper.endTimeTask();
+            redPacketDialogHelper.dismiss();
+        }
+        if(mAct!=null&&userRobRedPacketEndDialogHelper==null){
+            userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct,datas);
+            userRobRedPacketEndDialogHelper.show();
+        }
+
+    }
     /**
      * 点击了商品(宝贝)
      */
