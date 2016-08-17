@@ -123,7 +123,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             switch (eventid) {
                 case TYPE_MEMBER_CHANGE_IN:
                     SxbLog.i(TAG, "stepin id  " + updateList.length);
-                    mStepInOutView.memberJoinLive(updateList);
+                    if(mStepInOutView!=null) {
+                        mStepInOutView.memberJoinLive(updateList);
+                    }
 
                     break;
                 case TYPE_MEMBER_CHANGE_HAS_CAMERA_VIDEO:
