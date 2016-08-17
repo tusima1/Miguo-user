@@ -291,28 +291,6 @@
 
                 <include layout="@layout/separator_list_indent"/>
 
-                <!--<LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/layer_white_stroke_bot"
-                    android:minHeight="55dp"
-                    android:orientation="horizontal">-->
-
-                    <!--<include
-                        android:id="@+id/order_not_paid"
-                        layout="@layout/item_my_orders"/>
-
-                    <include
-                        android:id="@+id/order_not_used"
-                        layout="@layout/item_my_orders"/>
-
-                    <include
-                        android:id="@+id/order_not_commented"
-                        layout="@layout/item_my_orders"/>
-
-                    <include
-                        android:id="@+id/order_to_refund"
-                        layout="@layout/item_my_orders"/>-->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -401,36 +379,6 @@
                 <include layout="@layout/arrow_right"/>
             </LinearLayout>
 
-            <!-- 外卖预定订单 -->
-
-            <LinearLayout
-                android:id="@+id/ll_order_takeaway_reservation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/selector_white_gray"
-                android:gravity="center_vertical"
-                android:minHeight="55dp"
-                android:orientation="horizontal"
-                android:paddingLeft="11.5dp"
-                android:paddingRight="11.5dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="@dimen/width_set_item_icon"
-                    android:layout_height="@dimen/width_set_item_icon"
-                    android:src="@drawable/ic_my_account_order_takeaway_reservation"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_weight="1"
-                    android:text="外卖预定订单"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/text_size_normal_16sp"/>
-
-                <include layout="@layout/arrow_right"/>
-            </LinearLayout>
             <!-- 提现 my_distribution_tixian -->
 
             <View

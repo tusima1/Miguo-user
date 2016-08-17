@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="@dimen/dp83"
+              android:background="@drawable/bg_rob_v2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp81"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3.4"
+            android:textColor="#e91c2d"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/tv_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="折"
+            android:textColor="#e91c2d"
+            android:textSize="@dimen/sp20"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp10"
+        android:textColor="#a76801"
+        android:layout_gravity="center_horizontal"
+        android:text="您与中奖就差一次点击,\n     一会儿还有机会哦~"
+        android:layout_marginTop="@dimen/dp12"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp20"
+        android:textColor="#ffcc00"
+        android:layout_gravity="center_horizontal"
+        android:text="恭喜您!"
+        android:layout_marginTop="@dimen/dp40"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="红包将在5分钟之后到账,\n            请耐心等待..."
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp11"
+        android:layout_marginTop="@dimen/dp19"
+        />
+    <TextView
+        android:id="@+id/tv_enter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rob_enter_v2"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp22"
+        android:text="确定"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#e91c2d"
+        android:textSize="@dimen/sp16"/>
+
+</LinearLayout>
