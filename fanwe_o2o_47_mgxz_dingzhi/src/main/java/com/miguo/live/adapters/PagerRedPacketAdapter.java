@@ -1,12 +1,14 @@
 package com.miguo.live.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.model.UserRedPacketInfo;
 
 import java.util.List;
@@ -38,7 +40,10 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
         //红包类型 1 折扣券。2 优惠券。"red_packet_type":"1",
         if(userRedPacketInfo!=null) {
             String str = "";
-            holder.mTv_BigNum.setText(userRedPacketInfo.getRed_packet_amount());
+            String amount = userRedPacketInfo.getRed_packet_amount();
+            amount = SDFormatUtil.formatNumberString(amount,2);
+
+            holder.mTv_BigNum.setText(amount);
             switch (userRedPacketInfo.getRed_packet_type()){
                 case "1":
                     str="折";
@@ -51,7 +56,15 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
             }
             holder.packet_type.setText(str);
             holder.mTv_Title.setText(userRedPacketInfo.getRed_packet_name()==null?"":userRedPacketInfo.getRed_packet_name());
-            holder.mTv_Time.setText(userRedPacketInfo.getAvailable_time_start()==null?"":userRedPacketInfo.getAvailable_time_start()+"-"+userRedPacketInfo.getAvailable_time_end()==null?"":userRedPacketInfo.getAvailable_time_end());
+             String startTime = userRedPacketInfo.getAvailable_time_start();
+             String endTime = userRedPacketInfo.getAvailable_time_end();
+            String available="";
+            if(TextUtils.isEmpty(startTime)||TextUtils.isEmpty(endTime)){
+                available = "永久有效";
+            }else {
+                available = startTime +"-"+endTime;
+            }
+            holder.mTv_Time.setText(available);
         }
     }
 

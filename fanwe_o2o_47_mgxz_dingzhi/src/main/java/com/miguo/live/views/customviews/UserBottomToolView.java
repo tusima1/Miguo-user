@@ -13,6 +13,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
+import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
@@ -70,6 +71,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 用户取得的红包列表。
      */
     private PagerRedPacketAdapter mRedPacketAdapter;
+
+    private PagerBaoBaoAdapter  mBaobaoAdapter;
 
     public UserBottomToolView(Context context) {
         this(context, null);
@@ -182,15 +185,14 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      */
     public void clickGoods(int type) {
         if (mAct != null && rootView != null && popHelper == null) {
-            popHelper = new LiveUserPopHelper(mAct, rootView,mCallbackView,mRedPacketAdapter);
+            popHelper = new LiveUserPopHelper(mAct, rootView,mCallbackView,mRedPacketAdapter,mBaobaoAdapter,type);
+
         }
-        popHelper.setCurrentPosition(type);
+      ;
         if(mSellerDetailInfo!=null) {
             popHelper.setmSellerDetailInfo(mSellerDetailInfo);
         }
-        if(baoBaoEntities!=null){
-            popHelper.setBaoBaoEntityList(baoBaoEntities);
-        }
+
         popHelper.show();
     }
 
@@ -244,12 +246,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         }
     }
 
-    public void notifyGoodListChange(){
-        if(popHelper!=null){
-            popHelper.setBaoBaoEntityList(this.baoBaoEntities);
-            popHelper.refreshGoodsList();
-        }
-    }
+
     public List<BaoBaoEntity> getBaoBaoEntities() {
         return baoBaoEntities;
     }
@@ -264,5 +261,13 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     public void setmRedPacketAdapter(PagerRedPacketAdapter mRedPacketAdapter) {
         this.mRedPacketAdapter = mRedPacketAdapter;
+    }
+
+    public PagerBaoBaoAdapter getmBaobaoAdapter() {
+        return mBaobaoAdapter;
+    }
+
+    public void setmBaobaoAdapter(PagerBaoBaoAdapter mBaobaoAdapter) {
+        this.mBaobaoAdapter = mBaobaoAdapter;
     }
 }

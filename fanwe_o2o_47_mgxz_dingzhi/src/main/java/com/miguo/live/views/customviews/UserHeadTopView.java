@@ -30,6 +30,7 @@ import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUserExitDialogHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private TextView mKeywords;//关键词
     private RecyclerView mMemberList;//room的观众头像列表(取前N位展示)
     private Activity mActivity;
+    private LiveView mLiveView;
     private LiveUserExitDialogHelper userExitDialogHelper;
     private LinearLayout location_ic_location;
 
@@ -131,8 +133,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 //        if (mActivity != null && userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
 //            userExitDialogHelper.show();
 //        }
-        if (mActivity != null)
-            mActivity.finish();
+        if (mLiveView != null) {
+            mLiveView.userExit();
+        }
         isUserClose = true;
     }
 
@@ -316,5 +319,13 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
             userExitDialogHelper.dismiss();;
             userExitDialogHelper = null;
         }
+    }
+
+    public LiveView getmLiveView() {
+        return mLiveView;
+    }
+
+    public void setmLiveView(LiveView mLiveView) {
+        this.mLiveView = mLiveView;
     }
 }

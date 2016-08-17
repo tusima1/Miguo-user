@@ -554,8 +554,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     private void handleTextMessage(TIMElem elem, String name, String faceUrl) {
         TIMTextElem textElem = (TIMTextElem) elem;
 //        Toast.makeText(mContext, "" + textElem.getText(), Toast.LENGTH_SHORT).show();
+        if(mLiveView!=null) {
 
-        mLiveView.refreshText(textElem.getText(), name, faceUrl);
+            mLiveView.refreshText(textElem.getText(), name, faceUrl);
+        }
 //        sendToUIThread(REFRESH_TEXT, textElem.getText(), sendId);
     }
 

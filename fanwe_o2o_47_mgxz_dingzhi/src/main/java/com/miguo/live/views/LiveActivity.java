@@ -43,6 +43,7 @@ import com.fanwe.utils.SDDateUtil;
 import com.google.gson.Gson;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
+import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
@@ -64,6 +65,7 @@ import com.miguo.live.views.customviews.HostMeiToolView;
 import com.miguo.live.views.customviews.HostRedPacketTimeView;
 import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
@@ -173,6 +175,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * @param savedInstanceState
      */
     private PagerRedPacketAdapter mRedPacketAdapter;
+
+    private PagerBaoBaoAdapter   mBaoBaoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -661,9 +665,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //            });
         } else {//普通用户加载的view
             initInviteDialog();
+
+            mBaoBaoAdapter  =new PagerBaoBaoAdapter(this);
+
             mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
+            mUserHeadTopView.setmLiveView(this);
             mUserHeadTopView.setmAdapter(mHeadTopAdapter);
             mUserHeadTopView.init();
+
 
             mUserHeadTopView.setVisibility(View.VISIBLE);
             //普通用户退出
@@ -671,13 +680,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserHeadTopView.initNeed(this);
 
             mUserBottomTool.setVisibility(View.VISIBLE);
+            mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
             mHostBottomToolView1.setVisibility(View.GONE);
             mHostBottomMeiView2.setVisibility(View.GONE);
             String hostImg = CurLiveInfo.getHostAvator();
             mUserHeadTopView.setHostImg(hostImg);
             mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
 
-          doUpdateMembersCount();
+            doUpdateMembersCount();
 
             if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
                 mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
@@ -701,8 +711,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
-        //获取商品列表。
-        mLiveHttphelper.getGoodsDetailList(CurLiveInfo.shopID);
+
 
         //开启后台业务服务器请求管理类
 
@@ -874,6 +883,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     /**
      * 普通用户退出
      */
+
     public void userExit() {
         mLiveHelper.perpareQuitRoom(true);
         App.getInstance().setAvStart(false);
@@ -1572,9 +1582,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         entity.setSenderName(name);
         entity.setContent(context);
         entity.setType(type);
-        //mArrayListChatEntity.add(entity);
         notifyRefreshListView(entity);
-        //mChatMsgListAdapter.notifyDataSetChanged();
+
 
         mListViewMsgItems.setVisibility(View.VISIBLE);
         SxbLog.d(TAG, "refreshTextListView height " + mListViewMsgItems.getHeight());
@@ -1889,10 +1898,18 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case LiveConstants.LIST_OF_STORES:
-                if (datas != null && datas.size() > 0) {
-                    mUserBottomTool.setBaoBaoEntities(datas);
-                    mUserBottomTool.notifyGoodListChange();
-                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas == null) {
+                            mBaoBaoAdapter.setData(null);
+                        } else {
+                            mBaoBaoAdapter.setData(datas);
+                        }
+                        mBaoBaoAdapter.notifyDataSetChanged();
+                    }
+                });
+
                 break;
             case SellerConstants.LIVE_BIZ_SHOP:
                 if (datas != null && datas.size() > 0) {
