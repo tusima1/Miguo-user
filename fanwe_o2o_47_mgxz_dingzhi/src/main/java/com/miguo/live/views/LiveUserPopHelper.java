@@ -20,18 +20,13 @@ import com.miguo.live.adapters.LiveViewPagerItemAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.IHelper;
-import com.miguo.live.model.pagermodel.BaoBaoEntity;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.live.views.customviews.PagerRedPacketView;
 import com.miguo.utils.DisplayUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
-
-import java.util.List;
 
 /**
  * Created by didik on 2016/8/4.
@@ -61,7 +56,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     private int currentPosition=0;
 
     private PagerBaoBaoAdapter mBaobaoAdapter;
-
+    private ViewPager viewPager;
 
 
     public LiveUserPopHelper(Activity activity,View rootView,CallbackView mCallbackView,PagerRedPacketAdapter mRedPacketAdapter,PagerBaoBaoAdapter mBaobaoAdapter,int currentPosition) {
@@ -100,6 +95,11 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     }
     /*显示*/
     public void show(){
+        /**
+         * 进去的时候选择哪个界面,tab与viewpager 需要保持一致
+         */
+        listener.onPageSelected(currentPosition);
+        viewPager.setCurrentItem(currentPosition,true);
         if (popupWindow!=null){
             popupWindow.showAtLocation(rootView, Gravity.BOTTOM,0,0);
         }
@@ -124,7 +124,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         }
 
 
-        final ViewPager viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
+        viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter1);
 
         final SmartTabLayout viewPagerTab = (SmartTabLayout) contentView.findViewById(R.id.viewpagertab);
@@ -205,9 +205,6 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         };
 
         viewPagerTab.setOnPageChangeListener(listener);
-        listener.onPageSelected(currentPosition);
-
-
     }
 
 

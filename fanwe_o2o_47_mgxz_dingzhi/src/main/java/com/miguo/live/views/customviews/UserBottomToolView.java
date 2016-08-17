@@ -186,9 +186,10 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     public void clickGoods(int type) {
         if (mAct != null && rootView != null && popHelper == null) {
             popHelper = new LiveUserPopHelper(mAct, rootView,mCallbackView,mRedPacketAdapter,mBaobaoAdapter,type);
-
+        }else {
+            popHelper.setCurrentPosition(type);
         }
-      ;
+
         if(mSellerDetailInfo!=null) {
             popHelper.setmSellerDetailInfo(mSellerDetailInfo);
         }

@@ -995,11 +995,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         } else {
             if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
                 mUserHeadTopView.showExitDialog();
+            }else {
+                finish();
             }
 
         }
         App.getInstance().setAvStart(false);
-
     }
 
     /**
