@@ -42,6 +42,11 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
         this.mShoppingCartHelper = mShoppingCartHelper;
 
     }
+    public PagerBaoBaoAdapter(Context mContext)
+    {
+        this.mContext=mContext;
+
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(mContext).inflate(R.layout
@@ -130,10 +135,8 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
      * @param data
      */
     public void setData(List<BaoBaoEntity> data){
-        if(this.mData!=data) {
-            this.mData = data;
-            notifyItemRangeChanged(0, getItemCount());
-        }
+        this.mData = data;
+        notifyItemRangeChanged(0,getItemCount());
 
     }
 
@@ -154,7 +157,9 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
             String goods_id = entity.getId();
             String cart_type = "1";
             String add_goods_num = "1";
-            mShoppingCartHelper.addToShoppingCart(roomId,fx_user_id,lgn_user_id,goods_id,cart_type,add_goods_num);
+            if(mShoppingCartHelper!=null) {
+                mShoppingCartHelper.addToShoppingCart(roomId, fx_user_id, lgn_user_id, goods_id, cart_type, add_goods_num);
+            }
         }
     }
 
@@ -168,6 +173,15 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
         mContext.startActivity(bintent);
 
     }
+
+    public ShoppingCartHelper getmShoppingCartHelper() {
+        return mShoppingCartHelper;
+    }
+
+    public void setmShoppingCartHelper(ShoppingCartHelper mShoppingCartHelper) {
+        this.mShoppingCartHelper = mShoppingCartHelper;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView add2cart;
         public TextView buy;

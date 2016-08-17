@@ -18,6 +18,7 @@ import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.miguo.live.interf.ItemChangeListener;
+import com.miguo.utils.MGUIUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
     private TextView mCollect;//按钮,收藏
     private RatingBar mRatingBar;//评分
 
+    private CallbackView mCallbackView;
     /**
      * 门店详情。
      */
@@ -51,8 +53,9 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
      */
     private String collectState = "0";
 
-    public PagerMainHostView(Context context) {
+    public PagerMainHostView(Context context,CallbackView mCallbackView) {
         super(context);
+        this.mCallbackView = mCallbackView;
         init(context);
     }
     public PagerMainHostView(Context context, AttributeSet attrs) {
@@ -130,7 +133,7 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
             return;
         }
        if("1".equals(this.collectState)) {
-          mSellerHttpHelper.deleteShopCollect(CurLiveInfo.getShopID());
+           mSellerHttpHelper.deleteShopCollect(CurLiveInfo.getShopID());
        }else{
            mSellerHttpHelper.postShopCollect(CurLiveInfo.getShopID());
        }
@@ -149,12 +152,19 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
     public void onSuccess(String responseBody) {
 
     }
-    public void setCollectState(String collectState){
-        if(!TextUtils.isEmpty(collectState)&&"1".equals(collectState)){
-            mCollect.setText("已收藏");
-        }else{
-            mCollect.setText("收藏");
-        }
+    public void setCollectState(final String collectState){
+
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(!TextUtils.isEmpty(collectState)&&"1".equals(collectState)){
+                    mCollect.setText("已收藏");
+                }else{
+                    mCollect.setText("收藏");
+                }
+            }
+        });
+
 
     }
 
@@ -166,12 +176,15 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
           if(datas!=null) {
               value = ((HashMap<String, String>) datas.get(0)).get("collect");
           }
+          this.collectState = value;
           setCollectState(value);
           break;
       case SellerConstants.SHOP_COLLECT_DELETE:
+          this.collectState = "0";
           setCollectState("0");
           break;
       case SellerConstants.SHOP_COLLECT_POST:
+          this.collectState = "1";
           setCollectState("1");
           break;
       default:
