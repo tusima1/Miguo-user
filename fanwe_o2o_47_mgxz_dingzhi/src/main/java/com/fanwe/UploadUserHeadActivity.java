@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.ImageView.ScaleType;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
@@ -33,7 +34,7 @@ import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;
 
-public class UploadUserHeadActivity extends BaseActivity implements CallbackView {
+public class UploadUserHeadActivity extends BaseActivity implements CallbackView2,CallbackView {
 
     public static final String EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL";
 
@@ -173,4 +174,10 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
+
 }

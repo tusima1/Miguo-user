@@ -69,8 +69,14 @@ public class RedDotView extends LinearLayout {
         if (num<=0){
             mRedNum.setVisibility(View.GONE);
         }else if(num<=99){
+            if (mRedNum.getVisibility()==View.GONE){
+                mRedNum.setVisibility(View.VISIBLE);
+            }
             mRedNum.setText(""+num);
         }else {
+            if (mRedNum.getVisibility()==View.GONE){
+                mRedNum.setVisibility(View.VISIBLE);
+            }
             mRedNum.setText("99+");
         }
     }

@@ -127,4 +127,11 @@ public class UserConstants {
     public static final String ALL_REGISTERED = "311";
     public static final String SUCCESS = "200";
     public static final String CODE_ERROR = "300";
+
+    /**
+     * 我的,界面数据展示
+     */
+    public static final String PERSONALHOME = "PersonalHome";
+
+
 }
