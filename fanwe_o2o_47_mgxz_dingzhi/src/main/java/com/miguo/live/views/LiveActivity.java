@@ -1933,6 +1933,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     }
                 });
                 break;
+            case  LiveConstants.GET_PACKET_RESULT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUserBottomTool.showRedPacketResult(datas);
+                    }
+                });
+
             default:
                 break;
         }

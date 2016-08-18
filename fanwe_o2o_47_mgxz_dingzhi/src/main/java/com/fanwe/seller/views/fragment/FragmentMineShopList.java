@@ -41,10 +41,11 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
 
     private SellerHttpHelper sellerHttpHelper;
 
-    int pageSize = 10;
-    int pageNum = 1;
-    boolean isRefresh = true;
+    private int pageSize = 10;
+    private int pageNum = 1;
+    private boolean isRefresh = true;
     private int type;
+    private boolean isNotMine;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +62,11 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     protected void init() {
         super.init();
         type = getArguments().getInt("type");
+        if (type == 1) {
+            isNotMine = false;
+        } else {
+            isNotMine = true;
+        }
         sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         getData();
         bindDefaultLvData();
@@ -109,7 +115,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     }
 
     private void bindDefaultLvData() {
-        mAdapter = new ShopListAdapter(mListModel, getActivity());
+        mAdapter = new ShopListAdapter(mListModel, getActivity(), isNotMine);
         mPtrlvContent.setAdapter(mAdapter);
     }
 

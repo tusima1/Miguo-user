@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
@@ -20,9 +21,11 @@ import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import java.util.List;
 
 public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
+    boolean isNotMine;
 
-    public ShopListAdapter(List<ModelStoreList> listModel, Activity activity) {
+    public ShopListAdapter(List<ModelStoreList> listModel, Activity activity, boolean isNotMine) {
         super(listModel, activity);
+        this.isNotMine = isNotMine;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
     @Override
     public void bindData(int position, View convertView, ViewGroup parent, final ModelStoreList model) {
         ImageView iv_image = get(R.id.iv_image, convertView);
-        LinearLayout ll_name_bar = get(R.id.ll_name_bar, convertView);
+        RelativeLayout ll_name_bar = get(R.id.ll_name_bar, convertView);
         ImageView iv_tag_tuan = get(R.id.iv_tag_tuan, convertView);
         ImageView iv_tag_quan = get(R.id.iv_tag_quan, convertView);
         final TextView tv_name = get(R.id.tv_name, convertView);
@@ -45,6 +48,12 @@ public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
         LinearLayout ll_hui = get(R.id.ll_hui, convertView);
         TextView tv_hui_edtail = get(R.id.tv_hui_edtail, convertView);
         TextView tv_tuan_edtail = get(R.id.tv_tuan_edtail, convertView);
+        TextView tv_represent = get(R.id.tv_represent, convertView);
+        if (isNotMine) {
+            tv_represent.setVisibility(View.VISIBLE);
+        } else {
+            tv_represent.setVisibility(View.GONE);
+        }
 
 
 //        if (model.getDeal_count() > 0) {

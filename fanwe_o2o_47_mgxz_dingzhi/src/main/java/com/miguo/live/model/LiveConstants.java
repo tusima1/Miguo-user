@@ -105,10 +105,13 @@ public class LiveConstants {
      * HostAuthTime
      */
     public static final String HOST_AUTH_TIME = "HostAuthTime";
-/**
+    /**
      * 购物车
-     * */
-
+     */
     public static final String SHOPPING_CART = "ShopingCart";
+    /**
+     * 抢红包结果。
+     */
+    public static final String GET_PACKET_RESULT = "GetRedPacketResult";
 
 }

@@ -13,6 +13,9 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
+import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
+import com.fanwe.seller.model.checkShopCollect.ResultCheckShopCollect;
+import com.fanwe.seller.model.checkShopCollect.RootCheckShopCollect;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 import com.fanwe.seller.model.getBusinessCircleList.ResultBusinessCircleList;
 import com.fanwe.seller.model.getBusinessCircleList.RootBusinessCircleList;
@@ -22,9 +25,15 @@ import com.fanwe.seller.model.getCityList.RootCityList;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
 import com.fanwe.seller.model.getClassifyList.ResultClassifyList;
 import com.fanwe.seller.model.getClassifyList.RootClassifyList;
+import com.fanwe.seller.model.getCroupBuyByMerchant.ModelCroupBuyByMerchant;
+import com.fanwe.seller.model.getCroupBuyByMerchant.ResultCroupBuyByMerchant;
+import com.fanwe.seller.model.getCroupBuyByMerchant.RootCroupBuyByMerchant;
 import com.fanwe.seller.model.getGroupBuyCollect.ModelGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyCollect.ResultGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyCollect.RootGroupBuyCollect;
+import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
+import com.fanwe.seller.model.getGroupBuyDetail.ResultGroupBuyDetail;
+import com.fanwe.seller.model.getGroupBuyDetail.RootGroupBuyDetail;
 import com.fanwe.seller.model.getMarketList.ModelMarketListItem;
 import com.fanwe.seller.model.getMarketList.ResultMarketList;
 import com.fanwe.seller.model.getMarketList.RootMarketList;
@@ -36,14 +45,12 @@ import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -324,10 +331,11 @@ public class SellerHttpHelper implements IHelper {
     }
 
     /**
+     * 检测门店是否收藏过
      *
      * @param shop_id
      */
-    public void CheckShopCollect(String shop_id){
+    public void checkShopCollect(String shop_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("shop_id", shop_id);
@@ -336,27 +344,14 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-
-                Type type = new TypeToken<Root<HashMap<String,String>>>() {
-                }.getType();
-                Gson gson = new Gson();
-                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
-                String status = root.getStatusCode();
-                String message = root.getMessage();
-                HashMap<String,String> map=null ;
-                if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-                {
-                    map= root.getResult().get(0).getBody().get(0);
+                RootCheckShopCollect root = gson.fromJson(responseBody, RootCheckShopCollect.class);
+                List<ResultCheckShopCollect> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, null);
+                    return;
                 }
-                List<HashMap<String,String>> datas = new ArrayList<HashMap<String, String>>();
-                //"0"  0表示未收藏 1表示已收藏
-                String collected ="0";
-                if (map != null) {
-                    datas.add(map);
-                    mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, datas);
-
-                }
-
+                List<ModelCheckShopCollect> items = result.get(0).getBody();
+                mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, items);
             }
 
             @Override
@@ -365,6 +360,7 @@ public class SellerHttpHelper implements IHelper {
             }
         });
     }
+
     /**
      * 获取分类列表
      */
@@ -522,6 +518,90 @@ public class SellerHttpHelper implements IHelper {
                     return;
                 }
                 mView.onSuccess(SellerConstants.SHOP_INFO, result);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 通过商家id获取团购列表
+     */
+    public void getCroupBuyByMerchant(int pageNum, int pageSize, String ent_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("ent_id", ent_id);
+        params.put("method", SellerConstants.GROUP_BUY_BY_MERCHANT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootCroupBuyByMerchant root = gson.fromJson(responseBody, RootCroupBuyByMerchant.class);
+                List<ResultCroupBuyByMerchant> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.GROUP_BUY_BY_MERCHANT, null);
+                    return;
+                }
+                List<ModelCroupBuyByMerchant> items = result.get(0).getBody();
+                mView.onSuccess(SellerConstants.GROUP_BUY_BY_MERCHANT, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 团购评论 TODO
+     */
+    public void getGroupBuyComment(String tuan_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("tuan_id", tuan_id);
+        params.put("method", SellerConstants.GROUP_BUY_COMMENT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerConstants.GROUP_BUY_COMMENT, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 团购详情
+     */
+    public void getGroupBuyDetail(String tuan_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("id", tuan_id);
+        params.put("method", SellerConstants.GROUP_BUY_DETAIL);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootGroupBuyDetail root = gson.fromJson(responseBody, RootGroupBuyDetail.class);
+                List<ResultGroupBuyDetail> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.GROUP_BUY_DETAIL, null);
+                    return;
+                }
+                ModelGroupBuyDetail item = result.get(0).getDetail();
+                List<ModelGroupBuyDetail> items = new ArrayList<>();
+                items.add(item);
+                mView.onSuccess(SellerConstants.GROUP_BUY_DETAIL, items);
             }
 
             @Override

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.StoreDetailActivity;
@@ -52,7 +53,7 @@ public class HoltelListAdapter extends SDSimpleBaseAdapter<HoltelModel_list>{
 	{
 		ImageView iv_image = ViewHolder.get(R.id.iv_image, convertView);
 		
-		LinearLayout ll_name_bar = get(R.id.ll_name_bar, convertView);
+		RelativeLayout ll_name_bar = get(R.id.ll_name_bar, convertView);
 		ImageView iv_tag_tuan = get(R.id.iv_tag_tuan, convertView);
 		ImageView iv_tag_quan = get(R.id.iv_tag_quan, convertView);
 		final TextView tv_name = get(R.id.tv_name, convertView);

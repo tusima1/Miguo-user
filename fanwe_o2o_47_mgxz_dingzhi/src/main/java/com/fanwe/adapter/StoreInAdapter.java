@@ -91,7 +91,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list>
 		return convertView;
 	}
 
-	protected void requestAddCart(int id)
+	protected void requestAddCart(String  id)
 	{
 		RequestModel model = new RequestModel();
 		model.putCtl("cart");

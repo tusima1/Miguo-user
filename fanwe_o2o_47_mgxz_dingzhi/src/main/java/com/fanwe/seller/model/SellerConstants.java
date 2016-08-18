@@ -50,8 +50,20 @@ public class SellerConstants {
      *
      */
     public static final String SHOP_INFO = "ShopInfo";
-   /**
+    /**
      * 判断是否收藏。
      */
-    public static final String  CHECK_SHOP_COLLECT  ="CheckShopCollect";
+    public static final String CHECK_SHOP_COLLECT = "CheckShopCollect";
+    /**
+     * 通过商家id获取团购列表
+     */
+    public static final String GROUP_BUY_BY_MERCHANT = "CroupBuyByMerchant";
+    /**
+     * 团购评论
+     */
+    public static final String GROUP_BUY_COMMENT = "GroupBuyComment";
+    /**
+     *团购明细
+     */
+    public static final String GROUP_BUY_DETAIL = "GroupBuyDetail";
 }

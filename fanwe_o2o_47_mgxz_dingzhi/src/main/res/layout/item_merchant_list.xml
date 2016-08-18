@@ -5,26 +5,25 @@
     android:background="@drawable/selector_white_gray_stroke_bot"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2.2"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <com.fanwe.library.customview.SDScaleImageView
             android:id="@+id/iv_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:src="@drawable/nopic" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="18dp"
-            />
+            android:layout_height="18dp" />
     </LinearLayout>
 
     <!-- 右边 -->
@@ -36,26 +35,28 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="5"
         android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_name_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_name"
                 style="@style/text_item_title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true" />
 
             <LinearLayout
                 android:id="@+id/ll_tags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_name"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/iv_tag_tuan"
@@ -81,7 +82,23 @@
                     android:src="@drawable/bg_youhui"
                     android:visibility="gone" />
             </LinearLayout>
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_represent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_orange"
+                android:paddingBottom="@dimen/dp5"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:paddingTop="@dimen/dp5"
+                android:text="代言"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -89,7 +106,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <RatingBar
                 android:id="@+id/rb_rating"
@@ -104,7 +121,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_address"
@@ -133,7 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="12dp"
@@ -158,7 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="12dp"

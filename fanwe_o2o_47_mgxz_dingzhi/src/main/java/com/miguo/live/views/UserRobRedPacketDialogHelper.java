@@ -49,6 +49,9 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     private boolean ifClickable = true;
     private String resultMessage="";
 
+    private CallbackView mcallbackView;
+
+
 
     /**
      * 抢红包的dialog
@@ -116,10 +119,11 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
         }
     };
 
-    public UserRobRedPacketDialogHelper(Activity activity,String red_packet_key,int duration) {
+    public UserRobRedPacketDialogHelper(Activity activity,String red_packet_key,int duration,CallbackView mcallbackView) {
         this.red_packet_key = red_packet_key;
         this.duration = duration;
         this.mActivity = activity;
+        this.mcallbackView = mcallbackView;
         initCount(duration);
     }
 
@@ -151,6 +155,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
             }
             @Override
             public void onFinish() {
+                ifClickable = true;
                 dismiss();
             }
         };
@@ -164,13 +169,23 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
 
     public void dismiss() {
         if (dialog != null && dialog.isShowing()) {
+            endTimeTask();
+            ifClickable = true;
             dialog.dismiss();
+        }
+    }
+    public boolean isShowing(){
+        if(dialog!=null){
+            return dialog.isShowing();
+        }else{
+            return false;
         }
     }
 
     @Override
     public void onDestroy() {
         mActivity = null;
+        ifClickable = true;
         dismiss();
     }
 
@@ -190,10 +205,19 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
         robLiftTimer.start();
         totalTimer.start();
     }
+
+    /**
+     * 结束计时器。
+     */
+    public void endTimeTask(){
+        robLiftTimer.cancel();
+        totalTimer.cancel();
+    }
     /**
      * 关闭
      */
     private void clickClose() {
+        ifClickable = true;
         dismiss();
     }
 
@@ -216,14 +240,8 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     public void onSuccess(String method, List datas) {
         switch (method){
             case LiveConstants.GET_RED_PACKETS:
-                if(datas!=null){
-                    resultMessage = "抢到一个红包.";
-
-                }else{
-                    resultMessage = "没有抢到，下回再努力.";
-                }
-
-                break;
+                mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,datas);
+               break;
             default:
                 break;
         }

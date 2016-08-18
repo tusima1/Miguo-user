@@ -373,6 +373,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         StoreActModel actModel = new StoreActModel();
         //Store_infoModel
         Store_infoModel bean = new Store_infoModel();
+        bean.setId(store_info.getId());
         bean.setName(store_info.getShop_name());
         bean.setAddress(store_info.getAddress());
         bean.setTel(store_info.getTel());
