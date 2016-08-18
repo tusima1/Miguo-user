@@ -9,7 +9,7 @@ public class Store_infoModel implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     private String preview;
-    private int id;
+    private String id;
     private int supplier_id;
     private int is_verify;
     private int is_auto_order;
@@ -93,11 +93,11 @@ public class Store_infoModel implements Serializable {
         this.preview = preview;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

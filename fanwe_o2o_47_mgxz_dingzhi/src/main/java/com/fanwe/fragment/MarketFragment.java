@@ -88,7 +88,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
 
     private PageModel mPage = new PageModel();
 
-    private int mId;
+    private String mId;
     private int mCate_id = 0;
 
     private String city_id = "";//城市id
@@ -138,7 +138,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
     }
 
     private void getIntentData() {
-        mId = getArguments().getInt(EXTRA_ID);
+        mId = getArguments().getString(EXTRA_ID);
         mCate_id = getArguments().getInt(EXTRA_CATE_ID);
         keyword = getArguments().getString(EXTRA_KEY_WORD);
         if (!isEmpty(keyword)) {

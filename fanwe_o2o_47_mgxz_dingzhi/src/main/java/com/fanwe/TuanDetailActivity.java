@@ -1,9 +1,16 @@
 package com.fanwe;
 
-import java.util.List;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-import com.fanwe.app.AppHelper;
-import com.fanwe.common.CommonInterface;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.event.EnumEventTag;
@@ -25,537 +32,412 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.Deal_add_collectActModel;
 import com.fanwe.model.Deal_indexActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
+import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import java.util.List;
 
-public class TuanDetailActivity extends BaseActivity
-{
+public class TuanDetailActivity extends BaseActivity implements CallbackView {
 
-	/** 商品id (int) */
-	public static final String EXTRA_GOODS_ID = "extra_goods_id";
-	public static final String EXTRA_HOTEL_NUM = "extra_number";
+    /**
+     * 商品id (int)
+     */
+    public static final String EXTRA_GOODS_ID = "extra_goods_id";
+    public static final String EXTRA_HOTEL_NUM = "extra_number";
 
-	@ViewInject(R.id.ll_add_distribution)
-	private LinearLayout mLl_add_distribution;
+    @ViewInject(R.id.ll_add_distribution)
+    private LinearLayout mLl_add_distribution;
 
-	@ViewInject(R.id.btn_add_distribution)
-	private Button mBtn_add_distribution;
+    @ViewInject(R.id.btn_add_distribution)
+    private Button mBtn_add_distribution;
 
-	@ViewInject(R.id.act_tuan_detail_ssv_scroll)
-	private SDStickyScrollView mScrollView;
-	
+    @ViewInject(R.id.act_tuan_detail_ssv_scroll)
+    private SDStickyScrollView mScrollView;
 
-	@ViewInject(R.id.act_tuan_detail_fl_attr)
-	private FrameLayout mFlAttr;
 
-	private int mId;
-	private Deal_indexActModel mGoodsModel;
+    @ViewInject(R.id.act_tuan_detail_fl_attr)
+    private FrameLayout mFlAttr;
 
-	private TuanDetailImagePriceFragment mFragImagePrice;
-	private TuanDetailDetailFragment mFragDetail;
-	//private TuanDetailRatingFragment mFragRating;
-	
-	private TuanDetailOtherMerchantFragment mFragOtherMerchant;
-	private TuanDetailAttrsFragment mFragAttr;
-	private TuanDetailComboFragment mFragCombo;
-	private TuanDetailCombinedPackagesFragment mFragCombinedPackages;
-	private TuanDetailMoreDetailFragment mFragMoreDetail;
-	private TuanDetailBuyNoticelFragment mFragBuyNotice;
-	private TuanDetailCommentFragment mFragComment;
-	private int mNumber = 1;
+    private String mId;
+    private Deal_indexActModel mGoodsModel;
 
-	public TuanDetailAttrsFragment getTuanDetailAttrsFragment()
-	{
-		return mFragAttr;
-	}
+    private TuanDetailImagePriceFragment mFragImagePrice;
+    private TuanDetailDetailFragment mFragDetail;
+    //private TuanDetailRatingFragment mFragRating;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setmTitleType(TitleType.TITLE);
-		setContentView(R.layout.act_tuan_detail);
-		init();
-	}
+    private TuanDetailOtherMerchantFragment mFragOtherMerchant;
+    private TuanDetailAttrsFragment mFragAttr;
+    private TuanDetailComboFragment mFragCombo;
+    private TuanDetailCombinedPackagesFragment mFragCombinedPackages;
+    private TuanDetailMoreDetailFragment mFragMoreDetail;
+    private TuanDetailBuyNoticelFragment mFragBuyNotice;
+    private TuanDetailCommentFragment mFragComment;
+    private int mNumber = 1;
 
-	private void init()
-	{
-		getIntentData();
-		if (mId <= 0)
-		{
-			SDToast.showToast("id为空");
-			finish();
-			return;
-		}
-		initTitle();
-		registerClick();
-		initScrollView();
-	}
+    public TuanDetailAttrsFragment getTuanDetailAttrsFragment() {
+        return mFragAttr;
+    }
 
-	private void registerClick()
-	{
-		/*mBtn_add_distribution.setOnClickListener(new OnClickListener()
-		{
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setmTitleType(TitleType.TITLE);
+        setContentView(R.layout.act_tuan_detail);
+        init();
+        changeTitle();
+    }
 
-			@Override
-			public void onClick(View v)
-			{
-				if (mGoodsModel == null)
-				{
-					return;
-				}
-				if (AppHelper.isLogin(mActivity))
-				{
-					int isMyFx = mGoodsModel.getIs_my_fx();
-					if (isMyFx == 0)
-					{
-						Intent intent = new Intent(getApplicationContext(), DistributionManageActivity.class);
-						intent.putExtra(DistributionManageActivity.EXTRA_SELECT_INDEX, 1);
-						intent.putExtra(DistributionMarketFragment.EXTRA_ID, mGoodsModel.getId());
-						startActivity(intent);
-					} else if (isMyFx == 1)
-					{
-						requestDeleteDistribution();
-					}
-				}
-			}
-		});*/
-	}
+    SellerHttpHelper sellerHttpHelper;
 
-	private void initScrollView()
-	{
-		mScrollView.setMode(Mode.PULL_FROM_START);
-		mScrollView.setOnRefreshListener(new OnRefreshListener2<StickyScrollView>()
-		{
+    private void getData() {
+        if (sellerHttpHelper == null) {
+            sellerHttpHelper = new SellerHttpHelper(this, this);
+        }
+        sellerHttpHelper.getGroupBuyDetail(mId);
+        sellerHttpHelper.checkShopCollect(mId);
+    }
 
-			@Override
-			public void onPullDownToRefresh(PullToRefreshBase<StickyScrollView> refreshView)
-			{
-				requestDetail();
-			}
+    private void init() {
+        getIntentData();
+        if (TextUtils.isEmpty(mId)) {
+            SDToast.showToast("id为空");
+            finish();
+            return;
+        }
+        initTitle();
+        initScrollView();
+    }
 
-			@Override
-			public void onPullUpToRefresh(PullToRefreshBase<StickyScrollView> refreshView)
-			{
+    private void initScrollView() {
+        mScrollView.setMode(Mode.PULL_FROM_START);
+        mScrollView.setOnRefreshListener(new OnRefreshListener2<StickyScrollView>() {
 
-			}
-		});
-		mScrollView.setRefreshing();
-	}
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<StickyScrollView> refreshView) {
+                getData();
+            }
 
-	public void scrollToAttr()
-	{
-		SDViewUtil.scrollToViewY(mScrollView.getRefreshableView(), (int) mFlAttr.getY(), 100);
-	}
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<StickyScrollView> refreshView) {
 
-	@Override
-	protected void onNewIntent(Intent intent)
-	{
-		setIntent(intent);
-		init();
-		super.onNewIntent(intent);
-	}
+            }
+        });
+        mScrollView.setRefreshing();
+    }
 
-	private void initTitle()
-	{
-		String title = SDResourcesUtil.getString(R.string.detail);
+    public void scrollToAttr() {
+        SDViewUtil.scrollToViewY(mScrollView.getRefreshableView(), (int) mFlAttr.getY(), 100);
+    }
 
-		mTitle.setMiddleTextTop(title);
-		mTitle.initRightItem(2);
-		mTitle.getItemRight(0).setImageLeft(R.drawable.ic_tuan_detail_share);
-		mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_un_collection);
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        init();
+        super.onNewIntent(intent);
+    }
 
-	@Override
-	public void onCLickRight_SDTitleSimple(SDTitleItem v, int index)
-	{
-		switch (index)
-		{
-		case 0:
-			clickShare();
-			break;
-		case 1:
-			clickCollect();
-			break;
+    private void initTitle() {
+        String title = SDResourcesUtil.getString(R.string.detail);
 
-		default:
-			break;
-		}
-	}
+        mTitle.setMiddleTextTop(title);
+        mTitle.initRightItem(2);
+        mTitle.getItemRight(0).setImageLeft(R.drawable.ic_tuan_detail_share);
+        mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_un_collection);
+    }
 
-	private void changeTitle()
-	{
-		if (mGoodsModel != null)
-		{
-			String title = SDResourcesUtil.getString(R.string.detail);
-			switch (mGoodsModel.getIs_shop())
-			{
-			case 0:
-				title = SDResourcesUtil.getString(R.string.tuan_gou_detail);
-				break;
-			case 1:
-				title = SDResourcesUtil.getString(R.string.goods_detail);
-				break;
-			default:
-				break;
-			}
-			mTitle.setMiddleTextTop(title);
-			initCollectBtn(mGoodsModel.getIs_collect());
-		}
-	}
+    @Override
+    public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
+        switch (index) {
+            case 0:
+                clickShare();
+                break;
+            case 1:
+                clickCollect();
+                break;
 
-	private void initCollectBtn(int isCollect)
-	{
-		switch (isCollect)
-		{
-		case 0:
-			mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_un_collection);
-			break;
-		case 1:
-			mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_collection);
-			break;
+            default:
+                break;
+        }
+    }
 
-		default:
-			break;
-		}
-	}
+    private void changeTitle() {
+        if (mGoodsModel != null) {
+            String title = SDResourcesUtil.getString(R.string.detail);
+            switch (mGoodsModel.getIs_shop()) {
+                case 0:
+                    title = SDResourcesUtil.getString(R.string.tuan_gou_detail);
+                    break;
+                case 1:
+                    title = SDResourcesUtil.getString(R.string.goods_detail);
+                    break;
+                default:
+                    break;
+            }
+            mTitle.setMiddleTextTop(title);
+        }
+    }
 
-	/**
-	 * 请求商品详情接口
-	 */
-	private void requestDetail()
-	{
-		RequestModel model = new RequestModel();
-		model.putCtl("deal");
-		model.put("data_id", mId);
-		model.putUser();
-		model.putLocation();
-		SDRequestCallBack<Deal_indexActModel> handler = new SDRequestCallBack<Deal_indexActModel>()
-		{
+    private void initCollectBtn(int isCollect) {
+        switch (isCollect) {
+            case 0:
+                mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_un_collection);
+                break;
+            case 1:
+                mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_collection);
+                break;
 
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
+            default:
+                break;
+        }
+    }
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					mGoodsModel = actModel;
-					bindData();
-				}
-			}
+    /**
+     * 请求商品详情接口
+     */
+    private void requestDetail() {
+        RequestModel model = new RequestModel();
+        model.putCtl("deal");
+        model.put("data_id", mId);
+        model.putUser();
+        model.putLocation();
+        SDRequestCallBack<Deal_indexActModel> handler = new SDRequestCallBack<Deal_indexActModel>() {
 
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-				mScrollView.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-	}
+            @Override
+            public void onStart() {
+                SDDialogManager.showProgressDialog("请稍候...");
+            }
 
-	protected void bindData()
-	{
-		if (mGoodsModel == null)
-		{
-			return;
-		}
-		changeTitle();
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() == 1) {
+                    mGoodsModel = actModel;
+                }
+            }
 
-		// 是否显示我要分销
-		/*int isFx = AppRuntimeWorker.getIs_fx();
-		if (isFx == 1)
-		{
-			if (mGoodsModel.getIs_fx() == 2)
-			{
-				SDViewUtil.show(mLl_add_distribution);
-				int isMyFx = mGoodsModel.getIs_my_fx();
-				if (isMyFx == 0)
-				{
-					mBtn_add_distribution.setText("我要分销");
-				} else if (isMyFx == 1)
-				{
-					mBtn_add_distribution.setText("取消分销");
-				}
-			} else
-			{
-				SDViewUtil.hide(mLl_add_distribution);
-			}
-		} else
-		{
-			SDViewUtil.hide(mLl_add_distribution);
-		}*/
+            @Override
+            public void onFinish() {
+                SDDialogManager.dismissProgressDialog();
+                mScrollView.onRefreshComplete();
+            }
+        };
+        InterfaceServer.getInstance().requestInterface(model, handler);
+    }
 
-		addFragments(mGoodsModel);
-	}
+    private void getIntentData() {
+        Intent intent = getIntent();
+        mId = intent.getStringExtra(EXTRA_GOODS_ID);
+        mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
+    }
 
-	private void getIntentData()
-	{
-		Intent intent = getIntent();
-		mId = intent.getIntExtra(EXTRA_GOODS_ID, -1);
-		mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
-	}
+    /**
+     * 添加fragment
+     */
+    private void addFragments(Deal_indexActModel model) {
+        if (model == null) {
+            return;
+        }
 
-	/**
-	 * 添加fragment
-	 */
-	private void addFragments(Deal_indexActModel model)
-	{
-		if (model == null)
-		{
-			return;
-		}
+        mFragImagePrice = new TuanDetailImagePriceFragment();
+        mFragImagePrice.setmDealModel(model);
+        Bundle bundle = new Bundle();
+        bundle.putInt("number", mNumber);
+        mFragImagePrice.setArguments(bundle);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_image_price, mFragImagePrice);
 
-		mFragImagePrice = new TuanDetailImagePriceFragment();
-		mFragImagePrice.setmDealModel(model);
-		Bundle bundle = new Bundle();
-		bundle.putInt("number",mNumber);
-		mFragImagePrice.setArguments(bundle);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_image_price, mFragImagePrice);
-		
-		mFragDetail = new TuanDetailDetailFragment();
-		mFragDetail.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_detail, mFragDetail);
-		/*
-		// ---------------评分----------------
+        mFragDetail = new TuanDetailDetailFragment();
+        mFragDetail.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_detail, mFragDetail);
+        /*
+        // ---------------评分----------------
 		mFragRating = new TuanDetailRatingFragment();
 		mFragRating.setmDealModel(model);
 		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_rating, mFragRating);*/
-		
-		// ---------------商品属性----------------
-		mFragAttr = new TuanDetailAttrsFragment();
-		mFragAttr.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_attr, mFragAttr);
-		
-		//----------------套餐内容-------------
-		mFragCombo = new TuanDetailComboFragment();
-		mFragCombo.setmDealModel(model);
-	    getSDFragmentManager().replace(R.id.act_tuan_detail_fl_combo, mFragCombo);
 
-		// ---------------组合推荐----------------
-		mFragCombinedPackages = new TuanDetailCombinedPackagesFragment();
-		mFragCombinedPackages.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_combined_packages, mFragCombinedPackages);
+        // ---------------商品属性----------------
+        mFragAttr = new TuanDetailAttrsFragment();
+        mFragAttr.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_attr, mFragAttr);
 
-		// ---------------购买须知----------------
-		mFragBuyNotice = new TuanDetailBuyNoticelFragment();
-		mFragBuyNotice.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_buy_notice, mFragBuyNotice);
+        //----------------套餐内容-------------
+        mFragCombo = new TuanDetailComboFragment();
+        mFragCombo.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_combo, mFragCombo);
 
-		// ---------------更多详情----------------
-		mFragMoreDetail = new TuanDetailMoreDetailFragment();
-		mFragMoreDetail.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_more_detail, mFragMoreDetail);
+        // ---------------组合推荐----------------
+        mFragCombinedPackages = new TuanDetailCombinedPackagesFragment();
+        mFragCombinedPackages.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_combined_packages, mFragCombinedPackages);
 
-		// ---------------其他门店----------------
-		mFragOtherMerchant = new TuanDetailOtherMerchantFragment();
-		mFragOtherMerchant.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_other_merchant, mFragOtherMerchant);
+        // ---------------购买须知----------------
+        mFragBuyNotice = new TuanDetailBuyNoticelFragment();
+        mFragBuyNotice.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_buy_notice, mFragBuyNotice);
 
-		// ---------------评论----------------
-		mFragComment = new TuanDetailCommentFragment();
-		mFragComment.setmDealModel(model);
-		getSDFragmentManager().replace(R.id.act_tuan_detail_fl_comment, mFragComment);
-	}
+        // ---------------更多详情----------------
+        mFragMoreDetail = new TuanDetailMoreDetailFragment();
+        mFragMoreDetail.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_more_detail, mFragMoreDetail);
 
-	@Override
-	public void onClick(View v)
-	{
-	}
+        // ---------------其他门店----------------
+        mFragOtherMerchant = new TuanDetailOtherMerchantFragment();
+        mFragOtherMerchant.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_other_merchant, mFragOtherMerchant);
 
-	/**
-	 * 分享
-	 */
-	private void clickShare()
-	{
-		if (mGoodsModel != null)
-		{
-			String content = mGoodsModel.getName() + mGoodsModel.getShare_url();
-			String imageUrl = null;
-			String clickUrl = mGoodsModel.getShare_url();
+        // ---------------评论----------------
+        mFragComment = new TuanDetailCommentFragment();
+        mFragComment.setmDealModel(model);
+        getSDFragmentManager().replace(R.id.act_tuan_detail_fl_comment, mFragComment);
+    }
 
-			imageUrl = mGoodsModel.getIcon();
+    @Override
+    public void onClick(View v) {
+    }
 
-			if (TextUtils.isEmpty(imageUrl))
-			{
-				List<String> listImages = mGoodsModel.getImages();
-				if (!SDCollectionUtil.isEmpty(listImages))
-				{
-					imageUrl = listImages.get(0);
-				}
-			}
+    /**
+     * 分享
+     */
+    private void clickShare() {
+        if (mGoodsModel != null) {
+            String content = mGoodsModel.getName() + mGoodsModel.getShare_url();
+            String imageUrl = null;
+            String clickUrl = mGoodsModel.getShare_url();
+
+            imageUrl = mGoodsModel.getIcon();
+
+            if (TextUtils.isEmpty(imageUrl)) {
+                List<String> listImages = mGoodsModel.getImages();
+                if (!SDCollectionUtil.isEmpty(listImages)) {
+                    imageUrl = listImages.get(0);
+                }
+            }
 
 //			UmengSocialManager.openShare("分享", content, imageUrl, clickUrl, this, null);
-			UmengShareManager.share(this, "分享", content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
-		}
-	}
+            UmengShareManager.share(this, "分享", content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+        }
+    }
 
-	/**
-	 * 收藏
-	 */
-	private void clickCollect()
-	{
-		if (!AppHelper.isLogin(mActivity))
-		{
-			return;
-		}
-		requestCollect();
-	}
+    /**
+     * 收藏
+     */
+    private void clickCollect() {
+        requestCollect();
+    }
 
-	private void requestCollect()
-	{
-		RequestModel model = new RequestModel();
-		if (mGoodsModel.getIs_collect()==0) {
-			//0代表没有收藏
-			model.putAct("add_collect");
-		}else if(mGoodsModel.getIs_collect()==1){
-			model.putAct("delete_collect");
-		}else {
-			return;
-		}
-		model.putCtl("deal");
-		model.put("id", mId);
-		model.putUser();
-		SDRequestCallBack<Deal_add_collectActModel> handler = new SDRequestCallBack<Deal_add_collectActModel>()
-		{
+    private void requestCollect() {
+        if (isCollect == 0) {
+            //0代表没有收藏
+            sellerHttpHelper.postShopCollect(mId);
+        } else if (isCollect == 1) {
+            sellerHttpHelper.deleteShopCollect(mId);
+        } else {
+            return;
+        }
 
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
+    }
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					initCollectBtn(actModel.getIs_collect());
-					mGoodsModel.setIs_collect(actModel.getIs_collect());
-				}
-			}
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case COMMENT_SUCCESS:
+                getData();
+                break;
+            case ADD_DISTRIBUTION_GOODS_SUCCESS:
+                getData();
+            default:
+                break;
+        }
+    }
 
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-				mScrollView.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-	}
 
-	@Override
-	public void onEventMainThread(SDBaseEvent event)
-	{
-		super.onEventMainThread(event);
-		switch (EnumEventTag.valueOf(event.getTagInt()))
-		{
-		case COMMENT_SUCCESS:
-			requestDetail();
-			break;
-		case ADD_DISTRIBUTION_GOODS_SUCCESS:
-			requestDetail();
-		default:
-			break;
-		}
-	}
+    @Override
+    public void onSuccess(String responseBody) {
 
-	private void requestDeleteDistribution()
-	{
-		if (mGoodsModel == null)
-		{
-			return;
-		}
-		CommonInterface.requestDeleteDistribution(mGoodsModel.getId(), new SDRequestCallBack<BaseActModel>()
-		{
+    }
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					requestDetail();
-				}
-			}
+    List<ModelCheckShopCollect> itemsCheck;
+    List<ModelGroupBuyDetail> itemsDetail;
 
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候");
-			}
+    @Override
+    public void onSuccess(String method, List datas) {
+        Message msg = new Message();
+        if (SellerConstants.CHECK_SHOP_COLLECT.equals(method)) {
+            //检查收藏情况
+            itemsCheck = datas;
+            msg.what = 0;
+        } else if (SellerConstants.SHOP_COLLECT_DELETE.equals(method)) {
+            //取消收藏
+            msg.what = 1;
+        } else if (SellerConstants.SHOP_COLLECT_POST.equals(method)) {
+            //收藏
+            msg.what = 2;
+        } else if (SellerConstants.GROUP_BUY_DETAIL.equals(method)) {
+            //团购详情
+            itemsDetail = datas;
+            msg.what = 3;
+        }
+        mHandler.sendMessage(msg);
+    }
 
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
+    @Override
+    public void onFailue(String responseBody) {
 
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-			}
-		});
-	}
+    }
 
-	private void requestAddDistribution()
-	{
-		if (mGoodsModel == null)
-		{
-			return;
-		}
-		CommonInterface.requestAddDistribution(mGoodsModel.getId(), new SDRequestCallBack<BaseActModel>()
-		{
+    private int isCollect;
+    private ModelGroupBuyDetail modelGroupBuyDetail;
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					requestDetail();
-				}
-			}
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候");
-			}
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (!SDCollectionUtil.isEmpty(itemsCheck)) {
+                        ModelCheckShopCollect temp = itemsCheck.get(0);
+                        isCollect = Integer.valueOf(temp.getCollect());
+                        initCollectBtn(isCollect);
+                    }
+                    break;
+                case 1:
+                    //取消收藏
+                    isCollect = 0;
+                    initCollectBtn(isCollect);
+                    break;
+                case 2:
+                    //收藏
+                    isCollect = 1;
+                    initCollectBtn(isCollect);
+                    break;
+                case 3:
+                    if (!SDCollectionUtil.isEmpty(itemsDetail)) {
+                        modelGroupBuyDetail = itemsDetail.get(0);
+                        Deal_indexActModel model = new Deal_indexActModel();
+                        //基本信息
+                        model.setId(modelGroupBuyDetail.getId());
+                        model.setName(modelGroupBuyDetail.getName());
+                        model.setShare_url(modelGroupBuyDetail.getShare_url());
+                        model.setCurrent_price(modelGroupBuyDetail.getTuan_price());
+                        model.setOrigin_price(modelGroupBuyDetail.getOrigin_price());
+                        model.setIcon(modelGroupBuyDetail.getIcon());
 
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-			}
-		});
-	}
-
+                        addFragments(model);
+                    }
+                    mScrollView.onRefreshComplete();
+                    break;
+            }
+        }
+    };
 }

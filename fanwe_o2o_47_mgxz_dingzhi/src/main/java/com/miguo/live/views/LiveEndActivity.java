@@ -137,6 +137,8 @@ public class LiveEndActivity extends Activity implements CallbackView {
                 modelStopLive = (ModelStopLive) datas.get(0);
                 dataBindingLiveEnd.numViewers.set(modelStopLive.getWatch_count());
                 dataBindingLiveEnd.timeLive.set(TimeUtils.millisecondToHHMMSS(Long.valueOf(modelStopLive.getUsetime())));
+                dataBindingLiveEnd.countMoney.set(modelStopLive.getRed_packets_total());
+                dataBindingLiveEnd.countGood.set(modelStopLive.getSell_total());
             }
         }
         MySelfInfo.getInstance().setMyRoomNum(-1);
