@@ -59,11 +59,15 @@ public class SellerConstants {
      */
     public static final String GROUP_BUY_BY_MERCHANT = "CroupBuyByMerchant";
     /**
-     * 团购评论
+     * 评论列表
      */
-    public static final String GROUP_BUY_COMMENT = "GroupBuyComment";
+    public static final String COMMENT_LIST = "CommentList";
     /**
-     *团购明细
+     * 团购明细
      */
     public static final String GROUP_BUY_DETAIL = "GroupBuyDetail";
+    /**
+     * 我要代言，get代言delete取消代言
+     */
+    public static final String REPRESENT_MERCHANT = "RepresentMerchant";
 }

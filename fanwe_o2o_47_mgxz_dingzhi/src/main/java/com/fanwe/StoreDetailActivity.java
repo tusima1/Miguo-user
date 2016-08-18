@@ -34,10 +34,10 @@ import com.fanwe.model.StoreActModel;
 import com.fanwe.model.StoreModel;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
-import com.fanwe.seller.model.getShopInfo.CommentModelShopInfo;
 import com.fanwe.seller.model.getShopInfo.GoodsModelShopInfo;
-import com.fanwe.seller.model.getShopInfo.ImageShopInfo;
 import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
 import com.fanwe.seller.model.getShopInfo.StoreModelShopInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
@@ -367,7 +367,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
     private StoreModelShopInfo store_info;
     private List<GoodsModelShopInfo> tuan_list;
     private List<StoreModelShopInfo> other_supplier_location;
-    private List<CommentModelShopInfo> dp_list;
+    private List<ModelComment> dp_list;
 
     private void setView() {
         StoreActModel actModel = new StoreActModel();
@@ -408,14 +408,14 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         //dp_list
         List<CommentModel> commentModels = new ArrayList<>();
         if (!SDCollectionUtil.isEmpty(dp_list)) {
-            for (CommentModelShopInfo commentModelShopInfo : dp_list) {
+            for (ModelComment commentModelShopInfo : dp_list) {
                 CommentModel beanCommentModel = new CommentModel();
-                beanCommentModel.setContent(commentModelShopInfo.getComment());
+                beanCommentModel.setContent(commentModelShopInfo.getContent());
                 beanCommentModel.setPoint(commentModelShopInfo.getPoint());
                 //缩略图
                 List<String> images = new ArrayList<>();
                 if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getImages())) {
-                    for (ImageShopInfo imageShopInfo : commentModelShopInfo.getImages()) {
+                    for (ModelImage imageShopInfo : commentModelShopInfo.getImages()) {
                         images.add(imageShopInfo.getImage());
                     }
                 }
@@ -423,7 +423,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
                 //原图
                 List<String> oimages = new ArrayList<>();
                 if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getOimages())) {
-                    for (ImageShopInfo imageShopInfo : commentModelShopInfo.getOimages()) {
+                    for (ModelImage imageShopInfo : commentModelShopInfo.getOimages()) {
                         oimages.add(imageShopInfo.getImage());
                     }
                 }

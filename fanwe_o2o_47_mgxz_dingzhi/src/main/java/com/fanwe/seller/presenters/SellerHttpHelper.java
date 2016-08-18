@@ -11,6 +11,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.seller.model.ModelComment;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
@@ -25,6 +26,8 @@ import com.fanwe.seller.model.getCityList.RootCityList;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
 import com.fanwe.seller.model.getClassifyList.ResultClassifyList;
 import com.fanwe.seller.model.getClassifyList.RootClassifyList;
+import com.fanwe.seller.model.getCommentList.ResultCommentList;
+import com.fanwe.seller.model.getCommentList.RootCommentList;
 import com.fanwe.seller.model.getCroupBuyByMerchant.ModelCroupBuyByMerchant;
 import com.fanwe.seller.model.getCroupBuyByMerchant.ResultCroupBuyByMerchant;
 import com.fanwe.seller.model.getCroupBuyByMerchant.RootCroupBuyByMerchant;
@@ -559,18 +562,28 @@ public class SellerHttpHelper implements IHelper {
     }
 
     /**
-     * 团购评论 TODO
+     * 评论列表
      */
-    public void getGroupBuyComment(String tuan_id) {
+    public void getCommentList(int pageNum, int pageSize, String tuan_id, String shop_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
+        params.put("page", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(pageSize));
         params.put("tuan_id", tuan_id);
-        params.put("method", SellerConstants.GROUP_BUY_COMMENT);
+        params.put("shop_id", shop_id);
+        params.put("method", SellerConstants.COMMENT_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(SellerConstants.GROUP_BUY_COMMENT, null);
+                RootCommentList root = gson.fromJson(responseBody, RootCommentList.class);
+                List<ResultCommentList> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.COMMENT_LIST, null);
+                    return;
+                }
+                List<ModelComment> items = result.get(0).getBody();
+                mView.onSuccess(SellerConstants.COMMENT_LIST, items);
             }
 
             @Override
@@ -610,6 +623,30 @@ public class SellerHttpHelper implements IHelper {
             }
         });
     }
+
+    /**
+     * 我要代言，get代言delete取消代言
+     */
+    public void getRepresentMerchant(String ent_id, String shop_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("ent_id", ent_id);
+        params.put("shop_id", shop_id);
+        params.put("method", SellerConstants.REPRESENT_MERCHANT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
 
     @Override
     public void onDestroy() {

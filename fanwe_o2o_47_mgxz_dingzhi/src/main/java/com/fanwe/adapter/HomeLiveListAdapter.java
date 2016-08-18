@@ -17,6 +17,7 @@ import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.StringTool;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -71,6 +72,8 @@ public class HomeLiveListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private int maxLength = 15;
+
     private void setData(Holder mHolder, int position) {
         Room room = datas.get(position);
         ImageLoader.getInstance().displayImage(room.getCover(), mHolder.ivBg, null, null, null);
@@ -85,7 +88,20 @@ public class HomeLiveListAdapter extends BaseAdapter {
         if (host != null) {
             List<String> tags = host.getTags();
             if (!SDCollectionUtil.isEmpty(tags)) {
-                for (String tagName : tags) {
+                String totalStr = "";
+                String tempStr = "";
+                for (int i = 0; i < tags.size(); i++) {
+                    if (i == 3) {
+                        break;
+                    }
+                    String tagName = tags.get(i);
+                    tempStr = totalStr;
+                    totalStr = totalStr + tagName + " ";
+                    if (totalStr.length() > maxLength) {
+                        tagName = StringTool.getStringFixed(tagName, (maxLength - tempStr.length()), "");
+                        mHolder.layoutTags.addView(generalTag(tagName));
+                        break;
+                    }
                     mHolder.layoutTags.addView(generalTag(tagName));
                 }
             }

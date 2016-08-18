@@ -476,6 +476,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
     }
 
+    List<ModelShopListNavs> navs;
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -492,8 +494,10 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                     if (!SDCollectionUtil.isEmpty(resultShopLists)) {
                         ResultShopList resultShopList = resultShopLists.get(0);
                         //排序
-                        List<ModelShopListNavs> navs = resultShopList.getNavs();
-                        bindRightCategoryViewData(navs);
+                        if (SDCollectionUtil.isEmpty(navs)) {
+                            navs = resultShopList.getNavs();
+                            bindRightCategoryViewData(navs);
+                        }
                         //店铺数据
                         List<StoreModel> listNewData = new ArrayList<>();
                         if (!SDCollectionUtil.isEmpty(resultShopList.getItem())) {

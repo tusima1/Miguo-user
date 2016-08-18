@@ -92,9 +92,11 @@ public class Constant
 
 	public static final class CommentType
 	{
+		//团购
 		public static final String DEAL = "deal";
 		public static final String YOUHUI = "youhui";
 		public static final String EVENT = "event";
+		//店铺
 		public static final String STORE = "store";
 	}
 

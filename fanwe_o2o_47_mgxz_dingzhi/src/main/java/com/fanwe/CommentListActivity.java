@@ -2,6 +2,8 @@ package com.fanwe;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,11 +16,13 @@ import android.widget.TextView;
 import com.fanwe.adapter.TuanDetailCommentAdapter;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewUtil;
@@ -27,6 +31,9 @@ import com.fanwe.model.Dp_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelImage;
+import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -108,6 +115,9 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
     private String mId;
     private String mStrType;
+    int pageNum = 1;
+    int pageSize = 2;
+    boolean isRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +125,6 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_comment_list);
         init();
-        getData();
     }
 
     private SellerHttpHelper sellerHttpHelper;
@@ -123,6 +132,13 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
     private void getData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(this, this);
+        }
+        if (Constant.CommentType.DEAL.equals(mStrType)) {
+            //团购
+            sellerHttpHelper.getCommentList(pageNum, pageSize, mId, "");
+        } else if (Constant.CommentType.STORE.equals(mStrType)) {
+            //门店
+            sellerHttpHelper.getCommentList(pageNum, pageSize, "", mId);
         }
     }
 
@@ -165,18 +181,19 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPage.resetPage();
-                requestComments(false);
+                isRefresh = true;
+                pageNum = 1;
+                getData();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (!mPage.increment()) {
-                    SDToast.showToast("没有更多内容");
-                    mPtrlvComment.onRefreshComplete();
-                } else {
-                    requestComments(true);
+                isRefresh = false;
+                if (!SDCollectionUtil.isEmpty(items)) {
+                    pageNum++;
                 }
+                getData();
+
             }
         });
         mPtrlvComment.setRefreshing();
@@ -308,13 +325,61 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
     }
 
+    List<ModelComment> items;
+
     @Override
     public void onSuccess(String method, List datas) {
-
+        Message msg = new Message();
+        if (SellerConstants.COMMENT_LIST.equals(method)) {
+            items = datas;
+            msg.what = 0;
+        }
+        mHandler.sendMessage(msg);
     }
 
     @Override
     public void onFailue(String responseBody) {
 
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (isRefresh) {
+                        mListModel.clear();
+                    }
+                    if (!SDCollectionUtil.isEmpty(items)) {
+                        for (ModelComment modelComment : items) {
+                            CommentModel beanCommentModel = new CommentModel();
+                            beanCommentModel.setContent(modelComment.getContent());
+                            beanCommentModel.setPoint(modelComment.getPoint());
+                            //缩略图
+                            List<String> images = new ArrayList<>();
+                            if (!SDCollectionUtil.isEmpty(modelComment.getImages())) {
+                                for (ModelImage imageShopInfo : modelComment.getImages()) {
+                                    images.add(imageShopInfo.getImage());
+                                }
+                            }
+                            beanCommentModel.setImages(images);
+                            //原图
+                            List<String> oimages = new ArrayList<>();
+                            if (!SDCollectionUtil.isEmpty(modelComment.getOimages())) {
+                                for (ModelImage imageShopInfo : modelComment.getOimages()) {
+                                    oimages.add(imageShopInfo.getImage());
+                                }
+                            }
+                            beanCommentModel.setOimages(oimages);
+
+                            mListModel.add(beanCommentModel);
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    mPtrlvComment.onRefreshComplete();
+                    break;
+            }
+        }
+    };
 }

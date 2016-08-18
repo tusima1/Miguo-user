@@ -1,40 +1,25 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.fanwe.SearchListActivity;
-import com.fanwe.ShoppingMallActivity;
 import com.fanwe.adapter.DistributionMarketAdapter;
-import com.fanwe.adapter.DistributionMarketCatePageAdapter;
-import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
-import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.app.DistributionMarketCateView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.DistributionGoodsModel;
-import com.fanwe.model.DistributionMarketCateModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Supplier_fx;
@@ -47,6 +32,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 分销市场
@@ -229,37 +217,37 @@ public class DistributionMarketFragment extends BaseFragment
 		{
 			return;
 		}
-		if (mNeedBindCate)
-		{
-			List<List<DistributionMarketCateModel>> listModel = SDCollectionUtil.splitList(actModel.getCate_list(), 10);
-			if (isEmpty(listModel))
-			{
-				SDViewUtil.hide(mCateView);
-			} else
-			{
-				SDViewUtil.show(mCateView);
-				DistributionMarketCatePageAdapter adapter = new DistributionMarketCatePageAdapter(listModel, getActivity());
-				adapter.setmListenerOnClickCateItem(new OnClickCateItemListener()
-				{
-					@Override
-					public void onClickItem(int position, View view, DistributionMarketCateModel model)
-					{
-						mCate_id = model.getId();
-						if(mCate_id == -1)
-						{
-							Intent intent = new Intent(getActivity(),ShoppingMallActivity.class);
-							startActivity(intent);
-						}else
-						{
-							mPtrlv_content.setRefreshing();
-						}
-					}
-				});
-				mCateView.mSpv_content.setAdapter(adapter);
-				mNeedBindCate = false;
-			}
-		}
-		SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
+//		if (mNeedBindCate)
+//		{
+//			List<List<DistributionMarketCateModel>> listModel = SDCollectionUtil.splitList(actModel.getCate_list(), 10);
+//			if (isEmpty(listModel))
+//			{
+//				SDViewUtil.hide(mCateView);
+//			} else
+//			{
+//				SDViewUtil.show(mCateView);
+//				DistributionMarketCatePageAdapter adapter = new DistributionMarketCatePageAdapter(listModel, getActivity());
+//				adapter.setmListenerOnClickCateItem(new OnClickCateItemListener()
+//				{
+//					@Override
+//					public void onClickItem(int position, View view, DistributionMarketCateModel model)
+//					{
+//						mCate_id = model.getId();
+//						if(mCate_id == -1)
+//						{
+//							Intent intent = new Intent(getActivity(),ShoppingMallActivity.class);
+//							startActivity(intent);
+//						}else
+//						{
+//							mPtrlv_content.setRefreshing();
+//						}
+//					}
+//				});
+//				mCateView.mSpv_content.setAdapter(adapter);
+//				mNeedBindCate = false;
+//			}
+//		}
+//		SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
 	}
 
 	@Override
