@@ -30,15 +30,16 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
      * 门店详情。
      */
     private SellerDetailInfo mSellerDetailInfo;
-    private List<BaoBaoEntity> baoBaoEntityList;
     private View currentView;
     private CallbackView mCallbackview;
     private PagerRedPacketAdapter mRedPacketAdapter;
+    private PagerBaoBaoAdapter mBaobaoAdapter;
 
-    public LiveViewPagerItemAdapter(ViewPagerItems pages,CallbackView mCallbackview,PagerRedPacketAdapter mRedPacketAdapter) {
+    public LiveViewPagerItemAdapter(ViewPagerItems pages,CallbackView mCallbackview,PagerRedPacketAdapter mRedPacketAdapter,PagerBaoBaoAdapter mBaobaoAdapter) {
         this.mRedPacketAdapter = mRedPacketAdapter;
         this.mCallbackview = mCallbackview;
         this.pages = pages;
+        this.mBaobaoAdapter = mBaobaoAdapter;
         this.holder = new SparseArrayCompat<>(pages.size());
         this.inflater = LayoutInflater.from(pages.getContext());
     }
@@ -56,10 +57,10 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
         View view = getPagerItem(position).initiate(inflater, container);
         switch (position){
             case 0:
-                view=new PagerBaoBaoView(container.getContext());
+                view=new PagerBaoBaoView(container.getContext(),mBaobaoAdapter,mCallbackview);
             break;
             case 1:
-                view=new PagerMainHostView(container.getContext());
+                view=new PagerMainHostView(container.getContext(),mCallbackview);
                 break;
             case 2:
                 view=new PagerRedPacketView(container.getContext(),mCallbackview,mRedPacketAdapter);
@@ -114,23 +115,12 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
         }
     }
 
-    /**
-     * 刷新产品列表。
-     */
-    public void refreshGoodList(){
-        if(currentView!=null&&currentView instanceof PagerBaoBaoView ) {
-            ((PagerBaoBaoView)currentView).setBaoBaoEntityList(baoBaoEntityList);
-            ((PagerBaoBaoView)currentView).onRefreshData();
-        }
+
+    public PagerBaoBaoAdapter getmBaobaoAdapter() {
+        return mBaobaoAdapter;
     }
 
-    public List<BaoBaoEntity> getBaoBaoEntityList() {
-        return baoBaoEntityList;
+    public void setmBaobaoAdapter(PagerBaoBaoAdapter mBaobaoAdapter) {
+        this.mBaobaoAdapter = mBaobaoAdapter;
     }
-
-    public void setBaoBaoEntityList(List<BaoBaoEntity> baoBaoEntityList) {
-        this.baoBaoEntityList = baoBaoEntityList;
-    }
-
-
 }

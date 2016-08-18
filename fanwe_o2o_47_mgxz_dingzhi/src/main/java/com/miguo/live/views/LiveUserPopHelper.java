@@ -17,19 +17,16 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.miguo.live.adapters.LiveViewPagerItemAdapter;
+import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.IHelper;
-import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.live.views.customviews.PagerRedPacketView;
 import com.miguo.utils.DisplayUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
-
-import java.util.List;
 
 /**
  * Created by didik on 2016/8/4.
@@ -43,7 +40,6 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     private PopupWindow popupWindow;
     LiveViewPagerItemAdapter adapter1;
     private ImageView mShopCart;
-    private List<BaoBaoEntity> baoBaoEntityList;
     /**
      * 用户取得的红包列表。
      */
@@ -59,12 +55,17 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
 
     private int currentPosition=0;
 
+    private PagerBaoBaoAdapter mBaobaoAdapter;
+    private ViewPager viewPager;
 
-    public LiveUserPopHelper(Activity activity,View rootView,CallbackView mCallbackView,PagerRedPacketAdapter mRedPacketAdapter) {
+
+    public LiveUserPopHelper(Activity activity,View rootView,CallbackView mCallbackView,PagerRedPacketAdapter mRedPacketAdapter,PagerBaoBaoAdapter mBaobaoAdapter,int currentPosition) {
         this.mRedPacketAdapter = mRedPacketAdapter;
         this.mActivity=activity;
         this.rootView=rootView;
         this.mCallbackView = mCallbackView;
+        this.mBaobaoAdapter = mBaobaoAdapter;
+        this.currentPosition = currentPosition;
         createPopWindow();
 
     }
@@ -94,6 +95,11 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     }
     /*显示*/
     public void show(){
+        /**
+         * 进去的时候选择哪个界面,tab与viewpager 需要保持一致
+         */
+        listener.onPageSelected(currentPosition);
+        viewPager.setCurrentItem(currentPosition,true);
         if (popupWindow!=null){
             popupWindow.showAtLocation(rootView, Gravity.BOTTOM,0,0);
         }
@@ -112,15 +118,13 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         pagerItems.add(item3);
         pagerItems.add(item4);
 
-        adapter1 = new LiveViewPagerItemAdapter(pagerItems,mCallbackView,mRedPacketAdapter);
+        adapter1 = new LiveViewPagerItemAdapter(pagerItems,mCallbackView,mRedPacketAdapter,mBaobaoAdapter);
         if(mSellerDetailInfo!=null){
             adapter1.setmSellerDetailInfo(mSellerDetailInfo);
         }
-        if(baoBaoEntityList!=null){
-            adapter1.setBaoBaoEntityList(baoBaoEntityList);
-        }
 
-        final ViewPager viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
+
+        viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter1);
 
         final SmartTabLayout viewPagerTab = (SmartTabLayout) contentView.findViewById(R.id.viewpagertab);
@@ -191,11 +195,6 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
                 }else if(currentView instanceof PagerRedPacketView){
                     ((PagerRedPacketView)currentView).setmCallbackView(mCallbackView);
                     ((PagerRedPacketView)currentView).refreshData();
-                }else if(currentView instanceof PagerBaoBaoView){
-                    if(baoBaoEntityList!=null) {
-                        ((PagerBaoBaoView) currentView).setBaoBaoEntityList(baoBaoEntityList);
-                        ((PagerBaoBaoView) currentView).onRefreshData();
-                    }
                 }
             }
 
@@ -206,9 +205,6 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         };
 
         viewPagerTab.setOnPageChangeListener(listener);
-        listener.onPageSelected(currentPosition);
-
-
     }
 
 
@@ -227,16 +223,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         }
     }
 
-    public void setBaoBaoEntityList(List<BaoBaoEntity> baoBaoEntityList) {
-        this.baoBaoEntityList = baoBaoEntityList;
-    }
 
-    public void refreshGoodsList(){
-        if(adapter1!=null) {
-            adapter1.setBaoBaoEntityList(baoBaoEntityList);
-            adapter1.refreshGoodList();
-        }
-    }
     @Override
     public void onClick(View v) {
         if (v==mShopCart){
@@ -257,5 +244,13 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
 
     public void setCurrentPosition(int currentPosition) {
         this.currentPosition = currentPosition;
+    }
+
+    public PagerBaoBaoAdapter getmBaobaoAdapter() {
+        return mBaobaoAdapter;
+    }
+
+    public void setmBaobaoAdapter(PagerBaoBaoAdapter mBaobaoAdapter) {
+        this.mBaobaoAdapter = mBaobaoAdapter;
     }
 }

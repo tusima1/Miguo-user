@@ -43,6 +43,7 @@ import com.fanwe.utils.SDDateUtil;
 import com.google.gson.Gson;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
+import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
@@ -64,6 +65,7 @@ import com.miguo.live.views.customviews.HostMeiToolView;
 import com.miguo.live.views.customviews.HostRedPacketTimeView;
 import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
@@ -173,6 +175,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * @param savedInstanceState
      */
     private PagerRedPacketAdapter mRedPacketAdapter;
+
+    private PagerBaoBaoAdapter   mBaoBaoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -570,7 +574,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mHostTopView.init(this);
             mHostTopView.setVisibility(View.VISIBLE);
             mHostTopView.setNeed(this, mCommonHelper);
-            mHostTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+
+           doUpdateMembersCount();
+
             if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
                 mHostTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             }
@@ -659,9 +665,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //            });
         } else {//普通用户加载的view
             initInviteDialog();
+
+            mBaoBaoAdapter  =new PagerBaoBaoAdapter(this);
+
             mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
+            mUserHeadTopView.setmLiveView(this);
             mUserHeadTopView.setmAdapter(mHeadTopAdapter);
             mUserHeadTopView.init();
+
 
             mUserHeadTopView.setVisibility(View.VISIBLE);
             //普通用户退出
@@ -669,12 +680,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserHeadTopView.initNeed(this);
 
             mUserBottomTool.setVisibility(View.VISIBLE);
+            mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
             mHostBottomToolView1.setVisibility(View.GONE);
             mHostBottomMeiView2.setVisibility(View.GONE);
             String hostImg = CurLiveInfo.getHostAvator();
             mUserHeadTopView.setHostImg(hostImg);
             mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
-            mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+
+            doUpdateMembersCount();
+
             if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name())) {
                 mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             }
@@ -697,8 +711,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems, mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
 
-        //获取商品列表。
-        mLiveHttphelper.getGoodsDetailList(CurLiveInfo.shopID);
+
 
         //开启后台业务服务器请求管理类
 
@@ -723,7 +736,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
         }
-        if (!TextUtils.isEmpty(CurLiveInfo.shopID)) {
+        if (!TextUtils.isEmpty(CurLiveInfo.shopID) &&!LiveUtil.checkIsHost() ) {
             getShopDetail(CurLiveInfo.shopID);
         }
     }
@@ -870,6 +883,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     /**
      * 普通用户退出
      */
+
     public void userExit() {
         mLiveHelper.perpareQuitRoom(true);
         App.getInstance().setAvStart(false);
@@ -981,11 +995,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         } else {
             if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
                 mUserHeadTopView.showExitDialog();
+            }else {
+                finish();
             }
 
         }
         App.getInstance().setAvStart(false);
-
     }
 
     /**
@@ -1005,29 +1020,22 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
 
         //人数加1,可以设置到界面上
-        if (mHostTopView != null) {
-            mHostTopView.updateAudienceCount(members + "");
-        }
-        if (mUserHeadTopView != null) {
-            mUserHeadTopView.updateAudienceCount(members + "");
-        }
+       doUpdateMembersCount();
     }
 
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
-        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间", Constants.MEMBER_EXIT);
+        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间了", Constants.MEMBER_EXIT);
         watchCount--;
         int roomId = CurLiveInfo.getRoomNum();
 
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
-            if (mHostTopView != null) {
-                mHostTopView.updateAudienceCount(members + "");
-            }
-            if (mUserHeadTopView != null) {
-                mUserHeadTopView.updateAudienceCount(members + "");
-            }
+            doUpdateMembersCount();
+
+
+
         }
 
         //如果存在视频互动，取消
@@ -1036,12 +1044,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     public void hostLeave(String id, String name, String faceUrl) {
-        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "leave for a while", Constants.HOST_LEAVE);
+        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "离开一会", Constants.HOST_LEAVE);
     }
 
     @Override
     public void hostBack(String id, String name, String faceUrl) {
-        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "is back", Constants.HOST_BACK);
+        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "回来了", Constants.HOST_BACK);
     }
 
     @Override
@@ -1151,6 +1159,27 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
 
     }
+
+    /**
+     * update 观众 数量 。
+     */
+    public void doUpdateMembersCount(){
+
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (LiveUtil.checkIsHost() && mHostTopView != null) {
+                        mHostTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+
+                    } else {
+                        if (mUserHeadTopView != null) {
+                            mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+                        }
+                    }
+                }
+            });
+        }
+
 
     /**
      * 加载视频数据
@@ -1554,9 +1583,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         entity.setSenderName(name);
         entity.setContent(context);
         entity.setType(type);
-        //mArrayListChatEntity.add(entity);
         notifyRefreshListView(entity);
-        //mChatMsgListAdapter.notifyDataSetChanged();
+
 
         mListViewMsgItems.setVisibility(View.VISIBLE);
         SxbLog.d(TAG, "refreshTextListView height " + mListViewMsgItems.getHeight());
@@ -1623,7 +1651,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             switch (requestCode) {
                 case GETPROFILE_JOIN:
                     for (TIMUserProfile user : profiles) {
-                        mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+                       doUpdateMembersCount();
+
                         if (!TextUtils.isEmpty(user.getNickName())) {
                             refreshTextListView(user.getFaceUrl(), user.getNickName(), "加入直播", Constants.MEMBER_ENTER);
                         } else {
@@ -1808,20 +1837,26 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 //观众列表
                 List<ModelAudienceInfo> audienceList = datas;
                 if (audienceList != null && audienceList.size() >= 0) {
-                    boolean isHost = LiveUtil.checkIsHost();
-                    int size = datas.size();
-                    if (isHost) {
-                        if (mHostTopView != null) {
-                            mHostTopView.refreshData(datas);
-                            mHostTopView.updateAudienceCount(size + "");
+                    final  boolean isHost = LiveUtil.checkIsHost();
+                   final   int size = datas.size();
+
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isHost) {
+                                if (mHostTopView != null) {
+                                    mHostTopView.refreshData(datas);
+                                }
+                            } else {
+                                if (mUserHeadTopView != null) {
+                                    mUserHeadTopView.refreshData(datas);
+                                }
+                            }
+                            doUpdateMembersCount();
+                            mHeadTopAdapter.notifyDataSetChanged();
                         }
-                    } else {
-                        if (mUserHeadTopView != null) {
-                            mUserHeadTopView.refreshData(datas);
-                            mUserHeadTopView.updateAudienceCount(size + "");
-                        }
-                    }
-                    mHeadTopAdapter.notifyDataSetChanged();
+                    });
+
                 }
                 break;
             case LiveConstants.END_INFO:
@@ -1859,20 +1894,23 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
                 //更新观众人数
                 if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
-                    boolean isHost = LiveUtil.checkIsHost();
-                    if (isHost) {
-                        mHostTopView.updateAudienceCount(audienceCount.getCount());
-                    } else {
-                        mUserHeadTopView.updateAudienceCount(audienceCount.getCount());
-                    }
+                    doUpdateMembersCount();
                     CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                 }
                 break;
             case LiveConstants.LIST_OF_STORES:
-                if (datas != null && datas.size() > 0) {
-                    mUserBottomTool.setBaoBaoEntities(datas);
-                    mUserBottomTool.notifyGoodListChange();
-                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas == null) {
+                            mBaoBaoAdapter.setData(null);
+                        } else {
+                            mBaoBaoAdapter.setData(datas);
+                        }
+                        mBaoBaoAdapter.notifyDataSetChanged();
+                    }
+                });
+
                 break;
             case SellerConstants.LIVE_BIZ_SHOP:
                 if (datas != null && datas.size() > 0) {
@@ -1885,18 +1923,24 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     @Override
                     public void run() {
                         int size = datas == null ? 0 : datas.size();
-                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+//                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
                         if (datas == null) {
-                            mRedPacketAdapter.setMdatas(userRedPacketInfos);
+                            mRedPacketAdapter.setMdatas(null);
                         } else {
-                            mRedPacketAdapter.setMdatas(userRedPacketInfos);
-
+                            mRedPacketAdapter.setMdatas(datas);
                         }
                         mRedPacketAdapter.notifyDataSetChanged();
                     }
                 });
-
                 break;
+            case  LiveConstants.GET_PACKET_RESULT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUserBottomTool.showRedPacketResult(datas);
+                    }
+                });
+
             default:
                 break;
         }

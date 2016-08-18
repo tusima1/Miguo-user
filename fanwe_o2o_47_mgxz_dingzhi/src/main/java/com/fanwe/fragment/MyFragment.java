@@ -1,6 +1,7 @@
 package com.fanwe.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.fanwe.MyCommentActivity;
 import com.fanwe.MyCouponListActivity;
 import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
+import com.fanwe.MyMessageActivity;
 import com.fanwe.MyOrderListActivity;
 import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.ShopCartActivity;
@@ -32,7 +34,6 @@ import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.customview.BadgeView;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.jpush.MessageHelper;
@@ -44,8 +45,6 @@ import com.fanwe.library.handler.PhotoHandler.PhotoHandlerListener;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.MessageCount;
 import com.fanwe.model.MyDistributionUser_dataModel;
 import com.fanwe.model.PageModel;
@@ -54,7 +53,6 @@ import com.fanwe.model.User_center_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MoneyFormat;
-import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -103,25 +101,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.iv_vip)
     private ImageView mIv_vip;//vip等级的图标
 
-    /*
-     * @ViewInject(R.id.ll_my_friend_circle) private LinearLayout
-     * mLl_my_friend_circle; // 我的朋友圈
-     */
     @ViewInject(R.id.btn_view_all_orders)
     private View viewAllOrdersButton;
-
-    @ViewInject(R.id.order_not_paid)
-    private View orderNotPaidView;// 待付款订单
-
-    @ViewInject(R.id.order_not_used)
-    private View orderNotUsedView;// 待使用订单
-
-    @ViewInject(R.id.order_not_commented)
-    private View orderNotCommentedView;// 待评价订单
-
-    @ViewInject(R.id.order_to_refund)
-    private View orderToRefundView;// 待退款订单
-
 
     @ViewInject(R.id.ll_look_dianpu)
     private View ll_lookDianpu;
@@ -138,8 +119,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.tv_order_not_comment)
     private TextView mTv_order_not_comment;
 
-    @ViewInject(R.id.ll_order_takeaway_reservation)
-    private LinearLayout mLl_order_takeaway_reservation; // 外卖预定订单
 
     // 我的红包
     @ViewInject(R.id.ll_my_red_money)
@@ -182,16 +161,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 //    private TextView redCount;
 //    private BadgeView redDot;
 
-    private BadgeView orderNotPaidBadge;
-    private BadgeView orderReadyForUseBadge;
-    private BadgeView orderNotCommentedBadge;
-    private BadgeView orderRefundBadge;
-
-    private TextView orderNotPaidCountView;
-    private TextView orderReadyForUseCountView;
-    private TextView orderNotCommentedCountView;
-    private TextView orderRefundCountView;
-
     private PageModel mPage = new PageModel();
 //    private TextView mTv_totalMomey;// 总佣金
     private TextView mTv_tixian;// 提现现金
@@ -217,6 +186,12 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     private TextView mTv_FansNum;//粉丝数量
     private TextView mTv_Msg;//消息数量
 
+    private RedDotView mRDV_orderNotPay;//待付款订单
+    private RedDotView mRDV_orderNotUse;//待使用
+    private RedDotView mRDV_orderNotComment;//待评价
+    private RedDotView mRDV_orderNotRefund;//退款
+
+
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -230,11 +205,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         initUserTopView();
         initPhotoHandler();
         registerClick();
-        initViewState();
         initPullToRefreshScrollView();
         initMyOrders();
         addTopView();
-
         setView();
     }
 
@@ -326,80 +299,34 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     }
 
     private void initMyOrders() {
-        ImageView icon;
-        TextView textView;
-        int colorId = getResources().getColor(R.color.white);
-        //--------------------------------------------
-
         mRDV_Comsume = ((RedDotView) findViewById(R.id.rdv_consume));
         mRDV_MyShop = ((RedDotView) findViewById(R.id.rdv_my_shop));
         mRDV_MyFriend = ((RedDotView) findViewById(R.id.rdv_my_friend));
         mRDV_MyNameCard = ((RedDotView) findViewById(R.id.rdv_my_name_card));
+        mRDV_orderNotPay = ((RedDotView) findViewById(R.id.rdv_order_not_paid));
+        mRDV_orderNotUse = ((RedDotView) findViewById(R.id.rdv_order_not_used));
+        mRDV_orderNotComment = ((RedDotView) findViewById(R.id.rdv_order_not_commented));
+        mRDV_orderNotRefund = ((RedDotView) findViewById(R.id.rdv_order_to_refund));
 
-        mRDV_Comsume.setTitle("消费券");
-        mRDV_MyShop.setTitle("我的小店");
-        mRDV_MyFriend.setTitle("我的战队");
-        mRDV_MyNameCard.setTitle("我的名片");
+        int color = Color.parseColor("#999999");
+        mRDV_Comsume.setAllParams("消费券",R.drawable.bg_groupvacher,0,Color.WHITE);
+        mRDV_MyShop.setAllParams("我的小店",R.drawable.bg_xiaodian,0,Color.WHITE);
+        mRDV_MyFriend.setAllParams("我的战队",R.drawable.bg_xiaomi,0,Color.WHITE);
+        mRDV_MyNameCard.setAllParams("我的名片",R.drawable.bg_erweima,0,Color.WHITE);
 
-        mRDV_Comsume.setIcon(R.drawable.bg_groupvacher);
-        mRDV_MyShop.setIcon(R.drawable.bg_xiaodian);
-        mRDV_MyFriend.setIcon(R.drawable.bg_xiaomi);
-        mRDV_MyNameCard.setIcon(R.drawable.bg_erweima);
-
-        mRDV_Comsume.setRedNum(0);
-        mRDV_MyShop.setRedNum(0);
-        mRDV_MyFriend.setRedNum(0);
-        mRDV_MyNameCard.setRedNum(0);
+        mRDV_orderNotPay.setAllParams("代付款",R.drawable.ic_obligation,10,color);
+        mRDV_orderNotUse.setAllParams("待使用",R.drawable.ic_ready_for_use,0,color);
+        mRDV_orderNotComment.setAllParams("待评价",R.drawable.ic_to_rank,0,color);
+        mRDV_orderNotRefund.setAllParams("退款",R.drawable.ic_refund,0,color);
 
         mRDV_Comsume.setOnRedDotViewClickListener(this);
         mRDV_MyShop.setOnRedDotViewClickListener(this);
         mRDV_MyFriend.setOnRedDotViewClickListener(this);
         mRDV_MyNameCard.setOnRedDotViewClickListener(this);
-
-
-        //_______________
-
-        int color = getResources().getColor(R.color.text_fenxiao);
-        icon = (ImageView) orderNotPaidView.findViewById(R.id.icon);
-        icon.setMinimumWidth(20);
-        icon.setMinimumHeight(20);
-        icon.setImageResource(R.drawable.ic_obligation);
-        textView = (TextView) orderNotPaidView.findViewById(R.id.text);
-        textView.setTextColor(color);
-        textView.setText("待付款");
-        orderNotPaidBadge = (BadgeView) orderNotPaidView.findViewById(R.id.badge);
-        orderNotPaidCountView = (TextView) orderNotPaidView.findViewById(R.id.count);
-
-        icon = (ImageView) orderNotUsedView.findViewById(R.id.icon);
-        icon.setMinimumWidth(20);
-        icon.setMinimumHeight(20);
-        icon.setImageResource(R.drawable.ic_ready_for_use);
-        textView = (TextView) orderNotUsedView.findViewById(R.id.text);
-        textView.setTextColor(color);
-        textView.setText("待使用");
-        orderReadyForUseBadge = (BadgeView) orderNotUsedView.findViewById(R.id.badge);
-        orderReadyForUseCountView = (TextView) orderNotUsedView.findViewById(R.id.count);
-
-        icon = (ImageView) orderNotCommentedView.findViewById(R.id.icon);
-        icon.setMinimumWidth(20);
-        icon.setMinimumHeight(20);
-        icon.setImageResource(R.drawable.ic_to_rank);
-        textView = (TextView) orderNotCommentedView.findViewById(R.id.text);
-        textView.setTextColor(color);
-        textView.setText("待评价");
-        orderNotCommentedBadge = (BadgeView) orderNotCommentedView.findViewById(R.id.badge);
-        orderNotCommentedCountView = (TextView) orderNotCommentedView.findViewById(R.id.count);
-
-        icon = (ImageView) orderToRefundView.findViewById(R.id.icon);
-        icon.setMinimumWidth(20);
-        icon.setMinimumHeight(20);
-        icon.setImageResource(R.drawable.ic_refund);
-        textView = (TextView) orderToRefundView.findViewById(R.id.text);
-        textView.setTextColor(color);
-        textView.setText("退款");
-        orderRefundBadge = (BadgeView) orderToRefundView.findViewById(R.id.badge);
-        orderRefundCountView = (TextView) orderToRefundView.findViewById(R.id.count);
-
+        mRDV_orderNotPay.setOnRedDotViewClickListener(this);
+        mRDV_orderNotUse.setOnRedDotViewClickListener(this);
+        mRDV_orderNotComment.setOnRedDotViewClickListener(this);
+        mRDV_orderNotRefund.setOnRedDotViewClickListener(this);
     }
 
     private void initPhotoHandler() {
@@ -432,18 +359,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         });
     }
 
-    private void initViewState() {
-        Init_indexActModel model = AppRuntimeWorker.getInitActModel();
-        if (model == null) {
-            return;
-        }
 
-        if (AppRuntimeWorker.getIs_plugin_dc() == 1) {
-            SDViewUtil.show(mLl_order_takeaway_reservation);
-        } else {
-            SDViewUtil.hide(mLl_order_takeaway_reservation);
-        }
-    }
 
     private void initPullToRefreshScrollView() {
         mPtrsvAll.setMode(Mode.PULL_FROM_START);
@@ -451,7 +367,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                initViewState();
                 requestMyAccount();
             }
 
@@ -535,12 +450,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         SDViewBinder.setTextView(mHongbaoCount, actModel.getRed_packet_count(), "0");
         SDViewBinder.setTextView(mTv_comments, actModel.getHas_dp_count(), "0");
         SDViewBinder.setTextView(mTv_collect, actModel.getCollect_deal_count(), "0");
-        // 待付款订单数量
-        String strNotPayOrderCount = null;
-        int notPayOrderCount = SDTypeParseUtil.getInt(actModel.getNot_pay_order_count());
-        if (notPayOrderCount > 0) {
-            strNotPayOrderCount = String.valueOf(notPayOrderCount);
-        }
 
         // 待评价
         String strWaitComment = null;
@@ -550,21 +459,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         }
         SDViewBinder.setTextViewsVisibility(mTv_order_not_comment, strWaitComment);
 
+        // 待付款订单数量
         String notPaidCountStr = actModel.getNot_pay_order_count();
         Integer notPaidCount = Integer.parseInt(notPaidCountStr);
-
-        if (notPaidCount != null) {
-            orderNotPaidBadge.setCount(notPaidCount);
-            if (notPaidCount > 0) {
-                if (notPaidCount > 99) {
-                    notPaidCountStr = "99+";
-                }
-                orderNotPaidCountView.setVisibility(View.VISIBLE);
-                orderNotPaidCountView.setText(notPaidCountStr);
-            } else {
-                orderNotPaidCountView.setVisibility(View.INVISIBLE);
-            }
-        }
+        mRDV_orderNotPay.setRedNum(notPaidCount);
         // 消费券
         String groupVoucherCountStr = actModel.getCoupon_count();
         Integer groupVoucherCount = Integer.parseInt(groupVoucherCountStr);
@@ -576,47 +474,14 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
         String readyForUseCountStr = actModel.getWait_use_count();
         Integer readyForUseCount = Integer.parseInt(readyForUseCountStr);
-        if (readyForUseCount != null) {
-            orderReadyForUseBadge.setCount(readyForUseCount);
-            if (readyForUseCount > 0) {
-                if (readyForUseCount > 99) {
-                    readyForUseCountStr = "99+";
-                }
-                orderReadyForUseCountView.setVisibility(View.VISIBLE);
-                orderReadyForUseCountView.setText(readyForUseCountStr);
-            } else {
-                orderReadyForUseCountView.setVisibility(View.INVISIBLE);
-            }
-        }
+        mRDV_orderNotUse.setRedNum(readyForUseCount);
         String notCommentedCountStr = actModel.getWait_dp_count();
         Integer notCommentedCount = Integer.parseInt(notCommentedCountStr);
-        if (notCommentedCount != null) {
-            orderNotCommentedBadge.setCount(notCommentedCount);
-            if (notCommentedCount > 0) {
-                if (notCommentedCount > 99) {
-                    notCommentedCountStr = "99+";
-                }
-                orderNotCommentedCountView.setVisibility(View.VISIBLE);
-                orderNotCommentedCountView.setText(notCommentedCountStr);
-            } else {
-                orderNotCommentedCountView.setVisibility(View.INVISIBLE);
-            }
-        }
+        mRDV_orderNotComment.setRedNum(notCommentedCount);
 
         String refundCountStr = actModel.getOrder_refund_count();
         Integer refundCount = Integer.parseInt(refundCountStr);
-        if (refundCount != null) {
-            orderRefundBadge.setCount(refundCount);
-            if (refundCount > 0) {
-                if (refundCount > 99) {
-                    refundCountStr = "99+";
-                }
-                orderRefundCountView.setVisibility(View.VISIBLE);
-                orderRefundCountView.setText(refundCountStr);
-            } else {
-                orderRefundCountView.setVisibility(View.INVISIBLE);
-            }
-        }
+        mRDV_orderNotRefund.setRedNum(refundCount);
     }
 
     private void initUserTopView() {
@@ -637,7 +502,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         findViewById(R.id.ll_msg).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                MGToast.showToast("消息");
+                startActivity(new Intent(getActivity(), MyMessageActivity.class));
             }
         });
 
@@ -651,38 +516,18 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
                 startActivity(intent);
             }
         });
-        // 消息
-//        findViewById(R.id.messages).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = (new Intent(getActivity(), MyMessageActivity.class));
-//                startActivity(intent);
-//            }
-//        });
     }
 
     private void registerClick() {
         mIv_user_avatar.setOnClickListener(this);
-        // mLl_user_info.setOnClickListener(this);
         mLlGroupCoupons.setOnClickListener(this);
-
-        // mLl_my_friend_circle.setOnClickListener(this);
         mLl_order_has_pay.setOnClickListener(this);
-        mLl_order_takeaway_reservation.setOnClickListener(this);
-
         mLl_my_red_money.setOnClickListener(this);
         mLl_my_collect.setOnClickListener(this);
-        // mLl_my_event.setOnClickListener(this);
-        // mLl_my_lottery.setOnClickListener(this);
         mLl_comments.setOnClickListener(this);
         mLl_shopping_cart.setOnClickListener(this);
         mLl_my_asset.setOnClickListener(this);
-
         viewAllOrdersButton.setOnClickListener(this);
-        orderNotPaidView.setOnClickListener(this);
-        orderNotUsedView.setOnClickListener(this);
-        orderNotCommentedView.setOnClickListener(this);
-        orderToRefundView.setOnClickListener(this);
     }
 
     @Override
@@ -693,8 +538,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickGoupCoupons();
         } else if (v == mLl_order_has_pay) {
             clickOrderHasPay();
-        } else if (v == mLl_order_takeaway_reservation) {
-
         } else if (v == mLl_my_collect) {
             clickCollect();
         } else if (v == mLl_my_red_money) {
@@ -703,32 +546,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickMyComment();
         } else if (v == mLl_shopping_cart) {
             clickShopping_cart();
-        } /*
-             * else if (v == mLl_my_friend_circle) { clickMyFriendCircle();
-			 * 
-			 * }
-			 */ else if (v == viewAllOrdersButton) {
-            clickMyOrderView("all");
-
-        } else if (v == orderNotPaidView) {
-            clickMyOrderView("pay_wait");
-
-        } else if (v == orderNotCommentedView) {
-            clickMyOrderView("comment_wait");
-
-        } else if (v == orderToRefundView) {
-            clickMyOrderView("refund");
-
-        } else if (v == orderNotUsedView) {
-            clickMyOrderView("use_wait");
         } else if (v == mLl_my_asset) {
             clickWithdraw();
-        } else if (v == ll_lookDianpu) {
-
-        } else if (v == ll_myXiaomi) {
-
-        } else if (v == ll_erWeima) {
-
+        } else if (v == viewAllOrdersButton) {
+            clickMyOrderView("all");
         }
     }
 
@@ -745,8 +566,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             //
             intent.putExtra("up_id", mActModel.getUp_id());
             startActivity(intent);
-        }else{
-            return;
         }
     }
 
@@ -916,66 +735,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @Override
     public void onResume() {
         refreshMyAccountFragment();
-        showRedDot();
+//        showRedDot();
         super.onResume();
     }
 
-    //	private ImageView redBig;
-//	private ImageView redMore;
-//	private TextView redCount;
-//	private BadgeView redDot;
-    private void showRedDot() {
-//		MessageHelper.msg_Activity=99;
-//		MessageHelper.msg_All=100;
-        //三种状态
-        /*if (MessageHelper.msg_All>0) {
-
-			if (MessageHelper.msg_Activity>99) {
-				redDot.setCount(0);
-				redBig.setVisibility(View.GONE);
-				redMore.setVisibility(View.VISIBLE);
-				return;
-			}
-			
-			if (MessageHelper.msg_Activity>0) {
-				redCount.setVisibility(View.VISIBLE);
-				redCount.setText(""+MessageHelper.msg_Activity);
-				redDot.setCount(MessageHelper.msg_Activity);
-			}else {
-				redDot.setCount(0);
-				redCount.setText("");
-				redBig.setVisibility(View.VISIBLE);
-				redMore.setVisibility(View.GONE);
-			}
-			
-		}else {
-			redCount.setVisibility(View.INVISIBLE);
-			redDot.setCount(0);
-			redBig.setVisibility(View.GONE);
-			redMore.setVisibility(View.GONE);
-			redCount.setText("");
-		}*/
-        //目前的消息是显示总数量
-//        int tempCount = 0;
-//        if (MessageHelper.msg_All >= 99) {
-//            tempCount = 99;
-//        } else {
-//            tempCount = MessageHelper.msg_All;
-//        }
-//        if (tempCount == 0) {
-//            redCount.setVisibility(View.INVISIBLE);
-//            redDot.setCount(0);
-//            redBig.setVisibility(View.GONE);
-//            redMore.setVisibility(View.GONE);
-//            redCount.setText("");
-//        } else {
-//            redCount.setVisibility(View.VISIBLE);
-//            redCount.setText("" + tempCount);
-//            redDot.setCount(tempCount);
-//            redMore.setVisibility(View.GONE);
-//            redBig.setVisibility(View.GONE);
-//        }
-    }
 
     private void updateMessageCount() {
         RequestModel model = new RequestModel();
@@ -993,7 +756,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
                     MessageHelper.msg_Activity = 0;
                     MessageHelper.msg_All = 0;
                 }
-                showRedDot();
+//                showRedDot();
             }
 
             @Override
@@ -1012,7 +775,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     private void refreshMyAccountFragment() {
         updateMessageCount();
         if (!this.isHidden()) {
-            initViewState();
             requestMyAccount();
         }
     }
@@ -1058,6 +820,17 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         }else if (v==mRDV_MyNameCard){
             //我的名片
             clickErWeiMa();
+//            UserRobRedPacketEndDialogHelper helper=new UserRobRedPacketEndDialogHelper(getActivity(),true);
+//            helper.show();
+//            helper.setQuan("8.8","折扣券");
+        }else if (v==mRDV_orderNotPay){
+            clickMyOrderView("pay_wait");
+        }else if (v==mRDV_orderNotUse){
+            clickMyOrderView("use_wait");
+        }else if (v==mRDV_orderNotComment){
+            clickMyOrderView("comment_wait");
+        }else if (v==mRDV_orderNotRefund){
+            clickMyOrderView("refund");
         }
     }
 }

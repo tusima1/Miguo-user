@@ -37,14 +37,17 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 //    private TextView mGet;//获取按钮
     private RecyclerView mRecycler;
     private Context mContext;
+    private CallbackView mCallbackView;
     private  PagerBaoBaoAdapter mAdapter;
-    private  List<BaoBaoEntity> baoBaoEntityList;
     private ShoppingCartHelper mShoppingCartHelper;
+    private LiveHttpHelper mLiveHttpHelper;
 
 
-    public PagerBaoBaoView(Context context) {
+    public PagerBaoBaoView(Context context,PagerBaoBaoAdapter mBaobaoAdapter,CallbackView mCallbackView) {
         super(context);
         mShoppingCartHelper= new ShoppingCartHelper(context,this);
+        this.mAdapter = mBaobaoAdapter;
+        this.mCallbackView = mCallbackView;
         init(context);
     }
 
@@ -70,13 +73,11 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 //        mIv_title_append = ((TextView) this.findViewById(R.id.tv_title_append));
 //        mGet = ((TextView) this.findViewById(R.id.get));
         mRecycler = ((RecyclerView) findViewById(R.id.bao_recyler));
+        if(mAdapter!=null) {
+            mAdapter.setmShoppingCartHelper(mShoppingCartHelper);
+        }
 
       //  mGet.setOnClickListener(this);
-
-        mAdapter=new PagerBaoBaoAdapter(mContext,mShoppingCartHelper);
-        if(baoBaoEntityList!=null&&baoBaoEntityList.size()>0){
-            mAdapter.setData(baoBaoEntityList);
-        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -91,8 +92,12 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
                 outRect.bottom=offset;
             }
         });
-//        mRecycler.setHasFixedSize(true);
+        mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
+        mLiveHttpHelper = new LiveHttpHelper(mContext,mCallbackView);  //获取商品列表。
+        mLiveHttpHelper.getGoodsDetailList(CurLiveInfo.shopID);
+
+
     }
 
     @Override
@@ -109,22 +114,6 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 
         Toast.makeText(mContext, "点击了获取", Toast.LENGTH_SHORT).show();
     }
-
-
-    /**
-     * 更新商品列表数据。
-     */
-    public void onRefreshData(){
-        if(baoBaoEntityList!=null&&baoBaoEntityList.size()>0){
-            mAdapter.setData(baoBaoEntityList);
-        }
-    }
-
-
-    public void setBaoBaoEntityList(List<BaoBaoEntity> baoBaoEntityList) {
-        this.baoBaoEntityList = baoBaoEntityList;
-    }
-
     @Override
     public void onSuccess(String responseBody) {
 
@@ -138,5 +127,13 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
     @Override
     public void onFailue(String responseBody) {
 
+    }
+
+    public CallbackView getmCallbackView() {
+        return mCallbackView;
+    }
+
+    public void setmCallbackView(CallbackView mCallbackView) {
+        this.mCallbackView = mCallbackView;
     }
 }
