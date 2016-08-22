@@ -22,7 +22,6 @@ import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.MyOrderListActivity;
-import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.UploadUserHeadActivity;
 import com.fanwe.WithdrawLogActivity;
@@ -42,12 +41,12 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MessageCount;
-import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MoneyFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -139,7 +138,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.ll_shopping_cart)
     private LinearLayout mLl_shopping_cart;// 购物车
 
-    private PageModel mPage = new PageModel();
 //    private TextView mTv_totalMomey;// 总佣金
     private TextView mTv_tixian;// 提现现金
     private TextView mTv_used;// 已使用现金
@@ -399,18 +397,14 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             MGLog.e("personalHome 为null");
             return;
         }
-
-//        MyDistributionUser_dataModel userData = mActModel.getUser_data();
-//        if (mActModel.getLevel_id() == 1) {
-////            SDViewBinder.setTextView(mTv_vip, "青铜", "未找到");
-//            mIv_vip.setImageResource(R.drawable.ic_rank_3);
-//        } else if (mActModel.getLevel_id() == 2) {
-//            mIv_vip.setImageResource(R.drawable.ic_rank_2);
-////            SDViewBinder.setTextView(mTv_vip, "白金", "未找到");
-//        } else if (mActModel.getLevel_id() == 3) {
-////            SDViewBinder.setTextView(mTv_vip, "钻石", "未找到");
-//            mIv_vip.setImageResource(R.drawable.ic_rank_1);
-//        }
+        String fx_level = personalHome.getFx_level();
+        if ("1".equals(fx_level)) {
+            mIv_vip.setImageResource(R.drawable.ic_rank_3);
+        } else if ("2".equals(fx_level)) {
+            mIv_vip.setImageResource(R.drawable.ic_rank_2);
+        } else if ("3".equals(fx_level)) {
+            mIv_vip.setImageResource(R.drawable.ic_rank_1);
+        }
 
 //        SDViewBinder.setTextView(mTv_tixian, MoneyFormat.format(userData.getFx_money()));
         //可提现
@@ -539,7 +533,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(MyCollectionActivity.class);
         } else if (v == mLl_my_red_money) {
             //我的红包
-            startActivity(MyRedEnvelopeActivity.class);
+//            startActivity(MyRedEnvelopeActivity.class);
+            startActivity(RedPacketListActivity.class);
         } else if (v == mLl_comments) {
             //我的点评
             startActivity(MyCommentActivity.class);

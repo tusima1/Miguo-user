@@ -132,6 +132,14 @@ public class UserConstants {
      * 我的,界面数据展示
      */
     public static final String PERSONALHOME = "PersonalHome";
+    /**
+     * 修改手机号
+     */
+    public static final String USER_CHANGE_MOBILE = "UserChangeMobile";
+    /**
+     * 红包列表
+     */
+    public static final String USER_RED_PACKET_LIST = "GetUserRedPackets";
 
 
 }

@@ -1,7 +1,5 @@
 package com.fanwe.library.activity;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +20,8 @@ import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
 
+import java.util.List;
+
 public class SDBaseActivity extends FragmentActivity implements SDEventObserver, OnClickListener
 {
 
@@ -38,8 +38,7 @@ public class SDBaseActivity extends FragmentActivity implements SDEventObserver,
 	 * 
 	 * @param mIsNeedRefreshOnResume
 	 */
-	public void setmIsNeedRefreshOnResume(boolean mIsNeedRefreshOnResume)
-	{
+	public void setmIsNeedRefreshOnResume(boolean mIsNeedRefreshOnResume) {
 		this.mIsNeedRefreshOnResume = mIsNeedRefreshOnResume;
 	}
 
