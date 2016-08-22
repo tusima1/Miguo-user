@@ -1,5 +1,8 @@
 package com.miguo.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Administrator on 2016/8/2.
  */
@@ -63,5 +66,16 @@ public class TimeUtils {
         strMilliSecond = milliSecond < 100 ? "0" + strMilliSecond : "" + strMilliSecond;
 
         return strHour + ":" + strMinute + ":" + strSecond;
+    }
+
+    /**
+     * 时间戳转换成日期
+     *
+     * @param time
+     * @return
+     */
+    public static String timeToYMD(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(new Date(time));
     }
 }

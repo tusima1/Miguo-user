@@ -2,7 +2,10 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import com.fanwe.adapter.CategoryQuanLeftAdapter;
 import com.fanwe.adapter.CategoryQuanRightAdapter;
 import com.fanwe.adapter.TuanGruopListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.SearchTypeMap;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
@@ -45,9 +49,12 @@ import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Tuan_indexActModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
+import com.fanwe.seller.model.getGroupList.ModelGroupList;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -65,7 +72,7 @@ import java.util.List;
  *
  * @author js02
  */
-public class TuanListFragment extends BaseFragment {
+public class TuanListFragment extends BaseFragment implements CallbackView {
 
     /**
      * 大分类id(int)
@@ -154,6 +161,10 @@ public class TuanListFragment extends BaseFragment {
 
     private int mNotice;
 
+    private int pageNum = 1;
+    private int pageSize = 10;
+    private SellerHttpHelper sellerHttpHelper;
+
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setmTitleType(TitleType.TITLE);
@@ -171,6 +182,18 @@ public class TuanListFragment extends BaseFragment {
         initCategoryViewNavigatorManager();
         registeClick();
         initPullRefreshLv();
+
+        initData();
+    }
+
+    private void initData() {
+        if (sellerHttpHelper == null) {
+            sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
+        }
+        sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
+        sellerHttpHelper.getClassifyList();
+        sellerHttpHelper.getOrderByList();
+        sellerHttpHelper.getGroupList("", "", AppRuntimeWorker.getCity_id(), "default", "", "", 1, 10);
     }
 
     private void bindLocationData() {
@@ -533,4 +556,67 @@ public class TuanListFragment extends BaseFragment {
     protected String setUmengAnalyticsTag() {
         return this.getClass().getName().toString();
     }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+
+    List<ModelBusinessCircleList> modelBusinessCircleLists;
+    List<ModelClassifyList> modelClassifyLists;
+    List<ModelShopListNavs> navs;
+    List<ModelGroupList> groupItems;
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        Message message = new Message();
+        if (SellerConstants.BUSINESS_CIRCLE_LIST.equals(method)) {
+            //商圈
+            modelBusinessCircleLists = datas;
+            message.what = 0;
+        } else if (SellerConstants.CLASSIFY_LIST.equals(method)) {
+            //类别
+            modelClassifyLists = datas;
+            message.what = 1;
+        } else if (SellerConstants.ORDER_BY_LIST.equals(method)) {
+            //排序
+            navs = datas;
+            message.what = 2;
+        } else if (SellerConstants.GROUP_BUY.equals(method)) {
+            //团购
+            groupItems = datas;
+            message.what = 3;
+        }
+        mHandler.sendMessage(message);
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    //商圈
+                    bindMiddleCategoryViewData(modelBusinessCircleLists);
+                    break;
+                case 1:
+                    //类别
+                    bindLeftCategoryViewData(modelClassifyLists);
+                    break;
+                case 2:
+                    //排序
+                    bindRightCategoryViewData(navs);
+                    break;
+                case 3:
+                    //团购
+                    Log.d("groupItems", groupItems.toString());
+                    break;
+            }
+        }
+    };
+
 }

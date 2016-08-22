@@ -142,7 +142,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
      */
     private String pid;
     private int pageNum = 1;
-    private int pageSize = 5;
+    private int pageSize = 10;
     private SellerHttpHelper sellerHttpHelper;
 
     @Override
@@ -509,6 +509,9 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                                 storeModel.setPreview(bean.getPreview());
                                 storeModel.setAddress(bean.getAddress());
                                 storeModel.setTel(bean.getTel());
+                                storeModel.setAvg_point(Float.valueOf(bean.getAvg_grade()));
+                                storeModel.setOffline(Integer.valueOf(bean.getOffline()));
+                                storeModel.setDiscount_pay(Integer.valueOf(bean.getDiscount_pay()));
                                 listNewData.add(storeModel);
                             }
                         }

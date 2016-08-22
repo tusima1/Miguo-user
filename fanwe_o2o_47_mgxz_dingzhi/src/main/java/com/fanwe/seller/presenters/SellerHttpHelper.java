@@ -37,11 +37,17 @@ import com.fanwe.seller.model.getGroupBuyCollect.RootGroupBuyCollect;
 import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
 import com.fanwe.seller.model.getGroupBuyDetail.ResultGroupBuyDetail;
 import com.fanwe.seller.model.getGroupBuyDetail.RootGroupBuyDetail;
+import com.fanwe.seller.model.getGroupList.ModelGroupList;
+import com.fanwe.seller.model.getGroupList.ResultGroupList;
+import com.fanwe.seller.model.getGroupList.RootGroupList;
 import com.fanwe.seller.model.getMarketList.ModelMarketListItem;
 import com.fanwe.seller.model.getMarketList.ResultMarketList;
 import com.fanwe.seller.model.getMarketList.RootMarketList;
+import com.fanwe.seller.model.getOrderByList.ResultOrderByList;
+import com.fanwe.seller.model.getOrderByList.RootOrderByList;
 import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
 import com.fanwe.seller.model.getShopInfo.RootShopInfo;
+import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.model.getShopList.RootShopList;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
@@ -365,6 +371,34 @@ public class SellerHttpHelper implements IHelper {
     }
 
     /**
+     * 取得排序列表
+     */
+    public void getOrderByList() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("method", SellerConstants.ORDER_BY_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootOrderByList root = gson.fromJson(responseBody, RootOrderByList.class);
+                List<ResultOrderByList> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.ORDER_BY_LIST, null);
+                    return;
+                }
+                List<ModelShopListNavs> items = result.get(0).getBody();
+                mView.onSuccess(SellerConstants.ORDER_BY_LIST, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
      * 获取分类列表
      */
     public void getClassifyList() {
@@ -638,6 +672,52 @@ public class SellerHttpHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 获取团购列表
+     *
+     * @param tid        二级分类ID
+     * @param cate_id    大分类ID
+     * @param city_id    城市
+     * @param order_type 排序
+     * @param quan_id    商圈id
+     * @param keyword    关键字
+     * @param pageNum
+     * @param pageSize
+     */
+    public void getGroupList(String tid, String cate_id, String city_id, String order_type, String quan_id, String keyword, int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("tid", tid);
+        params.put("cate_id", cate_id);
+        params.put("city_id", city_id);
+        params.put("order_type", order_type);
+        params.put("qid", quan_id);
+        params.put("keyword", keyword);
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("method", SellerConstants.GROUP_BUY);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootGroupList rootGroupList = gson.fromJson(responseBody, RootGroupList.class);
+                List<ResultGroupList> result = rootGroupList.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.GROUP_BUY, null);
+                    return;
+                }
+                List<ModelGroupList> items = result.get(0).getBody();
+                mView.onSuccess(SellerConstants.GROUP_BUY, items);
             }
 
             @Override

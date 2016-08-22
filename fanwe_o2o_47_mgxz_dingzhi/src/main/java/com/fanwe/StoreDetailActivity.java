@@ -35,6 +35,7 @@ import com.fanwe.model.StoreModel;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelDisplayComment;
 import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getShopInfo.GoodsModelShopInfo;
@@ -100,18 +101,13 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_store_detail);
         init();
-        getData();
     }
 
     private void getData() {
         SDDialogManager.showProgressDialog("请稍候...");
-
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
-
-        MerchantID = "4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b2";
-
         sellerHttpHelper.getShopInfo(MerchantID, AppRuntimeWorker.getCity_id());
     }
 
@@ -347,6 +343,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
                 case 0:
                     if (!SDCollectionUtil.isEmpty(results)) {
                         ResultShopInfo result = results.get(0);
+                        page_title = result.getPage_title();
                         store_info = result.getStore_info();
                         tuan_list = result.getTuan_list();
                         other_supplier_location = result.getOther_supplier_location();
@@ -378,17 +375,20 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         bean.setAddress(store_info.getAddress());
         bean.setTel(store_info.getTel());
         bean.setPreview(store_info.getPreview());
+        bean.setAvg_point(store_info.getAvg_grade());
+        bean.setShare_url(store_info.getShare());
+        bean.setDp_count(store_info.getDp_count());
         actModel.setStore_info(bean);
         //other_supplier_location
         List<StoreModel> otherStores = new ArrayList<>();
         if (!SDCollectionUtil.isEmpty(other_supplier_location)) {
             for (StoreModelShopInfo store_info : other_supplier_location) {
                 StoreModel beanOther = new StoreModel();
+                beanOther.setId(store_info.getId());
                 beanOther.setName(store_info.getShop_name());
                 beanOther.setAddress(store_info.getAddress());
                 beanOther.setTel(store_info.getTel());
                 beanOther.setPreview(store_info.getPreview());
-
                 otherStores.add(beanOther);
             }
         }
@@ -398,8 +398,13 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         if (!SDCollectionUtil.isEmpty(tuan_list)) {
             for (GoodsModelShopInfo goodsModelShopInfo : tuan_list) {
                 GoodsModel beanGoodsModel = new GoodsModel();
+                beanGoodsModel.setId(goodsModelShopInfo.getId());
                 beanGoodsModel.setName(goodsModelShopInfo.getName());
+                beanGoodsModel.setSub_name(goodsModelShopInfo.getShort_name());
                 beanGoodsModel.setIcon(goodsModelShopInfo.getIcon());
+                beanGoodsModel.setOrigin_price(Double.valueOf(goodsModelShopInfo.getOrigin_price()));
+                beanGoodsModel.setCurrent_price(Double.valueOf(goodsModelShopInfo.getTuan_price()));
+                beanGoodsModel.setBuy_count(Integer.valueOf(goodsModelShopInfo.getBuy_count()));
 
                 tuanGoodsModels.add(beanGoodsModel);
             }
@@ -410,8 +415,11 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         if (!SDCollectionUtil.isEmpty(dp_list)) {
             for (ModelComment commentModelShopInfo : dp_list) {
                 CommentModel beanCommentModel = new CommentModel();
+                beanCommentModel.setId(commentModelShopInfo.getId());
+                beanCommentModel.setCreate_time(commentModelShopInfo.getCreate_time());
                 beanCommentModel.setContent(commentModelShopInfo.getContent());
                 beanCommentModel.setPoint(commentModelShopInfo.getPoint());
+                beanCommentModel.setUser_name(commentModelShopInfo.getNick());
                 //缩略图
                 List<String> images = new ArrayList<>();
                 if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getImages())) {
@@ -433,8 +441,20 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
             }
         }
         actModel.setDp_list(commentModels);
+        //ModelDisplayComment
+        ModelDisplayComment modelDisplayComment = new ModelDisplayComment();
+        modelDisplayComment.setPageTitle(page_title);
+        modelDisplayComment.setMessage_count(store_info.getDp_count());
+        modelDisplayComment.setBuy_dp_avg(store_info.getAvg_grade());
+        modelDisplayComment.setStar_1(store_info.getDp_count_1());
+        modelDisplayComment.setStar_2(store_info.getDp_count_2());
+        modelDisplayComment.setStar_3(store_info.getDp_count_3());
+        modelDisplayComment.setStar_4(store_info.getDp_count_4());
+        modelDisplayComment.setStar_5(store_info.getDp_count_5());
+        actModel.setModelDisplayComment(modelDisplayComment);
 
         addFragments(actModel);
+
     }
 
 }

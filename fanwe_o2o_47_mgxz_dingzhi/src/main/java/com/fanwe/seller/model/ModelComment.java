@@ -54,6 +54,16 @@ public class ModelComment {
 
     private String status;
 
+    private String nick;
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
     public void setIs_content(String is_content) {
         this.is_content = is_content;
     }

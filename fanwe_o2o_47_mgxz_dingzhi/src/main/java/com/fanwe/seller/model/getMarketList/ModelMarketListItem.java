@@ -46,6 +46,16 @@ public class ModelMarketListItem {
 
     private String rq;
 
+    private String is_delete;
+
+    public String getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(String is_delete) {
+        this.is_delete = is_delete;
+    }
+
     public void setBank_card(String bank_card) {
         this.bank_card = bank_card;
     }

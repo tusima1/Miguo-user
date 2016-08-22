@@ -17,6 +17,10 @@ public class SellerConstants {
      */
     public static final String CLASSIFY_LIST = "ClassifyList";
     /**
+     * 取得排序列表
+     */
+    public static final String ORDER_BY_LIST = "OrderByList";
+    /**
      * 门店列表
      */
     public static final String SHOP_LIST = "ShopList";
@@ -70,4 +74,8 @@ public class SellerConstants {
      * 我要代言，get代言delete取消代言
      */
     public static final String REPRESENT_MERCHANT = "RepresentMerchant";
+    /**
+     * 团购列表
+     */
+    public static final String GROUP_BUY = "GroupBuy";
 }

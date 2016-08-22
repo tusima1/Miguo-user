@@ -444,6 +444,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                                 CommentModel beanCommentModel = new CommentModel();
                                 beanCommentModel.setContent(commentModelShopInfo.getContent());
                                 beanCommentModel.setPoint(commentModelShopInfo.getPoint());
+                                beanCommentModel.setUser_name(commentModelShopInfo.getNick());
                                 //缩略图
                                 List<String> images = new ArrayList<>();
                                 if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getImages())) {

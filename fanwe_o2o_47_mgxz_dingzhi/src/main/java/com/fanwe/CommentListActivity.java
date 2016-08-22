@@ -32,6 +32,7 @@ import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelDisplayComment;
 import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.presenters.SellerHttpHelper;
@@ -116,8 +117,9 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
     private String mId;
     private String mStrType;
     int pageNum = 1;
-    int pageSize = 2;
+    int pageSize = 10;
     boolean isRefresh;
+    private ModelDisplayComment modelDisplayComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +149,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         initTitle();
         bindDefaultData();
         initPullToRefreshListView();
+        bindData(modelDisplayComment);
     }
 
     private void bindDefaultData() {
@@ -157,6 +160,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
     private void getIntentData() {
         mId = getIntent().getStringExtra(EXTRA_ID);
         mStrType = getIntent().getStringExtra(EXTRA_TYPE);
+        modelDisplayComment = (ModelDisplayComment) getIntent().getSerializableExtra("modelDisplayComment");
 
         if (TextUtils.isEmpty(mId)) {
             SDToast.showToast("id为空");
@@ -219,7 +223,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
                 if (actModel.getStatus() == 1) {
                     mPage.update(actModel.getPage());
                     if (actModel != null) {
-                        bindData(actModel);
+//                        bindData(actModel);
                     }
                     SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore, "未找到评论", "没有更多评论了");
                 }
@@ -236,18 +240,15 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
     /**
      * 评分栏
-     *
-     * @param actModel
      */
-    private void bindData(Dp_indexActModel actModel) {
-        String strTitle = actModel.getPage_title();
-        final String strName = actModel.getName();
-        if (!TextUtils.isEmpty(strTitle)) {
-            mTitle.setMiddleTextTop(strTitle);
+    private void bindData(ModelDisplayComment bean) {
+        if (bean == null) {
+            return;
         }
+        final String strName = bean.getName();
 
         if (AppHelper.isLogin()) {
-            if (actModel.getAllow_dp() == 1) {
+            if (bean.getAllow_dp() == 1) {
                 mBtnPublish.setVisibility(View.VISIBLE);
             } else {
                 mBtnPublish.setVisibility(View.GONE);
@@ -273,23 +274,23 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
             }
         });
 
-        mTvByDpAvg.setText(String.valueOf(actModel.getBuy_dp_avg()));
-        mTvByDpCount.setText(String.valueOf(actModel.getMessage_count()));
+        mTvByDpAvg.setText(bean.getBuy_dp_avg());
+        mTvByDpCount.setText(bean.getMessage_count());
 
-        float ratingStar = SDTypeParseUtil.getFloat(actModel.getBuy_dp_avg());
+        float ratingStar = SDTypeParseUtil.getFloat(bean.getBuy_dp_avg());
         mRbStar.setRating(ratingStar);
 
-        mTvStar5.setText(String.valueOf(actModel.getStar_5()));
-        mTvStar4.setText(String.valueOf(actModel.getStar_4()));
-        mTvStar3.setText(String.valueOf(actModel.getStar_3()));
-        mTvStar2.setText(String.valueOf(actModel.getStar_2()));
-        mTvStar1.setText(String.valueOf(actModel.getStar_1()));
+        mTvStar5.setText(bean.getStar_5());
+        mTvStar4.setText(bean.getStar_4());
+        mTvStar3.setText(bean.getStar_3());
+        mTvStar2.setText(bean.getStar_2());
+        mTvStar1.setText(bean.getStar_1());
 
-        mPbStar5.setProgress(actModel.getStar_dp_width_5());
-        mPbStar4.setProgress(actModel.getStar_dp_width_4());
-        mPbStar3.setProgress(actModel.getStar_dp_width_3());
-        mPbStar2.setProgress(actModel.getStar_dp_width_2());
-        mPbStar1.setProgress(actModel.getStar_dp_width_1());
+        mPbStar5.setProgress(bean.getStar_dp_width_5());
+        mPbStar4.setProgress(bean.getStar_dp_width_4());
+        mPbStar3.setProgress(bean.getStar_dp_width_3());
+        mPbStar2.setProgress(bean.getStar_dp_width_2());
+        mPbStar1.setProgress(bean.getStar_dp_width_1());
 
     }
 
@@ -354,8 +355,12 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
                     if (!SDCollectionUtil.isEmpty(items)) {
                         for (ModelComment modelComment : items) {
                             CommentModel beanCommentModel = new CommentModel();
+                            beanCommentModel.setId(modelComment.getId());
+                            beanCommentModel.setCreate_time(modelComment.getCreate_time());
                             beanCommentModel.setContent(modelComment.getContent());
                             beanCommentModel.setPoint(modelComment.getPoint());
+                            beanCommentModel.setUser_name(modelComment.getNick());
+
                             //缩略图
                             List<String> images = new ArrayList<>();
                             if (!SDCollectionUtil.isEmpty(modelComment.getImages())) {
