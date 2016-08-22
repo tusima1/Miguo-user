@@ -32,9 +32,12 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.CommentModel;
 import com.fanwe.model.Deal_indexActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
@@ -47,6 +50,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TuanDetailActivity extends BaseActivity implements CallbackView {
@@ -432,6 +436,36 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         model.setCurrent_price(modelGroupBuyDetail.getTuan_price());
                         model.setOrigin_price(modelGroupBuyDetail.getOrigin_price());
                         model.setIcon(modelGroupBuyDetail.getIcon());
+
+                        //dp_list
+                        List<CommentModel> commentModels = new ArrayList<>();
+                        if (!SDCollectionUtil.isEmpty(modelGroupBuyDetail.getDp_list())) {
+                            for (ModelComment commentModelShopInfo : modelGroupBuyDetail.getDp_list()) {
+                                CommentModel beanCommentModel = new CommentModel();
+                                beanCommentModel.setContent(commentModelShopInfo.getContent());
+                                beanCommentModel.setPoint(commentModelShopInfo.getPoint());
+                                beanCommentModel.setUser_name(commentModelShopInfo.getNick());
+                                //缩略图
+                                List<String> images = new ArrayList<>();
+                                if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getImages())) {
+                                    for (ModelImage imageShopInfo : commentModelShopInfo.getImages()) {
+                                        images.add(imageShopInfo.getImage());
+                                    }
+                                }
+                                beanCommentModel.setImages(images);
+                                //原图
+                                List<String> oimages = new ArrayList<>();
+                                if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getOimages())) {
+                                    for (ModelImage imageShopInfo : commentModelShopInfo.getOimages()) {
+                                        oimages.add(imageShopInfo.getImage());
+                                    }
+                                }
+                                beanCommentModel.setOimages(oimages);
+
+                                commentModels.add(beanCommentModel);
+                                model.setDp_list(commentModels);
+                            }
+                        }
 
                         addFragments(model);
                     }

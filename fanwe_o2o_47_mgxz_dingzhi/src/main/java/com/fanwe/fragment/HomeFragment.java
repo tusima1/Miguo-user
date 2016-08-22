@@ -13,6 +13,9 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
+import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.views.FragmentHomeTimeLimit;
@@ -79,10 +82,12 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     protected Index_indexActModel mActModel;
 
     private LiveHttpHelper liveHelper;
+    private CommonHttpHelper commonHttpHelper;
     private boolean isRefresh = true;
     private int pageNum = 1;
     private int pageSize = 10;
     private List<Room> rooms;
+    private String typeLiveHome = "";
 
 
     @Override
@@ -94,11 +99,18 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     @Override
     protected void init() {
         super.init();
-
+        getHomeClassify();
 //		initPageModel();
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
+    }
+
+    private void getHomeClassify() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(getActivity(), this);
+        }
+        commonHttpHelper.getHomeClassifyList();
     }
 
     private void initPageModel(int totalPage) {
@@ -120,9 +132,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                 if (pageData_2 != null) {
                     pageData_2.clear();
                 }
-                requestIndex();
                 requestLiveList();
-//                requestIndex2(false);
                 if (location != null) {
                     dealLocationSuccess();
                 }
@@ -200,12 +210,6 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         @Override
         public void onPullDownToRefresh(
                 PullToRefreshBase<ScrollView> refreshView) {
-//            pageModel.resetPage();
-//            mListModel.clear();
-//            pageData_1 = null;
-//            pageData_2.clear();
-//            requestIndex();
-//            requestIndex2(false);
 
             isRefresh = true;
             pageNum = 1;
@@ -226,7 +230,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     private void requestLiveList() {
         if (liveHelper != null) {
-            liveHelper.getLiveList(pageNum, pageSize, "", "", AppRuntimeWorker.getCity_id());
+            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
         }
     }
 
@@ -277,52 +281,6 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         InterfaceServer.getInstance().requestInterface(model, handler);
     }
 
-    private void requestIndex2(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("index");
-        model.putAct("index2");
-        model.putPage(pageModel.getPage() - 1);
-        SDRequestCallBack<Index_indexActModel> handler = new SDRequestCallBack<Index_indexActModel>() {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                // 这是第二页和第三页的数据
-                mActModel = actModel;
-                if (pageData_1 == null) {//第一页都没有显示,我还显示个P啊
-                    return;
-                }
-                if (actModel.getStatus() == 1) {
-                    initPageModel(actModel.getPage().getPage_total());
-                    if (pageModel.getPage() == 2) {
-
-                        if (pageData_2.size() > 0) {
-                            mListModel.addAll(pageData_2);
-                        }
-                    } else if (pageModel.getPage() == 3) {
-
-                        mListModel.addAll(actModel.getDeal_list());
-                        pageData_1 = null;
-                        pageData_2.clear();
-                    }
-                    pageModel.update(pageModel);
-
-                    // 推荐团购
-                    mFragRecommendDeals = new HomeRecommendTuanFragment();
-                    mFragRecommendDeals.setmIndexModel(mListModel,
-                            pageModel.getPage());
-//                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                mPtrsvAll.onRefreshComplete();
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
-
     protected void addFragmentsByActModel(Index_indexActModel actModel) {
         if (actModel == null) {
             return;
@@ -335,9 +293,9 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         getSDFragmentManager().replace(R.id.frag_home_new_fl_advs, mFragAdvs);
 
         // 首页分类
-        mFragIndex = new HomeIndexFragment();
-        mFragIndex.setmIndexModel(actModel);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_index, mFragIndex);
+//        mFragIndex = new HomeIndexFragment();
+//        mFragIndex.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_index, mFragIndex);
 
         // 米果优惠预告
         mFragForenoticeYouhui = new HomeForenoticeYouhui();
@@ -394,11 +352,18 @@ public class HomeFragment extends BaseFragment implements CallbackView {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
-                requestIndex();
                 requestLiveList();
                 break;
             case RETRY_INIT_SUCCESS:
                 dealLocationSuccess();
+                break;
+            case HOME_TYPE_CHANGE:
+                ModelHomeClassifyList bean = (ModelHomeClassifyList) event.getData();
+                if (mHomeFragmentLiveList != null) {
+                    mHomeFragmentLiveList.updateTitle(bean.getName());
+                }
+                typeLiveHome = bean.getId();
+                requestLiveList();
                 break;
             default:
                 break;
@@ -440,6 +405,14 @@ public class HomeFragment extends BaseFragment implements CallbackView {
                 case 2:
                     mPtrsvAll.onRefreshComplete();
                     break;
+                case 3:
+                    // 首页分类
+                    if (mFragIndex == null) {
+                        mFragIndex = new HomeIndexFragment();
+                        getSDFragmentManager().replace(R.id.frag_home_new_fl_index, mFragIndex);
+                    }
+                    mFragIndex.setHomeClassifyList(itemsHomeClassify);
+                    break;
             }
         }
     };
@@ -450,12 +423,18 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     }
 
+    List<ModelHomeClassifyList> itemsHomeClassify;
 
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.LIVE_LIST.equals(method)) {
             //直播列表
             getLiveList((ArrayList<Room>) datas);
+        } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
+            itemsHomeClassify = datas;
+            Message message = new Message();
+            message.what = 3;
+            mHandler.sendMessage(message);
         }
     }
 

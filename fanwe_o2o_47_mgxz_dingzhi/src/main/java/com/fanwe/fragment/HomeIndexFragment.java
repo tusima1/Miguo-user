@@ -1,20 +1,20 @@
 package com.fanwe.fragment;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.adapter.HomeIndexPageAdapter;
+import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.IndexActIndexsModel;
-import com.fanwe.model.Index_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 首页分类fragment
@@ -26,16 +26,15 @@ public class HomeIndexFragment extends BaseFragment {
     @ViewInject(R.id.spv_content)
     private SDSlidingPlayView mSpvAd;
 
-    private Index_indexActModel mIndexModel;
-    private List<IndexActIndexsModel> mListIndexsModel;
-
+    private List<ModelHomeClassifyList> mList = new ArrayList<>();
     private HomeIndexPageAdapter mAdapter;
 
-    public void setmIndexModel(Index_indexActModel indexModel) {
-        this.mIndexModel = indexModel;
-        if (mIndexModel != null) {
-            this.mListIndexsModel = mIndexModel.getIndexs();
-        }
+    public void setHomeClassifyList(List<ModelHomeClassifyList> datas) {
+        mList.clear();
+        if (!SDCollectionUtil.isEmpty(datas))
+            mList.addAll(datas);
+        if (mAdapter != null)
+            mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -58,15 +57,15 @@ public class HomeIndexFragment extends BaseFragment {
     }
 
     private void bindData() {
-        if (!toggleFragmentView(mListIndexsModel)) {
+        if (!toggleFragmentView(mList)) {
             return;
         }
 
-        if (mListIndexsModel.size() > 10) {
+        if (mList.size() > 10) {
             SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(20));
         }
 
-        mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mListIndexsModel, 10), getActivity());
+        mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mList, 10), getActivity());
         mSpvAd.setAdapter(mAdapter);
     }
 

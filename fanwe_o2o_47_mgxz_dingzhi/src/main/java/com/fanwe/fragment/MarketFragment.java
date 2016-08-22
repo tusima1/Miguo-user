@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,17 +24,15 @@ import com.fanwe.adapter.DistributionMarketAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
+import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.customview.app.DistributionMarketCateView;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.DistributionMarketCateModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Supplier_fx;
-import com.fanwe.model.Uc_fx_deal_fxActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getMarketList.ModelMarketListItem;
@@ -43,8 +42,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -89,15 +86,14 @@ public class MarketFragment extends BaseFragment implements CallbackView {
     private PageModel mPage = new PageModel();
 
     private String mId;
-    private int mCate_id = 0;
+    private String mCate_id;
 
     private String city_id = "";//城市id
     private MarketTitleFragment marketTitleFragment;
     private SellerHttpHelper sellerHttpHelper;
-
+    private CommonHttpHelper commonHttpHelper;
     private int pageNum = 1;
     private int pageSize = 10;
-    private String buss_type;
     private String keyword;
 
     @Override
@@ -109,6 +105,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
     @Override
     protected void init() {
         super.init();
+        getHomeClassify();
         initView();
         initFragment();
         getIntentData();
@@ -117,12 +114,18 @@ public class MarketFragment extends BaseFragment implements CallbackView {
         addHeaderView();
         initPullToRefreshListView();
 
-        requestData(false);
         getMarketList();
     }
 
     private void initView() {
 
+    }
+
+    private void getHomeClassify() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(getActivity(), this);
+        }
+        commonHttpHelper.getHomeClassifyList();
     }
 
     private void initFragment() {
@@ -139,7 +142,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
 
     private void getIntentData() {
         mId = getArguments().getString(EXTRA_ID);
-        mCate_id = getArguments().getInt(EXTRA_CATE_ID);
+        mCate_id = getArguments().getString(EXTRA_CATE_ID);
         keyword = getArguments().getString(EXTRA_KEY_WORD);
         if (!isEmpty(keyword)) {
             mEt_search.setText(keyword);
@@ -223,64 +226,9 @@ public class MarketFragment extends BaseFragment implements CallbackView {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getMarketList(pageNum, pageSize, buss_type, keyword, AppRuntimeWorker.getCity_id());
+        sellerHttpHelper.getMarketList(pageNum, pageSize, mCate_id, keyword, AppRuntimeWorker.getCity_id());
     }
 
-    protected void requestData(final boolean isLoadMore) {
-
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_fx");
-        model.putAct("supplier_fx");
-        model.put("cate_id", mCate_id);
-        model.putPage(mPage.getPage());
-        model.put("fx_seach_key", keyword);
-        model.put("city2_id", city_id);
-
-        InterfaceServer.getInstance().requestInterface(HttpMethod.POST, model, null, false, new SDRequestCallBack<Uc_fx_deal_fxActModel>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-
-                if (actModel.getStatus() == 1) {
-                    bindData(actModel, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                mPtrlv_content.onRefreshComplete();
-            }
-        });
-    }
-
-    protected void bindData(Uc_fx_deal_fxActModel actModel, boolean isLoadMore) {
-        if (actModel == null) {
-            return;
-        }
-        if (mNeedBindCate) {
-            List<List<DistributionMarketCateModel>> listModel = SDCollectionUtil.splitList(actModel.getCate_list(), 10);
-            if (isEmpty(listModel)) {
-                SDViewUtil.hide(mCateView);
-            } else {
-                SDViewUtil.show(mCateView);
-                DistributionMarketCatePageAdapter adapter = new DistributionMarketCatePageAdapter(listModel, getActivity());
-                adapter.setmListenerOnClickCateItem(new OnClickCateItemListener() {
-                    @Override
-                    public void onClickItem(int position, View view, DistributionMarketCateModel model) {
-                        mCate_id = model.getId();
-                        if (mCate_id == -1) {
-                            Intent intent = new Intent(getActivity(), ShoppingMallActivity.class);
-                            startActivity(intent);
-                        } else {
-                            mCateView.mNow_Selected.setText(model.getName());
-                            mPtrlv_content.setRefreshing();
-                        }
-                    }
-                });
-                mCateView.mSpv_content.setAdapter(adapter);
-                mNeedBindCate = false;
-            }
-        }
-    }
 
     @Override
     public void onEventMainThread(SDBaseEvent event) {
@@ -306,7 +254,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
     public void setCityIdTitle(String cityName, String cityId) {
         marketTitleFragment.setShowCity(cityName);
         city_id = cityId;
-        requestData(false);
+        getMarketList();
     }
 
     @Override
@@ -316,6 +264,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
 
     private List<ModelMarketListItem> items;
     private boolean isRefresh;
+    List<ModelHomeClassifyList> itemsHomeClassify = new ArrayList<>();
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -324,6 +273,11 @@ public class MarketFragment extends BaseFragment implements CallbackView {
             Message msg = new Message();
             msg.what = 0;
             mHandler.sendMessage(msg);
+        } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
+            itemsHomeClassify = datas;
+            Message message = new Message();
+            message.what = 1;
+            mHandler.sendMessage(message);
         }
 
     }
@@ -347,7 +301,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
                         supplier_fx.setPreview(bean.getEnt_logo());
                         supplier_fx.setBuy_count(Integer.valueOf(bean.getRq()));
                         supplier_fx.setName(bean.getBuss_name());
-                        supplier_fx.setIs_delete(1);
+                        supplier_fx.setIs_delete(Integer.valueOf(bean.getIs_delete()));
                         mListModel.add(supplier_fx);
                     }
                     mAdapter.notifyDataSetChanged();
@@ -359,7 +313,33 @@ public class MarketFragment extends BaseFragment implements CallbackView {
                     }
 
                     break;
+                case 1:
+                    // 分类
+                    List<List<ModelHomeClassifyList>> listModel = SDCollectionUtil.splitList(itemsHomeClassify, 10);
+                    if (isEmpty(listModel)) {
+                        SDViewUtil.hide(mCateView);
+                    } else {
+                        SDViewUtil.show(mCateView);
+                        DistributionMarketCatePageAdapter adapter = new DistributionMarketCatePageAdapter(listModel, getActivity());
+                        adapter.setmListenerOnClickCateItem(new OnClickCateItemListener() {
+                            @Override
+                            public void onClickItem(int position, View view, ModelHomeClassifyList model) {
+                                mCate_id = model.getId();
+                                if (TextUtils.isEmpty(mCate_id)) {
+                                    Intent intent = new Intent(getActivity(), ShoppingMallActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    mCateView.mNow_Selected.setText(model.getName());
+                                    mPtrlv_content.setRefreshing();
+                                }
+                            }
+                        });
+                        mCateView.mSpv_content.setAdapter(adapter);
+
+                        break;
+                    }
             }
         }
+
     };
 }

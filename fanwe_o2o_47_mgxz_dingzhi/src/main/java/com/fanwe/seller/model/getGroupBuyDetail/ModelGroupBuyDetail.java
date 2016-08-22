@@ -1,5 +1,7 @@
 package com.fanwe.seller.model.getGroupBuyDetail;
 
+import com.fanwe.seller.model.ModelComment;
+
 import java.util.List;
 
 /**
@@ -28,7 +30,7 @@ public class ModelGroupBuyDetail {
 
     private String is_integral;
 
-    private List<CommentModelTuan> dp_list;
+    private List<ModelComment> dp_list;
 
     private String is_first_price;
 
@@ -272,11 +274,11 @@ public class ModelGroupBuyDetail {
         this.is_integral = is_integral;
     }
 
-    public List<CommentModelTuan> getDp_list() {
+    public List<ModelComment> getDp_list() {
         return dp_list;
     }
 
-    public void setDp_list(List<CommentModelTuan> dp_list) {
+    public void setDp_list(List<ModelComment> dp_list) {
         this.dp_list = dp_list;
     }
 

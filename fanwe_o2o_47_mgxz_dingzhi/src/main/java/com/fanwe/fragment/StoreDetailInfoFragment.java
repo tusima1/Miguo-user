@@ -29,8 +29,10 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.StoreActModel;
 import com.fanwe.model.Store_imagesModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.ModelDisplayComment;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.math.BigDecimal;
@@ -104,6 +106,7 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
     private TextView mTv_days;
 
     protected OnStoreDetailListener mListener;
+    private ModelDisplayComment modelDisplayComment;
 
     private SimpleDateFormat format = new SimpleDateFormat("MM-dd");
     private int day = 0;
@@ -127,6 +130,12 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
             e.printStackTrace();
         }
         registeClick();
+    }
+
+    @Override
+    public void setmStoreModel(StoreActModel mStoreModel) {
+        super.setmStoreModel(mStoreModel);
+        this.modelDisplayComment = mStoreModel.getModelDisplayComment();
     }
 
     private void initViewState() {
@@ -242,6 +251,7 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
         Intent intent = new Intent(App.getApplication(), CommentListActivity.class);
         intent.putExtra(CommentListActivity.EXTRA_ID, mInfoModel.getId());
         intent.putExtra(CommentListActivity.EXTRA_TYPE, CommentType.STORE);
+        intent.putExtra("modelDisplayComment", modelDisplayComment);
         startActivity(intent);
     }
 

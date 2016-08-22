@@ -1,56 +1,48 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.library.adapter.SDBasePagerAdapter;
 import com.fanwe.library.customview.SDGridLinearLayout;
 import com.fanwe.library.customview.SDGridLinearLayout.OnItemClickListener;
-import com.fanwe.model.DistributionMarketCateModel;
 
-public class DistributionMarketCatePageAdapter extends SDBasePagerAdapter<List<DistributionMarketCateModel>>
-{
+import java.util.List;
 
-	private OnClickCateItemListener mListenerOnClickCateItem;
+public class DistributionMarketCatePageAdapter extends SDBasePagerAdapter<List<ModelHomeClassifyList>> {
 
-	public void setmListenerOnClickCateItem(OnClickCateItemListener listenerOnClickCateItem)
-	{
-		this.mListenerOnClickCateItem = listenerOnClickCateItem;
-	}
+    private OnClickCateItemListener mListenerOnClickCateItem;
 
-	public DistributionMarketCatePageAdapter(List<List<DistributionMarketCateModel>> listModel, Activity activity)
-	{
-		super(listModel, activity);
-	}
+    public void setmListenerOnClickCateItem(OnClickCateItemListener listenerOnClickCateItem) {
+        this.mListenerOnClickCateItem = listenerOnClickCateItem;
+    }
 
-	@Override
-	public View getView(View container, int position)
-	{
-		final SDGridLinearLayout ll = new SDGridLinearLayout(mActivity);
-		ll.setmColNumber(5);
-		final DistributionMarketCateAdapter adapter = new DistributionMarketCateAdapter(getItemModel(position), mActivity);
-		ll.setmListenerOnItemClick(new OnItemClickListener()
-		{
+    public DistributionMarketCatePageAdapter(List<List<ModelHomeClassifyList>> listModel, Activity activity) {
+        super(listModel, activity);
+    }
 
-			@Override
-			public void onItemClick(int position, View view, ViewGroup parent)
-			{
-				if (mListenerOnClickCateItem != null)
-				{
-					mListenerOnClickCateItem.onClickItem(position, view, adapter.getItem(position));
-				}
-			}
-		});
-		ll.setAdapter(adapter);
-		return ll;
-	}
+    @Override
+    public View getView(View container, int position) {
+        final SDGridLinearLayout ll = new SDGridLinearLayout(mActivity);
+        ll.setmColNumber(5);
+        final DistributionMarketCateAdapter adapter = new DistributionMarketCateAdapter(getItemModel(position), mActivity);
+        ll.setmListenerOnItemClick(new OnItemClickListener() {
 
-	public interface OnClickCateItemListener
-	{
-		public void onClickItem(int position, View view, DistributionMarketCateModel model);
-	}
+            @Override
+            public void onItemClick(int position, View view, ViewGroup parent) {
+                if (mListenerOnClickCateItem != null) {
+                    mListenerOnClickCateItem.onClickItem(position, view, adapter.getItem(position));
+                }
+            }
+        });
+        ll.setAdapter(adapter);
+        return ll;
+    }
+
+    public interface OnClickCateItemListener {
+        public void onClickItem(int position, View view, ModelHomeClassifyList model);
+    }
 
 }

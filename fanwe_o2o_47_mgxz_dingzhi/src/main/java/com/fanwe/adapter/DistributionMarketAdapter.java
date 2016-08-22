@@ -3,6 +3,8 @@ package com.fanwe.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +17,7 @@ import android.widget.Toast;
 import com.fanwe.DaiYanStoreWapActivity;
 import com.fanwe.DistributionStoreInActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBaseAdapter;
@@ -31,15 +33,19 @@ import com.fanwe.model.AddStoreModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Supplier_fx;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 
 import java.util.List;
 
-public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> {
+public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implements CallbackView {
+    private SellerHttpHelper sellerHttpHelper;
 
     public DistributionMarketAdapter(List<Supplier_fx> listModel, Activity activity) {
         super(listModel, activity);
+        sellerHttpHelper = new SellerHttpHelper(activity, this);
     }
 
     @Override
@@ -65,7 +71,7 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> {
             SDViewBinder.setTextView(tv_name, model.getName());
             SDViewBinder.setTextView(tv_commission, String.valueOf(model.getBuy_count()));
 
-            if (model.getIs_delete() == 0) {
+            if (model.getIs_delete() == 1) {
                 add_distribution.setText("已代言");
                 add_distribution.setBackgroundResource(R.drawable.bg_daiyan);
             } else {
@@ -76,16 +82,19 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> {
 
                 @Override
                 public void onClick(View v) {
-                    if (model.getIs_delete() == 0) {
+                    if (model.getIs_delete() == 1) {
 //						openTheStore(model.getUrl());
                         SDToast.showToast("已经代言过了!");
                         return;
                     }
-                    if (AppHelper.isLogin(mActivity)) {
-                        clickAddDistribution(model, position);
-                    } else {
-                        mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
-                    }
+//                    if (AppHelper.isLogin(mActivity)) {
+//                        clickAddDistribution(model, position);
+//                    } else {
+//                        mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
+//                    }
+                    currPosition = position;
+                    currModel = model;
+                    representMerchant();
                 }
             });
 
@@ -128,6 +137,13 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> {
             });
         }
         return convertView;
+    }
+
+    private int currPosition;
+    private Supplier_fx currModel;
+
+    private void representMerchant() {
+        sellerHttpHelper.getRepresentMerchant(currModel.getId(), "");
     }
 
     /**
@@ -224,4 +240,35 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> {
         super.updateData(listModel);
     }
 
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        Message message = new Message();
+        if (SellerConstants.REPRESENT_MERCHANT.equals(method)) {
+            message.what = 0;
+        }
+        mHandler.sendMessage(message);
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    mListModel.get(currPosition).setIs_delete(1);
+                    notifyDataSetChanged();
+                    showDialog("代言成功，请进入我的小店查看", mListModel.get(currPosition).getUrl());
+                    break;
+            }
+        }
+    };
 }

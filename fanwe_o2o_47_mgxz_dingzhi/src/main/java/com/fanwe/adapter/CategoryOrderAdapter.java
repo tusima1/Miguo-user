@@ -69,4 +69,5 @@ public class CategoryOrderAdapter extends SDBaseAdapter<ModelShopListNavs> imple
         return -1;
     }
 
+
 }
