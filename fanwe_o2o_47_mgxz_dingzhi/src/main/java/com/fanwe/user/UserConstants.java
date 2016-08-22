@@ -116,6 +116,8 @@ public class UserConstants {
      */
     public static final String QQ_GET_USER_INFO = "https://graph.qq.com/user/get_user_info";
 
+
+
     //返回码
     /**
      * 注册成功。

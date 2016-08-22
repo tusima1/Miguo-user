@@ -346,12 +346,12 @@ public class SellerHttpHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 RootCheckShopCollect root = gson.fromJson(responseBody, RootCheckShopCollect.class);
                 List<ResultCheckShopCollect> result = root.getResult();
-                if (SDCollectionUtil.isEmpty(result)) {
+                if(!SDCollectionUtil.isEmpty(result)&&result.get(0)!=null && result.get(0).getBody()!=null) {
+                    List<ModelCheckShopCollect> items = result.get(0).getBody();
+                    mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, items);
+                }else{
                     mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, null);
-                    return;
                 }
-                List<ModelCheckShopCollect> items = result.get(0).getBody();
-                mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, items);
             }
 
             @Override

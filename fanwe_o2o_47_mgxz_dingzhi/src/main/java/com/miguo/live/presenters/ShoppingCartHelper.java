@@ -23,9 +23,9 @@ public class ShoppingCartHelper extends Presenter {
     private CallbackView mView;
 
     public ShoppingCartHelper(Context mContext,CallbackView mView){
-       this.mContext = mContext;
+        this.mContext = mContext;
+        this.mContext = mContext;
         this.mView = mView;
-
     }
 
     /**添加至购物车

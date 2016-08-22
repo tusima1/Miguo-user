@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.fanwe.LoginActivity;
 import com.fanwe.adapter.HomeLiveListAdapter;
 import com.fanwe.app.App;
 import com.fanwe.customview.SDGridViewInScroll;
@@ -73,6 +74,11 @@ HomeFragmentLiveList extends BaseFragment {
         mSDGridViewInScroll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(TextUtils.isEmpty(App.getInstance().getToken())){
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 Room room = datas.get(position);
                 Host host = room.getHost();
                 Intent intent = new Intent(getActivity(), LiveActivity.class);

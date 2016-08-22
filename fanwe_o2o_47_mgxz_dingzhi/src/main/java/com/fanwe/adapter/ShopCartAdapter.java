@@ -1,11 +1,5 @@
 package com.fanwe.adapter;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
@@ -31,27 +25,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fanwe.common.CommonInterface;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.BaseActModel;
 import com.fanwe.model.CartGoodsModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
+import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.utils.SDFormatUtil;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.sunday.eventbus.SDEventManager;
 
-public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 
 	/** 屏幕宽度 */
 	public int mScreenWidth;
@@ -68,13 +61,11 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 	/** touch事件锁定,如果已经有滑动出删除按钮的itemView,就屏蔽下一整次(down,move,up)的onTouch操作 */
 	public boolean mLockOnTouch = false;
 
-	private boolean mIsScore;
-	/**
-	 * 当前是否编辑状态。
-	 */
-	protected boolean mIsDelect;
-
 	protected ShopCartSelectedListener mListener;
+
+	public OutSideShoppingCartHelper mShoppingCartHelper;
+
+	public CallbackView mCallbackview;
 
 	public void setOnShopCartSelectedListener(ShopCartSelectedListener listener) {
 		this.mListener = listener;
@@ -82,11 +73,9 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 
 	private HorizontalScrollView scrollView;
 
-	public ShopCartAdapter(List<CartGoodsModel> listModel, Activity activity,
-			boolean isScore, boolean isDelect, TextView shopCart) {
+	public ShopCartAdapter(List<ShoppingCartInfo> listModel, Activity activity,CallbackView callbackView) {
 		super(listModel, activity);
-		this.mIsScore = isScore;
-		this.mIsDelect = isDelect;
+		this.mCallbackview = callbackView;
 		// 搞到屏幕宽度
 		Display defaultDisplay = mActivity.getWindowManager()
 				.getDefaultDisplay();
@@ -103,17 +92,17 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 	public ArrayList<Integer> getId() {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		if (mListModel != null) {
-			for (CartGoodsModel model : mListModel) {
+			for (ShoppingCartInfo model : mListModel) {
 				list.add(Integer.valueOf(model.getId()));
 			}
 		}
 		return list;
 	}
 
-	public Map<String, Integer> getMapNumber() {
-		Map<String, Integer> mapNumber = new HashMap<String, Integer>();
+	public Map<String, String> getMapNumber() {
+		Map<String, String> mapNumber = new HashMap<String, String>();
 		if (mListModel != null) {
-			for (CartGoodsModel model : mListModel) {
+			for (ShoppingCartInfo model : mListModel) {
 				mapNumber.put(String.valueOf(model.getId()), model.getNumber());
 			}
 		}
@@ -161,7 +150,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		final TextView tv_originalPrice = ViewHolder.get(convertView,
 				R.id.tv_originalPrice);
 
-		final CartGoodsModel model = getItem(position);
+		final ShoppingCartInfo model = getItem(position);
 		if (model != null) {
 			ll_percent.setLayoutParams(mParams);
 			DisplayMetrics metric = new DisplayMetrics();
@@ -170,26 +159,22 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 			int height = (int) (width * 0.242 - 5);
 			SDViewUtil.setViewHeight(iv_image, height);
 			tv_originalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-			SDViewBinder.setImageView(iv_image, model.getIcon());
-			if (model.getUser_max_bought() <= -1) {
+			SDViewBinder.setImageView(iv_image, model.getImg());
+			if (SDFormatUtil.stringToInteger(model.getLimit_num()) <= -1) {
 				SDViewUtil.hide(tv_max);
 			} else {
 				SDViewUtil.show(tv_max);
 				SDViewBinder.setTextView(tv_max,
-						"限购" + model.getUser_max_bought() + "件");
+						"限购" + model.getLimit_num() + "件");
 			}
-			SDViewBinder.setTextView(tv_title, model.getSub_name());
-			et_number.setText(String.valueOf(model.getNumber()));
+
+			et_number.setText(model.getNumber());
 			SDViewBinder.setTextView(tv_originalPrice,
 					SDFormatUtil.formatMoneyChina(model.getOrigin_price()));
 			setPrice(tv_actualPrice, tv_sunMoney, model);
 			scrollView.scrollTo(0, 0);
 			bt_delect.setOnClickListener(new DeleteOnClickListener(position));
-			// ineffective
-			int user_max_bought = model.getUser_max_bought();
-			if (user_max_bought > -1 && model.getNumber() > user_max_bought) {
 
-			}
 
 			if (!ineffectiveCheck(model)) {
 				ineffectiveBtn.setVisibility(View.VISIBLE);
@@ -206,30 +191,20 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 				et_number.setVisibility(View.VISIBLE);
 			}
 
-			if (mIsDelect) {
-				cb_check.setChecked(model.isEdit());
-			} else {
 
 				cb_check.setChecked(model.isChecked());
-			}
+
 			cb_check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
 
-					if (!mIsDelect) {
+
 						model.setChecked(isChecked);
 						if (mListener != null) {
 							mListener.onSelectedListener();
 						}
-					} else {
-						model.setEdit(isChecked);
-						if (mListener != null) {
-							mListener.onDelSelectedListener(model, mIsDelect);
-						}
-					}
-
 				}
 			});
 			tv_add_number.setOnClickListener(new OnClickListener() {
@@ -240,7 +215,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 						SDToast.showToast("该宝贝不能购买更多哦！",Toast.LENGTH_LONG);
 						return;
 					}
-					int maxNumber = model.getUser_max_bought();
+					int maxNumber = SDFormatUtil.stringToInteger(model.getLimit_num());
 					// -1表示无数量限制.
 					if ((maxNumber <= -1)
 							|| ((maxNumber > -1) && curNumber < maxNumber)) {
@@ -279,7 +254,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 					if (TextUtils.isEmpty(s)) {
 						return;
 					} else {
-						int maxNumber = model.getUser_max_bought();
+						int maxNumber = SDFormatUtil.stringToInteger(model.getLimit_num());
 						if (s.toString().length() > 4) {
 							int index = s.toString().length();
 							s.delete(index - 1, index);
@@ -291,7 +266,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 								// 无限制
 								inputNum = maxNumber;
 							}
-							model.setNumber(inputNum);
+							model.setNumber(inputNum+"");
 							setPrice(tv_actualPrice, tv_sunMoney, model);
 							if (cb_check.isChecked()) {
 								mListener.onSelectedListener();
@@ -338,34 +313,28 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 	}
 
 	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice,
-			CartGoodsModel model) {
+			ShoppingCartInfo model) {
 		if (model != null && tvSinglePrice != null && tvTotalPrice != null) {
-			if (mIsScore) {
-				SDViewBinder.setTextView(tvSinglePrice,
-						model.getReturn_scoreFormat());
-				SDViewBinder.setTextView(tvTotalPrice,
-						model.getReturn_total_scoreFormat());
-			} else {
-				int is_first = model.getIs_first();
-				is_first -= model.getCheck_first();
-				if (is_first > 0) {
-					if (is_first > model.getNumber()) {
-						is_first = model.getNumber();
-					}
-				} else {
-					is_first = 0;
+			float sumPrice = 0.00f;
+			int firstNum = SDFormatUtil.stringToInteger(model.getIs_first());
+			int number= SDFormatUtil.stringToInteger(model.getNumber());
+			if (firstNum > 0) {
+				if (firstNum > number) {
+					firstNum = number;
 				}
-				float total_price = is_first * model.getIs_first_price();
-				total_price += (model.getNumber() - is_first)
-						* Float.parseFloat(model.getUnit_price());
-				BigDecimal bd1 = new BigDecimal(total_price);
-
-				bd1 = bd1.setScale(2, BigDecimal.ROUND_HALF_UP);
-				model.setSumPrice(bd1.floatValue());
-				SDViewBinder.setTextView(tvSinglePrice, model.getUnit_price());
-				SDViewBinder.setTextView(tvTotalPrice, String.valueOf(bd1));
+			} else {
+				firstNum = 0;
 			}
-		}
+			/**
+			 * 总金额-首几单 优惠 金额 - = 总金额。
+			 */
+			sumPrice = firstNum * SDFormatUtil.stringToFloat(model.getIs_first_price());
+			sumPrice = number* SDFormatUtil.stringToFloat(model.getTuan_price())-sumPrice;
+
+				model.setSumPrice(sumPrice);
+				SDViewBinder.setTextView(tvSinglePrice, model.getOrigin_price());
+				SDViewBinder.setTextView(tvTotalPrice, sumPrice+"");
+			}
 	}
 
 	private int getNumberFromEditText(EditText et) {
@@ -386,52 +355,17 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		@Override
 		public void onClick(View v) {
 			// TODO 删除商品
-			final CartGoodsModel model = getItem(nPosition);
-			if (model != null) {
-				RequestModel request = new RequestModel();
-				request.putCtl("cart");
-				request.putAct("del");
-				request.putUser();
-				request.put("id", model.getId());
-				SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>() {
-					@Override
-					public void onStart() {
-						SDDialogManager.showProgressDialog("正在删除");
-					}
+			if(mShoppingCartHelper ==null){
+				mShoppingCartHelper = new OutSideShoppingCartHelper(mCallbackview);
 
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo) {
-						if (actModel.getStatus() == 1) {
-							// 删除成功
-							mListModel.remove(model);
-							notifyDataSetChanged();
-							CommonInterface.updateCartNumber();
-							mListener.onTitleNumChangeListener(mListModel
-									.size());
-							SDEventManager
-									.post(EnumEventTag.DELETE_CART_GOODS_SUCCESS
-											.ordinal());
-						}
-					}
-
-					@Override
-					public void onFailure(HttpException error, String msg) {
-
-					}
-
-					@Override
-					public void onFinish() {
-						SDDialogManager.dismissProgressDialog();
-					}
-				};
-				InterfaceServer.getInstance()
-						.requestInterface(request, handler);
 			}
+			final ShoppingCartInfo model = getItem(nPosition);
+			mShoppingCartHelper.doDeleteShopCart(model.getId());
 		}
 	}
 
 	// 删除一批数据
-	public void removeItems(List<CartGoodsModel> list) {
+	public void removeItems(List<ShoppingCartInfo> list) {
 		mListModel.removeAll(list);
 		notifyDataSetChanged();
 	}
@@ -445,9 +379,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 
-			if (!mIsDelect) {
-				return true;
-			} else {
+
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 					// 如果有划出删除按钮的itemView,就让他滑回去并且锁定本次touch操作,解锁会在父组件的dispatchTouchEvent中进行
@@ -463,7 +395,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 				case MotionEvent.ACTION_UP:
 					HorizontalScrollView view = (HorizontalScrollView) v;
 					// 当前是编辑状态，并且滑动了>70个像素,就显示出删除按钮
-					if (mIsDelect && (startX > event.getX() + 70)) {
+					if ((startX > event.getX() + 70)) {
 						startX = 0;// 因为公用一个事件处理对象,防止错乱,还原startX值
 						scrollView(view, HorizontalScrollView.FOCUS_RIGHT);
 						mScrollView = view;
@@ -475,7 +407,7 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 
 				}
 				return false;
-			}
+
 		}
 	}
 
@@ -489,34 +421,19 @@ public class ShopCartAdapter extends SDBaseAdapter<CartGoodsModel> {
 		});
 	}
 
-	public boolean ismIsDelect() {
-		return mIsDelect;
-	}
-
-	public void setmIsDelect(boolean mIsDelect) {
-		this.mIsDelect = mIsDelect;
-	}
-
 	/**
-	 * 判断当前订单是否有效。
+	 * 判断当前订单是否有效。 1为可以购买，0为不可
 	 * 
 	 * @param model
 	 * @return
 	 */
-	public boolean ineffectiveCheck(CartGoodsModel model) {
+	public boolean ineffectiveCheck(ShoppingCartInfo model) {
 
-		int user_max_bought = model.getUser_max_bought();
-		if (user_max_bought > -1 && model.getNumber() > user_max_bought) {
-			return false;
-		}
-		if (model.getTime_status() == 2 || model.getTime_status() == 3) {
-			return false;
-		}
 
-		if (model.getBuy_status() == 2) {
-			return false;
+		if (!TextUtils.isEmpty(model.getBuyFlg())&&"1".equals(model.getBuyFlg())) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 }

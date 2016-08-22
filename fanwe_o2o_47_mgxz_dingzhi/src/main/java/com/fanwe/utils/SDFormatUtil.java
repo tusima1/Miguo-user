@@ -35,6 +35,21 @@ public class SDFormatUtil
 	{
 		return formatMoneyChina(String.valueOf(money));
 	}
+	public static float stringToFloat(String value){
+		if(TextUtils.isEmpty(value)){
+			return 0.00f;
+		}else{
+			return Float.valueOf(value);
+		}
+	}
+
+
+	public static int  stringToInteger(String number){
+		if(TextUtils.isEmpty(number)){
+			return 0;
+		}
+		return Integer.valueOf(number);
+	}
 
 	public static String formatNumberString(String formatString, int number)
 	{

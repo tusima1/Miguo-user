@@ -3,7 +3,8 @@ package com.fanwe;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fanwe.fragment.ShopCartFragment;
+
+import com.fanwe.fragment.ShopCartFragmentNew;
 import com.fanwe.o2o.miguo.R;
 
 /**
@@ -25,7 +26,8 @@ public class ShopCartActivity extends BaseActivity
 
 	private void init()
 	{
-		getSDFragmentManager().replace(R.id.view_container_fl_content, new ShopCartFragment());
+		getSDFragmentManager().replace(R.id.view_container_fl_content, new ShopCartFragmentNew()
+		);
 	}
 
 	@Override

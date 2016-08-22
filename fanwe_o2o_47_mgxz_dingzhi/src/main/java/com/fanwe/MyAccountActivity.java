@@ -494,8 +494,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         App.getInstance().setImLoginSuccess(false);
 
 
-        App.getApplication().setmLocalUser(new LocalUserModel());
-        App.getApplication().clearAppsLocalUserModel();
+        App.getInstance().setmLocalUser(new LocalUserModel());
+        App.getInstance().clearAppsLocalUserModel();
         AppConfig.setSessionId("");
         AppConfig.setUserName("");
         AppConfig.setRefId("");
