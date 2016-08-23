@@ -4,7 +4,7 @@ public class StoreModelShopInfo {
     private String preview;
 
     private String cons_count;
-
+    private String dp_count;
     private String dp_count_2;
 
     private String dp_count_1;
@@ -60,6 +60,14 @@ public class StoreModelShopInfo {
     private String avg_grade;
 
     private String city_id;
+
+    public String getDp_count() {
+        return dp_count;
+    }
+
+    public void setDp_count(String dp_count) {
+        this.dp_count = dp_count;
+    }
 
     public void setPreview(String preview) {
         this.preview = preview;

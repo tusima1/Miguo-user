@@ -1,7 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,107 +15,101 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.ModelDisplayComment;
 import com.lidroid.xutils.view.annotation.ViewInject;
+
+import java.util.List;
 
 /**
  * 团购详情，商品评论fragment
- * 
+ *
  * @author js02
- * 
  */
-public class TuanDetailCommentFragment extends TuanDetailBaseFragment
-{
+public class TuanDetailCommentFragment extends TuanDetailBaseFragment {
 
-	@ViewInject(R.id.ll_all)
-	private LinearLayout mLl_all;
+    @ViewInject(R.id.ll_all)
+    private LinearLayout mLl_all;
 
-	@ViewInject(R.id.ll_comment)
-	private LinearLayout mLl_comment;
+    @ViewInject(R.id.ll_comment)
+    private LinearLayout mLl_comment;
 
-	@ViewInject(R.id.ll_more_comment)
-	private LinearLayout mLl_more_comment;
+    @ViewInject(R.id.ll_more_comment)
+    private LinearLayout mLl_more_comment;
 
-	@ViewInject(R.id.tv_comment)
-	private TextView mTv_comment;
+    @ViewInject(R.id.tv_comment)
+    private TextView mTv_comment;
 
-	@Override
-	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		return setContentView(R.layout.frag_tuan_detail_comment);
-	}
+    private ModelDisplayComment modelDisplayComment;
 
-	@Override
-	protected void init()
-	{
-		registeClick();
-		bindData();
-	}
+    @Override
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return setContentView(R.layout.frag_tuan_detail_comment);
+    }
 
-	private void registeClick()
-	{
-		mLl_more_comment.setOnClickListener(this);
-		mTv_comment.setOnClickListener(this);
-	}
+    @Override
+    protected void init() {
+        registeClick();
+        bindData();
+    }
 
-	private void bindData()
-	{
-		if (!toggleFragmentView(mDealModel))
-		{
-			return;
-		}
+    private void registeClick() {
+        mLl_more_comment.setOnClickListener(this);
+        mTv_comment.setOnClickListener(this);
+    }
 
-		List<CommentModel> listModel = mDealModel.getDp_list();
-		changeViewState(listModel);
-		if (!SDCollectionUtil.isEmpty(listModel))
-		{
-			mLl_comment.removeAllViews();
-			TuanDetailCommentAdapter adapter = new TuanDetailCommentAdapter(listModel, getActivity());
-			for (int i = 0; i < listModel.size(); i++)
-			{
-				mLl_comment.addView(adapter.getView(i, null, null));
-			}
-		}
-	}
+    private void bindData() {
+        if (!toggleFragmentView(mDealModel)) {
+            return;
+        }
 
-	private void changeViewState(List<CommentModel> listModel)
-	{
-		if (!SDCollectionUtil.isEmpty(listModel))
-		{
-			SDViewUtil.show(mLl_all);
-			SDViewUtil.hide(mTv_comment);
-		} else
-		{
-			SDViewUtil.show(mTv_comment);
-			SDViewUtil.hide(mLl_all);
-		}
-	}
+        List<CommentModel> listModel = mDealModel.getDp_list();
+        changeViewState(listModel);
+        if (!SDCollectionUtil.isEmpty(listModel)) {
+            mLl_comment.removeAllViews();
+            TuanDetailCommentAdapter adapter = new TuanDetailCommentAdapter(listModel, getActivity());
+            for (int i = 0; i < listModel.size(); i++) {
+                mLl_comment.addView(adapter.getView(i, null, null));
+            }
+        }
+    }
 
-	@Override
-	public void onClick(View v)
-	{
-		switch (v.getId())
-		{
-		case R.id.ll_more_comment:
-			clickMoreComment();
-			break;
-		case R.id.tv_comment:
-			clickMoreComment();
-			break;
+    public void setModelDisplayComment(ModelDisplayComment modelDisplayComment) {
+        this.modelDisplayComment = modelDisplayComment;
+    }
 
-		default:
-			break;
-		}
-	}
+    private void changeViewState(List<CommentModel> listModel) {
+        if (!SDCollectionUtil.isEmpty(listModel)) {
+            SDViewUtil.show(mLl_all);
+            SDViewUtil.hide(mTv_comment);
+        } else {
+            SDViewUtil.show(mTv_comment);
+            SDViewUtil.hide(mLl_all);
+        }
+    }
 
-	private void clickMoreComment()
-	{
-		if (mDealModel != null)
-		{
-			Intent intent = new Intent(getActivity(), CommentListActivity.class);
-			intent.putExtra(CommentListActivity.EXTRA_ID, mDealModel.getId());
-			intent.putExtra(CommentListActivity.EXTRA_TYPE, CommentType.DEAL);
-			startActivity(intent);
-		}
-	}
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_more_comment:
+                clickMoreComment();
+                break;
+            case R.id.tv_comment:
+                clickMoreComment();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void clickMoreComment() {
+        if (mDealModel != null) {
+            Intent intent = new Intent(getActivity(), CommentListActivity.class);
+            intent.putExtra(CommentListActivity.EXTRA_ID, mDealModel.getId());
+            intent.putExtra(CommentListActivity.EXTRA_TYPE, CommentType.DEAL);
+            intent.putExtra("modelDisplayComment", modelDisplayComment);
+            startActivity(intent);
+        }
+    }
 
 }

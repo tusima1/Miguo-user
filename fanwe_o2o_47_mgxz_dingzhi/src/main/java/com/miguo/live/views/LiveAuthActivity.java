@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.fanwe.CityListActivity;
 import com.fanwe.base.CallbackView;
@@ -24,6 +25,7 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveAuthBinding;
 import com.fanwe.utils.Bimp;
+import com.fanwe.utils.StringTool;
 import com.fanwe.utils.UriUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.adapters.VisitImgAdapter;
@@ -61,6 +63,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     private LiveHttpHelper liveHttpHelper;
     private UploadManager uploadManager;
     private EditText etPhone;
+    private TextView tvInterest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         ActLiveAuthBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_auth);
         mGridView = (GridView) findViewById(R.id.gridView_live_auth);
         etPhone = (EditText) findViewById(R.id.et_phone_live_auth);
+        tvInterest = (TextView) findViewById(R.id.tv_interest_live_auth);
         dataBindingLiveAuth = new DataBindingLiveAuth();
         binding.setLive(dataBindingLiveAuth);
 
@@ -226,6 +230,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         }
         if (requestCode == 200 && resultCode == 8888) {
             dataBindingLiveAuth.interest.set(data.getStringExtra("tags"));
+            tvInterest.setText(StringTool.getStringFixed(dataBindingLiveAuth.interest.get(), 15, ""));
             return;
         }
         if (resultCode != Activity.RESULT_OK) {

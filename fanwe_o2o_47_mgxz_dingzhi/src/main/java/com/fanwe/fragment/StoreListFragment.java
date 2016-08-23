@@ -142,7 +142,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
      */
     private String pid;
     private int pageNum = 1;
-    private int pageSize = 5;
+    private int pageSize = 10;
     private SellerHttpHelper sellerHttpHelper;
 
     @Override
@@ -476,6 +476,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
     }
 
+    List<ModelShopListNavs> navs;
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -492,8 +494,10 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                     if (!SDCollectionUtil.isEmpty(resultShopLists)) {
                         ResultShopList resultShopList = resultShopLists.get(0);
                         //排序
-                        List<ModelShopListNavs> navs = resultShopList.getNavs();
-                        bindRightCategoryViewData(navs);
+                        if (SDCollectionUtil.isEmpty(navs)) {
+                            navs = resultShopList.getNavs();
+                            bindRightCategoryViewData(navs);
+                        }
                         //店铺数据
                         List<StoreModel> listNewData = new ArrayList<>();
                         if (!SDCollectionUtil.isEmpty(resultShopList.getItem())) {
@@ -505,6 +509,9 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                                 storeModel.setPreview(bean.getPreview());
                                 storeModel.setAddress(bean.getAddress());
                                 storeModel.setTel(bean.getTel());
+                                storeModel.setAvg_point(Float.valueOf(bean.getAvg_grade()));
+                                storeModel.setOffline(Integer.valueOf(bean.getOffline()));
+                                storeModel.setDiscount_pay(Integer.valueOf(bean.getDiscount_pay()));
                                 listNewData.add(storeModel);
                             }
                         }

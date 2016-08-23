@@ -129,4 +129,30 @@ public class UserConstants {
     public static final String ALL_REGISTERED = "311";
     public static final String SUCCESS = "200";
     public static final String CODE_ERROR = "300";
+
+    /**
+     * 我的,界面数据展示
+     */
+    public static final String PERSONALHOME = "PersonalHome";
+    /**
+     * 修改手机号
+     */
+    public static final String USER_CHANGE_MOBILE = "UserChangeMobile";
+    /**
+     * 红包列表
+     */
+    public static final String USER_RED_PACKET_LIST = "GetUserRedPackets";
+
+    /**
+     * 订单列表
+     */
+    public static final String ORDER_INFO = "OrderInfo";
+    public static final String ORDER_INFO_ALL = "OrderInfo_all";
+    public static final String ORDER_INFO_PAY_WAIT = "OrderInfo_pay_wait";
+    public static final String ORDER_INFO_USE_WAIT = "OrderInfo_use_wait";
+    public static final String ORDER_INFO_COMMENT_WAIT = "OrderInfo_comment_wait";
+    public static final String ORDER_INFO_REFUND = "OrderInfo_refund";
+
+
+
 }

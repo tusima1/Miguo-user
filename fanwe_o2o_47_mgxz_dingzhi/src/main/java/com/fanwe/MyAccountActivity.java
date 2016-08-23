@@ -1,12 +1,25 @@
 package com.fanwe;
 
-import java.io.File;
-import java.util.List;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.Constant.LoadImageType;
@@ -46,29 +59,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.os.Bundle;
-import android.os.Message;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import java.io.File;
+import java.util.List;
 
 /**
  * 我的账户
  *
  * @author Administrator
  */
-public class MyAccountActivity extends BaseActivity implements CallbackView {
+public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     @ViewInject(R.id.et_username)
     private TextView mEt_username; // 用户名
@@ -392,6 +391,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         }
     }
 
+    private String nickName;
+
     private void clickUsername() {
         // TODO 魅族上为啥这么丑
         LayoutInflater inflater = this.getLayoutInflater();
@@ -427,7 +428,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
                     SDToast.showToast("用户已被占用!");
                     return;
                 }
-                updateNickname(mInputName.getText().toString());
+                nickName = mInputName.getText().toString();
+                updateNickname(nickName);
                 alertdialog.dismiss();
             }
 
@@ -529,8 +531,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
 
         CommonInterface.requestLogout(null);
-
-
 
 
     }
@@ -737,7 +737,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
             case BIND_MOBILE_SUCCESS:
                 initViewState();
                 break;
-
             default:
                 break;
         }
@@ -771,6 +770,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     public void onSuccess(String method, List datas) {
         if (UserConstants.USER_INFO_METHOD.equals(method)) {
             SDToast.showToast("修改成功");
+            App.getInstance().setUserNickName(nickName);
+            SDEventManager.post(EnumEventTag.UPLOAD_USER_INFO_SUCCESS.ordinal());
         }
     }
 
@@ -778,4 +779,10 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
+
 }

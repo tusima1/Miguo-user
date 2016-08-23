@@ -77,4 +77,6 @@ dependencies {
     compile 'com.qiniu:happy-dns:0.2.9'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
 
+    compile 'com.didikee:UILibrary:0.0.2'
+
 }

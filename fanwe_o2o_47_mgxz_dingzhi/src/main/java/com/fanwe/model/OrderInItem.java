@@ -6,7 +6,7 @@ public class OrderInItem {
 //    'slname': '老家面',
 //    'supplier_id': '805', //商家ID
 //    'location_id': '855', //门店ID，跳转到门店详情界面时请以data_id名称传此参数
-//    'fx_user_id': '123', //分销ID，如果是分销订单,请以uid的名称传该参数
+//    'fx_user_id': '123', //分销ID，如果是分销订单,请以uid的名称传该参数//xx
 //    'cate_id': 8,
 //    'id': '190',
 //    'deal_id': 4592, //当商品ID为0时表示到店支付优惠买单
@@ -45,7 +45,22 @@ public class OrderInItem {
 	private int refund_status;
 	private int refunding;
 	private int refunded;
-	
+
+	//	'order_sn': '2016020206300523',
+//    'slname': '老家面',
+//    'location_id': '855', //门店ID，跳转到门店详情界面时请以data_id名称传此参数
+//    'cate_id': 8,
+//    'id': '190',
+//    'deal_id': 4592, //当商品ID为0时表示到店支付优惠买单
+//    'deal_icon': 'http://mgxz.web.com/public/attachment/201510/27/11/562ef0b30252a_244x148.jpg',
+//    'name': '【嵊州】老家面 仅售14.5元！价值17元的三鲜面一份，提供免费WiFi',
+//    'sub_name': '老家面14.5元三鲜面',
+//    'number': '1',
+//    'total_price': 14.5,
+//    'consume_count': 0, //消费数量，为0则是待消费
+//    'dp_id': 0, //点评ID，如果没点评则为0
+//    'is_refund': 1,//是否支持退款
+//    'refund_status': 0 //0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结
 	
 	public int getRefunding() {
 		return refunding;

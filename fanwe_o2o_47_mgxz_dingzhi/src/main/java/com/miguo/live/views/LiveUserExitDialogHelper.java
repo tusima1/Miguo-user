@@ -120,7 +120,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     @Override
     public void onDestroy() {
         //防止内存泄漏,在这里释放资源
-        if(dialog!=null&&dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         dialog = null;

@@ -96,20 +96,16 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 请求直播列表
-     *
-     * @param pageNum
-     * @param pageSize
      */
     public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
-
         TreeMap<String, String> params = new TreeMap<String, String>();
-
         params.put("token", App.getInstance().getToken());
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("tag", tag);
         params.put("keyword", keyword);
         params.put("city", city);
+        params.put("tag", tag);
         params.put("method", LiveConstants.LIVE_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -739,8 +735,8 @@ public class LiveHttpHelper implements IHelper {
                 Root<UserRedPacketInfo> root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
                 String message = root.getMessage();
-                if(LiveConstants.RESULT_SUCCESS.equals(status)){
-                    if(root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0)!=null) {
+                if (LiveConstants.RESULT_SUCCESS.equals(status)) {
+                    if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
                         List<UserRedPacketInfo> datas = root.getResult().get(0).getBody();
                         mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, datas);
                     } else {

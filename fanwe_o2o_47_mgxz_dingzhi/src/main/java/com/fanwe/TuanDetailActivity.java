@@ -32,14 +32,22 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.CommentModel;
 import com.fanwe.model.Deal_indexActModel;
+import com.fanwe.model.Deal_tagsModel;
 import com.fanwe.model.RequestModel;
+import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelDisplayComment;
+import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
+import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -47,6 +55,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TuanDetailActivity extends BaseActivity implements CallbackView {
@@ -298,6 +307,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
         // ---------------评论----------------
         mFragComment = new TuanDetailCommentFragment();
         mFragComment.setmDealModel(model);
+        mFragComment.setModelDisplayComment(getModelDisplayComment());
         getSDFragmentManager().replace(R.id.act_tuan_detail_fl_comment, mFragComment);
     }
 
@@ -428,10 +438,64 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         //基本信息
                         model.setId(modelGroupBuyDetail.getId());
                         model.setName(modelGroupBuyDetail.getName());
+                        model.setSub_name(modelGroupBuyDetail.getShort_name());
                         model.setShare_url(modelGroupBuyDetail.getShare_url());
                         model.setCurrent_price(modelGroupBuyDetail.getTuan_price());
                         model.setOrigin_price(modelGroupBuyDetail.getOrigin_price());
                         model.setIcon(modelGroupBuyDetail.getIcon());
+
+                        //点评列表
+                        List<CommentModel> commentModels = new ArrayList<>();
+                        if (!SDCollectionUtil.isEmpty(modelGroupBuyDetail.getDp_list())) {
+                            for (ModelComment commentModelShopInfo : modelGroupBuyDetail.getDp_list()) {
+                                CommentModel beanCommentModel = new CommentModel();
+                                beanCommentModel.setContent(commentModelShopInfo.getContent());
+                                beanCommentModel.setPoint(commentModelShopInfo.getPoint());
+                                beanCommentModel.setUser_name(commentModelShopInfo.getNick());
+                                //缩略图
+                                List<String> images = new ArrayList<>();
+                                if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getImages())) {
+                                    for (ModelImage imageShopInfo : commentModelShopInfo.getImages()) {
+                                        images.add(imageShopInfo.getImage());
+                                    }
+                                }
+                                beanCommentModel.setImages(images);
+                                //原图
+                                List<String> oimages = new ArrayList<>();
+                                if (!SDCollectionUtil.isEmpty(commentModelShopInfo.getOimages())) {
+                                    for (ModelImage imageShopInfo : commentModelShopInfo.getOimages()) {
+                                        oimages.add(imageShopInfo.getImage());
+                                    }
+                                }
+                                beanCommentModel.setOimages(oimages);
+
+                                commentModels.add(beanCommentModel);
+                                model.setDp_list(commentModels);
+                            }
+                        }
+                        //门店列表
+                        List<StoreModel> supplier_location_list = new ArrayList<>();
+                        if (!SDCollectionUtil.isEmpty(modelGroupBuyDetail.getSupplier_location_list())) {
+                            for (Supplier_location_list store_info : modelGroupBuyDetail.getSupplier_location_list()) {
+                                StoreModel beanOther = new StoreModel();
+                                beanOther.setId(store_info.getId());
+                                beanOther.setName(store_info.getShop_name());
+                                beanOther.setAddress(store_info.getAddress());
+                                beanOther.setTel(store_info.getTel());
+                                supplier_location_list.add(beanOther);
+                            }
+                        }
+                        model.setSupplier_location_list(supplier_location_list);
+                        //购买须知
+                        model.setTime_status(DataFormat.toInt(modelGroupBuyDetail.getTime_status()));
+                        model.setBegin_time(DataFormat.toLong(modelGroupBuyDetail.getCoupon_begin_time()));
+                        model.setEnd_time(DataFormat.toLong(modelGroupBuyDetail.getCoupon_end_time()));
+                        model.setLast_time(DataFormat.toLong(modelGroupBuyDetail.getLast_time()));
+                        model.setNow_time(DataFormat.toLong(modelGroupBuyDetail.getNow_time()));
+                        model.setNotes(modelGroupBuyDetail.getNotes());
+                        model.setDescription(modelGroupBuyDetail.getTuan_detail());
+                        //tags
+                        model.setDeal_tags(modelGroupBuyDetail.getDeal_tags());
 
                         addFragments(model);
                     }
@@ -440,4 +504,18 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             }
         }
     };
+
+    public ModelDisplayComment getModelDisplayComment() {
+        ModelDisplayComment modelDisplayComment = new ModelDisplayComment();
+        if (modelGroupBuyDetail != null) {
+            modelDisplayComment.setMessage_count(modelGroupBuyDetail.getDp_count());
+            modelDisplayComment.setBuy_dp_avg(modelGroupBuyDetail.getAvg_point());
+            modelDisplayComment.setStar_1(modelGroupBuyDetail.getDp_count_1());
+            modelDisplayComment.setStar_2(modelGroupBuyDetail.getDp_count_2());
+            modelDisplayComment.setStar_3(modelGroupBuyDetail.getDp_count_3());
+            modelDisplayComment.setStar_4(modelGroupBuyDetail.getDp_count_4());
+            modelDisplayComment.setStar_5(modelGroupBuyDetail.getDp_count_5());
+        }
+        return modelDisplayComment;
+    }
 }

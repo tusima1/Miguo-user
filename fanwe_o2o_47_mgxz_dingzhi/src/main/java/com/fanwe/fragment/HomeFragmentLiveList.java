@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.adapter.HomeLiveListAdapter;
@@ -34,6 +35,7 @@ import java.util.List;
 public class
 HomeFragmentLiveList extends BaseFragment {
     private View view;
+    private TextView tvTitle;
     private SDGridViewInScroll mSDGridViewInScroll;
     private HomeLiveListAdapter mLiveViewAdapter;
     private ArrayList<Room> datas = new ArrayList<>();
@@ -84,12 +86,12 @@ HomeFragmentLiveList extends BaseFragment {
                 Intent intent = new Intent(getActivity(), LiveActivity.class);
                 intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
                 MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-                String nickName =App.getInstance().getUserNickName();
-                String avatar ="";
-                if(App.getInstance().getmUserCurrentInfo()!=null){
+                String nickName = App.getInstance().getUserNickName();
+                String avatar = "";
+                if (App.getInstance().getmUserCurrentInfo() != null) {
                     UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-                    if(currentInfo.getUserInfoNew()!=null){
-                         avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+                    if (currentInfo.getUserInfoNew() != null) {
+                        avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
                     }
                 }
                 MySelfInfo.getInstance().setAvatar(avatar);
@@ -101,22 +103,20 @@ HomeFragmentLiveList extends BaseFragment {
 
                 CurLiveInfo.setHostAvator(room.getHost().getAvatar());
                 CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
-                if(room.getLbs()!=null){
+                if (room.getLbs() != null) {
                     CurLiveInfo.setShopID(room.getLbs().getShop_id());
-                    ModelStoreList modelStoreList=new ModelStoreList();
-                     modelStoreList.setShop_name(room.getLbs().getShop_name());
-                     modelStoreList.setId(room.getLbs().getShop_id());
+                    ModelStoreList modelStoreList = new ModelStoreList();
+                    modelStoreList.setShop_name(room.getLbs().getShop_name());
+                    modelStoreList.setId(room.getLbs().getShop_id());
                     CurLiveInfo.setModelShop(modelStoreList);
                 }
-
 
 
                 CurLiveInfo.setHostUserID(room.getHost().getUid());
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
                 CurLiveInfo.setMembers(1); // 添加自己
 //                CurLiveInfo.setAddress(item.getLbs().getAddress());
-                if(room.getLbs()!=null&&!TextUtils.isEmpty(room.getLbs().getShop_id()))
-                {
+                if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
                     CurLiveInfo.setShopID(room.getLbs().getShop_id());
                 }
                 CurLiveInfo.setAdmires(1);
@@ -133,7 +133,17 @@ HomeFragmentLiveList extends BaseFragment {
         view = (View) inflater
                 .inflate(R.layout.fragment_home_live_list, container, false);
         mSDGridViewInScroll = (SDGridViewInScroll) view.findViewById(R.id.gridView_home_fragment_list);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title_live_list);
+    }
 
+
+    public void updateTitle(String title) {
+        if (tvTitle != null) {
+            if (TextUtils.isEmpty(title)) {
+                title = "";
+            }
+            tvTitle.setText(title);
+        }
     }
 
     public void updateView(boolean isRefresh, List<Room> rooms) {

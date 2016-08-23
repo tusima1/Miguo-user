@@ -1,5 +1,7 @@
 package com.fanwe.seller.model.getShopInfo;
 
+import com.fanwe.seller.model.ModelComment;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ public class ResultShopInfo {
     private StoreModelShopInfo store_info;
     private List<GoodsModelShopInfo> tuan_list;
     private List<StoreModelShopInfo> other_supplier_location;
-    private List<CommentModelShopInfo> dp_list;
+    private List<ModelComment> dp_list;
 
     public String getCity_name() {
         return city_name;
@@ -53,11 +55,11 @@ public class ResultShopInfo {
         this.other_supplier_location = other_supplier_location;
     }
 
-    public List<CommentModelShopInfo> getDp_list() {
+    public List<ModelComment> getDp_list() {
         return dp_list;
     }
 
-    public void setDp_list(List<CommentModelShopInfo> dp_list) {
+    public void setDp_list(List<ModelComment> dp_list) {
         this.dp_list = dp_list;
     }
 }

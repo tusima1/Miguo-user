@@ -74,15 +74,21 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
         setListener();
     }
 
+    ModelStoreList tempBean;
+
     private void setListener() {
         mPtrlvContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CurLiveInfo.modelShop = mListModel.get(position - 1);
-                //选择当前店铺，进行代言
-                getActivity().setResult(8888);
-                getActivity().finish();
-
+                tempBean = mListModel.get(position - 1);
+                if (isNotMine) {
+                    //代言
+                    sellerHttpHelper.getRepresentMerchant("", tempBean.getId());
+                } else {
+                    CurLiveInfo.modelShop = tempBean;
+                    getActivity().setResult(8888);
+                    getActivity().finish();
+                }
             }
         });
     }
@@ -137,8 +143,10 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
         if (SellerConstants.STORE_LIST.equals(method)) {
             temps = (ArrayList<ModelStoreList>) datas;
             message.what = 0;
-            mHandler.sendMessage(message);
+        } else if (SellerConstants.REPRESENT_MERCHANT.equals(method)) {
+            message.what = 1;
         }
+        mHandler.sendMessage(message);
 
     }
 
@@ -157,6 +165,11 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
                     }
                     mAdapter.notifyDataSetChanged();
                     mPtrlvContent.onRefreshComplete();
+                    break;
+                case 1:
+                    CurLiveInfo.modelShop = tempBean;
+                    getActivity().setResult(8888);
+                    getActivity().finish();
                     break;
             }
         }

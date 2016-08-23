@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.fanwe.BaseActivity;
@@ -254,7 +253,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public UserCurrentInfo getmUserCurrentInfo() {
-        if(mUserCurrentInfo==null){
+        if (mUserCurrentInfo == null) {
             mUserCurrentInfo = UserCurrentInfo.getInstance();
         }
         return mUserCurrentInfo;
@@ -302,10 +301,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public String getUserNickName() {
-
-
         if (this.mUserCurrentInfo != null) {
-
             if (mUserCurrentInfo.getUserInfoNew() != null) {
                 nickName = mUserCurrentInfo.getUserInfoNew().getNick();
                 if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
@@ -320,6 +316,15 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     }
 
+    public void setUserNickName(String nickName) {
+        if (this.mUserCurrentInfo != null) {
+            if (mUserCurrentInfo.getUserInfoNew() != null) {
+                mUserCurrentInfo.getUserInfoNew().setNick(nickName);
+            }
+        }
+    }
+
+
     public String getUserIcon() {
         String icon = "";
         if (this.mUserCurrentInfo != null) {
@@ -328,7 +333,14 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
             }
         }
         return icon;
+    }
 
+    public void setUserIcon(String icon) {
+        if (this.mUserCurrentInfo != null) {
+            if (mUserCurrentInfo.getUserInfoNew() != null) {
+                mUserCurrentInfo.getUserInfoNew().setIcon(icon);
+            }
+        }
     }
 
     @Override
@@ -336,11 +348,12 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
-    public void clearAllData(){
+
+    public void clearAllData() {
         this.imLoginSuccess = false;
         this.isAvStart = false;
         this.nickName = "";
-        this.mUserCurrentInfo=null;
+        this.mUserCurrentInfo = null;
 
     }
 

@@ -12,7 +12,7 @@ public class MoneyFormat {
 	
 	/**
 	 * 
-	 * @param str 例如:012345.789--> ￥12345.79
+	 * @param numStr 例如:012345.789--> ￥12345.79
 	 * @return ￥12345.79
 	 */
 	public static String format(String numStr) {

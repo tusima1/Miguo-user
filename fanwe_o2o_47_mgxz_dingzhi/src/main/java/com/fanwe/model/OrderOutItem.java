@@ -38,7 +38,15 @@ public class OrderOutItem {
 	private String status;
 	private int status_value;
 	private List<OrderInItem> deal_order_item;
-	
+	//	'id': '164',
+//    'order_sn': '2016020206300523',
+//    'create_time': '2016-02-02 18:30:05',
+//    'pay_amount': 14.5, //已支付总额
+//    'total_price': 14.5, //订单总额
+//    'c': 1, //包含商品总数
+//    'deal_order_item': 内层数据
+//	'status': '已支付',
+//    'status_value': 2 //0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结,6:已取消
 	
 	public String getStatus() {
 		return status;
