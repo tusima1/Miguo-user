@@ -227,7 +227,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
 				}
 			});
 
-			SDViewBinder.setImageView("file://" + model.getPath(), iv, ImageLoaderManager.getOptionsNoCache());
+			SDViewBinder.setImageView("file:///" + model.getPath(), iv, ImageLoaderManager.getOptionsNoCache());
 		} else {
 			iv.setImageResource(R.drawable.bg_phone_comment_image);
 		}

@@ -34,6 +34,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.CartGoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.utils.SDFormatUtil;
@@ -65,7 +66,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 
 	public OutSideShoppingCartHelper mShoppingCartHelper;
 
-	public CallbackView mCallbackview;
+	public RefreshCalbackView mCallbackview;
 
 	public void setOnShopCartSelectedListener(ShopCartSelectedListener listener) {
 		this.mListener = listener;
@@ -73,7 +74,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 
 	private HorizontalScrollView scrollView;
 
-	public ShopCartAdapter(List<ShoppingCartInfo> listModel, Activity activity,CallbackView callbackView) {
+	public ShopCartAdapter(List<ShoppingCartInfo> listModel, Activity activity,RefreshCalbackView callbackView) {
 		super(listModel, activity);
 		this.mCallbackview = callbackView;
 		// 搞到屏幕宽度
@@ -332,7 +333,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			sumPrice = number* SDFormatUtil.stringToFloat(model.getTuan_price())-sumPrice;
 
 				model.setSumPrice(sumPrice);
-				SDViewBinder.setTextView(tvSinglePrice, model.getOrigin_price());
+				SDViewBinder.setTextView(tvSinglePrice, model.getTuan_price());
 				SDViewBinder.setTextView(tvTotalPrice, sumPrice+"");
 			}
 	}
@@ -428,8 +429,6 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 	 * @return
 	 */
 	public boolean ineffectiveCheck(ShoppingCartInfo model) {
-
-
 		if (!TextUtils.isEmpty(model.getBuyFlg())&&"1".equals(model.getBuyFlg())) {
 			return true;
 		}

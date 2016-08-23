@@ -150,7 +150,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     private boolean clickLike2ShowHeart() {
         mHeartLayout.addFavor();
         if (checkInterval()) {
-            mLiveHelper.sendC2CMessage(Constants.AVIMCMD_Praise, "", CurLiveInfo.getHostID());
+            mLiveHelper.sendGroupMessage(Constants.AVIMCMD_Praise, "");
             CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
             return true;
         } else {

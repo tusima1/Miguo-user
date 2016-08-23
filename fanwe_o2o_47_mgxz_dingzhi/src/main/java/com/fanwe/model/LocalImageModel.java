@@ -42,7 +42,7 @@ public class LocalImageModel implements Serializable
 		this.path = path;
 		if (!TextUtils.isEmpty(path))
 		{
-			this.pathLoad = "file://" + path;
+			this.pathLoad = "file:///" + path;
 		}
 	}
 

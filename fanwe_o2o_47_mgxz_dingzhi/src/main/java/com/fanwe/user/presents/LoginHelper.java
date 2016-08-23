@@ -18,6 +18,8 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
+import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
@@ -286,7 +288,7 @@ public class LoginHelper extends Presenter {
         String status = root.getStatusCode();
         String message = root.getMessage();
 
-        UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
+        UserInfoNew userInfoNew = (UserInfoNew) validateInfoBody(root);
         if (userInfoNew != null) {
                 App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
                 User_infoModel model = new User_infoModel();
@@ -302,25 +304,13 @@ public class LoginHelper extends Presenter {
                     model.setUser_pwd(userInfoNew.getPwd());
                 }
                 model.setUser_name(userInfoNew.getUser_name());
+
                 dealLoginSuccess(model);
         }else{
             SDToast.showToast(TextUtils.isEmpty(message)==true?"登录失败。":message);
         }
     }
-    /**
-     * 判断BODY对象是否存在。
-     * @param root
-     * @return
-     */
-    public  UserInfoNew validateBody(Root<UserInfoNew> root) {
 
-        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-        {
-            return root.getResult().get(0).getBody().get(0);
-        }
-        return null;
-
-    }
 
 
     public void loginSuccess(){
@@ -346,13 +336,35 @@ public class LoginHelper extends Presenter {
         }else{
             //baocun
             LocalUserModel.dealLoginSuccess(actModel, true);
+            putLocalShoppingToServer();
             getSign(token);
         }
+    }
 
+    /**
+     * 把本地购物车提交到线上用户。
+     */
+    public void putLocalShoppingToServer(){
+        List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
+        if(list!=null){
+            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(null);
+            helper.multiAddShopCart(list);
+        }
+    }
 
+    /**
+     * 判断BODY对象是否存在。
+     * @param root
+     * @return
+     */
 
+    public UserInfoNew validateInfoBody(Root<UserInfoNew> root) {
 
-
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
+        {
+            return root.getResult().get(0).getBody().get(0);
+        }
+        return null;
     }
     @Override
     public void onDestory() {

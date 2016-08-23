@@ -181,7 +181,7 @@ public class SxbLogImpl {
      * @throws IOException
      */
     static synchronized void initLogFile(long nowCurrentTimeMillis) throws IOException {
-        logPath = Environment.getExternalStorageDirectory().getPath() + "/tencent/sxblog/" + packageName.replace(".", "/")
+        logPath = "file:///"+Environment.getExternalStorageDirectory().getPath() + "/tencent/sxblog/" + packageName.replace(".", "/")
                 + "/";
         File tmpeFile = new File(logPath);
         if (!tmpeFile.exists()) {

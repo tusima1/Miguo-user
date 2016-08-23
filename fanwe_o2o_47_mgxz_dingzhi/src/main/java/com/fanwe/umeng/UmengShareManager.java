@@ -34,7 +34,7 @@ public class UmengShareManager {
     //-------------------------------             b5fe7acf5dc0eecaf23344a0f84b26e6
     public static int mTag = 0;
     public static Activity context;
-    public static int mOrder_id;
+    public static String mOrder_id;
 
     public static void initConfig() {
         // 初始化qq与qq空间分享
@@ -153,7 +153,7 @@ public class UmengShareManager {
     }
 
     //---------------------------------------------
-    public static void setShareTag(int tag, Activity activity, int order_id) {
+    public static void setShareTag(int tag, Activity activity, String order_id) {
         mTag = tag;
         context = activity;
         mOrder_id = order_id;

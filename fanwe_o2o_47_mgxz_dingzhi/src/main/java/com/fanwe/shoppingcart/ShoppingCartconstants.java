@@ -8,6 +8,15 @@ public class ShoppingCartconstants {
      * 操作成功 。
      */
     public static final String RESULT_OK = "200";
+    /**
+     * 订单ID。
+     */
+    public static final String ORDER_ID = "order_id";
+    /**
+     * 优惠金额。
+     */
+    public static final String YOUHUI_PRICE = "youhuiPrice";
+
 
     /**
      * 批量加入购物车。
@@ -29,4 +38,30 @@ public class ShoppingCartconstants {
      *  购物车列表。
      */
     public static final String SHOPPING_CART_LIST= "ShopingCart_list";
+    /**
+     * 购物车结算按钮。
+     */
+    public static final String  SP_CART_TOORDER ="SpCartToOrder";
+    /**
+     * 购物车结算按钮 get。
+     */
+    public static final String  SP_CART_TOORDER_GET ="SpCartToOrder_get";
+    /**
+     * 购物车结算按钮 POST.
+     */
+    public static final String  SP_CART_TOORDER_POST ="SpCartToOrder_post";
+    /**
+     * 生成订单。
+     */
+    public static final String  ORDER_INFO ="OrderInfo";
+    /**
+     * 生成订单。
+     */
+    public static final String  ORDER_INFO_CREATE ="OrderInfo_put";
+    /**
+     * 获取支付方式列表。
+     */
+    public static final  String  GET_PAYMENT = "GetPayment";
+
+
 }

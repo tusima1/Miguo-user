@@ -81,7 +81,7 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
             finish();
         }
 
-        SDViewBinder.setImageView(mIv_image, "file://" + mStrUrl);
+        SDViewBinder.setImageView(mIv_image, "file:///" + mStrUrl);
     }
 
     private void initTitle() {

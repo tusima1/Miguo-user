@@ -20,8 +20,7 @@
             android:background="@color/white"
             android:minHeight="35dp"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:visibility="gone" >
+            android:paddingLeft="10dp" >
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -83,72 +82,6 @@
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_compile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:background="@color/white"
-            android:minHeight="35dp"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:visibility="gone" >
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <CheckBox
-                    android:id="@+id/cb_xuanze"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="3dp"
-                    android:background="@drawable/bg_checkbox"
-                    android:button="@null" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="5dp"
-                    android:text="全选"
-                    android:textColor="@color/black_d"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/bt_addTo_collect"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="#595959"
-                    android:text="移到收藏夹"
-                    android:textSize="14sp" />
-
-                <Button
-                    android:id="@+id/bt_delect"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/main_color"
-                    android:text="删除"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshScrollView
@@ -164,8 +97,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="fill_parent"
             android:orientation="vertical" >
 
             <RelativeLayout
@@ -188,18 +120,16 @@
             <com.fanwe.customview.HorizontalSlideDeleteListView
                 android:id="@+id/lv_cart_goods"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="10dp"
+                android:paddingTop="5dp"
                 android:cacheColorHint="#00000000"
                 android:listSelector="#00000000"
                 android:scrollbars="none" />
             <!-- 免登陆直接购买 -->
 
 
-            <FrameLayout
-                android:id="@+id/frag_shop_cart_fl_recommend"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </FrameLayout>
+
         </LinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 

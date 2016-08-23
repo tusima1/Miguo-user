@@ -1,12 +1,25 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.fanwe.adapter.PayorderCodesAdapter;
 import com.fanwe.app.App;
-import com.fanwe.app.AppHelper;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -36,7 +49,6 @@ import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
-import com.fanwe.utils.DialogUtil;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.exception.HttpException;
@@ -50,24 +62,9 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.unionpay.UPPayAssistEx;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	/** 00:正式，01:测试 */
@@ -95,8 +92,10 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	private View top_line;
 
 	protected ImageView mIv_share;
-
-	private int mOrderId;
+	/**
+	 * 订单编号。
+	 */
+	private String mOrderId;
 
 	private Payment_codeModel mPaymentCodeModel;
 
@@ -138,7 +137,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	}
 
 	private void requestPayOrder() {
-		if (!AppHelper.isLogin(mActivity)) {
+		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
 			return;
 		}
 		RequestModel model = new RequestModel();
@@ -224,8 +223,8 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	}
 
 	private void getIntentData() {
-		mOrderId = getIntent().getIntExtra(EXTRA_ORDER_ID, 0);
-		if (mOrderId <= 0) {
+		mOrderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
+		if (TextUtils.isEmpty(mOrderId)) {
 			SDToast.showToast("id为空");
 			finish();
 			return;

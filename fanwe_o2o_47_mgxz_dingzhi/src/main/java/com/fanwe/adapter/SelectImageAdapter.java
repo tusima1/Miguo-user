@@ -47,7 +47,7 @@ public class SelectImageAdapter extends SDSimpleBaseAdapter<LocalImageModel>
 		{
 			SDViewUtil.show(iv_delete);
 			iv_image.setScaleType(ScaleType.CENTER_CROP);
-			SDViewBinder.setImageView("file://" + model.getPath(), iv_image, ImageLoaderManager.getOptionsNoCache());
+			SDViewBinder.setImageView("file:///" + model.getPath(), iv_image, ImageLoaderManager.getOptionsNoCache());
 			iv_delete.setOnClickListener(new OnClickListener()
 			{
 

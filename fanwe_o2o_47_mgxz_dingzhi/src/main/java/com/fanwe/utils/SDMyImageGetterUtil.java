@@ -37,7 +37,7 @@ public class SDMyImageGetterUtil implements ImageGetter
 	public Drawable getDrawable(String source)
 	{
 
-		String sdcardPath = Environment.getExternalStorageDirectory().toString(); // 获取SDCARD的路径
+		String sdcardPath ="file:///"+ Environment.getExternalStorageDirectory().toString(); // 获取SDCARD的路径
 
 		// 最终图片保持的地址
 		String savePath = sdcardPath + "/" + context.getPackageName() + "/" + source;

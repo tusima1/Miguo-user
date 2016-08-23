@@ -50,7 +50,8 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo)
 			{
-				dealRequestDataSuccess(actModel);
+
+				//dealRequestDataSuccess(actModel);
 			}
 
 			@Override
@@ -113,7 +114,7 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 		model.put("order_id", mId);
 		model.put("red_packet_ids",mList);
 		model.putUser();
-		fillDoneOrderParams(model);
+		//fillDoneOrderParams(model);
 
 		SDRequestCallBack<Cart_doneActModel> handler = new SDRequestCallBack<Cart_doneActModel>()
 		{
@@ -127,7 +128,7 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo)
 			{
-				dealRequestDoneOrderSuccess(actModel);
+				//dealRequestDoneOrderSuccess(actModel);
 			}
 
 			@Override

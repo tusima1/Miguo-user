@@ -50,9 +50,9 @@ public class UserHttpHelper implements IHelper {
      * 更新用户信息
      */
     public void updateUserInfo(String key, String value) {
-        getToken();
+
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", App.getInstance().getToken());
         params.put(key, value);
         params.put("method", UserConstants.USER_INFO_METHOD);
 

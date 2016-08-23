@@ -99,5 +99,14 @@ public abstract class MgCallback<T> implements Callback {
 
     }
 
+    public List<T>  validateBodyList(Root<T> root) {
+
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
+        {
+            return root.getResult().get(0).getBody();
+        }
+        return null;
+
+    }
     public abstract void onErrorResponse(String message, String errorCode);
 }

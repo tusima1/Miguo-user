@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -18,26 +16,14 @@ import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
-import com.fanwe.app.AppHelper;
-import com.fanwe.base.CallbackView;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.HorizontalSlideDeleteListView;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.BaseActModel;
 import com.fanwe.model.CartGoodsModel;
-import com.fanwe.model.Cart_check_cartActModel;
-import com.fanwe.model.Cart_indexActModel;
-import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
@@ -46,13 +32,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
-import com.sunday.eventbus.SDEventManager;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -64,30 +46,29 @@ import java.util.List;
  * @author js02
  *
  */
-public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
+public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackView {
     @ViewInject(R.id.lv_cart_goods)
     private HorizontalSlideDeleteListView mLvCartGoods;
+    /**
+     * 当前结果为空
+     */
     @ViewInject(R.id.rl_empty)
     private RelativeLayout mRlEmpty;
-
-
     /** 结算 */
     @ViewInject(R.id.ll_bottom)
     private LinearLayout mLl_count;
+    /**
+     * 总计：
+     */
     @ViewInject(R.id.tv_sum)
     private TextView mTv_sum;
 
     @ViewInject(R.id.bt_account)
     private Button mBt_account;
 
-    @ViewInject(R.id.cb_xuanze)
+    @ViewInject(R.id.iv_xuanze)
     private CheckBox mCb_xuanze;
 
-    @ViewInject(R.id.bt_addTo_collect)
-    private Button mBt_addToCollect;
-
-    @ViewInject(R.id.bt_delect)
-    private Button mBt_delect;
 
     @ViewInject(R.id.content_ptr)
     private PullToRefreshScrollView mContentPtr;//内容部分,可下拉刷新
@@ -99,6 +80,10 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
     private List<ShoppingCartInfo> listModel;
 
     private OutSideShoppingCartHelper outSideShoppingCartHelper;
+    /**
+     * 当前操作，是返回，还是结算 进入下一步，默认是结算 1 ，返回2
+     */
+    private int currentGoTo=1;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -145,15 +130,39 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
         mTv_sum.setText("0.00");
         // 初始化adapter.
         mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
-        getmAdapterListener();
         mLvCartGoods.setAdapter(mAdapter);
+        getmAdapterListener();
     }
-
-
-
-
     private void registeClick() {
-        mBt_account.setOnClickListener(this);
+        mBt_account.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               clickSettleAccounts();
+                                           }
+                                       }
+        );
+
+        // 编辑状态下
+        mCb_xuanze.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                boolean isChecked = mCb_xuanze.isChecked();
+                BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
+                mTv_sum.setText(String.valueOf(bd));
+                if (isChecked) {
+                    mBt_account.setText("结算" + "（" + listModel.size() + "）");
+                    mBt_account.setBackgroundColor(getResources().getColor(
+                            R.color.main_color));
+                    mBt_account.setClickable(true);
+                } else {
+                    mBt_account.setText("结算");
+                    mBt_account.setBackgroundColor(getResources().getColor(
+                            R.color.text_fenxiao));
+                    mBt_account.setClickable(false);
+                }
+            }
+        });
     }
 
     /**
@@ -199,22 +208,24 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
      */
     public void updateSumMoneyAndCount() {
         BigDecimal sumMoney = getSumMoney();
-        int count = getSumSeleted(1);
-        mCb_xuanze.setClickable(true);
-
+        int count = getSumSeleted();
         mTv_sum.setText(String.valueOf(sumMoney));
         if (count > 0) {
             mBt_account.setText("结算" + "（" + count + "）");
             mBt_account.setBackgroundColor(getResources().getColor(
                     R.color.main_color));
             mBt_account.setClickable(true);
-            mBt_delect.setClickable(true);
+
         } else {
             mBt_account.setText("结算");
             mBt_account.setBackgroundColor(getResources().getColor(
                     R.color.text_fenxiao));
             mBt_account.setClickable(false);
-            mBt_delect.setClickable(false);
+        }
+        if(listModel!=null&&(count>0)&&(count==listModel.size())){
+            mCb_xuanze.setChecked(true);
+        }else{
+            mCb_xuanze.setChecked(false);
         }
 
     }
@@ -246,11 +257,9 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
     /**
      * 获取已经选中听选项.
      *
-     * @param type
-     *            type=1 获取非编辑状态下的已经被选择的数量
      * @return
      */
-    private Integer getSumSeleted(int type) {
+    private Integer getSumSeleted() {
         int size = 0;
         int count = 0;
         if (listModel == null || listModel.size() < 1) {
@@ -260,9 +269,8 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
             boolean checked = false;
-            if (type == 1) {
-                checked = model.isChecked();
-            }
+            checked = model.isChecked();
+
             if (checked) {
                 count++;
             }
@@ -270,7 +278,7 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
         return count;
     }
 
-    private ArrayList<String> getSumSeletedIds(int type) {
+    private ArrayList<String> getSumSeletedIds() {
         int size = 0;
         if (listModel == null || listModel.size() < 1) {
             return null;
@@ -280,13 +288,9 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
             boolean checked = false;
-            if (type == 1) {
-                checked = model.isChecked();
-            }
+            checked = model.isChecked();
             if (checked) {
-                if (type == 1) {
-                    mSeletedGoods.add(model.getId());
-                }
+             mSeletedGoods.add(model.getId());
             }
         }
         return mSeletedGoods;
@@ -327,50 +331,10 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
 
     @Override
     public void onCLickLeft_SDTitleSimple(SDTitleItem v) {
+        currentGoTo = 2;
+        clickSettleAccounts();
         super.onCLickLeft_SDTitleSimple(v);
-        requestCheckCart2();
     }
-
-    private void requestCheckCart2()
-    {
-        if(mAdapter == null)
-        {
-            return;
-        }
-
-        RequestModel request = new RequestModel();
-        request.putCtl("cart");
-        request.putAct("check_cart");
-        request.putUser();
-        if(mAdapter != null)
-        {
-            request.put("num", mAdapter.getMapNumber());
-        }
-        SDRequestCallBack<Cart_check_cartActModel> handler = new SDRequestCallBack<Cart_check_cartActModel>()
-        {
-            @Override
-            public void onStart()
-            {
-
-            }
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo)
-            {
-                if (actModel.getStatus() == 1)
-                {
-
-                }
-            }
-
-            @Override
-            public void onFinish()
-            {
-
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(request, handler);
-    }
-
 
     public void getmAdapterListener() {
         mAdapter.setOnShopCartSelectedListener(new ShopCartSelectedListener() {
@@ -384,7 +348,7 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
                                               boolean isChecked) {
                 // 非编辑状态
 
-                    int count = getSumSeleted(2);
+                    int count = getSumSeleted();
                     if (count == listModel.size()) {
                         mCb_xuanze.setChecked(true);
                     } else {
@@ -398,65 +362,22 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
                 updateTitleNum(num);
             }
         });
-        mLvCartGoods.setAdapter(mAdapter);
-    }
 
-    /**
-     * 去结算
-     */
-    private void clickSettleAccounts() {
-        // TODO 去结算
-        requestCheckCart();
     }
 
     /**
      * 确认购物车。
      */
-    private void requestCheckCart() {
-
-
-        RequestModel model = new RequestModel();
-        model.putCtl("cart");
-        model.putAct("check_cart");
-        model.putUser();
-        if (mAdapter != null) {
-            model.put("num", mAdapter.getMapNumber());
-        }
-
-
-        SDRequestCallBack<Cart_check_cartActModel> handler = new SDRequestCallBack<Cart_check_cartActModel>() {
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    CommonInterface.updateCartNumber();
-                    User_infoModel model = actModel.getUser_data();
-                    if (model != null) {
-                        LocalUserModel.dealLoginSuccess(model, false);
-                    }
-                           // TODO 跳到确认订单界面
-                    startConfirmOrderActivity();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
+    private void clickSettleAccounts() {
+        currentGoTo = 1;
+        outSideShoppingCartHelper.multiAddShopCart(listModel);
     }
-
     /**
      * 进入商品购买确认页。
      */
     private void startConfirmOrderActivity() {
         if (listModel != null && listModel.size() > 0 ) {
-            ArrayList<String> mSeletedGoods = getSumSeletedIds(1);
+            ArrayList<String> mSeletedGoods = getSumSeletedIds();
 
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
@@ -483,14 +404,13 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
             mTitle.setMiddleTextTop("购物车" + "（" + listModel.size() + "）");
         }
         initSumPrice();
-        SDViewUtil.toggleEmptyMsgByList(listModel, mRlEmpty);
-
-        mAdapter.notifyDataSetChanged();
+        if(listModel==null||listModel.size()<1) {
+            mRlEmpty.setVisibility(View.VISIBLE);
+        }else{
+            mRlEmpty.setVisibility(View.GONE);
+        }
 
     }
-
-
-
 
 
     @Override
@@ -501,20 +421,7 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
         super.onHiddenChanged(hidden);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_unlogin_buy:
-                clickSettleAccounts();
-                break;
-            case R.id.bt_account:
-                clickSettleAccounts();
-                break;
-            default:
-                break;
-        }
 
-    }
     /**
      * 更新Title上的商品数量
      * @param num
@@ -558,12 +465,12 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
         switch (method){
             case ShoppingCartconstants.SHOPPING_CART_LIST:
                 this.listModel = datas;
-
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if(mAdapter!=null){
                             mAdapter.setData(listModel);
+                            bindData();
                             mAdapter.notifyDataSetChanged();
                         }
                         mContentPtr.onRefreshComplete();
@@ -581,9 +488,9 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
                         }
                     }
                 });
-
-
-
+                break;
+            case ShoppingCartconstants.BATCH_SHOPPING_CART:
+                startConfirmOrderActivity();
                 break;
             default:
                 break;
@@ -596,9 +503,26 @@ public class ShopCartFragmentNew extends BaseFragment implements CallbackView {
 
     }
 
+
     @Override
     protected String setUmengAnalyticsTag() {
         return this.getClass().getName().toString();
     }
 
+    @Override
+    public void onFailue(String method, String responseBody) {
+        switch (method) {
+            case ShoppingCartconstants.SHOPPING_CART_LIST:
+                mContentPtr.onRefreshComplete();
+                break;
+            case ShoppingCartconstants.SHOPPING_CART_DELETE:
+                SDToast.showToast(responseBody);
+                break;
+            case ShoppingCartconstants.BATCH_SHOPPING_CART:
+                SDToast.showToast(responseBody);
+                break;
+            default:
+                break;
+        }
+    }
 }

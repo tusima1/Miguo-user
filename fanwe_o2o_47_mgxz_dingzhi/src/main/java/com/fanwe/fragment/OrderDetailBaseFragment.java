@@ -1,17 +1,17 @@
 package com.fanwe.fragment;
 
-import com.fanwe.model.Cart_checkActModel;
+import com.fanwe.shoppingcart.model.ShoppingBody;
 
 public class OrderDetailBaseFragment extends BaseFragment
 {
-	protected Cart_checkActModel mCheckActModel;
+	protected ShoppingBody mCheckActModel;
 	
-	public Cart_checkActModel getmCheckActModel()
+	public ShoppingBody getmCheckActModel()
 	{
 		return mCheckActModel;
 	}
 
-	public void setmCheckActModel(Cart_checkActModel mCheckActModel)
+	public void setmCheckActModel(ShoppingBody mCheckActModel)
 	{
 		this.mCheckActModel = mCheckActModel;
 		refreshData();

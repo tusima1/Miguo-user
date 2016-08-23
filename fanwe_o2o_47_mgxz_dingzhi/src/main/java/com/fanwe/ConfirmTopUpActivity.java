@@ -119,7 +119,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 
 	private void clickBt() 
 	{
-		if(mFragPayments.getPaymentId() == 0 &&  mFragAccountPayment.getUseAccountMoney() == 0)
+		if(TextUtils.isEmpty(mFragPayments.getPaymentId()) &&  mFragAccountPayment.getUseAccountMoney() == 0)
 		{
 			SDToast.showToast("请选择支付方式");
 			return;
@@ -300,9 +300,9 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 		SDViewBinder.setTextView(mTv_money, "￥"+String.valueOf(bd));
 		// 支付方式列表
-		mFragPayments.setmCheckActModel(actModel);
+		//mFragPayments.setmCheckActModel(actModel);
 		// 余额支付
-		mFragAccountPayment.setmCheckActModel(actModel);
+		//mFragAccountPayment.setmCheckActModel(actModel);
 	}
 
 	/**
