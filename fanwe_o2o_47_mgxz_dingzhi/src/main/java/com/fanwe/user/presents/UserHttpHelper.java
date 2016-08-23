@@ -223,5 +223,6 @@ public class UserHttpHelper implements IHelper{
     @Override
     public void onDestroy() {
         mView=null;
+        gson=null;
     }
 }

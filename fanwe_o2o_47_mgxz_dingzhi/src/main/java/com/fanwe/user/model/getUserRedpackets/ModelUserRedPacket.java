@@ -30,6 +30,18 @@ public class ModelUserRedPacket {
     private String order_sn;//使用红包订单ID
     private String available_period_data;//不可用期间 ???
 //    private String is_query;//用户红包查看标记
+    /**
+     * 为选择红包操作立flag-
+     */
+    private boolean isChecked=false;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public String getTencent_room_id() {
         return tencent_room_id;

@@ -1,12 +1,8 @@
 package com.fanwe;
 
-import java.io.File;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.Constant.TitleType;
@@ -25,6 +21,9 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * 添加评论
@@ -46,7 +45,7 @@ public class AddCommentActivity extends BaseActivity
 
 	private AddCommentFragment mFragAddComment;
 
-	private int mId;
+	private String mId;
 	private String mStrType;
 	private String mStrName;
 	
@@ -91,10 +90,10 @@ public class AddCommentActivity extends BaseActivity
 
 	private void getIntentData()
 	{
-		mId = getIntent().getIntExtra(EXTRA_ID, 0);
+		mId = getIntent().getStringExtra(EXTRA_ID);
 		mStrType = getIntent().getStringExtra(EXTRA_TYPE);
 		mStrName = getIntent().getStringExtra(EXTRA_NAME);
-		if (mId <= 0)
+		if (TextUtils.isEmpty(mId))
 		{
 			SDToast.showToast("id为空");
 			finish();

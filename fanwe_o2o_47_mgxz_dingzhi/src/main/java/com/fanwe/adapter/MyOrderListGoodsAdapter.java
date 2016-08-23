@@ -1,39 +1,9 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
-import com.fanwe.AddCommentActivity;
-import com.fanwe.AppWebViewActivity;
-import com.fanwe.RefundApplicationActivity;
-import com.fanwe.StoreDetailActivity;
-import com.fanwe.TuanDetailActivity;
-import com.fanwe.constant.Constant.CommentType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.dialog.SDDialogConfirm;
-import com.fanwe.library.dialog.SDDialogCustom;
-import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.OrderInItem;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_orderGoodsModel;
-import com.fanwe.model.Uc_order_check_deliveryActModel;
-import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.sunday.eventbus.SDEventManager;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -41,7 +11,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
+import com.fanwe.AddCommentActivity;
+import com.fanwe.RefundApplicationActivity;
+import com.fanwe.TuanDetailActivity;
+import com.fanwe.constant.Constant.CommentType;
+import com.fanwe.library.adapter.SDBaseAdapter;
+import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.library.utils.ViewHolder;
+import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
+import com.fanwe.utils.MGString2Num;
+
+import java.util.List;
+
+public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 {
 
 	private boolean mShowActions = true;
@@ -51,7 +35,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 	private int mStatus_value;//订单的状态
 	private int mOrderMode;//0,1,2,3,
 
-	public MyOrderListGoodsAdapter(List<OrderInItem> listModel, String isPayed, Activity activity,int status_value,int orderMode)
+	public MyOrderListGoodsAdapter(List<ModelOrderItemIn> listModel, String isPayed, Activity activity, int status_value, int orderMode)
 	{
 		super(listModel, activity);
 		if ("已支付".equalsIgnoreCase(isPayed)) {
@@ -85,17 +69,18 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 //		View v_line = ViewHolder.get(R.id.v_line, convertView);
 		TextView tv_total_price = ViewHolder.get(convertView, R.id.tv_total_price);
 	
-		final OrderInItem model = getItem(position);
-		int refund_status = model.getRefund_status();
+		final ModelOrderItemIn model = getItem(position);
+		int refund_status = MGString2Num.getInt(model.getRefund_status());
 		if (model != null)
 		{
-			SDViewBinder.setImageView(iv_image, model.getDeal_icon());
-			SDViewBinder.setTextView(tv_name, model.getSub_name());
-			SDViewBinder.setTextView(tv_number, String.valueOf(model.getNumber()));
-			SDViewBinder.setTextView(tv_total_price, ""+model.getTotal_price());
+			SDViewBinder.setImageView(iv_image, model.getIcon());
+			SDViewBinder.setTextView(tv_name, model.getName());
+			SDViewBinder.setTextView(tv_number, model.getNumber());
+			SDViewBinder.setTextView(tv_total_price, model.getTotal_price());
 			SDViewBinder.setTextView(tv_sno, model.getOrder_sn());
-			SDViewBinder.setTextView(tv_order_title, model.getSlname());
-			switch (model.getCate_id())
+			SDViewBinder.setTextView(tv_order_title, model.getBuss_name());//商家名称
+			int cate_id = MGString2Num.getInt(model.getCate_id());
+			switch (cate_id)
 			{
 			case 8:
 				iv_img.setImageResource(R.drawable.bg_order_food);
@@ -135,15 +120,15 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 				break; 
 			}
 			
-			if(model.getDeal_id() == 0)
-			{
-				iv_img.setImageResource(R.drawable.bg_order_hui);
-			}
+//			if(model.getDeal_id() == 0)
+//			{
+//				iv_img.setImageResource(R.drawable.bg_order_hui);
+//			}
 			/**
 			 * 状态说明 0 没有申请退款  1:退款中,2:已退款,3,退款失败
 			 */
 			String goodsStatus="";
-			int refundStatus = model.getRefund_status();
+			int refundStatus = MGString2Num.getInt(model.getRefund_status());
 			switch (mOrderMode) {
 				case 1:
 					goodsStatus="";
@@ -153,7 +138,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 		
 			case 3:
 				SDViewUtil.show(mLl_button);
-				if (model.getDp_id()==1) {
+				if (MGString2Num.getInt(model.getDp_id())==1) {
 					SDViewUtil.show(tv_evaluate);
 					tv_evaluate.setText("追评");
 				}
@@ -164,7 +149,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 					public void onClick(View v) {
 						//TODO 评价
 						Intent intent = new Intent(mActivity, AddCommentActivity.class);
-						intent.putExtra(AddCommentActivity.EXTRA_ID, model.getDeal_id());
+						intent.putExtra(AddCommentActivity.EXTRA_ID, model.getTuan_id());
 						intent.putExtra(AddCommentActivity.EXTRA_NAME, model.getName());
 						intent.putExtra(AddCommentActivity.EXTRA_TYPE, CommentType.DEAL);
 						mActivity.startActivity(intent);
@@ -188,7 +173,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 					break;
 			default:
 				if (mStatus_value!=0) {//已支付
-					goodsStatus = getGoodsStatus(Integer.valueOf(model.getNumber()), Integer.valueOf(model.getConsume_count()), model.getDp_id(),model.getRefund_status());
+					goodsStatus = getGoodsStatus(Integer.valueOf(model.getNumber()), Integer.valueOf(model.getConsume_count()), MGString2Num.getInt(model.getDp_id()),MGString2Num.getInt(model.getRefund_status()));
 				}else {
 					goodsStatus="";
 				}
@@ -204,23 +189,20 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 				@Override
 				public void onClick(View v)
 				{
-					if (model.getDeal_id() > 0)
-					{
+					if (!TextUtils.isEmpty(model.getTuan_id())) {
 						Intent intent = new Intent(mActivity, TuanDetailActivity.class);
-						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getDeal_id());
+						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
 						mActivity.startActivity(intent);
-					} else if(model.getDeal_id() == 0)
-					{
-						Intent intent = new Intent(mActivity, StoreDetailActivity.class);
-						Bundle bundle=new Bundle();
-						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID, Integer.valueOf(model.getLocation_id()).intValue());
-						bundle.putInt("type",0);
-						intent.putExtras(bundle);
-						mActivity.startActivity(intent);
-					}else
-					{
-						SDToast.showToast("未找到商品ID");
 					}
+//					else if(model.getDeal_id() == 0)
+//					{
+//						Intent intent = new Intent(mActivity, StoreDetailActivity.class);
+//						Bundle bundle=new Bundle();
+//						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID, Integer.valueOf(model.getLocation_id()).intValue());
+//						bundle.putInt("type",0);
+//						intent.putExtras(bundle);
+//						mActivity.startActivity(intent);
+//					}
 				}
 			});
 		}
@@ -233,10 +215,10 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 	 * @param mLl_button
 	 * @param tv_tuikuan
 	 */
-	private void defaultShow(final OrderInItem model, LinearLayout mLl_button, TextView tv_tuikuan){
-		if (model.getDeal_id() != 0 && mStatus_value!=0) {
-			int judgement=Integer.valueOf(model.getNumber()).intValue() - Integer.valueOf(model.getConsume_count()).intValue()- model.getRefunded() -model.getRefunding();
-			if (judgement > 0 && model.getIs_refund() == 1) {
+	private void defaultShow(final ModelOrderItemIn model, LinearLayout mLl_button, TextView tv_tuikuan){
+		if (mStatus_value!=0) {
+			int judgement=Integer.valueOf(model.getNumber()).intValue() - Integer.valueOf(model.getConsume_count()).intValue()- MGString2Num.getInt(model.getRefunded()) -MGString2Num.getInt(model.getRefunding());
+			if (judgement > 0 && MGString2Num.getInt(model.getIs_refund()) == 1) {
 				SDViewUtil.show(mLl_button);
 				SDViewUtil.show(tv_tuikuan);
 //				SDViewUtil.show(v_line);
@@ -246,14 +228,14 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 
 					@Override
 					public void onClick(View v) {
-						int id=0;
-						try {
-							id = Integer.valueOf(model.getId()).intValue();
-						} catch (NumberFormatException e) {
-							SDToast.showToast("id错误!");
-							return;
-						}
-						gotoRefundApplication(id);
+//						int id=0;
+//						try {
+//							id = Integer.valueOf(model.getId()).intValue();
+//						} catch (NumberFormatException e) {
+//							SDToast.showToast("id错误!");
+//							return;
+//						}
+//						gotoRefundApplication(id);
 					}
 				});
 			}
@@ -293,26 +275,6 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 				}
 			}
 		}
-//		switch (mOrderMode) {
-//		case 0:
-//			
-//			break;
-//		case 1:
-//			
-//			break;
-//		case 2:
-//	
-//			break;
-//		case 3:
-//			return "";
-//		case 4:
-//	
-//			break;
-//
-//		default:
-//			break;
-//		}
-		
 		return "";
 	}
 
@@ -326,131 +288,5 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<OrderInItem>
 		data.putInt("extra_id", goodsID);
 		intent.putExtras(data);
 		mActivity.startActivity(intent);
-	}
-	
-	/**
-	 * 点击确认收货
-	 * 
-	 * @param model
-	 */
-	protected void clickConfirmationReceipt(final Uc_orderGoodsModel model)
-	{
-		if (model == null)
-		{
-			return;
-		}
-
-		SDDialogConfirm dialog = new SDDialogConfirm();
-		dialog.setTextContent("确认收货?");
-		dialog.setmListener(new SDDialogCustomListener()
-		{
-			@Override
-			public void onDismiss(SDDialogCustom dialog)
-			{
-
-			}
-
-			@Override
-			public void onClickConfirm(View v, SDDialogCustom dialog)
-			{
-				requestConfirmationReceipt(model);
-			}
-
-			@Override
-			public void onClickCancel(View v, SDDialogCustom dialog)
-			{
-
-			}
-		});
-		dialog.show();
-	}
-
-	/**
-	 * 确认收货
-	 * 
-	 * @param model
-	 */
-	protected void requestConfirmationReceipt(final Uc_orderGoodsModel model)
-	{
-		if (model == null)
-		{
-			return;
-		}
-
-		RequestModel requestModel = new RequestModel();
-		requestModel.putCtl("uc_order");
-		requestModel.putAct("verify_delivery");
-		requestModel.put("item_id", model.getId());
-		InterfaceServer.getInstance().requestInterface(requestModel, new SDRequestCallBack<BaseActModel>()
-		{
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("");
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					// TODO 刷新列表
-					SDEventManager.post(EnumEventTag.REFRESH_ORDER_LIST.ordinal());
-				}
-			}
-		});
-	}
-
-	/**
-	 * 查看物流
-	 * 
-	 * @param model
-	 */
-	protected void requestQueryLogistics(Uc_orderGoodsModel model)
-	{
-		if (model == null)
-		{
-			return;
-		}
-		RequestModel requestModel = new RequestModel();
-		requestModel.putCtl("uc_order");
-		requestModel.putAct("check_delivery");
-		requestModel.put("item_id", model.getId());
-		InterfaceServer.getInstance().requestInterface(requestModel, new SDRequestCallBack<Uc_order_check_deliveryActModel>()
-		{
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("");
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					String url = actModel.getUrl();
-					if (!TextUtils.isEmpty(url))
-					{
-						Intent intent = new Intent(mActivity, AppWebViewActivity.class);
-						intent.putExtra(AppWebViewActivity.EXTRA_URL, url);
-						intent.putExtra(AppWebViewActivity.EXTRA_TITLE, "查看物流");
-						mActivity.startActivity(intent);
-					}
-				}
-			}
-		});
 	}
 }

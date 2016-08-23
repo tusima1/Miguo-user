@@ -70,12 +70,33 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.mTv_Content = ((TextView) convertView.findViewById(R.id.tv_content));
             holder.mIv_WaterMark = ((ImageView) convertView.findViewById(R.id.iv_watermark));
             holder.fr_bg_down= (FrameLayout) convertView.findViewById(R.id.fr_bg_down);
+            holder.mIv_check= (ImageView) convertView.findViewById(R.id.iv_check);
             convertView.setTag(holder);
         }
         holder= (ViewHolder) convertView.getTag();
 
+
         //bind data
         ModelUserRedPacket modelUserRedPacket = mData.get(position);
+
+        //确定模式
+        if (isCheckMode){
+            holder.mIv_check.setVisibility(View.VISIBLE);
+            final boolean check = modelUserRedPacket.isChecked();
+            if (check){
+                holder.mIv_check.setImageResource(R.drawable.ic_checked);
+            }else {
+                holder.mIv_check.setImageResource(R.drawable.ic_uncheck);
+            }
+            holder.mIv_check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doCheck(v,check);
+                }
+            });
+        }else {
+            holder.mIv_check.setVisibility(View.GONE);
+        }
         //两种状态
         String event_flag = modelUserRedPacket.getEvent_flag();//红包过期标志
         String is_used = modelUserRedPacket.getIs_used();//是否使用
@@ -128,6 +149,7 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.mTv_TitleTag.setText("现金券");
         }
 
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,6 +158,10 @@ public class RedpacketListAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    private void doCheck(View v, boolean check) {
+
     }
 
     private class ViewHolder{
@@ -148,5 +174,6 @@ public class RedpacketListAdapter extends BaseAdapter {
         public TextView mTv_BigNum;//打几折?例如8折,就是8,只能是数字
         public ImageView mIv_WaterMark;//水印
         public FrameLayout fr_bg_down;//下部分的背景
+        public ImageView mIv_check;//是否选中
     }
 }

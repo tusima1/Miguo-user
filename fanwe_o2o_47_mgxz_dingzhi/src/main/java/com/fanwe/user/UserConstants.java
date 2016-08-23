@@ -141,5 +141,16 @@ public class UserConstants {
      */
     public static final String USER_RED_PACKET_LIST = "GetUserRedPackets";
 
+    /**
+     * 订单列表
+     */
+    public static final String ORDER_INFO = "OrderInfo";
+    public static final String ORDER_INFO_ALL = "OrderInfo_all";
+    public static final String ORDER_INFO_PAY_WAIT = "OrderInfo_pay_wait";
+    public static final String ORDER_INFO_USE_WAIT = "OrderInfo_use_wait";
+    public static final String ORDER_INFO_COMMENT_WAIT = "OrderInfo_comment_wait";
+    public static final String ORDER_INFO_REFUND = "OrderInfo_refund";
+
+
 
 }
