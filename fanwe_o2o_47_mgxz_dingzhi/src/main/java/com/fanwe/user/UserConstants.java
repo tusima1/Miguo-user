@@ -30,7 +30,7 @@ public class UserConstants {
      * 取用户信息。
      */
 
-    public static final String USER_INFO_URL="UserInfo";
+    public static final String USER_INFO_URL = "UserInfo";
     /**
      * 第三方OPENID.
      */
@@ -132,6 +132,10 @@ public class UserConstants {
      * 我的,界面数据展示
      */
     public static final String PERSONALHOME = "PersonalHome";
+    /**
+     * 我的战队
+     */
+    public static final String MY_DISTRIBUTION_CROPS = "MyDistributionCorps";
 
 
 }

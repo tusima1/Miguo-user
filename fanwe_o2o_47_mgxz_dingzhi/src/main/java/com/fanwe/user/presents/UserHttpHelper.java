@@ -116,6 +116,31 @@ public class UserHttpHelper implements IHelper {
                 });
             }
         });
+    }
+
+    /**
+     * 我的战队
+     */
+    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("type", type);
+        params.put("rank", rank);
+        params.put("page", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("method", UserConstants.MY_DISTRIBUTION_CROPS);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
 
     }
 

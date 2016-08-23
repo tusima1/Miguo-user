@@ -737,6 +737,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             case BIND_MOBILE_SUCCESS:
                 initViewState();
                 break;
+            case UPLOAD_USER_INFO_SUCCESS:
+                mEt_username.setText(App.getInstance().getUserNickName());
+                break;
             default:
                 break;
         }

@@ -192,6 +192,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
         httpHelper = new UserHttpHelper(getContext(), this);
         httpHelper.getPersonalHome();
+        httpHelper.getMyDistributionCorps("2", "", 1, 10);
     }
 
     private void setView() {
