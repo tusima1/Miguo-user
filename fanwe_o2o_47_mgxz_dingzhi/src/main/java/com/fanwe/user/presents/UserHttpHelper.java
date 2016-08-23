@@ -35,7 +35,6 @@ public class UserHttpHelper implements IHelper{
     private UserCurrentInfo userCurrentInfo;
     private CallbackView2 mView;
     private Context mContext;
-    private String token;
 
     public static final String RESULT_OK = "no_body_but_is_ok";
 
@@ -54,9 +53,8 @@ public class UserHttpHelper implements IHelper{
      * 更新用户信息
      */
     public void updateUserInfo(String key, String value) {
-        getToken();
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", token);
+        params.put("token", getToken());
         params.put(key, value);
         params.put("method", UserConstants.USER_INFO_METHOD);
 
@@ -70,7 +68,7 @@ public class UserHttpHelper implements IHelper{
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
             }
-        }, null);
+        });
 
     }
 
@@ -79,31 +77,31 @@ public class UserHttpHelper implements IHelper{
      */
     public void getPersonalHome() {
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token",App.getInstance().getToken());
+        params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.PERSONALHOME);
 
-        OkHttpUtils.getInstance().get(null,params, new MgCallback() {
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test","responseBody PERSONALHOME:"+responseBody);
+                Log.e("test", "responseBody PERSONALHOME:" + responseBody);
                 //200为正常的返回 。
-                Gson gson=new Gson();
+                Gson gson = new Gson();
                 RootPersonalHome rootPersonalHome = gson.fromJson(responseBody, RootPersonalHome
                         .class);
-                if (rootPersonalHome!=null){
+                if (rootPersonalHome != null) {
                     List<ResultPersonalHome> result = rootPersonalHome.getResult();
-                    if (result!=null && result.size()>0){
+                    if (result != null && result.size() > 0) {
                         final List<ModelPersonalHome> body = result.get(0).getBody();
-                        if (body!=null && body.size()>0){
+                        if (body != null && body.size() > 0) {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView.onSuccess(UserConstants.PERSONALHOME,body);
+                                    mView.onSuccess(UserConstants.PERSONALHOME, body);
                                 }
                             });
                         }
                     }
-                }else {
+                } else {
                     mView.onFailue(responseBody);
                 }
             }

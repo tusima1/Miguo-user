@@ -176,7 +176,8 @@ public class MainActivity extends BaseActivity {
                     case 4:
                         click4();
                 }
-                preTab = index;
+                if (index != 2)
+                    preTab = index;
             }
         });
         // 如果要加入guideActivity请注释这行代码,并打开initGuideResult();方法...=.=
@@ -234,6 +235,25 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         }
+
+        switch (preTab) {
+            case 0:
+                mViewManager.setSelectIndex(preTab, mTab0, true);
+                break;
+            case 1:
+                mViewManager.setSelectIndex(preTab, mTab1, true);
+                break;
+            case 3:
+                mViewManager.setSelectIndex(preTab, mTab3, true);
+                break;
+            case 4:
+                mViewManager.setSelectIndex(preTab, mTab4, true);
+                mFragMyAccount.refreshFragment();
+                break;
+            default:
+                break;
+        }
+
     }
 
     /**

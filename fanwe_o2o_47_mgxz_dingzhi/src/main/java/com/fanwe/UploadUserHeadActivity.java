@@ -6,9 +6,11 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.widget.ImageView.ScaleType;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -24,6 +26,7 @@ import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.sunday.eventbus.SDEventManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +37,7 @@ import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;
 
-public class UploadUserHeadActivity extends BaseActivity implements CallbackView2,CallbackView {
+public class UploadUserHeadActivity extends BaseActivity implements CallbackView2, CallbackView {
 
     public static final String EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL";
 
@@ -165,6 +168,8 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
                     SDDialogManager.dismissProgressDialog();
                     SDToast.showToast("修改头像成功");
                     finish();
+                    App.getInstance().setUserIcon(urlIcon);
+                    SDEventManager.post(EnumEventTag.UPLOAD_USER_HEAD_SUCCESS.ordinal());
                     break;
             }
         }

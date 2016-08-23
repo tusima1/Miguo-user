@@ -698,6 +698,9 @@ public class SellerHttpHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("tid", tid);
+        if (TextUtils.isEmpty(cate_id)) {
+            cate_id = "0";
+        }
         params.put("cate_id", cate_id);
         params.put("city_id", city_id);
         params.put("order_type", order_type);

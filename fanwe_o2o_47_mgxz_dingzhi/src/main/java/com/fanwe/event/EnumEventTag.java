@@ -97,6 +97,10 @@ public enum EnumEventTag {
     UPLOAD_USER_HEAD_SUCCESS,
 
     /**
+     * 修改用户信息成功
+     */
+    UPLOAD_USER_INFO_SUCCESS,
+    /**
      * 发表动态成功
      */
     PUBLISH_DYNAMIC_SUCCESS,

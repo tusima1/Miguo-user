@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import com.fanwe.constant.Constant.SearchTypeMap;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
@@ -42,25 +39,24 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsGroupModel;
+import com.fanwe.model.GoodsModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Tuan_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
+import com.fanwe.seller.model.getGroupList.ModelDealData;
 import com.fanwe.seller.model.getGroupList.ModelGroupList;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -163,6 +159,7 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
 
     private int pageNum = 1;
     private int pageSize = 10;
+    private boolean isRefresh;
     private SellerHttpHelper sellerHttpHelper;
 
     @Override
@@ -193,7 +190,10 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
         sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
         sellerHttpHelper.getClassifyList();
         sellerHttpHelper.getOrderByList();
-        sellerHttpHelper.getGroupList("", "", AppRuntimeWorker.getCity_id(), "default", "", "", 1, 10);
+    }
+
+    private void getGroupList() {
+        sellerHttpHelper.getGroupList(tid, cate_id, AppRuntimeWorker.getCity_id(), order_type, qid, keyword, pageNum, pageSize);
     }
 
     private void bindLocationData() {
@@ -278,18 +278,17 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPage.resetPage();
-                requestData(false);
+                isRefresh = true;
+                pageNum = 1;
+                getGroupList();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (mPage.increment()) {
-                    requestData(true);
-
-                } else {
-                    SDToast.showToast("没有更多数据了");
-                    mPtrlvContent.onRefreshComplete();
+                if (!SDCollectionUtil.isEmpty(groupItems)) {
+                    pageNum++;
+                    isRefresh = false;
+                    getGroupList();
                 }
             }
         });
@@ -388,55 +387,6 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
             }
         });
 
-    }
-
-    private void requestData(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("tuan");
-        model.putAct("index_v1");
-        model.put("order_type", order_type); // 排序类型
-        model.put("tid", tid);// 小分类ID
-        model.put("cate_id", cate_id);// 大分类ID
-        model.put("qid", qid); // 商圈
-        model.putPage(mPage.getPage());
-        model.put("keyword", keyword);
-        if (mNotice > 0) {
-            model.put("notice", 1);
-        }
-        SDRequestCallBack<Tuan_indexActModel> handler = new SDRequestCallBack<Tuan_indexActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    if (mIsFirstBindCategoryViewData) {
-//                        bindLeftCategoryViewData(actModel.getBcate_list());
-//                        bindMiddleCategoryViewData(actModel.getQuan_list());
-//                        bindRightCategoryViewData(actModel.getNavs());
-                        mIsFirstBindCategoryViewData = false;
-                    }
-                    mPage.update(actModel.getPage());
-                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                dealFinishRequest();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-
-    }
-
-    protected void dealFinishRequest() {
-        SDDialogManager.dismissProgressDialog();
-        mPtrlvContent.onRefreshComplete();
-        SDViewUtil.toggleEmptyMsgByList(mListModel, mLlEmpty);
     }
 
     private void bindLeftCategoryViewData(List<ModelClassifyList> listModel) {
@@ -612,8 +562,52 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
                     bindRightCategoryViewData(navs);
                     break;
                 case 3:
+                    if (isRefresh) {
+                        mListModel.clear();
+                    }
                     //团购
-                    Log.d("groupItems", groupItems.toString());
+                    if (!SDCollectionUtil.isEmpty(groupItems)) {
+                        for (ModelGroupList bean : groupItems) {
+                            GoodsGroupModel goodsGroupModel = new GoodsGroupModel();
+                            goodsGroupModel.setId(bean.getId());
+                            goodsGroupModel.setName(bean.getName());
+                            goodsGroupModel.setAddress(bean.getAddress());
+                            goodsGroupModel.setAvg_point(DataFormat.toFloat(bean.getAvg_grade()));
+                            goodsGroupModel.setDiscount_pay(DataFormat.toInt(bean.getDiscount_pay()));
+                            goodsGroupModel.setDistance(DataFormat.toDouble(bean.getDistance()));
+                            goodsGroupModel.setPreview(bean.getPreview());
+                            goodsGroupModel.setIs_verify(DataFormat.toInt(bean.getIs_verify()));
+                            goodsGroupModel.setIs_youhui(DataFormat.toInt(bean.getIs_youhui()));
+                            goodsGroupModel.setTel(bean.getTel());
+                            goodsGroupModel.setXpoint(DataFormat.toDouble(bean.getXpoint()));
+                            goodsGroupModel.setYpoint(DataFormat.toDouble(bean.getYpoint()));
+
+                            List<GoodsModel> deal_data = new ArrayList<>();
+                            if (!SDCollectionUtil.isEmpty(bean.getDeal_data())) {
+                                for (ModelDealData temp : bean.getDeal_data()) {
+                                    GoodsModel goodsModel = new GoodsModel();
+                                    goodsModel.setId(temp.getId());
+                                    goodsModel.setName(temp.getName());
+                                    goodsModel.setSub_name(temp.getSub_name());
+                                    goodsModel.setIcon(temp.getIcon());
+                                    goodsModel.setBuy_count(DataFormat.toInt(temp.getBuy_count()));
+                                    goodsModel.setCurrent_price(DataFormat.toDouble(temp.getCurrent_price()));
+                                    goodsModel.setOrigin_price(DataFormat.toDouble(temp.getOrigin_price()));
+                                    goodsModel.setBrief(temp.getBrief());
+                                    goodsModel.setDistance(temp.getDistance());
+
+                                    deal_data.add(goodsModel);
+                                }
+                            }
+                            goodsGroupModel.setDeal_data(deal_data);
+
+                            mListModel.add(goodsGroupModel);
+                        }
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                    SDDialogManager.dismissProgressDialog();
+                    mPtrlvContent.onRefreshComplete();
                     break;
             }
         }

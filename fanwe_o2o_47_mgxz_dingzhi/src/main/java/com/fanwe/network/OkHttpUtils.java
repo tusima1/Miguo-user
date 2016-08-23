@@ -104,8 +104,8 @@ public class OkHttpUtils {
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
-                    requestStr.append("key:"+entry.getKey()+"  value:"+entry.getValue());
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(),"UTF-8"));
+                    requestStr.append("key:" + entry.getKey() + "  value:" + entry.getValue());
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -121,22 +121,21 @@ public class OkHttpUtils {
                 .post(requestBodyPost)
                 .build();
         if (ServerUrl.DEBUG) {
-            String method  = params.get("method");
-            Log.e(TAG, "method :+="+method+" post:"+requestStr.toString());
+            String method = params.get("method");
+            Log.e(TAG, "method :+=" + method + " post:" + requestStr.toString());
         }
 
         client.newCall(requestPost).enqueue(mCallback);
     }
 
     /**
-     * 异步PUT提交
+     * put请求
      *
      * @param url
      * @param params
      * @param mCallback
-     * @param tag
      */
-    public void put(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+    public void put(String url, TreeMap<String, String> params, Callback mCallback) {
         String serverUrl = "";
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
@@ -151,33 +150,36 @@ public class OkHttpUtils {
         params.putAll(commonParams());
         //加密所有的参数
         params = encryptParams(params);
+        StringBuilder requestStr = new StringBuilder("");
 
         FormBody.Builder build = new FormBody.Builder();
 
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
                 try {
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
+                    requestStr.append("key:" + entry.getKey() + "  value:" + entry.getValue());
+                    build.add(entry.getKey(), entry.getValue());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
                 build.add(entry.getKey(), "");
             }
         }
-        if (ServerUrl.DEBUG) {
-            String method  = params.get("method");
-            Log.e(TAG, "method :+="+method+" put:"+build.toString());
-        }
+
+
         RequestBody requestBodyPut = build.build();
         Request requestPut = new Request.Builder()
                 .url(serverUrl)
                 .put(requestBodyPut)
                 .build();
+        if (ServerUrl.DEBUG) {
+            String method = params.get("method");
+            Log.e(TAG, "method :+=" + method + " put:" + requestStr.toString());
+        }
 
         client.newCall(requestPut).enqueue(mCallback);
     }
-
 
     /**
      * 异步delete提交
@@ -323,8 +325,8 @@ public class OkHttpUtils {
         }
         serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
         if (ServerUrl.DEBUG) {
-            String method  = params.get("method");
-            Log.e(TAG, "method :+="+method+" get:"+serverUrl);
+            String method = params.get("method");
+            Log.e(TAG, "method :+=" + method + " get:" + serverUrl);
 
         }
         //创建一个Request

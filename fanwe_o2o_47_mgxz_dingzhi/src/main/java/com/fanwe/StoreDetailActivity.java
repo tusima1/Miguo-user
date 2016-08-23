@@ -401,6 +401,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
                 beanGoodsModel.setId(goodsModelShopInfo.getId());
                 beanGoodsModel.setName(goodsModelShopInfo.getName());
                 beanGoodsModel.setSub_name(goodsModelShopInfo.getShort_name());
+                beanGoodsModel.setBrief(goodsModelShopInfo.getTuan_introdution());
                 beanGoodsModel.setIcon(goodsModelShopInfo.getIcon());
                 beanGoodsModel.setOrigin_price(Double.valueOf(goodsModelShopInfo.getOrigin_price()));
                 beanGoodsModel.setCurrent_price(Double.valueOf(goodsModelShopInfo.getTuan_price()));
