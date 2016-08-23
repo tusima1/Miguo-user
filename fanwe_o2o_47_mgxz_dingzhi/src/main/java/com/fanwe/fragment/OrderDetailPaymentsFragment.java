@@ -61,7 +61,7 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 	{
 		super.init();
 		mManager.setmMode(Mode.CAN_NONE_SELECT);
-		bindData();
+		//bindData();
 	}
 
 	private void resetParams()
@@ -173,6 +173,7 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 
 	public void setListPayment(List<PaymentTypeInfo> listPayment) {
 		this.listPayment = listPayment;
+		bindData();
 	}
 
 

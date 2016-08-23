@@ -112,10 +112,12 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 		initTitle();
 		registeClick();
 		addFragments();
-		initPullToRefreshScrollView();
+		//initPullToRefreshScrollView();
+		requestData();
 	}
 
 	private void initIntentData()
+
 	{
 		mListDeal_id=getIntent().getExtras().getString("list_id");
 	}
@@ -236,6 +238,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
   取支付方式 。
    */
 	public void getPayType(){
+
 		commonShoppingHelper.getPayment();
 	}
 	/**

@@ -278,22 +278,28 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         return count;
     }
 
-    private ArrayList<String> getSumSeletedIds() {
+    private String getSumSeletedIds() {
         int size = 0;
         if (listModel == null || listModel.size() < 1) {
             return null;
         }
-        ArrayList<String> mSeletedGoods = new ArrayList<String>();
+        StringBuffer selectedIds= new StringBuffer();
+
+
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
             boolean checked = false;
             checked = model.isChecked();
             if (checked) {
-             mSeletedGoods.add(model.getId());
+                selectedIds.append(model.getId()+",");
+
             }
         }
-        return mSeletedGoods;
+        if(selectedIds!=null&&selectedIds.length()>1){
+            return  selectedIds.substring(0,selectedIds.length()-1);
+        }
+        return "";
     }
 
     /**
@@ -332,7 +338,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     @Override
     public void onCLickLeft_SDTitleSimple(SDTitleItem v) {
         currentGoTo = 2;
-        clickSettleAccounts();
+      clickSettleAccounts();
         super.onCLickLeft_SDTitleSimple(v);
     }
 
@@ -377,12 +383,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void startConfirmOrderActivity() {
         if (listModel != null && listModel.size() > 0 ) {
-            ArrayList<String> mSeletedGoods = getSumSeletedIds();
+            String mSeletedGoods = getSumSeletedIds();
 
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putStringArrayList("list_id", mSeletedGoods);
+            bundle.putString("list_id", mSeletedGoods);
             intent.putExtras(bundle);
             startActivity(intent);
         } else {
@@ -391,6 +397,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     private void requestData() {
+
         outSideShoppingCartHelper.getUserShopCartList();
     }
 
