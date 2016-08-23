@@ -45,7 +45,7 @@ public class ImgViewActivity extends Activity {
             path = getIntent().getStringExtra("path");
             File file = new File(path);
             if (file.exists()) {
-                ImageLoader.getInstance().displayImage("file://" + path, ivImg);
+                ImageLoader.getInstance().displayImage("file:///" + path, ivImg);
             }
         }
     }

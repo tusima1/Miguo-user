@@ -106,7 +106,6 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
                     mTvCountDown.setText(new Random().nextInt(9) + "");
                     break;
                 case 1:
-
                     break;
                 case 2:
                     int arg1 = msg.arg1;

@@ -1,13 +1,8 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -19,12 +14,15 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.Mode;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.model.Payment_listModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 订单详情页（支付方式fragment）
+ * 支付方式（支付方式fragment）
  * 
  * @author js02
  * 
@@ -37,14 +35,17 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 	private OrderDetailPaymentsFragmentListener mListener;
 	private SDViewNavigatorManager mManager = new SDViewNavigatorManager();
 	/** 选中的支付方式id */
-	private int mPaymentId;
+	private String mPaymentId;
+
+	 private List<PaymentTypeInfo> listPayment;
+
 
 	public void setmListener(OrderDetailPaymentsFragmentListener listener)
 	{
 		this.mListener = listener;
 	}
 
-	public int getPaymentId()
+	public String  getPaymentId()
 	{
 		return mPaymentId;
 	}
@@ -65,33 +66,17 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 
 	private void resetParams()
 	{
-		this.mPaymentId = 0;
+		this.mPaymentId = "0";
 	}
 
 	private void bindData()
 	{
-		if (!toggleFragmentView(mCheckActModel))
-		{
-			resetParams();
-			return;
-		}
-		if (!toggleFragmentView(mCheckActModel.getShow_payment()))
-		{
-			resetParams();
-			return;
-		}
-		final List<Payment_listModel> listPayment = mCheckActModel.getPayment_list();
-		if (!toggleFragmentView(listPayment))
-		{
-			resetParams();
-			return;
-		}
-
+		resetParams();
 		// TODO 生成支付方式
 		mLl_payment.removeAllViews();
 		List<SDViewBase> listView = new ArrayList<SDViewBase>();
-		Payment_listModel foundModel = null;
-		for (Payment_listModel model : listPayment)
+		PaymentTypeInfo foundModel = null;
+		for (PaymentTypeInfo model : listPayment)
 		{
 			if (model.getId() == this.mPaymentId)
 			{
@@ -102,7 +87,7 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 			listView.add(view);
 			mLl_payment.addView(view);
 		}
-		
+
 		mManager.setItems(SDCollectionUtil.toArray(listView));
 		mManager.setmListener(new SDViewNavigatorManagerListener()
 		{
@@ -110,7 +95,7 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 			@Override
 			public void onItemClick(View v, int index)
 			{
-				
+
 				/**
 				 * @author didikee
 				 * @date 2016年6月15日 上午10:24:16
@@ -119,13 +104,13 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 				 */
 				if (OrderDetailPaymentsFragment.this.getActivity() instanceof ConfirmOrderActivity) {
 					ConfirmOrderActivity activity = (ConfirmOrderActivity)OrderDetailPaymentsFragment.this.getActivity();
-					activity.sonFragemtMethod();
+					activity.checkPaymentMethod();
 				}else if (OrderDetailPaymentsFragment.this.getActivity() instanceof ConfirmTopUpActivity) {
 					ConfirmTopUpActivity activity = (ConfirmTopUpActivity)OrderDetailPaymentsFragment.this.getActivity();
 					activity.sonFragemtMethod();
 				}
-				
-				Payment_listModel model = SDCollectionUtil.get(listPayment, index);
+
+				PaymentTypeInfo model = SDCollectionUtil.get(listPayment, index);
 				if (model != null)
 				{
 					mPaymentId = model.getId();
@@ -179,7 +164,16 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 
 	public interface OrderDetailPaymentsFragmentListener
 	{
-		public void onPaymentChange(Payment_listModel model);
+		public void onPaymentChange(PaymentTypeInfo model);
 	}
+
+	public List<PaymentTypeInfo> getListPayment() {
+		return listPayment;
+	}
+
+	public void setListPayment(List<PaymentTypeInfo> listPayment) {
+		this.listPayment = listPayment;
+	}
+
 
 }

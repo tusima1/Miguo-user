@@ -30,7 +30,7 @@ public class UserConstants {
      * 取用户信息。
      */
 
-    public static final String USER_INFO_URL = "UserInfo";
+    public static final String USER_INFO_URL="UserInfo";
     /**
      * 第三方OPENID.
      */
@@ -116,6 +116,8 @@ public class UserConstants {
      */
     public static final String QQ_GET_USER_INFO = "https://graph.qq.com/user/get_user_info";
 
+
+
     //返回码
     /**
      * 注册成功。
@@ -132,6 +134,26 @@ public class UserConstants {
      * 我的,界面数据展示
      */
     public static final String PERSONALHOME = "PersonalHome";
+    /**
+     * 修改手机号
+     */
+    public static final String USER_CHANGE_MOBILE = "UserChangeMobile";
+    /**
+     * 红包列表
+     */
+    public static final String USER_RED_PACKET_LIST = "GetUserRedPackets";
+
+    /**
+     * 订单列表
+     */
+    public static final String ORDER_INFO = "OrderInfo";
+    public static final String ORDER_INFO_ALL = "OrderInfo_all";
+    public static final String ORDER_INFO_PAY_WAIT = "OrderInfo_pay_wait";
+    public static final String ORDER_INFO_USE_WAIT = "OrderInfo_use_wait";
+    public static final String ORDER_INFO_COMMENT_WAIT = "OrderInfo_comment_wait";
+    public static final String ORDER_INFO_REFUND = "OrderInfo_refund";
+
+
     /**
      * 我的战队
      */

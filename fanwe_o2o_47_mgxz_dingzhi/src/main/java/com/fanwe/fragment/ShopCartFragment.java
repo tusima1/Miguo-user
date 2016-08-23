@@ -61,9 +61,9 @@ import android.widget.TextView;
 
 /**
  * 购物车
- * 
+ *
  * @author js02
- * 
+ *
  */
 public class ShopCartFragment extends BaseFragment {
 	@ViewInject(R.id.lv_cart_goods)
@@ -115,7 +115,7 @@ public class ShopCartFragment extends BaseFragment {
 
 	@ViewInject(R.id.bt_delect)
 	private Button mBt_delect;
-	
+
 	@ViewInject(R.id.content_ptr)
 	private PullToRefreshScrollView mContentPtr;//内容部分,可下拉刷新
 
@@ -175,8 +175,8 @@ public class ShopCartFragment extends BaseFragment {
 		mCb_xuanze.setChecked(false);
 		mCB_xuanze.setChecked(false);
 		SDViewUtil.hide(mLl_compile);
-		
-		
+
+
 		//重置下巴(结算)
 		mBt_account.setText("结算");
 		mBt_account.setBackgroundColor(getResources().getColor(
@@ -303,8 +303,8 @@ public class ShopCartFragment extends BaseFragment {
 
 	/**
 	 * 改变购物车列表里面的商品是否被选择属性,同时计算总金额。。
-	 * 
-	 * @param ifChecked
+	 *
+	 * @param isChecked
 	 *            是否被选择。
 	 */
 	private BigDecimal checkListModelStateAndSumMoney(boolean isChecked) {
@@ -359,7 +359,7 @@ public class ShopCartFragment extends BaseFragment {
 
 	/**
 	 * 获取总金额。
-	 * 
+	 *
 	 * @return
 	 */
 	private BigDecimal getSumMoney() {
@@ -383,7 +383,7 @@ public class ShopCartFragment extends BaseFragment {
 
 	/**
 	 * 获取已经选中听选项.
-	 * 
+	 *
 	 * @param type
 	 *            type=1 获取非编辑状态下的已经被选择的数量。type=2 获取编辑状态下的被选择的数量。
 	 * @return
@@ -476,7 +476,7 @@ public class ShopCartFragment extends BaseFragment {
 				{
 					return;
 				}
-				
+
 				RequestModel request = new RequestModel();
 				request.putCtl("cart");
 				request.putAct("check_cart");
@@ -490,21 +490,21 @@ public class ShopCartFragment extends BaseFragment {
 						@Override
 						public void onStart()
 						{
-							
+
 						}
 						@Override
 						public void onSuccess(ResponseInfo<String> responseInfo)
 						{
 						if (actModel.getStatus() == 1)
 						{
-							
+
 						}
 					}
-			
+
 					@Override
 					public void onFinish()
 					{
-						
+
 					}
 				};
 				InterfaceServer.getInstance().requestInterface(request, handler);
@@ -528,7 +528,7 @@ public class ShopCartFragment extends BaseFragment {
 			mFalg = true;
 		}
 		if (mAdapter != null) {
-			mAdapter.setmIsDelect(mFalg);
+		//	mAdapter.setmIsDelect(mFalg);
 			mAdapter.notifyDataSetChanged();
 		}
 	}
@@ -567,7 +567,7 @@ public class ShopCartFragment extends BaseFragment {
 	 */
 	private void clickSettleAccounts() {
 		if (mLlPhoneLogin.getVisibility() == View.VISIBLE) {
-			
+
 			mStrMobile =mEt_mobile.getText().toString();
 			if (TextUtils.isEmpty(mStrMobile)) {
 				SDToast.showToast("请输入手机号");
@@ -589,7 +589,7 @@ public class ShopCartFragment extends BaseFragment {
 	}
 
 	private void requestCheckCart() {
-		
+
 		if (mActModel == null) {
 			return;
 		}
@@ -600,7 +600,7 @@ public class ShopCartFragment extends BaseFragment {
 		if (mAdapter != null) {
 			model.put("num", mAdapter.getMapNumber());
 		}
-		
+
 		model.put("mobile", mStrMobile);
 		model.put("sms_verify", mStrCode);
 		model.put("invite_mobile", mStrReference);
@@ -712,8 +712,8 @@ public class ShopCartFragment extends BaseFragment {
 		initSumPrice();
 		SDViewUtil.toggleEmptyMsgByList(listModel, mRlEmpty);
 		// 初始化adapter.
-		mAdapter = new ShopCartAdapter(listModel, getActivity(), isScore,
-				false, mTv_sum);
+//		mAdapter = new ShopCartAdapter(listModel, getActivity(), isScore,
+//				false, mTv_sum);
 		getmAdapterListener();
 		mLvCartGoods.setAdapter(mAdapter);
 		mAdapter.notifyDataSetChanged();
@@ -819,7 +819,7 @@ public class ShopCartFragment extends BaseFragment {
 				if (actModel.getStatus() == 1) {
 					// 删除成功
 					listModel.removeAll(deleteList);
-					mAdapter.setData(listModel);
+			//		mAdapter.setData(listModel);
 					mAdapter.notifyDataSetChanged();
 
 					SDEventManager.post(EnumEventTag.DELETE_CART_GOODS_SUCCESS
@@ -842,7 +842,7 @@ public class ShopCartFragment extends BaseFragment {
 		};
 		InterfaceServer.getInstance().requestInterface(request, handler);
 	}
-	
+
 	/**
 	 * 更新Title上的商品数量
 	 * @param num

@@ -7,7 +7,6 @@ public class Constant
 {
 
 	public static final String RESULT_SUCCESS="200";
-	public static final String DOWN_LOAD_DIR_NAME = "fanwe";
 
 	public static final String EARN_SUB_CHAR = "市";
 
@@ -33,17 +32,6 @@ public class Constant
 		public static final int ALL = 1;
 		/** wifi网络下加载图片,移动网络下不允许加载图片 */
 		public static final int ONLY_WIFI = 0;
-	}
-
-	public static final class PushType
-	{
-		public static final int NORMAL = 1;
-		public static final int URL = 2;
-		public static final int TUAN_DETAIL = 3;
-		public static final int GOODS_DETAIL = 4;
-		public static final int EVENT_DETAIL = 5;
-		public static final int YOUHUI_DETAIL = 6;
-		public static final int STORE_DETAIL = 7;
 	}
 
 	public enum TitleType

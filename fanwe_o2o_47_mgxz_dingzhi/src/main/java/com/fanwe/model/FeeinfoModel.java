@@ -8,6 +8,7 @@ public class FeeinfoModel implements Parcelable
 
 	private String name;
 	private String value;
+	private String id;
 
 	public String getName()
 	{
@@ -39,6 +40,7 @@ public class FeeinfoModel implements Parcelable
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(name);
 		dest.writeString(value);
+		dest.writeString(id);
 		
 	}
 	
@@ -55,6 +57,7 @@ public class FeeinfoModel implements Parcelable
 	     // 从包裹中读出数据
 		 brief.name = in.readString();
 	     brief.value = in.readString();
+		 brief.id = in.readString();
 	     
 	     
 	     
@@ -72,4 +75,11 @@ public class FeeinfoModel implements Parcelable
 	 }
 	};
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 }

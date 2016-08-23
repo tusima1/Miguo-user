@@ -2,8 +2,11 @@ package com.fanwe;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
-import com.fanwe.fragment.ShopCartFragment;
+
+import com.fanwe.app.App;
+import com.fanwe.fragment.ShopCartFragmentNew;
 import com.fanwe.o2o.miguo.R;
 
 /**
@@ -21,11 +24,13 @@ public class ShopCartActivity extends BaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view_container);
 		init();
+		checkLogin();
 	}
 
 	private void init()
 	{
-		getSDFragmentManager().replace(R.id.view_container_fl_content, new ShopCartFragment());
+		getSDFragmentManager().replace(R.id.view_container_fl_content, new ShopCartFragmentNew()
+		);
 	}
 
 	@Override
@@ -33,5 +38,16 @@ public class ShopCartActivity extends BaseActivity
 	{
 		super.onNewIntent(intent);
 		init();
+	}
+
+	/**
+	 * 判断是否登录。
+	 */
+	public void checkLogin(){
+		if(TextUtils.isEmpty(App.getInstance().getToken())){
+			Intent intent = new Intent(this,
+					LoginActivity.class);
+			startActivity(intent);
+		}
 	}
 }

@@ -119,7 +119,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private static final int UPDAT_WALL_TIME_TIMER_TASK = 1;
     private static final int TIMEOUT_INVITE = 2;
     private boolean mBoolRefreshLock = false;
-    private boolean mBoolNeedRefresh = false;
+    private boolean mBoolNeedRefresh = true;
     private final Timer mTimer = new Timer();
     private ArrayList<LiveChatEntity> mTmpChatList = new ArrayList<LiveChatEntity>();//缓冲队列
     private TimerTask mTimerTask = null;
@@ -1016,7 +1016,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "进入房间", Constants.MEMBER_ENTER);
         int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
-        int roomId = CurLiveInfo.getRoomNum();
 
 
         //人数加1,可以设置到界面上
@@ -1033,9 +1032,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
             doUpdateMembersCount();
-
-
-
         }
 
         //如果存在视频互动，取消
@@ -1170,7 +1166,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 public void run() {
                     if (LiveUtil.checkIsHost() && mHostTopView != null) {
                         mHostTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
-
                     } else {
                         if (mUserHeadTopView != null) {
                             mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
@@ -1838,7 +1833,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 List<ModelAudienceInfo> audienceList = datas;
                 if (audienceList != null && audienceList.size() >= 0) {
                     final  boolean isHost = LiveUtil.checkIsHost();
-                   final   int size = datas.size();
+                    final   int size = datas.size();
+                    CurLiveInfo.setMembers(size);
 
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
@@ -1894,8 +1890,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
                 //更新观众人数
                 if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
-                    doUpdateMembersCount();
+
                     CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                    doUpdateMembersCount();
                 }
                 break;
             case LiveConstants.LIST_OF_STORES:

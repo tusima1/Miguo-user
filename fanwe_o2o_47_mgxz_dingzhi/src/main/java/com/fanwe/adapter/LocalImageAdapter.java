@@ -88,7 +88,7 @@ public class LocalImageAdapter extends SDBaseAdapter<LocalImageModel>
 				}
 			});
 
-			SDViewBinder.setImageView(iv_image, "file://" + model.getPath());
+			SDViewBinder.setImageView(iv_image, "file:///" + model.getPath());
 		}
 		getViewUpdate(position, convertView, parent);
 		return convertView;

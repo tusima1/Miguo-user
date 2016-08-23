@@ -12,6 +12,7 @@ import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Payment_listModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 
 public class SDPaymentListView extends SDViewBase
 {
@@ -19,7 +20,7 @@ public class SDPaymentListView extends SDViewBase
 	public ImageView mIv_image;
 	public TextView mTv_name;
 	public ImageView mIv_selected;
-	private Payment_listModel mModel;
+	private PaymentTypeInfo mModel;
 	public SDPaymentListView(Context context)
 	{
 		this(context, null);
@@ -40,13 +41,13 @@ public class SDPaymentListView extends SDViewBase
 		mIv_image.setVisibility(View.GONE);
 	}
 
-	public void setData(Payment_listModel model)
+	public void setData(PaymentTypeInfo model)
 	{
 		this.mModel = model;
 		bindData();
 	}
 
-	public Payment_listModel getData()
+	public PaymentTypeInfo getData()
 	{
 		return mModel;
 	}

@@ -24,6 +24,8 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
@@ -355,6 +357,14 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     }
 
+    public List<ShoppingCartInfo> getLocalShoppingCartInfo(){
+        return LocalShoppingcartDao.queryModel();
+    }
+    public void setLocalShoppingCartInfo(List<ShoppingCartInfo> infoList){
+        if(infoList!=null){
+            LocalShoppingcartDao.insertModel(infoList);
+        }
+    }
     public boolean isImLoginSuccess() {
         return imLoginSuccess;
     }

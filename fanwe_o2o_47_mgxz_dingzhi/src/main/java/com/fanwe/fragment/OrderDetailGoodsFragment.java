@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import com.fanwe.adapter.OrderDetailGroupGoodsAdapter;
 import com.fanwe.model.CartGroupGoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.Deals;
+import com.fanwe.shoppingcart.model.ShoppingBody;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 /**
@@ -25,7 +27,7 @@ public class OrderDetailGoodsFragment extends OrderDetailBaseFragment
 	@ViewInject(R.id.frag_order_detail_goods_ll_all)
 	private LinearLayout mLlGoods;
 
-	private List<CartGroupGoodsModel> mListModel;
+	private List<Deals> mListModel;
 	
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -47,13 +49,13 @@ public class OrderDetailGoodsFragment extends OrderDetailBaseFragment
 			return;
 		}
 
-		mListModel = mCheckActModel.getListCartGroupsGoods();
+		mListModel = mCheckActModel.getDeals();
 		if (!toggleFragmentView(mListModel))
 		{
 			return;
 		}
 		mLlGoods.removeAllViews();
-		OrderDetailGroupGoodsAdapter adapter = new OrderDetailGroupGoodsAdapter(mListModel, getActivity(), mCheckActModel.getIs_score());
+		OrderDetailGroupGoodsAdapter adapter = new OrderDetailGroupGoodsAdapter(mListModel, getActivity());
 		for (int i = 0; i < mListModel.size(); i++)
 		{
 			mLlGoods.addView(adapter.getView(i, null, null));

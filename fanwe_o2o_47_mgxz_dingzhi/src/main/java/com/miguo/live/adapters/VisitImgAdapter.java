@@ -102,7 +102,7 @@ public class VisitImgAdapter extends BaseAdapter {
             });
             File file = new File(path);
             if (file.exists()) {
-                ImageLoader.getInstance().displayImage("file://" + path, mHolder.ivImg);
+                ImageLoader.getInstance().displayImage("file:///" + path, mHolder.ivImg);
             }
         }
     }

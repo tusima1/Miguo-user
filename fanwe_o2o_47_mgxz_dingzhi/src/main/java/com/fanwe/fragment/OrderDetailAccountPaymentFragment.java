@@ -11,6 +11,7 @@ import com.fanwe.customview.SDPaymentListView;
 import com.fanwe.library.customview.SDViewBase.SDViewBaseListener;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 /**
@@ -65,16 +66,7 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 		{
 			return;
 		}
-
-		int hasAccount = mCheckActModel.getHas_account();
-		if (hasAccount == 0)
-		{
-			mPlv_account_money.onNormal();
-			hideFragmentView();
-			return;
-		}
-
-		double accountMoney = SDTypeParseUtil.getDouble(mCheckActModel.getAccount_money());
+		double accountMoney = SDTypeParseUtil.getDouble(mCheckActModel.getUserAccountMoney());
 		if (accountMoney <= 0)
 		{
 			mPlv_account_money.onNormal();
@@ -85,7 +77,7 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 			showFragmentView();
 		}
 
-		mPlv_account_money.mTv_name.setText("账户余额：" + mCheckActModel.getAccount_moneyFormat());
+		mPlv_account_money.mTv_name.setText("账户余额：" + mCheckActModel.getUserAccountMoney());
 		if (mPlv_account_money.ismSelected())
 		{
 			mPlv_account_money.onSelected();

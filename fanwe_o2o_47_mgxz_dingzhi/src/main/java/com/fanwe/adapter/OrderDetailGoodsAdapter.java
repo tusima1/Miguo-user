@@ -1,10 +1,8 @@
 package com.fanwe.adapter;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -15,19 +13,22 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.CartGoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.BuyItem;
 
-public class OrderDetailGoodsAdapter extends SDBaseAdapter<CartGoodsModel>
+import java.util.List;
+
+/**
+ * 商品列表。
+ *
+ */
+public class OrderDetailGoodsAdapter extends SDBaseAdapter<BuyItem>
 {
 
-	private int mIsScore;
-	private float total_price;
-
-	public OrderDetailGoodsAdapter(List<CartGoodsModel> listModel, Activity activity, int isScore)
+	public OrderDetailGoodsAdapter(List<BuyItem> listModel, Activity activity)
 	{
 		super(listModel, activity);
-		this.mIsScore = isScore;
+
 	}
 
 	@Override
@@ -43,11 +44,11 @@ public class OrderDetailGoodsAdapter extends SDBaseAdapter<CartGoodsModel>
 		final TextView tv_single_price = ViewHolder.get(convertView, R.id.tv_single_price);
 		final TextView tv_total_price = ViewHolder.get(convertView, R.id.tv_total_price);
 		
-		final CartGoodsModel model = getItem(position);
+		final BuyItem model = getItem(position);
 		if (model != null)
 		{
-			SDViewBinder.setImageView(iv_image, model.getIcon());
-			SDViewBinder.setTextView(tv_name, model.getSub_name());
+			SDViewBinder.setImageView(iv_image, model.getImg());
+			SDViewBinder.setTextView(tv_name, model.getGoodsName());
 			SDViewBinder.setTextView(tv_number, String.valueOf(model.getNumber()));
 			setPrice(tv_single_price, tv_total_price, model);
 
@@ -57,10 +58,10 @@ public class OrderDetailGoodsAdapter extends SDBaseAdapter<CartGoodsModel>
 				@Override
 				public void onClick(View v)
 				{
-					if (model.getDeal_id() > 0)
+					if (!TextUtils.isEmpty(model.getGoodsId()))
 					{
 						Intent intent = new Intent(mActivity, TuanDetailActivity.class);
-						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getDeal_id());
+						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getGoodsId());
 						mActivity.startActivity(intent);
 					}
 				}
@@ -71,19 +72,14 @@ public class OrderDetailGoodsAdapter extends SDBaseAdapter<CartGoodsModel>
 		return convertView;
 	}
 
-	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice, CartGoodsModel model)
+	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice, BuyItem model)
 	{
 		if (model != null && tvSinglePrice != null && tvTotalPrice != null)
 		{
-			if (mIsScore == 1)
-			{
-				SDViewBinder.setTextView(tvSinglePrice, model.getReturn_scoreFormat());
-				SDViewBinder.setTextView(tvTotalPrice, model.getReturn_total_scoreFormat());
-			} else
-			{
-				SDViewBinder.setTextView(tvSinglePrice, model.getUnit_priceFormat());
-				SDViewBinder.setTextView(tvTotalPrice, model.getTotal_price());
-			}
+
+				SDViewBinder.setTextView(tvSinglePrice, model.getPrice());
+				SDViewBinder.setTextView(tvTotalPrice, model.getTotal());
+
 		}
 	}
 

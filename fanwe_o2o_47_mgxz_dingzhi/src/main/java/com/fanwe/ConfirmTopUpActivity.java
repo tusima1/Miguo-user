@@ -30,6 +30,7 @@ import com.fanwe.model.Uc_HomeModel;
 import com.fanwe.model.UpacpappModel;
 import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.fanwe.wxapp.SDWxappPay;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
@@ -119,7 +120,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 
 	private void clickBt() 
 	{
-		if(mFragPayments.getPaymentId() == 0 &&  mFragAccountPayment.getUseAccountMoney() == 0)
+		if(TextUtils.isEmpty(mFragPayments.getPaymentId()) &&  mFragAccountPayment.getUseAccountMoney() == 0)
 		{
 			SDToast.showToast("请选择支付方式");
 			return;
@@ -214,9 +215,11 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 		mFragPayments = new OrderDetailPaymentsFragment();
 		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
 			@Override
-			public void onPaymentChange(Payment_listModel model) {
-				// requestCalculate();
+			public void onPaymentChange(PaymentTypeInfo model) {
+
 			}
+
+
 		});
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
 				mFragPayments);
@@ -300,9 +303,9 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 		SDViewBinder.setTextView(mTv_money, "￥"+String.valueOf(bd));
 		// 支付方式列表
-		mFragPayments.setmCheckActModel(actModel);
+		//mFragPayments.setmCheckActModel(actModel);
 		// 余额支付
-		mFragAccountPayment.setmCheckActModel(actModel);
+		//mFragAccountPayment.setmCheckActModel(actModel);
 	}
 
 	/**

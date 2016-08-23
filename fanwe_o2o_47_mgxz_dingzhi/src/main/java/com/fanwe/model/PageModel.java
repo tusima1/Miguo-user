@@ -5,28 +5,28 @@ public class PageModel
 
 	private int page = 1;
 	private int page_total = 0;
-	private int page_size;
-	private int data_total;
+//	private int page_size;
+//	private int data_total;
 
-	public int getPage_size()
-	{
-		return page_size;
-	}
+//	public int getPage_size()
+//	{
+//		return page_size;
+//	}
+//
+//	public void setPage_size(int page_size)
+//	{
+//		this.page_size = page_size;
+//	}
 
-	public void setPage_size(int page_size)
-	{
-		this.page_size = page_size;
-	}
-
-	public int getData_total()
-	{
-		return data_total;
-	}
-
-	public void setData_total(int data_total)
-	{
-		this.data_total = data_total;
-	}
+//	public int getData_total()
+//	{
+//		return data_total;
+//	}
+//
+//	public void setData_total(int data_total)
+//	{
+//		this.data_total = data_total;
+//	}
 
 	public int getPage()
 	{

@@ -26,6 +26,7 @@ public class ModelPersonalHome {
     "use_money":22,//已使用佣金
     "collect":"0",//收藏数（当前版本可能不实装收藏，可以无视）
     "pending_use":"0"//待使用
+    "fx_level":"1"//用户等级
     */
 
     private String pending_pay;
@@ -47,6 +48,7 @@ public class ModelPersonalHome {
     private int use_money;
     private String collect;
     private String pending_use;
+    private String fx_level;
 
     public String getPending_pay() {
         return pending_pay;
@@ -200,4 +202,11 @@ public class ModelPersonalHome {
         this.pending_use = pending_use;
     }
 
+    public String getFx_level() {
+        return fx_level;
+    }
+
+    public void setFx_level(String fx_level) {
+        this.fx_level = fx_level;
+    }
 }

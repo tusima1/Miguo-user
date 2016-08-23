@@ -42,7 +42,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
     private DataBindingLiveStart dataBindingLiveStart;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mLoginHelper;
     private TencentHttpHelper tencentHttpHelper;
-    private String token;
+//    private String token;
     /**
      * 签名后 的userid
      */
@@ -69,8 +69,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
 
     public void init() {
-        token = App.getApplication().getToken();
-        if (TextUtils.isEmpty(token)) {
+//        token = App.getApplication().getToken();
+        if (TextUtils.isEmpty(App.getInstance().getToken())) {
             goToLoginActivity();
         } else {
             dataBindingLiveStart.shopName.set("选择你的消费场所");
@@ -117,7 +117,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 SDToast.showToast("获取用户签名失败。");
             }
         };
-        tencentHttpHelper.getSign(token, mgCallback);
+        tencentHttpHelper.getSign(App.getInstance().getToken(), mgCallback);
     }
 
     public void onClick(View v) {

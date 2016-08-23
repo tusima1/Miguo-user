@@ -1,6 +1,11 @@
 package com.fanwe;
 
-import java.util.ArrayList;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ScrollView;
 
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
@@ -12,35 +17,30 @@ import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPa
 import com.fanwe.fragment.OrderDetailFeeFragment;
 import com.fanwe.fragment.OrderDetailGoodsFragment;
 import com.fanwe.fragment.OrderDetailParamsFragment;
-import com.fanwe.fragment.OrderDetailParamsFragment.OrderDetailParamsFragmentListener;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
 import com.fanwe.fragment.OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
-import com.fanwe.model.Cart_checkActModel;
 import com.fanwe.model.Cart_count_buy_totalModel;
-import com.fanwe.model.Cart_doneActModel;
-import com.fanwe.model.Payment_listModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.RefreshCalbackView;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.PaymentTypeInfo;
+import com.fanwe.shoppingcart.model.ShoppingBody;
+import com.fanwe.shoppingcart.presents.CommonShoppingHelper;
+import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
+import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 确认订单
@@ -48,25 +48,30 @@ import android.widget.TextView;
  * @author js02
  * 
  */
-public class ConfirmOrderActivity extends BaseActivity
+public class ConfirmOrderActivity extends BaseActivity implements RefreshCalbackView
 {
-	public static final int REQUEST_CODE_DELIVERY_ADDRESS = 1;
-
+	/**
+	 * 下拉刷 新。
+	 */
 	protected PullToRefreshScrollView mPtrsvAll;
-
+	/**
+	 *确认订单。
+	 */
 	protected Button mBtnConfirmOrder;
 
-	protected Cart_checkActModel mCheckActModel;
-	
-	protected TextView tv_dingdan;
-	
-	protected ArrayList<Integer> mList =new ArrayList<Integer>();
+	protected ShoppingBody mCheckActModel;
+	/**
+	 * 商品IDS.
+	 */
+	protected ArrayList<String> mList =new ArrayList<String>();
 	// -------------------------fragments
-	//商品详情
+	/**
+	 *  商品详情
+	 */
 	protected OrderDetailGoodsFragment mFragGoods;
 	//订单参数
 	protected OrderDetailParamsFragment mFragParams;
-	//订单详情
+	//支付方式详情
 	protected OrderDetailPaymentsFragment mFragPayments;
 	//余额支付
 	protected OrderDetailAccountPaymentFragment mFragAccountPayment;
@@ -74,9 +79,21 @@ public class ConfirmOrderActivity extends BaseActivity
 	protected OrderDetailFeeFragment mFragFees;
 	//红包抵扣
 	protected MyRedPayMentsFragment mFragMyRed;
+	/**
+	 * 商品ID 集合。
+	 */
+	private String mListDeal_id;
 
-	private ArrayList<Integer> mListDeal_id;
+	private OutSideShoppingCartHelper outSideShoppingCartHelper;
+	private CommonShoppingHelper commonShoppingHelper;
 
+	//总金额。
+	float totalFloat=0.00f;
+
+	//用户余额。
+	float yueFloat=0.00f;
+
+	private  PaymentTypeInfo currentPayType;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -88,6 +105,8 @@ public class ConfirmOrderActivity extends BaseActivity
 
 	protected void init()
 	{
+		outSideShoppingCartHelper= new OutSideShoppingCartHelper(this);
+		commonShoppingHelper = new CommonShoppingHelper(this);
 		initIntentData();
 		findViews();
 		initTitle();
@@ -98,14 +117,13 @@ public class ConfirmOrderActivity extends BaseActivity
 
 	private void initIntentData()
 	{
-		mListDeal_id=getIntent().getExtras().getIntegerArrayList("list_id");
+		mListDeal_id=getIntent().getExtras().getString("list_id");
 	}
 
 	private void findViews()
 	{
 		mPtrsvAll = (PullToRefreshScrollView) findViewById(R.id.act_confirm_order_ptrsv_all);
 		mBtnConfirmOrder = (Button) findViewById(R.id.act_confirm_order_btn_confirm_order);
-//		tv_dingdan = (TextView)findViewById(R.id.tv_panduan);
 	}
 
 	private void addFragments()
@@ -114,28 +132,22 @@ public class ConfirmOrderActivity extends BaseActivity
 		mFragGoods = new OrderDetailGoodsFragment();
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_goods, mFragGoods);
 		
-		// 订单参数
+		// 留言信息
 		mFragParams = new OrderDetailParamsFragment();
-		mFragParams.setmListener(new OrderDetailParamsFragmentListener()
-		{
-			@Override
-			public void onCalculate()
-			{
-				requestCalculate();
-			}
-		});
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_params, mFragParams);
 
 		// 支付方式列表
 		mFragPayments = new OrderDetailPaymentsFragment();
-		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener()
-		{
+		getPayType();
+		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
+
 			@Override
-			public void onPaymentChange(Payment_listModel model)
-			{
-				requestCalculate();
+			public void onPaymentChange(PaymentTypeInfo model) {
+				currentPayType = model;
+				changePayType(1);
 			}
 		});
+
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments, mFragPayments);
 		//红包
 		mFragMyRed = new MyRedPayMentsFragment();
@@ -145,8 +157,10 @@ public class ConfirmOrderActivity extends BaseActivity
 			@Override
 			public void onRedPaymentChange(ArrayList list) {
 				
-				mList = list;
-				requestCalculate();
+				if(list!=null&&list.size()>0) {
+                    String redIDs = listToString(list);
+					requestBenefit(redIDs);
+				}
 			}
 		});
 		getSDFragmentManager().replace(R.id.act_my_red_pay,mFragMyRed);
@@ -158,16 +172,16 @@ public class ConfirmOrderActivity extends BaseActivity
 			@Override
 			public void onPaymentChange(boolean isSelected)
 			{
-				
-				requestCalculate();
+
+				changePayType(0);
 			}
 		});
+
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_account_payments, mFragAccountPayment);
 
 		// 费用信息
 		mFragFees = new OrderDetailFeeFragment();
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_fees, mFragFees);
-
 	}
 
 	private void initPullToRefreshScrollView()
@@ -192,73 +206,52 @@ public class ConfirmOrderActivity extends BaseActivity
 	}
 
 	/**
+	 *
+	 * 改变支付方式 0 余额支付 。1 第三方支付
+	 * @param type
+     */
+	public void changePayType(int type){
+		//总金额。
+		 totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
+		//用户余额。
+		 yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
+       //当前 选择余额支付
+		if(type==0){
+			if(totalFloat<=yueFloat){
+				mFragPayments.clearSelectedPayment(false);
+				mFragFees.setCurrentFeeInfoModel(null);
+			}
+			mFragFees.setIfYueChecked(true);
+			mFragFees.refreshData();
+		}else{
+			if(totalFloat<=yueFloat){
+				mFragAccountPayment.clearSelectedPayment(false);
+			}
+			mFragFees.setCurrentFeeInfoModel(currentPayType);
+			mFragFees.setIfYueChecked(false);
+			mFragFees.refreshData();
+		}
+	}
+  /*
+  取支付方式 。
+   */
+	public void getPayType(){
+		commonShoppingHelper.getPayment();
+	}
+	/**
 	 * 获取数据
 	 */
 	protected void requestData()
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("cart");
-		model.putAct("check");
-		model.putUser();
-		model.put("deals", mListDeal_id);
-
-		SDRequestCallBack<Cart_checkActModel> handler = new SDRequestCallBack<Cart_checkActModel>()
-		{
-			
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("正在加载");
-			}
-			
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				dealRequestDataSuccess(actModel);
-				
-			}
-			
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-				mPtrsvAll.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
+		outSideShoppingCartHelper.getDingdanDetail(mListDeal_id);
 	}
 
-	protected void dealRequestDataSuccess(Cart_checkActModel actModel)
+	protected void dealRequestDataSuccess(ShoppingBody actModel)
 	{
-		Intent intent = null;
-		switch (actModel.getStatus())
-		{
-		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
-			startActivity(intent);
-			break;
-		case 1:
-			mCheckActModel = actModel;
-			if(mCheckActModel.getRed_packet_total()>0 && mCheckActModel.getRed_packet_info() != null)
-			{
-				mList.add(mCheckActModel.getRed_packet_info().getId());
-			}else 
-			{
-				mList.clear();
-			}
-			bindData();
-			requestCalculate();
-			break;
 
-		default:
-			break;
-		}
+		   mCheckActModel = actModel;
+			bindData();
+
 	}
 
 	protected void bindData()
@@ -267,19 +260,11 @@ public class ConfirmOrderActivity extends BaseActivity
 		{
 			return;
 		}
-//		if(mCheckActModel.getListCartGroupsGoods().size() > 1)
-//		{
-//			
-//			SDViewUtil.show(tv_dingdan);
-//		}else
-//		{
-//			SDViewUtil.hide(tv_dingdan);
-//		}
 		
 		// 绑定商品数据
 		mFragGoods.setmCheckActModel(mCheckActModel);
 
-		// 订单参数
+		// 留言参数
 		mFragParams.setmCheckActModel(mCheckActModel);
 		
 		// 支付方式列表
@@ -290,76 +275,55 @@ public class ConfirmOrderActivity extends BaseActivity
 		
 		//红包
 		mFragMyRed.setmCheckActModel(mCheckActModel);
+
+		mFragFees.setmCheckActModel(mCheckActModel);
+	}
+
+	/**
+	 * 绑定 支付方式
+	 * @param datas
+     */
+	private void bindPayment(List<PaymentTypeInfo> datas){
+		if(datas!=null&&datas.size()>0){
+			mFragPayments.setListPayment(datas);
+		}
+	}
+
+	/**
+	 * 显示优惠后金额。
+	 * @param datas
+     */
+	private void dealBenifit(List<HashMap<String,String>> datas){
+		if(datas!=null){
+			HashMap<String,String> maps =datas.get(0);
+			String youhuiPrice = maps.get(ShoppingCartconstants.YOUHUI_PRICE);
+			mCheckActModel.setYouhuiPrice(youhuiPrice);
+			mFragFees.refreshData();
+		}
+
 	}
 	
 	protected void fillCalculateParams(RequestModel model)
 	{
-		if (model != null)
-		{
-			if (mFragParams != null)
-			{
-				model.put("delivery_id", mFragParams.getDelivery_id());
-				model.put("ecvsn", mFragParams.getEcv_sn());
-			}
-			if (mFragPayments != null)
-			{
-				model.put("payment", mFragPayments.getPaymentId());
-			}
-			if (mFragAccountPayment != null)
-			{
-				model.put("all_account_money", mFragAccountPayment.getUseAccountMoney());
+		if (model != null) {
+			if (mFragParams != null) {
+
+				if (mFragPayments != null) {
+					model.put("payment", mFragPayments.getPaymentId());
+				}
+				if (mFragAccountPayment != null) {
+					model.put("all_account_money", mFragAccountPayment.getUseAccountMoney());
+				}
 			}
 		}
 	}
 
 	/**
-	 * 计算价格
-	 */
-	protected void requestCalculate()
-	{
-		RequestModel model = new RequestModel();
-		model.putCtl("cart");
-		model.putAct("count_buy_total");
-		model.put("deals", mListDeal_id);
-		if(!mList.isEmpty() || mList != null)
-		{
-			model.put("red_packet_ids", mList);
-			
-		}else
-		{
-			model.put("red_packet_ids", null);
-		}
-		model.putUser();
-		fillCalculateParams(model);
-		SDRequestCallBack<Cart_count_buy_totalModel> handler = new SDRequestCallBack<Cart_count_buy_totalModel>()
-		{
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("正在加载");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				// TODO 绑定所需费用信息
-				dealRequestCalculateSuccess(actModel);
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-				
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
+	 * 选择红包后取优惠金额。
+	 * @param redIDs
+     */
+	private void requestBenefit(String redIDs){
+		outSideShoppingCartHelper.getBenefitCount(mCheckActModel.getId(),redIDs);
 	}
 
 	protected void dealRequestCalculateSuccess(Cart_count_buy_totalModel actModel)
@@ -389,15 +353,6 @@ public class ConfirmOrderActivity extends BaseActivity
 				}
 			}
 
-			mFragFees.setListFeeinfo(actModel.getFeeinfo());
-
-			// TODO 更新各商家运费
-			if (mFragGoods != null)
-			{
-				mCheckActModel.setCalculateModel(actModel);
-				mFragGoods.setmCheckActModel(mCheckActModel);
-			}
-
 			break;
 
 		default:
@@ -405,96 +360,54 @@ public class ConfirmOrderActivity extends BaseActivity
 		}
 	}
 
-	protected void fillDoneOrderParams(RequestModel model)
-	{
-		if (model != null)
-		{
-			if (mFragParams != null)
-			{
-				model.put("delivery_id", mFragParams.getDelivery_id());
-				model.put("ecvsn", mFragParams.getEcv_sn());
-				model.put("content", mFragParams.getContent());
-			}
-			if (mFragPayments != null)
-			{
-				model.put("payment", mFragPayments.getPaymentId());
-			}
-			if (mFragAccountPayment != null)
-			{
-				model.put("all_account_money", mFragAccountPayment.getUseAccountMoney());
-			}
-		}
-	}
 
 	/**
-	 * 确认订单
+	 * 确认并 生成订单。
 	 */
 	protected void requestDoneOrder()
 	{
-		
-		 
-		RequestModel model = new RequestModel();
-		model.putCtl("cart");
-		model.putAct("done");
-		model.put("deals", mListDeal_id);
-		model.put("red_packet_ids",mList);
-		model.putUser();
-		fillDoneOrderParams(model);
-
-		SDRequestCallBack<Cart_doneActModel> handler = new SDRequestCallBack<Cart_doneActModel>()
+		if (mFragPayments != null&&mFragParams!=null&&mFragMyRed!=null&&mFragAccountPayment!=null)
 		{
-			
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("正在加载");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				dealRequestDoneOrderSuccess(actModel);
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-
-			}
-
-			@Override
-			public void onFinish()
-			{
-				mBtnConfirmOrder.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
-				mBtnConfirmOrder.setClickable(true);
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-
+			//支付方式
+			String payDisp = mFragPayments.getPaymentId();
+			// 留言
+			String content = mFragParams.getContent();
+			//红包列表。
+			String red_id =mFragMyRed.getIdList();
+			//是否使用余额支付。
+			String balances_flg = mFragAccountPayment.getUseAccountMoney()+"";
+			//提交并生成订单。
+			outSideShoppingCartHelper.createOrder(mCheckActModel.getId(), balances_flg, red_id, payDisp,content);
+		}else{
+			return;
+		}
 	}
 
-	protected void dealRequestDoneOrderSuccess(Cart_doneActModel actModel)
+	public void onFinish(){
+		mBtnConfirmOrder.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
+		mBtnConfirmOrder.setClickable(true);
+	}
+
+	/**
+	 *  生成订单并 进入支付页。
+	 * @param datas
+     */
+
+	protected void dealRequestDoneOrderSuccess(List datas)
 	{
-		Intent intent = null;
-		switch (actModel.getStatus())
-		{
-		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
-			startActivity(intent);
-			break;
-		case 1:
+		if(datas!=null&&datas.size()>0){
+			HashMap<String,String> map =(HashMap<String,String>)datas.get(0);
+	    	Intent intent = null;
 			CommonInterface.updateCartNumber();
 			SDEventManager.post(EnumEventTag.DONE_CART_SUCCESS.ordinal());
 			intent = new Intent(mActivity, PayActivity.class);
-			intent.putExtra(PayActivity.EXTRA_ORDER_ID, actModel.getOrder_id());
+			intent.putExtra(PayActivity.EXTRA_ORDER_ID, map.get(ShoppingCartconstants.ORDER_ID));
 			startActivity(intent);
 			finish();
-			break;
-
-		default:
-			break;
+		}else{
+			SDToast.showToast("订单提交失败。");
 		}
+
 	}
 
 	private void registeClick()
@@ -503,13 +416,6 @@ public class ConfirmOrderActivity extends BaseActivity
 		{
 			@Override
 			public void onClick(View v){
-				
-				
-				//支付方式选择。
-//				if(mFragPayments==null|| mFragPayments.getPaymentId()==0){
-//					
-//				}
-//				
 				
 				if (v.isClickable()) {
 					v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
@@ -552,7 +458,76 @@ public class ConfirmOrderActivity extends BaseActivity
 		super.onNeedRefreshOnResume();
 	}
 
-	public void sonFragemtMethod() {
+	/**
+	 * 选择支付方式 。
+	 */
+	public void checkPaymentMethod() {
+
 		mFragAccountPayment.performClick();
+	}
+
+	@Override
+	public void onFailue(String method, String message) {
+		switch (method){
+			case ShoppingCartconstants.SP_CART_TOORDER_GET:
+			 	SDToast.showToast(message);
+				onFinish();
+				break;
+			case ShoppingCartconstants.ORDER_INFO_CREATE:
+                 SDToast.showToast(message);
+				break;
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public void onSuccess(String responseBody) {
+
+	}
+
+	@Override
+	public void onSuccess(String method, List datas) {
+		switch (method){
+			case ShoppingCartconstants.SP_CART_TOORDER_GET:
+				onFinish();
+				if(datas!=null&&datas.size()>0){
+					dealRequestDataSuccess((ShoppingBody) datas.get(0));
+				}
+
+				break;
+			case ShoppingCartconstants.ORDER_INFO_CREATE:
+				dealRequestDoneOrderSuccess(datas);
+				   break;
+			case ShoppingCartconstants.GET_PAYMENT:
+				bindPayment(datas);
+				break;
+			case ShoppingCartconstants.SP_CART_TOORDER_POST:
+				dealBenifit(datas);
+			default:
+				break;
+		}
+
+	}
+
+	/**
+	 * list 转 string.
+	 * @param list
+	 * @return
+     */
+	private String listToString(ArrayList<String> list){
+		int size = list.size();
+		StringBuffer str = new StringBuffer();
+		for(int i = 0 ; i < size ; i++){
+			str.append(list.get(i)+",");
+		}
+		if(str.length()>1){
+			return str.substring(0,str.length()-1);
+		}
+		return "";
+	}
+	@Override
+	public void onFailue(String responseBody) {
+
 	}
 }
