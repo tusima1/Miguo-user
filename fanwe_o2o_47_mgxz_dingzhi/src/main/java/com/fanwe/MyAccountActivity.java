@@ -391,6 +391,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         }
     }
 
+    private String nickName;
+
     private void clickUsername() {
         // TODO 魅族上为啥这么丑
         LayoutInflater inflater = this.getLayoutInflater();
@@ -426,7 +428,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
                     SDToast.showToast("用户已被占用!");
                     return;
                 }
-                updateNickname(mInputName.getText().toString());
+                nickName = mInputName.getText().toString();
+                updateNickname(nickName);
                 alertdialog.dismiss();
             }
 
@@ -528,8 +531,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
 
         CommonInterface.requestLogout(null);
-
-
 
 
     }
@@ -736,7 +737,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             case BIND_MOBILE_SUCCESS:
                 initViewState();
                 break;
-
             default:
                 break;
         }
@@ -770,6 +770,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     public void onSuccess(String method, List datas) {
         if (UserConstants.USER_INFO_METHOD.equals(method)) {
             SDToast.showToast("修改成功");
+            App.getInstance().setUserNickName(nickName);
+            SDEventManager.post(EnumEventTag.UPLOAD_USER_INFO_SUCCESS.ordinal());
         }
     }
 

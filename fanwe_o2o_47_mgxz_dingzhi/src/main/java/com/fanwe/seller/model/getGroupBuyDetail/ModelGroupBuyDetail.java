@@ -1,6 +1,8 @@
 package com.fanwe.seller.model.getGroupBuyDetail;
 
+import com.fanwe.model.Deal_tagsModel;
 import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.ModelImage;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class ModelGroupBuyDetail {
 
     private String dp_count_1;
 
-    private List<String> oimages;
+    private List<ModelImage> oimages;
 
     private String is_integral;
 
@@ -58,7 +60,7 @@ public class ModelGroupBuyDetail {
 
     private String is_expire_refund;
 
-    private List<String> images;
+    private List<ModelImage> images;
 
     private String is_mobile;
 
@@ -178,6 +180,16 @@ public class ModelGroupBuyDetail {
 
     private String max_num;
 
+    private List<Deal_tagsModel> deal_tags;
+
+    public List<Deal_tagsModel> getDeal_tags() {
+        return deal_tags;
+    }
+
+    public void setDeal_tags(List<Deal_tagsModel> deal_tags) {
+        this.deal_tags = deal_tags;
+    }
+
     public String getNow_time() {
         return now_time;
     }
@@ -250,19 +262,19 @@ public class ModelGroupBuyDetail {
         this.dp_count_1 = dp_count_1;
     }
 
-    public List<String> getOimages() {
+    public List<ModelImage> getOimages() {
         return oimages;
     }
 
-    public void setOimages(List<String> oimages) {
+    public void setOimages(List<ModelImage> oimages) {
         this.oimages = oimages;
     }
 
-    public List<String> getImages() {
+    public List<ModelImage> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<ModelImage> images) {
         this.images = images;
     }
 

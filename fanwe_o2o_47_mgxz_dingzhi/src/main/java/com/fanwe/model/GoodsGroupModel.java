@@ -1,192 +1,161 @@
 package com.fanwe.model;
 
-import java.util.List;
-
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.utils.SDDistanceUtil;
 
-public class GoodsGroupModel
-{
+import java.util.List;
 
-	private String preview;
-	private int id;
-	private int is_verify;
-	private int is_youhui;
-	private int discount_pay;
-	private float avg_point;
-	private String address;
-	private String name;
-	private double distance;
-	private double xpoint;
-	private double ypoint;
-	private String tel;
-	private List<GoodsModel> deal_data;
+public class GoodsGroupModel {
 
-	// add
-	private String avg_pointFormat;
-	private String distanceFormat;
-	private boolean isOpen;
+    private String preview;
+    private String id;
+    private int is_verify;
+    private int is_youhui;
+    private int discount_pay;
+    private float avg_point;
+    private String address;
+    private String name;
+    private double distance;
+    private double xpoint;
+    private double ypoint;
+    private String tel;
+    private List<GoodsModel> deal_data;
 
-	
-	public int getDiscount_pay() {
-		return discount_pay;
-	}
+    // add
+    private String avg_pointFormat;
+    private String distanceFormat;
+    private boolean isOpen;
 
-	public void setDiscount_pay(int discount_pay) {
-		this.discount_pay = discount_pay;
-	}
 
-	public boolean isOpen()
-	{
-		return isOpen;
-	}
+    public int getDiscount_pay() {
+        return discount_pay;
+    }
 
-	public void setOpen(boolean isOpen)
-	{
-		this.isOpen = isOpen;
-	}
+    public void setDiscount_pay(int discount_pay) {
+        this.discount_pay = discount_pay;
+    }
 
-	public int getIs_youhui()
-	{
-		return is_youhui;
-	}
+    public boolean isOpen() {
+        return isOpen;
+    }
 
-	public void setIs_youhui(int is_youhui)
-	{
-		this.is_youhui = is_youhui;
-	}
+    public void setOpen(boolean isOpen) {
+        this.isOpen = isOpen;
+    }
 
-	public String getDistanceFormat()
-	{
-		return distanceFormat;
-	}
+    public int getIs_youhui() {
+        return is_youhui;
+    }
 
-	public String getAvg_pointFormat()
-	{
-		return avg_pointFormat;
-	}
+    public void setIs_youhui(int is_youhui) {
+        this.is_youhui = is_youhui;
+    }
 
-	public String getPreview()
-	{
-		return preview;
-	}
+    public String getDistanceFormat() {
+        return distanceFormat;
+    }
 
-	public void setPreview(String preview)
-	{
-		this.preview = preview;
-	}
+    public String getAvg_pointFormat() {
+        return avg_pointFormat;
+    }
 
-	public int getId()
-	{
-		return id;
-	}
+    public String getPreview() {
+        return preview;
+    }
 
-	public void setId(int id)
-	{
-		this.id = id;
-	}
+    public void setPreview(String preview) {
+        this.preview = preview;
+    }
 
-	public int getIs_verify()
-	{
-		return is_verify;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setIs_verify(int is_verify)
-	{
-		this.is_verify = is_verify;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public float getAvg_point()
-	{
-		return avg_point;
-	}
+    public int getIs_verify() {
+        return is_verify;
+    }
 
-	public void setAvg_point(float avg_point)
-	{
-		this.avg_point = avg_point;
-		this.avg_pointFormat = this.avg_point + "分";
-	}
+    public void setIs_verify(int is_verify) {
+        this.is_verify = is_verify;
+    }
 
-	public String getAddress()
-	{
-		return address;
-	}
+    public float getAvg_point() {
+        return avg_point;
+    }
 
-	public void setAddress(String address)
-	{
-		this.address = address;
-	}
+    public void setAvg_point(float avg_point) {
+        this.avg_point = avg_point;
+        this.avg_pointFormat = this.avg_point + "分";
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public double getDistance()
-	{
-		return distance;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setDistance(double distance)
-	{
-		this.distance = distance;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public double getXpoint()
-	{
-		return xpoint;
-	}
+    public double getDistance() {
+        return distance;
+    }
 
-	public void setXpoint(double xpoint)
-	{
-		this.xpoint = xpoint;
-		calculateDistance();
-	}
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 
-	public double getYpoint()
-	{
-		return ypoint;
-	}
+    public double getXpoint() {
+        return xpoint;
+    }
 
-	public void setYpoint(double ypoint)
-	{
-		this.ypoint = ypoint;
-		calculateDistance();
-	}
+    public void setXpoint(double xpoint) {
+        this.xpoint = xpoint;
+        calculateDistance();
+    }
 
-	public void calculateDistance()
-	{
-		double dis = 0;
-		if (xpoint != 0 && ypoint != 0)
-		{
-			dis = BaiduMapManager.getInstance().getDistanceFromMyLocation(ypoint, xpoint);
-		}
-		this.distanceFormat = SDDistanceUtil.getFormatDistance(dis);
-	}
+    public double getYpoint() {
+        return ypoint;
+    }
 
-	public String getTel()
-	{
-		return tel;
-	}
+    public void setYpoint(double ypoint) {
+        this.ypoint = ypoint;
+        calculateDistance();
+    }
 
-	public void setTel(String tel)
-	{
-		this.tel = tel;
-	}
+    public void calculateDistance() {
+        double dis = 0;
+        if (xpoint != 0 && ypoint != 0) {
+            dis = BaiduMapManager.getInstance().getDistanceFromMyLocation(ypoint, xpoint);
+        }
+        this.distanceFormat = SDDistanceUtil.getFormatDistance(dis);
+    }
 
-	public List<GoodsModel> getDeal_data()
-	{
-		return deal_data;
-	}
+    public String getTel() {
+        return tel;
+    }
 
-	public void setDeal_data(List<GoodsModel> deal_data)
-	{
-		this.deal_data = deal_data;
-	}
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public List<GoodsModel> getDeal_data() {
+        return deal_data;
+    }
+
+    public void setDeal_data(List<GoodsModel> deal_data) {
+        this.deal_data = deal_data;
+    }
 
 }
