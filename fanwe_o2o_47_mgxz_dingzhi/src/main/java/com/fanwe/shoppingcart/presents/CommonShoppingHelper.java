@@ -65,7 +65,7 @@ public class CommonShoppingHelper extends Presenter {
             public void onErrorResponse(String message, String errorCode) {
                 mCallbackView.onFailue(ShoppingCartconstants.GET_PAYMENT,message);
             }
-        },null);
+        });
     }
     @Override
     public void onDestory() {

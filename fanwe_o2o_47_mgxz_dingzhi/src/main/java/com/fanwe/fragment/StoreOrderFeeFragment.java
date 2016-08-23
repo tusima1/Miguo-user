@@ -15,7 +15,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class StoreOrderFeeFragment extends StoreConfirmOrderBaseFragment{
 	
-	@ViewInject(R.id.frag_order_detail_fee_ll_fees)
+	//@ViewInject(R.id.frag_order_detail_fee_ll_fees)
 	private LinearLayout mLlFees = null;
 
 	

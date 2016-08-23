@@ -30,6 +30,7 @@ import com.fanwe.model.Uc_HomeModel;
 import com.fanwe.model.UpacpappModel;
 import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.fanwe.wxapp.SDWxappPay;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
@@ -214,9 +215,11 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 		mFragPayments = new OrderDetailPaymentsFragment();
 		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
 			@Override
-			public void onPaymentChange(Payment_listModel model) {
-				// requestCalculate();
+			public void onPaymentChange(PaymentTypeInfo model) {
+
 			}
+
+
 		});
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
 				mFragPayments);

@@ -84,7 +84,7 @@ public class StoreOrderPaymentsFragment extends StoreConfirmOrderBaseFragment{
 				foundModel = model;
 			}
 			SDPaymentListView view = new SDPaymentListView(getActivity());
-			view.setData(model);
+			//view.setData(model);
 			listView.add(view);
 			mLl_payment.addView(view);
 		}

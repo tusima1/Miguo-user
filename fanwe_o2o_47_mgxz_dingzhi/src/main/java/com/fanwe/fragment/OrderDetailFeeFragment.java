@@ -23,6 +23,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
  * @author js02
  */
 public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
+
     /**
      * 商品总价。
      */
@@ -74,8 +75,6 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
 
 
 
-    @ViewInject(R.id.frag_order_detail_fee_ll_fees)
-    private LinearLayout mLlFees = null;
     /**
      * 当前的第三方支付方式。
      */

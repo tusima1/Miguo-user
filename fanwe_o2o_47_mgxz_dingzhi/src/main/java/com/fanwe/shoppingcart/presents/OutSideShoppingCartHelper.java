@@ -310,7 +310,7 @@ public class OutSideShoppingCartHelper extends Presenter {
             public void onErrorResponse(String message, String errorCode) {
                 mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE,message);
             }
-        },null);
+        });
     }
 
     /**
@@ -353,7 +353,7 @@ public class OutSideShoppingCartHelper extends Presenter {
             public void onErrorResponse(String message, String errorCode) {
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_POST,message);
             }
-        },null);
+        });
     }
     @Override
     public void onDestory() {

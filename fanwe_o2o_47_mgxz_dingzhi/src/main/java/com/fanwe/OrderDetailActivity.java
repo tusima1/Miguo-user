@@ -64,7 +64,7 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
-	@Override
+
 	protected void requestCalculate()
 	{
 		RequestModel model = new RequestModel();
