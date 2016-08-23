@@ -5,11 +5,15 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.getMyDistributionCorps.ModelMyDistributionCorps;
+import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
+import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.model.getPersonalHome.ResultPersonalHome;
 import com.fanwe.user.model.getPersonalHome.RootPersonalHome;
@@ -28,7 +32,7 @@ import java.util.TreeMap;
 /**
  * Created by Administrator on 2016/8/6.
  */
-public class UserHttpHelper implements IHelper{
+public class UserHttpHelper implements IHelper {
 
     private static final String TAG = UserHttpHelper.class.getSimpleName();
     private Gson gson;
@@ -138,7 +142,14 @@ public class UserHttpHelper implements IHelper{
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
+                RootMyDistributionCorps root = gson.fromJson(responseBody, RootMyDistributionCorps.class);
+                List<ResultMyDistributionCorps> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
+                    return;
+                }
+                List<ModelMyDistributionCorps> items = result.get(0).getList();
+                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, items);
             }
 
             @Override
@@ -151,12 +162,13 @@ public class UserHttpHelper implements IHelper{
 
     /**
      * 修改手机号
+     *
      * @param mobile 需要修改成的最终手机号
      */
-    public void getUserChangeMobile(final String mobile){
+    public void getUserChangeMobile(final String mobile) {
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token",App.getInstance().getToken());
-        params.put("mobile",mobile);
+        params.put("token", App.getInstance().getToken());
+        params.put("mobile", mobile);
         params.put("method", UserConstants.USER_CHANGE_MOBILE);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
@@ -168,16 +180,16 @@ public class UserHttpHelper implements IHelper{
             public void onSuccessResponse(String responseBody) {
                 final ModelUserChangeMobile modelUserChangeMobile = gson.fromJson(responseBody,
                         ModelUserChangeMobile.class);
-                if (modelUserChangeMobile!=null){
+                if (modelUserChangeMobile != null) {
                     String statusCode = modelUserChangeMobile.getStatusCode();
-                    if ("315".equals(statusCode)){
+                    if ("315".equals(statusCode)) {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 mView.onFailue("此手机号被占用!");
                             }
                         });
-                    }else if ("200".equals(statusCode)){
+                    } else if ("200".equals(statusCode)) {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -193,9 +205,9 @@ public class UserHttpHelper implements IHelper{
     /**
      * 获取红包列表,用户红包列表页面专用
      */
-    public void getUserRedPackets(){
+    public void getUserRedPackets() {
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token",App.getInstance().getToken());
+        params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.USER_RED_PACKET_LIST);
 //        params.put("page","1");
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -206,21 +218,21 @@ public class UserHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                MGLog.e("红包列表"+responseBody);
+                MGLog.e("红包列表" + responseBody);
                 RootUserRedPacket rootUserRedPacket = gson.fromJson(responseBody,
                         RootUserRedPacket.class);
 
-                if (rootUserRedPacket!=null ){
+                if (rootUserRedPacket != null) {
                     final List<ResultUserRedPacket> result = rootUserRedPacket.getResult();
-                    if (result!=null && result.size()>0){
+                    if (result != null && result.size() > 0) {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(UserConstants.USER_RED_PACKET_LIST,result);
+                                mView.onSuccess(UserConstants.USER_RED_PACKET_LIST, result);
                             }
                         });
                     }
-                }else {
+                } else {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -245,7 +257,7 @@ public class UserHttpHelper implements IHelper{
 
     @Override
     public void onDestroy() {
-        mView=null;
-        gson=null;
+        mView = null;
+        gson = null;
     }
 }
