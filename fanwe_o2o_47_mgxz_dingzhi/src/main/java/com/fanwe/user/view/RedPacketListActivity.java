@@ -1,5 +1,6 @@
 package com.fanwe.user.view;
 
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -12,6 +13,7 @@ import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,23 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     }
 
     @Override
+    protected int setRightImageSrcId() {
+        int resId;
+        if (isCheckMode){
+            resId=R.drawable.app_icon;
+        }else {
+            resId=0;
+        }
+        return resId;
+    }
+
+    @Override
+    protected void onRightImageClick(View v) {
+        List<ModelUserRedPacket> selectedItem = mAdapter.getSelectedItem();
+        MGToast.showToast(selectedItem.size()+"");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mPull2Refresh.setRefreshing();
@@ -67,6 +86,11 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     protected void onDestroy() {
         super.onDestroy();
         httpHelper.onDestroy();
+    }
+
+    @Override
+    protected CharSequence setTitleText() {
+        return "红包列表";
     }
 
     @Override

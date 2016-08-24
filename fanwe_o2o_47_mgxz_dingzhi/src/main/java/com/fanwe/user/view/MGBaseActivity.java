@@ -47,6 +47,9 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
         ib_right = (ImageButton) container.findViewById(R.id.ib_right);
         tv_middle = (TextView) container.findViewById(R.id.tv_middle);
 
+        //设置标题
+        CharSequence charSequence = setTitleText();
+        tv_middle.setText(charSequence);
         boolean clickable = setMiddleClickable();
         if (clickable){
             tv_middle.setClickable(clickable);
@@ -86,8 +89,8 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
         tv_middle.setLayoutParams(layoutParams);
     }
 
-    protected void setTitleText(CharSequence title){
-        tv_middle.setText(title);
+    protected CharSequence setTitleText(){
+        return "";
     }
 
     protected void setTitleTextStyle(){

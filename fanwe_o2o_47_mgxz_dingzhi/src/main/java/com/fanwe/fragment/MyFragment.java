@@ -609,13 +609,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     }
 
     private void clickMyOrderView(String key) {
-//		if ("use_wait".equalsIgnoreCase(key)) {
-//			startActivity(new Intent(getActivity(), OrderWait2UseActivity.class));
-//		}else {
         Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
         intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
         startActivity(intent);
-//		}
     }
 
 

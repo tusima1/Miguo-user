@@ -152,6 +152,16 @@ public class UserConstants {
     public static final String ORDER_INFO_USE_WAIT = "OrderInfo_use_wait";
     public static final String ORDER_INFO_COMMENT_WAIT = "OrderInfo_comment_wait";
     public static final String ORDER_INFO_REFUND = "OrderInfo_refund";
+    /**
+     * 取消订单
+     */
+    public static final String ORDER_INFO_CANCEL_ORDER = "OrderOperator";
+    /**
+     * 删除订单
+     */
+    public static final String ORDER_INFO_DELETE_ORDER = "OrderOperator";
+
+
 
 
     /**
