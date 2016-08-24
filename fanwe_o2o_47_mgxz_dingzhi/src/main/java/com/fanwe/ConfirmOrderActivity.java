@@ -18,11 +18,7 @@ import com.fanwe.fragment.OrderDetailFeeFragment;
 import com.fanwe.fragment.OrderDetailGoodsFragment;
 import com.fanwe.fragment.OrderDetailParamsFragment;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
-import com.fanwe.fragment.OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener;
 import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDTypeParseUtil;
-import com.fanwe.model.Cart_count_buy_totalModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
@@ -35,6 +31,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 
@@ -73,7 +70,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 	protected OrderDetailParamsFragment mFragParams;
 	//支付方式详情
 	protected OrderDetailPaymentsFragment mFragPayments;
-	//余额支付
+	//余额支付 当前余额为零 时，不显示。
 	protected OrderDetailAccountPaymentFragment mFragAccountPayment;
 	//费用项目
 	protected OrderDetailFeeFragment mFragFees;
@@ -114,6 +111,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 		addFragments();
 		//initPullToRefreshScrollView();
 		requestData();
+		getPayType();
 	}
 
 	private void initIntentData()
@@ -140,15 +138,17 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
 		// 支付方式列表
 		mFragPayments = new OrderDetailPaymentsFragment();
-		getPayType();
-		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
+
+
+		mFragPayments.setmListener(new OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener() {
 
 			@Override
 			public void onPaymentChange(PaymentTypeInfo model) {
 				currentPayType = model;
-				changePayType(1);
+				changePayType(1,false);
 			}
 		});
+
 
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments, mFragPayments);
 		//红包
@@ -175,7 +175,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 			public void onPaymentChange(boolean isSelected)
 			{
 
-				changePayType(0);
+				changePayType(0,isSelected);
 			}
 		});
 
@@ -211,28 +211,38 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 	 *
 	 * 改变支付方式 0 余额支付 。1 第三方支付
 	 * @param type
+	 * @param isChecked  是否选择余额支付。
      */
-	public void changePayType(int type){
+	public void changePayType(int type,boolean isChecked){
 		//总金额。
 		 totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
 		//用户余额。
 		 yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
        //当前 选择余额支付
 		if(type==0){
-			if(totalFloat<=yueFloat){
-				mFragPayments.clearSelectedPayment(false);
-				mFragFees.setCurrentFeeInfoModel(null);
+			if(isChecked) {
+				if (totalFloat <= yueFloat) {
+					mFragPayments.clearSelectedPayment(false);
+					mFragFees.setCurrentFeeInfoModel(null);
+				}
+				mFragFees.setIfYueChecked(true);
+			}else{
+				mFragFees.setIfYueChecked(false);
 			}
-			mFragFees.setIfYueChecked(true);
-			mFragFees.refreshData();
 		}else{
 			if(totalFloat<=yueFloat){
 				mFragAccountPayment.clearSelectedPayment(false);
 			}
 			mFragFees.setCurrentFeeInfoModel(currentPayType);
 			mFragFees.setIfYueChecked(false);
-			mFragFees.refreshData();
 		}
+		MGUIUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				mFragFees.refreshData();
+			}
+		});
+
 	}
   /*
   取支付方式 。
@@ -240,8 +250,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 	public void getPayType(){
 
 		commonShoppingHelper.getPayment();
-	}
-	/**
+	}	/**
 	 * 获取数据
 	 */
 	protected void requestData()
@@ -275,7 +284,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 		
 		// 余额支付
 		mFragAccountPayment.setmCheckActModel(mCheckActModel);
-		
+
 		//红包
 		mFragMyRed.setmCheckActModel(mCheckActModel);
 
@@ -306,20 +315,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
 	}
 	
-	protected void fillCalculateParams(RequestModel model)
-	{
-		if (model != null) {
-			if (mFragParams != null) {
 
-				if (mFragPayments != null) {
-					model.put("payment", mFragPayments.getPaymentId());
-				}
-				if (mFragAccountPayment != null) {
-					model.put("all_account_money", mFragAccountPayment.getUseAccountMoney());
-				}
-			}
-		}
-	}
 
 	/**
 	 * 选择红包后取优惠金额。
@@ -329,47 +325,13 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 		outSideShoppingCartHelper.getBenefitCount(mCheckActModel.getId(),redIDs);
 	}
 
-	protected void dealRequestCalculateSuccess(Cart_count_buy_totalModel actModel)
-	{
-		Intent intent = null;
-		switch (actModel.getStatus())
-		{
-		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
-			startActivity(intent);
-			break;
-		case 1:
-			// 支付方式不让选中,或者隐藏
-			double payPrice = SDTypeParseUtil.getDouble(actModel.getPay_price());
-			if (payPrice == 0)
-			{
-				if (mFragPayments != null)
-				{
-					mFragPayments.clearSelectedPayment(false);
-//					mFragPayments.setIsCanSelected(false);
-				}
-			} else
-			{
-				if (mFragPayments != null)
-				{
-					mFragPayments.setIsCanSelected(true);
-				}
-			}
-
-			break;
-
-		default:
-			break;
-		}
-	}
-
 
 	/**
 	 * 确认并 生成订单。
 	 */
 	protected void requestDoneOrder()
 	{
-		if (mFragPayments != null&&mFragParams!=null&&mFragMyRed!=null&&mFragAccountPayment!=null)
+		if (mFragPayments != null&&mFragParams!=null&&mFragMyRed!=null&&mFragAccountPayment!=null&&mCheckActModel!=null)
 		{
 			//支付方式
 			String payDisp = mFragPayments.getPaymentId();
@@ -446,10 +408,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 		super.onEventMainThread(event);
 		switch (EnumEventTag.valueOf(event.getTagInt()))
 		{
-		case USER_DELIVERY_CHANGE:
-			setmIsNeedRefreshOnResume(true);
-			break;
-			
+
 		default:
 			break;
 		}
@@ -461,13 +420,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 		super.onNeedRefreshOnResume();
 	}
 
-	/**
-	 * 选择支付方式 。
-	 */
-	public void checkPaymentMethod() {
-
-		mFragAccountPayment.performClick();
-	}
 
 	@Override
 	public void onFailue(String method, String message) {
@@ -493,7 +445,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 	public void onSuccess(String method, List datas) {
 		switch (method){
 			case ShoppingCartconstants.SP_CART_TOORDER_GET:
-				onFinish();
+				//onFinish();
 				if(datas!=null&&datas.size()>0){
 					dealRequestDataSuccess((ShoppingBody) datas.get(0));
 				}

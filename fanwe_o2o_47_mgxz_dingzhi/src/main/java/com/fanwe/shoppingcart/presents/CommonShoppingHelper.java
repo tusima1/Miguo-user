@@ -43,7 +43,7 @@ public class CommonShoppingHelper extends Presenter {
         params.put("scene","android");
         params.put("method", ShoppingCartconstants.GET_PAYMENT);
 
-        OkHttpUtils.getInstance().put(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {

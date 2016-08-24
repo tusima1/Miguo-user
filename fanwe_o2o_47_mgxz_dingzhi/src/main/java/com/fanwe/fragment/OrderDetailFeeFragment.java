@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,6 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
     TextView youhui_account;
 
 
-
     /**
      * 当前的第三方支付方式。
      */
@@ -83,17 +83,18 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
     boolean ifYueChecked = true;
 
     //总金额。
-    float totalFloat=0.00f;
+    float totalFloat = 0.00f;
     //用户余额。
-    float yueFloat=0.00f;
+    float yueFloat = 0.00f;
     /**
      * 优惠金额。
      */
-    float youhuiFloat=0.00f;
+    float youhuiFloat = 0.00f;
     /**
-     *需要支付金额。
+     * 需要支付金额。
      */
-    float needFloat =0.00f;
+    float needFloat = 0.00f;
+
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return setContentView(R.layout.frag_order_detail_fee);
@@ -111,72 +112,81 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
             return;
         }
         //总金额。
-         totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
+        totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
         //用户余额。
-         yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
+        yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
 
-         youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
-         needFloat = totalFloat-yueFloat-youhuiFloat;
+        youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
+        needFloat = totalFloat - yueFloat - youhuiFloat;
         total_fee.setText(mCheckActModel.getGoodsTotal());
         total.setText(mCheckActModel.getTotal());
 
-        youhui_account.setText(mCheckActModel.getYouhuiPrice());
+        if(TextUtils.isEmpty(mCheckActModel.getYouhuiPrice())||"0".equals(mCheckActModel.getYouhuiPrice())){
+            youhui_account.setText(0+"");
+        }else {
+            youhui_account.setText(mCheckActModel.getYouhuiPrice());
+        }
         yue_fee.setText(mCheckActModel.getUserAccountMoney());
-        need_pay_line.setVisibility(View.VISIBLE);
-        need_pay_fee.setText(needFloat +"");
+        if(need_pay_line!=null) {
+            need_pay_line.setVisibility(View.VISIBLE);
+        }
+        if(need_pay_fee!=null) {
+            need_pay_fee.setText(needFloat + "");
+        }
         calculateFee();
 
     }
 
-    private void calculateFee(){
+    private void calculateFee() {
         //总金额。
         float totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
         //用户余额。
         float yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
 
         float youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
-        float needFloat = totalFloat-yueFloat-youhuiFloat;
+        float needFloat = totalFloat - yueFloat - youhuiFloat;
         //余额 》= 总金额。
-        if(yueFloat>=totalFloat){
-            if(ifYueChecked){
+        if (yueFloat >= totalFloat) {
+            if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(totalFloat+"");
+                yue_fee.setText(totalFloat + "");
                 yue_line.setVisibility(View.VISIBLE);
 
                 pay_type_line.setVisibility(View.GONE);
                 need_pay_line.setVisibility(View.GONE);
-            }else{
+            } else {
                 //不使用余额支付
-                need_pay_fee.setText(totalFloat+"");
+                need_pay_fee.setText(totalFloat + "");
                 yue_line.setVisibility(View.GONE);
-
-                pay_type.setText(currentFeeInfoModel.getName());
-                pay_type_line.setVisibility(View.VISIBLE);
-                need_pay_line.setVisibility(View.VISIBLE);
+                if (currentFeeInfoModel != null) {
+                    pay_type.setText(currentFeeInfoModel.getName());
+                    pay_type_line.setVisibility(View.VISIBLE);
+                    need_pay_line.setVisibility(View.VISIBLE);
+                }
             }
-        }else{
-            if(ifYueChecked){
+        } else {
+            if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(totalFloat+"");
+                yue_fee.setText(totalFloat + "");
                 yue_line.setVisibility(View.VISIBLE);
 
-                need_pay_fee.setText(needFloat+"");
-                if(currentFeeInfoModel!=null) {
+                need_pay_fee.setText(needFloat + "");
+                if (currentFeeInfoModel != null) {
                     pay_type.setText(currentFeeInfoModel.getName());
 
                     pay_type_line.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     pay_type_line.setVisibility(View.GONE);
                 }
                 need_pay_line.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 //不使用余额支付
-                need_pay_fee.setText(totalFloat+"");
-                if(currentFeeInfoModel!=null) {
+                need_pay_fee.setText(totalFloat + "");
+                if (currentFeeInfoModel != null) {
                     yue_line.setVisibility(View.GONE);
                     pay_type.setText(currentFeeInfoModel.getName());
                     pay_type_line.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     yue_line.setVisibility(View.GONE);
                     pay_type_line.setVisibility(View.GONE);
                 }
@@ -184,6 +194,7 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
             }
         }
     }
+
     @Override
     protected void onRefreshData() {
         bindData();

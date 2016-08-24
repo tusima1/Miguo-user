@@ -1,53 +1,5 @@
 package com.fanwe;
 
-import java.math.BigDecimal;
-
-import com.fanwe.app.App;
-import com.fanwe.constant.Constant.PaymentType;
-import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
-import com.fanwe.fragment.OrderDetailFeeFragment;
-import com.fanwe.fragment.OrderDetailPaymentsFragment;
-import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPaymentFragmentListener;
-import com.fanwe.fragment.OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.alipay.easy.PayResult;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.Cart_checkActModel;
-import com.fanwe.model.MalipayModel;
-import com.fanwe.model.PayActModel;
-import com.fanwe.model.PayResultModel;
-import com.fanwe.model.Payment_codeModel;
-import com.fanwe.model.Payment_doneActModel;
-import com.fanwe.model.Payment_listModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_HomeModel;
-import com.fanwe.model.UpacpappModel;
-import com.fanwe.model.WxappModel;
-import com.fanwe.o2o.miguo.R;
-import com.fanwe.shoppingcart.model.PaymentTypeInfo;
-import com.fanwe.wxapp.SDWxappPay;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.sunday.eventbus.SDEventManager;
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
-import com.umeng.socialize.utils.Log;
-import com.unionpay.UPPayAssistEx;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -55,6 +7,45 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.fanwe.app.App;
+import com.fanwe.constant.Constant.PaymentType;
+import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
+import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPaymentFragmentListener;
+import com.fanwe.fragment.OrderDetailFeeFragment;
+import com.fanwe.fragment.OrderDetailPaymentsFragment;
+import com.fanwe.http.InterfaceServer;
+import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.library.alipay.easy.PayResult;
+import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDToast;
+import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.model.Cart_checkActModel;
+import com.fanwe.model.MalipayModel;
+import com.fanwe.model.PayActModel;
+import com.fanwe.model.PayResultModel;
+import com.fanwe.model.RequestModel;
+import com.fanwe.model.Uc_HomeModel;
+import com.fanwe.model.UpacpappModel;
+import com.fanwe.model.WxappModel;
+import com.fanwe.o2o.miguo.R;
+import com.fanwe.wxapp.SDWxappPay;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.tencent.mm.sdk.constants.ConstantsAPI;
+import com.tencent.mm.sdk.modelbase.BaseReq;
+import com.tencent.mm.sdk.modelbase.BaseResp;
+import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.unionpay.UPPayAssistEx;
+
+import java.math.BigDecimal;
 
 public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler{
 	@ViewInject(R.id.tv_money)
@@ -213,14 +204,14 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 	private void addFragment() {
 		// 支付方式列表
 		mFragPayments = new OrderDetailPaymentsFragment();
-		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
-			@Override
-			public void onPaymentChange(PaymentTypeInfo model) {
-
-			}
-
-
-		});
+//		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
+//			@Override
+//			public void onPaymentChange(PaymentTypeInfo model) {
+//
+//			}
+//
+//
+//		});
 		getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
 				mFragPayments);
 
@@ -520,7 +511,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 		
 	}
 	public void sonFragemtMethod() {
-		mFragAccountPayment.performClick();
+		//mFragAccountPayment.performClick();
 	}
 	
 	@Override

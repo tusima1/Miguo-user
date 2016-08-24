@@ -6,6 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fanwe.customview.SDPaymentListView;
 import com.fanwe.library.customview.SDViewBase.SDViewBaseListener;
@@ -22,9 +26,12 @@ import com.lidroid.xutils.view.annotation.ViewInject;
  */
 public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 {
-
-	@ViewInject(R.id.plv_account_money)
-	private SDPaymentListView mPlv_account_money;
+	@ViewInject(R.id.mPlv_account_money)
+	private LinearLayout mPlv_account_money;
+	@ViewInject(R.id.tv_name)
+	private TextView account_money_text;
+	@ViewInject(R.id.iv_selected)
+	private CheckBox account_checkBox;
 
 	private OrderDetailAccountPaymentFragmentListener mListener;
 
@@ -36,7 +43,7 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 	public int getUseAccountMoney()
 	{
 		int useAccountMoney = 0;
-		if (mPlv_account_money.ismSelected())
+		if (account_checkBox.isChecked())
 		{
 			useAccountMoney = 1;
 		} else
@@ -57,7 +64,6 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 	{
 		super.init();
 		bindData();
-		afterBindData();
 	}
 
 	private void bindData()
@@ -69,7 +75,7 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 		double accountMoney = SDTypeParseUtil.getDouble(mCheckActModel.getUserAccountMoney());
 		if (accountMoney <= 0)
 		{
-			mPlv_account_money.onNormal();
+			account_checkBox.setChecked(false);
 			hideFragmentView();
 			return;
 		} else
@@ -77,69 +83,18 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 			showFragmentView();
 		}
 
-		mPlv_account_money.mTv_name.setText("账户余额：" + mCheckActModel.getUserAccountMoney());
-		if (mPlv_account_money.ismSelected())
-		{
-			mPlv_account_money.onSelected();
-		} else
-		{
-			mPlv_account_money.onNormal();
-		}
+		account_money_text.setText("账户余额：" + mCheckActModel.getUserAccountMoney());
 
-		mPlv_account_money.setOnClickListener(new OnClickListener()
-		{
+		account_checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onClick(View v)
-			{
-				mPlv_account_money.toggleSelected();
-			}
-		});
-
-		mPlv_account_money.setmListenerState(new SDViewBaseListener()
-		{
-			@Override
-			public void onSelected_SDViewBase(View v)
-			{
-				if (mListener != null)
-				{
-					mListener.onPaymentChange(mPlv_account_money.ismSelected());
-				}
-			}
-
-			@Override
-			public void onPressed_SDViewBase(View v)
-			{
-			}
-
-			@Override
-			public void onNormal_SDViewBase(View v)
-			{
-				if (mListener != null)
-				{
-					mListener.onPaymentChange(mPlv_account_money.ismSelected());
-				}
-			}
-
-			@Override
-			public void onFocus_SDViewBase(View v)
-			{
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mListener.onPaymentChange(isChecked);
 			}
 		});
 
 	}
 	
-	/**当被选中时无法再选择其他的支付方式,所以在选择其他支付方式前手动取消 余额支付 的选中状态**/
-	public void performClick() {
-		boolean ismSelected = mPlv_account_money.ismSelected();
-		if (ismSelected) {
-			mPlv_account_money.performClick();
-		}
-	}
 
-	private void afterBindData()
-	{
-		mPlv_account_money.onSelected();
-	}
 
 	@Override
 	protected void onRefreshData()
@@ -150,12 +105,13 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 
 	public void clearSelectedPayment(boolean notify)
 	{
-		mPlv_account_money.onNormal();
+		account_checkBox.setChecked(false);
+
 		if (notify)
 		{
 			if (mListener != null)
 			{
-				mListener.onPaymentChange(mPlv_account_money.ismSelected());
+				mListener.onPaymentChange(false);
 			}
 		}
 	}

@@ -32,6 +32,8 @@ public class PaymentTypeInfo implements Serializable {
 
     private String config;
 
+    private boolean checked=false;
+
     public void setOnline_pay(String online_pay){
         this.online_pay = online_pay;
     }
@@ -105,4 +107,11 @@ public class PaymentTypeInfo implements Serializable {
         return this.config;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }
