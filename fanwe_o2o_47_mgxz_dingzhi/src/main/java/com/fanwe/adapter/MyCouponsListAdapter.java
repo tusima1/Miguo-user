@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +9,15 @@ import android.widget.TextView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.Uc_couponActItemModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.getGroupBuyCoupon.ModelGroupCoupon;
 
-public class MyCouponsListAdapter extends SDBaseAdapter<Uc_couponActItemModel>
+import java.util.List;
+
+public class MyCouponsListAdapter extends SDBaseAdapter<ModelGroupCoupon>
 {
 
-	public MyCouponsListAdapter(List<Uc_couponActItemModel> listModel, Activity activity)
+	public MyCouponsListAdapter(List<ModelGroupCoupon> listModel, Activity activity)
 	{
 		super(listModel, activity);
 	}
@@ -35,10 +35,10 @@ public class MyCouponsListAdapter extends SDBaseAdapter<Uc_couponActItemModel>
 		TextView tv_name = ViewHolder.get(convertView, R.id.tv_name);
 		TextView tv_expire_time = ViewHolder.get(convertView, R.id.tv_expire_time);
 
-		Uc_couponActItemModel model = getItem(position);
+		ModelGroupCoupon model = getItem(position);
 		if (model != null)
 		{
-			SDViewBinder.setImageView(iv_qrcode, model.getQrcode());
+//			SDViewBinder.setImageView(iv_qrcode, model.getQrcode());
 			SDViewBinder.setTextView(tv_password, model.getPassword());
 			SDViewBinder.setTextView(tv_name, model.getName());
 			SDViewBinder.setTextView(tv_expire_time, model.getEnd_time());

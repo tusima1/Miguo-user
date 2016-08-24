@@ -180,6 +180,7 @@ public class OrderHttpHelper implements IHelper {
         });
     }
 
+
     @Override
     public void onDestroy() {
         mView2=null;
