@@ -48,7 +48,7 @@
                     style="@style/text_base"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="加载中"
+                    android:text=""
                     android:textColor="@color/text_item_price_current"
                     android:textSize="@dimen/text_size_item_price_current" />
 

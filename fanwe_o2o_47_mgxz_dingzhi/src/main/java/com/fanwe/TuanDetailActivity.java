@@ -482,6 +482,8 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                                 beanOther.setName(store_info.getShop_name());
                                 beanOther.setAddress(store_info.getAddress());
                                 beanOther.setTel(store_info.getTel());
+                                beanOther.setXpoint(DataFormat.toDouble(store_info.getGeo_x()));
+                                beanOther.setYpoint(DataFormat.toDouble(store_info.getGeo_y()));
                                 supplier_location_list.add(beanOther);
                             }
                         }

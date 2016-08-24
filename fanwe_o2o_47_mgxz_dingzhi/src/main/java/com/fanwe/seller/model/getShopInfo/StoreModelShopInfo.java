@@ -57,9 +57,9 @@ public class StoreModelShopInfo {
 
     private String buss_range;
 
-    private String avg_grade;
-
     private String city_id;
+
+    private String avg_grade;
 
     public String getDp_count() {
         return dp_count;
