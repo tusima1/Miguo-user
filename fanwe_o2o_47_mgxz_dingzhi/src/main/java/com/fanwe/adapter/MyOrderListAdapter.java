@@ -8,20 +8,26 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView2;
 import com.fanwe.library.adapter.SDBaseAdapter;
+import com.fanwe.library.dialog.SDDialogConfirm;
+import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemOut;
+import com.fanwe.user.presents.OrderHttpHelper;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
+public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut>{
 
     private List<ModelOrderItemIn> listGoods;
 
@@ -48,7 +54,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
         TextView tv_money = ViewHolder.get(R.id.tv_money, convertView);
         tv_delect = ViewHolder.get(R.id.tv_delect, convertView);
         TextView tv_pay = ViewHolder.get(R.id.tv_pay, convertView);
-//		TextView tv_refund = ViewHolder.get(R.id.tv_refund, convertView); 
+//		TextView tv_refund = ViewHolder.get(R.id.tv_refund, convertView);
         TextView tv_cancel_order = ViewHolder.get(R.id.tv_cancel_order, convertView);
 
         final ModelOrderItemOut model = getItem(position);
@@ -56,8 +62,8 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
             listGoods = model.getDeal_order_item();
             MyOrderListGoodsAdapter adapter = new MyOrderListGoodsAdapter(listGoods, model
-					.getStatus_name(), mActivity, MGStringFormatter.getInt(model.getOrder_status()),
-					mOrderMode);
+                    .getStatus_name(), mActivity, MGStringFormatter.getInt(model.getOrder_status()),
+                    mOrderMode);
             if (!SDCollectionUtil.isEmpty(listGoods)) {
                 ll_goods.removeAllViews();
                 final int size = listGoods.size();
@@ -72,7 +78,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                             @Override
                             public void onClick(View v) {
                                 //TODO delete
-//								deleteOrder(model, position);
+								deleteOrder(model, position);
                             }
                         });
                     } else {
@@ -94,6 +100,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 //                            intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, Integer.valueOf
 //									(model.getId()).intValue());
 //                            mActivity.startActivity(intent);
+                            MGToast.showToast("test:跳转到订单详情");
                         }
                     });
                     SDViewUtil.show(tv_cancel_order);
@@ -101,7 +108,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                         @Override
                         public void onClick(View v) {
                             //TODO 取消
-//                            cancelOrder(model, position);
+                            cancelOrder(model, position);
                         }
                     });
                 } else {
@@ -122,6 +129,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 //                            intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, Integer.valueOf
 //									(model.getId()).intValue());
 //                            mActivity.startActivity(intent);
+                            MGToast.showToast("test:跳转到订单详情");
                         }
                     });
                     SDViewUtil.show(tv_cancel_order);
@@ -130,7 +138,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                         @Override
                         public void onClick(View v) {
                             //取消
-//                            cancelOrder(model, position);
+                            cancelOrder(model, position);
                         }
                     });
                 } else {
@@ -148,14 +156,13 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                 }
 
             } else {
-
-                if (inStatus == 0 || inStatus == 4 ||inStatus == 6 || inStatus== 5) {
+                if (inStatus == 0 || inStatus == 4 || inStatus == 6 || inStatus == 5) {
                     SDViewUtil.show(ll_order_list);
                     SDViewUtil.show(tv_delect);
                     tv_delect.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            deleteOrder(model, position);
+                            deleteOrder(model, position);
                         }
                     });
                 } else {
@@ -166,7 +173,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
                             @Override
                             public void onClick(View v) {
-//                                cancelOrder(model, position);
+                                cancelOrder(model, position);
                             }
                         });
                     } else {
@@ -182,154 +189,122 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
          * 状态汇总
          */
         if (tv_cancel_order.getVisibility() == View.GONE && tv_pay.getVisibility() == View.GONE
-				&& tv_pay_again.getVisibility() == View.GONE && tv_delect.getVisibility() == View
-				.GONE) {
+                && tv_pay_again.getVisibility() == View.GONE && tv_delect.getVisibility() == View
+                .GONE) {
             SDViewUtil.hide(ll_order_list);
         }
-
-
         return convertView;
     }
 
 
-//	protected void cancelOrder(final OrderOutItem model, final int position)
-//	{
-//		if (model == null)
-//		{
-//			return;
-//		}
-//
-//		SDDialogConfirm dialog = new SDDialogConfirm();
-//		dialog.setTextContent("确定取消订单？");
-//		dialog.setmListener(new SDDialogCustomListener()
-//		{
-//
-//			@Override
-//			public void onDismiss(SDDialogCustom dialog)
-//			{
-//
-//			}
-//
-//			@Override
-//			public void onClickConfirm(View v, SDDialogCustom dialog)
-//			{
-////				requestCanCelOrder(model, position);
-//			}
-//
-//			@Override
-//			public void onClickCancel(View v, SDDialogCustom dialog)
-//			{
-//
-//			}
-//		});
-//		dialog.show();
-//
-//	}
+    protected void cancelOrder(final ModelOrderItemOut model, final int position) {
+        if (model == null) {
+            return;
+        }
 
-//	protected void requestCanCelOrder(final OrderOutItem model,final int position)
-//	{
-//		CommonInterface.requestCanCelOrder(Integer.valueOf(model.getId()).intValue(), new
-// SDRequestCallBack<BaseActModel>()
-//				{
-//
-//					@Override
-//					public void onSuccess(ResponseInfo<String> responseInfo)
-//					{
-//						if (actModel.getStatus() == 1)
-//						{
-//							SDToast.showToast("订单取消成功");
-//							mListModel.remove(position);
-//							notifyDataSetChanged();
-//						}
-//					}
-//
-//					@Override
-//					public void onStart()
-//					{
-//						SDDialogManager.showProgressDialog("正在取消");
-//					}
-//
-//					@Override
-//					public void onFinish()
-//					{
-//						SDDialogManager.dismissProgressDialog();
-//					}
-//
-//					@Override
-//					public void onFailure(HttpException error, String msg)
-//					{
-//
-//					}
-//				});
-//
-//	}
+        SDDialogConfirm dialog = new SDDialogConfirm();
+        dialog.setTextContent("确定取消订单？");
+        dialog.setmListener(new SDDialogCustom.SDDialogCustomListener() {
 
-//	private void deleteOrder(final ModelOrderItemOut model, final int position)
-//	{
-//		if (model == null)
-//		{
-//			return;
-//		}
-//
-//		SDDialogConfirm dialog = new SDDialogConfirm();
-//		dialog.setTextContent("确定删除订单？");
-//		dialog.setmListener(new SDDialogCustomListener()
-//		{
-//
-//			@Override
-//			public void onDismiss(SDDialogCustom dialog)
-//			{
-//
-//			}
-//			@Override
-//			public void onClickConfirm(View v, SDDialogCustom dialog)
-//			{
-//				requestDeleteOrder(model, position);
-//			}
-//
-//			@Override
-//			public void onClickCancel(View v, SDDialogCustom dialog)
-//			{
-//
-//			}
-//		});
-//		dialog.show();
-//	}
+            @Override
+            public void onDismiss(SDDialogCustom dialog) {
 
-//	private void requestDeleteOrder(final ModelOrderItemOut model, final int position)
-//	{
-//		CommonInterface.requestDeleteOrder(Integer.valueOf(model.getId()).intValue(), new SDRequestCallBack<BaseActModel>()
-//		{
-//
-//			@Override
-//			public void onSuccess(ResponseInfo<String> responseInfo)
-//			{
-//				if (actModel.getStatus() == 1)
-//				{
-//					mListModel.remove(position);
-//					notifyDataSetChanged();
-//				}
-//			}
-//
-//			@Override
-//			public void onStart()
-//			{
-//				SDDialogManager.showProgressDialog("正在删除");
-//			}
-//
-//			@Override
-//			public void onFinish()
-//			{
-//				SDDialogManager.dismissProgressDialog();
-//			}
-//
-//			@Override
-//			public void onFailure(HttpException error, String msg)
-//			{
-//
-//			}
-//		});
-//	}
+            }
 
+            @Override
+            public void onClickConfirm(View v, SDDialogCustom dialog) {
+                new OrderHttpHelper(new CallbackView2() {
+                    @Override
+                    public void onSuccess(String responseBody) {
 
+                    }
+
+                    @Override
+                    public void onSuccess(String method, List datas) {
+                        if (UserConstants.ORDER_INFO_CANCEL_ORDER.endsWith(method)){
+                            //删除订单成功
+                            MGToast.showToast("订单取消成功!");
+                            mListModel.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailue(String responseBody) {
+                        if (UserConstants.ORDER_INFO_CANCEL_ORDER.endsWith(responseBody)){
+                            //删除订单失败
+                            MGToast.showToast("订单取消失败!");
+                        }
+                    }
+
+                    @Override
+                    public void onFinish(String method) {
+                    }
+
+                }).postCancelOrderOperator(model.getOrder_id());
+            }
+
+            @Override
+            public void onClickCancel(View v, SDDialogCustom dialog) {
+
+            }
+        });
+        dialog.show();
+
+    }
+
+    private void deleteOrder(final ModelOrderItemOut model, final int position) {
+        if (model == null) {
+            return;
+        }
+
+        SDDialogConfirm dialog = new SDDialogConfirm();
+        dialog.setTextContent("确定删除订单？");
+        dialog.setmListener(new SDDialogCustom.SDDialogCustomListener() {
+
+            @Override
+            public void onDismiss(SDDialogCustom dialog) {
+
+            }
+
+            @Override
+            public void onClickConfirm(View v, SDDialogCustom dialog) {
+                new OrderHttpHelper(new CallbackView2() {
+                    @Override
+                    public void onSuccess(String responseBody) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String method, List datas) {
+                        if (UserConstants.ORDER_INFO.endsWith(method)){
+                            //删除订单成功
+                            mListModel.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailue(String responseBody) {
+                        if (UserConstants.ORDER_INFO.endsWith(responseBody)){
+                            //删除订单失败
+                            MGToast.showToast("订单删除失败!");
+                        }
+                    }
+
+                    @Override
+                    public void onFinish(String method) {
+
+                    }
+
+                }).postDeleteOrderOperator(model.getOrder_id());
+            }
+
+            @Override
+            public void onClickCancel(View v, SDDialogCustom dialog) {
+
+            }
+        });
+        dialog.show();
+    }
 }

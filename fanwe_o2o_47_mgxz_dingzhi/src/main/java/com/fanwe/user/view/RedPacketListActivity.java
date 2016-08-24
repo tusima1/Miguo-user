@@ -23,7 +23,7 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     private PullToRefreshListView mPull2Refresh;
     private LinearLayout mLL_empty;
 
-    private boolean isCheckMode=true;//是否可以选择
+    private boolean isCheckMode=false;//是否可以选择
 
     List<ModelUserRedPacket> mData=new ArrayList<ModelUserRedPacket>();
     private RedpacketListAdapter mAdapter;

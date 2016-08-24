@@ -218,12 +218,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:orientation="horizontal">
-
-                    <!-- <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/my_distribution_tixian" /> -->
-
                     <TextView
                         android:id="@+id/frag_my_tv_tixian"
                         android:layout_width="wrap_content"
