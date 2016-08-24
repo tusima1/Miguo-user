@@ -212,38 +212,6 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
         }
     }
 
-    /**
-     * 请求商品详情接口
-     */
-    private void requestDetail() {
-        RequestModel model = new RequestModel();
-        model.putCtl("deal");
-        model.put("data_id", mId);
-        model.putUser();
-        model.putLocation();
-        SDRequestCallBack<Deal_indexActModel> handler = new SDRequestCallBack<Deal_indexActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    mGoodsModel = actModel;
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-                mScrollView.onRefreshComplete();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
-
     private void getIntentData() {
         Intent intent = getIntent();
         mId = intent.getStringExtra(EXTRA_GOODS_ID);
@@ -333,7 +301,6 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                 }
             }
 
-//			UmengSocialManager.openShare("分享", content, imageUrl, clickUrl, this, null);
             UmengShareManager.share(this, "分享", content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
         }
     }

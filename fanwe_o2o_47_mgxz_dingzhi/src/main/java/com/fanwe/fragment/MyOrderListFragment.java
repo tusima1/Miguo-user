@@ -19,7 +19,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemOut;
 import com.fanwe.user.model.getOrderInfo.ResultOrderInfo;
 import com.fanwe.user.presents.OrderHttpHelper;
-import com.fanwe.utils.MGString2Num;
+import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -232,7 +232,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         ResultOrderInfo resultOrderInfo = (ResultOrderInfo) datas.get(0);
-        int pageItemNum = MGString2Num.getInt(resultOrderInfo.getDataNum());
+        int pageItemNum = MGStringFormatter.getInt(resultOrderInfo.getDataNum());
         if (pageItemNum!=10){
             hasMore=false;
         }

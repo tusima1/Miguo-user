@@ -16,7 +16,7 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemOut;
-import com.fanwe.utils.MGString2Num;
+import com.fanwe.utils.MGStringFormatter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -56,7 +56,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
             listGoods = model.getDeal_order_item();
             MyOrderListGoodsAdapter adapter = new MyOrderListGoodsAdapter(listGoods, model
-					.getStatus_name(), mActivity, MGString2Num.getInt(model.getOrder_status()),
+					.getStatus_name(), mActivity, MGStringFormatter.getInt(model.getOrder_status()),
 					mOrderMode);
             if (!SDCollectionUtil.isEmpty(listGoods)) {
                 ll_goods.removeAllViews();
@@ -81,7 +81,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                     }
                 }
             }
-            int inStatus = MGString2Num.getInt(model.getOrder_status());
+            int inStatus = MGStringFormatter.getInt(model.getOrder_status());
             if (!isDelect) {
                 if (inStatus == 0) {
                     SDViewUtil.show(ll_order_list);

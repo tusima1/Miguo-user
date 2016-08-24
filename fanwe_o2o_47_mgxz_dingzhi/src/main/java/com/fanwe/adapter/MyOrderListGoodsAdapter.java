@@ -21,7 +21,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
-import com.fanwe.utils.MGString2Num;
+import com.fanwe.utils.MGStringFormatter;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 		TextView tv_total_price = ViewHolder.get(convertView, R.id.tv_total_price);
 	
 		final ModelOrderItemIn model = getItem(position);
-		int refund_status = MGString2Num.getInt(model.getRefund_status());
+		int refund_status = MGStringFormatter.getInt(model.getRefund_status());
 		if (model != null)
 		{
 			SDViewBinder.setImageView(iv_image, model.getIcon());
@@ -79,7 +79,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 			SDViewBinder.setTextView(tv_total_price, model.getTotal_price());
 			SDViewBinder.setTextView(tv_sno, model.getOrder_sn());
 			SDViewBinder.setTextView(tv_order_title, model.getBuss_name());//商家名称
-			int cate_id = MGString2Num.getInt(model.getCate_id());
+			int cate_id = MGStringFormatter.getInt(model.getCate_id());
 			switch (cate_id)
 			{
 			case 8:
@@ -128,7 +128,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 			 * 状态说明 0 没有申请退款  1:退款中,2:已退款,3,退款失败
 			 */
 			String goodsStatus="";
-			int refundStatus = MGString2Num.getInt(model.getRefund_status());
+			int refundStatus = MGStringFormatter.getInt(model.getRefund_status());
 			switch (mOrderMode) {
 				case 1:
 					goodsStatus="";
@@ -138,7 +138,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 		
 			case 3:
 				SDViewUtil.show(mLl_button);
-				if (MGString2Num.getInt(model.getDp_id())==1) {
+				if (MGStringFormatter.getInt(model.getDp_id())==1) {
 					SDViewUtil.show(tv_evaluate);
 					tv_evaluate.setText("追评");
 				}
@@ -173,7 +173,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 					break;
 			default:
 				if (mStatus_value!=0) {//已支付
-					goodsStatus = getGoodsStatus(Integer.valueOf(model.getNumber()), Integer.valueOf(model.getConsume_count()), MGString2Num.getInt(model.getDp_id()),MGString2Num.getInt(model.getRefund_status()));
+					goodsStatus = getGoodsStatus(Integer.valueOf(model.getNumber()), Integer.valueOf(model.getConsume_count()), MGStringFormatter.getInt(model.getDp_id()), MGStringFormatter.getInt(model.getRefund_status()));
 				}else {
 					goodsStatus="";
 				}
@@ -183,7 +183,6 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 			}
 			
 			// 0 没有申请退款 1:退款中,2:已退款
-						
 			convertView.setOnClickListener(new OnClickListener()
 			{
 				@Override
@@ -194,15 +193,6 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
 						mActivity.startActivity(intent);
 					}
-//					else if(model.getDeal_id() == 0)
-//					{
-//						Intent intent = new Intent(mActivity, StoreDetailActivity.class);
-//						Bundle bundle=new Bundle();
-//						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID, Integer.valueOf(model.getLocation_id()).intValue());
-//						bundle.putInt("type",0);
-//						intent.putExtras(bundle);
-//						mActivity.startActivity(intent);
-//					}
 				}
 			});
 		}
@@ -217,8 +207,8 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn>
 	 */
 	private void defaultShow(final ModelOrderItemIn model, LinearLayout mLl_button, TextView tv_tuikuan){
 		if (mStatus_value!=0) {
-			int judgement=Integer.valueOf(model.getNumber()).intValue() - Integer.valueOf(model.getConsume_count()).intValue()- MGString2Num.getInt(model.getRefunded()) -MGString2Num.getInt(model.getRefunding());
-			if (judgement > 0 && MGString2Num.getInt(model.getIs_refund()) == 1) {
+			int judgement=Integer.valueOf(model.getNumber()).intValue() - Integer.valueOf(model.getConsume_count()).intValue()- MGStringFormatter.getInt(model.getRefunded()) - MGStringFormatter.getInt(model.getRefunding());
+			if (judgement > 0 && MGStringFormatter.getInt(model.getIs_refund()) == 1) {
 				SDViewUtil.show(mLl_button);
 				SDViewUtil.show(tv_tuikuan);
 //				SDViewUtil.show(v_line);
