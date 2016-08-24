@@ -362,7 +362,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                                         sbFileKeys.append(urlQiNiu + fileKey + ",");
                                     }
                                     if (sbFileKeys.toString().indexOf("http:") != -1) {
-                                        String[] strs = sbFileKeys.toString().split("ttp://");
+                                        String[] strs = sbFileKeys.toString().split("http://");
                                         if (datas.contains("add")) {
                                             if ((strs.length - 1) == 2) {
                                                 liveHttpHelper.postHostInfo(String.valueOf(dataBindingLiveAuth.mode.get()), phone, sbFileKeys.toString(), cityId, dataBindingLiveAuth.interest.get());

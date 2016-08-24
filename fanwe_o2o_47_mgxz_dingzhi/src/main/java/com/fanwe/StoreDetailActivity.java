@@ -43,6 +43,7 @@ import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
 import com.fanwe.seller.model.getShopInfo.StoreModelShopInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -389,6 +390,8 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
                 beanOther.setAddress(store_info.getAddress());
                 beanOther.setTel(store_info.getTel());
                 beanOther.setPreview(store_info.getPreview());
+                beanOther.setXpoint(DataFormat.toDouble(store_info.getGeo_x()));
+                beanOther.setYpoint(DataFormat.toDouble(store_info.getGeo_y()));
                 otherStores.add(beanOther);
             }
         }
@@ -452,6 +455,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         modelDisplayComment.setStar_3(store_info.getDp_count_3());
         modelDisplayComment.setStar_4(store_info.getDp_count_4());
         modelDisplayComment.setStar_5(store_info.getDp_count_5());
+        modelDisplayComment.setAllow_dp(DataFormat.toInt("1"));
         actModel.setModelDisplayComment(modelDisplayComment);
 
         addFragments(actModel);

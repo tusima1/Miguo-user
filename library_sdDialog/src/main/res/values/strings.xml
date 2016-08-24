@@ -3,7 +3,6 @@
 
     <string name="app_name">library_iosDialog</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
 
     
      <!-- 下拉刷新控件 -->
