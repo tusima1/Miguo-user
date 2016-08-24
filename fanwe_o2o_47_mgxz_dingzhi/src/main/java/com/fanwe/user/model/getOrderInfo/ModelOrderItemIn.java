@@ -14,7 +14,7 @@ public class ModelOrderItemIn {
     private String icon;//团购小图
     private String detail_id;//订单明细id
     private String order_sn;//订单号
-    private String cate_id;//分类ｉｃｏｎ
+    private String cate_id;//分类icon
     private String dp_id;//点评
     private String is_refund;//是否支持退款，０，无；　１：用户申请退款；　２：已确认；　３：拒绝退款
     private String refunded;//已退款

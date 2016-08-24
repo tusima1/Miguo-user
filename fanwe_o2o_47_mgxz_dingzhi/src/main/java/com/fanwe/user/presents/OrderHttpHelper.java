@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
@@ -99,6 +100,82 @@ public class OrderHttpHelper implements IHelper {
                         mView2.onFinish(methodName);
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 取消订单
+     * @param deal_id 订单id
+     */
+    public void postCancelOrderOperator(String deal_id){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.ORDER_INFO_CANCEL_ORDER);
+        params.put("order_id", deal_id);
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Root root = gson.fromJson(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                if ("200".endsWith(statusCode)){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(UserConstants.ORDER_INFO_CANCEL_ORDER,null);
+                        }
+                    });
+                }else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onFailue(UserConstants.ORDER_INFO_CANCEL_ORDER);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    /**
+     * 删除订单
+     * @param deal_id 订单id
+     */
+    public void postDeleteOrderOperator(String deal_id){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.ORDER_INFO);
+        params.put("order_id", deal_id);
+        OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Root root = gson.fromJson(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                if ("200".endsWith(statusCode)){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(UserConstants.ORDER_INFO,null);
+                        }
+                    });
+                }else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onFailue(UserConstants.ORDER_INFO);
+                        }
+                    });
+                }
             }
         });
     }

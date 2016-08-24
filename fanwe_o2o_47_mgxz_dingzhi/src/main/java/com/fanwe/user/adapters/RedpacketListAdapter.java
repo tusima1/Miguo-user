@@ -1,17 +1,21 @@
 package com.fanwe.user.adapters;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getUserRedpackets.ModelUserRedPacket;
+import com.fanwe.utils.MGStringFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +61,7 @@ public class RedpacketListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView==null){
             holder=new ViewHolder();
@@ -70,7 +74,7 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.mTv_Content = ((TextView) convertView.findViewById(R.id.tv_content));
             holder.mIv_WaterMark = ((ImageView) convertView.findViewById(R.id.iv_watermark));
             holder.fr_bg_down= (FrameLayout) convertView.findViewById(R.id.fr_bg_down);
-            holder.mIv_check= (ImageView) convertView.findViewById(R.id.iv_check);
+            holder.mCb_check = (CheckBox) convertView.findViewById(R.id.iv_check);
             convertView.setTag(holder);
         }
         holder= (ViewHolder) convertView.getTag();
@@ -78,30 +82,26 @@ public class RedpacketListAdapter extends BaseAdapter {
 
         //bind data
         ModelUserRedPacket modelUserRedPacket = mData.get(position);
-
+        final boolean check = modelUserRedPacket.isChecked();
         //确定模式
         if (isCheckMode){
-            holder.mIv_check.setVisibility(View.VISIBLE);
-            final boolean check = modelUserRedPacket.isChecked();
-            if (check){
-                holder.mIv_check.setImageResource(R.drawable.ic_checked);
-            }else {
-                holder.mIv_check.setImageResource(R.drawable.ic_uncheck);
-            }
-            holder.mIv_check.setOnClickListener(new View.OnClickListener() {
+            holder.mCb_check.setVisibility(View.VISIBLE);
+            holder.mCb_check.setChecked(check);
+            holder.mCb_check.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    doCheck(v,check);
+                    boolean checked = ((CheckBox) v).isChecked();
+                    mData.get(position).setChecked(checked);
                 }
             });
         }else {
-            holder.mIv_check.setVisibility(View.GONE);
+            holder.mCb_check.setVisibility(View.GONE);
         }
         //两种状态
         String event_flag = modelUserRedPacket.getEvent_flag();//红包过期标志
         String is_used = modelUserRedPacket.getIs_used();//是否使用
         if ("1".equals(event_flag)){
-            //已经无效
+            //已经无效 已过期
             holder.packet_type.setTextColor(grayColor);
             holder.mTv_BigNum.setTextColor(grayColor);
             holder.mTv_TitleTag.setTextColor(grayColor);
@@ -128,17 +128,20 @@ public class RedpacketListAdapter extends BaseAdapter {
 
         holder.mTv_Title.setText(modelUserRedPacket.getRed_packet_name());
         holder.mTv_Content.setText(modelUserRedPacket.getSpecial_note());
-
-        StringBuilder sb=new StringBuilder();
-        sb.append("有效期:");
-        sb.append(modelUserRedPacket.getEvent_start());
-        sb.append("-");
-        sb.append(modelUserRedPacket.getEvent_end());
-        holder.mTv_Time.setText(sb.toString());
-
+        String dateStart = MGStringFormatter.getDate(modelUserRedPacket.getEvent_start());
+        String dateEnd = MGStringFormatter.getDate(modelUserRedPacket.getEvent_end());
+        if (TextUtils.isEmpty(dateStart)|| TextUtils.isEmpty(dateEnd)){
+            holder.mTv_Time.setText("永久有效");
+        }else {
+            StringBuilder sb=new StringBuilder();
+            sb.append("有效期:");
+            sb.append(dateStart);
+            sb.append("--");
+            sb.append(dateEnd);
+            holder.mTv_Time.setText(sb.toString());
+        }
         //bind content
-        holder.mTv_BigNum.setText(modelUserRedPacket.getRed_packet_amount());
-
+        holder.mTv_BigNum.setText(MGStringFormatter.getFloat1(modelUserRedPacket.getRed_packet_amount()));
         String red_packet_type = modelUserRedPacket.getRed_packet_type();
         //红包类型 1:打折  2:现金券
         if ("1".equals(red_packet_type)){
@@ -148,20 +151,21 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.packet_type.setText("元");
             holder.mTv_TitleTag.setText("现金券");
         }
-
-
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         return convertView;
     }
 
-    private void doCheck(View v, boolean check) {
-
+    /**
+     * 获取被选中的item
+     * @return 被选中的集合
+     */
+    public List<ModelUserRedPacket> getSelectedItem(){
+        List<ModelUserRedPacket> selectedItems=new ArrayList<>();
+        for (ModelUserRedPacket modelUserRedPacket : mData) {
+            if (modelUserRedPacket.isChecked()){
+                selectedItems.add(modelUserRedPacket);
+            }
+        }
+        return selectedItems;
     }
 
     private class ViewHolder{
@@ -174,6 +178,6 @@ public class RedpacketListAdapter extends BaseAdapter {
         public TextView mTv_BigNum;//打几折?例如8折,就是8,只能是数字
         public ImageView mIv_WaterMark;//水印
         public FrameLayout fr_bg_down;//下部分的背景
-        public ImageView mIv_check;//是否选中
+        public CheckBox mCb_check;//是否选中
     }
 }

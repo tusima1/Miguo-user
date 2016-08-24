@@ -20,6 +20,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.utils.DataFormat;
 import com.miguo.live.views.LiveActivity;
 import com.tencent.imcore.Context;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -102,7 +103,7 @@ HomeFragmentLiveList extends BaseFragment {
                 CurLiveInfo.setHostName(host.getNickname());
 
                 CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-                CurLiveInfo.setRoomNum(Integer.valueOf(room.getId()));
+                CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
                 if (room.getLbs() != null) {
                     CurLiveInfo.setShopID(room.getLbs().getShop_id());
                     ModelStoreList modelStoreList = new ModelStoreList();

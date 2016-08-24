@@ -84,15 +84,16 @@
                 android:textSize="13sp"
                 android:textStyle="bold"
                 />
-            <ImageView
+            <CheckBox
                 android:id="@+id/iv_check"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="@dimen/dp5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RedPacketCheckModeCheckboxTheme"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/dp15"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_checked"
-                android:scaleType="centerInside"/>
+                />
 
             <TextView
                 android:id="@+id/tv_content"

@@ -14,7 +14,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.fanwe.adapter.TuanDetailCommentAdapter;
-import com.fanwe.app.AppHelper;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
@@ -247,7 +247,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         }
         final String strName = bean.getName();
 
-        if (AppHelper.isLogin()) {
+        if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getToken())) {
             if (bean.getAllow_dp() == 1) {
                 mBtnPublish.setVisibility(View.VISIBLE);
             } else {
@@ -260,17 +260,13 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         mBtnPublish.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (!AppHelper.isLogin()) {
-                    startActivity(new Intent(CommentListActivity.this, LoginActivity.class));
-                } else {
-                    Intent i = new Intent(CommentListActivity.this, AddCommentActivity.class);
-                    i.putExtra(AddCommentActivity.EXTRA_ID, mId);
-                    i.putExtra(AddCommentActivity.EXTRA_TYPE, mStrType);
-                    if (!TextUtils.isEmpty(strName)) {
-                        i.putExtra(AddCommentActivity.EXTRA_NAME, strName);
-                    }
-                    startActivity(i);
+                Intent i = new Intent(CommentListActivity.this, AddCommentActivity.class);
+                i.putExtra(AddCommentActivity.EXTRA_ID, mId);
+                i.putExtra(AddCommentActivity.EXTRA_TYPE, mStrType);
+                if (!TextUtils.isEmpty(strName)) {
+                    i.putExtra(AddCommentActivity.EXTRA_NAME, strName);
                 }
+                startActivity(i);
             }
         });
 

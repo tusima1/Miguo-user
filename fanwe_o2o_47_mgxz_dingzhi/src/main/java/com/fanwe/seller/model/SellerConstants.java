@@ -78,4 +78,12 @@ public class SellerConstants {
      * 团购列表
      */
     public static final String GROUP_BUY = "GroupBuy";
+    /**
+     * 点评门店
+     */
+    public static final String SHOP_COMMENT = "ShopComment";
+    /**
+     * 点评订单
+     */
+    public static final String GROUP_BUY_COMMENT = "GroupBuyComment";
 }

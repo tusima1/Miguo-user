@@ -38,6 +38,7 @@ import com.fanwe.seller.model.getShopList.ModelShopListItem;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -174,6 +175,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         }
         sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
         sellerHttpHelper.getClassifyList();
+        sellerHttpHelper.getOrderByList();
     }
 
     private void bindLocationData() {
@@ -451,6 +453,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     List<ModelBusinessCircleList> modelBusinessCircleLists;
     List<ModelClassifyList> modelClassifyLists;
     List<ResultShopList> resultShopLists;
+    List<ModelShopListNavs> navs;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -463,10 +466,14 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             //类别
             modelClassifyLists = datas;
             message.what = 1;
+        } else if (SellerConstants.ORDER_BY_LIST.equals(method)) {
+            //排序
+            navs = datas;
+            message.what = 2;
         } else if (SellerConstants.SHOP_LIST.equals(method)) {
             //店铺
             resultShopLists = datas;
-            message.what = 2;
+            message.what = 3;
         }
         mHandler.sendMessage(message);
     }
@@ -475,8 +482,6 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     public void onFailue(String responseBody) {
 
     }
-
-    List<ModelShopListNavs> navs;
 
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -490,14 +495,16 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                     bindLeftCategoryViewData(modelClassifyLists);
                     break;
                 case 2:
+                    //排序
+                    bindRightCategoryViewData(navs);
+                    break;
+                case 3:
                     //店铺
+                    if (isRefresh) {
+                        mListModel.clear();
+                    }
                     if (!SDCollectionUtil.isEmpty(resultShopLists)) {
                         ResultShopList resultShopList = resultShopLists.get(0);
-                        //排序
-                        if (SDCollectionUtil.isEmpty(navs)) {
-                            navs = resultShopList.getNavs();
-                            bindRightCategoryViewData(navs);
-                        }
                         //店铺数据
                         List<StoreModel> listNewData = new ArrayList<>();
                         if (!SDCollectionUtil.isEmpty(resultShopList.getItem())) {
@@ -509,23 +516,18 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                                 storeModel.setPreview(bean.getPreview());
                                 storeModel.setAddress(bean.getAddress());
                                 storeModel.setTel(bean.getTel());
-                                storeModel.setAvg_point(Float.valueOf(bean.getAvg_grade()));
-                                storeModel.setOffline(Integer.valueOf(bean.getOffline()));
-                                storeModel.setDiscount_pay(Integer.valueOf(bean.getDiscount_pay()));
+                                storeModel.setAvg_point(DataFormat.toFloat(bean.getAvg_grade()));
+                                storeModel.setOffline(DataFormat.toInt(bean.getOffline()));
+                                storeModel.setDiscount_pay(DataFormat.toInt(bean.getDiscount_pay()));
                                 listNewData.add(storeModel);
                             }
                         }
-                        //加载数据
-                        if (isRefresh) {
-                            mListModel.clear();
-                        }
                         mListModel.addAll(listNewData);
-                        mAdapter.notifyDataSetChanged();
-                        mPtrlvContent.onRefreshComplete();
-                        break;
                     }
+                    mAdapter.notifyDataSetChanged();
+                    mPtrlvContent.onRefreshComplete();
+                    break;
             }
-
         }
     };
 }

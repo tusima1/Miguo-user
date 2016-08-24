@@ -355,10 +355,10 @@ public class SellerHttpHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 RootCheckShopCollect root = gson.fromJson(responseBody, RootCheckShopCollect.class);
                 List<ResultCheckShopCollect> result = root.getResult();
-                if(!SDCollectionUtil.isEmpty(result)&&result.get(0)!=null && result.get(0).getBody()!=null) {
+                if (!SDCollectionUtil.isEmpty(result) && result.get(0) != null && result.get(0).getBody() != null) {
                     List<ModelCheckShopCollect> items = result.get(0).getBody();
                     mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, items);
-                }else{
+                } else {
                     mView.onSuccess(SellerConstants.CHECK_SHOP_COLLECT, null);
                 }
             }
@@ -730,6 +730,65 @@ public class SellerHttpHelper implements IHelper {
         });
     }
 
+    /**
+     * 点评门店
+     *
+     * @param shop_id
+     * @param content
+     * @param point
+     * @param image
+     */
+    public void postShopComment(String shop_id, String content, String point, String image) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("shop_id", shop_id);
+        params.put("content", content);
+        params.put("point", point);
+        params.put("image", image);
+        params.put("method", SellerConstants.SHOP_COMMENT);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerConstants.SHOP_COMMENT, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 点评订单
+     *
+     * @param order_item_id
+     * @param content
+     * @param point
+     * @param image
+     */
+    public void postGroupBuyComment(String order_item_id, String content, String point, String image) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("order_item_id", order_item_id);
+        params.put("content", content);
+        params.put("point", point);
+        params.put("image", image);
+        params.put("method", SellerConstants.GROUP_BUY_COMMENT);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerConstants.GROUP_BUY_COMMENT, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
 
     @Override
     public void onDestroy() {
