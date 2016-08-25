@@ -30,7 +30,7 @@ public class UserConstants {
      * 取用户信息。
      */
 
-    public static final String USER_INFO_URL="UserInfo";
+    public static final String USER_INFO_URL = "UserInfo";
     /**
      * 第三方OPENID.
      */
@@ -117,7 +117,6 @@ public class UserConstants {
     public static final String QQ_GET_USER_INFO = "https://graph.qq.com/user/get_user_info";
 
 
-
     //返回码
     /**
      * 注册成功。
@@ -160,10 +159,6 @@ public class UserConstants {
      * 删除订单
      */
     public static final String ORDER_INFO_DELETE_ORDER = "OrderOperator";
-
-
-
-
     /**
      * 我的战队
      */

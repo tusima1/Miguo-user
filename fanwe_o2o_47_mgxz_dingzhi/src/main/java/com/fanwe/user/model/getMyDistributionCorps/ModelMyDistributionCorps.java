@@ -12,6 +12,8 @@ public class ModelMyDistributionCorps {
 
     private String user_id;
 
+    private String fx_level;
+
     private String fx_time;
 
     private String icon;
@@ -48,6 +50,14 @@ public class ModelMyDistributionCorps {
 
     public String getUser_id() {
         return this.user_id;
+    }
+
+    public void setFx_level(String fx_level) {
+        this.fx_level = fx_level;
+    }
+
+    public String getFx_level() {
+        return this.fx_level;
     }
 
     public void setFx_time(String fx_time) {

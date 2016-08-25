@@ -234,13 +234,18 @@ public class MarketFragment extends BaseFragment implements CallbackView {
     public void onEventMainThread(SDBaseEvent event) {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case CITY_CHANGE:
+                isRefresh = true;
+                getMarketList();
+                break;
             case DELETE_DISTRIBUTION_GOODS_SUCCESS:
+                isRefresh = true;
                 getMarketList();
                 break;
             case ADD_DISTRIBUTION_GOODS_SUCCESS:
+                isRefresh = true;
                 getMarketList();
                 break;
-
             default:
                 break;
         }

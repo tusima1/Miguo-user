@@ -12,31 +12,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.fanwe.DaiYanStoreWapActivity;
 import com.fanwe.DistributionStoreInActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.base.CallbackView;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.AddStoreModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Supplier_fx;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 
 import java.util.List;
 
@@ -83,56 +73,42 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
                 @Override
                 public void onClick(View v) {
                     if (model.getIs_delete() == 1) {
-//						openTheStore(model.getUrl());
                         SDToast.showToast("已经代言过了!");
                         return;
                     }
-//                    if (AppHelper.isLogin(mActivity)) {
-//                        clickAddDistribution(model, position);
-//                    } else {
-//                        mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
-//                    }
                     currPosition = position;
                     currModel = model;
                     representMerchant();
                 }
             });
-
             bt_goStore.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    if (model.getIs_delete() == 0) {
-                        openTheStore(model.getUrl());
-                    } else {
-                        Intent intent = new Intent(mActivity, DistributionStoreInActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("img", model.getPreview());
-                        bundle.putString("name", model.getName());
-                        bundle.putInt("count", model.getBuy_count());
-                        bundle.putString("id", model.getId());
-                        intent.putExtras(bundle);
-                        mActivity.startActivity(intent);
-                    }
-
+                    Intent intent = new Intent(mActivity, DistributionStoreInActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("img", model.getPreview());
+                    bundle.putString("name", model.getName());
+                    bundle.putInt("count", model.getBuy_count());
+                    bundle.putString("id", model.getId());
+                    bundle.putString("isMyShop", model.getIs_delete() + "");
+                    intent.putExtras(bundle);
+                    mActivity.startActivity(intent);
                 }
             });
 
             convertView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (model.getIs_delete() == 0) {
-                        openTheStore(model.getUrl());
-                    } else {
-                        Intent intent = new Intent(mActivity, DistributionStoreInActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("img", model.getPreview());
-                        bundle.putString("name", model.getName());
-                        bundle.putInt("count", model.getBuy_count());
-                        bundle.putString("id", model.getId());
-                        intent.putExtras(bundle);
-                        mActivity.startActivity(intent);
-                    }
+                    Intent intent = new Intent(mActivity, DistributionStoreInActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("img", model.getPreview());
+                    bundle.putString("name", model.getName());
+                    bundle.putInt("count", model.getBuy_count());
+                    bundle.putString("id", model.getId());
+                    bundle.putString("isMyShop", model.getIs_delete() + "");
+                    intent.putExtras(bundle);
+                    mActivity.startActivity(intent);
                 }
             });
         }
@@ -146,72 +122,7 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
         sellerHttpHelper.getRepresentMerchant(currModel.getId(), "");
     }
 
-    /**
-     * 打开对应的小店
-     **/
-    protected void openTheStore(String url) {
-        Intent intent = new Intent(mActivity, DaiYanStoreWapActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("url", url);
-        bundle.putInt("user_id", 0);
-        intent.putExtras(bundle);
-        mActivity.startActivity(intent);
-    }
-
-    /**
-     * 添加分销商品
-     */
-    protected void clickAddDistribution(Supplier_fx actModel, final int position) {
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_fxshop");
-        model.putAct("add_fx");
-        model.put("id", actModel.getId());
-        SDRequestCallBack<AddStoreModel> handler = new SDRequestCallBack<AddStoreModel>(false) {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SDDialogManager.dismissProgressDialog();
-                Intent intent = null;
-                switch (actModel.getStatus()) {
-                    case -1:
-                        intent = new Intent(mActivity, LoginActivity.class);
-                        mActivity.startActivity(intent);
-                        break;
-                    case 0://代言失败
-                        SDToast.showToast(this.actModel.getInfo(), Toast.LENGTH_LONG);
-                        break;
-                    case 1:
-                        mListModel.get(position).setIs_delete(0);
-                        mListModel.get(position).setUrl(this.actModel.getUrl());
-                        notifyDataSetChanged();
-                        showDialog("代言成功，请进入我的小店查看", mListModel.get(position).getUrl());
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                SDDialogManager.dismissProgressDialog();
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-
-    }
-
-    private void showDialog(final String location, final String url) {
+    private void showDialog(final String location) {
         new SDDialogConfirm()
                 .setTextContent(
                         location)
@@ -223,9 +134,15 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
 
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
-//						Intent intent = new Intent(mActivity, DistributionStoreWapActivity.class);
-//						mActivity.startActivity(intent);
-                        openTheStore(url);
+                        Intent intent = new Intent(mActivity, DistributionStoreInActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("img", currModel.getPreview());
+                        bundle.putString("name", currModel.getName());
+                        bundle.putInt("count", currModel.getBuy_count());
+                        bundle.putString("id", currModel.getId());
+                        bundle.putString("isMyShop", currModel.getIs_delete() + "");
+                        intent.putExtras(bundle);
+                        mActivity.startActivity(intent);
                     }
 
                     @Override
@@ -266,7 +183,7 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
                 case 0:
                     mListModel.get(currPosition).setIs_delete(1);
                     notifyDataSetChanged();
-                    showDialog("代言成功，请进入我的小店查看", mListModel.get(currPosition).getUrl());
+                    showDialog("代言成功，请进入我的小店查看");
                     break;
             }
         }

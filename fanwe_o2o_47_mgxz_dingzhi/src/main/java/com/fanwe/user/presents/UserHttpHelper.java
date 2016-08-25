@@ -11,7 +11,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.getMyDistributionCorps.ModelMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
@@ -130,11 +129,12 @@ public class UserHttpHelper implements IHelper {
     /**
      * 我的战队
      */
-    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize) {
+    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize,String user_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("type", type);
         params.put("rank", rank);
+        params.put("user_id", user_id);
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("method", UserConstants.MY_DISTRIBUTION_CROPS);
@@ -148,8 +148,7 @@ public class UserHttpHelper implements IHelper {
                     mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
                     return;
                 }
-                List<ModelMyDistributionCorps> items = result.get(0).getList();
-                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, items);
+                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, result);
             }
 
             @Override
@@ -157,7 +156,6 @@ public class UserHttpHelper implements IHelper {
                 SDToast.showToast(message);
             }
         });
-
     }
 
     /**

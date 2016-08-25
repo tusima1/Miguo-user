@@ -86,4 +86,8 @@ public class SellerConstants {
      * 点评订单
      */
     public static final String GROUP_BUY_COMMENT = "GroupBuyComment";
+    /**
+     * 商家分销商品列表，支持分页
+     */
+    public static final String BUSINESS_DISTRIBUTION_LIST = "BusinessDistributionList";
 }
