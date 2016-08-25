@@ -23,10 +23,7 @@ import com.fanwe.fragment.TuanDetailDetailFragment;
 import com.fanwe.fragment.TuanDetailImagePriceFragment;
 import com.fanwe.fragment.TuanDetailMoreDetailFragment;
 import com.fanwe.fragment.TuanDetailOtherMerchantFragment;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
@@ -34,8 +31,6 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.Deal_indexActModel;
-import com.fanwe.model.Deal_tagsModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.ModelComment;
@@ -51,7 +46,6 @@ import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -384,7 +378,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                 case 0:
                     if (!SDCollectionUtil.isEmpty(itemsCheck)) {
                         ModelCheckShopCollect temp = itemsCheck.get(0);
-                        isCollect = Integer.valueOf(temp.getCollect());
+                        isCollect = DataFormat.toInt(temp.getCollect());
                         initCollectBtn(isCollect);
                     }
                     break;

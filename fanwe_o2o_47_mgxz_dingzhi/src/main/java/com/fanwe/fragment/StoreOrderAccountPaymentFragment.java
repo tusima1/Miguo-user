@@ -17,7 +17,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class StoreOrderAccountPaymentFragment extends StoreConfirmOrderBaseFragment{
 
-	@ViewInject(R.id.plv_account_money)
+	//@ViewInject(R.id.plv_account_money)
 	protected SDPaymentListView mPlv_account_money;
 
 	private StoreOrderAccountPaymentFragmentListener mListener;

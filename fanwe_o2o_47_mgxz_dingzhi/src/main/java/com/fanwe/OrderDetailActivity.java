@@ -79,7 +79,7 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 			model.put("red_packet_ids", null);
 		}
 		model.putUser();
-		fillCalculateParams(model);
+		//fillCalculateParams(model);
 		SDRequestCallBack<Cart_count_buy_totalModel> handler = new SDRequestCallBack<Cart_count_buy_totalModel>()
 		{
 
@@ -93,7 +93,7 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 			public void onSuccess(ResponseInfo<String> responseInfo)
 			{
 				// TODO 绑定所需费用信息
-				dealRequestCalculateSuccess(actModel);
+			//	dealRequestCalculateSuccess(actModel);
 			}
 
 			@Override

@@ -1,6 +1,7 @@
 package com.fanwe.fragment;
 
 import com.fanwe.shoppingcart.model.ShoppingBody;
+import com.miguo.utils.MGUIUtil;
 
 public class OrderDetailBaseFragment extends BaseFragment
 {
@@ -14,7 +15,13 @@ public class OrderDetailBaseFragment extends BaseFragment
 	public void setmCheckActModel(ShoppingBody mCheckActModel)
 	{
 		this.mCheckActModel = mCheckActModel;
-		refreshData();
+		MGUIUtil.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				refreshData();
+			}
+		});
+
 	}
 	@Override
 	protected String setUmengAnalyticsTag() {

@@ -129,4 +129,9 @@
         <item name="android:windowExitAnimation">@anim/anim_pop_exit_translate</item>
     </style>
 
+    <!--圆形CHECKBOX-->
+    <style name="Circle_checkbox">
+        <item name="android:button">@drawable/circle_checkbox</item>
+    </style>
+
 </resources>

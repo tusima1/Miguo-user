@@ -10,14 +10,9 @@ import android.widget.TextView;
 import com.fanwe.adapter.StoreInAdapter;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.StoreIn_Fx;
 import com.fanwe.model.StoreIn_list;
 import com.fanwe.o2o.miguo.R;
@@ -29,8 +24,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
@@ -73,7 +66,6 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
-        mId = "160160c0-262c-11e6-98e2-6c92bf2c1775";
         sellerHttpHelper.getCroupBuyByMerchant(pageNum, pageSize, mId);
     }
 
@@ -108,31 +100,6 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
         store_grid.setRefreshing();
     }
 
-    private void requestData(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_fx");
-        model.putAct("deal_fx_list");
-        model.put("id", mId);
-        model.putPage(page.getPage());
-        SDRequestCallBack<StoreIn_Fx> handler = new SDRequestCallBack<StoreIn_Fx>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    mActModel = actModel;
-                    page.update(actModel.getPage());
-                    SDViewUtil.updateAdapterByList(listModel, actModel.getList(), mAdapter, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-                store_grid.onRefreshComplete();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(HttpMethod.POST, model, null, false, handler);
-    }
-
     private void initDefaultAdapter() {
         mAdapter = new StoreInAdapter(listModel, this);
         store_grid.setAdapter(mAdapter);
@@ -146,8 +113,8 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
         }
         mTitle.setMiddleTextTop(bundle.getString("name"));
         mTitle.initRightItem(0);
-        SDViewBinder.setImageView(bundle.getString("img"), mIv_avatar);
         SDViewBinder.setTextView(mTv_name, bundle.getString("name"));
+        SDViewBinder.setImageView(bundle.getString("img"), mIv_avatar);
         SDViewBinder.setTextView(mTv_number, String.valueOf(bundle.getInt("count")));
     }
 

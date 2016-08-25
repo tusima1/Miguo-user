@@ -23,21 +23,21 @@ import java.util.List;
 
 /**
  * 支付方式（支付方式fragment）
- * 
+ *
  * @author js02
- * 
+ *
  */
 public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 {
 	@ViewInject(R.id.ll_payment)
 	private LinearLayout mLl_payment;
-	
+
 	private OrderDetailPaymentsFragmentListener mListener;
 	private SDViewNavigatorManager mManager = new SDViewNavigatorManager();
 	/** 选中的支付方式id */
 	private String mPaymentId;
 
-	 private List<PaymentTypeInfo> listPayment;
+	private List<PaymentTypeInfo> listPayment;
 
 
 	public void setmListener(OrderDetailPaymentsFragmentListener listener)
@@ -73,7 +73,7 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 	{
 		resetParams();
 		// TODO 生成支付方式
-		mLl_payment.removeAllViews();
+
 		List<SDViewBase> listView = new ArrayList<SDViewBase>();
 		PaymentTypeInfo foundModel = null;
 		for (PaymentTypeInfo model : listPayment)
@@ -103,8 +103,8 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 				 * #14 通过我的小店购买商品，在订单确认页面，如果已经选择了余额付，不能选择支付宝或者微信付，不勾选余额付，可以选择支付宝或者微信付，但是通过线下付的方式到订单确认页面，如果选择了余额付，可以选择支付宝或者微信付
 				 */
 				if (OrderDetailPaymentsFragment.this.getActivity() instanceof ConfirmOrderActivity) {
-					ConfirmOrderActivity activity = (ConfirmOrderActivity)OrderDetailPaymentsFragment.this.getActivity();
-					activity.checkPaymentMethod();
+//					ConfirmOrderActivity activity = (ConfirmOrderActivity)OrderDetailPaymentsFragment.this.getActivity();
+//					activity.checkPaymentMethod();
 				}else if (OrderDetailPaymentsFragment.this.getActivity() instanceof ConfirmTopUpActivity) {
 					ConfirmTopUpActivity activity = (ConfirmTopUpActivity)OrderDetailPaymentsFragment.this.getActivity();
 					activity.sonFragemtMethod();
