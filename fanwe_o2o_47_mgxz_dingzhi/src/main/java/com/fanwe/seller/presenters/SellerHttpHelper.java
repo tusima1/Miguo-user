@@ -20,6 +20,8 @@ import com.fanwe.seller.model.checkShopCollect.RootCheckShopCollect;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 import com.fanwe.seller.model.getBusinessCircleList.ResultBusinessCircleList;
 import com.fanwe.seller.model.getBusinessCircleList.RootBusinessCircleList;
+import com.fanwe.seller.model.getBusinessDistributionList.ResultBusinessDistributionList;
+import com.fanwe.seller.model.getBusinessDistributionList.RootBusinessDistributionList;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.model.getCityList.ResultCityList;
 import com.fanwe.seller.model.getCityList.RootCityList;
@@ -555,6 +557,37 @@ public class SellerHttpHelper implements IHelper {
                     return;
                 }
                 mView.onSuccess(SellerConstants.SHOP_INFO, result);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 商家分销商品列表
+     */
+    public void getBusinessDistributionList(int pageNum, int pageSize, String ent_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("user_id", userCurrentInfo.getUserInfoNew().getUser_id());
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("ent_id", ent_id);
+        params.put("method", SellerConstants.BUSINESS_DISTRIBUTION_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootBusinessDistributionList root = gson.fromJson(responseBody, RootBusinessDistributionList.class);
+                List<ResultBusinessDistributionList> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.BUSINESS_DISTRIBUTION_LIST, null);
+                    return;
+                }
+                mView.onSuccess(SellerConstants.BUSINESS_DISTRIBUTION_LIST, result);
             }
 
             @Override

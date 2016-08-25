@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
+import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.MyCollectionActivity;
@@ -189,9 +190,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         setView();
 
         httpHelper = new UserHttpHelper(getContext(), this);
-        httpHelper.getPersonalHome();
-        httpHelper.getMyDistributionCorps("1", "", 1, 10);
-        httpHelper.getMyDistributionCorps("2", "", 1, 10);
     }
 
     private void setView() {
@@ -547,14 +545,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     //TODO 朋友
     private void clickMyFriends() {
-//        if(mActModel!=null) {
-//            Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
-//
-//            intent.putExtra("up_name", mActModel.getUp_name());
-//            //
-//            intent.putExtra("up_id", mActModel.getUp_id());
-//            startActivity(intent);
-//        }
+        Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
+        startActivity(intent);
     }
 
     //TODO 二维码

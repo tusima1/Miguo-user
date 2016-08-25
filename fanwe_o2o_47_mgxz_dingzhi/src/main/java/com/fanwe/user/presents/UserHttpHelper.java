@@ -1,7 +1,6 @@
 package com.fanwe.user.presents;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.app.App;
@@ -12,9 +11,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.getGroupBuyCoupon.ResultGroupCoupon;
-import com.fanwe.user.model.getGroupBuyCoupon.RootGroupCoupon;
-import com.fanwe.user.model.getMyDistributionCorps.ModelMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
@@ -133,11 +129,12 @@ public class UserHttpHelper implements IHelper {
     /**
      * 我的战队
      */
-    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize) {
+    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize,String user_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("type", type);
         params.put("rank", rank);
+        params.put("user_id", user_id);
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("method", UserConstants.MY_DISTRIBUTION_CROPS);
@@ -145,15 +142,13 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootMyDistributionCorps root = gson.fromJson(responseBody,
-                        RootMyDistributionCorps.class);
+                RootMyDistributionCorps root = gson.fromJson(responseBody, RootMyDistributionCorps.class);
                 List<ResultMyDistributionCorps> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
                     mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
                     return;
                 }
-                List<ModelMyDistributionCorps> items = result.get(0).getList();
-                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, items);
+                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, result);
             }
 
             @Override
@@ -161,7 +156,6 @@ public class UserHttpHelper implements IHelper {
                 SDToast.showToast(message);
             }
         });
-
     }
 
     /**
@@ -259,7 +253,7 @@ public class UserHttpHelper implements IHelper {
         });
     }
 
-    /**
+/**
      * 团购券列表
      * @param tag (1 即将过期 /2 未使用 /3 已失效) 不传默认全部
      * @param tuan_id 团购id
