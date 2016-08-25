@@ -17,7 +17,7 @@ import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyCommentActivity;
-import com.fanwe.MyCouponListActivity;
+import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
 import com.fanwe.MyMessageActivity;
@@ -315,7 +315,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mRDV_MyFriend.setAllParams("我的战队", R.drawable.bg_xiaomi, 0, Color.WHITE);
         mRDV_MyNameCard.setAllParams("我的名片", R.drawable.bg_erweima, 0, Color.WHITE);
 
-        mRDV_orderNotPay.setAllParams("代付款", R.drawable.ic_obligation, 10, color);
+        mRDV_orderNotPay.setAllParams("代付款", R.drawable.ic_obligation, 0, color);
         mRDV_orderNotUse.setAllParams("待使用", R.drawable.ic_ready_for_use, 0, color);
         mRDV_orderNotComment.setAllParams("待评价", R.drawable.ic_to_rank, 0, color);
         mRDV_orderNotRefund.setAllParams("退款", R.drawable.ic_refund, 0, color);
@@ -382,32 +382,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
      * 请求我的账户接口
      */
     public void requestMyAccount() {
-//        if (AppHelper.getLocalUser() == null) {
-//            return;
-//        }
-//        if (mHttpHandler != null) {
-//            mHttpHandler.cancel();
-//        }
-//
-//        RequestModel model = new RequestModel();
-//        model.putCtl("user_center");
-//        model.putUser();
-//        SDRequestCallBack<User_center_indexActModel> handler = new SDRequestCallBack<User_center_indexActModel>() {
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                if (actModel.getStatus() == 1) {
-//                    mActModel = actModel;
-////                    bindData(actModel);
-//                }
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                mPtrsvAll.onRefreshComplete();
-//            }
-//        };
-//        mHttpHandler = InterfaceServer.getInstance().requestInterface(model, handler);
         httpHelper.getPersonalHome();
     }
 
@@ -473,9 +447,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mRDV_Comsume.setRedNum(groupVoucherCount);
         // 我的战队
         //TODO 战队没看见数据
-        String xiaomiCountStr = String.valueOf("2");
-        Integer xiaomiCount = Integer.parseInt(xiaomiCountStr);
-        mRDV_MyFriend.setRedNum(xiaomiCount);
+        mRDV_MyFriend.setRedNum(0);
 
         //待使用
         String readyForUseCountStr = personalHome.getPending_use();
@@ -708,7 +680,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @Override
     public void onResume() {
         refreshMyAccountFragment();
-//        showRedDot();
         super.onResume();
     }
 

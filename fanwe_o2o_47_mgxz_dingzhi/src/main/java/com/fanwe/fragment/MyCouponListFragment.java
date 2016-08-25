@@ -1,5 +1,6 @@
 package com.fanwe.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.fanwe.user.view.MyCouponDetailActivity;
 import com.fanwe.adapter.MyCouponsListAdapter;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.utils.SDToast;
@@ -111,11 +113,11 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (mAdapter != null) {
-//                    Uc_couponActItemModel model = mAdapter.getItem((int) id);
-//                    Intent intent = new Intent();
-//                    intent.setClass(getActivity(), MyCouponDetailActivity.class);
-//                    intent.putExtra(MyCouponDetailActivity.EXTRA_COUPONLISTACTITEMMODEL, model);
-//                    getActivity().startActivity(intent);
+                    ModelGroupCoupon model = mAdapter.getItem((int) id);
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), MyCouponDetailActivity.class);
+                    intent.putExtra(MyCouponDetailActivity.EXTRA_COUPONLISTACTITEMMODEL, model);
+                    getActivity().startActivity(intent);
                 }
 
             }
@@ -127,41 +129,6 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
     private void requestCoupons(final boolean isLoadMore) {
         this.isLoadMore=isLoadMore;
         httpHelper.getGroupBuyCouponList(mStatus+"",null,null,mPage.getPage());
-//        new UserHttpHelper(getContext(),this).getGroupBuyCouponList(null,null,null);
-//        RequestModel model = new RequestModel();
-//        model.putCtl("uc_coupon");
-//        model.putUser();
-//        model.put("tag", mStatus); // 0:所有，1:快过期， 2:可以使用， 3:失败
-//        model.putPage(mPage.getPage());
-//        SDRequestCallBack<Uc_coupon_indexActModel> handler = new
-//				SDRequestCallBack<Uc_coupon_indexActModel>() {
-//
-//            @Override
-//            public void onStart() {
-//                SDDialogManager.showProgressDialog("请稍候");
-//            }
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                if (actModel.getStatus() == 1) {
-//                    mPage.update(actModel.getPage());
-//                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                SDDialogManager.dismissProgressDialog();
-//                mPtrlv_content.onRefreshComplete();
-//                SDViewUtil.toggleEmptyMsgByList(mListModel, mIv_empty);
-//            }
-//        };
-//        InterfaceServer.getInstance().requestInterface(model, handler);
     }
 
     @Override
@@ -186,7 +153,6 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
             }
             List<ModelGroupCoupon> body = resultGroupCoupon.getBody();
             SDViewUtil.updateAdapterByList(mListModel, body, mAdapter, isLoadMore);
-
         }
     }
 
@@ -197,6 +163,10 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
 
     @Override
     public void onFinish(String method) {
+        if (UserConstants.GROUP_BUY_COUPON_LIST.endsWith(method)){
+            mPtrlv_content.onRefreshComplete();
+            SDViewUtil.toggleEmptyMsgByList(mListModel, mIv_empty);
+        }
 
     }
 }

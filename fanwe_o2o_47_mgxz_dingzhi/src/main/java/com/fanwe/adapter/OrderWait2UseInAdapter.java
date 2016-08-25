@@ -4,8 +4,7 @@ import java.util.List;
 
 import com.fanwe.AddCommentActivity;
 import com.fanwe.AppWebViewActivity;
-import com.fanwe.RefundApplicationActivity;
-import com.fanwe.RefundGoodsActivity;
+import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
@@ -39,7 +38,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {

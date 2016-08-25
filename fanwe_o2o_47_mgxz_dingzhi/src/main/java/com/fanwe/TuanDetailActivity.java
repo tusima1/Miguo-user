@@ -59,6 +59,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
      */
     public static final String EXTRA_GOODS_ID = "extra_goods_id";
     public static final String EXTRA_HOTEL_NUM = "extra_number";
+    public static final String EXTRA_DETAIL_ID = "detail_id";
 
     @ViewInject(R.id.ll_add_distribution)
     private LinearLayout mLl_add_distribution;

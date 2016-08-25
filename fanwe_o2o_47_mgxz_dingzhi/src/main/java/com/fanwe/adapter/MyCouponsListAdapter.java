@@ -11,40 +11,42 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getGroupBuyCoupon.ModelGroupCoupon;
+import com.fanwe.utils.MGStringFormatter;
 
 import java.util.List;
 
-public class MyCouponsListAdapter extends SDBaseAdapter<ModelGroupCoupon>
-{
+public class MyCouponsListAdapter extends SDBaseAdapter<ModelGroupCoupon> {
 
-	public MyCouponsListAdapter(List<ModelGroupCoupon> listModel, Activity activity)
-	{
-		super(listModel, activity);
-	}
+    public MyCouponsListAdapter(List<ModelGroupCoupon> listModel, Activity activity) {
+        super(listModel, activity);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = mInflater.inflate(R.layout.item_lv_my_coupons, null);
-		}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_lv_my_coupon, null);
+        }
 
-		ImageView iv_qrcode = ViewHolder.get(convertView, R.id.iv_qrcode);
-		TextView tv_password = ViewHolder.get(convertView, R.id.tv_password);
-		TextView tv_name = ViewHolder.get(convertView, R.id.tv_name);
-		TextView tv_expire_time = ViewHolder.get(convertView, R.id.tv_expire_time);
+        ImageView iv_icon = ViewHolder.get(convertView, R.id.iv_icon);
+        TextView tv_password = ViewHolder.get(convertView, R.id.tv_password);
+        TextView tv_name = ViewHolder.get(convertView, R.id.tv_name);
+        TextView tv_expire_time = ViewHolder.get(convertView, R.id.tv_expire_time);
 
-		ModelGroupCoupon model = getItem(position);
-		if (model != null)
-		{
-//			SDViewBinder.setImageView(iv_qrcode, model.getQrcode());
-			SDViewBinder.setTextView(tv_password, model.getPassword());
-			SDViewBinder.setTextView(tv_name, model.getName());
-			SDViewBinder.setTextView(tv_expire_time, model.getEnd_time());
-		}
+        ModelGroupCoupon model = getItem(position);
+        if (model != null) {
+            SDViewBinder.setImageView(model.getIcon(), iv_icon);
+            SDViewBinder.setTextView(tv_password, model.getPassword());
+            SDViewBinder.setTextView(tv_name, model.getName());
+            String end_time = model.getEnd_time();
+            if ("0".endsWith(end_time)) {
+                end_time = "永久有效";
+            } else {
+                end_time = MGStringFormatter.getDate(end_time);
+            }
+            SDViewBinder.setTextView(tv_expire_time, end_time);
+        }
 
-		return convertView;
-	}
+        return convertView;
+    }
 
 }

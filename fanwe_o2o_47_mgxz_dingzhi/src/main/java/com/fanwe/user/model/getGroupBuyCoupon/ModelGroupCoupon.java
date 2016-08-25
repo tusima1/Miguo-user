@@ -1,9 +1,12 @@
 package com.fanwe.user.model.getGroupBuyCoupon;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by didik on 2016/8/24.
  */
-public class ModelGroupCoupon {
+public class ModelGroupCoupon implements Serializable {
     /**
      * fx_user_id :
      * is_enable : 1
@@ -60,6 +63,15 @@ public class ModelGroupCoupon {
     private String name;//团购名称
     private String order_id;//订单id
     private String status;//状态，1为未使用，2为已使用
+    private List<ModelShopInfo2> shop_list;
+
+    public List<ModelShopInfo2> getShop_list() {
+        return shop_list;
+    }
+
+    public void setShop_list(List<ModelShopInfo2> shop_list) {
+        this.shop_list = shop_list;
+    }
 
     public String getFx_user_id() {
         return fx_user_id;

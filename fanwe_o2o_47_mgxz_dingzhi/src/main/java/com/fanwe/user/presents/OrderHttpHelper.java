@@ -63,6 +63,7 @@ public class OrderHttpHelper implements IHelper {
                 key="all";
                 break;
         }
+        Log.e("test","key:"+key);
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.ORDER_INFO);
@@ -180,6 +181,39 @@ public class OrderHttpHelper implements IHelper {
         });
     }
 
+    /**
+     * 退款页面的
+     * @param detail_id
+     * @param tuan_id
+     */
+    public void getOrderItemTuangou(String detail_id,String tuan_id){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.REFUND_APPLICATION_PAGE);
+        params.put("id", detail_id);
+        params.put("tuan_id", tuan_id);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Log.e("test","responseBody :"+responseBody);
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView2.onFinish(UserConstants.REFUND_APPLICATION_PAGE);
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     public void onDestroy() {

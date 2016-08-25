@@ -383,7 +383,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <!-- 我的团购券界面 -->
         <activity
-            android:name="com.fanwe.MyCouponListActivity"
+            android:name="com.fanwe.user.view.MyCouponListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
@@ -422,7 +422,7 @@
 
         <!-- 团购卷详情界面 -->
         <activity
-            android:name="com.fanwe.MyCouponDetailActivity"
+            android:name="com.fanwe.user.view.MyCouponDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
@@ -759,7 +759,7 @@
 
         <!-- 申请退款new -->
         <activity
-            android:name="com.fanwe.RefundApplicationActivity"
+            android:name="com.fanwe.user.view.RefundApplicationActivity"
             android:configChanges="keyboard|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
