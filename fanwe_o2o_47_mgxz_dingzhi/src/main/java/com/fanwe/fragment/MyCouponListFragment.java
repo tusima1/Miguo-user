@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.fanwe.adapter.MyCouponsListAdapter;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.utils.SDToast;
+import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -183,8 +184,9 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
                 int pageSize = MGStringFormatter.getInt(resultGroupCoupon.getPage_count());
                 mPage.setPage_total(pageSize);
             }
-//            SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-            
+            List<ModelGroupCoupon> body = resultGroupCoupon.getBody();
+            SDViewUtil.updateAdapterByList(mListModel, body, mAdapter, isLoadMore);
+
         }
     }
 
