@@ -7,7 +7,15 @@ public class StoreIn_list {
     private Float current_price;
     private Float salary;
     private Float origin_price;
+    private String is_delete;
 
+    public String getIs_delete() {
+        return is_delete;
+    }
+
+    public void setIs_delete(String is_delete) {
+        this.is_delete = is_delete;
+    }
 
     public Float getOrigin_price() {
         return origin_price;

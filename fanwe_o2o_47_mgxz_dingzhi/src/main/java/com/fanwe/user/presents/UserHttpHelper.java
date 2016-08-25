@@ -11,7 +11,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.getMyDistributionCorps.ModelMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
@@ -130,11 +129,12 @@ public class UserHttpHelper implements IHelper {
     /**
      * 我的战队
      */
-    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize) {
+    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize,String user_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("type", type);
         params.put("rank", rank);
+        params.put("user_id", user_id);
         params.put("page", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(pageSize));
         params.put("method", UserConstants.MY_DISTRIBUTION_CROPS);
@@ -148,8 +148,7 @@ public class UserHttpHelper implements IHelper {
                     mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
                     return;
                 }
-                List<ModelMyDistributionCorps> items = result.get(0).getList();
-                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, items);
+                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, result);
             }
 
             @Override
@@ -157,7 +156,6 @@ public class UserHttpHelper implements IHelper {
                 SDToast.showToast(message);
             }
         });
-
     }
 
     /**
@@ -249,6 +247,61 @@ public class UserHttpHelper implements IHelper {
                     @Override
                     public void run() {
                         mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                    }
+                });
+            }
+        });
+    }
+
+/**
+     * 团购券列表
+     * @param tag (1 即将过期 /2 未使用 /3 已失效) 不传默认全部
+     * @param tuan_id 团购id
+     * @param order_id 用于团购订单支付完成后的团购券列表
+     */
+    public void getGroupBuyCouponList(String tag, String tuan_id, String order_id,int page) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.GROUP_BUY_COUPON_LIST);
+        params.put("page", page+"");
+        if (!TextUtils.isEmpty(tag) && !"0".equals(tag)) {
+            params.put("tag", tag);
+        }
+        if (!TextUtils.isEmpty(tuan_id)) {
+            params.put("tuan_id", tuan_id);
+        }
+        if (!TextUtils.isEmpty(order_id)) {
+            params.put("order_id", order_id);
+        }
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+//                Log.e("test", "团购券 :" + responseBody);
+                RootGroupCoupon rootGroupCoupon = gson.fromJson(responseBody, RootGroupCoupon
+                        .class);
+                final List<ResultGroupCoupon> result = rootGroupCoupon.getResult();
+                if (result!=null && result.size()>0){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.onSuccess(UserConstants.GROUP_BUY_COUPON_LIST,result);
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFinish(UserConstants.GROUP_BUY_COUPON_LIST);
                     }
                 });
             }

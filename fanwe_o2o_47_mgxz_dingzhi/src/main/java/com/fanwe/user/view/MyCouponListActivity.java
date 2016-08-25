@@ -1,8 +1,9 @@
-package com.fanwe;
+package com.fanwe.user.view;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.fanwe.BaseActivity;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.MyCouponListFragment;
 import com.fanwe.fragment.MyCouponListFragment.CouponTag;

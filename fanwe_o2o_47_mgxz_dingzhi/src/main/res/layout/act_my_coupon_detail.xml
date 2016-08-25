@@ -26,10 +26,10 @@
                 android:orientation="horizontal"
                 android:padding="10dp" >
 
-                <com.fanwe.library.customview.SDScaleImageView
+                <ImageView
                     android:id="@+id/act_my_coupon_detail_iv_coupon_image"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="90dp"
+                    android:layout_height="76dp" />
 
                 <TextView
                     android:id="@+id/act_my_coupon_detail_tv_coupon_brief"
@@ -118,11 +118,13 @@
                             android:textSize="@dimen/text_size_home_recommend_title" />
                     </LinearLayout>
 
-                    <com.fanwe.library.customview.SDScaleImageView
+                    <ImageView
                         android:id="@+id/act_my_coupon_detail_iv_coupon_code_image"
                         android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp" />
+                        android:layout_height="120dp"
+                        android:layout_marginTop="10dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/nopic"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -130,31 +132,34 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
                 android:background="@color/stroke_deep" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp10"
+                android:padding="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp10"
+                android:background="@android:color/white"
+                android:text="@string/suppliers_introduction"
+                android:textColor="@color/text_home_recommend"
+                android:textSize="@dimen/text_size_home_recommend_title"
+                />
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp5"
+                android:paddingRight="@dimen/dp5"
+                android:dividerHeight="@dimen/dp5"
+                />
 
             <!-- 底部 -->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/white"
-                android:gravity="center_horizontal"
                 android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:orientation="horizontal"
-                    android:padding="10dp" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/suppliers_introduction"
-                        android:textColor="@color/text_home_recommend"
-                        android:textSize="@dimen/text_size_home_recommend_title" />
-                </LinearLayout>
 
                 <View
                     android:layout_width="fill_parent"
@@ -228,7 +233,7 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </LinearLayout>-->
 
             <View
                 android:layout_width="fill_parent"

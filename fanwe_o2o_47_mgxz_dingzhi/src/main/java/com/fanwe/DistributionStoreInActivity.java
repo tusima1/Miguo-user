@@ -17,8 +17,10 @@ import com.fanwe.model.StoreIn_Fx;
 import com.fanwe.model.StoreIn_list;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
-import com.fanwe.seller.model.getCroupBuyByMerchant.ModelCroupBuyByMerchant;
+import com.fanwe.seller.model.getBusinessDistributionList.ModelBusinessDistributionList;
+import com.fanwe.seller.model.getBusinessDistributionList.ResultBusinessDistributionList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.utils.DataFormat;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -52,6 +54,7 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
     private int pageNum = 1;
     private int pageSize = 10;
     private boolean isRefresh;
+    private String isMyShop;
 
 
     @Override
@@ -66,7 +69,7 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
-        sellerHttpHelper.getCroupBuyByMerchant(pageNum, pageSize, mId);
+        sellerHttpHelper.getBusinessDistributionList(pageNum, pageSize, mId);
     }
 
     private void init() {
@@ -111,6 +114,7 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
         if (TextUtils.isEmpty(mId)) {
             finish();
         }
+        isMyShop = bundle.getString("isMyShop");
         mTitle.setMiddleTextTop(bundle.getString("name"));
         mTitle.initRightItem(0);
         SDViewBinder.setTextView(mTv_name, bundle.getString("name"));
@@ -123,11 +127,11 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
 
     }
 
-    List<ModelCroupBuyByMerchant> items;
+    List<ResultBusinessDistributionList> items;
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (SellerConstants.GROUP_BUY_BY_MERCHANT.equals(method)) {
+        if (SellerConstants.BUSINESS_DISTRIBUTION_LIST.equals(method)) {
             items = datas;
             Message msg = new Message();
             msg.what = 0;
@@ -151,15 +155,19 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
                         listModel.clear();
                     }
                     if (!SDCollectionUtil.isEmpty(items)) {
-                        for (ModelCroupBuyByMerchant bean : items) {
-                            StoreIn_list storeIn_list = new StoreIn_list();
-                            storeIn_list.setId(bean.getId());
-                            storeIn_list.setName(bean.getName());
-                            storeIn_list.setImg(bean.getImg());
-                            storeIn_list.setCurrent_price(Float.valueOf(bean.getTuan_price()));
-                            storeIn_list.setOrigin_price(Float.valueOf(bean.getOrigin_price()));
-                            storeIn_list.setSalary(Float.valueOf(bean.getTuan_price()) - Float.valueOf(bean.getBalance_price()));
-                            listModel.add(storeIn_list);
+                        ResultBusinessDistributionList result = items.get(0);
+                        if (!SDCollectionUtil.isEmpty(result.getList())) {
+                            for (ModelBusinessDistributionList bean : result.getList()) {
+                                StoreIn_list storeIn_list = new StoreIn_list();
+                                storeIn_list.setId(bean.getId());
+                                storeIn_list.setName(bean.getTuan_name());
+                                storeIn_list.setImg(bean.getImg());
+                                storeIn_list.setCurrent_price(DataFormat.toFloat(bean.getTuan_price()));
+                                storeIn_list.setOrigin_price(DataFormat.toFloat(bean.getOrigin_price()));
+                                storeIn_list.setSalary(DataFormat.toFloat(bean.getSalary()));
+                                storeIn_list.setIs_delete(isMyShop);
+                                listModel.add(storeIn_list);
+                            }
                         }
                     }
                     mAdapter.notifyDataSetChanged();

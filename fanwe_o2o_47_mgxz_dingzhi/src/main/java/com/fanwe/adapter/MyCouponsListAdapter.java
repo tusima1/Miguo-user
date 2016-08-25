@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,40 +9,44 @@ import android.widget.TextView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.Uc_couponActItemModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.getGroupBuyCoupon.ModelGroupCoupon;
+import com.fanwe.utils.MGStringFormatter;
 
-public class MyCouponsListAdapter extends SDBaseAdapter<Uc_couponActItemModel>
-{
+import java.util.List;
 
-	public MyCouponsListAdapter(List<Uc_couponActItemModel> listModel, Activity activity)
-	{
-		super(listModel, activity);
-	}
+public class MyCouponsListAdapter extends SDBaseAdapter<ModelGroupCoupon> {
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		if (convertView == null)
-		{
-			convertView = mInflater.inflate(R.layout.item_lv_my_coupons, null);
-		}
+    public MyCouponsListAdapter(List<ModelGroupCoupon> listModel, Activity activity) {
+        super(listModel, activity);
+    }
 
-		ImageView iv_qrcode = ViewHolder.get(convertView, R.id.iv_qrcode);
-		TextView tv_password = ViewHolder.get(convertView, R.id.tv_password);
-		TextView tv_name = ViewHolder.get(convertView, R.id.tv_name);
-		TextView tv_expire_time = ViewHolder.get(convertView, R.id.tv_expire_time);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_lv_my_coupon, null);
+        }
 
-		Uc_couponActItemModel model = getItem(position);
-		if (model != null)
-		{
-			SDViewBinder.setImageView(iv_qrcode, model.getQrcode());
-			SDViewBinder.setTextView(tv_password, model.getPassword());
-			SDViewBinder.setTextView(tv_name, model.getName());
-			SDViewBinder.setTextView(tv_expire_time, model.getEnd_time());
-		}
+        ImageView iv_icon = ViewHolder.get(convertView, R.id.iv_icon);
+        TextView tv_password = ViewHolder.get(convertView, R.id.tv_password);
+        TextView tv_name = ViewHolder.get(convertView, R.id.tv_name);
+        TextView tv_expire_time = ViewHolder.get(convertView, R.id.tv_expire_time);
 
-		return convertView;
-	}
+        ModelGroupCoupon model = getItem(position);
+        if (model != null) {
+            SDViewBinder.setImageView(model.getIcon(), iv_icon);
+            SDViewBinder.setTextView(tv_password, model.getPassword());
+            SDViewBinder.setTextView(tv_name, model.getName());
+            String end_time = model.getEnd_time();
+            if ("0".endsWith(end_time)) {
+                end_time = "永久有效";
+            } else {
+                end_time = MGStringFormatter.getDate(end_time);
+            }
+            SDViewBinder.setTextView(tv_expire_time, end_time);
+        }
+
+        return convertView;
+    }
 
 }

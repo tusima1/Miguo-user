@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.AddCommentActivity;
-import com.fanwe.RefundApplicationActivity;
+import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
 import com.fanwe.library.adapter.SDBaseAdapter;
@@ -67,7 +67,6 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn> {
         TextView tv_total_price = ViewHolder.get(convertView, R.id.tv_total_price);
 
         final ModelOrderItemIn model = getItem(position);
-        int refund_status = MGStringFormatter.getInt(model.getRefund_status());
         if (model != null) {
             SDViewBinder.setImageView(iv_image, model.getIcon());
             SDViewBinder.setTextView(tv_name, model.getName());
@@ -94,7 +93,6 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     break;
                 case 20:
                     iv_img.setImageResource(R.drawable.bg_order_near);
-
                     break;
                 case 21:
                     iv_img.setImageResource(R.drawable.bg_order_massage);
@@ -185,6 +183,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     if (!TextUtils.isEmpty(model.getTuan_id())) {
                         Intent intent = new Intent(mActivity, TuanDetailActivity.class);
                         intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
+                        intent.putExtra(TuanDetailActivity.EXTRA_DETAIL_ID, model.getDetail_id());
                         mActivity.startActivity(intent);
                     }
                 }

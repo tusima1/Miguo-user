@@ -1,5 +1,14 @@
-package com.fanwe;
+package com.fanwe.user.view;
 
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.fanwe.BaseActivity;
+import com.fanwe.RefundGoodsActivity;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.http.InterfaceServer;
@@ -7,28 +16,16 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.OrderRefundItemInfo;
 import com.fanwe.model.RefundItemInfo;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_order_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
-
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * 

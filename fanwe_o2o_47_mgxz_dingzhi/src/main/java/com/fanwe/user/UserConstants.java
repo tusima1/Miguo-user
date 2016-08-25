@@ -157,9 +157,13 @@ public class UserConstants {
      */
     public static final String ORDER_INFO_CANCEL_ORDER = "OrderOperator";
     /**
-     * 删除订单
+     * 退款页面数据
      */
-    public static final String ORDER_INFO_DELETE_ORDER = "OrderOperator";
+    public static final String REFUND_APPLICATION_PAGE = "OrderItemTuangou";
+    /**
+     * 团购券
+     */
+    public static final String GROUP_BUY_COUPON_LIST = "GroupBuyCouponList";
 
 
 
