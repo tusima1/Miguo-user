@@ -43,6 +43,7 @@ import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -397,6 +398,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         modelGroupBuyDetail = itemsDetail.get(0);
                         Deal_indexActModel model = new Deal_indexActModel();
                         //基本信息
+
                         model.setId(modelGroupBuyDetail.getId());
                         model.setName(modelGroupBuyDetail.getName());
                         model.setSub_name(modelGroupBuyDetail.getShort_name());
@@ -404,6 +406,10 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         model.setCurrent_price(modelGroupBuyDetail.getTuan_price());
                         model.setOrigin_price(modelGroupBuyDetail.getOrigin_price());
                         model.setIcon(modelGroupBuyDetail.getIcon());
+                        model.setMax_num(modelGroupBuyDetail.getMax_num());
+                        model.setIs_first(SDFormatUtil.stringToInteger(modelGroupBuyDetail.getIs_first()));
+                        model.setIs_first_price(SDFormatUtil.stringToFloat(modelGroupBuyDetail.getIs_first_price()));
+                        model.setTime_status(SDFormatUtil.stringToInteger(modelGroupBuyDetail.getTime_status()));
 
                         //点评列表
                         List<CommentModel> commentModels = new ArrayList<>();

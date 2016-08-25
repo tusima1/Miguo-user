@@ -1,11 +1,16 @@
 package com.fanwe.user.view;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.adapters.RedpacketListAdapter;
 import com.fanwe.user.model.getUserRedpackets.ModelUserRedPacket;
@@ -14,6 +19,7 @@ import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +34,16 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     List<ModelUserRedPacket> mData=new ArrayList<ModelUserRedPacket>();
     private RedpacketListAdapter mAdapter;
     private UserHttpHelper httpHelper;
+    private OutSideShoppingCartHelper outSideShoppingCartHelper;
+    /**
+     * 商品IDS.
+     */
+    private  String mListDeal_id="";
+    protected int request_CODE = 100;
 
     @Override
     protected void init() {
+        outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
         mPull2Refresh = ((PullToRefreshListView) findViewById(R.id.ptrlv_content));
 
         mLL_empty = ((LinearLayout) findViewById(R.id.ll_empty));
@@ -42,7 +55,11 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
         mPull2Refresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                httpHelper.getUserRedPackets();
+                if(TextUtils.isEmpty(mListDeal_id)) {
+                    httpHelper.getUserRedPackets();
+                }else{
+                    outSideShoppingCartHelper.getUsableRedPacketList(mListDeal_id);
+                }
             }
 
             @Override
@@ -52,6 +69,13 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
         });
 
         httpHelper = new UserHttpHelper(this,this);
+    }
+
+    @Override
+    protected void initTitle(LinearLayout container) {
+        setTitle("红包列表");
+        intentValue();
+        super.initTitle(container);
     }
 
     @Override
@@ -72,15 +96,32 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
 
     @Override
     protected void onRightImageClick(View v) {
-        List<ModelUserRedPacket> selectedItem = mAdapter.getSelectedItem();
-        MGToast.showToast(selectedItem.size()+"");
+        if(mAdapter!=null) {
+            String selectedIDs = mAdapter.getSelectedItemIds();
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putString("selectedIDs", selectedIDs);
+            intent.putExtras(bundle);
+            setResult(request_CODE, intent);
+            finish();
+        }
     }
 
+    private void intentValue(){
+        Intent intent = getIntent();
+        if(intent.hasExtra(ShoppingCartconstants.LIST_DEAL_IDS)){
+             mListDeal_id = intent.getStringExtra(ShoppingCartconstants.LIST_DEAL_IDS);
+             isCheckMode = true;
+        }
+
+    }
     @Override
     protected void onResume() {
         super.onResume();
         mPull2Refresh.setRefreshing();
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -115,6 +156,19 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
                     mAdapter.update(body);
                 }
                 break;
+            case ShoppingCartconstants.GET_USERING_REDPACKETS:
+                mData = datas;
+                if(datas!=null){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.update(mData);
+                        }
+                    });
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -127,4 +181,6 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     public void onFinish(String method) {
         mPull2Refresh.onRefreshComplete();
     }
+
+
 }

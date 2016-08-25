@@ -47,6 +47,7 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.model.UpacpappModel;
 import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
 import com.fanwe.utils.DisPlayUtil;
@@ -72,6 +73,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 
 	/** 订单id (int) */
 	public static final String EXTRA_ORDER_ID = "extra_order_id";
+	public static final String ORDER_ENTITY = "order_detail";
 
 	@ViewInject(R.id.act_pay_tv_order_sn)
 	private TextView mTvOrderSn;
@@ -96,6 +98,8 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	 * 订单编号。
 	 */
 	private String mOrderId;
+
+	private OrderDetailInfo orderDetailInfo;
 
 	private Payment_codeModel mPaymentCodeModel;
 
@@ -223,8 +227,12 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	}
 
 	private void getIntentData() {
+		Intent intent =getIntent();
 		mOrderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
-		if (TextUtils.isEmpty(mOrderId)) {
+		if(intent.getSerializableExtra(ORDER_ENTITY)!=null&&intent.getSerializableExtra(ORDER_ENTITY) instanceof  OrderDetailInfo) {
+			orderDetailInfo = (OrderDetailInfo) intent.getSerializableExtra(ORDER_ENTITY);
+		}
+		if (TextUtils.isEmpty(mOrderId)||orderDetailInfo==null) {
 			SDToast.showToast("id为空");
 			finish();
 			return;

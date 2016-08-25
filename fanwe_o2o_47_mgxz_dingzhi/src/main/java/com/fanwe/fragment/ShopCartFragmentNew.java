@@ -2,6 +2,7 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.ConfirmOrderActivity;
+import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
+import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.HorizontalSlideDeleteListView;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
@@ -25,6 +29,7 @@ import com.fanwe.model.CartGoodsModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.utils.SDFormatUtil;
@@ -84,6 +89,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      * 当前操作，是返回，还是结算 进入下一步，默认是结算 1 ，返回2
      */
     private int currentGoTo=1;
+    private boolean ifLogin = false;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -95,12 +101,20 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     @Override
     protected void init() {
         super.init();
+        checkLogin();
         outSideShoppingCartHelper= new OutSideShoppingCartHelper(this);
         initTitle();
         registeClick();
         resetInitData();
-
         initPull2RefreshSrcollView();
+    }
+    public void checkLogin(){
+        if(!TextUtils.isEmpty(App.getInstance().getToken())){
+            ifLogin=true;
+        }else{
+            ifLogin=false;
+        }
+
     }
 
     /**
@@ -109,7 +123,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void initPull2RefreshSrcollView() {
         mContentPtr.setMode(Mode.PULL_FROM_START);
         mContentPtr.setOnRefreshListener(new OnRefreshListener<ScrollView>() {
-
             @Override
             public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
                 requestData();
@@ -227,9 +240,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         }else{
             mCb_xuanze.setChecked(false);
         }
-
     }
-
     /**
      * 获取总金额。
      *
@@ -338,7 +349,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     @Override
     public void onCLickLeft_SDTitleSimple(SDTitleItem v) {
         currentGoTo = 2;
-      clickSettleAccounts();
+        returnToLastActivity();
         super.onCLickLeft_SDTitleSimple(v);
     }
 
@@ -353,14 +364,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             public void onDelSelectedListener(CartGoodsModel model,
                                               boolean isChecked) {
                 // 非编辑状态
-
                     int count = getSumSeleted();
                     if (count == listModel.size()) {
                         mCb_xuanze.setChecked(true);
                     } else {
                         mCb_xuanze.setChecked(false);
                     }
-
             }
 
             @Override
@@ -372,11 +381,34 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     /**
+     * 返回按扭，先提交购物车，后返回。
+     */
+    private void returnToLastActivity(){
+        currentGoTo = 2;
+        if(ifLogin) {
+            outSideShoppingCartHelper.multiAddShopCart(listModel);
+        }else{
+            LocalShoppingcartDao.insertModel(listModel);
+        }
+
+    }
+
+    /**
      * 确认购物车。
      */
     private void clickSettleAccounts() {
         currentGoTo = 1;
-        outSideShoppingCartHelper.multiAddShopCart(listModel);
+        if(ifLogin) {
+            outSideShoppingCartHelper.multiAddShopCart(listModel);
+        }else{
+            LocalShoppingcartDao.insertModel(listModel);
+            gotoLogin();
+            setmIsNeedRefreshOnResume(true);
+        }
+    }
+    private void gotoLogin(){
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        getContext().startActivity(intent);
     }
     /**
      * 进入商品购买确认页。
@@ -397,8 +429,13 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     private void requestData() {
-
-        outSideShoppingCartHelper.getUserShopCartList();
+        if(ifLogin) {
+            outSideShoppingCartHelper.getUserShopCartList();
+        }else{
+            SDDialogManager.dismissProgressDialog();
+            List<ShoppingCartInfo> datas = LocalShoppingcartDao.queryModel();
+            onSuccess(ShoppingCartconstants.SHOPPING_CART_LIST,datas);
+        }
     }
 
     protected void bindData() {
@@ -416,7 +453,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         }else{
             mRlEmpty.setVisibility(View.GONE);
         }
-
     }
 
 
@@ -491,13 +527,17 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                     @Override
                     public void run() {
                         if(mAdapter!=null){
-                            mAdapter.removeItems(listModel);
+                            mAdapter.setData(listModel);
+                            mAdapter.notifyDataSetChanged();
+                            updateTitleNum(listModel.size());
                         }
                     }
                 });
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
-                startConfirmOrderActivity();
+                if(currentGoTo==1) {
+                    startConfirmOrderActivity();
+                }
                 break;
             default:
                 break;
@@ -524,6 +564,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 break;
             case ShoppingCartconstants.SHOPPING_CART_DELETE:
                 SDToast.showToast(responseBody);
+                requestData();
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
                 SDToast.showToast(responseBody);

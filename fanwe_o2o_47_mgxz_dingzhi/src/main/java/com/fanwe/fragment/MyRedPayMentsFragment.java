@@ -1,20 +1,19 @@
 package com.fanwe.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.MyRedPaymentActivity;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.user.view.RedPacketListActivity;
 import com.lidroid.xutils.view.annotation.ViewInject;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	
@@ -27,18 +26,14 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	@ViewInject(R.id.tv_totalred)
 	private TextView mTv_totalRed;
 	
-	protected int request_CODE = 101;
-	protected ArrayList<String> mList = new ArrayList<String>();
+	protected int request_CODE = 100;
+	protected String mRedIds = "";
 	
 	protected MyredPaymentsFragmentListener mListener;
 
 	private int mId;
 
-	private BigDecimal bd1;
 
-	private BigDecimal bd;
-
-	private BigDecimal bd2;
 	
 	public void setmListener(MyredPaymentsFragmentListener listener)
 	{
@@ -60,67 +55,10 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 		{
 			return;
 		}
-//		if(mCheckActModel.getRed_packet_total() > 0 && mCheckActModel.getRed_packet_info() != null)
-//		{
-//			bd = new BigDecimal(mCheckActModel.getRed_packet_info().getMoney());
-//			bd1 = new BigDecimal(mCheckActModel.getRed_packet_total());
-//			String arr[] = String.valueOf(mCheckActModel.getRed_packet_info().getMoney()).split("\\.");
-//			String arr1[] = String.valueOf(mCheckActModel.getRed_packet_total()).split("\\.");
-//			if(Integer.parseInt(arr[1]) > 0 )
-//			{
-//				bd = bd.setScale(1, BigDecimal.ROUND_HALF_UP);
-//
-//			}else
-//			{
-//				bd = bd.setScale(0, BigDecimal.ROUND_HALF_UP);
-//
-//			}
-//			mTv_red.setText("￥"+bd);
-//			mTv_red.setTextColor(Color.parseColor("#FB6F08"));
-//			mLl_red.setClickable(true);
-//			if(Integer.parseInt(arr1[1]) >0)
-//			{
-//				bd1 = bd1.setScale(1, BigDecimal.ROUND_HALF_UP);
-//			}else
-//			{
-//				bd1 = bd1.setScale(0, BigDecimal.ROUND_HALF_UP);
-//			}
-//			mTv_totalRed.setText("最高可抵"+bd1+"元");
-//		}else
-//		{
-//			bd2 = new BigDecimal(mCheckActModel.getRed_packet_total());
-//			String arr1[] = String.valueOf(mCheckActModel.getRed_packet_total()).split("\\.");
-//			if(Integer.parseInt(arr1[1]) > 0)
-//			{
-//				bd2 = bd2.setScale(1, BigDecimal.ROUND_HALF_UP);
-//			}else
-//			{
-//				bd2 = bd2.setScale(0, BigDecimal.ROUND_HALF_UP);
-//			}
-//			mTv_totalRed.setText("最高可抵"+bd2+"元");
-//			mTv_red.setText("无红包可使用");
-//			mLl_red.setClickable(false);
-//		}
 		
 	}
 
-	/**
-	 *  获取红包IDS.
-	 * @return
-     */
-	public String getIdList(){
-		StringBuffer ids = new StringBuffer();
-		if(mList!=null&&mList.size()>0){
-			for(int i = 0 ; i < mList.size() ; i++){
-			   ids.append(mList.get(i)+",");
-			}
-		}
-		if(ids.length()>=2){
-			return ids.substring(0,ids.length()-1);
-		}else{
-			return "";
-		}
-	}
+
 	private void registerClick() {
 		
 		mLl_red.setOnClickListener(this);
@@ -139,45 +77,37 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 		}
 	}
 	private void clickMyRed() {
-		Intent intent = new Intent(getActivity(),MyRedPaymentActivity.class);
-		//mId =mCheckActModel.getRed_packet_info().getId();
-		intent.putExtra("id", mId);
-		startActivityForResult(intent, request_CODE);
+		if(mCheckActModel!=null&&!TextUtils.isEmpty(mCheckActModel.getId())) {
+			Intent intent = new Intent(getActivity(), RedPacketListActivity.class);
+
+			intent.putExtra(ShoppingCartconstants.LIST_DEAL_IDS, mCheckActModel.getId());
+			startActivityForResult(intent, request_CODE);
+		}
 	}
+
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode==request_CODE)  
-        {  
-            if (resultCode==MyRedPaymentActivity.result_CODE)  
-            {  
-            	Bundle bundle = data.getExtras();
-                mList = bundle.getStringArrayList("mId");
-                if(mListener != null)
-                {
-                	mListener.onRedPaymentChange(mList);
-                }
-                float money = bundle.getFloat("money");
-                if(mList == null || money == 0)
-                {
-                	mTv_red.setText("不使用红包");
-                }else
-                {
-                	String arr[] = String.valueOf(money).split("\\.");
-                	BigDecimal bd = new BigDecimal(money);
-                	if(Integer.parseInt(arr[1]) >0)
-                	{
-                		bd.setScale(1, BigDecimal.ROUND_HALF_UP);
-                	}else
-                	{
-                		bd.setScale(0, BigDecimal.ROUND_HALF_UP);
-                	}
-                	mTv_red.setText("￥"+bd);
-                	mTv_red.setTextColor(Color.parseColor("#FB6F08"));
-            			
-                }
-            }  
-        }  
+        {
+			if(data!=null) {
+				Bundle bundle = data.getExtras();
+				mRedIds = bundle.getString("selectedIDs");
+				if (mListener != null) {
+					mListener.onRedPaymentChange(mRedIds);
+				}
+			}
+		}
 	}
+
+	public String getmRedIds() {
+		return mRedIds;
+	}
+
+	public void setmRedIds(String mRedIds) {
+		this.mRedIds = mRedIds;
+	}
+
 	@Override
 	protected void onRefreshData() {
 		initGetIntent();
@@ -185,6 +115,6 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	}
 	public interface MyredPaymentsFragmentListener
 	{
-		public void onRedPaymentChange(ArrayList list);
+		public void onRedPaymentChange(String  mRedIds);
 	}
 }

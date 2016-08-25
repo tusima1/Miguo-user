@@ -13,5 +13,6 @@ public interface CallbackView2 {
 
     void onFailue(String responseBody);
 
+
     void onFinish(String method);
 }

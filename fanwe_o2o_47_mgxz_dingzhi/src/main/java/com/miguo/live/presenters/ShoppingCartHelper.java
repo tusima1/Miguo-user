@@ -24,7 +24,7 @@ public class ShoppingCartHelper extends Presenter {
 
     public ShoppingCartHelper(Context mContext,CallbackView mView){
         this.mContext = mContext;
-        this.mContext = mContext;
+
         this.mView = mView;
     }
 
@@ -55,7 +55,7 @@ public class ShoppingCartHelper extends Presenter {
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
-                    SDToast.showToast("添加购物车成功。");
+                    SDToast.showToast("添加购物车成功");
                     if(mView!=null){
                         mView.onSuccess(LiveConstants.SHOPPING_CART, null);
                     }

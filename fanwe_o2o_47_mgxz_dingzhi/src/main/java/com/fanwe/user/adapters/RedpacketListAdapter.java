@@ -168,6 +168,26 @@ public class RedpacketListAdapter extends BaseAdapter {
         return selectedItems;
     }
 
+    /**
+     * 获取被选中的item ids.
+     * @return 被选中的集合
+     */
+    public String  getSelectedItemIds(){
+        StringBuffer str = new StringBuffer();
+
+        for (ModelUserRedPacket modelUserRedPacket : mData) {
+            if (modelUserRedPacket.isChecked()){
+                str.append(modelUserRedPacket.getId()+",");
+            }
+        }
+        if(str.length()>1){
+            return str.substring(0,str.length()-1);
+        }else{
+            return "";
+        }
+
+    }
+
     private class ViewHolder{
         public TextView mTv_Time;//有效期
         public TextView mTv_TitleTag;//类型(专属优惠)

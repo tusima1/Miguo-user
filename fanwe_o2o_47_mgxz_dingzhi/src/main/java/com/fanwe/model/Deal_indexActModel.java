@@ -49,7 +49,10 @@ public class Deal_indexActModel extends BaseActModel {
     private int is_first;
     private float is_first_price;
     private int check_first;
-
+    /**
+     * 最大购买量。
+     */
+    private String max_num;
 
     // add
     private String current_priceFormat;
@@ -541,4 +544,11 @@ public class Deal_indexActModel extends BaseActModel {
         this.dp_list = dp_list;
     }
 
+    public String getMax_num() {
+        return max_num;
+    }
+
+    public void setMax_num(String max_num) {
+        this.max_num = max_num;
+    }
 }

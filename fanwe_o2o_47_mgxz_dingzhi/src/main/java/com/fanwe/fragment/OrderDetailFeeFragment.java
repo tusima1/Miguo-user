@@ -201,6 +201,8 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         super.onRefreshData();
     }
 
+
+
     public void setCurrentFeeInfoModel(PaymentTypeInfo currentFeeInfoModel) {
         this.currentFeeInfoModel = currentFeeInfoModel;
     }
