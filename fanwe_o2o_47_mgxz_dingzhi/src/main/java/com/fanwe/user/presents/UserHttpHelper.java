@@ -1,6 +1,7 @@
 package com.fanwe.user.presents;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.app.App;
@@ -11,6 +12,8 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.getGroupBuyCoupon.ResultGroupCoupon;
+import com.fanwe.user.model.getGroupBuyCoupon.RootGroupCoupon;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;

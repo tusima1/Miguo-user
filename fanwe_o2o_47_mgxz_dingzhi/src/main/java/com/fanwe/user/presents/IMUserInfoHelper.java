@@ -82,7 +82,7 @@ public class IMUserInfoHelper {
             if(userCurrentInfo!=null){
                 UserInfoNew user = userCurrentInfo.getUserInfoNew();
                 if(user!=null){
-                    String value =user.getIcon();
+                    String value = user.getIcon();
                     if(TextUtils.isEmpty(value)){
                         return;
                     }else{

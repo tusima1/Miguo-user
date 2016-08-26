@@ -16,6 +16,7 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
+import com.miguo.live.views.definetion.LiveRoomParams;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupManager;
@@ -73,9 +74,16 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      * 进入一个直播房间流程
      */
     public void startEnterRoom() {
+        /**
+         * 主播创建直播的时候才会等于true
+         * 在LiveStartActivity中会设置为true
+         */
         if (MySelfInfo.getInstance().isCreateRoom() == true) {
             createLive();
         } else {
+            /**
+             * 用户加入直播
+             */
             SxbLog.i(TAG, "joinLiveRoom startEnterRoom ");
             joinLive(CurLiveInfo.getRoomNum());
         }
@@ -189,7 +197,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      */
     private void createIMChatRoom() {
         final ArrayList<String> list = new ArrayList<String>();
-        final String roomName = "this is a  test";
+        final String roomName = LiveRoomParams.ROOM_NAME;
         int roomId = MySelfInfo.getInstance().getMyRoomNum();
         SxbLog.i(TAG, "createlive createIMChatRoom " + MySelfInfo.getInstance().getMyRoomNum());
         TIMGroupManager.getInstance().createGroup("AVChatRoom", list, roomName, "" + roomId, new TIMValueCallBack<String>() {
