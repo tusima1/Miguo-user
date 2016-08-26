@@ -976,6 +976,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (mHostTopView != null) {
             mHostTopView = null;
         }
+        /**
+         * 主播退出直播
+         */
+        handlerStopLive();
+
         QavsdkControl.getInstance().clearVideoMembers();
         QavsdkControl.getInstance().onDestroy();
         MySelfInfo.getInstance().setMyRoomNum(-1);
@@ -1028,23 +1033,32 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             @Override
             public void clickSure() {
                 //如果是直播，发消息
-                if (null != mLiveHelper) {
-                    //向后台发送主播退出
-                    mLiveHelper.perpareQuitRoom(true);
-                    if (isPushed) {
-                        mLiveHelper.stopPushAction();
-                    }
-                    startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
-                    dialog.dismiss();
-                }
+                handlerStopLive();
+                startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
+                finish();
+                dialog.dismiss();
             }
 
             @Override
             public void clickCancel() {
+                dialog.dismiss();
                 dialog.cancel();
             }
         });
         dialog.show();
+    }
+
+    /**
+     * 停止直播
+     */
+    private void handlerStopLive(){
+        if (null != mLiveHelper) {
+            //向后台发送主播退出
+            mLiveHelper.perpareQuitRoom(true);
+            if (isPushed) {
+                mLiveHelper.stopPushAction();
+            }
+        }
     }
 
     /**

@@ -29,6 +29,7 @@ import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.SendRedPacketDialog;
+import com.miguo.live.views.dialog.RedPacketDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
@@ -186,37 +187,47 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             liveHttpHelper = new LiveHttpHelper(mContext, HostBottomToolView.this);
         }
         liveHttpHelper.getHandOutRedPacket(CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
-        if (dialogSendRedPacket == null) {
-            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(mActivity);
-            builder.setItemClickType(this);
-            builder.setItemClickNum(this);
-            builder.setSendListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //点击确定按钮，发送红包
-                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
-                        if (dialogSendRedPacket != null) {
-                            dialogSendRedPacket.dismiss();
-                        }
-                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-                                currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
-                    }
-                    dialogSendRedPacket.dismiss();
-                }
-            });
-            builder.setCancelListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (dialogSendRedPacket.isShowing()) {
-                        dialogSendRedPacket.dismiss();
-                    }
-                }
-            });
-            dialogSendRedPacket = builder.create();
-        }
-        dialogSendRedPacket.show();
-        initNum();
-        dialogSendRedPacket.updateDatasNum(redNumDatas);
+
+
+        RedPacketDialog redPacketDialog = new RedPacketDialog(getContext());
+        redPacketDialog.show();
+
+
+
+//        if (dialogSendRedPacket == null) {
+//            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(mActivity);
+//            builder.setItemClickType(this);
+//            builder.setItemClickNum(this);
+//            builder.setSendListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    //点击确定按钮，发送红包
+//                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
+//                        if (dialogSendRedPacket != null) {
+//                            dialogSendRedPacket.dismiss();
+//                        }
+//                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+//                                currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
+//                    }
+//                    dialogSendRedPacket.dismiss();
+//                }
+//            });
+//            builder.setCancelListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (dialogSendRedPacket.isShowing()) {
+//                        dialogSendRedPacket.dismiss();
+//                    }
+//                }
+//            });
+//            dialogSendRedPacket = builder.create();
+//        }
+//        dialogSendRedPacket.show();
+
+
+
+//        initNum();
+//        dialogSendRedPacket.updateDatasNum(redNumDatas);
     }
 
     ArrayList<ModelRedNum> redNumDatas;

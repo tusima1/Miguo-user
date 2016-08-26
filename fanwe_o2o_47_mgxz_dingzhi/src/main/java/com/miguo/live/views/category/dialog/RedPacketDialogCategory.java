@@ -97,6 +97,7 @@ public class RedPacketDialogCategory extends DialogCategory{
     protected void init() {
         initRecyclers();
         initViewsData();
+        initRedNum();
     }
 
     private void initRecyclers(){
@@ -151,6 +152,30 @@ public class RedPacketDialogCategory extends DialogCategory{
         mTypeGridView.setAdapter(redTypeAdapter);
         redNumGridAdapter = new RedNumGridAdapter(getContext(), redNumDatas);
         mNumGridView.setAdapter(redNumGridAdapter);
+    }
+
+    private void initRedNum() {
+        redNumDatas = new ArrayList<ModelRedNum>();
+        ModelRedNum modelRedNum;
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("1");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("10");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("20");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("30");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("40");
+        redNumDatas.add(modelRedNum);
+        modelRedNum = new ModelRedNum();
+        modelRedNum.setName("全部");
+        redNumDatas.add(modelRedNum);
+        redNumGridAdapter.notifyDataSetChanged();
     }
 
     public void clickSure(){
