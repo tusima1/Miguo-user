@@ -17,6 +17,11 @@ public class ShoppingCartconstants {
      */
     public static final String YOUHUI_PRICE = "youhuiPrice";
 
+    /**
+     * 商品ID 列表。
+     */
+    public static final String LIST_DEAL_IDS="mListDeal_id";
+
 
     /**
      * 批量加入购物车。
@@ -62,6 +67,10 @@ public class ShoppingCartconstants {
      * 获取支付方式列表。
      */
     public static final  String  GET_PAYMENT = "GetPayment";
+    /**
+     * 取可用红包。
+     */
+    public static  final  String    GET_USERING_REDPACKETS="GetUseingRedPackets";
 
 
 }

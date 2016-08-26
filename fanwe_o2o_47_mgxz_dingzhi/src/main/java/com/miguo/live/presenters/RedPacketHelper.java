@@ -66,6 +66,8 @@ public class RedPacketHelper extends Presenter {
         }
         return redList;
     }
+
+
     @Override
     public void onDestory() {
 

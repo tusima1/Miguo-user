@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
@@ -12,11 +13,15 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.shoppingcart.model.ShoppingBody;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
+import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.getUserRedpackets.ModelUserRedPacket;
 import com.fanwe.utils.SDFormatUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.utils.MGUIUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -34,11 +39,15 @@ public class OutSideShoppingCartHelper extends Presenter {
      * 回调。
      */
     private RefreshCalbackView mCallbackView;
+    private CallbackView2  callbackView2;
 
     public OutSideShoppingCartHelper(RefreshCalbackView mCallbackView){
         this.mCallbackView = mCallbackView;
     }
 
+    public OutSideShoppingCartHelper(CallbackView2 mCallbackView){
+        this.callbackView2 = mCallbackView;
+    }
     /**
      *添加到购物车。
      * @param fx_user_id 分销用户id（可不给）
@@ -123,7 +132,7 @@ public class OutSideShoppingCartHelper extends Presenter {
      * 删除某件商品。
      * @param id
      */
-    public void doDeleteShopCart(String id){
+    public void doDeleteShopCart(String id, final ShoppingCartInfo model){
         TreeMap<String, String> params = new TreeMap<String,String>();
         params.put("token", App.getInstance().getToken());
         params.put("id",id);
@@ -137,7 +146,9 @@ public class OutSideShoppingCartHelper extends Presenter {
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
-                    mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_DELETE,null);
+                    List<ShoppingCartInfo> datas = new ArrayList<ShoppingCartInfo>();
+                    datas.add(model);
+                    mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_DELETE,datas);
                 }else{
                     mCallbackView.onFailue(message);
                 }
@@ -215,7 +226,7 @@ public class OutSideShoppingCartHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 if(mCallbackView!=null) {
-                    mCallbackView.onFailue(ShoppingCartconstants.SHOPPING_CART_DELETE, message);
+                    mCallbackView.onFailue(ShoppingCartconstants.BATCH_SHOPPING_CART, message);
                 }
             }
         });
@@ -287,19 +298,16 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                Type type = new TypeToken<Root<OrderDetailInfo>>() {
                 }.getType();
                 Gson gson = new Gson();
-                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                Root<OrderDetailInfo> root = gson.fromJson(responseBody, type);
 
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
-                    List<HashMap<String,String>> datas = new ArrayList<HashMap<String, String>>();
-                     HashMap<String,String> map =(HashMap<String,String>) validateBody(root);
-                    if(map!=null){
-                        datas.add(map);
-                    }
+                    List<OrderDetailInfo> datas =validateBodyList(root);
+
                     mCallbackView.onSuccess(ShoppingCartconstants.ORDER_INFO_CREATE,datas);
                 }else{
                     mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE,message);
@@ -352,6 +360,50 @@ public class OutSideShoppingCartHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_POST,message);
+            }
+        });
+    }
+
+    /**
+     *通过商品IDS 取红包列表。
+     * @param id 商品IDS。
+     */
+    public void getUsableRedPacketList(String id){
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("id",id);
+        params.put("method", ShoppingCartconstants.GET_USERING_REDPACKETS);
+
+        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<ModelUserRedPacket>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<ModelUserRedPacket> root = gson.fromJson(responseBody, type);
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
+                    List<ModelUserRedPacket> datas = validateBodyList(root);
+                    callbackView2.onSuccess(ShoppingCartconstants.GET_USERING_REDPACKETS,datas);
+                }else{
+                    callbackView2.onFailue(message);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                callbackView2.onFailue(message);
+            }
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callbackView2.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                    }
+                });
             }
         });
     }

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.fanwe.BaseActivity;
@@ -236,7 +237,15 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public String getImei() {
+        if (TextUtils.isEmpty(imei)) {
+            TelephonyManager telephonyManager = (TelephonyManager) this
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            imei = telephonyManager.getDeviceId();
+            App.getInstance().setImei(telephonyManager.getDeviceId());
+        }
+
         return imei;
+
     }
 
     public void setImei(String imei) {

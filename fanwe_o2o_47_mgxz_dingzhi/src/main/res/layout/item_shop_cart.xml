@@ -89,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text=""
                     android:textColor="@color/text_fenxiao"
                     android:textSize="@dimen/text_size_base" />
 

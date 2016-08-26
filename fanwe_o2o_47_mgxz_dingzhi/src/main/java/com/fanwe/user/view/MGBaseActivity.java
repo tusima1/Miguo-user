@@ -3,6 +3,7 @@ package com.fanwe.user.view;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
     private ImageButton ib_left;
     private ImageButton ib_right;
     private TextView tv_middle;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
 
         //设置标题
         CharSequence charSequence = setTitleText();
+
         tv_middle.setText(charSequence);
         boolean clickable = setMiddleClickable();
         if (clickable){
@@ -90,8 +93,9 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
     }
 
     protected CharSequence setTitleText(){
-        return "";
+        return title;
     }
+
 
     protected void setTitleTextStyle(){
         //wo...
@@ -119,4 +123,10 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
     }
     protected  void onMiddleTextClick(View v){}
     protected  void onRightImageClick(View v){}
+
+
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

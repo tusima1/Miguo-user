@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.fragment.LoginFragment;
@@ -347,7 +348,27 @@ public class LoginHelper extends Presenter {
     public void putLocalShoppingToServer(){
         List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
         if(list!=null){
-            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(null);
+            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
+                @Override
+                public void onSuccess(String responseBody) {
+
+                }
+
+                @Override
+                public void onSuccess(String method, List datas) {
+
+                }
+
+                @Override
+                public void onFailue(String responseBody) {
+
+                }
+
+                @Override
+                public void onFinish(String method) {
+
+                }
+            });
             helper.multiAddShopCart(list);
         }
     }

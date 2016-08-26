@@ -24,7 +24,6 @@ public class ShopCartActivity extends BaseActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view_container);
 		init();
-		checkLogin();
 	}
 
 	private void init()
@@ -40,14 +39,5 @@ public class ShopCartActivity extends BaseActivity
 		init();
 	}
 
-	/**
-	 * 判断是否登录。
-	 */
-	public void checkLogin(){
-		if(TextUtils.isEmpty(App.getInstance().getToken())){
-			Intent intent = new Intent(this,
-					LoginActivity.class);
-			startActivity(intent);
-		}
-	}
+
 }

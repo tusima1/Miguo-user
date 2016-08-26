@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDToast;
@@ -35,6 +36,8 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.CartGoodsModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.RefreshCalbackView;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.utils.SDFormatUtil;
@@ -159,6 +162,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			int width = metric.widthPixels;
 			int height = (int) (width * 0.242 - 5);
 			SDViewUtil.setViewHeight(iv_image, height);
+			tv_title.setText(model.getTitle());
 			tv_originalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
 			SDViewBinder.setImageView(iv_image, model.getImg());
 			if (SDFormatUtil.stringToInteger(model.getLimit_num()) <= -1) {
@@ -358,10 +362,20 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			// TODO 删除商品
 			if(mShoppingCartHelper ==null){
 				mShoppingCartHelper = new OutSideShoppingCartHelper(mCallbackview);
-
 			}
-			final ShoppingCartInfo model = getItem(nPosition);
-			mShoppingCartHelper.doDeleteShopCart(model.getId());
+				 ShoppingCartInfo model = getItem(nPosition);
+				if(TextUtils.isEmpty(App.getInstance().getToken())){
+					LocalShoppingcartDao.deleteModel(model);
+					List<ShoppingCartInfo> datas = new ArrayList<ShoppingCartInfo>();
+					datas.add(model);
+					mCallbackview.onSuccess(ShoppingCartconstants.SHOPPING_CART_DELETE,datas);
+				}else{
+					mShoppingCartHelper.doDeleteShopCart(model.getId(),model);
+				}
+
+
+
+
 		}
 	}
 
