@@ -1,6 +1,5 @@
 ECLIPSE ANDROID PROJECT IMPORT SUMMARY
 ======================================
-
 Manifest Merging:
 -----------------
 Your project uses libraries that provide manifests, and your Eclipse
@@ -162,3 +161,5 @@ Component-Tools.
 
 (This import summary is for your information only, and can be deleted
 after import once you are satisfied with the results.)
+
+test
