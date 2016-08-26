@@ -18,11 +18,10 @@ import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyCommentActivity;
-import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
 import com.fanwe.MyMessageActivity;
-import com.fanwe.MyOrderListActivity;
+import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.UploadUserHeadActivity;
 import com.fanwe.WithdrawLogActivity;
@@ -48,7 +47,9 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.RedPacketListActivity;
+import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MoneyFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -551,6 +552,29 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     //TODO 二维码
     private void clickErWeiMa() {
+        startActivity(RefundApplicationActivity.class);
+
+//        new OrderHttpHelper(new CallbackView2() {
+//            @Override
+//            public void onSuccess(String responseBody) {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(String method, List datas) {
+//
+//            }
+//
+//            @Override
+//            public void onFailue(String responseBody) {
+//
+//            }
+//
+//            @Override
+//            public void onFinish(String method) {
+//
+//            }
+//        }).getOrderItemTuangou(detail_id,tuan_id);
 //        Intent intent = new Intent(getActivity(), DistributionMyQRCodeActivity.class);
 //        Bundle bundle = new Bundle();
 //        if (mActModel == null) {

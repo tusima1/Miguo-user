@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by didik on 2016/8/25.
  */
-public class ModelShopInfo2 implements Serializable{
+public class ModelShopInfo2 implements Serializable {
 //    "shop_id": "4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b2",      门店id
 //    "address": "浦沿",                                      门店地址
 //    "index_img": "",                                        门店图片地址

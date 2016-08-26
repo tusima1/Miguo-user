@@ -21,7 +21,8 @@
                 android:id="@+id/ll_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
+                android:background="@drawable/md_ripple_white"
+                android:clickable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp" >

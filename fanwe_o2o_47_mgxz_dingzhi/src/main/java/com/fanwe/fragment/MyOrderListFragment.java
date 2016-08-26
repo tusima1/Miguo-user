@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.fanwe.MyOrderListActivity;
-import com.fanwe.adapter.MyOrderListAdapter;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -16,9 +14,11 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.adapters.OrderOutAdapter;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemOut;
 import com.fanwe.user.model.getOrderInfo.ResultOrderInfo;
 import com.fanwe.user.presents.OrderHttpHelper;
+import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -44,7 +44,8 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
     @ViewInject(R.id.ll_empty)
     private View mLl_empty;
 
-    private MyOrderListAdapter mAdapter;
+//    private MyOrderListAdapter mAdapter;
+    private OrderOutAdapter mAdapter;
     private List<ModelOrderItemOut> mListModel = new ArrayList<ModelOrderItemOut>();
 
     private PageModel mPage=new PageModel();
@@ -96,8 +97,8 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
         }
 
         mTitle.setMiddleTextTop(title);
-        mTitle.initRightItem(1);
-        mTitle.getItemRight(0).setTextTop("编辑");
+//        mTitle.initRightItem(1);
+//        mTitle.getItemRight(0).setTextTop("编辑");
     }
 
     @Override
@@ -108,7 +109,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
             mTitle.getItemRight(0).setTextTop("编辑");
             mStatus = false;
         } else {
-            mAdapter = new MyOrderListAdapter(mListModel, getActivity(), true, mOrderMode);
+            mAdapter = new OrderOutAdapter(mListModel, getActivity(), true, mOrderMode);
             mPtrlv_content.setAdapter(mAdapter);
             mTitle.getItemRight(0).setTextTop("完成");
             mStatus = true;
@@ -121,7 +122,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
     }
 
     private void bindDefaultData() {
-        mAdapter = new MyOrderListAdapter(mListModel, getActivity(), false, mOrderMode);
+        mAdapter = new OrderOutAdapter(mListModel, getActivity(), false, mOrderMode);
         mPtrlv_content.setAdapter(mAdapter);
     }
 
