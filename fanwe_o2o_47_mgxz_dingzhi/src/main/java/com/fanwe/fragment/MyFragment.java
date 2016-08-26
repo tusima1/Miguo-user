@@ -15,10 +15,10 @@ import android.widget.TextView;
 import com.fanwe.AccountMoneyActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
+import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyCommentActivity;
-import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
 import com.fanwe.MyMessageActivity;
@@ -48,6 +48,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MoneyFormat;
@@ -506,6 +507,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mLl_shopping_cart.setOnClickListener(this);
         mLl_my_asset.setOnClickListener(this);
         viewAllOrdersButton.setOnClickListener(this);
+        mTvUsername.setOnClickListener(this);
+
     }
 
     @Override
@@ -535,6 +538,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(AccountMoneyActivity.class);
         } else if (v == viewAllOrdersButton) {
             clickMyOrderView("all");
+        } else if (v == mTvUsername) {
+            clickUserInfo();
         }
     }
 
@@ -580,7 +585,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
 
     private void clickUserInfo() {
-        Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+        Intent intent = new Intent(getActivity(), MemberRankActivity.class);
         startActivity(intent);
     }
 
