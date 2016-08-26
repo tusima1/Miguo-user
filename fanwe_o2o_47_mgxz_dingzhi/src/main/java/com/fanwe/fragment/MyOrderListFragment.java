@@ -191,7 +191,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         ResultOrderInfo resultOrderInfo = (ResultOrderInfo) datas.get(0);
-        int pageItemNum = MGStringFormatter.getInt(resultOrderInfo.getDataNum());
+        int pageItemNum = MGStringFormatter.getInt(resultOrderInfo.getData_num());
         if (pageItemNum!=10){
             hasMore=false;
         }
