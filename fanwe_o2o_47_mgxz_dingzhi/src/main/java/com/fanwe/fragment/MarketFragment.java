@@ -296,27 +296,27 @@ public class MarketFragment extends BaseFragment implements CallbackView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    mPtrlv_content.onRefreshComplete();
                     if (isRefresh) {
                         mListModel.clear();
                     }
-                    for (ModelMarketListItem bean : items) {
-                        Supplier_fx supplier_fx = new Supplier_fx();
-                        supplier_fx.setId(bean.getId());
-                        supplier_fx.setPreview(bean.getEnt_logo());
-                        supplier_fx.setBuy_count(Integer.valueOf(bean.getRq()));
-                        supplier_fx.setName(bean.getBuss_name());
-                        supplier_fx.setIs_delete(Integer.valueOf(bean.getIs_delete()));
-                        mListModel.add(supplier_fx);
+                    if (!SDCollectionUtil.isEmpty(items)) {
+                        for (ModelMarketListItem bean : items) {
+                            Supplier_fx supplier_fx = new Supplier_fx();
+                            supplier_fx.setId(bean.getId());
+                            supplier_fx.setPreview(bean.getEnt_logo());
+                            supplier_fx.setBuy_count(Integer.valueOf(bean.getRq()));
+                            supplier_fx.setName(bean.getBuss_name());
+                            supplier_fx.setIs_delete(Integer.valueOf(bean.getIs_delete()));
+                            mListModel.add(supplier_fx);
+                        }
                     }
                     mAdapter.notifyDataSetChanged();
-
                     if (SDCollectionUtil.isEmpty(mListModel)) {
                         ll_emptyLayout.setVisibility(View.VISIBLE);
                     } else {
                         ll_emptyLayout.setVisibility(View.GONE);
                     }
-
+                    mPtrlv_content.onRefreshComplete();
                     break;
                 case 1:
                     // 分类

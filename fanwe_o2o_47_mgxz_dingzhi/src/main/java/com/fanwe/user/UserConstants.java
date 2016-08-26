@@ -30,7 +30,7 @@ public class UserConstants {
      * 取用户信息。
      */
 
-    public static final String USER_INFO_URL="UserInfo";
+    public static final String USER_INFO_URL = "UserInfo";
     /**
      * 第三方OPENID.
      */
@@ -117,7 +117,6 @@ public class UserConstants {
     public static final String QQ_GET_USER_INFO = "https://graph.qq.com/user/get_user_info";
 
 
-
     //返回码
     /**
      * 注册成功。
@@ -164,14 +163,12 @@ public class UserConstants {
      * 团购券
      */
     public static final String GROUP_BUY_COUPON_LIST = "GroupBuyCouponList";
-
-
-
-
     /**
      * 我的战队
      */
     public static final String MY_DISTRIBUTION_CROPS = "MyDistributionCorps";
-
-
+    /**
+     * 我的分销小店基本信息
+     */
+    public static final String DISTR_INFO = "DistrInfo";
 }

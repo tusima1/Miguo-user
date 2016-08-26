@@ -9,6 +9,52 @@ public class StoreIn_list {
     private Float origin_price;
     private String is_delete;
 
+    private String max_num;
+    private int is_first;
+    private float is_first_price;
+    private String sub_name;
+    private int time_status;
+
+    public String getMax_num() {
+        return max_num;
+    }
+
+    public void setMax_num(String max_num) {
+        this.max_num = max_num;
+    }
+
+    public int getIs_first() {
+        return is_first;
+    }
+
+    public void setIs_first(int is_first) {
+        this.is_first = is_first;
+    }
+
+    public float getIs_first_price() {
+        return is_first_price;
+    }
+
+    public void setIs_first_price(float is_first_price) {
+        this.is_first_price = is_first_price;
+    }
+
+    public String getSub_name() {
+        return sub_name;
+    }
+
+    public void setSub_name(String sub_name) {
+        this.sub_name = sub_name;
+    }
+
+    public int getTime_status() {
+        return time_status;
+    }
+
+    public void setTime_status(int time_status) {
+        this.time_status = time_status;
+    }
+
     public String getIs_delete() {
         return is_delete;
     }

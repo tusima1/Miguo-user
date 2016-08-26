@@ -3,6 +3,7 @@ package com.fanwe.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,38 +13,40 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.TuanDetailActivity;
-import com.fanwe.common.CommonInterface;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.listener.TextMoney;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.StoreIn_list;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.sunday.eventbus.SDEventManager;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
+import com.fanwe.umeng.UmengEventStatistics;
+import com.miguo.live.presenters.ShoppingCartHelper;
 
 import java.util.List;
 
-public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> {
+public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements CallbackView {
+    private ShoppingCartHelper mShoppingCartHelper;
+    private StoreIn_list currStoreIn_list;
+    private String fx_id;
 
     public StoreInAdapter(List<StoreIn_list> listModel, Activity activity) {
         super(listModel, activity);
+        mShoppingCartHelper = new ShoppingCartHelper(mActivity, this);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent,
                         final StoreIn_list model) {
+        currStoreIn_list = model;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_store_in, null);
         }
@@ -64,10 +67,12 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> {
         if (model != null) {
             SDViewBinder.setTextView(tv_title, model.getName());
             if ("1".equals(model.getIs_delete())) {
+                fx_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
                 //代言商品，显示佣金
                 layout_priceOrigin.setVisibility(View.VISIBLE);
                 SDViewBinder.setTextView(tv_priceCurrent, TextMoney.textFarmat3(model.getSalary()));
             } else {
+                fx_id = "";
                 layout_priceOrigin.setVisibility(View.GONE);
             }
             SDViewBinder.setTextView(tv_price, TextMoney.textFarmat3(model.getOrigin_price()));
@@ -77,7 +82,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> {
             bt_buy.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    requestAddCart(model.getId());
+                    clickBuyGoods();
                 }
             });
         }
@@ -92,53 +97,92 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> {
         return convertView;
     }
 
-    protected void requestAddCart(String id) {
-        RequestModel model = new RequestModel();
-        model.putCtl("cart");
-        model.putAct("addcart");
-        model.putUser();
-        model.put("id", id);
-        model.put("number", 1);
-        SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>() {
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
+    /**
+     * 加入本地购物车。
+     */
+    private void addToLocalShopping() {
+        ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
+        shoppingCartInfo.setId(currStoreIn_list.getId());
+        shoppingCartInfo.setFx_user_id(fx_id);
+        shoppingCartInfo.setNumber("1");
+        shoppingCartInfo.setImg(currStoreIn_list.getImg());
+        shoppingCartInfo.setLimit_num(currStoreIn_list.getMax_num());
+        shoppingCartInfo.setIs_first(currStoreIn_list.getIs_first() + "");
+        shoppingCartInfo.setIs_first_price(currStoreIn_list.getIs_first_price() + "");
+        shoppingCartInfo.setOrigin_price(currStoreIn_list.getOrigin_price() + "");
+        shoppingCartInfo.setTuan_price(currStoreIn_list.getCurrent_price() + "");
+        shoppingCartInfo.setTitle(currStoreIn_list.getSub_name());
+        shoppingCartInfo.setBuyFlg(currStoreIn_list.getTime_status() + "");
+
+        LocalShoppingcartDao.insertModel(shoppingCartInfo);
+    }
+
+    private void clickBuyGoods() {
+        if (currStoreIn_list == null || TextUtils.isEmpty(currStoreIn_list.getId())) {
+            return;
+        }
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            //当前已经登录，
+            addGoodsToShoppingPacket();
+        } else {
+            //当前未登录.
+            int status = currStoreIn_list.getTime_status();
+            if (status == 0) {
+                SDToast.showToast("商品活动未开始。");
+                return;
+            } else if (status == 1) {
+                addToLocalShopping();
+                goToShopping();
+            } else if (status == 2) {
+                SDToast.showToast("商品已经过期。");
+                return;
             }
+        }
 
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SDDialogManager.dismissProgressDialog();
-                Intent intent = null;
-                switch (actModel.getStatus()) {
-                    case -1:
-                        intent = new Intent(mActivity, LoginActivity.class);
-                        mActivity.startActivity(intent);
-                        break;
-                    case 0:
+        UmengEventStatistics.sendEvent(mActivity, UmengEventStatistics.BUY);
 
-                        break;
-                    case 1:
-                        CommonInterface.updateCartNumber();
-                        SDEventManager.post(EnumEventTag.ADD_CART_SUCCESS.ordinal());
-                        intent = new Intent(mActivity, ShopCartActivity.class);
-                        mActivity.startActivity(intent);
-                        break;
+    }
 
-                    default:
-                        break;
-                }
-            }
+    /**
+     * 添加到购物车。
+     */
+    public void addGoodsToShoppingPacket() {
+        String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        String goods_id = currStoreIn_list.getId();
+        String cart_type = "1";
+        String add_goods_num = "1";
+        if (mShoppingCartHelper != null) {
+            mShoppingCartHelper.addToShoppingCart("", fx_id, lgn_user_id, goods_id, cart_type, add_goods_num);
+        }
+    }
 
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                SDDialogManager.dismissProgressDialog();
-            }
+    public void goToShopping() {
+        Intent intent = new Intent(mActivity, ShopCartActivity.class);
+        mActivity.startActivity(intent);
+    }
 
-            @Override
-            public void onFinish() {
+    @Override
+    public void onSuccess(String responseBody) {
 
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        switch (method) {
+            case ShoppingCartconstants.SHOPPING_CART:
+                goToShopping();
+                break;
+            case ShoppingCartconstants.SHOPPING_CART_ADD:
+                goToShopping();
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }
