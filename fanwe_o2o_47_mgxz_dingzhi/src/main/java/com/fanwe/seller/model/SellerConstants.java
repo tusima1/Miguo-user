@@ -90,4 +90,8 @@ public class SellerConstants {
      * 商家分销商品列表，支持分页
      */
     public static final String BUSINESS_DISTRIBUTION_LIST = "BusinessDistributionList";
+    /**
+     * 我的小店
+     */
+    public static final String MY_DISTRIBUTION_SHOP = "MyDistributionShop";
 }
