@@ -12,12 +12,9 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
-<<<<<<< HEAD
-=======
 import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.model.getDistrInfo.ResultDistrInfo;
 import com.fanwe.user.model.getDistrInfo.RootDistrInfo;
->>>>>>> 977a0fd2e75c4e5e3bb9c3514d360b10a63a2796
 import com.fanwe.user.model.getGroupBuyCoupon.ResultGroupCoupon;
 import com.fanwe.user.model.getGroupBuyCoupon.RootGroupCoupon;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
