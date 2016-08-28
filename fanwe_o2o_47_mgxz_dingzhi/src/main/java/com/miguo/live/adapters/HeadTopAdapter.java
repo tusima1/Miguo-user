@@ -42,6 +42,9 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ModelAudienceInfo modelAudienceInfo = mData.get(position);
+        /**
+         * 更新用户头像
+         */
         if(modelAudienceInfo!=null&&!TextUtils.isEmpty(modelAudienceInfo.getIcon())){
             ImageLoader.getInstance().displayImage(modelAudienceInfo.getIcon(),holder.mCIV);
         }else {
@@ -64,7 +67,7 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
      */
     public void setmData(List<ModelAudienceInfo> mData) {
         //数据不一致才刷新。
-            this.mData = mData;
+        this.mData = mData;
         notifyItemRangeChanged(0,getItemCount());
     }
 

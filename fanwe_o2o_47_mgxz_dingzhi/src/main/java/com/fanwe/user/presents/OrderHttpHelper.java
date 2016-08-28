@@ -11,6 +11,8 @@ import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getOrderInfo.ResultOrderInfo;
 import com.fanwe.user.model.getOrderInfo.RootOrderInfo;
+import com.fanwe.user.model.getRefundPage.ResultRefundPage;
+import com.fanwe.user.model.getRefundPage.RootRefundPage;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -201,6 +203,23 @@ public class OrderHttpHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Log.e("test","responseBody :"+responseBody);
+                final List<ResultRefundPage> result = gson.fromJson(responseBody, RootRefundPage.class)
+                        .getResult();
+                if (result!=null && result.size()>0){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(UserConstants.REFUND_APPLICATION_PAGE,result);
+                        }
+                    });
+                }else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onFailue(UserConstants.REFUND_APPLICATION_PAGE);
+                        }
+                    });
+                }
             }
 
             @Override
@@ -211,6 +230,48 @@ public class OrderHttpHelper implements IHelper {
                         mView2.onFinish(UserConstants.REFUND_APPLICATION_PAGE);
                     }
                 });
+            }
+        });
+    }
+
+    /**
+     * 退款申请提交
+     * @param number 退款数量
+     * @param order_id 订单id
+     * @param tuan_id 团购id
+     */
+    public void postRefundApply(String number,String order_id,String tuan_id){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.REFUND_APPLICATION);
+        params.put("id", order_id);
+        params.put("tuan_id", tuan_id);
+        params.put("number", number);
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Root root = gson.fromJson(responseBody, Root.class);
+                if ("200".endsWith(root.getStatusCode())){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(UserConstants.REFUND_APPLICATION,null);
+                        }
+                    });
+                }else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onFailue(UserConstants.REFUND_APPLICATION);
+                        }
+                    });
+                }
+
             }
         });
     }

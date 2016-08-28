@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="2dp"
     android:orientation="vertical" >
     <!--android:background="@drawable/layer_white_stroke_all"  -->
@@ -9,8 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dp"
-         >
+        android:padding="3dp">
          <!-- android:background="@drawable/shape_cricle_stoke_gray" -->
 
         <LinearLayout
@@ -20,23 +19,20 @@
             android:orientation="vertical" >
         </LinearLayout>
     </FrameLayout>
+    <!--<com.didikee.uilibs.views.customviews.MaxHeightListView-->
+        <!--android:id="@+id/max_list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
 
     <LinearLayout
         android:id="@+id/ll_order_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|right"
+        android:orientation="horizontal"
         android:padding="10dp"
         android:visibility="gone" >
 
-        <TextView
-            android:id="@+id/tv_money"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textColor="@color/main_color"
-            android:textSize="@dimen/text_size_title" />
 
         <TextView
             android:id="@+id/tv_cancel_order"
@@ -62,16 +58,6 @@
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
             android:text="继续支付" />
-        <!--
-             <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="退款"
-            style="@style/text_order"
-            android:id="@+id/tv_refund"
-            />
-        -->
-
         <TextView
             android:id="@+id/tv_delect"
             style="@style/text_order"
@@ -79,10 +65,5 @@
             android:layout_height="wrap_content"
             android:text="删除" />
     </LinearLayout>
-
-    <!-- <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/stroke" /> -->
 
 </LinearLayout>

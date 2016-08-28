@@ -377,7 +377,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <!-- 我的订单界面 -->
         <activity
-            android:name="com.fanwe.MyOrderListActivity"
+            android:name="com.fanwe.user.view.MyOrderListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>

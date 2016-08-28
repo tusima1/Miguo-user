@@ -11,8 +11,16 @@ import java.util.List;
  */
 public interface LiveView extends MvpView {
 
+    /**
+     * 显示直播视频
+     * @param isHost
+     * @param id
+     */
     void showVideoView(boolean isHost, String id);
 
+    /**
+     * 显示邀请对话框
+     */
     void showInviteDialog();
 
     void refreshText(String text, String name);

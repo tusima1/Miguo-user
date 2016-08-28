@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:orientation="vertical" >
+    <com.didikee.uilibs.views.customviews.MaxHeightListView
+        android:id="@+id/max_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/ll_order_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|right"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone" >
+
+
+        <TextView
+            android:id="@+id/tv_cancel_order"
+            style="@style/text_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="取消订单" />
+
+        <TextView
+            android:id="@+id/tv_pay"
+            style="@style/text_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="付款" />
+
+        <TextView
+            android:id="@+id/tv_pay_again"
+            style="@style/text_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="继续支付" />
+        <TextView
+            android:id="@+id/tv_delect"
+            style="@style/text_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除" />
+    </LinearLayout>
+
+</LinearLayout>
