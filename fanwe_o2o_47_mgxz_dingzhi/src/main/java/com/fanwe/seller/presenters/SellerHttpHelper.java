@@ -823,6 +823,24 @@ public class SellerHttpHelper implements IHelper {
         });
     }
 
+    public void getMyDistributionShop() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("method", SellerConstants.MY_DISTRIBUTION_SHOP);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(SellerConstants.MY_DISTRIBUTION_SHOP, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         mContext = null;
