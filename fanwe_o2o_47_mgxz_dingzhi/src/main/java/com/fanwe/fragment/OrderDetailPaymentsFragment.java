@@ -74,6 +74,9 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 		resetParams();
 		// TODO 生成支付方式
 
+		if(mLl_payment!=null){
+			mLl_payment.removeAllViews();
+		}
 		List<SDViewBase> listView = new ArrayList<SDViewBase>();
 		PaymentTypeInfo foundModel = null;
 		for (PaymentTypeInfo model : listPayment)

@@ -277,6 +277,48 @@ public class OutSideShoppingCartHelper extends Presenter {
     }
 
     /**
+     * 订单ID取订单详情。
+     * @param id 订单ID.
+     */
+    public void getDindanDetailById(String id){
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("id",id);
+        params.put("method", ShoppingCartconstants.PENDIING_ORDER);
+        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+                Type type = new TypeToken<Root<ShoppingBody>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<ShoppingBody> root = gson.fromJson(responseBody, type);
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
+                    if(root!=null&&root.getResult()!=null&&root.getResult().get(0)!=null&&root.getResult().get(0).getBody()!=null) {
+                        ShoppingBody shoppingBody = (ShoppingBody) root.getResult().get(0).getBody().get(0);
+                        List<ShoppingBody> datas = new ArrayList<ShoppingBody>();
+                        datas.add(shoppingBody);
+                        mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_GET,datas);
+                    }else{
+                        mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_GET,null);
+                    }
+                }else{
+                    mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET,message);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET,message);
+            }
+        });
+
+    }
+
+    /**
      * 购物车生成订单。
      * @param deals   商品IDS./
      * @param is_use_account_money 是否使用余额，1：使用，0：不使用 0或1
@@ -334,7 +376,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
         params.put("method", ShoppingCartconstants.SP_CART_TOORDER);
 
-        OkHttpUtils.getInstance().put(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -406,6 +448,49 @@ public class OutSideShoppingCartHelper extends Presenter {
                 });
             }
         });
+    }
+
+    /**
+     *用订单号重新取支付详情。
+     * @param order_id 订单id
+     * @param payment  支付方式
+     * @param is_use_account_money 是否使用余额
+     */
+    public void payByOrderId(String order_id,String payment,String is_use_account_money){
+
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("order_id",order_id);
+        params.put("is_use_account_money",is_use_account_money);
+        params.put("payment",payment);
+        params.put("method", ShoppingCartconstants.ORDER_INFO);
+
+        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<OrderDetailInfo>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<OrderDetailInfo> root = gson.fromJson(responseBody, type);
+
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
+                    List<OrderDetailInfo> datas =validateBodyList(root);
+
+                    mCallbackView.onSuccess(ShoppingCartconstants.ORDER_INFO_CREATE,datas);
+                }else{
+                    mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE,message);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE,message);
+            }
+        });
+
     }
     @Override
     public void onDestory() {
