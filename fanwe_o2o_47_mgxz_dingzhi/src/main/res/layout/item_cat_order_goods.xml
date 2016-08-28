@@ -21,7 +21,7 @@
         <com.fanwe.library.customview.SDScaleImageView
             android:id="@+id/iv_image"
             android:layout_width="100dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="100dp" />
 
         <!-- 右边 -->
 

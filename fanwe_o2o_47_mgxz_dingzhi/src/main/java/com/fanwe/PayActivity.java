@@ -112,6 +112,8 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	protected String content;
 	private PopupWindow pop;
 
+	private  final  String  PAY_SUCCESS="3";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -124,7 +126,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		getIntentData();
 		initfews();
 		initTitle();
-		requestPayOrder();
+	//	requestPayOrder();
 		registeClick();
 	}
 
@@ -139,6 +141,8 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		 * LayoutParams.WRAP_CONTENT,true);
 		 */
 	}
+
+
 
 	private void requestPayOrder() {
 		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
@@ -226,6 +230,11 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		}
 	}
 
+	private void bindData(){
+		if(orderDetailInfo.getOrder_info().getOrder_status().equals(PAY_SUCCESS)){
+			//支付成功 处理。
+		}
+	}
 	private void getIntentData() {
 		Intent intent =getIntent();
 		mOrderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
@@ -236,6 +245,9 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 			SDToast.showToast("id为空");
 			finish();
 			return;
+		}
+		else{
+			bindData();
 		}
 	}
 

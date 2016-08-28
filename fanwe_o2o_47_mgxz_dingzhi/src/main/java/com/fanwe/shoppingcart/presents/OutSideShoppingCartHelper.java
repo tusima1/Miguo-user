@@ -334,7 +334,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
         params.put("method", ShoppingCartconstants.SP_CART_TOORDER);
 
-        OkHttpUtils.getInstance().put(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().post(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {

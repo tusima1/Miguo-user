@@ -31,6 +31,7 @@ public class RedpacketListAdapter extends BaseAdapter {
 
     List<ModelUserRedPacket> mData;
 
+
     public RedpacketListAdapter(List<ModelUserRedPacket> mData,boolean isCheckMode) {
         this.mData = mData;
         this.isCheckMode=isCheckMode;
@@ -83,6 +84,8 @@ public class RedpacketListAdapter extends BaseAdapter {
         //bind data
         ModelUserRedPacket modelUserRedPacket = mData.get(position);
         final boolean check = modelUserRedPacket.isChecked();
+        final String shopId = modelUserRedPacket.getId();
+        final String redId = modelUserRedPacket.getRed_packet_id();
         //确定模式
         if (isCheckMode){
             holder.mCb_check.setVisibility(View.VISIBLE);
@@ -92,6 +95,7 @@ public class RedpacketListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     boolean checked = ((CheckBox) v).isChecked();
                     mData.get(position).setChecked(checked);
+                    updateCheckList(shopId,redId);
                 }
             });
         }else {
@@ -155,6 +159,25 @@ public class RedpacketListAdapter extends BaseAdapter {
     }
 
     /**
+     * 设置红包被 选择列表
+     * @param id  商家 ID
+     * @param redId 红包ID
+     */
+    public void updateCheckList(String id, String redId){
+        if(TextUtils.isEmpty(redId)){
+            return;
+        }
+        int size = mData.size();
+        for(int i = 0 ; i < size;i++){
+            ModelUserRedPacket modelUserRedPacket = mData.get(i);
+            if(modelUserRedPacket.getId().equals(id)&&!modelUserRedPacket.getRed_packet_id().equals(redId)){
+                modelUserRedPacket.setChecked(false);
+            }
+        }
+        notifyDataSetChanged();
+
+    }
+    /**
      * 获取被选中的item
      * @return 被选中的集合
      */
@@ -177,7 +200,7 @@ public class RedpacketListAdapter extends BaseAdapter {
 
         for (ModelUserRedPacket modelUserRedPacket : mData) {
             if (modelUserRedPacket.isChecked()){
-                str.append(modelUserRedPacket.getId()+",");
+                str.append(modelUserRedPacket.getRed_packet_id()+",");
             }
         }
         if(str.length()>1){
