@@ -135,7 +135,7 @@ public class WithdrawLogAdapter extends SDBaseAdapter<ModelCommissionLog>
 			SDViewBinder.setTextView(tv_desc, model.getDescription());
 			
 			//设置时间
-			SDViewBinder.setTextView(tv_time, format.format(new Date(model.getInsert_time())));
+			SDViewBinder.setTextView(tv_time, format.format(new Date(Long.valueOf(model.getInsert_time()))));//1472127680687
 			
 			//设置来自推荐人字段,为空时不设置
 			String mobile = model.getMobile();

@@ -17,21 +17,19 @@ import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
 import com.fanwe.commission.presenter.LogHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_HomeModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
+import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.math.BigDecimal;
@@ -68,12 +66,11 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 	private WithdrawLogAdapter mAdapter;
 
 	private PageModel mPage = new PageModel();
-//	private Uc_money_Zijin_LogActModel mActModel;
-
 	private int rank = -1;
 	private LogHttpHelper httpHelper;
 	private ResultCommissionLog resultCommissionLog;
 	private boolean isLoadMore;
+	private UserHttpHelper tempHttp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,21 +89,34 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 	}
 
 	private void getMemberRank() {
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_home");
-		model.putAct("homepage");
-		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_HomeModel>() {
+		tempHttp = new UserHttpHelper(this, new CallbackView2() {
 			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					rank = actModel.getDist().getRank();
+			public void onSuccess(String responseBody) {
+
+			}
+
+			@Override
+			public void onSuccess(String method, List datas) {
+				if (UserConstants.DISTR_INFO.endsWith(method)){
+					if (datas!=null){
+						ModelDistrInfo modelDistrInfo= (ModelDistrInfo) datas.get(0);
+						String fx_level = modelDistrInfo.getFx_level();
+						rank=MGStringFormatter.getInt(fx_level);
+					}
 				}
 			}
 
 			@Override
-			public void onFinish() {
+			public void onFailue(String responseBody) {
+
+			}
+
+			@Override
+			public void onFinish(String method) {
+
 			}
 		});
+		tempHttp.getDistrInfo();
 	}
 
 	private void initIntentData() {
@@ -134,7 +144,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 			@Override
 			public void onClick(View v) {
 				if (rank == -1) {
-					getMemberRank();
+					tempHttp.getDistrInfo();
 					SDToast.showToast("网络异常,请重新点击!");
 				} else {
 					if (rank == 1) {// 青铜
@@ -189,48 +199,6 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 	private void requestData(boolean isLoadMore) {
 		this.isLoadMore=isLoadMore;
 		httpHelper.getCommissionLog(mPage.getPage()+"","10");
-
-//		RequestModel model = new RequestModel();
-//		model.putCtl("fxwithdraw");
-//		model.putAct("moneylog");
-//		model.putPage(mPage);
-//		model.put("type", 1);
-//		InterfaceServer.getInstance().requestInterface(model, new RequestCallBack<String>() {
-//			@Override
-//			public void onStart() {
-//				super.onStart();
-//			}
-//
-//			@Override
-//			public void onSuccess(ResponseInfo<String> responseInfo) {
-//				Uc_money_Zijin_LogActModel actModel = JsonUtil.json2Object(responseInfo.result,
-//						Uc_money_Zijin_LogActModel.class);
-//
-//				if (actModel.getStatus() == 1) {
-//					mActModel = actModel;
-//					if (mPage.getPage() == 1) {
-//						if (actModel == null || actModel.getResult() == null || actModel.getResult().size() == 0) {
-//							ll_empty.setVisibility(View.VISIBLE);
-//						} else {
-//							ll_empty.setVisibility(View.GONE);
-//						}
-//					} else {
-//						ll_empty.setVisibility(View.GONE);
-//					}
-//
-//					mPage.update(actModel.getPage());
-//					initIntentData();
-//					SDViewUtil.updateAdapterByList(mListModel, mActModel.getResult(), mAdapter, isLoadMore);
-//				}
-//
-//			}
-//
-//			@Override
-//			public void onFinish() {
-//				mPtrlv_content.onRefreshComplete();
-//				super.onFinish();
-//			}
-//		});
 	}
 
 	private void initTitle() {
@@ -241,6 +209,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 	protected void onDestroy() {
 		super.onDestroy();
 		httpHelper.onDestroy();
+		tempHttp.onDestroy();
 	}
 
 	@Override
@@ -277,6 +246,8 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 
 	@Override
 	public void onFinish(String method) {
-		mPtrlv_content.onRefreshComplete();
+		if (CommissionConstance.COMMISSION_LOG.equals(method)) {
+			mPtrlv_content.onRefreshComplete();
+		}
 	}
 }

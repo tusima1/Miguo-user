@@ -92,7 +92,7 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                     }
                 });
             }
-            if (order_status==3){
+            if (order_status==1){
                 tv_pay_again.setVisibility(View.VISIBLE);
                 tv_pay_again.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -105,7 +105,7 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                     }
                 });
             }
-            if (order_status==0 || order_status==3){
+            if (order_status==0 || order_status==1){
                 tv_cancel_order.setVisibility(View.VISIBLE);
                 tv_cancel_order.setOnClickListener(new View.OnClickListener() {
                     @Override
