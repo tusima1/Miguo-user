@@ -5,12 +5,16 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.commission.model.CommissionConstance;
+import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
+import com.fanwe.commission.model.getCommissionLog.RootCommissionLog;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -48,8 +52,26 @@ public class LogHttpHelper implements IHelper{
             @Override
             public void onSuccessResponse(String responseBody) {
                 Log.e("test","responseBody:"+responseBody);
+                final List<ResultCommissionLog> result = gson.fromJson(responseBody, RootCommissionLog
+                        .class).getResult();
+                if (result!=null && result.size()>0){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(CommissionConstance.COMMISSION_LOG,result);
+                        }
+                    });
+                }else {
+                    mView2.onFailue(CommissionConstance.COMMISSION_LOG);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                mView2.onFinish(CommissionConstance.COMMISSION_LOG);
             }
         });
+
     }
 
     @Override
