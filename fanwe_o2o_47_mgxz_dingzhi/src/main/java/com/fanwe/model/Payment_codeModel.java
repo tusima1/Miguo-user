@@ -14,7 +14,7 @@ public class Payment_codeModel
 	private String pay_money;
 	private String class_name;
 
-	private Map<String, Object> config;
+	private Map<String, String> config;
 	
 	public MalipayModel getMalipay()
 	{
@@ -31,12 +31,12 @@ public class Payment_codeModel
 		return JsonUtil.map2Object(config, UpacpappModel.class);
 	}
 
-	public Map<String, Object> getConfig()
+	public Map<String, String> getConfig()
 	{
 		return config;
 	}
 
-	public void setConfig(Map<String, Object> config)
+	public void setConfig(Map<String, String> config)
 	{
 		this.config = config;
 	}

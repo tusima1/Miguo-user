@@ -91,6 +91,10 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     float yueFloat = 0.00f;
 
     private PaymentTypeInfo currentPayType;
+    /**
+     * 订单编号。
+     */
+    private String orderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +119,12 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     private void initIntentData()
 
     {
-        mListDeal_id = getIntent().getExtras().getString("list_id");
+       Intent intent = getIntent();
+        if(intent.hasExtra("orderId")){
+            orderId = intent.getStringExtra("orderId");
+        }else {
+            mListDeal_id = getIntent().getExtras().getString("list_id");
+        }
     }
 
     private void findViews() {
@@ -279,7 +288,13 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      * 获取数据
      */
     protected void requestData() {
-        outSideShoppingCartHelper.getDingdanDetail(mListDeal_id);
+        //来自订单 页
+        if(!TextUtils.isEmpty(orderId)){
+           outSideShoppingCartHelper.getDindanDetailById(orderId);
+        }else {
+            //来自购物车页。
+            outSideShoppingCartHelper.getDingdanDetail(mListDeal_id);
+        }
     }
 
     protected void dealRequestDataSuccess(ShoppingBody actModel) {
@@ -310,6 +325,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragMyRed.setmCheckActModel(mCheckActModel);
 
         mFragFees.setmCheckActModel(mCheckActModel);
+        if(!TextUtils.isEmpty(orderId)){
+          findViewById(R.id.act_confirm_order_fl_payments).setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -361,7 +379,14 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             //是否使用余额支付。
             String balances_flg = mFragAccountPayment.getUseAccountMoney() + "";
             //提交并生成订单。
-            outSideShoppingCartHelper.createOrder(mCheckActModel.getId(), balances_flg, red_id, payDisp, content);
+            if(!TextUtils.isEmpty(orderId)) {
+                //String order_id,String payment,String is_use_account_money
+                outSideShoppingCartHelper.payByOrderId(orderId,balances_flg,payDisp);
+            }else{
+
+                outSideShoppingCartHelper.createOrder(mCheckActModel.getId(), balances_flg, red_id, payDisp, content);
+
+            }
 
     }
 
@@ -385,7 +410,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             intent = new Intent(mActivity, PayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(PayActivity.ORDER_ENTITY, orderDetailInfo);
-            bundle.putString(PayActivity.EXTRA_ORDER_ID, orderDetailInfo.getOrder_info().getPayment_id());
+            bundle.putString(PayActivity.EXTRA_ORDER_ID, orderDetailInfo.getOrder_info().getOrder_id());
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
@@ -396,7 +421,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     }
 
     private void registeClick() {
-
 
         mBtnConfirmOrder.setOnClickListener(new OnClickListener() {
             @Override

@@ -48,6 +48,11 @@ public class ShoppingCartconstants {
      */
     public static final String  SP_CART_TOORDER ="SpCartToOrder";
     /**
+     * 未支付订单。
+     */
+    public static final String  PENDIING_ORDER ="PendingOrder";
+
+    /**
      * 购物车结算按钮 get。
      */
     public static final String  SP_CART_TOORDER_GET ="SpCartToOrder_get";

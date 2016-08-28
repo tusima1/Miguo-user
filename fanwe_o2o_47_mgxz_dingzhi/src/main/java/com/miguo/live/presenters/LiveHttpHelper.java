@@ -96,6 +96,7 @@ public class LiveHttpHelper implements IHelper {
 
     /**
      * 请求直播列表
+     * 首页fragment
      */
     public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
         TreeMap<String, String> params = new TreeMap<String, String>();
@@ -165,8 +166,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootAudienceCount rootAudienceCount = gson.fromJson(responseBody,
-                        RootAudienceCount.class);
+                RootAudienceCount rootAudienceCount = gson.fromJson(responseBody,RootAudienceCount.class);
                 List<ResultAudienceCount> resultAudienceCounts = rootAudienceCount.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceCounts)) {
                     mView.onSuccess(LiveConstants.AUDIENCE_COUNT, null);

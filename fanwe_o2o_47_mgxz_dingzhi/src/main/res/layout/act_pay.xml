@@ -85,6 +85,17 @@
                     </LinearLayout>
 
                     <Button
+                        android:id="@+id/act_quanlist_btn"
+                        android:layout_width="fill_parent"
+                        android:layout_height="45dip"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/selector_main_color_corner"
+                        android:text="查看消费券"
+                        android:textColor="@color/white"
+                        android:textSize="19.0sp"
+                        android:visibility="gone" />
+                    <Button
                         android:id="@+id/act_pay_btn_pay"
                         android:layout_width="fill_parent"
                         android:layout_height="45dip"

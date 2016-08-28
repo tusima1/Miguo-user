@@ -14,6 +14,9 @@ public class MalipayModel
 	private String order_spec;
 	private String sign;
 	private String sign_type;
+	private String _input_charset;
+	private String service;
+	private String payment_type;
 
 	public String getSubject()
 	{
@@ -125,4 +128,27 @@ public class MalipayModel
 		this.sign_type = sign_type;
 	}
 
+	public String get_input_charset() {
+		return _input_charset;
+	}
+
+	public void set_input_charset(String _input_charset) {
+		this._input_charset = _input_charset;
+	}
+
+	public String getService() {
+		return service;
+	}
+
+	public void setService(String service) {
+		this.service = service;
+	}
+
+	public String getPayment_type() {
+		return payment_type;
+	}
+
+	public void setPayment_type(String payment_type) {
+		this.payment_type = payment_type;
+	}
 }
