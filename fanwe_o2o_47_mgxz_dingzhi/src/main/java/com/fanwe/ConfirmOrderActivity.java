@@ -165,8 +165,10 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             public void onRedPaymentChange(String redIds) {
 
                 if (!TextUtils.isEmpty(redIds)) {
-
                     requestBenefit(redIds);
+                }else{
+                    mCheckActModel.setYouhuiPrice(0+"");
+                    mFragFees.refreshData();
                 }
             }
         });
@@ -326,7 +328,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
         mFragFees.setmCheckActModel(mCheckActModel);
         if(!TextUtils.isEmpty(orderId)){
-          findViewById(R.id.act_confirm_order_fl_payments).setVisibility(View.GONE);
+          findViewById(R.id.act_my_red_pay).setVisibility(View.GONE);
         }
     }
 

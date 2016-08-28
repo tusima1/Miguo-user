@@ -1,12 +1,15 @@
 package com.fanwe.user.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.didikee.uilibs.views.customviews.MaxHeightListView;
+import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -84,11 +87,12 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                 tv_pay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Intent intent = new Intent(mActivity, OrderDetailActivity.class);
-//                            intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, Integer.valueOf
-//									(model.getId()).intValue());
-//                            mActivity.startActivity(intent);
-                        MGToast.showToast("test:跳转到订单详情");
+                        if(!TextUtils.isEmpty(model.getOrder_id())) {
+                            Intent intent = new Intent(mActivity, ConfirmOrderActivity.class);
+                            intent.putExtra("orderId", model.getOrder_id());
+                            mActivity.startActivity(intent);
+                        }
+
                     }
                 });
             }
@@ -97,11 +101,11 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                 tv_pay_again.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent intent = new Intent(mActivity, OrderDetailActivity.class);
-//                            intent.putExtra(OrderDetailActivity.EXTRA_ORDER_ID, Integer.valueOf
-//									(model.getId()).intValue());
-//                            mActivity.startActivity(intent);
-                            MGToast.showToast("test:跳转到订单详情");
+                        if(!TextUtils.isEmpty(model.getOrder_id())) {
+                            Intent intent = new Intent(mActivity, ConfirmOrderActivity.class);
+                            intent.putExtra("orderId", model.getOrder_id());
+                            mActivity.startActivity(intent);
+                        }
                     }
                 });
             }

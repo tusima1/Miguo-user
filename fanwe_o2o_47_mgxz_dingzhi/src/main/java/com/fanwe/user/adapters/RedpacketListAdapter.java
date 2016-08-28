@@ -31,6 +31,8 @@ public class RedpacketListAdapter extends BaseAdapter {
 
     List<ModelUserRedPacket> mData;
 
+    private String mRedIds;
+
 
     public RedpacketListAdapter(List<ModelUserRedPacket> mData,boolean isCheckMode) {
         this.mData = mData;
@@ -158,6 +160,7 @@ public class RedpacketListAdapter extends BaseAdapter {
         return convertView;
     }
 
+
     /**
      * 设置红包被 选择列表
      * @param id  商家 ID
@@ -195,20 +198,25 @@ public class RedpacketListAdapter extends BaseAdapter {
      * 获取被选中的item ids.
      * @return 被选中的集合
      */
-    public String  getSelectedItemIds(){
-        StringBuffer str = new StringBuffer();
+    public ArrayList<String>  getSelectedItemIds(){
+        ArrayList<String> selectedItems= new ArrayList<>();
 
         for (ModelUserRedPacket modelUserRedPacket : mData) {
             if (modelUserRedPacket.isChecked()){
-                str.append(modelUserRedPacket.getRed_packet_id()+",");
+                selectedItems.add(modelUserRedPacket.getRed_packet_id());
             }
         }
-        if(str.length()>1){
-            return str.substring(0,str.length()-1);
-        }else{
-            return "";
-        }
+        return selectedItems;
 
+    }
+
+
+    public String getmRedIds() {
+        return mRedIds;
+    }
+
+    public void setmRedIds(String mRedIds) {
+        this.mRedIds = mRedIds;
     }
 
     private class ViewHolder{

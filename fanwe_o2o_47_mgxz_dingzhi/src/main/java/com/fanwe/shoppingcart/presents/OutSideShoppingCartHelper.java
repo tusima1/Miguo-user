@@ -177,10 +177,8 @@ public class OutSideShoppingCartHelper extends Presenter {
         int size = datas.size();
         for(int i = 0 ; i < size ; i++){
             ShoppingCartInfo info = datas.get(i);
-            if(!info.isChecked()){
-                continue;
-            }
-            if(TextUtils.isEmpty(info.getId())||TextUtils.isEmpty(info.getNumber())){
+
+            if(TextUtils.isEmpty(info.getPro_id())||TextUtils.isEmpty(info.getNumber())){
                 continue;
             }
 
@@ -188,7 +186,7 @@ public class OutSideShoppingCartHelper extends Presenter {
                 continue;
             }
             fx_user_ids.append(info.getFx_user_id()==null?"":info.getFx_user_id()+",");
-            goods_ids.append(info.getId()+",");
+            goods_ids.append(info.getPro_id()+",");
             cart_types.append("1,");
             add_goods_num.append(info.getNumber()+",");
         }

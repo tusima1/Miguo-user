@@ -226,6 +226,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 							|| ((maxNumber > -1) && curNumber < maxNumber)) {
 						curNumber++;
 						et_number.setText(String.valueOf(curNumber));
+						model.setNumber(curNumber+"");
 					}
 				}
 			});
@@ -237,6 +238,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 					if (curNumber > 1) {
 						curNumber--;
 						et_number.setText(String.valueOf(curNumber));
+						model.setNumber(curNumber+"");
 					}
 				}
 			});
