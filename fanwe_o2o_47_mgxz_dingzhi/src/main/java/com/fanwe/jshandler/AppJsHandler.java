@@ -169,6 +169,9 @@ public class AppJsHandler extends BaseJsHandler {
 		startActivity(intent);
 	}
 
+	/**
+	 * 去购物车
+	 */
 	@JavascriptInterface
 	public void goCart() {
 
@@ -176,10 +179,15 @@ public class AppJsHandler extends BaseJsHandler {
 		startActivity(intent);
 	}
 
+	/**
+	 * 分享
+	 * @param url
+	 * @param title
+	 * @param summary
+     * @param pic
+     */
 	@JavascriptInterface
 	public void shareStore(String url, String title, String summary, String pic) {
-		// UmengSocialManager.openShare(title, summary, pic, url, mActivity,
-		// null);
 		UmengShareManager.share(mActivity, title, summary, url,
 				UmengShareManager.getUMImage(mActivity, pic), null);
 	}

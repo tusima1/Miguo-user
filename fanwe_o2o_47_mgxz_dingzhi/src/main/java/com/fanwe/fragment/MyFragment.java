@@ -21,7 +21,6 @@ import com.fanwe.MyCommentActivity;
 import com.fanwe.MyEventListActivity;
 import com.fanwe.MyLotteryActivity;
 import com.fanwe.MyMessageActivity;
-import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.UploadUserHeadActivity;
 import com.fanwe.WithdrawLogActivity;
@@ -48,8 +47,8 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.user.view.MyCouponListActivity;
+import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.user.view.RedPacketListActivity;
-import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MoneyFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -552,7 +551,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     //TODO 二维码
     private void clickErWeiMa() {
-        startActivity(RefundApplicationActivity.class);
+//        startActivity(RefundApplicationActivity.class);
 
 //        new OrderHttpHelper(new CallbackView2() {
 //            @Override
