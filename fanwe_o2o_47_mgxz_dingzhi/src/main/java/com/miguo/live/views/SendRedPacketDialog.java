@@ -152,18 +152,19 @@ public class SendRedPacketDialog extends Dialog {
         }
 
         public SendRedPacketDialog create() {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // instantiate the dialog with the custom Theme
             final SendRedPacketDialog dialog = new SendRedPacketDialog(context, R.style.dialog);
             View layout = inflater.inflate(R.layout.dialog_live_red_packet, null);
             dialog.addContentView(layout, new LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
             btnSure = (Button) layout.findViewById(R.id.btn_submit_dialog_red);
             tvShopName = (TextView) layout.findViewById(R.id.shop_name_dialog_live_red_packet);
             cancelBtn = (Button) layout.findViewById(R.id.cancel_btn);
             mTypeGridView = (RecyclerView) layout.findViewById(R.id.type_grid);
             mNumGridView = (RecyclerView) layout.findViewById(R.id.num_grid);
+
             //GridLayout 3列
             GridLayoutManager mgr = new GridLayoutManager(context, 2);
             mTypeGridView.setLayoutManager(mgr);
@@ -183,8 +184,13 @@ public class SendRedPacketDialog extends Dialog {
                     outRect.top = dp12;
                 }
             });
+
+
+
             tvShopName.setText(CurLiveInfo.modelShop.getShop_name());
             redList = new ArrayList<ModelHandOutRedPacket>();
+
+
             View.OnClickListener onClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -195,10 +201,17 @@ public class SendRedPacketDialog extends Dialog {
                     }
                 }
             };
+
+
+
+
             redTypeAdapter = new RedTypeAdapter(redList, context);
+
             if (myItemClickListenerType != null) {
                 redTypeAdapter.setOnItemClickListener(myItemClickListenerType);
             }
+
+
             //设置适配器
             mTypeGridView.setAdapter(redTypeAdapter);
 

@@ -202,7 +202,6 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             case 1:
                 mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_collection);
                 break;
-
             default:
                 break;
         }

@@ -47,163 +47,152 @@ import com.unionpay.UPPayAssistEx;
 
 import java.math.BigDecimal;
 
-public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler{
-	@ViewInject(R.id.tv_money)
-	private TextView mTv_money;
+public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler {
+    @ViewInject(R.id.tv_money)
+    private TextView mTv_money;
 
-	@ViewInject(R.id.act_confirm_order_ptrsv_all)
-	private PullToRefreshScrollView mPtrsvAll;
+    @ViewInject(R.id.act_confirm_order_ptrsv_all)
+    private PullToRefreshScrollView mPtrsvAll;
 
-	@ViewInject(R.id.act_confirm_order_btn_confirm_order)
-	private Button mBtnConfirmOrder;
+    @ViewInject(R.id.act_confirm_order_btn_confirm_order)
+    private Button mBtnConfirmOrder;
 
-	/** 00:正式，01:测试 */
-	private static final String UPACPAPP_MODE = "00";
+    /**
+     * 00:正式，01:测试
+     */
+    private static final String UPACPAPP_MODE = "00";
 
-	protected OrderDetailPaymentsFragment mFragPayments;
-	protected OrderDetailAccountPaymentFragment mFragAccountPayment;
-	protected OrderDetailFeeFragment mFragFees;
+    protected OrderDetailPaymentsFragment mFragPayments;
+    protected OrderDetailAccountPaymentFragment mFragAccountPayment;
+    protected OrderDetailFeeFragment mFragFees;
 
-	protected PayResultModel mActModel;
+    protected PayResultModel mActModel;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setmTitleType(TitleType.TITLE);
-		setContentView(R.layout.act_top_up);
-		init();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setmTitleType(TitleType.TITLE);
+        setContentView(R.layout.act_top_up);
+        init();
+    }
 
-	private void init()
-	{
-		initTitle();
-		initClick();
-		addFragment();
-		initPullToRefreshScrollView();
-	}
+    private void init() {
+        initTitle();
+        initClick();
+        addFragment();
+        initPullToRefreshScrollView();
+    }
 
-	private void initClick()
-	{
-		mBtnConfirmOrder.setOnClickListener(this);
-	}
+    private void initClick() {
+        mBtnConfirmOrder.setOnClickListener(this);
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.act_confirm_order_btn_confirm_order:
-			if (v.isClickable()) {
-				v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
-				v.setClickable(false);
-				//60s可点
-				
-			}else{
-				v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
-				v.setClickable(true);
-			}
-			clickBt();
-			break;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.act_confirm_order_btn_confirm_order:
+                if (v.isClickable()) {
+                    v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
+                    v.setClickable(false);
+                    //60s可点
 
-		default:
-			break;
-		}
-	}
+                } else {
+                    v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
+                    v.setClickable(true);
+                }
+                clickBt();
+                break;
 
-	private void clickBt() 
-	{
-		if(TextUtils.isEmpty(mFragPayments.getPaymentId()) &&  mFragAccountPayment.getUseAccountMoney() == 0)
-		{
-			SDToast.showToast("请选择支付方式");
-			return;
-		}
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_fx");
-		model.putAct("upgrade_commit");
-		if (mFragPayments != null)
-		{
-			model.put("id",mFragPayments.getPaymentId());
-		}
-		if (mFragAccountPayment != null)
-		{
-			model.put("all_account_money", mFragAccountPayment.getUseAccountMoney());
-		}
-		
-		SDRequestCallBack<PayActModel> handler = new SDRequestCallBack<PayActModel>() {
+            default:
+                break;
+        }
+    }
 
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
+    private void clickBt() {
+        if (TextUtils.isEmpty(mFragPayments.getPaymentId()) && mFragAccountPayment.getUseAccountMoney() == 0) {
+            SDToast.showToast("请选择支付方式");
+            return;
+        }
+        RequestModel model = new RequestModel();
+        model.putCtl("uc_fx");
+        model.putAct("upgrade_commit");
+        if (mFragPayments != null) {
+            model.put("id", mFragPayments.getPaymentId());
+        }
+        if (mFragAccountPayment != null) {
+            model.put("all_account_money", mFragAccountPayment.getUseAccountMoney());
+        }
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1)
-				{
-					mActModel = actModel.getResult();
-					if(mActModel != null)
-					{
-						payMent();
-					}else
-					{
-						Intent intent = new Intent(ConfirmTopUpActivity.this,MemberRankActivity.class);
-						startActivity(intent);
-					}
-				}
-			}
+        SDRequestCallBack<PayActModel> handler = new SDRequestCallBack<PayActModel>() {
 
-			@Override
-			public void onFailure(HttpException error, String msg) {
+            @Override
+            public void onStart() {
+                SDDialogManager.showProgressDialog("请稍候...");
+            }
 
-			}
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() == 1) {
+                    mActModel = actModel.getResult();
+                    if (mActModel != null) {
+                        payMent();
+                    } else {
+                        Intent intent = new Intent(ConfirmTopUpActivity.this, MemberRankActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            }
 
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
+            @Override
+            public void onFailure(HttpException error, String msg) {
 
-	}
+            }
 
-	protected void payMent() {
-		if (mActModel == null) 
-		{
-			return;
-		}
-		String payAction = mActModel.getPayment_name();
-		String className = mActModel.getClass_name();
-		if (TextUtils.isEmpty(payAction)) // wap
-		{
-			Intent intent = new Intent(App.getApplication(),
-					AppWebViewActivity.class);
-			intent.putExtra(AppWebViewActivity.EXTRA_URL, payAction);
-			startActivity(intent);
-			return;
-		} else
-		{
-			if (PaymentType.MALIPAY.equals(className)
-					|| PaymentType.ALIAPP.equals(className)) // 支付宝sdk新
-			{
-				payMalipay();
-			} else if (PaymentType.WXAPP.equals(className)) // 微信
-			{
-				payWxapp();
-			} else if (PaymentType.UPACPAPP.equals(className)) // 银联支付
-			{
-				payUpacpapp();
-			}
-		}
+            @Override
+            public void onFinish() {
+                SDDialogManager.dismissProgressDialog();
+            }
+        };
+        InterfaceServer.getInstance().requestInterface(model, handler);
 
-	}
+    }
 
-	private void initTitle() {
-		mTitle.setMiddleTextTop("确认支付");
-	}
+    protected void payMent() {
+        if (mActModel == null) {
+            return;
+        }
+        String payAction = mActModel.getPayment_name();
+        String className = mActModel.getClass_name();
+        if (TextUtils.isEmpty(payAction)) // wap
+        {
+            Intent intent = new Intent(App.getApplication(),
+                    AppWebViewActivity.class);
+            intent.putExtra(AppWebViewActivity.EXTRA_URL, payAction);
+            startActivity(intent);
+            return;
+        } else {
+            if (PaymentType.MALIPAY.equals(className)
+                    || PaymentType.ALIAPP.equals(className)) // 支付宝sdk新
+            {
+                payMalipay();
+            } else if (PaymentType.WXAPP.equals(className)) // 微信
+            {
+                payWxapp();
+            } else if (PaymentType.UPACPAPP.equals(className)) // 银联支付
+            {
+                payUpacpapp();
+            }
+        }
 
-	private void addFragment() {
-		// 支付方式列表
-		mFragPayments = new OrderDetailPaymentsFragment();
+    }
+
+    private void initTitle() {
+        mTitle.setMiddleTextTop("确认支付");
+    }
+
+    private void addFragment() {
+        // 支付方式列表
+        mFragPayments = new OrderDetailPaymentsFragment();
 //		mFragPayments.setmListener(new OrderDetailPaymentsFragmentListener() {
 //			@Override
 //			public void onPaymentChange(PaymentTypeInfo model) {
@@ -212,347 +201,351 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 //
 //
 //		});
-		getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
-				mFragPayments);
+        getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
+                mFragPayments);
 
-		// 余额支付
-		mFragAccountPayment = new OrderDetailAccountPaymentFragment();
-		mFragAccountPayment
-				.setmListener(new OrderDetailAccountPaymentFragmentListener() {
-					@Override
-					public void onPaymentChange(boolean isSelected) {
-						// requestCalculate();
-					}
-				});
-		getSDFragmentManager()
-				.replace(R.id.act_confirm_order_fl_account_payments,
-						mFragAccountPayment);
+        // 余额支付
+        mFragAccountPayment = new OrderDetailAccountPaymentFragment();
+        mFragAccountPayment
+                .setmListener(new OrderDetailAccountPaymentFragmentListener() {
+                    @Override
+                    public void onPaymentChange(boolean isSelected) {
+                        // requestCalculate();
+                    }
+                });
+        getSDFragmentManager()
+                .replace(R.id.act_confirm_order_fl_account_payments,
+                        mFragAccountPayment);
 
-		// 费用信息
-		mFragFees = new OrderDetailFeeFragment();
-		getSDFragmentManager().replace(R.id.act_confirm_order_fl_fees,
-				mFragFees);
-	}
+        // 费用信息
+        mFragFees = new OrderDetailFeeFragment();
+        getSDFragmentManager().replace(R.id.act_confirm_order_fl_fees,
+                mFragFees);
+    }
 
-	private void initPullToRefreshScrollView() {
-		mPtrsvAll.setMode(Mode.PULL_FROM_START);
-		mPtrsvAll.setOnRefreshListener(new OnRefreshListener2<ScrollView>() {
+    private void initPullToRefreshScrollView() {
+        mPtrsvAll.setMode(Mode.PULL_FROM_START);
+        mPtrsvAll.setOnRefreshListener(new OnRefreshListener2<ScrollView>() {
 
-			@Override
-			public void onPullDownToRefresh(
-					PullToRefreshBase<ScrollView> refreshView) {
-				requestData();
-			}
+            @Override
+            public void onPullDownToRefresh(
+                    PullToRefreshBase<ScrollView> refreshView) {
+                requestData();
+            }
 
-			@Override
-			public void onPullUpToRefresh(
-					PullToRefreshBase<ScrollView> refreshView) {
+            @Override
+            public void onPullUpToRefresh(
+                    PullToRefreshBase<ScrollView> refreshView) {
 
-			}
+            }
 
-		});
-		mPtrsvAll.setRefreshing();
-	}
+        });
+        mPtrsvAll.setRefreshing();
+    }
 
-	protected void requestData() {
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_fx");
-		model.putAct("upgrade");
-		SDRequestCallBack<Cart_checkActModel> handler = new SDRequestCallBack<Cart_checkActModel>() {
+    protected void requestData() {
+        RequestModel model = new RequestModel();
+        model.putCtl("uc_fx");
+        model.putAct("upgrade");
+        SDRequestCallBack<Cart_checkActModel> handler = new SDRequestCallBack<Cart_checkActModel>() {
 
-			@Override
-			public void onStart() {
-				SDDialogManager.showProgressDialog("正在加载");
-			}
+            @Override
+            public void onStart() {
+                SDDialogManager.showProgressDialog("正在加载");
+            }
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
 
-				dealRequestDataSuccess(actModel);
+                dealRequestDataSuccess(actModel);
 
-			}
+            }
 
-			@Override
-			public void onFailure(HttpException error, String msg) {
+            @Override
+            public void onFailure(HttpException error, String msg) {
 
-			}
+            }
 
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-				mPtrsvAll.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-	}
+            @Override
+            public void onFinish() {
+                SDDialogManager.dismissProgressDialog();
+                mPtrsvAll.onRefreshComplete();
+            }
+        };
+        InterfaceServer.getInstance().requestInterface(model, handler);
+    }
 
-	protected void dealRequestDataSuccess(Cart_checkActModel actModel) {
-		if (actModel == null) {
-			return;
-		}
-		BigDecimal bd = new BigDecimal(actModel.getFee());
-		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-		SDViewBinder.setTextView(mTv_money, "￥"+String.valueOf(bd));
-		// 支付方式列表
-		//mFragPayments.setmCheckActModel(actModel);
-		// 余额支付
-		//mFragAccountPayment.setmCheckActModel(actModel);
-	}
+    protected void dealRequestDataSuccess(Cart_checkActModel actModel) {
+        if (actModel == null) {
+            return;
+        }
+        try {
+            BigDecimal bd = new BigDecimal(actModel.getFee());
+            if (bd != null) {
+                bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+                SDViewBinder.setTextView(mTv_money, "￥" + String.valueOf(bd));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	/**
-	 * 支付宝sdk支付(新)
-	 */
-	private void payMalipay() {
-		if (mActModel == null) {
-			return;
-		}
-		MalipayModel model = mActModel.getMalipay();
-		if (model == null) {
-			SDToast.showToast("获取支付宝支付参数失败");
-			return;
-		}
+        // 支付方式列表
+        //mFragPayments.setmCheckActModel(actModel);
+        // 余额支付
+        //mFragAccountPayment.setmCheckActModel(actModel);
+    }
 
-		String orderSpec = model.getOrder_spec();
+    /**
+     * 支付宝sdk支付(新)
+     */
+    private void payMalipay() {
+        if (mActModel == null) {
+            return;
+        }
+        MalipayModel model = mActModel.getMalipay();
+        if (model == null) {
+            SDToast.showToast("获取支付宝支付参数失败");
+            return;
+        }
 
-		String sign = model.getSign();
+        String orderSpec = model.getOrder_spec();
 
-		String signType = model.getSign_type();
+        String sign = model.getSign();
 
-		if (TextUtils.isEmpty(orderSpec)) {
-			SDToast.showToast("order_spec为空");
-			return;
-		}
+        String signType = model.getSign_type();
 
-		if (TextUtils.isEmpty(sign)) {
-			SDToast.showToast("sign为空");
-			return;
-		}
+        if (TextUtils.isEmpty(orderSpec)) {
+            SDToast.showToast("order_spec为空");
+            return;
+        }
 
-		if (TextUtils.isEmpty(signType)) {
-			SDToast.showToast("signType为空");
-			return;
-		}
+        if (TextUtils.isEmpty(sign)) {
+            SDToast.showToast("sign为空");
+            return;
+        }
 
-		com.fanwe.library.alipay.easy.SDAlipayer payer = new com.fanwe.library.alipay.easy.SDAlipayer(
-				mActivity);
-		payer.setmListener(new com.fanwe.library.alipay.easy.SDAlipayer.SDAlipayerListener() {
+        if (TextUtils.isEmpty(signType)) {
+            SDToast.showToast("signType为空");
+            return;
+        }
 
-			@Override
-			public void onStart() {
+        com.fanwe.library.alipay.easy.SDAlipayer payer = new com.fanwe.library.alipay.easy.SDAlipayer(
+                mActivity);
+        payer.setmListener(new com.fanwe.library.alipay.easy.SDAlipayer.SDAlipayerListener() {
 
-			}
+            @Override
+            public void onStart() {
 
-			@Override
-			public void onFinish(PayResult result) {
-				String info = result.getMemo();
-				String status = result.getResultStatus();
+            }
 
-				if ("9000".equals(status)) // 支付成功
-				{
-					SDToast.showToast("支付成功");
-					Intent intent = new Intent(ConfirmTopUpActivity.this,MemberRankActivity.class);
-					startActivity(intent);
-					finish();
-				} else if ("8000".equals(status)) // 支付结果确认中
-				{
-					SDToast.showToast("支付结果确认中,请等待5分钟");
-					
-				} else {
-					SDToast.showToast(info);
-				}
-			}
+            @Override
+            public void onFinish(PayResult result) {
+                String info = result.getMemo();
+                String status = result.getResultStatus();
 
-			@Override
-			public void onFailure(Exception e, String msg) {
-				if (e != null) {
-					SDToast.showToast("错误:" + e.toString());
-				} else {
-					if (!TextUtils.isEmpty(msg)) {
-						SDToast.showToast(msg);
-					}
-				}
-			}
-		});
-		payer.pay(orderSpec, sign, signType);
-	}
+                if ("9000".equals(status)) // 支付成功
+                {
+                    SDToast.showToast("支付成功");
+                    Intent intent = new Intent(ConfirmTopUpActivity.this, MemberRankActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if ("8000".equals(status)) // 支付结果确认中
+                {
+                    SDToast.showToast("支付结果确认中,请等待5分钟");
 
-	/**
-	 * 银联支付
-	 */
-	private void payUpacpapp() {
-		if (mActModel == null) {
-			return;
-		}
+                } else {
+                    SDToast.showToast(info);
+                }
+            }
 
-		UpacpappModel model = mActModel.getUpacpapp();
-		if (model == null) {
-			SDToast.showToast("获取银联支付参数失败");
-			return;
-		}
+            @Override
+            public void onFailure(Exception e, String msg) {
+                if (e != null) {
+                    SDToast.showToast("错误:" + e.toString());
+                } else {
+                    if (!TextUtils.isEmpty(msg)) {
+                        SDToast.showToast(msg);
+                    }
+                }
+            }
+        });
+        payer.pay(orderSpec, sign, signType);
+    }
 
-		String tn = model.getTn();
-		if (TextUtils.isEmpty(tn)) {
-			SDToast.showToast("tn 为空");
-			return;
-		}
-		UPPayAssistEx.startPayByJAR(mActivity,
-				com.unionpay.uppay.PayActivity.class, null, null, tn,
-				UPACPAPP_MODE);
-	}
+    /**
+     * 银联支付
+     */
+    private void payUpacpapp() {
+        if (mActModel == null) {
+            return;
+        }
 
-	/**
-	 * 微信支付
-	 */
-	private void payWxapp() {
-		if (mActModel == null) {
-			return;
-		}
+        UpacpappModel model = mActModel.getUpacpapp();
+        if (model == null) {
+            SDToast.showToast("获取银联支付参数失败");
+            return;
+        }
 
-		WxappModel model = mActModel.getWxapp();
-		if (model == null) {
-			SDToast.showToast("获取微信支付参数失败");
-			return;
-		}
+        String tn = model.getTn();
+        if (TextUtils.isEmpty(tn)) {
+            SDToast.showToast("tn 为空");
+            return;
+        }
+        UPPayAssistEx.startPayByJAR(mActivity,
+                com.unionpay.uppay.PayActivity.class, null, null, tn,
+                UPACPAPP_MODE);
+    }
 
-		String appId = model.getAppid();
-		if (TextUtils.isEmpty(appId)) {
-			SDToast.showToast("appId为空");
-			return;
-		}
+    /**
+     * 微信支付
+     */
+    private void payWxapp() {
+        if (mActModel == null) {
+            return;
+        }
 
-		String partnerId = model.getPartnerid();
-		if (TextUtils.isEmpty(partnerId)) {
-			SDToast.showToast("partnerId为空");
-			return;
-		}
+        WxappModel model = mActModel.getWxapp();
+        if (model == null) {
+            SDToast.showToast("获取微信支付参数失败");
+            return;
+        }
 
-		String prepayId = model.getPrepayid();
-		if (TextUtils.isEmpty(prepayId)) {
-			SDToast.showToast("prepayId为空");
-			return;
-		}
+        String appId = model.getAppid();
+        if (TextUtils.isEmpty(appId)) {
+            SDToast.showToast("appId为空");
+            return;
+        }
 
-		String nonceStr = model.getNoncestr();
-		if (TextUtils.isEmpty(nonceStr)) {
-			SDToast.showToast("nonceStr为空");
-			return;
-		}
+        String partnerId = model.getPartnerid();
+        if (TextUtils.isEmpty(partnerId)) {
+            SDToast.showToast("partnerId为空");
+            return;
+        }
 
-		String timeStamp = model.getTimestamp();
-		if (TextUtils.isEmpty(timeStamp)) {
-			SDToast.showToast("timeStamp为空");
-			return;
-		}
+        String prepayId = model.getPrepayid();
+        if (TextUtils.isEmpty(prepayId)) {
+            SDToast.showToast("prepayId为空");
+            return;
+        }
 
-		String packageValue = model.getPackagevalue();
-		if (TextUtils.isEmpty(packageValue)) {
-			SDToast.showToast("packageValue为空");
-			return;
-		}
+        String nonceStr = model.getNoncestr();
+        if (TextUtils.isEmpty(nonceStr)) {
+            SDToast.showToast("nonceStr为空");
+            return;
+        }
 
-		String sign = model.getSign();
-		if (TextUtils.isEmpty(sign)) {
-			SDToast.showToast("sign为空");
-			return;
-		}
+        String timeStamp = model.getTimestamp();
+        if (TextUtils.isEmpty(timeStamp)) {
+            SDToast.showToast("timeStamp为空");
+            return;
+        }
 
-		SDWxappPay.getInstance().setAppId(appId);
+        String packageValue = model.getPackagevalue();
+        if (TextUtils.isEmpty(packageValue)) {
+            SDToast.showToast("packageValue为空");
+            return;
+        }
 
-		PayReq req = new PayReq();
-		req.appId = appId;
-		req.partnerId = partnerId;
-		req.prepayId = prepayId;
-		req.nonceStr = nonceStr;
-		req.timeStamp = timeStamp;
-		req.packageValue = packageValue;
-		req.sign = sign;
-		SDWxappPay.getInstance().pay(req);
-	}
+        String sign = model.getSign();
+        if (TextUtils.isEmpty(sign)) {
+            SDToast.showToast("sign为空");
+            return;
+        }
 
-	@Override
-	public void onReq(BaseReq arg0) {
-		
-	}
+        SDWxappPay.getInstance().setAppId(appId);
 
-	@Override
-	public void onResp(BaseResp resp) {
-		int respType = resp.getType();
-		switch (respType)
-		{
-		case ConstantsAPI.COMMAND_PAY_BY_WX:
-			String content = null;
-			switch (resp.errCode)
-			{
-			case 0: // 成功
-				content = "支付成功";
-				Intent intent = new Intent(ConfirmTopUpActivity.this,MemberRankActivity.class);
-				startActivity(intent);
-				break;
-			case -1: // 可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
-				content = "支付失败";
-				break;
-			case -2: // 无需处理。发生场景：用户不支付了，点击取消，返回APP。
-				content = "取消支付";
-				break;
+        PayReq req = new PayReq();
+        req.appId = appId;
+        req.partnerId = partnerId;
+        req.prepayId = prepayId;
+        req.nonceStr = nonceStr;
+        req.timeStamp = timeStamp;
+        req.packageValue = packageValue;
+        req.sign = sign;
+        SDWxappPay.getInstance().pay(req);
+    }
 
-			default:
-				break;
-			}
-			if (content != null)
-			{
-				SDToast.showToast(content);
-			}
-			break;
+    @Override
+    public void onReq(BaseReq arg0) {
 
-		default:
-			break;
-		}
-		finish();
-		
-	}
-	public void sonFragemtMethod() {
-		//mFragAccountPayment.performClick();
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		confirmRankState();
-	}
-	
-	private void confirmRankState() {
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_home");
-		model.putAct("homepage");
-		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_HomeModel>()
-				{
+    }
 
-					@Override
-					public void onStart() {
-						super.onStart();
-						SDDialogManager.showProgressDialog("");
-					}
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo)
-					{
-						if (actModel.getStatus() == 1){
-							int rank = actModel.getDist().getRank();
-							if (rank >=2) {
+    @Override
+    public void onResp(BaseResp resp) {
+        int respType = resp.getType();
+        switch (respType) {
+            case ConstantsAPI.COMMAND_PAY_BY_WX:
+                String content = null;
+                switch (resp.errCode) {
+                    case 0: // 成功
+                        content = "支付成功";
+                        Intent intent = new Intent(ConfirmTopUpActivity.this, MemberRankActivity.class);
+                        startActivity(intent);
+                        break;
+                    case -1: // 可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
+                        content = "支付失败";
+                        break;
+                    case -2: // 无需处理。发生场景：用户不支付了，点击取消，返回APP。
+                        content = "取消支付";
+                        break;
+
+                    default:
+                        break;
+                }
+                if (content != null) {
+                    SDToast.showToast(content);
+                }
+                break;
+
+            default:
+                break;
+        }
+        finish();
+
+    }
+
+    public void sonFragemtMethod() {
+        //mFragAccountPayment.performClick();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        confirmRankState();
+    }
+
+    private void confirmRankState() {
+        RequestModel model = new RequestModel();
+        model.putCtl("uc_home");
+        model.putAct("homepage");
+        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_HomeModel>() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                SDDialogManager.showProgressDialog("");
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() == 1) {
+                    int rank = actModel.getDist().getRank();
+                    if (rank >= 2) {
 //								Intent intent = new Intent(ConfirmTopUpActivity.this,MemberRankActivity.class);
 //								startActivity(intent);
-								SDToast.showToast("升级成功!");
-								finish();
-							}else {
-								//DoNothing
-							}
-						}
-					}
+                        SDToast.showToast("升级成功!");
+                        finish();
+                    } else {
+                        //DoNothing
+                    }
+                }
+            }
 
-					@Override
-					public void onFinish(){
-						SDDialogManager.dismissProgressDialog();
-					}
-				});
-	}
+            @Override
+            public void onFinish() {
+                SDDialogManager.dismissProgressDialog();
+            }
+        });
+    }
 
 }

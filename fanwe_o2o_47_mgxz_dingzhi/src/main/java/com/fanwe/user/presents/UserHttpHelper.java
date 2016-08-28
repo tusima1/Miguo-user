@@ -12,6 +12,12 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+<<<<<<< HEAD
+=======
+import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
+import com.fanwe.user.model.getDistrInfo.ResultDistrInfo;
+import com.fanwe.user.model.getDistrInfo.RootDistrInfo;
+>>>>>>> 977a0fd2e75c4e5e3bb9c3514d360b10a63a2796
 import com.fanwe.user.model.getGroupBuyCoupon.ResultGroupCoupon;
 import com.fanwe.user.model.getGroupBuyCoupon.RootGroupCoupon;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
@@ -132,7 +138,7 @@ public class UserHttpHelper implements IHelper {
     /**
      * 我的战队
      */
-    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize,String user_id) {
+    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize, String user_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("type", type);
@@ -256,17 +262,18 @@ public class UserHttpHelper implements IHelper {
         });
     }
 
-/**
+    /**
      * 团购券列表
-     * @param tag (1 即将过期 /2 未使用 /3 已失效) 不传默认全部
-     * @param tuan_id 团购id
+     *
+     * @param tag      (1 即将过期 /2 未使用 /3 已失效) 不传默认全部
+     * @param tuan_id  团购id
      * @param order_id 用于团购订单支付完成后的团购券列表
      */
-    public void getGroupBuyCouponList(String tag, String tuan_id, String order_id,int page) {
+    public void getGroupBuyCouponList(String tag, String tuan_id, String order_id, int page) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.GROUP_BUY_COUPON_LIST);
-        params.put("page", page+"");
+        params.put("page", page + "");
         if (!TextUtils.isEmpty(tag) && !"0".equals(tag)) {
             params.put("tag", tag);
         }
@@ -288,11 +295,11 @@ public class UserHttpHelper implements IHelper {
                 RootGroupCoupon rootGroupCoupon = gson.fromJson(responseBody, RootGroupCoupon
                         .class);
                 final List<ResultGroupCoupon> result = rootGroupCoupon.getResult();
-                if (result!=null && result.size()>0){
+                if (result != null && result.size() > 0) {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView.onSuccess(UserConstants.GROUP_BUY_COUPON_LIST,result);
+                            mView.onSuccess(UserConstants.GROUP_BUY_COUPON_LIST, result);
                         }
                     });
                 }
@@ -310,6 +317,35 @@ public class UserHttpHelper implements IHelper {
             }
         });
     }
+
+    /**
+     * 我的分销小店基本信息
+     */
+    public void getDistrInfo() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("method", UserConstants.DISTR_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootDistrInfo root = gson.fromJson(responseBody, RootDistrInfo.class);
+                List<ResultDistrInfo> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.DISTR_INFO, null);
+                    return;
+                }
+                List<ModelDistrInfo> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.DISTR_INFO, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
 
     @Override
     public void onDestroy() {

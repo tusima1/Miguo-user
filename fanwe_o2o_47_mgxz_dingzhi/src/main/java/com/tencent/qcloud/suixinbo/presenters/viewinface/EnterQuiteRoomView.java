@@ -9,10 +9,25 @@ import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 public interface EnterQuiteRoomView extends MvpView {
 
 
+    /**
+     * 进入房间成功
+     * @param id_status
+     * @param succ
+     */
     void enterRoomComplete(int id_status, boolean succ);
 
+    /**
+     * 退出房间成功
+     * @param id_status
+     * @param succ
+     * @param liveinfo
+     */
     void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo);
 
+    /**
+     * 有成员退群
+     * @param list
+     */
     void memberQuiteLive(String[] list);
 
     /**

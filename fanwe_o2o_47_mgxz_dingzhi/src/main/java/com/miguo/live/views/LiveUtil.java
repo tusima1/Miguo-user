@@ -86,6 +86,6 @@ public class LiveUtil {
      * @return true 是主播
      */
     public static boolean checkIsHost(){
-        return  MySelfInfo.getInstance().getIdStatus() == Constants.HOST? true :false;
+        return MySelfInfo.getInstance().getIdStatus() == Constants.HOST? true :false;
     }
 }

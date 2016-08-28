@@ -56,7 +56,7 @@
                         android:layout_marginTop="10dp"
                         android:text=""
                         android:textColor="@color/text_hongbao_title"
-                        android:textSize="@dimen/fenxiao_text_city" />
+                        android:textSize="@dimen/text_size_base" />
                 </LinearLayout>
 
                 <LinearLayout

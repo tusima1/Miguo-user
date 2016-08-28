@@ -187,7 +187,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     public String getPath(String name) {
         String sdcardDataDir = "";
         if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-            File file = new File("file:///"+Environment.getExternalStorageDirectory().getAbsolutePath() + "/MiGuoPhoto/");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MiGuoPhoto/");
             if (!file.exists()) {
                 if (file.mkdirs()) {
                     sdcardDataDir = file.getAbsolutePath();
@@ -253,7 +253,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         try {
             String sdcardDataDir = "";
             if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-                File file = new File("file:///"+Environment.getExternalStorageDirectory().getAbsolutePath() + "/MiGuoPhoto/");
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MiGuoPhoto/");
                 if (!file.exists()) {
                     if (file.mkdirs()) {
                         sdcardDataDir = file.getAbsolutePath();
