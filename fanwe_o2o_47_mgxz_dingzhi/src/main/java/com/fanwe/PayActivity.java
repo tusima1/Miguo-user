@@ -50,6 +50,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
+import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.utils.SDFormatUtil;
 import com.fanwe.wxapp.SDWxappPay;

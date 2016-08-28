@@ -160,6 +160,10 @@ public class UserConstants {
      */
     public static final String REFUND_APPLICATION_PAGE = "OrderItemTuangou";
     /**
+     * 退款申请
+     */
+    public static final String REFUND_APPLICATION = "RefundApply";
+    /**
      * 团购券
      */
     public static final String GROUP_BUY_COUPON_LIST = "GroupBuyCouponList";

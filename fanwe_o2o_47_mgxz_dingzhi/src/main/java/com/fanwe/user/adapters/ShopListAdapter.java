@@ -38,8 +38,9 @@ public class ShopListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder=null;
+        ViewHolder holder;
         if (convertView==null){
+            holder=new ViewHolder();
             convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_my_coupon_detail,null);
             holder.tv_shopName= (TextView) convertView.findViewById(R.id.tv_name);
             holder.tv_shopTel= (TextView) convertView.findViewById(R.id.tv_tel);
@@ -47,10 +48,12 @@ public class ShopListAdapter extends BaseAdapter {
             convertView.setTag(holder);
         }
         holder= (ViewHolder) convertView.getTag();
-        ModelShopInfo2 item = mData.get(position);
-        holder.tv_shopName.setText(item.getShop_name());
-        holder.tv_shopTel.setText(item.getTel());
-        holder.tv_shopAddress.setText(item.getAddress());
+        if (mData!=null){
+            ModelShopInfo2 item = mData.get(position);
+            holder.tv_shopName.setText(item.getShop_name());
+            holder.tv_shopTel.setText(item.getTel());
+            holder.tv_shopAddress.setText(item.getAddress());
+        }
         return convertView;
     }
 
