@@ -66,7 +66,7 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 
 	private void resetParams()
 	{
-		this.mPaymentId = "0";
+		this.mPaymentId = "";
 	}
 
 	private void bindData()

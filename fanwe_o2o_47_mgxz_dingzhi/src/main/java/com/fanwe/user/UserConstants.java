@@ -180,4 +180,10 @@ public class UserConstants {
      * 二维码
      */
     public static final String QR_SHOP_CARD = "MyShopNameCard";
+    /**
+     * 用户升级
+     */
+    public static final String USER_UPGRADE_ORDER = "UserUpgradeOrder";
+    public static final String USER_UPGRADE_ORDER_GET = "UserUpgradeOrderGet";
+    public static final String USER_UPGRADE_ORDER_POST = "UserUpgradeOrderPost";
 }
