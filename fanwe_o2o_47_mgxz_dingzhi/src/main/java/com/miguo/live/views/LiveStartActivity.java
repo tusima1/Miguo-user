@@ -16,6 +16,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
+import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -27,6 +28,7 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.views.definetion.IntentKey;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -59,7 +61,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
         ActLiveStartBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_start);
         dataBindingLiveStart = new DataBindingLiveStart();
-
+        isShare = false;
         binding.setLive(dataBindingLiveStart);
         mLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this, this);
         tencentHttpHelper = new TencentHttpHelper(this);
@@ -160,9 +162,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
     @Override
     protected void onResume() {
         super.onResume();
-        isShare = false;
-
-
+        if(isShare){
+             createAvRoom();
+        }
     }
 
     private void startLive() {
@@ -181,13 +183,18 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-            //  UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
-            createAvRoom();
+              UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+//            createAvRoom();
+            if(isShare){
+//            createAvRoom();
+            }
+            isShare = true;
         } else {
             //未认证的，去认证
             startActivity(new Intent(this, LiveAuthActivity.class));
         }
     }
+
 
     public void goToLoginActivity() {
         Intent intent = new Intent(LiveStartActivity.this, LoginActivity.class);
@@ -203,6 +210,14 @@ public class LiveStartActivity extends Activity implements CallbackView {
             dataBindingLiveStart.shopName.set(CurLiveInfo.modelShop.getShop_name());
             return;
         }
+    }
+
+
+    /**
+     * 分享
+     */
+    private void clickShare() {
+        UmengShareManager.share(this, "", "用户直播分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 
     /**
@@ -286,6 +301,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
         Intent intent = new Intent(this, LiveActivity.class);
         intent.putExtra(Constants.ID_STATUS, Constants.HOST);
+        intent.putExtra(IntentKey.IS_ANCHOR, true);
         MySelfInfo.getInstance().setIdStatus(Constants.HOST);
         MySelfInfo.getInstance().setJoinRoomWay(true);
         String nickName = "直播";

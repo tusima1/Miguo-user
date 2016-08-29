@@ -250,6 +250,10 @@ public class SendRedPacketDialog extends Dialog {
             return dialog;
         }
 
+        /**
+         * 设置发送红包监听
+         * @param sendListener
+         */
         public void setSendListener(View.OnClickListener sendListener) {
             this.sendListener = sendListener;
         }
