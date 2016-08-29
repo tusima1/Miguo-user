@@ -715,7 +715,7 @@
 ////            recordBtn.setVisibility(View.VISIBLE);
 ////            recordBtn.setOnClickListener(this);
 //
-//        initBackDialog();//退出的第一个界面,问你是否退出
+//        showBackDialog();//退出的第一个界面,问你是否退出
 //        initPushDialog();
 ////            initRecordDialog();
 //        //录制功能
@@ -985,7 +985,7 @@
 //    /**
 //     * 退出直播对话框
 //     */
-//    private void initBackDialog() {
+//    private void showBackDialog() {
 //        backDialog = new Dialog(this, R.style.dialog);
 //        backDialog.setContentView(R.layout.dialog_live_host_exit_1);
 //        Window window = backDialog.getWindow();

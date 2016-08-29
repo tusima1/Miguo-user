@@ -101,7 +101,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         if (v == iv_close) {
             //关闭
             if (mActivity != null) {
-                mActivity.onBackPressed();
+                mActivity.showBackDialog();
             }
         } else if (v == iv_photo) {
             //切换摄像头
