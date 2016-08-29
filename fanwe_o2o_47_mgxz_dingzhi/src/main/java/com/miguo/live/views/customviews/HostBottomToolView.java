@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -29,7 +30,9 @@ import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.SendRedPacketDialog;
+import com.miguo.live.views.definetion.LogTag;
 import com.miguo.live.views.dialog.RedPacketDialog;
+import com.miguo.live.views.utils.ToasUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
@@ -189,45 +192,52 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         liveHttpHelper.getHandOutRedPacket(CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
 
 
-        RedPacketDialog redPacketDialog = new RedPacketDialog(getContext());
-        redPacketDialog.show();
+//        RedPacketDialog redPacketDialog = new RedPacketDialog(getContext());
+//        redPacketDialog.show();
 
 
 
-//        if (dialogSendRedPacket == null) {
-//            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(mActivity);
-//            builder.setItemClickType(this);
-//            builder.setItemClickNum(this);
-//            builder.setSendListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //点击确定按钮，发送红包
-//                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
-//                        if (dialogSendRedPacket != null) {
-//                            dialogSendRedPacket.dismiss();
-//                        }
-//                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-//                                currModelHandOutRedPacket.getRed_packet_type(), strNum, currModelHandOutRedPacket.getRed_packet_amount());
-//                    }
-//                    dialogSendRedPacket.dismiss();
-//                }
-//            });
-//            builder.setCancelListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (dialogSendRedPacket.isShowing()) {
-//                        dialogSendRedPacket.dismiss();
-//                    }
-//                }
-//            });
-//            dialogSendRedPacket = builder.create();
-//        }
-//        dialogSendRedPacket.show();
+        if (dialogSendRedPacket == null) {
+            SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(mActivity);
+            builder.setItemClickType(this);
+            builder.setItemClickNum(this);
+            builder.setSendListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int sendPacketCount = 0;
+                    if(strNum.equals("全部")){
+                        sendPacketCount = Integer.parseInt(currModelHandOutRedPacket.getRed_packets());
+                    }else {
+                        sendPacketCount = Integer.parseInt(strNum);
+                    }
+                    if(sendPacketCount > Integer.parseInt(currModelHandOutRedPacket.getRed_packets())){
+                        ToasUtil.showToastWithShortTime(getContext(), "选择的红包数量大于可用红包数量！");
+                        return;
+                    }
+                    //点击确定按钮，发送红包
+                    if (currModelHandOutRedPacket != null && !TextUtils.isEmpty(strNum)) {
+                        if (dialogSendRedPacket != null) {
+                            dialogSendRedPacket.dismiss();
+                        }
+                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                                currModelHandOutRedPacket.getRed_packet_type(), sendPacketCount + "", currModelHandOutRedPacket.getRed_packet_amount());
+                    }
+                    dialogSendRedPacket.dismiss();
+                }
+            });
+            builder.setCancelListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (dialogSendRedPacket.isShowing()) {
+                        dialogSendRedPacket.dismiss();
+                    }
+                }
+            });
+            dialogSendRedPacket = builder.create();
+        }
+        dialogSendRedPacket.show();
 
-
-
-//        initNum();
-//        dialogSendRedPacket.updateDatasNum(redNumDatas);
+        initNum();
     }
 
     ArrayList<ModelRedNum> redNumDatas;
@@ -253,6 +263,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         modelRedNum = new ModelRedNum();
         modelRedNum.setName("全部");
         redNumDatas.add(modelRedNum);
+        dialogSendRedPacket.updateDatasNum(redNumDatas);
     }
 
     /**
@@ -318,8 +329,13 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 
     ArrayList<ModelHandOutRedPacket> datas;
 
+
+
     @Override
     public void onSuccess(String method, List datas) {
+        /**
+         * 选择红包类型数据
+         */
         if (LiveConstants.HAND_OUT_RED_PACKET_GET.equals(method)) {
             this.datas = (ArrayList<ModelHandOutRedPacket>) datas;
             Message message = new Message();
@@ -393,7 +409,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         //改变红包数量的选中状态
         ModelRedNum tempBean = redNumDatas.get(postion);
         strNum = tempBean.getName();
-
+        Log.d(LogTag.HIJASON, getClass().getSimpleName() + " -> " + "onItemClickNum: " + strNum);
         for (ModelRedNum modelRedNum : redNumDatas) {
             modelRedNum.setChecked(false);
         }

@@ -9,6 +9,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
@@ -19,6 +20,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Cart_checkActModel;
@@ -30,6 +32,11 @@ import com.fanwe.model.Uc_HomeModel;
 import com.fanwe.model.UpacpappModel;
 import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.RefreshCalbackView;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.PaymentTypeInfo;
+import com.fanwe.shoppingcart.presents.CommonShoppingHelper;
+import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.wxapp.SDWxappPay;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -38,6 +45,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.utils.MGUIUtil;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -46,8 +54,9 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.unionpay.UPPayAssistEx;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler {
+public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler, RefreshCalbackView, CallbackView2 {
     @ViewInject(R.id.tv_money)
     private TextView mTv_money;
 
@@ -68,12 +77,29 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 
     protected PayResultModel mActModel;
 
+    private CommonShoppingHelper commonShoppingHelper;
+    private UserHttpHelper userHttpHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_top_up);
         init();
+    }
+
+    private void getPayment() {
+        if (commonShoppingHelper == null) {
+            commonShoppingHelper = new CommonShoppingHelper(this);
+        }
+        commonShoppingHelper.getPayment();
+    }
+
+    private void postUserUpgradeOrder() {
+        if (userHttpHelper == null) {
+            userHttpHelper = new UserHttpHelper(this, this);
+        }
+        userHttpHelper.postUserUpgradeOrder(mFragPayments.getPaymentId(), "");
     }
 
     private void init() {
@@ -91,6 +117,10 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.act_confirm_order_btn_confirm_order:
+                if (TextUtils.isEmpty(mFragPayments.getPaymentId())) {
+                    SDToast.showToast("请选择支付方式");
+                    return;
+                }
                 if (v.isClickable()) {
                     v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
                     v.setClickable(false);
@@ -109,6 +139,10 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     }
 
     private void clickBt() {
+        if (true) {
+            postUserUpgradeOrder();
+            return;
+        }
         if (TextUtils.isEmpty(mFragPayments.getPaymentId()) && mFragAccountPayment.getUseAccountMoney() == 0) {
             SDToast.showToast("请选择支付方式");
             return;
@@ -230,7 +264,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
             @Override
             public void onPullDownToRefresh(
                     PullToRefreshBase<ScrollView> refreshView) {
-                requestData();
+                getPayment();
             }
 
             @Override
@@ -243,37 +277,37 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         mPtrsvAll.setRefreshing();
     }
 
-    protected void requestData() {
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_fx");
-        model.putAct("upgrade");
-        SDRequestCallBack<Cart_checkActModel> handler = new SDRequestCallBack<Cart_checkActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("正在加载");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-
-                dealRequestDataSuccess(actModel);
-
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-                mPtrsvAll.onRefreshComplete();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
+//    protected void requestData() {
+//        RequestModel model = new RequestModel();
+//        model.putCtl("uc_fx");
+//        model.putAct("upgrade");
+//        SDRequestCallBack<Cart_checkActModel> handler = new SDRequestCallBack<Cart_checkActModel>() {
+//
+//            @Override
+//            public void onStart() {
+//                SDDialogManager.showProgressDialog("正在加载");
+//            }
+//
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//
+//                dealRequestDataSuccess(actModel);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(HttpException error, String msg) {
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                SDDialogManager.dismissProgressDialog();
+//                mPtrsvAll.onRefreshComplete();
+//            }
+//        };
+//        InterfaceServer.getInstance().requestInterface(model, handler);
+//    }
 
     protected void dealRequestDataSuccess(Cart_checkActModel actModel) {
         if (actModel == null) {
@@ -548,4 +582,53 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         });
     }
 
+    /**
+     * 绑定 支付方式
+     *
+     * @param datas
+     */
+    private void bindPayment(List<PaymentTypeInfo> datas) {
+        if (!SDCollectionUtil.isEmpty(datas)) {
+            if (mFragPayments != null)
+                mFragPayments.setListPayment(datas);
+        }
+    }
+
+    @Override
+    public void onFailue(String method, String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, final List datas) {
+        switch (method) {
+            case ShoppingCartconstants.GET_PAYMENT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bindPayment(datas);
+                        mPtrsvAll.onRefreshComplete();
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

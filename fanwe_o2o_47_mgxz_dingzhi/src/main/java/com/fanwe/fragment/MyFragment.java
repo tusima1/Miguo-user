@@ -13,8 +13,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
+import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
+import com.fanwe.DistributionWithdrawActivity;
+import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyCommentActivity;
@@ -50,6 +53,7 @@ import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
+import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.MoneyFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -120,12 +124,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.ll_my_collect)
     private LinearLayout mLl_my_collect; // 我的收藏
 
-    /*
-     * @ViewInject(R.id.ll_my_event) private LinearLayout mLl_my_event; // 我的活动
-     *
-     * @ViewInject(R.id.ll_my_lottery) private LinearLayout mLl_my_lottery; //
-     * 我的抽奖
-     */
     @ViewInject(R.id.ll_comments)
     private LinearLayout mLl_comments;
 
@@ -144,18 +142,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     //    private TextView mTv_totalMomey;// 总佣金
     private TextView mTv_tixian;// 提现现金
     private TextView mTv_used;// 已使用现金
-    // private TextView mTv_place;
-    /*
-     * private LinearLayout mll_hongbao; private TextView mTv_hongbao;
-	 */
     private TextView mTv_Predict;
 
 
     private PhotoHandler mPhotoHandler;
-
-//    protected User_center_indexActModel mActModel;
-
-
     private String mUserFaceString = "";
     private RedDotView mRDV_Comsume;//消费券
     private RedDotView mRDV_MyShop;//我的小店
@@ -248,15 +238,18 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
             @Override
             public void onClick(View v) {
-//                if (mActModel.getLevel_id() < 2) {
-//                    Intent intent = new Intent(getActivity(), MemberRankActivity.class);
-//                    startActivity(intent);
-//                    SDToast.showToast("您还没有提现权限");
-//                } else {
-//                    Intent intent = new Intent(getActivity(), DistributionWithdrawActivity.class);
-//                    intent.putExtra("money", mActModel.getUser_data().getFx_money() + "");
-//                    startActivity(intent);
-//                }
+                String fx_level = modelPersonalHome.getFx_level();
+                int level = MGStringFormatter.getInt(fx_level);
+                if (level < 2) {
+                    Intent intent = new Intent(getActivity(), MemberRankActivity.class);
+                    startActivity(intent);
+                    SDToast.showToast("您还没有提现权限");
+                } else {
+                    Intent intent = new Intent(getActivity(), DistributionWithdrawActivity.class);
+                    intent.putExtra("money", modelPersonalHome.getWithdrawals());
+                    intent.putExtra("money_type",2);
+                    startActivity(intent);
+                }
             }
         });
         //TODO 我的战队
@@ -266,6 +259,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mLl_Predict.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                MGToast.showToast("去我的战队");
 //                Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
 //                intent.putExtra("yes", true);
 //                intent.putExtra("money", mActModel.getYuji());
@@ -383,12 +377,12 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         httpHelper.getPersonalHome();
     }
 
-    protected void bindData(ModelPersonalHome personalHome) {
-        if (personalHome == null) {
+    protected void bindData() {
+        if (modelPersonalHome == null) {
             MGLog.e("personalHome 为null");
             return;
         }
-        String fx_level = personalHome.getFx_level();
+        String fx_level = modelPersonalHome.getFx_level();
         if ("1".equals(fx_level)) {
             mIv_vip.setImageResource(R.drawable.ic_rank_3);
         } else if ("2".equals(fx_level)) {
@@ -399,13 +393,13 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
 //        SDViewBinder.setTextView(mTv_tixian, MoneyFormat.format(userData.getFx_money()));
         //可提现
-        SDViewBinder.setTextView(mTv_tixian, "￥ " + personalHome.getWithdrawals());
+        SDViewBinder.setTextView(mTv_tixian, "￥ " + modelPersonalHome.getWithdrawals());
 //        SDViewBinder.setTextView(mTv_totalMomey, MoneyFormat.format(userData.getFx_total_balance()));
         //已使用
-        SDViewBinder.setTextView(mTv_used, MoneyFormat.format(personalHome.getUse_money() * 1.0f), "￥ 0.00");
+        SDViewBinder.setTextView(mTv_used, MoneyFormat.format(modelPersonalHome.getUse_money() * 1.0f), "￥ 0.00");
 
         //预计可提现佣金
-        SDViewBinder.setTextView(mTv_Predict, "￥ " + personalHome.getForecast_estimated_money(), "￥ 0.00");
+        SDViewBinder.setTextView(mTv_Predict, "￥ " + modelPersonalHome.getForecast_estimated_money(), "￥ 0.00");
 //        SDViewBinder.setTextView(mTv_Predict, MoneyFormat.format(personalHome.getForecast_estimated_money()), "￥ 0.00");
 //        SDViewBinder.setImageView(actModel.getUser_avatar(), mIv_user_avatar,
 //                ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
@@ -413,34 +407,34 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 //		SDViewBinder.setTextView(mTvUsername, actModel.getUser_name(), "未找到");
 
         //余额
-        SDViewBinder.setTextView(mTvBalance, personalHome.getNow_user_account_money(), "￥ 0.00");
+        SDViewBinder.setTextView(mTvBalance, modelPersonalHome.getNow_user_account_money(), "￥ 0.00");
 
-        SDViewBinder.setTextView(mTv_user_score, personalHome.getNow_user_points(), "0");
-        SDViewBinder.setTextView(mTvCoupons, personalHome.getTotal_user_commission(), "0");
+        SDViewBinder.setTextView(mTv_user_score, modelPersonalHome.getNow_user_points(), "0");
+        SDViewBinder.setTextView(mTvCoupons, modelPersonalHome.getTotal_user_commission(), "0");
         //红包数
-        SDViewBinder.setTextView(mHongbaoCount, personalHome.getRed_packet_count(), "0");
+        SDViewBinder.setTextView(mHongbaoCount, modelPersonalHome.getRed_packet_count(), "0");
         //评价
         SDViewBinder.setTextView(mTv_comments, "0", "0");
-        SDViewBinder.setTextView(mTv_collect, personalHome.getCollect(), "0");
+        SDViewBinder.setTextView(mTv_collect, modelPersonalHome.getCollect(), "0");
 
         //粉丝
-        mTv_FansNum.setText(personalHome.getFans_count());
+        mTv_FansNum.setText(modelPersonalHome.getFans_count());
         //消息
-        mTv_Msg.setText(personalHome.getUser_message());
+        mTv_Msg.setText(modelPersonalHome.getUser_message());
         // 待评价
         String strWaitComment = null;
-        int waitComment = SDTypeParseUtil.getInt(personalHome.getPending_evaluation());
+        int waitComment = SDTypeParseUtil.getInt(modelPersonalHome.getPending_evaluation());
         if (waitComment > 0) {
             strWaitComment = "待评价 " + waitComment;
         }
         SDViewBinder.setTextViewsVisibility(mTv_order_not_comment, strWaitComment);
 
         // 待付款订单数量
-        String notPaidCountStr = personalHome.getPending_pay();
+        String notPaidCountStr = modelPersonalHome.getPending_pay();
         Integer notPaidCount = Integer.parseInt(notPaidCountStr);
         mRDV_orderNotPay.setRedNum(notPaidCount);
         // 消费券
-        String groupVoucherCountStr = personalHome.getCoupons_count();
+        String groupVoucherCountStr = modelPersonalHome.getCoupons_count();
         Integer groupVoucherCount = Integer.parseInt(groupVoucherCountStr);
         mRDV_Comsume.setRedNum(groupVoucherCount);
         // 我的战队
@@ -448,16 +442,16 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mRDV_MyFriend.setRedNum(0);
 
         //待使用
-        String readyForUseCountStr = personalHome.getPending_use();
+        String readyForUseCountStr = modelPersonalHome.getPending_use();
         Integer readyForUseCount = Integer.parseInt(readyForUseCountStr);
         mRDV_orderNotUse.setRedNum(readyForUseCount);
         //待评价
-        String notCommentedCountStr = personalHome.getPending_evaluation();
+        String notCommentedCountStr = modelPersonalHome.getPending_evaluation();
         Integer notCommentedCount = Integer.parseInt(notCommentedCountStr);
         mRDV_orderNotComment.setRedNum(notCommentedCount);
 
         //退款
-        String refundCountStr = personalHome.getRefunt();
+        String refundCountStr = modelPersonalHome.getRefunt();
         Integer refundCount = Integer.parseInt(refundCountStr);
         mRDV_orderNotRefund.setRedNum(refundCount);
     }
@@ -506,6 +500,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mLl_shopping_cart.setOnClickListener(this);
         mLl_my_asset.setOnClickListener(this);
         viewAllOrdersButton.setOnClickListener(this);
+        mTvUsername.setOnClickListener(this);
     }
 
     @Override
@@ -535,6 +530,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(AccountMoneyActivity.class);
         } else if (v == viewAllOrdersButton) {
             clickMyOrderView("all");
+        } else if (v == mTvUsername) {
+            clickUserInfo();
         }
     }
 
@@ -549,52 +546,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         startActivity(intent);
     }
 
-    //TODO 二维码
-    private void clickErWeiMa() {
-//        startActivity(RefundApplicationActivity.class);
-
-//        new OrderHttpHelper(new CallbackView2() {
-//            @Override
-//            public void onSuccess(String responseBody) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(String method, List datas) {
-//
-//            }
-//
-//            @Override
-//            public void onFailue(String responseBody) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish(String method) {
-//
-//            }
-//        }).getOrderItemTuangou(detail_id,tuan_id);
-//        Intent intent = new Intent(getActivity(), DistributionMyQRCodeActivity.class);
-//        Bundle bundle = new Bundle();
-//        if (mActModel == null) {
-//            return;
-//        }
-//        MyDistributionUser_dataModel userData = mActModel.getUser_data();
-//        if (userData == null) {
-//            return;
-//        }
-//        String share_card = userData.getShare_mall_card();
-//        String user_avatar = userData.getUser_avatar();
-//        if ("".equals(share_card) || "".equals(user_avatar)) {
-//            return;
-//        }
-//        bundle.putString("card", share_card);
-//        bundle.putString("photo", user_avatar);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
-
-    }
-
     private void clickMyOrderView(String key) {
         Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
         intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
@@ -603,7 +554,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
 
     private void clickUserInfo() {
-        Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+        Intent intent = new Intent(getActivity(), MemberRankActivity.class);
         startActivity(intent);
     }
 
@@ -774,10 +725,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickMyFriends();
         } else if (v == mRDV_MyNameCard) {
             //我的名片
-            clickErWeiMa();
-//            UserRobRedPacketEndDialogHelper helper=new UserRobRedPacketEndDialogHelper(getActivity(),true);
-//            helper.show();
-//            helper.setQuan("8.8","折扣券");
+            startActivity(DistributionMyQRCodeActivity.class);
         } else if (v == mRDV_orderNotPay) {
             clickMyOrderView("pay_wait");
         } else if (v == mRDV_orderNotUse) {
@@ -800,7 +748,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         switch (method) {
             case UserConstants.PERSONALHOME:
                 modelPersonalHome = (ModelPersonalHome) datas.get(0);
-                bindData(modelPersonalHome);
+                bindData();
                 break;
         }
     }

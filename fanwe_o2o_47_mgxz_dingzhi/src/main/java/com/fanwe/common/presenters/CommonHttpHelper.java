@@ -45,7 +45,7 @@ public class CommonHttpHelper implements IHelper {
     }
 
     /**
-     * 请求门店列表
+     * 请求首页分类图标
      */
     public void getHomeClassifyList() {
         TreeMap<String, String> params = new TreeMap<String, String>();

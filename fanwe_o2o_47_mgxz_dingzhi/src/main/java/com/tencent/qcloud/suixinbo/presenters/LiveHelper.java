@@ -326,6 +326,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             }
             @Override
             public void onSuccess(TIMMessage timMessage) {
+                Log.d(TAG, timMessage.msg.customStr());
 //                Log.d(TAG,"红包发送成功!");
 //                SDToast.showToast("红包发送成功!");
             }
@@ -633,8 +634,11 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     if(mLiveView!=null) {
                         mLiveView.hostBack(identifier, nickname, faceUrl);
                     }
+                    /**
+                     * 收到红包
+                     */
                 case Constants.AVIMCMD_RED_PACKET:
-                    String datas =    json.getString(Constants.CMD_PARAM);
+                    String datas = json.getString(Constants.CMD_PARAM);
                     HashMap<String,String> params = parseRedPacket(datas);
                     if(mLiveView!=null) {
                         mLiveView.getHostRedPacket(params);
