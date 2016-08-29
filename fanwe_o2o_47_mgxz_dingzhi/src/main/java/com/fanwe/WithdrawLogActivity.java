@@ -153,6 +153,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 						Intent intent = new Intent(getApplicationContext(), DistributionWithdrawActivity.class);
 						intent.putExtra("money", Float.parseFloat(resultCommissionLog.getSalary())
 								- Float.parseFloat(resultCommissionLog.getBlocksalary()) + "");
+						intent.putExtra("money_type",2);
 						startActivity(intent);
 					}
 				}

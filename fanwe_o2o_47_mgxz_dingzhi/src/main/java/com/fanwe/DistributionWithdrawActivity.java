@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +22,20 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CommonHelper;
+import com.fanwe.base.Root;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getUserAccount.ModelUserAccount;
 import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
 import com.fanwe.commission.presenter.MoneyHttpHelper;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
@@ -43,13 +43,10 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.listener.NumLimitWatcher;
-import com.fanwe.model.BaseActModel;
 import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Sms_send_sms_codeActModel;
+import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
+import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
@@ -65,7 +62,8 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class DistributionWithdrawActivity extends BaseActivity implements CallbackView2 {
+public class DistributionWithdrawActivity extends BaseActivity implements CallbackView2,
+        CallbackView {
     @ViewInject(R.id.ll_withdraw_type)
     private LinearLayout mLl_withdraw_type;
 
@@ -105,18 +103,22 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     @ViewInject(R.id.ssv_scroll)
     private ScrollView rootView;
 
+    @ViewInject(R.id.tv_card_num)
+    private TextView tv_bank_card_info;
+
     /** 0表示提现至余额 1表示提至银行卡 */
     private int mWithdrawType = 1;
     private String mStrMoney;
     private String mStrBankName;//银行名
     private String mStrBankNumber;//银行卡号
-    private String mStrRealName;//开户名
+    private String mStrBank_UserName;//开户名
     private String mStrCode;//验证码
     private String mStrMobile;//发送验证码的手机号码
-    private Float money;//可提现的金额(佣金和余额两种)
+    private Float money;//可提现的金额(佣金和余额两种)(一个来表示)
     private PopupWindow pop;
     private MoneyHttpHelper moneyHttpHelper;//用户获取用户信息
-    private int money_type=-1;/*0:余额,1:佣金*/
+    private int money_type = 0;/*1:余额,2:佣金*/
+    private CommonHelper commonHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,24 +129,53 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     }
 
     private void init() {
-        initTitle();
+        getIntentData();
         moneyHttpHelper = new MoneyHttpHelper(this);
         moneyHttpHelper.getUserAccount();
-
+        commonHelper = new CommonHelper(null, this);
         registerClick();
         hideKeyboradOnTouchOutside(DistributionWithdrawActivity.this, rootView);
     }
 
+    private void getIntentData() {
+        String moneyFrom = getIntent().getStringExtra("money");
+        if (TextUtils.isEmpty(moneyFrom)) {
+            money = 0f;
+        } else {
+            money = Float.parseFloat(moneyFrom);
+        }
+        money_type = getIntent().getIntExtra("money_type", 0);
+        //获取金额
+        SDViewBinder.setTextView(mTv_circle, "可提现额（元）" + "\n" + money);
+        initTitle();
+    }
+
     private void binData(ModelUserAccount modelUserAccount) {
-        mStrMobile=modelUserAccount.getPhone();
+        mStrMobile = modelUserAccount.getPhone();
         //获取银行卡信息
         String bank_card = modelUserAccount.getBank_card();//银行卡
         String bank_name = modelUserAccount.getBank_name();//银行名
         String bank_type = modelUserAccount.getBank_type();//银行卡类型
         String level_id = modelUserAccount.getLevel_id();//用户等级
-        //获取金额
-        money = Float.parseFloat(getIntent().getStringExtra("money"));
-        SDViewBinder.setTextView(mTv_circle, "可提现额（元）" + "\n" + money);
+        String bank_user = modelUserAccount.getBank_user();//开户名(姓名)
+        if (TextUtils.isEmpty(bank_card) || TextUtils.isEmpty(bank_name) || TextUtils.isEmpty
+                (bank_user)) {
+            tv_bank_card_info.setText("");
+            mLl_bank_info.setVisibility(View.VISIBLE);
+        } else {
+            mStrBank_UserName = bank_user;
+            mStrBankName = bank_name;
+            mStrBankNumber = bank_card;
+            int length = bank_card.length();
+            String bank_card_start = bank_card.substring(0, 4);
+            String bank_card_end = bank_card.substring(length - 4, length);
+            StringBuilder sb = new StringBuilder(bank_card_start);
+            for (int i = 0; i < length - 8; i++) {
+                sb.append("*");
+            }
+            sb.append(bank_card_end);
+            tv_bank_card_info.setText(sb.toString());
+        }
     }
 
     private void initMobile() {
@@ -163,12 +194,14 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
             @Override
             public void onClickSendValidateButton() {
-
                 requestSendCode();
             }
         });
     }
 
+    /**
+     * 绑定手机号
+     */
     private void showBindMobileDialog() {
         Intent intent = new Intent(this, BindMobileActivity.class);
         startActivity(intent);
@@ -178,41 +211,27 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
      * 请求验证码
      */
     protected void requestSendCode() {
-        CommonInterface.requestValidateCode(mStrMobile, 0,
-                new SDRequestCallBack<Sms_send_sms_codeActModel>() {
+        if (TextUtils.isEmpty(mStrMobile)) {
+            showBindMobileDialog();
+            return;
+        }
+        commonHelper.doGetCaptcha(mStrMobile, 3, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
 
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        switch (actModel.getStatus()) {
-                            case 0:
-                                showBindMobileDialog();
-                                break;
-                            case 1:
-                                mBtn_send_code.setmDisableTime(actModel
-                                        .getLesstime());
-                                mBtn_send_code.startTickWork();
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onStart() {
-                        SDDialogManager.showProgressDialog("请稍候");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        SDDialogManager.dismissProgressDialog();
-                    }
-
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-
-                    }
-                });
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Gson gson = new Gson();
+                Root root = gson.fromJson(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                if ("200".equals(statusCode)) {
+                    mBtn_send_code.setmDisableTime(5 * 60);
+                    mBtn_send_code.startTickWork();
+                }
+            }
+        });
     }
 
     private void registerClick() {
@@ -267,11 +286,10 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
     private void initTitle() {
         mTitle.setMiddleTextTop("提现");
-
         mTitle.initRightItem(1);
-
-        mTitle.getItemRight(0).setTextBot("提现日志");
-
+        if (money_type == 2) {
+            mTitle.getItemRight(0).setTextBot("提现日志");
+        }
     }
 
     @Override
@@ -285,7 +303,8 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     private void clickWithdrawLog() {
         // TODO 跳到提现日志界面
         Intent intent = new Intent(this, DistributionWithdrawLogActivity.class);
-        intent.putExtra("money_type",money_type);
+        money_type = 2;
+        intent.putExtra("money_type", money_type);
         startActivity(intent);
     }
 
@@ -295,12 +314,19 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             clickWithDrawType();
         } else if (v == mBtn_submit) {
             clickSubmit();
-        }else if (v==iv_select){
+        } else if (v == iv_select) {
             clickCardSelect();
         }
     }
 
+    /**
+     * 选择:
+     * 目前只有一个选项,不知道什么鬼
+     */
     private void clickCardSelect() {
+        if (mLl_bank_info.getVisibility() == View.VISIBLE) {
+            return;
+        }
         View contentView = LayoutInflater.from(this).inflate(R.layout.item_pop_bankcard, null);
         int width = mEt_money.getWidth();
         int offset = DisplayUtil.dp2px(this, 12);
@@ -317,7 +343,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         pop.setOutsideTouchable(true);
         pop.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         pop.setFocusable(true);
-        pop.showAsDropDown(mLl_withdraw_type,width/2-ox,-offset);
+        pop.showAsDropDown(mLl_withdraw_type, width / 2 - ox, -offset);
     }
 
     private void clickSubmit() {
@@ -325,42 +351,15 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         if (!validateParams()) {
             return;
         }
-
-        RequestModel model = new RequestModel();
-        model.putCtl("fxwithdraw");
-        model.putAct("commit");
-        model.put("money", mStrMoney);
-        model.put("type", mWithdrawType);
-        model.put("bank_name", mStrBankName);
-        model.put("bank_account", mStrBankNumber);
-        model.put("bank_user", mStrRealName);
-        model.put("code", mStrCode);
-
-        InterfaceServer.getInstance().requestInterface(model,
-                new SDRequestCallBack<BaseActModel>() {
-                    @Override
-                    public void onStart() {
-                        SDDialogManager.showProgressDialog("");
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (actModel.getStatus() == 1) {
-                            // 提交成功
-                            mEt_code.setText("");
-                            Intent intent = new Intent(DistributionWithdrawActivity.this,
-                                    DistributionWithdrawLogActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        SDDialogManager.dismissProgressDialog();
-                    }
-                });
-
+        if (money_type == 2) {
+            //佣金提现
+            moneyHttpHelper.getUserCommissionWithdraw(true, mStrMobile, mStrCode, "0", mStrMoney,
+                    mStrBankName, mStrBankNumber, mStrBank_UserName);
+        } else if (money_type == 1) {
+            //余额提现
+            moneyHttpHelper.getUserCommissionWithdraw(false, mStrMobile, mStrCode, "0",
+                    mStrMoney, mStrBankName, mStrBankNumber, mStrBank_UserName);
+        }
     }
 
     private boolean validateParams() {
@@ -374,7 +373,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             case 0:
                 mStrBankName = null;
                 mStrBankNumber = null;
-                mStrRealName = null;
+                mStrBank_UserName = null;
                 break;
             case 1:
                 mStrBankName = mEt_bank_name.getText().toString().trim();
@@ -389,8 +388,8 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
                     return false;
                 }
 
-                mStrRealName = mEt_real_name.getText().toString().trim();
-                if (isEmpty(mStrRealName)) {
+                mStrBank_UserName = mEt_real_name.getText().toString().trim();
+                if (isEmpty(mStrBank_UserName)) {
                     SDToast.showToast("请输入姓名");
                     return false;
                 }
@@ -448,6 +447,8 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     public void onDestroy() {
         mBtn_send_code.stopTickWork();
         super.onDestroy();
+        commonHelper.onDestory();
+        moneyHttpHelper.onDestroy();
     }
 
     @Override
@@ -474,21 +475,32 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (CommissionConstance.USER_ACCOUNT.equals(method)){
+        if (CommissionConstance.USER_ACCOUNT.equals(method)) {
             ResultUserAccount resultUserAccount = (ResultUserAccount) datas.get(0);
             List<ModelUserAccount> body = resultUserAccount.getBody();
-            if (body!=null && body.size()>0){
+            if (body != null && body.size() > 0) {
                 ModelUserAccount modelUserAccount = body.get(0);
                 binData(modelUserAccount);
-            }else {
+            } else {
                 MGToast.showToast("数据获取异常!");
             }
+        }
+        if (CommissionConstance.USER_WITHDRAW.equals(method) || CommissionConstance
+                .USER_WITHDRAW_FX.equals(method)) {
+            mEt_code.setText("");
+            Intent intent = new Intent(DistributionWithdrawActivity.this,
+                    DistributionWithdrawLogActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
     @Override
     public void onFailue(String responseBody) {
-
+        if (CommissionConstance.USER_WITHDRAW.equals(responseBody) || CommissionConstance
+                .USER_WITHDRAW_FX.equals(responseBody)) {
+            MGToast.showToast("提现失败!");
+        }
     }
 
     @Override

@@ -124,12 +124,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @ViewInject(R.id.ll_my_collect)
     private LinearLayout mLl_my_collect; // 我的收藏
 
-    /*
-     * @ViewInject(R.id.ll_my_event) private LinearLayout mLl_my_event; // 我的活动
-     *
-     * @ViewInject(R.id.ll_my_lottery) private LinearLayout mLl_my_lottery; //
-     * 我的抽奖
-     */
     @ViewInject(R.id.ll_comments)
     private LinearLayout mLl_comments;
 
@@ -148,18 +142,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     //    private TextView mTv_totalMomey;// 总佣金
     private TextView mTv_tixian;// 提现现金
     private TextView mTv_used;// 已使用现金
-    // private TextView mTv_place;
-    /*
-     * private LinearLayout mll_hongbao; private TextView mTv_hongbao;
-	 */
     private TextView mTv_Predict;
 
 
     private PhotoHandler mPhotoHandler;
-
-//    protected User_center_indexActModel mActModel;
-
-
     private String mUserFaceString = "";
     private RedDotView mRDV_Comsume;//消费券
     private RedDotView mRDV_MyShop;//我的小店
@@ -261,6 +247,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
                 } else {
                     Intent intent = new Intent(getActivity(), DistributionWithdrawActivity.class);
                     intent.putExtra("money", modelPersonalHome.getWithdrawals());
+                    intent.putExtra("money_type",2);
                     startActivity(intent);
                 }
             }
