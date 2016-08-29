@@ -1,8 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,123 +23,110 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 分销提现日志
- * 
+ *
  * @author Administrator
- * 
+ *
  */
-public class DistributionWithdrawLogActivity extends BaseActivity
-{
+public class DistributionWithdrawLogActivity extends BaseActivity {
 
-	@ViewInject(R.id.ptrlv_content)
-	private PullToRefreshListView mPtrlv_content;
-	
-	@ViewInject(R.id.ll_empty)
-	private LinearLayout ll_empty;
+    @ViewInject(R.id.ptrlv_content)
+    private PullToRefreshListView mPtrlv_content;
 
-	private List<DistributionWithdrawLogModel> mListModel = new ArrayList<DistributionWithdrawLogModel>();
-	private DistributionWithdrawLogAdapter mAdapter;
+    @ViewInject(R.id.ll_empty)
+    private LinearLayout ll_empty;
 
-	private PageModel mPage = new PageModel();
+    private List<DistributionWithdrawLogModel> mListModel = new
+            ArrayList<DistributionWithdrawLogModel>();
+    private DistributionWithdrawLogAdapter mAdapter;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setmTitleType(TitleType.TITLE);
-		setContentView(R.layout.act_distribution_withdraw_log);
-		init();
-	}
+    private PageModel mPage = new PageModel();
 
-	private void init()
-	{
-		initTitle();
-		bindDefaultData();
-		initPullToRefreshListView();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setmTitleType(TitleType.TITLE);
+        setContentView(R.layout.act_distribution_withdraw_log);
+        init();
+    }
 
-	private void bindDefaultData()
-	{
-		mAdapter = new DistributionWithdrawLogAdapter(mListModel, this);
-		mPtrlv_content.setAdapter(mAdapter);
-	}
+    private void init() {
+        initTitle();
+        bindDefaultData();
+        initPullToRefreshListView();
+    }
 
-	private void initTitle()
-	{
-		mTitle.setMiddleTextTop("分销提现日志");
-	}
+    private void bindDefaultData() {
+        mAdapter = new DistributionWithdrawLogAdapter(mListModel, this);
+        mPtrlv_content.setAdapter(mAdapter);
+    }
 
-	private void initPullToRefreshListView()
-	{
-		mPtrlv_content.setMode(Mode.BOTH);
-		mPtrlv_content.setOnRefreshListener(new OnRefreshListener2<ListView>()
-		{
+    private void initTitle() {
+        mTitle.setMiddleTextTop("分销提现日志");
+    }
 
-			@Override
-			public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView)
-			{
-				mPage.resetPage();
-				requestData(false);
-			}
+    private void initPullToRefreshListView() {
+        mPtrlv_content.setMode(Mode.BOTH);
+        mPtrlv_content.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 
-			@Override
-			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView)
-			{
-				if (mPage.increment())
-				{
-					requestData(true);
-				} else
-				{
-					SDToast.showToast("未找到更多数据");
-					mPtrlv_content.onRefreshComplete();
-				}
-			}
-		});
-		mPtrlv_content.setRefreshing();
-	}
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                mPage.resetPage();
+                requestData(false);
+            }
 
-	private void requestData(final boolean isLoadMore)
-	{
-		CommonInterface.requestDistributionWithdrawLog(mPage.getPage(), new SDRequestCallBack<Uc_fxwithdraw_indexActModel>()
-		{
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					List<DistributionWithdrawLogModel> list = actModel.getResult();
-					
-					if (mPage.getPage()==1) {
-						if (list==null || list.size()==0) {
-							ll_empty.setVisibility(View.VISIBLE);
-						}else {
-							ll_empty.setVisibility(View.GONE);
-						}
-					}else {
-						ll_empty.setVisibility(View.GONE);
-					}
-					mPage.update(actModel.getPage());
-					SDViewUtil.updateAdapterByList(mListModel, actModel.getResult(), mAdapter, isLoadMore);
-				}
-			}
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                if (mPage.increment()) {
+                    requestData(true);
+                } else {
+                    SDToast.showToast("未找到更多数据");
+                    mPtrlv_content.onRefreshComplete();
+                }
+            }
+        });
+        mPtrlv_content.setRefreshing();
+    }
 
-			@Override
-			public void onStart()
-			{
-			}
+    private void requestData(final boolean isLoadMore) {
+        CommonInterface.requestDistributionWithdrawLog(mPage.getPage(), new
+				SDRequestCallBack<Uc_fxwithdraw_indexActModel>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() == 1) {
+                    List<DistributionWithdrawLogModel> list = actModel.getResult();
 
-			@Override
-			public void onFinish()
-			{
-				mPtrlv_content.onRefreshComplete();
-			}
+                    if (mPage.getPage() == 1) {
+                        if (list == null || list.size() == 0) {
+                            ll_empty.setVisibility(View.VISIBLE);
+                        } else {
+                            ll_empty.setVisibility(View.GONE);
+                        }
+                    } else {
+                        ll_empty.setVisibility(View.GONE);
+                    }
+                    mPage.update(actModel.getPage());
+                    SDViewUtil.updateAdapterByList(mListModel, actModel.getResult(), mAdapter, isLoadMore);
+                }
+            }
 
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-			}
-		});
-	}
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onFinish() {
+                mPtrlv_content.onRefreshComplete();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+            }
+        });
+    }
 
 }
