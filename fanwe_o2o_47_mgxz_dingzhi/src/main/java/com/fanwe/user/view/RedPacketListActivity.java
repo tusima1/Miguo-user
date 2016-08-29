@@ -40,6 +40,10 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
      */
     private  String mListDeal_id="";
     protected int request_CODE = 100;
+    /**
+     * 选 中的红包集。
+     */
+    private ArrayList<String> mRed_id;
 
     @Override
     protected void init() {
@@ -97,10 +101,9 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     @Override
     protected void onRightImageClick(View v) {
         if(mAdapter!=null) {
-            String selectedIDs = mAdapter.getSelectedItemIds();
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
-            bundle.putString("selectedIDs", selectedIDs);
+            bundle.putStringArrayList("selectedIDs",  mAdapter.getSelectedItemIds());
             intent.putExtras(bundle);
             setResult(request_CODE, intent);
             finish();
@@ -112,6 +115,10 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
         if(intent.hasExtra(ShoppingCartconstants.LIST_DEAL_IDS)){
              mListDeal_id = intent.getStringExtra(ShoppingCartconstants.LIST_DEAL_IDS);
              isCheckMode = true;
+            if(intent.hasExtra(ShoppingCartconstants.RED_IDS)){
+                mRed_id = intent.getStringArrayListExtra(ShoppingCartconstants.RED_IDS);
+            }
+
         }
 
     }
@@ -140,7 +147,7 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     }
 
     @Override
-    public void onSuccess(String method, List datas) {
+    public void onSuccess(final String method, List datas) {
         switch (method){
             case UserConstants.USER_RED_PACKET_LIST:
                 ResultUserRedPacket resultUserRedPacket = (ResultUserRedPacket) datas.get(0);
@@ -153,6 +160,7 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
                     if (Integer.valueOf(page)==1){
                         String page_size = resultUserRedPacket.getPage_size();
                     }
+
                     mAdapter.update(body);
                 }
                 break;
@@ -162,6 +170,17 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if(mRed_id!=null&&mRed_id.size()>0) {
+                                for (int i = 0; i < mData.size(); i++) {
+                                    ModelUserRedPacket modelUserRedPacket = mData
+                                            .get(i);
+                                    if(mRed_id.contains(modelUserRedPacket.getRed_packet_id())){
+                                        modelUserRedPacket.setChecked(true);
+                                    }else{
+                                        modelUserRedPacket.setChecked(false);
+                                    }
+                                }
+                            }
                             mAdapter.update(mData);
                         }
                     });

@@ -15,6 +15,9 @@ import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.view.RedPacketListActivity;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	
 	@ViewInject(R.id.ll_myred)
@@ -27,13 +30,14 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	private TextView mTv_totalRed;
 	
 	protected int request_CODE = 100;
-	protected String mRedIds = "";
+
+	private ArrayList<String> red_packet_list;
 	
 	protected MyredPaymentsFragmentListener mListener;
 
 	private int mId;
 
-
+	String mRedIds = "";
 	
 	public void setmListener(MyredPaymentsFragmentListener listener)
 	{
@@ -79,7 +83,7 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	private void clickMyRed() {
 		if(mCheckActModel!=null&&!TextUtils.isEmpty(mCheckActModel.getId())) {
 			Intent intent = new Intent(getActivity(), RedPacketListActivity.class);
-
+			intent.putStringArrayListExtra(ShoppingCartconstants.RED_IDS,  red_packet_list);
 			intent.putExtra(ShoppingCartconstants.LIST_DEAL_IDS, mCheckActModel.getId());
 			startActivityForResult(intent, request_CODE);
 		}
@@ -92,13 +96,25 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
         {
 			if(data!=null) {
 				Bundle bundle = data.getExtras();
-				mRedIds = bundle.getString("selectedIDs");
+				red_packet_list = bundle.getStringArrayList("selectedIDs");
+
+				StringBuffer mRedIdsBuffer = new StringBuffer();
+				if(red_packet_list!=null&&red_packet_list.size()>0){
+					for (int i = 0; i < red_packet_list.size(); i++) {
+						mRedIdsBuffer.append(red_packet_list.get(i)+",");
+					}
+					mRedIds = mRedIdsBuffer.substring(0,mRedIdsBuffer.length()-1);
+				}else{
+					mRedIds="";
+				}
+
 				if (mListener != null) {
 					mListener.onRedPaymentChange(mRedIds);
 				}
 			}
 		}
 	}
+
 
 	public String getmRedIds() {
 		return mRedIds;

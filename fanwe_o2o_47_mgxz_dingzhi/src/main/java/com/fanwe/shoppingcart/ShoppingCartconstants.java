@@ -21,6 +21,11 @@ public class ShoppingCartconstants {
      * 商品ID 列表。
      */
     public static final String LIST_DEAL_IDS="mListDeal_id";
+    /**
+     *
+     */
+
+    public static final String RED_IDS = "mRedIds";
 
 
     /**

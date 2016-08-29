@@ -66,6 +66,10 @@ public class ShoppingCartInfo implements Serializable {
      * 小计总额。
      */
     private float sumPrice =0.00f;
+    /**
+     * 团购券ID。
+     */
+    private String pro_id;
 
     public void setNumber(String number){
         this.number = number;
@@ -154,5 +158,13 @@ public class ShoppingCartInfo implements Serializable {
 
     public void setFx_user_id(String fx_user_id) {
         this.fx_user_id = fx_user_id;
+    }
+
+    public String getPro_id() {
+        return pro_id;
+    }
+
+    public void setPro_id(String pro_id) {
+        this.pro_id = pro_id;
     }
 }
