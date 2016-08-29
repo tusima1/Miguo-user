@@ -513,6 +513,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mLl_shopping_cart.setOnClickListener(this);
         mLl_my_asset.setOnClickListener(this);
         viewAllOrdersButton.setOnClickListener(this);
+        mTvUsername.setOnClickListener(this);
     }
 
     @Override
@@ -542,6 +543,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(AccountMoneyActivity.class);
         } else if (v == viewAllOrdersButton) {
             clickMyOrderView("all");
+        } else if (v == mTvUsername) {
+            clickUserInfo();
         }
     }
 
@@ -555,6 +558,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
         startActivity(intent);
     }
+
     private void clickMyOrderView(String key) {
         Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
         intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
@@ -563,7 +567,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
 
     private void clickUserInfo() {
-        Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+        Intent intent = new Intent(getActivity(), MemberRankActivity.class);
         startActivity(intent);
     }
 
