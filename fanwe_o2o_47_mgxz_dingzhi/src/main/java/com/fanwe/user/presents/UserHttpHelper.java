@@ -19,6 +19,9 @@ import com.fanwe.user.model.getGroupBuyCoupon.ResultGroupCoupon;
 import com.fanwe.user.model.getGroupBuyCoupon.RootGroupCoupon;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
+import com.fanwe.user.model.getNameCardQR.ModelNameCardQR;
+import com.fanwe.user.model.getNameCardQR.ResultNameCardQR;
+import com.fanwe.user.model.getNameCardQR.RootNameCardQR;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.model.getPersonalHome.ResultPersonalHome;
 import com.fanwe.user.model.getPersonalHome.RootPersonalHome;
@@ -329,16 +332,76 @@ public class UserHttpHelper implements IHelper {
                 RootDistrInfo root = gson.fromJson(responseBody, RootDistrInfo.class);
                 List<ResultDistrInfo> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.DISTR_INFO, null);
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.onSuccess(UserConstants.DISTR_INFO, null);
+                        }
+                    });
                     return;
                 }
-                List<ModelDistrInfo> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.DISTR_INFO, items);
+                final List<ModelDistrInfo> items = result.get(0).getBody();
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onSuccess(UserConstants.DISTR_INFO, items);
+                    }
+                });
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 获取二维码名片
+     */
+    public void getMyShopNameCard(){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.QR_SHOP_CARD);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                List<ResultNameCardQR> result = gson.fromJson(responseBody, RootNameCardQR.class)
+                        .getResult();
+                if (result!=null && result.size()>0){
+                    ResultNameCardQR resultNameCardQR = result.get(0);
+                    if (resultNameCardQR!=null){
+                        final List<ModelNameCardQR> body = resultNameCardQR.getBody();
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            mView.onSuccess(UserConstants.QR_SHOP_CARD,body);
+                            }
+                        });
+                    }
+                }else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.onFailue(UserConstants.QR_SHOP_CARD);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFinish(UserConstants.QR_SHOP_CARD);
+                    }
+                });
             }
         });
     }

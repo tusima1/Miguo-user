@@ -175,4 +175,9 @@ public class UserConstants {
      * 我的分销小店基本信息
      */
     public static final String DISTR_INFO = "DistrInfo";
+
+    /**
+     * 二维码
+     */
+    public static final String QR_SHOP_CARD = "MyShopNameCard";
 }

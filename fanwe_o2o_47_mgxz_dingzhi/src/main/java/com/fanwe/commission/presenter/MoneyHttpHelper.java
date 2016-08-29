@@ -1,16 +1,18 @@
 package com.fanwe.commission.presenter;
 
-import android.util.Log;
-
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.commission.model.CommissionConstance;
+import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
+import com.fanwe.commission.model.getUserAccount.RootUserAccount;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -60,8 +62,34 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("Test","用户信息: "+responseBody);
-//                gson.fromJson(responseBody,)
+//                Log.e("Test","用户信息: "+responseBody);
+                final List<ResultUserAccount> result = gson.fromJson(responseBody, RootUserAccount
+                        .class).getResult();
+                if (result!=null && result.size()>0){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(CommissionConstance.USER_ACCOUNT,result);
+                        }
+                    });
+                }else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onFailue(CommissionConstance.USER_ACCOUNT);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView2.onFinish(CommissionConstance.USER_ACCOUNT);
+                    }
+                });
             }
         });
     }

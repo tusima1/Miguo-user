@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
+import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
@@ -554,53 +555,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
         startActivity(intent);
     }
-
-    //TODO 二维码
-    private void clickErWeiMa() {
-//        startActivity(RefundApplicationActivity.class);
-
-//        new OrderHttpHelper(new CallbackView2() {
-//            @Override
-//            public void onSuccess(String responseBody) {
-//
-//            }
-//
-//            @Override
-//            public void onSuccess(String method, List datas) {
-//
-//            }
-//
-//            @Override
-//            public void onFailue(String responseBody) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish(String method) {
-//
-//            }
-//        }).getOrderItemTuangou(detail_id,tuan_id);
-//        Intent intent = new Intent(getActivity(), DistributionMyQRCodeActivity.class);
-//        Bundle bundle = new Bundle();
-//        if (mActModel == null) {
-//            return;
-//        }
-//        MyDistributionUser_dataModel userData = mActModel.getUser_data();
-//        if (userData == null) {
-//            return;
-//        }
-//        String share_card = userData.getShare_mall_card();
-//        String user_avatar = userData.getUser_avatar();
-//        if ("".equals(share_card) || "".equals(user_avatar)) {
-//            return;
-//        }
-//        bundle.putString("card", share_card);
-//        bundle.putString("photo", user_avatar);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
-
-    }
-
     private void clickMyOrderView(String key) {
         Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
         intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
@@ -780,10 +734,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickMyFriends();
         } else if (v == mRDV_MyNameCard) {
             //我的名片
-            clickErWeiMa();
-//            UserRobRedPacketEndDialogHelper helper=new UserRobRedPacketEndDialogHelper(getActivity(),true);
-//            helper.show();
-//            helper.setQuan("8.8","折扣券");
+            startActivity(DistributionMyQRCodeActivity.class);
         } else if (v == mRDV_orderNotPay) {
             clickMyOrderView("pay_wait");
         } else if (v == mRDV_orderNotUse) {

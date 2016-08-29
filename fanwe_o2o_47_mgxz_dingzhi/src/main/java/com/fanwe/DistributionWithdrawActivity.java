@@ -21,6 +21,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView2;
+import com.fanwe.commission.model.CommissionConstance;
+import com.fanwe.commission.model.getUserAccount.ModelUserAccount;
+import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
+import com.fanwe.commission.presenter.MoneyHttpHelper;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -46,11 +51,13 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 提现
@@ -58,7 +65,7 @@ import java.util.Arrays;
  * @author Administrator
  *
  */
-public class DistributionWithdrawActivity extends BaseActivity {
+public class DistributionWithdrawActivity extends BaseActivity implements CallbackView2 {
     @ViewInject(R.id.ll_withdraw_type)
     private LinearLayout mLl_withdraw_type;
 
@@ -101,13 +108,15 @@ public class DistributionWithdrawActivity extends BaseActivity {
     /** 0表示提现至余额 1表示提至银行卡 */
     private int mWithdrawType = 1;
     private String mStrMoney;
-    private String mStrBankName;
-    private String mStrBankNumber;
-    private String mStrRealName;
-    private String mStrCode;
-    private String mStrMobile;
-    private Float money;
+    private String mStrBankName;//银行名
+    private String mStrBankNumber;//银行卡号
+    private String mStrRealName;//开户名
+    private String mStrCode;//验证码
+    private String mStrMobile;//发送验证码的手机号码
+    private Float money;//可提现的金额(佣金和余额两种)
     private PopupWindow pop;
+    private MoneyHttpHelper moneyHttpHelper;//用户获取用户信息
+    private int money_type=-1;/*0:余额,1:佣金*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +128,21 @@ public class DistributionWithdrawActivity extends BaseActivity {
 
     private void init() {
         initTitle();
-        binData();
+        moneyHttpHelper = new MoneyHttpHelper(this);
+        moneyHttpHelper.getUserAccount();
+
         registerClick();
-        initMobile();
         hideKeyboradOnTouchOutside(DistributionWithdrawActivity.this, rootView);
     }
 
-    private void binData() {
+    private void binData(ModelUserAccount modelUserAccount) {
+        mStrMobile=modelUserAccount.getPhone();
+        //获取银行卡信息
+        String bank_card = modelUserAccount.getBank_card();//银行卡
+        String bank_name = modelUserAccount.getBank_name();//银行名
+        String bank_type = modelUserAccount.getBank_type();//银行卡类型
+        String level_id = modelUserAccount.getLevel_id();//用户等级
+        //获取金额
         money = Float.parseFloat(getIntent().getStringExtra("money"));
         SDViewBinder.setTextView(mTv_circle, "可提现额（元）" + "\n" + money);
     }
@@ -268,6 +285,7 @@ public class DistributionWithdrawActivity extends BaseActivity {
     private void clickWithdrawLog() {
         // TODO 跳到提现日志界面
         Intent intent = new Intent(this, DistributionWithdrawLogActivity.class);
+        intent.putExtra("money_type",money_type);
         startActivity(intent);
     }
 
@@ -447,5 +465,34 @@ public class DistributionWithdrawActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (CommissionConstance.USER_ACCOUNT.equals(method)){
+            ResultUserAccount resultUserAccount = (ResultUserAccount) datas.get(0);
+            List<ModelUserAccount> body = resultUserAccount.getBody();
+            if (body!=null && body.size()>0){
+                ModelUserAccount modelUserAccount = body.get(0);
+                binData(modelUserAccount);
+            }else {
+                MGToast.showToast("数据获取异常!");
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 }
