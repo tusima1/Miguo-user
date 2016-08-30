@@ -462,19 +462,19 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
             return;
         }
 
-        String nonceStr = model.getNoncestr();
+        String nonceStr = model.getNonce_str();
         if (TextUtils.isEmpty(nonceStr)) {
             SDToast.showToast("nonceStr为空");
             return;
         }
 
-        String timeStamp = model.getTimestamp();
+        String timeStamp = model.getTime_stamp();
         if (TextUtils.isEmpty(timeStamp)) {
             SDToast.showToast("timeStamp为空");
             return;
         }
 
-        String packageValue = model.getPackagevalue();
+        String packageValue = model.getPackage_value();
         if (TextUtils.isEmpty(packageValue)) {
             SDToast.showToast("packageValue为空");
             return;

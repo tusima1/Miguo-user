@@ -214,14 +214,16 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 			mHasPay = "pay_wait";
 			mBtnPay.setVisibility(View.VISIBLE);
 			HashMap<String,String> config = orderDetailInfo.getConfig();
-			String payMondy = config.get("total_fee");
-			mPaymentCodeModel.setPay_money(payMondy);
+			String payMoney = config.get("total_fee");
+			String payMoneyFormat =config.get("total_fee_format");
+			mPaymentCodeModel.setPay_money(payMoney);
 			mPaymentCodeModel.setConfig(config);
 			mPaymentCodeModel.setClass_name(class_name);
 			if(!TextUtils.isEmpty(class_name)&&ALIPAY.equals(class_name)){
 				mPaymentCodeModel.setPayment_name("支付宝支付");
 			}else{
 				mPaymentCodeModel.setPayment_name("微信支付");
+				mPaymentCodeModel.setPay_money(payMoneyFormat);
 
 			}
 
@@ -476,31 +478,31 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 			return;
 		}
 
-		String partnerId = model.getPartnerid();
+		String partnerId = model.getMch_id();
 		if (TextUtils.isEmpty(partnerId)) {
 			SDToast.showToast("partnerId为空");
 			return;
 		}
 
-		String prepayId = model.getPrepayid();
+		String prepayId = model.getOut_trade_no();
 		if (TextUtils.isEmpty(prepayId)) {
 			SDToast.showToast("prepayId为空");
 			return;
 		}
 
-		String nonceStr = model.getNoncestr();
+		String nonceStr = model.getNonce_str();
 		if (TextUtils.isEmpty(nonceStr)) {
 			SDToast.showToast("nonceStr为空");
 			return;
 		}
 
-		String timeStamp = model.getTimestamp();
+		String timeStamp = model.getTime_stamp();
 		if (TextUtils.isEmpty(timeStamp)) {
 			SDToast.showToast("timeStamp为空");
 			return;
 		}
 
-		String packageValue = model.getPackagevalue();
+		String packageValue = model.getPackage_value();
 		if (TextUtils.isEmpty(packageValue)) {
 			SDToast.showToast("packageValue为空");
 			return;
@@ -520,7 +522,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		req.prepayId = prepayId;
 		req.nonceStr = nonceStr;
 		req.timeStamp = timeStamp;
-		req.packageValue = packageValue;
+		req.packageValue =packageValue;
 		req.sign = sign;
 
 		SDWxappPay.getInstance().pay(req);

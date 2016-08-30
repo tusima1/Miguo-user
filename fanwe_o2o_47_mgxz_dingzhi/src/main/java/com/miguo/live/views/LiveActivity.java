@@ -14,6 +14,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -62,7 +63,6 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.category.dialog.LiveBackDialogCategory;
-import com.miguo.live.views.category.dialog.LivePushDialogCategory;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
 import com.miguo.live.views.customviews.HostRedPacketTimeView;
@@ -70,8 +70,8 @@ import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
+import com.miguo.live.views.definetion.IntentKey;
 import com.miguo.live.views.dialog.LiveBackDialog;
-import com.miguo.live.views.dialog.LivePushDialog;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
@@ -105,17 +105,15 @@ import java.util.TimerTask;
 
 /**
  * 直播类(用户+主播)
+backup
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
-    private static final String TAG = LiveActivity.class.getSimpleName();
+    public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     /**
      * 取商品和门店相关信息。
      */
     private SellerHttpHelper mSellerHttpHelper;
-    /**
-     * 进入聊天室的帮助类
-     */
     private EnterLiveHelper mEnterRoomHelper;
     private ProfileInfoHelper mUserInfoHelper;
     private LiveHelper mLiveHelper;
@@ -164,9 +162,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private boolean mProfile;//默认是美白
     private boolean bFirstRender = true;
 
-    /**
-     * 主播房间id信息
-     */
     private String backGroundId;
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
@@ -195,23 +190,35 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private PagerBaoBaoAdapter   mBaoBaoAdapter;
 
+    boolean isAnchor = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setActivityParams();
+        getIntentData();
+//        initHelper();
         findViews();
         setListeners();
         initHelper();
         checkUserAndPermission();
     }
 
+    private void getIntentData(){
+        isAnchor = getIntent().getBooleanExtra(IntentKey.IS_ANCHOR, false);
+    }
+
+    private void initAdapterDatas(){
+    }
+
     private void findViews(){
         root = findViewById(R.id.root);
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
-        mHostBottomToolView1.setmLiveView(this);
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
-        mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
-        mHostBottomMeiView2.setNeed(this, mCommonHelper);
+
+//        mHostBottomToolView1.setmLiveView(this);
+//        mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
+//        mHostBottomMeiView2.setNeed(this, mCommonHelper);
 
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
 
@@ -226,15 +233,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
         BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
         BtnHungup = (TextView) findViewById(R.id.close_member_video);
-
-//        TextView roomId = (TextView) findViewById(R.id.room_id);//房间room id
-//        roomId.setText(CurLiveInfo.getChatRoomId());
     }
 
     private void setListeners(){
-        BtnCtrlVideo.setOnClickListener(this);
-        BtnCtrlMic.setOnClickListener(this);
-        BtnHungup.setOnClickListener(this);
+
     }
 
     private void setActivityParams(){
@@ -267,15 +269,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mLiveHelper = new LiveHelper(this, this);
         // 用户资料类
         mUserInfoHelper = new ProfileInfoHelper(this);
-        /**
-         * 腾讯http操作类
-         */
         tencentHttpHelper = new TencentHttpHelper(this);
 //        root = findViewById(R.id.root);
         //屏幕方向管理,初始化
         mOrientationHelper = new LiveOrientationHelper();
         //公共功能管理类
         mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
+
+        mHostBottomToolView1.setmLiveView(this);
+        mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
+        mHostBottomMeiView2.setNeed(this, mCommonHelper);
     }
 
 
@@ -300,21 +303,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 判断用户是否已经登录，并注册 了腾讯 号。
      */
     public void checkUserAndPermission() {
-        /**
-         * 后台交互的token，只有用户登录了才有token
-         */
         String token = App.getInstance().getToken();
         boolean imLoginSuccess = App.getInstance().isImLoginSuccess();
-        boolean isAvStart = App.getInstance().isAvStart();
+//        boolean imLoginSuccess = false;
+//      boolean isAvStart = App.getInstance().isAvStart();
+        boolean isAvStart = isAnchor;
         String useSign = App.getInstance().getUserSign();
 
-        /**
-         * 如果用户未登录
-         */
+
         if (TextUtils.isEmpty(token)) {
             goToLoginActivity();
         }
-
         //直播已经初始化。
         String userid = MySelfInfo.getInstance().getId();
         if (TextUtils.isEmpty(userid)) {
@@ -330,73 +329,37 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
 
         //im login callback code...
+        Log.d(TAG, "user sign: " + useSign);
 
         /**
-         * 如果是主播开始直播，则这里为true
+         * 主播进来
          */
         if (isAvStart) {
+            if (QavsdkControl.getInstance().getAVContext() == null) {
+                startAVSDK();
+            }
+            enterRoom();
             /**
-             * 主播进来...
+             * 用户进来
              */
-            anchorInit();
         } else {
-            /**
-             * 用户进来了
-             */
-            userInit(imLoginSuccess, useSign, userid);
-        }
-
-
-    }
-
-
-    /**
-     * 主播进来了初始化操作
-     */
-    private void anchorInit(){
-        if (QavsdkControl.getInstance().getAVContext() == null) {
-            startAVSDK();
-        }
-        enterRoom();
-    }
-
-    /**
-     * 观看直播的用户进来了初始化操作
-     */
-    private void userInit(boolean imLoginSuccess, String useSign, String userid){
-        if (imLoginSuccess) {
-            showToast("im login success..");
-            boolean value = MySelfInfo.getInstance().isCreateRoom();
-            mTLoginHelper.getToRoomAndStartAV(imLoginSuccessCallback, value);
-        } else {
-            if (!TextUtils.isEmpty(useSign)) {
-                showToast("doImLogin..");
-                doImLogin(userid, useSign, imLoginSuccessCallback, MySelfInfo.getInstance().isCreateRoom());
+            if (imLoginSuccess) {
+                boolean value = MySelfInfo.getInstance().isCreateRoom();
+                mTLoginHelper.getToRoomAndStartAV(imLoginSuccessCallback, value);
             } else {
-                goToLoginActivity();
+                if (!TextUtils.isEmpty(useSign)) {
+                    doImLogin(userid, useSign, imLoginSuccessCallback, MySelfInfo.getInstance().isCreateRoom());
+                } else {
+                    goToLoginActivity();
+                }
             }
         }
     }
 
-    public void showToast(String msg){
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 主播进来了或者用户登录成功进来了都会进入房间
-     */
     public void enterRoom() {
-        /**
-         * 设置摄像头为前置
-         */
         mLiveHelper.setCameraPreviewChangeCallback();
-        /**
-         * 主播房间id信息
-         */
         backGroundId = CurLiveInfo.getHostID();
-        /**
-         * 进入房间流程
-         */
+        //进入房间流程
         mEnterRoomHelper.startEnterRoom();
         //初始化view
         initView();
@@ -472,7 +435,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
     /**
-     * 进入房间成功后需要
      * 初始化AVSDK
      */
     private void startAVSDK() {
@@ -637,10 +599,31 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 初始化界面
      */
     private void initView() {
+//        root = findViewById(R.id.root);
+//        mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
+//        mHostBottomToolView1.setmLiveView(this);
+//        mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
+//        mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
+//        mHostBottomMeiView2.setNeed(this, mCommonHelper);
+//
+//        mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
+//
+//        mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);//直播2的工具栏
+//        mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);//主播离开(断开)界面
+//        // mVideoChat = (TextView) findViewById(R.id.video_interact);//(腾讯)互动连线图标
+//        mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);//飘心区域
+//
+//        mVideoMemberCtrlView.setVisibility(View.INVISIBLE);
+        //top view
 
-//        BtnCtrlVideo.setOnClickListener(this);
-//        BtnCtrlMic.setOnClickListener(this);
-//        BtnHungup.setOnClickListener(this);
+
+//        //video_member_bottom_layout 直播2的工具栏
+//        BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
+//        BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
+//        BtnHungup = (TextView) findViewById(R.id.close_member_video);
+        BtnCtrlVideo.setOnClickListener(this);
+        BtnCtrlMic.setOnClickListener(this);
+        BtnHungup.setOnClickListener(this);
         //-----
 
 //        TextView roomId = (TextView) findViewById(R.id.room_id);//房间room id
@@ -814,10 +797,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 初始化观看直播用户的界面
      */
     private void initLiveUser(){
-        /**
-         * 现在没有邀请
-         */
-//        initInviteDialog();
+        initInviteDialog();
 
         mBaoBaoAdapter  =new PagerBaoBaoAdapter(this);
 
@@ -934,56 +914,65 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     protected void onDestroy() {
-        MGLog.e("onDestroy");
-        watchCount = 0;
-        super.onDestroy();
-        if (null != mHearBeatTimer) {
-            mHearBeatTimer.cancel();
-            mHearBeatTimer = null;
-        }
-        if (null != mVideoTimer) {
-            mVideoTimer.cancel();
-            mVideoTimer = null;
-        }
-        if (null != mAudienceTimer) {
-            mAudienceTimer.cancel();
-            mAudienceTimer = null;
-        }
-        inviteViewCount = 0;
-        thumbUp = 0;
-        CurLiveInfo.setMembers(0);
-        CurLiveInfo.setAdmires(0);
-        CurLiveInfo.setCurrentRequestCount(0);
-        unregisterReceiver();
-        if (mLiveHelper != null) {
-            mLiveHelper.closeCameraAndMic();
-            mLiveHelper.onDestory();
-        }
-        if (mEnterRoomHelper != null) {
-            mEnterRoomHelper.onDestory();
-        }
-        //mLiveHelper;
-        if (mTLoginHelper != null) {
-            mTLoginHelper.onDestory();
-        }
-        if (tencentHttpHelper != null) {
-            tencentHttpHelper.onDestroy();
-        }
-        if (mUserHeadTopView != null) {
-            mUserHeadTopView.ondestroy();
-            mUserHeadTopView = null;
-        }
-        if (mHostTopView != null) {
-            mHostTopView = null;
-        }
-        /**
-         * 主播退出直播
-         */
-        handlerStopLive();
 
-        QavsdkControl.getInstance().clearVideoMembers();
-        QavsdkControl.getInstance().onDestroy();
-        MySelfInfo.getInstance().setMyRoomNum(-1);
+        try{
+            /**
+             * 一定要退出聊天室
+             */
+//            userExit();
+            /**
+             * 如果不设置成false则用户再进来会变成主播身份
+             */
+            App.getInstance().setAvStart(false);
+            MGLog.e("onDestroy");
+            watchCount = 0;
+            super.onDestroy();
+            if (null != mHearBeatTimer) {
+                mHearBeatTimer.cancel();
+                mHearBeatTimer = null;
+            }
+            if (null != mVideoTimer) {
+                mVideoTimer.cancel();
+                mVideoTimer = null;
+            }
+            if (null != mAudienceTimer) {
+                mAudienceTimer.cancel();
+                mAudienceTimer = null;
+            }
+            inviteViewCount = 0;
+            thumbUp = 0;
+            CurLiveInfo.setMembers(0);
+            CurLiveInfo.setAdmires(0);
+            CurLiveInfo.setCurrentRequestCount(0);
+            unregisterReceiver();
+            if (mLiveHelper != null) {
+                mLiveHelper.closeCameraAndMic();
+                mLiveHelper.onDestory();
+            }
+            if (mEnterRoomHelper != null) {
+                mEnterRoomHelper.onDestory();
+            }
+            //mLiveHelper;
+            if (mTLoginHelper != null) {
+                mTLoginHelper.onDestory();
+            }
+            if (tencentHttpHelper != null) {
+                tencentHttpHelper.onDestroy();
+            }
+            if (mUserHeadTopView != null) {
+                mUserHeadTopView.ondestroy();
+                mUserHeadTopView = null;
+            }
+            if (mHostTopView != null) {
+                mHostTopView = null;
+            }
+            QavsdkControl.getInstance().clearVideoMembers();
+            QavsdkControl.getInstance().onDestroy();
+            MySelfInfo.getInstance().setMyRoomNum(-1);
+        }catch (Exception e){
+
+        }
+
 
     }
 
@@ -993,11 +982,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void onBackPressed() {
-        if (LiveUtil.checkIsHost()) {
-            hostExit();
-        } else {
-            finish();
-        }
+//        if (LiveUtil.checkIsHost()) {
+//            hostExit();
+//        } else {
+//            finish();
+//        }
 
     }
 
@@ -1006,7 +995,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-            showBackDialog();
+//            backDialog.show();
         }
     }
 
@@ -1016,49 +1005,43 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
 
     public void userExit() {
+        userClickOut = true;
         mLiveHelper.perpareQuitRoom(true);
         App.getInstance().setAvStart(false);
         if (mLiveHttphelper != null) {
             mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "");
         }
         mEnterRoomHelper.quiteLive();
+        finish();
     }
 
     /**
      * 退出直播对话框
      */
-    private void showBackDialog() {
+    public void showBackDialog() {
         final LiveBackDialog dialog = new LiveBackDialog(this);
         dialog.setOnLiveBackClickListener(new LiveBackDialogCategory.OnLiveBackClickListener() {
             @Override
             public void clickSure() {
                 //如果是直播，发消息
-                handlerStopLive();
-                startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
-                finish();
-                dialog.dismiss();
+                if (null != mLiveHelper) {
+                    //向后台发送主播退出
+                    mLiveHelper.perpareQuitRoom(true);
+                    if (isPushed) {
+                        mLiveHelper.stopPushAction();
+                    }
+                    startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
+                    finish();
+                    dialog.dismiss();
+                }
             }
 
             @Override
             public void clickCancel() {
                 dialog.dismiss();
-                dialog.cancel();
             }
         });
         dialog.show();
-    }
-
-    /**
-     * 停止直播
-     */
-    private void handlerStopLive(){
-        if (null != mLiveHelper) {
-            //向后台发送主播退出
-            mLiveHelper.perpareQuitRoom(true);
-            if (isPushed) {
-                mLiveHelper.stopPushAction();
-            }
-        }
     }
 
     /**
@@ -1105,25 +1088,39 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
 
+    boolean userClickOut = false;
     /**
      * 完全退出房间了
-     *
+     * 這裡需要判斷是否為主播退出導致的退出事件
      * @param id_status
      * @param succ
      * @param liveinfo
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
+        Log.d(TAG, "quiteRoomComplete 退出房间...");
         if (LiveUtil.checkIsHost()) {
             MGToast.showToast("主播退出!");
+//            if (backDialog != null) {
+//                backDialog.dismiss();
+//            }
             finish();
         } else {
-            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
+            /**
+             * 如果不是用戶點擊退出導致的調用，則需要彈出主播已退出的窗口
+             */
+            if(!userClickOut){
+                if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
                 mUserHeadTopView.showExitDialog();
-            }else {
-                finish();
             }
-
+            }
+            Log.d(LiveActivity.TAG, "quite: " + id_status);
+//            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
+//                mUserHeadTopView.showExitDialog();
+//            }else {
+//                finish();
+//            }
+//            finish();
         }
         App.getInstance().setAvStart(false);
     }
@@ -1285,6 +1282,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * update 观众 数量 。
      */
     public void doUpdateMembersCount(){
+
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -1792,23 +1790,59 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     public void pushStream() {
         if (!isPushed) {
-            initPushDialog();
+            if (mPushDialog != null)
+                mPushDialog.show();
         } else {
             mLiveHelper.stopPushAction();
         }
     }
 
+    private Dialog mPushDialog;
 
     private void initPushDialog() {
-        LivePushDialog dialog = new LivePushDialog(this);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setOnLivePushClickListener(new LivePushDialogCategory.OnLivePushClickListener() {
+        mPushDialog = new Dialog(this, R.style.dialog);
+        mPushDialog.setContentView(R.layout.push_dialog_layout);
+        final TIMAvManager.StreamParam mStreamParam = TIMAvManager.getInstance().new StreamParam();
+        final EditText pushfileNameInput = (EditText) mPushDialog.findViewById(R.id.push_filename);
+        final RadioGroup radgroup = (RadioGroup) mPushDialog.findViewById(R.id.push_type);
+
+
+        Button recordOk = (Button) mPushDialog.findViewById(R.id.btn_record_ok);
+        recordOk.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void clickRecordOk(TIMAvManager.StreamParam streamParam) {
-                mLiveHelper.pushAction(streamParam);
+            public void onClick(View view) {
+                if (pushfileNameInput.getText().toString().equals("")) {
+                    Toast.makeText(LiveActivity.this, "name can't be empty", Toast.LENGTH_SHORT);
+                    return;
+                } else {
+                    mStreamParam.setChannelName(pushfileNameInput.getText().toString());
+                }
+
+                if (radgroup.getCheckedRadioButtonId() == R.id.hls) {
+                    mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
+                } else {
+                    mStreamParam.setEncode(TIMAvManager.StreamEncode.RTMP);
+                }
+//                mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
+                mLiveHelper.pushAction(mStreamParam);
+                mPushDialog.dismiss();
             }
         });
-        dialog.show();
+
+
+        Button recordCancel = (Button) mPushDialog.findViewById(R.id.btn_record_cancel);
+        recordCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPushDialog.dismiss();
+            }
+        });
+
+        Window dialogWindow = mPushDialog.getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        dialogWindow.setGravity(Gravity.CENTER);
+        dialogWindow.setAttributes(lp);
+        mPushDialog.setCanceledOnTouchOutside(false);
     }
 
 
@@ -2061,5 +2095,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+//            boolean isAVStart = App.getInstance().isAvStart();
+            boolean isAVStart = isAnchor;
+            if(isAVStart){
+                showBackDialog();
+            }else {
+                userExit();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

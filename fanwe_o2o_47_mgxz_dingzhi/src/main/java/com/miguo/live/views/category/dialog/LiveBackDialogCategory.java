@@ -47,7 +47,7 @@ public class LiveBackDialogCategory extends DialogCategory{
 
     @Override
     protected void init() {
-        showToast("tv is null : " + (tvSure == null) + " ,onLiveBackClickListener is null: " + (getDialog().getOnLiveBackClickListener() == null));
+//        showToast("tv is null : " + (tvSure == null) + " ,onLiveBackClickListener is null: " + (getDialog().getOnLiveBackClickListener() == null));
     }
 
     public void clickSure(){

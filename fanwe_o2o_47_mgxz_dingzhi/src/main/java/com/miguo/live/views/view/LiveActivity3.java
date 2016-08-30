@@ -1,4 +1,4 @@
-//package com.miguo.live.views;
+//package com.miguo.live.views.view;
 //
 //import android.animation.ObjectAnimator;
 //import android.app.Dialog;
@@ -18,12 +18,10 @@
 //import android.view.Window;
 //import android.view.WindowManager;
 //import android.widget.Button;
-//import android.widget.EditText;
 //import android.widget.FrameLayout;
 //import android.widget.ImageView;
 //import android.widget.LinearLayout;
 //import android.widget.ListView;
-//import android.widget.RadioGroup;
 //import android.widget.SeekBar;
 //import android.widget.TextView;
 //import android.widget.Toast;
@@ -41,7 +39,6 @@
 //import com.fanwe.user.model.UserCurrentInfo;
 //import com.fanwe.user.model.UserInfoNew;
 //import com.fanwe.utils.SDDateUtil;
-//import com.google.gson.Gson;
 //import com.miguo.live.adapters.HeadTopAdapter;
 //import com.miguo.live.adapters.LiveChatMsgListAdapter;
 //import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -51,9 +48,6 @@
 //import com.miguo.live.model.LiveChatEntity;
 //import com.miguo.live.model.LiveConstants;
 //import com.miguo.live.model.UserRedPacketInfo;
-//import com.miguo.live.model.generateSign.ModelGenerateSign;
-//import com.miguo.live.model.generateSign.ResultGenerateSign;
-//import com.miguo.live.model.generateSign.RootGenerateSign;
 //import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 //import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 //import com.miguo.live.model.getHostInfo.ModelHostInfo;
@@ -61,6 +55,12 @@
 //import com.miguo.live.presenters.LiveHttpHelper;
 //import com.miguo.live.presenters.ShopAndProductView;
 //import com.miguo.live.presenters.TencentHttpHelper;
+//import com.miguo.live.views.LiveEndActivity;
+//import com.miguo.live.views.LiveOrientationHelper;
+//import com.miguo.live.views.LiveRecordDialogHelper;
+//import com.miguo.live.views.LiveUtil;
+//import com.miguo.live.views.category.dialog.LiveBackDialogCategory;
+//import com.miguo.live.views.category.dialog.LivePushDialogCategory;
 //import com.miguo.live.views.customviews.HostBottomToolView;
 //import com.miguo.live.views.customviews.HostMeiToolView;
 //import com.miguo.live.views.customviews.HostRedPacketTimeView;
@@ -68,6 +68,8 @@
 //import com.miguo.live.views.customviews.MGToast;
 //import com.miguo.live.views.customviews.UserBottomToolView;
 //import com.miguo.live.views.customviews.UserHeadTopView;
+//import com.miguo.live.views.dialog.LiveBackDialog;
+//import com.miguo.live.views.dialog.LivePushDialog;
 //import com.miguo.utils.MGLog;
 //import com.miguo.utils.MGUIUtil;
 //import com.miguo.utils.test.MGTimer;
@@ -101,15 +103,17 @@
 //
 ///**
 // * 直播类(用户+主播)
-//backup
 // */
-//public class LiveActivity2 extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
-//    private static final String TAG = LiveActivity2.class.getSimpleName();
+//public class LiveActivity3 extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView, LiveView, View.OnClickListener, ProfileView, CallbackView {
+//    public static final String TAG = LiveActivity3.class.getSimpleName() + "A";
 //    private static final int GETPROFILE_JOIN = 0x200;
 //    /**
 //     * 取商品和门店相关信息。
 //     */
 //    private SellerHttpHelper mSellerHttpHelper;
+//    /**
+//     * 进入聊天室的帮助类
+//     */
 //    private EnterLiveHelper mEnterRoomHelper;
 //    private ProfileInfoHelper mUserInfoHelper;
 //    private LiveHelper mLiveHelper;
@@ -121,6 +125,8 @@
 //    private static final int TIMEOUT_INVITE = 2;
 //    private boolean mBoolRefreshLock = false;
 //    private boolean mBoolNeedRefresh = true;
+//
+//
 //    private final Timer mTimer = new Timer();
 //    private ArrayList<LiveChatEntity> mTmpChatList = new ArrayList<LiveChatEntity>();//缓冲队列
 //    private TimerTask mTimerTask = null;
@@ -158,6 +164,9 @@
 //    private boolean mProfile;//默认是美白
 //    private boolean bFirstRender = true;
 //
+//    /**
+//     * 主播房间id信息
+//     */
 //    private String backGroundId;
 //
 //    private ArrayList<String> mRenderUserList = new ArrayList<>();
@@ -168,8 +177,44 @@
 //    private LiveCommonHelper mCommonHelper;
 //    private HostTopView mHostTopView;
 //    private HostMeiToolView mHostBottomMeiView2;
+//
+//    /**
+//     *
+//     */
 //    private TencentHttpHelper tencentHttpHelper;
+//
+//    /**
+//     * 请求直播列表
+//     * 申请直播房间ID
+//     * 请求观众数
+//     * 获取当前房间的观众列表
+//     * 结束直播
+//     * 观众进入房间
+//     * 观众退出房间
+//     * 直播登录，返回用户直播签名  GenerateSign
+//     * get获取主播信息
+//     * post申请成为主播
+//     * 获取主播标签
+//     * 主播退出，结束直播
+//     * 业务服务器的数据字典接口
+//     * 获取七牛UpToken
+//     * 校验用户是否关注该用户(主播)
+//     * 关注主播
+//     * 获取主播红包列表
+//     * 主播发红包
+//     * 抢红包接口。
+//     * 取用户所得到的红包列表。
+//     * 获取门店随机评价
+//     * 取直播门店的镇店之宝。
+//     * 获取用户主播认证时间
+//     *
+//     *
+//     */
 //    private LiveHttpHelper mLiveHttphelper;
+//
+//    /**
+//     * 红包倒计时的view
+//     */
 //    private HostRedPacketTimeView mHostRedPacketCountDownView;
 //
 //    /**
@@ -196,10 +241,6 @@
 //        checkUserAndPermission();
 //    }
 //
-//    private void initAdapterDatas(){
-//
-//    }
-//
 //    private void findViews(){
 //        root = findViewById(R.id.root);
 //        mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
@@ -221,10 +262,15 @@
 //        BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
 //        BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
 //        BtnHungup = (TextView) findViewById(R.id.close_member_video);
+//
+////        TextView roomId = (TextView) findViewById(R.id.room_id);//房间room id
+////        roomId.setText(CurLiveInfo.getChatRoomId());
 //    }
 //
 //    private void setListeners(){
-//
+//        BtnCtrlVideo.setOnClickListener(this);
+//        BtnCtrlMic.setOnClickListener(this);
+//        BtnHungup.setOnClickListener(this);
 //    }
 //
 //    private void setActivityParams(){
@@ -257,6 +303,9 @@
 //        mLiveHelper = new LiveHelper(this, this);
 //        // 用户资料类
 //        mUserInfoHelper = new ProfileInfoHelper(this);
+//        /**
+//         * 腾讯http操作类
+//         */
 //        tencentHttpHelper = new TencentHttpHelper(this);
 ////        root = findViewById(R.id.root);
 //        //屏幕方向管理,初始化
@@ -269,6 +318,7 @@
 //    MgCallback imLoginSuccessCallback = new MgCallback() {
 //        @Override
 //        public void onErrorResponse(String message, String errorCode) {
+//            Log.d(TAG, "imLoginSuccessCallback onErrorResponse...");
 //            SDToast.showToast("进入房间失败");
 //            finish();
 //        }
@@ -276,9 +326,12 @@
 //        @Override
 //        public void onSuccessResponse(String responseBody) {
 //            super.onSuccessResponse(responseBody);
-//            if (QavsdkControl.getInstance().getAVContext() == null) {
-//                startAVSDK();
-//            }
+////            if (QavsdkControl.getInstance().getAVContext() == null) {
+////                startAVSDK();
+////            }
+//            Log.d(TAG, "imLoginSuccessCallback onSuccessResponse...");
+//            startAVSDK();
+//
 //            enterRoom();
 //        }
 //    };
@@ -287,17 +340,30 @@
 //     * 判断用户是否已经登录，并注册 了腾讯 号。
 //     */
 //    public void checkUserAndPermission() {
+//        /**
+//         * 后台交互的token，只有用户登录了才有token
+//         */
 //        String token = App.getInstance().getToken();
 //        boolean imLoginSuccess = App.getInstance().isImLoginSuccess();
+////        boolean imLoginSuccess = false;
 //        boolean isAvStart = App.getInstance().isAvStart();
 //        String useSign = App.getInstance().getUserSign();
 //
-//
+//        /**
+//         * 如果用户未登录
+//         */
 //        if (TextUtils.isEmpty(token)) {
 //            goToLoginActivity();
 //        }
+//
+//        Log.d("LiveActivity", "checkUserAndPermission imLoginSuccess: " + imLoginSuccess + " ,useSign: " + useSign);
+//
+//
 //        //直播已经初始化。
 //        String userid = MySelfInfo.getInstance().getId();
+//        /**
+//         * 判断用户是否已登录，没有登录则跳转到登录界面
+//         */
 //        if (TextUtils.isEmpty(userid)) {
 //            UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
 //            //userCurrentInfo 一定不为null
@@ -310,35 +376,83 @@
 //            }
 //        }
 //
+//        Log.d("LiveActivity", "checkUserAndPermission after check user id.. " + " ,is av start: " + isAvStart);
+//
+//
 //        //im login callback code...
 //
+//        /**
+//         * 如果是主播开始直播，则这里为true
+//         */
 //        if (isAvStart) {
-//            if (QavsdkControl.getInstance().getAVContext() == null) {
-//                startAVSDK();
-//            }
-//            enterRoom();
+//            /**
+//             * 主播进来...
+//             */
+//            anchorInit();
 //        } else {
-//            if (imLoginSuccess) {
-//                boolean value = MySelfInfo.getInstance().isCreateRoom();
-//                mTLoginHelper.getToRoomAndStartAV(imLoginSuccessCallback, value);
-//            } else {
-//                if (!TextUtils.isEmpty(useSign)) {
-//                    doImLogin(userid, useSign, imLoginSuccessCallback, MySelfInfo.getInstance().isCreateRoom());
-//                } else {
-//                    goToLoginActivity();
-//                }
-//            }
+//            /**
+//             * 用户进来了
+//             */
+//            userInit(imLoginSuccess, useSign, userid);
 //        }
 //
 //
 //    }
 //
+//
+//    /**
+//     * 主播进来了初始化操作
+//     */
+//    private void anchorInit(){
+//        if (QavsdkControl.getInstance().getAVContext() == null) {
+//            startAVSDK();
+//        }
+////        startAVSDK();
+//
+//        enterRoom();
+//    }
+//
+//    /**
+//     * 观看直播的用户进来了初始化操作
+//     */
+//    private void userInit(boolean imLoginSuccess, String useSign, String userid){
+//        Log.d("LiveActivity", "imLoginSuccess: " + imLoginSuccess + " ,useSign: " + useSign);
+//        if (imLoginSuccess) {
+//            showToast("im login success..");
+//            boolean value = MySelfInfo.getInstance().isCreateRoom();
+//            mTLoginHelper.getToRoomAndStartAV(imLoginSuccessCallback, value);
+//        } else {
+//            if (!TextUtils.isEmpty(useSign)) {
+////            if (!TextUtils.isEmpty(userid)) {
+//                Log.d("LiveActivity","doImLogin.." + " ,user sign: " + useSign);
+//                doImLogin(userid, useSign, imLoginSuccessCallback, MySelfInfo.getInstance().isCreateRoom());
+//            } else {
+//                goToLoginActivity();
+//            }
+//        }
+//    }
+//
+//    public void showToast(String msg){
+//        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+//    }
+//
+//    /**
+//     * 主播进来了或者用户登录成功进来了都会进入房间
+//     */
 //    public void enterRoom() {
+//        /**
+//         * 设置摄像头为前置
+//         */
 //        mLiveHelper.setCameraPreviewChangeCallback();
+//        /**
+//         * 主播房间id信息
+//         */
 //        backGroundId = CurLiveInfo.getHostID();
-//        //进入房间流程
+//        /**
+//         * 进入房间流程
+//         */
 //        mEnterRoomHelper.startEnterRoom();
-//        //初始化view
+//        //初始化view 包括发送注册成功消息到服务端
 //        initView();
 //    }
 //
@@ -364,7 +478,7 @@
 //     * 跳转到登录界面
 //     */
 //    public void goToLoginActivity() {
-//        Intent intent = new Intent(LiveActivity2.this, LoginActivity.class);
+//        Intent intent = new Intent(LiveActivity3.this, LoginActivity.class);
 //        startActivity(intent);
 //        finish();
 //    }
@@ -375,43 +489,44 @@
 //     *
 //     * @param token
 //     */
-//    public void getSign(String token) {
-//        //get usersign
-//        MgCallback mgCallback = new MgCallback() {
-//            @Override
-//            public void onSuccessResponse(String responseBody) {
-//                Gson gson = new Gson();
-//                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
-//                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
-//                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
-//
-//                    SDToast.showToast("获取用户签名失败。");
-//                    finish();
-//                    return;
-//                }
-//                ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
-//                List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
-//
-//                if (modelGenerateSign != null && modelGenerateSign.size() > 0 && modelGenerateSign.get(0) != null) {
-//                    String usersig = modelGenerateSign.get(0).getUsersig();
-//                    MySelfInfo.getInstance().setUserSig(usersig);
-//                    App.getInstance().setUserSign(usersig);
-//                    String userid = MySelfInfo.getInstance().getId();
-//                    mTLoginHelper.imLogin(userid, usersig);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onErrorResponse(String message, String errorCode) {
-//                SDToast.showToast("获取用户签名失败。");
-//                finish();
-//            }
-//        };
-//        tencentHttpHelper.getSign(token, mgCallback);
-//    }
+////    public void getSign(String token) {
+////        //get usersign
+////        MgCallback mgCallback = new MgCallback() {
+////            @Override
+////            public void onSuccessResponse(String responseBody) {
+////                Gson gson = new Gson();
+////                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
+////                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
+////                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
+////
+////                    SDToast.showToast("获取用户签名失败。");
+////                    finish();
+////                    return;
+////                }
+////                ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
+////                List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
+////
+////                if (modelGenerateSign != null && modelGenerateSign.size() > 0 && modelGenerateSign.get(0) != null) {
+////                    String usersig = modelGenerateSign.get(0).getUsersig();
+////                    MySelfInfo.getInstance().setUserSig(usersig);
+////                    App.getInstance().setUserSign(usersig);
+////                    String userid = MySelfInfo.getInstance().getId();
+////                    mTLoginHelper.imLogin(userid, usersig);
+////                }
+////
+////            }
+////
+////            @Override
+////            public void onErrorResponse(String message, String errorCode) {
+////                SDToast.showToast("获取用户签名失败。");
+////                finish();
+////            }
+////        };
+////        tencentHttpHelper.getSign(token, mgCallback);
+////    }
 //
 //    /**
+//     * 进入房间成功后需要
 //     * 初始化AVSDK
 //     */
 //    private void startAVSDK() {
@@ -422,7 +537,7 @@
 //        int ccType = Constants.ACCOUNT_TYPE;
 //        QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
 //        QavsdkControl.getInstance().startContext();
-//        Log.e("live", "初始化AVSDK");
+//        Log.e(TAG, "初始化AVSDK");
 //    }
 //
 //    private Handler mHandler = new Handler(new Handler.Callback() {
@@ -576,31 +691,10 @@
 //     * 初始化界面
 //     */
 //    private void initView() {
-////        root = findViewById(R.id.root);
-////        mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
-////        mHostBottomToolView1.setmLiveView(this);
-////        mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
-////        mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
-////        mHostBottomMeiView2.setNeed(this, mCommonHelper);
-////
-////        mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
-////
-////        mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);//直播2的工具栏
-////        mHostLeaveLayout = (LinearLayout) findViewById(R.id.ll_host_leave);//主播离开(断开)界面
-////        // mVideoChat = (TextView) findViewById(R.id.video_interact);//(腾讯)互动连线图标
-////        mHeartLayout = (HeartLayout) findViewById(R.id.heart_layout);//飘心区域
-////
-////        mVideoMemberCtrlView.setVisibility(View.INVISIBLE);
-//        //top view
 //
-//
-////        //video_member_bottom_layout 直播2的工具栏
-////        BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
-////        BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
-////        BtnHungup = (TextView) findViewById(R.id.close_member_video);
-//        BtnCtrlVideo.setOnClickListener(this);
-//        BtnCtrlMic.setOnClickListener(this);
-//        BtnHungup.setOnClickListener(this);
+////        BtnCtrlVideo.setOnClickListener(this);
+////        BtnCtrlMic.setOnClickListener(this);
+////        BtnHungup.setOnClickListener(this);
 //        //-----
 //
 ////        TextView roomId = (TextView) findViewById(R.id.room_id);//房间room id
@@ -628,7 +722,9 @@
 //
 //        //开启后台业务服务器请求管理类
 //
-//        //----
+//        /**
+//         * 请求观众数
+//         */
 //        mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
 //        //主播清屏操作
 //        mHostBottomToolView1.setLiveSwitchScreenListener(new LiveSwitchScreenListener() {
@@ -667,7 +763,12 @@
 //            }
 //
 //        }
+//        /**
+//         * 向后台发送消息，注册房间成功
+//         */
 //        OKhttpHelper.getInstance().registerRoomInfo(title, url, roomId + "", roomId + "", roomId + "");
+//
+//
 //        //host的views
 //        mHostBottomToolView1.setVisibility(View.VISIBLE);
 //
@@ -715,8 +816,8 @@
 ////            recordBtn.setVisibility(View.VISIBLE);
 ////            recordBtn.setOnClickListener(this);
 //
-//        showBackDialog();//退出的第一个界面,问你是否退出
-//        initPushDialog();
+////        showBackDialog();//退出的第一个界面,问你是否退出
+////        initPushDialog();
 ////            initRecordDialog();
 //        //录制功能
 //        mRecordHelper = new LiveRecordDialogHelper(this, mLiveHelper);
@@ -774,7 +875,10 @@
 //     * 初始化观看直播用户的界面
 //     */
 //    private void initLiveUser(){
-//        initInviteDialog();
+//        /**
+//         * 现在没有邀请
+//         */
+////        initInviteDialog();
 //
 //        mBaoBaoAdapter  =new PagerBaoBaoAdapter(this);
 //
@@ -892,56 +996,73 @@
 //    @Override
 //    protected void onDestroy() {
 //        MGLog.e("onDestroy");
-//        watchCount = 0;
+//        try{
+//            App.getInstance().setAvStart(false);
+//            watchCount = 0;
+//            if (null != mHearBeatTimer) {
+//                mHearBeatTimer.cancel();
+//                mHearBeatTimer = null;
+//            }
+//            if (null != mVideoTimer) {
+//                mVideoTimer.cancel();
+//                mVideoTimer = null;
+//            }
+//            if (null != mAudienceTimer) {
+//                mAudienceTimer.cancel();
+//                mAudienceTimer = null;
+//            }
+//            inviteViewCount = 0;
+//            thumbUp = 0;
+//            CurLiveInfo.setMembers(0);
+//            CurLiveInfo.setAdmires(0);
+//            CurLiveInfo.setCurrentRequestCount(0);
+//            unregisterReceiver();
+//            if (mLiveHelper != null) {
+//                mLiveHelper.closeCameraAndMic();
+//                mLiveHelper.onDestory();
+//            }
+//            if (mEnterRoomHelper != null) {
+//                mEnterRoomHelper.onDestory();
+//            }
+//            //mLiveHelper;
+//            if (mTLoginHelper != null) {
+//                mTLoginHelper.onDestory();
+//            }
+//            if (tencentHttpHelper != null) {
+//                tencentHttpHelper.onDestroy();
+//            }
+//            if (mUserHeadTopView != null) {
+//                mUserHeadTopView.ondestroy();
+//                mUserHeadTopView = null;
+//            }
+//            if (mHostTopView != null) {
+//                mHostTopView = null;
+//            }
+//
+//            stopAvsdk();
+//
+//            /**
+//             * 主播退出直播
+//             */
+//            handlerStopLive();
+//
+//            QavsdkControl.getInstance().clearVideoMembers();
+//            QavsdkControl.getInstance().onDestroy();
+//            MySelfInfo.getInstance().setMyRoomNum(-1);
+//        }catch (Exception e){
+//
+//        }
+//
 //        super.onDestroy();
-//        if (null != mHearBeatTimer) {
-//            mHearBeatTimer.cancel();
-//            mHearBeatTimer = null;
-//        }
-//        if (null != mVideoTimer) {
-//            mVideoTimer.cancel();
-//            mVideoTimer = null;
-//        }
-//        if (null != mAudienceTimer) {
-//            mAudienceTimer.cancel();
-//            mAudienceTimer = null;
-//        }
-//        inviteViewCount = 0;
-//        thumbUp = 0;
-//        CurLiveInfo.setMembers(0);
-//        CurLiveInfo.setAdmires(0);
-//        CurLiveInfo.setCurrentRequestCount(0);
-//        unregisterReceiver();
-//        if (mLiveHelper != null) {
-//            mLiveHelper.closeCameraAndMic();
-//            mLiveHelper.onDestory();
-//        }
-//        if (mEnterRoomHelper != null) {
-//            mEnterRoomHelper.onDestory();
-//        }
-//        //mLiveHelper;
-//        if (mTLoginHelper != null) {
-//            mTLoginHelper.onDestory();
-//        }
-//        if (tencentHttpHelper != null) {
-//            tencentHttpHelper.onDestroy();
-//        }
-//        if (backDialog != null) {
-//            backDialog.dismiss();
-//        }
-//        if (mUserHeadTopView != null) {
-//            mUserHeadTopView.ondestroy();
-//            mUserHeadTopView = null;
-//        }
-//        if (mHostTopView != null) {
-//            mHostTopView = null;
-//        }
-//        QavsdkControl.getInstance().clearVideoMembers();
-//        QavsdkControl.getInstance().onDestroy();
-//        MySelfInfo.getInstance().setMyRoomNum(-1);
+//
 //
 //    }
 //
+//    private void stopAvsdk(){
+//        MySelfInfo.getInstance().clearCache(this);
+//        QavsdkControl.getInstance().stopContext();
+//
+//    }
 //
 //    /**
 //     * 点击Back键
@@ -961,7 +1082,7 @@
 //     */
 //    private void hostExit() {
 //        if (LiveUtil.checkIsHost()) {
-//            backDialog.show();
+//            showBackDialog();
 //        }
 //    }
 //
@@ -969,7 +1090,6 @@
 //    /**
 //     * 普通用户退出
 //     */
-//
 //    public void userExit() {
 //        mLiveHelper.perpareQuitRoom(true);
 //        App.getInstance().setAvStart(false);
@@ -979,44 +1099,41 @@
 //        mEnterRoomHelper.quiteLive();
 //    }
 //
-//
-//    private Dialog backDialog;
-//
 //    /**
 //     * 退出直播对话框
 //     */
 //    private void showBackDialog() {
-//        backDialog = new Dialog(this, R.style.dialog);
-//        backDialog.setContentView(R.layout.dialog_live_host_exit_1);
-//        Window window = backDialog.getWindow();
-//        window.setGravity(Gravity.CENTER);
-//
-//        TextView tvSure = (TextView) backDialog.findViewById(R.id.sure_action);
-//        tvSure.setOnClickListener(new View.OnClickListener() {
+//        final LiveBackDialog dialog = new LiveBackDialog(this);
+//        dialog.setOnLiveBackClickListener(new LiveBackDialogCategory.OnLiveBackClickListener() {
 //            @Override
-//            public void onClick(View v) {
+//            public void clickSure() {
 //                //如果是直播，发消息
-//                if (null != mLiveHelper) {
-//                    //向后台发送主播退出
-//                    mLiveHelper.perpareQuitRoom(true);
-//                    if (isPushed) {
-//                        mLiveHelper.stopPushAction();
-//                    }
-//                    startActivity(new Intent(LiveActivity2.this, LiveEndActivity.class));
-//                    if (backDialog != null && backDialog.isShowing()) {
-//                        backDialog.dismiss();
-//                    }
-//                }
+//                handlerStopLive();
+//                startActivity(new Intent(LiveActivity3.this, LiveEndActivity.class));
+//                finish();
+//                dialog.dismiss();
+//            }
 //
-//            }
-//        });
-//        TextView tvCancel = (TextView) backDialog.findViewById(R.id.cancel_action);
-//        tvCancel.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
-//                backDialog.cancel();
+//            public void clickCancel() {
+//                dialog.dismiss();
+//                dialog.cancel();
 //            }
 //        });
+//        dialog.show();
+//    }
+//
+//    /**
+//     * 停止直播
+//     */
+//    private void handlerStopLive(){
+//        if (null != mLiveHelper) {
+//            //向后台发送主播退出
+//            mLiveHelper.perpareQuitRoom(true);
+//            if (isPushed) {
+//                mLiveHelper.stopPushAction();
+//            }
+//        }
 //    }
 //
 //    /**
@@ -1042,7 +1159,7 @@
 //     */
 //    @Override
 //    public void enterRoomComplete(int id_status, boolean isSucc) {
-//        Toast.makeText(LiveActivity2.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(LiveActivity3.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
 //        //必须得进入房间之后才能初始化UI
 //        mEnterRoomHelper.initAvUILayer(avView);
 //
@@ -1074,9 +1191,6 @@
 //    public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
 //        if (LiveUtil.checkIsHost()) {
 //            MGToast.showToast("主播退出!");
-//            if (backDialog != null) {
-//                backDialog.dismiss();
-//            }
 //            finish();
 //        } else {
 //            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() && !mUserHeadTopView.isUserClose) {
@@ -1246,7 +1360,6 @@
 //     * update 观众 数量 。
 //     */
 //    public void doUpdateMembersCount(){
-//
 //            MGUIUtil.runOnUiThread(new Runnable() {
 //                @Override
 //                public void run() {
@@ -1358,17 +1471,17 @@
 //    public boolean showInviteView(String id) {
 //        int index = QavsdkControl.getInstance().getAvailableViewIndex(1);
 //        if (index == -1) {
-//            Toast.makeText(LiveActivity2.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(LiveActivity3.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
 //            return false;
 //        }
 //        int requetCount = index + inviteViewCount;
 //        if (requetCount > 3) {
-//            Toast.makeText(LiveActivity2.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(LiveActivity3.this, "the invitation's upper limit is 3", Toast.LENGTH_SHORT).show();
 //            return false;
 //        }
 //
 //        if (hasInvited(id)) {
-//            Toast.makeText(LiveActivity2.this, "it has already invited", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(LiveActivity3.this, "it has already invited", Toast.LENGTH_SHORT).show();
 //            return false;
 //        }
 //        switch (requetCount) {
@@ -1487,7 +1600,7 @@
 //            //host2的控制台---------------
 //            case R.id.camera_controll:
 //
-//                Toast.makeText(LiveActivity2.this, "切换" + backGroundId + "camrea 状态", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LiveActivity3.this, "切换" + backGroundId + "camrea 状态", Toast.LENGTH_SHORT).show();
 //                if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//自己关闭自己
 //                    mLiveHelper.toggleCamera();
 //                } else {
@@ -1495,7 +1608,7 @@
 //                }
 //                break;
 //            case R.id.mic_controll:
-//                Toast.makeText(LiveActivity2.this, "切换" + backGroundId + "mic 状态", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LiveActivity3.this, "切换" + backGroundId + "mic 状态", Toast.LENGTH_SHORT).show();
 //                if (backGroundId.equals(MySelfInfo.getInstance().getId())) {//自己关闭自己
 //                    mLiveHelper.toggleMic();
 //                } else {
@@ -1754,59 +1867,23 @@
 //     */
 //    public void pushStream() {
 //        if (!isPushed) {
-//            if (mPushDialog != null)
-//                mPushDialog.show();
+//            initPushDialog();
 //        } else {
 //            mLiveHelper.stopPushAction();
 //        }
 //    }
 //
-//    private Dialog mPushDialog;
 //
 //    private void initPushDialog() {
-//        mPushDialog = new Dialog(this, R.style.dialog);
-//        mPushDialog.setContentView(R.layout.push_dialog_layout);
-//        final TIMAvManager.StreamParam mStreamParam = TIMAvManager.getInstance().new StreamParam();
-//        final EditText pushfileNameInput = (EditText) mPushDialog.findViewById(R.id.push_filename);
-//        final RadioGroup radgroup = (RadioGroup) mPushDialog.findViewById(R.id.push_type);
-//
-//
-//        Button recordOk = (Button) mPushDialog.findViewById(R.id.btn_record_ok);
-//        recordOk.setOnClickListener(new View.OnClickListener() {
+//        LivePushDialog dialog = new LivePushDialog(this);
+//        dialog.setCanceledOnTouchOutside(false);
+//        dialog.setOnLivePushClickListener(new LivePushDialogCategory.OnLivePushClickListener() {
 //            @Override
-//            public void onClick(View view) {
-//                if (pushfileNameInput.getText().toString().equals("")) {
-//                    Toast.makeText(LiveActivity2.this, "name can't be empty", Toast.LENGTH_SHORT);
-//                    return;
-//                } else {
-//                    mStreamParam.setChannelName(pushfileNameInput.getText().toString());
-//                }
-//
-//                if (radgroup.getCheckedRadioButtonId() == R.id.hls) {
-//                    mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
-//                } else {
-//                    mStreamParam.setEncode(TIMAvManager.StreamEncode.RTMP);
-//                }
-////                mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
-//                mLiveHelper.pushAction(mStreamParam);
-//                mPushDialog.dismiss();
+//            public void clickRecordOk(TIMAvManager.StreamParam streamParam) {
+//                mLiveHelper.pushAction(streamParam);
 //            }
 //        });
-//
-//
-//        Button recordCancel = (Button) mPushDialog.findViewById(R.id.btn_record_cancel);
-//        recordCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mPushDialog.dismiss();
-//            }
-//        });
-//
-//        Window dialogWindow = mPushDialog.getWindow();
-//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//        dialogWindow.setGravity(Gravity.CENTER);
-//        dialogWindow.setAttributes(lp);
-//        mPushDialog.setCanceledOnTouchOutside(false);
+//        dialog.show();
 //    }
 //
 //
@@ -1853,7 +1930,7 @@
 //            public void onClick(View view) {
 //                ClipboardManager clip = (ClipboardManager) getApplicationContext().getSystemService(getApplicationContext().CLIPBOARD_SERVICE);
 //                clip.setText(url);
-//                Toast.makeText(LiveActivity2.this, getResources().getString(R.string.clip_tip), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LiveActivity3.this, getResources().getString(R.string.clip_tip), Toast.LENGTH_SHORT).show();
 //            }
 //        });
 //        if (url2 == null) {
@@ -1865,7 +1942,7 @@
 //                public void onClick(View view) {
 //                    ClipboardManager clip = (ClipboardManager) getApplicationContext().getSystemService(getApplicationContext().CLIPBOARD_SERVICE);
 //                    clip.setText(url2);
-//                    Toast.makeText(LiveActivity2.this, getResources().getString(R.string.clip_tip), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LiveActivity3.this, getResources().getString(R.string.clip_tip), Toast.LENGTH_SHORT).show();
 //                }
 //            });
 //        }

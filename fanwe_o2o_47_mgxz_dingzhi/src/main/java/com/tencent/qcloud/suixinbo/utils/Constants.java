@@ -36,6 +36,7 @@ public class Constants {
 //    public static final int ACCOUNT_TYPE = 884;// 用户的账号类型
 
     public static final int SDK_APPID = 1400012005;//sdkappid,本应用的
+//    public static final int SDK_APPID = 1252383683 ;//sdkappid,本应用的
 
     public static final int ACCOUNT_TYPE = 6410;// 用户的账号类型
 

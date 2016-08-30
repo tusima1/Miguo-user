@@ -4,11 +4,11 @@ public class WxappModel
 {
 
 	private String appid;
-	private String noncestr;
-	private String packagevalue;
+	private String nonce_str;
+	private String package_value;
 	private String partnerid;
 	private String prepayid;
-	private String timestamp;
+	private String time_stamp;
 	private String sign;
 	private String subject;
 	private String body;
@@ -19,16 +19,9 @@ public class WxappModel
 	private String pay_code;
 	private String key;
 	private String secret;
+	private String trade_type;
+	private String mch_id;
 
-	public String getPackagevalue()
-	{
-		return packagevalue;
-	}
-
-	public void setPackagevalue(String packagevalue)
-	{
-		this.packagevalue = packagevalue;
-	}
 
 	public String getAppid()
 	{
@@ -38,16 +31,6 @@ public class WxappModel
 	public void setAppid(String appid)
 	{
 		this.appid = appid;
-	}
-
-	public String getNoncestr()
-	{
-		return noncestr;
-	}
-
-	public void setNoncestr(String noncestr)
-	{
-		this.noncestr = noncestr;
 	}
 
 	public String getPartnerid()
@@ -70,15 +53,7 @@ public class WxappModel
 		this.prepayid = prepayid;
 	}
 
-	public String getTimestamp()
-	{
-		return timestamp;
-	}
 
-	public void setTimestamp(String timestamp)
-	{
-		this.timestamp = timestamp;
-	}
 
 	public String getSign()
 	{
@@ -180,4 +155,43 @@ public class WxappModel
 		this.secret = secret;
 	}
 
+	public String getMch_id() {
+		return mch_id;
+	}
+
+	public void setMch_id(String mch_id) {
+		this.mch_id = mch_id;
+	}
+
+	public String getTrade_type() {
+		return trade_type;
+	}
+
+	public void setTrade_type(String trade_type) {
+		this.trade_type = trade_type;
+	}
+
+	public String getPackage_value() {
+		return package_value;
+	}
+
+	public void setPackage_value(String package_value) {
+		this.package_value = package_value;
+	}
+
+	public String getTime_stamp() {
+		return time_stamp;
+	}
+
+	public void setTime_stamp(String time_stamp) {
+		this.time_stamp = time_stamp;
+	}
+
+	public String getNonce_str() {
+		return nonce_str;
+	}
+
+	public void setNonce_str(String nonce_str) {
+		this.nonce_str = nonce_str;
+	}
 }

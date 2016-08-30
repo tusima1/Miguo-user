@@ -178,7 +178,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击抢到
      */
     public void clickRob(String red_packet_key,int duration) {
-        if (mAct != null && redPacketDialogHelper == null) {
+//        if (mAct != null && redPacketDialogHelper == null) {
+        if (mAct != null) {
             redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct,red_packet_key,duration,mCallbackView);
             redPacketDialogHelper.createDialog();
         }

@@ -4,6 +4,7 @@ package com.miguo.live.model.getHandOutRedPacket;
  * Created by Administrator on 2016/7/30.
  */
 public class ModelHandOutRedPacket {
+
     private String red_packet_type;
 
     private String red_packet_amount;

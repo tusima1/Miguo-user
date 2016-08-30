@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
+import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.definetion.LiveRoomParams;
 import com.tencent.TIMCallBack;
@@ -87,7 +89,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             SxbLog.i(TAG, "joinLiveRoom startEnterRoom ");
             joinLive(CurLiveInfo.getRoomNum());
         }
-
+        Log.d(LiveActivity.TAG, "is creatroom: " + MySelfInfo.getInstance().isCreateRoom());
     }
 
 
@@ -102,16 +104,21 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                 //只有进入房间后才能初始化AvView
                 isInAVRoom = true;
                 initAudioService();
-                mStepInOutView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                try{
+                    mStepInOutView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
+                }catch (NullPointerException e){
+
+                }
             } else {
 //                mStepInOutView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), false);
                 quiteAVRoom();
             }
-
         }
 
         // 离开房间成功回调
         public void onExitRoomComplete(int result) {
+            Log.d(LiveActivity.TAG, "EnterLiveActivity: " + "onExitRoomComplete..");
+
             isInAVRoom = false;
             quiteIMChatRoom();
             CurLiveInfo.setCurrentRequestCount(0);
@@ -400,12 +407,12 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     /**
      * 退出一个AV房间
      */
-    private void quiteAVRoom() {
+    public void quiteAVRoom() {
         SxbLog.d(TAG, "quiteAVRoom ");
         if (isInAVRoom == true) {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
-            int result = avContext.exitRoom();
-            //  mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+//            int result = avContext.exitRoom();
+              mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
 
         } else {
             quiteIMChatRoom();
@@ -424,6 +431,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      * 退出IM房间
      */
     private void quiteIMChatRoom() {
+        Log.d(LiveActivity.TAG, "EnterLiveActivity: " + "quiteIMChatRoom..");
         if ((isInChatRoom == true)) {
             //主播解散群
             if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
