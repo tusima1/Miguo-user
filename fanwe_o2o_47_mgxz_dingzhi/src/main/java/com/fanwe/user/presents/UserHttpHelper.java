@@ -443,11 +443,12 @@ public class UserHttpHelper implements IHelper {
     /**
      * 提交用户升级信息
      */
-    public void postUserUpgradeOrder(String payment_id, String order_id) {
+    public void postUserUpgradeOrder(String payment_id, String order_id, int is_use_account_money) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("payment_id", payment_id);
         params.put("order_id", order_id);
+        params.put("is_use_account_money", is_use_account_money + "");
         params.put("method", UserConstants.USER_UPGRADE_ORDER);
 
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
