@@ -8,28 +8,19 @@ package com.fanwe.constant;
 public class ServerUrl {
     public static final boolean DEBUG = true;
     public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
-<<<<<<< HEAD
-//<<<<<<< HEAD
-        public static final String SERVER_API_JAVA_TEST_URL = "http://api.test.mgxz.com/";
-=======
+
        public static final String SERVER_API_JAVA_TEST_URL = "http://api.test.mgxz.com/";
->>>>>>> df0e74150a885d3fc36e99dbc14354acba28a1d0
+
 
 // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";
 
     //  public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.36:8080/mgxz.BussRPC/";
-<<<<<<< HEAD
-//=======
-//    public static final String SERVER_API_JAVA_TEST_URL = "http://api.test.mgxz.com/";
+
 //  public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";
 
 //      public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.37:8080/mgxz.BussRPC/";
 
-//>>>>>>> 977a0fd2e75c4e5e3bb9c3514d360b10a63a2796
-=======
-//      public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.37:8080/mgxz.BussRPC/";
->>>>>>> df0e74150a885d3fc36e99dbc14354acba28a1d0
-//    public static final String SERVER_API_JAVA_TEST_URL = "http://192.168.90.31:8080/mgxz.BussRPC/";
+
 
     //	public static final String SERVER_API_TEST_URL="pre.mgxz.com";
     public static final String SERVER_API_URL_MID = "www.mgxz.com";
