@@ -306,8 +306,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         String token = App.getInstance().getToken();
         boolean imLoginSuccess = App.getInstance().isImLoginSuccess();
 //        boolean imLoginSuccess = false;
-      boolean isAvStart = App.getInstance().isAvStart();
-//        boolean isAvStart = isAnchor;
+//      boolean isAvStart = App.getInstance().isAvStart();
+        boolean isAvStart = isAnchor;
         String useSign = App.getInstance().getUserSign();
 
 
@@ -331,11 +331,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //im login callback code...
         Log.d(TAG, "user sign: " + useSign);
 
+        /**
+         * 主播进来
+         */
         if (isAvStart) {
             if (QavsdkControl.getInstance().getAVContext() == null) {
                 startAVSDK();
             }
             enterRoom();
+            /**
+             * 用户进来
+             */
         } else {
             if (imLoginSuccess) {
                 boolean value = MySelfInfo.getInstance().isCreateRoom();
