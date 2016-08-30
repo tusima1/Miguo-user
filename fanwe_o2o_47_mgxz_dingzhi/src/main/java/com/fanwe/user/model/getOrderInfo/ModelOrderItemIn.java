@@ -19,6 +19,33 @@ public class ModelOrderItemIn {
     private String is_refund;//是否支持退款，０，无；　１：用户申请退款；　２：已确认；　３：拒绝退款
     private String refunded;//已退款
     private String refunding;//正在退款
+    private String can_refund;//是否可退款：0：不可退款，1：可退款
+    private String can_comment;//是否可评价：0：不可评价，1：可评价
+    private String can_consume;//是否可消费：0，不可消费，1，可消费
+
+    public String getCan_refund() {
+        return can_refund;
+    }
+
+    public void setCan_refund(String can_refund) {
+        this.can_refund = can_refund;
+    }
+
+    public String getCan_comment() {
+        return can_comment;
+    }
+
+    public void setCan_comment(String can_comment) {
+        this.can_comment = can_comment;
+    }
+
+    public String getCan_consume() {
+        return can_consume;
+    }
+
+    public void setCan_consume(String can_consume) {
+        this.can_consume = can_consume;
+    }
 
     public String getRefunded() {
         return refunded;

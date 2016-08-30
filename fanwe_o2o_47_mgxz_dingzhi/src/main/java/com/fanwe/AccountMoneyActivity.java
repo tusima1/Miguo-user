@@ -7,20 +7,19 @@ import android.view.View.OnClickListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDToast;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_money_indexActModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.SDFormatUtil;
+import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
+import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
+
+import java.util.List;
 
 /**
  * 账户余额
@@ -28,7 +27,7 @@ import com.miguo.live.views.customviews.MGToast;
  * @author Administrator
  *
  */
-public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity {
+public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity implements CallbackView2 {
 
     @ViewInject(R.id.tv_money)
     private TextView mTv_money;
@@ -36,8 +35,8 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity {
     @ViewInject(R.id.tv_withdraw)
     private TextView mTv_withdraw;
 
-    private Uc_money_indexActModel mActModel;
-    private String money;
+    private float money=0;
+    private UserHttpHelper httpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity {
     }
 
     private void init() {
+        httpHelper = new UserHttpHelper(null,this);
         initTitle();
         registerClick();
     }
@@ -65,54 +65,21 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity {
     }
 
     private void requestData() {
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_money");
-        InterfaceServer.getInstance().requestInterface(model, new
-                SDRequestCallBack<Uc_money_indexActModel>() {
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        mActModel = actModel;
-                        if (actModel.getStatus() > 0) {
-                            money = actModel.getMoney() + "";
-                            mTv_money.setText(SDFormatUtil.formatMoneyChina(actModel.getMoney()));
-                        }
-                        super.onSuccess(responseInfo);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        onRefreshComplete();
-                        super.onFinish();
-                    }
-
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-                        MGToast.showToast(msg);
-                        finish();
-                    }
-                });
+        httpHelper.getDistrInfo();
     }
 
     private void registerClick() {
         mTv_withdraw.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mActModel != null) {
-                    double money = mActModel.getMoney();
                     if (money > 0) {
-                        Intent intent = new Intent(getApplicationContext(), WithdrawActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), DistributionWithdrawActivity.class);
+                        intent.putExtra("money",money+"");
+                        intent.putExtra("money_type",1);
                         startActivity(intent);
                     } else {
                         SDToast.showToast("没有余额可提现");
                     }
-                } else {
-                    requestData();
-                }
             }
         });
     }
@@ -132,4 +99,39 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity {
         super.onCLickRight_SDTitleSimple(v, index);
     }
 
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (UserConstants.DISTR_INFO.equals(method)){
+            if (datas==null){
+                money =0;
+                mTv_money.setText("0");
+            }else {
+                ModelDistrInfo modelDistrInfo= (ModelDistrInfo) datas.get(0);
+                String fx_money = modelDistrInfo.getFx_money();
+                try {
+                    money=Float.valueOf(fx_money);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    money=0;
+                }
+                mTv_money.setText(money+"");
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+        MGToast.showToast(responseBody);
+        finish();
+    }
+
+    @Override
+    public void onFinish(String method) {
+        mPtrsv_all.onRefreshComplete();
+    }
 }

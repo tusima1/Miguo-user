@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * Created by didik on 2016/8/26.
+ * 8.30 虽然添加了3个字段,但是没有什么用....
  */
 public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
 
@@ -40,7 +41,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
         if ("已支付".equalsIgnoreCase(isPayed)) {
             this.isPayed = true;
         }
-        this.mOrder_id=order_id;
+        this.mOrder_id = order_id;
         this.mOrderMode = orderMode;
         this.mStatus_value = status_value;
     }
@@ -68,8 +69,8 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
         TextView tv_total_price = ViewHolder.get(convertView, R.id.tv_total_price);
 
         final ModelOrderItemIn model = getItem(position);
-        if (model!=null){
-            SDViewBinder.setImageView(model.getIcon(),iv_image);
+        if (model != null) {
+            SDViewBinder.setImageView(model.getIcon(), iv_image);
             tv_name.setText(model.getName());//单个商品的名称
             tv_order_title.setText(model.getBuss_name());//商家名称
             tv_sno.setText(model.getOrder_sn());
@@ -125,15 +126,23 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             int number = MGStringFormatter.getInt(model.getNumber());
             int refunded = MGStringFormatter.getInt(model.getRefunded());
             int refunding = MGStringFormatter.getInt(model.getRefunding());
-            int dp_id=-1;
+
+            /*是否可评价：0：不可评价，1：可评价*/
+            String can_comment = model.getCan_comment();
+            /*是否可消费：0，不可消费，1，可消费*/
+            String can_consume = model.getCan_consume();
+            /*是否可退款：0：不可退款，1：可退款*/
+            String can_refund = model.getCan_refund();
+
+            int dp_id = -1;
             String str_dp_id = model.getDp_id();
-            if (TextUtils.isEmpty(str_dp_id)){
-                dp_id=0;
-            }else {
-                dp_id=MGStringFormatter.getInt(str_dp_id);
+            if (TextUtils.isEmpty(str_dp_id)) {
+                dp_id = 0;
+            } else {
+                dp_id = MGStringFormatter.getInt(str_dp_id);
             }
 
-            if ((mStatus_value==3|| mStatus_value==4)&& dp_id==0 && consume_count>0){
+            if ((mStatus_value == 3 || mStatus_value == 4) && dp_id == 0 && consume_count > 0) {
                 tv_evaluate.setVisibility(View.VISIBLE);
                 tv_order.setText("已消费");
                 tv_evaluate.setOnClickListener(new View.OnClickListener() {
@@ -148,8 +157,9 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     }
                 });
             }
-            int cal_temp=number-refunded-refunding;
-            if ((mStatus_value==3|| mStatus_value==4) && cal_temp-consume_count>0){
+//            int cal_temp = number - refunded - refunding;
+//            if ((mStatus_value == 3 || mStatus_value == 4) && cal_temp - consume_count > 0) {
+            if ("1".equals(can_consume)) {
                 tv_tuikuan.setVisibility(View.VISIBLE);
                 tv_order.setText("待消费");
                 tv_tuikuan.setOnClickListener(new View.OnClickListener() {
@@ -160,24 +170,22 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     }
                 });
             }
-            if (dp_id>0){
+            if (dp_id > 0) {
                 tv_order.setText("已评价");
             }
-            if (refunding>0){
+            if (refunding > 0) {
                 tv_order.setText("退款中");
             }
             int refund_status = MGStringFormatter.getInt(model.getRefund_status());
-            if (refund_status==2){
+            if (refund_status == 2) {
                 tv_order.setText("已退款");
-            }else if (refund_status==3){
+            } else if (refund_status == 3) {
                 tv_order.setText("退款失败");
             }
-
-
         }
-        if (tv_evaluate.getVisibility()==View.GONE && tv_tuikuan.getVisibility()==View.GONE){
+        if (tv_evaluate.getVisibility() == View.GONE && tv_tuikuan.getVisibility() == View.GONE) {
             mLl_button.setVisibility(View.GONE);
-        }else {
+        } else {
             mLl_button.setVisibility(View.VISIBLE);
         }
 
@@ -195,6 +203,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
         });
         return convertView;
     }
+
     /**
      * 去退款页面
      * @param tuan_id

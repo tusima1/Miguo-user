@@ -18,7 +18,6 @@ import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.ArrayList;
