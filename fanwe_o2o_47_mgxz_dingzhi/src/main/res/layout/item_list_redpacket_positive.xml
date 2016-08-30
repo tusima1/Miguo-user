@@ -26,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:text="专属优惠"
+                    android:text=""
                     android:textColor="#ffd1b2"
                     android:textSize="12sp"
                     />
@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:text="5"
                         android:textColor="#ff6600"
-                        android:textSize="26sp"
+                        android:textSize="22sp"
                         />
                     <!--android:paddingRight="6dp" 用来调节前面数字的间距-->
                     <TextView
@@ -56,7 +56,7 @@
                         android:paddingRight="6dp"
                         android:text="折"
                         android:textColor="#ff6600"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         />
                 </LinearLayout>
             </RelativeLayout>

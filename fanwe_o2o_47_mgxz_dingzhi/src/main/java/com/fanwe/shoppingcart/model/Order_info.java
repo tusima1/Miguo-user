@@ -20,6 +20,8 @@ public class Order_info  implements Serializable{
 
     private String order_sn;
 
+    private String order_id;
+
     public void setOrder_status(String order_status){
         this.order_status = order_status;
     }
@@ -57,4 +59,11 @@ public class Order_info  implements Serializable{
         return this.order_sn;
     }
 
+    public String getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
+    }
 }

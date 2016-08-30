@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fanwe.BaseActivity;
+import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
@@ -80,9 +81,9 @@ public class MyCouponDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (mModel != null) {
-//                    Intent intent = new Intent(mActivity, TuanDetailActivity.class);
-//                    intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, mModel.getDeal_id());
-//                    startActivity(intent);
+                    Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+                    intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, mModel.getTuan_id());
+                    startActivity(intent);
                 }
             }
         });
@@ -122,9 +123,6 @@ public class MyCouponDetailActivity extends BaseActivity {
 
         mShopList= mModel.getShop_list();
         mAdapter.setData(mShopList);
-//        SDViewBinder.setTextView(mTvMerchantName, mModel.getSpName());
-//        SDViewBinder.setTextView(mTvMerchantMobile, mModel.getSpTel());
-//        SDViewBinder.setTextView(mTvMerchantAddress, mModel.getSpAddress());
     }
 
 }

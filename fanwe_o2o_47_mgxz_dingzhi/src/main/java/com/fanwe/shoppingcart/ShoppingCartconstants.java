@@ -21,6 +21,11 @@ public class ShoppingCartconstants {
      * 商品ID 列表。
      */
     public static final String LIST_DEAL_IDS="mListDeal_id";
+    /**
+     *
+     */
+
+    public static final String RED_IDS = "mRedIds";
 
 
     /**
@@ -47,6 +52,11 @@ public class ShoppingCartconstants {
      * 购物车结算按钮。
      */
     public static final String  SP_CART_TOORDER ="SpCartToOrder";
+    /**
+     * 未支付订单。
+     */
+    public static final String  PENDIING_ORDER ="PendingOrder";
+
     /**
      * 购物车结算按钮 get。
      */

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/tv_bank"
+                android:id="@+id/tv_time"
                 style="@style/text_item_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:src="@drawable/ic_launcher" />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_desc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

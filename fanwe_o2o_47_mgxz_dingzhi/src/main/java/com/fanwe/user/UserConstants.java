@@ -160,6 +160,10 @@ public class UserConstants {
      */
     public static final String REFUND_APPLICATION_PAGE = "OrderItemTuangou";
     /**
+     * 退款申请
+     */
+    public static final String REFUND_APPLICATION = "RefundApply";
+    /**
      * 团购券
      */
     public static final String GROUP_BUY_COUPON_LIST = "GroupBuyCouponList";
@@ -171,4 +175,15 @@ public class UserConstants {
      * 我的分销小店基本信息
      */
     public static final String DISTR_INFO = "DistrInfo";
+
+    /**
+     * 二维码
+     */
+    public static final String QR_SHOP_CARD = "MyShopNameCard";
+    /**
+     * 用户升级
+     */
+    public static final String USER_UPGRADE_ORDER = "UserUpgradeOrder";
+    public static final String USER_UPGRADE_ORDER_GET = "UserUpgradeOrderGet";
+    public static final String USER_UPGRADE_ORDER_POST = "UserUpgradeOrderPost";
 }

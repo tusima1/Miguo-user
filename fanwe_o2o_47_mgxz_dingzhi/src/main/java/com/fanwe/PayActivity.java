@@ -50,7 +50,9 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
+import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.DisPlayUtil;
+import com.fanwe.utils.SDFormatUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -65,11 +67,24 @@ import com.unionpay.UPPayAssistEx;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	/** 00:正式，01:测试 */
 	private static final String UPACPAPP_MODE = "00";
+	/**
+	 * 支付完成。
+	 */
+	private  final  String  PAY_SUCCESS="3";
+	/**
+	 * 未支付。
+	 */
+	private final String PAY_WAIT="0";
+	/**
+	 * ALIpay.
+	 */
+	private final String ALIPAY="Aliapp";
 
 	/** 订单id (int) */
 	public static final String EXTRA_ORDER_ID = "extra_order_id";
@@ -83,6 +98,11 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 
 	@ViewInject(R.id.act_pay_btn_pay)
 	private Button mBtnPay;
+	/**
+	 * 查看消费券。
+	 */
+	@ViewInject(R.id.act_quanlist_btn)
+	private Button mBtnQuan;
 
 	@ViewInject(R.id.act_pay_ll_scan_code)
 	private LinearLayout mLlScanCodes;
@@ -112,6 +132,9 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 	protected String content;
 	private PopupWindow pop;
 
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -124,7 +147,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		getIntentData();
 		initfews();
 		initTitle();
-		requestPayOrder();
+	//	requestPayOrder();
 		registeClick();
 	}
 
@@ -140,72 +163,9 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		 */
 	}
 
-	private void requestPayOrder() {
-		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-			return;
-		}
-		RequestModel model = new RequestModel();
-		model.putCtl("payment");
-		model.putAct("done");
-		model.putUser();
-		model.put("id", mOrderId);
-		SDRequestCallBack<Payment_doneActModel> handler = new SDRequestCallBack<Payment_doneActModel>() {
 
-			@Override
-			public void onStart() {
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					SDViewBinder.setTextView(mTvOrderSn, actModel.getOrder_sn());
-					int payStatus = actModel.getPay_status();
-					if (payStatus == 1)// 订单已经付款
-					{
-						SDEventManager.post(EnumEventTag.PAY_ORDER_SUCCESS.ordinal());
-						mHasPay = "all";
-						mBtnPay.setVisibility(View.GONE);
-						SDViewBinder.setTextView(mTvPayInfo, actModel.getPay_info());
-						bindCouponlistData(actModel.getCouponlist());
-						if (!isEmpty(actModel.getShare_url())) {
-							SDViewUtil.show(mIv_share);
-							title = actModel.getShare_title();
-							content = actModel.getShare_info();
-							clickUrl = actModel.getShare_url();
-							imageUrl = actModel.getShare_ico();
-						} else {
-							SDViewUtil.hide(mIv_share);
-						}
-						if (actModel.getShare() != null && actModel.getSalary() > 0) {
-							showSharePop(actModel.getShare(), actModel.getSalary());
-						}
-					} else {
-						mHasPay = "pay_wait";
-						mBtnPay.setVisibility(View.VISIBLE);
-						mPaymentCodeModel = actModel.getPayment_code();
-						if (mPaymentCodeModel == null) {
-							SDToast.showToast("payment_code is null");
-							return;
-						}
-						SDViewBinder.setTextView(mTvPayInfo, mPaymentCodeModel.getPay_info());
-						mBtnPay.setText(mPaymentCodeModel.getPay_moneyFormat());
-					}
-				}
-			}
 
-			@Override
-			public void onFailure(HttpException error, String msg) {
-
-			}
-
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-	}
 
 	/**
 	 * 绑定二维码
@@ -226,6 +186,53 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		}
 	}
 
+	private void bindData(){
+		SDViewBinder.setTextView(mTvOrderSn, orderDetailInfo.getOrder_info().getOrder_sn());
+		String payStatus = orderDetailInfo.getOrder_info().getOrder_status();
+		if(TextUtils.isEmpty(payStatus)){
+			return;
+		}
+		if(PAY_SUCCESS.equals(payStatus)){
+			//支付成功 处理。
+			SDViewUtil.show(mBtnQuan);
+			SDEventManager.post(EnumEventTag.PAY_ORDER_SUCCESS.ordinal());
+			mHasPay = "all";
+			mBtnPay.setVisibility(View.GONE);
+			SDViewBinder.setTextView(mTvPayInfo, orderDetailInfo.getOrder_info().getName());
+
+			if (!isEmpty(orderDetailInfo.getShare_url())) {
+				SDViewUtil.show(mIv_share);
+			} else {
+				SDViewUtil.hide(mIv_share);
+			}
+
+		}else if(PAY_WAIT.equals(payStatus)){
+			//支付未完成。
+			mPaymentCodeModel = new Payment_codeModel();
+			String class_name =orderDetailInfo.getClass_name();
+
+			mHasPay = "pay_wait";
+			mBtnPay.setVisibility(View.VISIBLE);
+			HashMap<String,String> config = orderDetailInfo.getConfig();
+			String payMondy = config.get("total_fee");
+			mPaymentCodeModel.setPay_money(payMondy);
+			mPaymentCodeModel.setConfig(config);
+			mPaymentCodeModel.setClass_name(class_name);
+			if(!TextUtils.isEmpty(class_name)&&ALIPAY.equals(class_name)){
+				mPaymentCodeModel.setPayment_name("支付宝支付");
+			}else{
+				mPaymentCodeModel.setPayment_name("微信支付");
+
+			}
+
+			if (mPaymentCodeModel == null) {
+				SDToast.showToast("payment_code is null");
+				return;
+			}
+			SDViewBinder.setTextView(mTvPayInfo, class_name+orderDetailInfo.getOrder_info().getName());
+			mBtnPay.setText(mPaymentCodeModel.getPay_money());
+		}
+	}
 	private void getIntentData() {
 		Intent intent =getIntent();
 		mOrderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
@@ -236,6 +243,9 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 			SDToast.showToast("id为空");
 			finish();
 			return;
+		}
+		else{
+			bindData();
 		}
 	}
 
@@ -260,29 +270,33 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		// finish();
 	}
 
-	@Override
-	public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-		requestPayOrder();
-
-	}
 
 	private void registeClick() {
 		mBtnPay.setOnClickListener(this);
 		mIv_share.setOnClickListener(this);
 	}
 
+
+	public void showPayment(boolean ifShow ){
+		View v = findViewById(R.id.act_pay_btn_pay);
+		if(!ifShow) {
+			v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
+			v.setClickable(false);
+		}else{
+			v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
+			v.setClickable(true);
+		}
+	}
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.act_pay_btn_pay:
 			if (v.isClickable()) {
-				v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
-				v.setClickable(false);
+				showPayment(false);
 				//60s可点
 				
 			}else{
-				v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
-				v.setClickable(true);
+				showPayment(true);
 			}
 			clickPay();
 			break;
@@ -389,7 +403,6 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 		if (mPaymentCodeModel == null) {
 			return;
 		}
-
 		String payAction = mPaymentCodeModel.getPay_action();
 		String className = mPaymentCodeModel.getClass_name();
 		if (!TextUtils.isEmpty(payAction)) // wap
@@ -411,6 +424,14 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 			}
 		}
 
+	}
+
+	/**
+	 * 支付结束页。
+	 */
+	public void payFinish(){
+		SDViewUtil.show(mBtnQuan);
+		SDViewUtil.hide(mBtnPay);
 	}
 
 	/**
@@ -518,7 +539,9 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 			return;
 		}
 
-		String orderSpec = model.getOrder_spec();
+
+		String orderSpec = "&partner = "+"\"" +model.getPartner()+"\"" +"&seller_id ="+ "\"" +model.getSeller_id()+ "\""+"&out_trade_no="+"\""+model.getOut_trade_no()+"\""+"&subject ="+"\""+model.getSubject()+"\""+"&body ="+model.getBody()+"\""+"&total_fee="+model.getTotal_fee()+"\""+"&notify_url="+model.getNotify_url()+"\""+"&service="+"\""+model.getService()+"\""+"&payment_type="+"\""+model.getPayment_type()+"\""+"&_input_charset="+"\""+model.get_input_charset()+"\"";
+
 
 		String sign = model.getSign();
 
@@ -555,13 +578,19 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 				if ("9000".equals(status)) // 支付成功
 				{
 					SDToast.showToast("支付成功");
+					showPayment(false);
+					payFinish();
+
 				} else if ("8000".equals(status)) // 支付结果确认中
 				{
 					SDToast.showToast("支付结果确认中");
+					showPayment(false);
+					payFinish();
 				} else {
 					SDToast.showToast(info);
+					showPayment(true);
 				}
-				requestPayOrder();
+				//requestPayOrder();
 			}
 
 			@Override
@@ -609,6 +638,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 				break;
 			case -2: // 无需处理。发生场景：用户不支付了，点击取消，返回APP。
 				content = "取消支付";
+				//showPayment(true);
 				break;
 
 			default:

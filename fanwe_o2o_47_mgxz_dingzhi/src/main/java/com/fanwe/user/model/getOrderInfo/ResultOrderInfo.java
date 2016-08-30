@@ -6,10 +6,10 @@ import java.util.List;
  * Created by didik on 2016/8/23.
  */
 public class ResultOrderInfo {
-    private String pageTitle;
-    private String pageSize;
+    private String page_title;
+    private String page_size;
     private String page;
-    private String dataNum;//每页数量
+    private String data_num;//每页数量
     /**
      * order_status : 0
      * create_time : 1470884540240
@@ -28,28 +28,28 @@ public class ResultOrderInfo {
 
     private List<ModelOrderItemOut> items;
 
-    public String getDataNum() {
-        return dataNum;
+    public String getData_num() {
+        return data_num;
     }
 
-    public void setDataNum(String dataNum) {
-        this.dataNum = dataNum;
+    public void setData_num(String data_num) {
+        this.data_num = data_num;
     }
 
-    public String getPageTitle() {
-        return pageTitle;
+    public String getPage_title() {
+        return page_title;
     }
 
-    public void setPageTitle(String pageTitle) {
-        this.pageTitle = pageTitle;
+    public void setPage_title(String page_title) {
+        this.page_title = page_title;
     }
 
-    public String getPageSize() {
-        return pageSize;
+    public String getPage_size() {
+        return page_size;
     }
 
-    public void setPageSize(String pageSize) {
-        this.pageSize = pageSize;
+    public void setPage_size(String page_size) {
+        this.page_size = page_size;
     }
 
     public String getPage() {

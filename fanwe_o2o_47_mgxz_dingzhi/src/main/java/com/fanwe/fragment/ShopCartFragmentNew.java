@@ -560,11 +560,23 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     public void onFailue(String method, String responseBody) {
         switch (method) {
             case ShoppingCartconstants.SHOPPING_CART_LIST:
-                mContentPtr.onRefreshComplete();
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mContentPtr.onRefreshComplete();
+
+                    }
+                });
                 break;
             case ShoppingCartconstants.SHOPPING_CART_DELETE:
                 SDToast.showToast(responseBody);
-                requestData();
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        requestData();
+
+                    }
+                });
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
                 SDToast.showToast(responseBody);

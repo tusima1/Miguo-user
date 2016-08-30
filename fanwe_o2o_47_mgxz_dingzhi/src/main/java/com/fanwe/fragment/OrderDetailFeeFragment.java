@@ -145,18 +145,19 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
 
         float youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         float needFloat = totalFloat - yueFloat - youhuiFloat;
+        float needFloat2= totalFloat-youhuiFloat;
         //余额 》= 总金额。
         if (yueFloat >= totalFloat) {
             if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(totalFloat + "");
+                yue_fee.setText(needFloat2 + "");
                 yue_line.setVisibility(View.VISIBLE);
 
                 pay_type_line.setVisibility(View.GONE);
                 need_pay_line.setVisibility(View.GONE);
             } else {
                 //不使用余额支付
-                need_pay_fee.setText(totalFloat + "");
+                need_pay_fee.setText(needFloat2 + "");
                 yue_line.setVisibility(View.GONE);
                 if (currentFeeInfoModel != null) {
                     pay_type.setText(currentFeeInfoModel.getName());
@@ -167,10 +168,10 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         } else {
             if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(totalFloat + "");
+                yue_fee.setText(needFloat2 + "");
                 yue_line.setVisibility(View.VISIBLE);
 
-                need_pay_fee.setText(needFloat + "");
+                need_pay_fee.setText(needFloat2 + "");
                 if (currentFeeInfoModel != null) {
                     pay_type.setText(currentFeeInfoModel.getName());
 
@@ -181,7 +182,7 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
                 need_pay_line.setVisibility(View.VISIBLE);
             } else {
                 //不使用余额支付
-                need_pay_fee.setText(totalFloat + "");
+                need_pay_fee.setText(needFloat2 + "");
                 if (currentFeeInfoModel != null) {
                     yue_line.setVisibility(View.GONE);
                     pay_type.setText(currentFeeInfoModel.getName());
