@@ -16,6 +16,9 @@ public class MGStringFormatter {
      * @return error Integer.min_value
      */
     public static int getInt(String maybeInt){
+        if(maybeInt == null || maybeInt.equals("")){
+            return 0;
+        }
         int a=Integer.MIN_VALUE;
         try {
             a= Integer.valueOf(maybeInt);

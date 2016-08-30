@@ -12,6 +12,7 @@ import com.miguo.live.interf.MyItemClickListenerRedType;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
 import com.miguo.live.viewHolder.ViewHolderRedType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -43,10 +44,14 @@ public class RedTypeAdapter extends RecyclerView.Adapter<ViewHolderRedType> {
         String count = modelHandOutRedPacket.getRed_packets();
         String type = modelHandOutRedPacket.getRed_packet_type();
         String amount = modelHandOutRedPacket.getRed_packet_amount();
+        BigDecimal bigDecimal = new BigDecimal(Double.parseDouble(amount));
+        double value = bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         if ("1".equals(type)) {
-            holder.typeText.setText(amount + "折");
+//            holder.typeText.setText(amount + "折");
+            holder.typeText.setText(value + "折");
         } else if ("2".equals(type)) {
-            holder.typeText.setText(amount + "元");
+//            holder.typeText.setText(amount + "元");
+            holder.typeText.setText(value + "元");
         } else {
             return;
         }

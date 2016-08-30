@@ -101,6 +101,7 @@
         <activity android:name="com.fanwe.seller.views.MineShopActivity"/>
         <activity
             android:name="com.miguo.live.views.LiveActivity"
+            android:hardwareAccelerated="true"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">

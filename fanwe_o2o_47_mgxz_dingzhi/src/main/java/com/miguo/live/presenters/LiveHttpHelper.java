@@ -3,6 +3,7 @@ package com.miguo.live.presenters;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -60,6 +61,7 @@ import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
+import com.miguo.live.views.definetion.LogTag;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -68,6 +70,30 @@ import java.util.TreeMap;
 
 /**
  * Created by didik on 2016/7/28.
+ * 请求直播列表
+ * 申请直播房间ID
+ * 请求观众数
+ * 获取当前房间的观众列表
+ * 结束直播
+ * 观众进入房间
+ * 观众退出房间
+ * 直播登录，返回用户直播签名  GenerateSign
+ * get获取主播信息
+ * post申请成为主播
+ * 获取主播标签
+ * 主播退出，结束直播
+ * 业务服务器的数据字典接口
+ * 获取七牛UpToken
+ * 校验用户是否关注该用户(主播)
+ * 关注主播
+ * 获取主播红包列表
+ * 主播发红包
+ * 抢红包接口。
+ * 取用户所得到的红包列表。
+ * 获取门店随机评价
+ * 取直播门店的镇店之宝。
+ * 获取用户主播认证时间
+ *
  */
 public class LiveHttpHelper implements IHelper {
 
@@ -465,7 +491,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                SDToast.showToast("stopLive on error: " + message);
             }
         });
 
@@ -606,6 +632,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                Log.d(LogTag.HIJASON, getClass().getSimpleName() + " -> " + "getHandOutRedPacket -> " + "onSuccessResponse:" + "\n" + responseBody);
                 RootHandOutRedPacket rootHandOutRedPacket = gson.fromJson(responseBody, RootHandOutRedPacket.class);
                 List<ResultHandOutRedPacket> resultHandOutRedPackets = rootHandOutRedPacket.getResult();
                 if (SDCollectionUtil.isEmpty(resultHandOutRedPackets)) {
