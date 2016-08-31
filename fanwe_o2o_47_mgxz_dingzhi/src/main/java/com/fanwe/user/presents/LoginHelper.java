@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
@@ -22,6 +23,7 @@ import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.ThirdLoginInfo;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -37,6 +39,7 @@ import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -54,6 +57,7 @@ public class LoginHelper extends Presenter {
 
     private TencentHttpHelper mTencentHttpHelper;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mTLoginHelper;
+
 
 
     public LoginHelper(Context context) {
@@ -110,6 +114,74 @@ public class LoginHelper extends Presenter {
 
     }
 
+
+    /**
+     *
+     * @param openId
+     * @param platformType
+     * @param icon 头像地址
+     * @param icon 昵称
+     */
+    public void thirdLogin(final String openId , final String platformType, final String icon, final String nick, final CallbackView mCallbackView){
+        if(TextUtils.isEmpty(openId)){
+            return;
+        }
+        TreeMap<String,String> params = new TreeMap<String,String>();
+        params.put("openid",openId);
+        params.put("platform",platformType);
+        if(!TextUtils.isEmpty(icon)) {
+            params.put("icon", icon);
+        }
+        params.put("nick", nick);
+
+        params.put("method",UserConstants.TRHID_LOGIN_URL);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+                Type type = new TypeToken<Root<UserInfoNew>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                List datas = new ArrayList();
+                if("210".equals(statusCode)) {
+                    UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
+                    if (userInfoNew != null) {
+                        if (userInfoNew != null) {
+                            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+                            User_infoModel model = new User_infoModel();
+                            model.setUser_id(userInfoNew.getUser_id());
+                            model.setMobile(userInfoNew.getMobile());
+                            model.setUser_name(userInfoNew.getUser_name());
+                            model.setUser_pwd(userInfoNew.getPwd());
+                            dealLoginInfo(responseBody,userInfoNew.getUser_name(),userInfoNew.getPwd());
+                            datas.add(model);
+                            mCallbackView.onSuccess(UserConstants.THIRD_LOGIN_SUCCESS,datas);
+                        }
+                    }
+                }else if("300".equals(statusCode)){
+                    ThirdLoginInfo thirdLoginInfo = new ThirdLoginInfo();
+                    thirdLoginInfo.setIcon(icon);
+                    thirdLoginInfo.setNick(nick);
+                    thirdLoginInfo.setOpenId(openId);
+                    thirdLoginInfo.setPlatformType(platformType);
+                    datas.add(thirdLoginInfo);
+                    mCallbackView.onSuccess(UserConstants.THIRD_LOGIN_UNREGISTER,datas);
+                }else{
+                        mCallbackView.onFailue(message);
+                }
+
+            }
+        });
+
+    }
     /**
      * 登录
      *

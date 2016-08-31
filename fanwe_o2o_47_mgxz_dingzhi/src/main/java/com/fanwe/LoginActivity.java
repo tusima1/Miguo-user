@@ -8,14 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -33,26 +30,21 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
-import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
-import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.user.model.ThirdLoginInfo;
+import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import simbest.com.sharelib.ILoginCallback;
 import simbest.com.sharelib.ShareUtils;
@@ -103,6 +95,8 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	//1:qq，2:微信，3：微博
 	String platformType="";
 	private ShareUtils su;
+
+	LoginHelper mLoginHelper;
 	SHARE_MEDIA platform = null;
 	/**
 	 * 头像。
@@ -123,6 +117,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		init();
 		//友盟授权登录初始化。
 		su = new ShareUtils(this);
+		mLoginHelper = new LoginHelper(this);
 	}
 
 	private void init()
@@ -328,8 +323,8 @@ public class LoginActivity extends BaseActivity implements CallbackView
 					Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
 					return;
 				}
-			//	SDToast.showToast("openid:"+openId+" icon:"+icon+" nick:"+nick+"",Toast.LENGTH_LONG);
-			  thirdLogin(openId,platformType,icon,nick);
+				mLoginHelper.thirdLogin(openId,platformType,icon,nick,LoginActivity.this);
+
 			}
 
 			@Override
@@ -361,6 +356,22 @@ public class LoginActivity extends BaseActivity implements CallbackView
 		getSDFragmentManager().toggle(R.id.act_login_fl_content, null, LoginPhoneFragment.class);
 	}
 
+	protected  void startRegisterActivity(boolean third,ThirdLoginInfo thirdLoginInfo){
+		String openId=thirdLoginInfo.getOpenId();
+		String type = thirdLoginInfo.getPlatformType();
+		String icon = thirdLoginInfo.getIcon();
+		String nick = thirdLoginInfo.getNick();
+		Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+		if(third&&!TextUtils.isEmpty(openId)) {
+			intent.putExtra(UserConstants.THIRD_OPENID, openId);
+			intent.putExtra(UserConstants.THIRD_PLATFORM, type);
+			intent.putExtra(UserConstants.THIRD_ICON, icon);
+			intent.putExtra(UserConstants.THIRD_NICK, nick);
+		}
+		startActivity(intent);
+		finish();
+
+	}
 	protected void startRegisterActivity(boolean third,String type,String icon,  String nick)
 	{
 
@@ -394,63 +405,7 @@ public class LoginActivity extends BaseActivity implements CallbackView
 
 
 
-	/**
-	 *
-	 * @param openId
-	 * @param platformType
-	 * @param icon 头像地址
-	 * @param icon 昵称
-     */
-	public void thirdLogin(String openId ,final String platformType,final String icon,  final String nick){
-		if(TextUtils.isEmpty(openId)){
-			return;
-		}
-		TreeMap<String,String> params = new TreeMap<String,String>();
-		params.put("openid",openId);
-		params.put("platform",platformType);
-		if(!TextUtils.isEmpty(icon)) {
-			params.put("icon", icon);
-		}
-		params.put("nick", nick);
 
-
-
-		params.put("method",UserConstants.TRHID_LOGIN_URL);
-		OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-			@Override
-			public void onErrorResponse(String message, String errorCode) {
-
-			}
-
-			@Override
-			public void onSuccessResponse(String responseBody) {
-
-				Type type = new TypeToken<Root<UserInfoNew>>() {
-				}.getType();
-				Gson gson = new Gson();
-				Root<UserInfoNew> root = gson.fromJson(responseBody, type);
-				String statusCode = root.getStatusCode();
-				if("210".equals(statusCode)) {
-					UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
-					if (userInfoNew != null) {
-						if (userInfoNew != null) {
-							App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
-							User_infoModel model = new User_infoModel();
-							model.setUser_id(userInfoNew.getUser_id());
-							model.setUser_name(userInfoNew.getUser_name());
-							dealLoginSuccess(model);
-						}
-					}
-				}else if("300".equals(statusCode)){
-					startRegisterActivity(true,platformType,icon,nick);
-				}else{
-
-				}
-
-			}
-		});
-
-	}
 	protected void dealLoginSuccess(User_infoModel actModel) {
 		LocalUserModel.dealLoginSuccess(actModel, true);
 		Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
@@ -474,13 +429,41 @@ public class LoginActivity extends BaseActivity implements CallbackView
 	}
 
 	@Override
-	public void onSuccess(String method, List datas) {
+	public void onSuccess(String method,final List datas) {
+  switch (method){
+	  case UserConstants.THIRD_LOGIN_SUCCESS:
+		  if(datas!=null&&datas.size()>0){
+			  MGUIUtil.runOnUiThread(new Runnable() {
+				  @Override
+				  public void run() {
+					  dealLoginSuccess((User_infoModel) datas.get(0));
+				  }
+			  });
+
+		  }
+
+		  break;
+	  case UserConstants.THIRD_LOGIN_UNREGISTER:
+		  if(datas!=null&&datas.size()>0){
+			  MGUIUtil.runOnUiThread(new Runnable() {
+				  @Override
+				  public void run() {
+					  ThirdLoginInfo thirdLoginInfo = (ThirdLoginInfo)datas.get(0);
+					  startRegisterActivity(true,thirdLoginInfo);
+				  }
+			  });
+
+		  }
+
+		  break;
+
+  }
 
 	}
 
 	@Override
 	public void onFailue(String responseBody) {
-
+ 			 SDToast.showToast(responseBody);
 	}
 
 
