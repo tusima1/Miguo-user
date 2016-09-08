@@ -148,7 +148,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 break;
             case R.id.btn_start_live_start:
                 if (CurLiveInfo.modelShop == null || TextUtils.isEmpty(CurLiveInfo.modelShop.getId())) {
-                    SDToast.showToast("请选择你的消费场所");
+                    MGToast.showToast("请选择你的消费场所");
                     return;
                 } else {
                     if (!TextUtils.isEmpty(usersig)) {

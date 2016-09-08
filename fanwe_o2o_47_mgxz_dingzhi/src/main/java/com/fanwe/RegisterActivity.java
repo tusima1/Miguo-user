@@ -1,6 +1,5 @@
 package com.fanwe;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -11,39 +10,27 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.LoginPhoneFragment;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.Check_MobActModel;
-import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.Sms_send_sms_codeActModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.LoginHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * 注册界面
@@ -114,9 +101,9 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
      * 第三方OPENID ，用于第三方注册 。
      */
     String openid = "";
-    String platform="";
+    String platform = "";
     String icon = "";
-    String nick="";
+    String nick = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +116,8 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     @Override
     protected void onResume() {
         super.onResume();
-        if(!TextUtils.isEmpty(openid)){
+        if (!TextUtils.isEmpty(openid)) {
+            mTitle.setMiddleTextTop("绑定手机");
             passline1.setVisibility(View.INVISIBLE);
             passline2.setVisibility(View.INVISIBLE);
         }
@@ -137,11 +125,10 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
     private void init() {
         mFragmentHelper = new CommonHelper(this, this);
-        mLoginHelper = new LoginHelper(RegisterActivity.this,this,null);
+        mLoginHelper = new LoginHelper(RegisterActivity.this, this, null);
         initGetIntent();
         initTitle();
         registeClick();
-        checkMobileExist();
         initSDSendValidateButton();
     }
 
@@ -191,17 +178,17 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
     private void clickRegister() {
         if (validateParam()) {
-            if(!TextUtils.isEmpty(openid)){
-                mLoginHelper.doThirdRegister(userPhone,openid,mStrPwd, icon, nick,platform);
-            }else {
-               mLoginHelper.doRegister(userPhone,mStrPwd,passwordStr);
+            if (!TextUtils.isEmpty(openid)) {
+                mLoginHelper.doThirdRegister(userPhone, openid, mStrPwd, icon, nick, platform);
+            } else {
+                mLoginHelper.doRegister(userPhone, mStrPwd, passwordStr);
             }
 
         }
     }
 
     /**
-     *  判断手机号是否存在。
+     * 判断手机号是否存在。
      */
     public void checkMobileExist() {
         userPhone = mEtUserphone.getText().toString();
@@ -213,41 +200,42 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
                 }.getType();
                 Gson gson = new Gson();
                 Root<UserInfoNew> root = gson.fromJson(responseBody, type);
-                HashMap<String,String> infoNew = (HashMap<String,String>) validateBody(root);
-                if(infoNew!=null) {
-                  String value =   infoNew.get("exist");
+                HashMap<String, String> infoNew = (HashMap<String, String>) validateBody(root);
+                if (infoNew != null) {
+                    String value = infoNew.get("exist");
                     //如果手机号存在，并且是第三方登录。直接取验证码。
-                    if("1".equals(value)){
-                        if(!TextUtils.isEmpty(openid)) {
-
+                    if ("1".equals(value)) {
+                        if (!TextUtils.isEmpty(openid)) {
                             time.start();
                             doGetCaptcha();
-                        }else{
+                        } else {
                             goLogin();
                         }
-                    }else{
+                    } else {
                         time.start();
                         doGetCaptcha();
                     }
                 }
             }
+
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
             }
         });
     }
-    public void goLogin(){
+
+    public void goLogin() {
+        MGToast.showToast("手机号已注册，请直接登录");
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         intent.putExtra(LoginActivity.EXTRA_SELECT_TAG_INDEX, 1);
         intent.putExtra(LoginPhoneFragment.EXTRA_PHONE_NUMBER, userPhone);
         startActivity(intent);
     }
-
 
 
     private void initSDSendValidateButton() {
@@ -277,15 +265,16 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast("验证码发送失败");
             }
-            public void onSuccessResponse(String responseBody){
+
+            public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<UserInfoNew>>() {
                 }.getType();
                 Gson gson = new Gson();
                 Root root = gson.fromJson(responseBody, type);
-                  String status = root.getStatusCode();
-                if(UserConstants.SUCCESS.equals(status)) {
+                String status = root.getStatusCode();
+                if (UserConstants.SUCCESS.equals(status)) {
                     SDToast.showToast("验证码发送成功");
-                }else if(UserConstants.CODE_ERROR.equals(status)) {
+                } else if (UserConstants.CODE_ERROR.equals(status)) {
                     SDToast.showToast("验证码发送失败");
                 }
             }

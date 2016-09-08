@@ -1,6 +1,8 @@
 package com.fanwe;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -19,6 +21,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.utils.Bimp;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
@@ -32,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,10 +83,38 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
             finish();
         }
 
-        mFileOriginal = new File(mStrUrl);
-        if (!mFileOriginal.exists()) {
-            SDToast.showToast("图片不存在");
-            finish();
+        Bitmap temp = null;
+        try {
+            temp = Bimp.revitionImageSize(mStrUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            String sdcardDataDir = "";
+            if (Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MiGuoPhoto/");
+                if (!file.exists()) {
+                    if (file.mkdirs()) {
+                        sdcardDataDir = file.getAbsolutePath();
+                    }
+                } else {
+                    sdcardDataDir = file.getAbsolutePath();
+                }
+            }
+            String fileTempPath = sdcardDataDir + "/" + System.currentTimeMillis() + ".jpg";
+            //保存图片
+            Bimp.saveFile(temp, fileTempPath);
+
+            mStrUrl = fileTempPath;
+            mFileOriginal = new File(fileTempPath);
+            if (!mFileOriginal.exists()) {
+                SDToast.showToast("图片不存在");
+                finish();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            temp = null;
         }
 
         SDViewBinder.setImageView(mIv_image, "file:///" + mStrUrl);

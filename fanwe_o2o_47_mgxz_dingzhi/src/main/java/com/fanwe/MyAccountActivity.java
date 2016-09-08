@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +22,6 @@ import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.CommonInterface;
-import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.SettingModelDao;
@@ -141,7 +141,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     @ViewInject(R.id.iv_user_face)
     private CircularImageView mUserFace;// 头像
 
-    private String mUserFaceString = "";
     private LocalUserModel mUser;
 
     private UserFaceModule mUserFaceModule;
@@ -173,11 +172,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void initBundle() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mUserFaceString = extras.getString("user_face");
-        }
-
     }
 
     private void bindData() {
@@ -212,8 +206,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
         String kfPhone = AppRuntimeWorker.getKf_phone();
         SDViewBinder.setTextView(mTv_kf_phone, kfPhone);
-        SDViewBinder.setImageView(mUserFaceString, mUserFace,
-                ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+        ImageLoader.getInstance().displayImage(App.getInstance().getUserIcon(), mUserFace);
 
     }
 
@@ -739,6 +732,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
                 break;
             case UPLOAD_USER_INFO_SUCCESS:
                 mEt_username.setText(App.getInstance().getUserNickName());
+                break;
+            case UPLOAD_USER_HEAD_SUCCESS:
+                ImageLoader.getInstance().displayImage(App.getInstance().getUserIcon(), mUserFace);
                 break;
             default:
                 break;

@@ -3,6 +3,7 @@ package com.fanwe.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -519,6 +520,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                                 storeModel.setAvg_point(DataFormat.toFloat(bean.getAvg_grade()));
                                 storeModel.setOffline(DataFormat.toInt(bean.getOffline()));
                                 storeModel.setDiscount_pay(DataFormat.toInt(bean.getDiscount_pay()));
+                                storeModel.setXpoint(DataFormat.toDouble(bean.getGeo_x()));
+                                storeModel.setYpoint(DataFormat.toDouble(bean.getGeo_y()));
                                 listNewData.add(storeModel);
                             }
                         }
