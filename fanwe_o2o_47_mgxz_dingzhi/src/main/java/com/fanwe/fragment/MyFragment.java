@@ -307,7 +307,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mRDV_MyFriend.setAllParams("我的战队", R.drawable.bg_xiaomi, 0, Color.WHITE);
         mRDV_MyNameCard.setAllParams("我的名片", R.drawable.bg_erweima, 0, Color.WHITE);
 
-        mRDV_orderNotPay.setAllParams("代付款", R.drawable.ic_obligation, 0, color);
+        mRDV_orderNotPay.setAllParams("待付款", R.drawable.ic_obligation, 0, color);
         mRDV_orderNotUse.setAllParams("待使用", R.drawable.ic_ready_for_use, 0, color);
         mRDV_orderNotComment.setAllParams("待评价", R.drawable.ic_to_rank, 0, color);
         mRDV_orderNotRefund.setAllParams("退款", R.drawable.ic_refund, 0, color);

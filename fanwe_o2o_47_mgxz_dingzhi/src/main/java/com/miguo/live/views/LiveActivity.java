@@ -62,6 +62,7 @@ import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.receiver.NetWorkStateReceiver;
 import com.miguo.live.views.category.dialog.LiveBackDialogCategory;
 import com.miguo.live.views.customviews.HostBottomToolView;
 import com.miguo.live.views.customviews.HostMeiToolView;
@@ -255,9 +256,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         intentFilter.addAction(Constants.ACTION_CAMERA_OPEN_IN_LIVE);
         intentFilter.addAction(Constants.ACTION_CAMERA_CLOSE_IN_LIVE);
         intentFilter.addAction(Constants.ACTION_SWITCH_VIDEO);
-        //主播离开 。
+        //主播离开
         intentFilter.addAction(Constants.ACTION_HOST_LEAVE);
         registerReceiver(mBroadcastReceiver, intentFilter);
+
+        //注册网络连接监听
+        registerReceiver(mNetWorkReceiver,NetWorkStateReceiver.NETWORK_FILTER);
 
     }
 
@@ -478,6 +482,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
     });
 
+    private NetWorkStateReceiver mNetWorkReceiver=new NetWorkStateReceiver() {
+        @Override
+        protected void onDisconnected() {
+            MGToast.showToast("网络已经断开!",Toast.LENGTH_LONG);
+            Log.e("test","断开连接");
+        }
+
+        @Override
+        protected void onConnected() {
+            Log.e("test","连接");
+        }
+    };
+
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -573,6 +590,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private void unregisterReceiver() {
         unregisterReceiver(mBroadcastReceiver);
+        unregisterReceiver(mNetWorkReceiver);
     }
 
     /**
@@ -982,28 +1000,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void onBackPressed() {
-//        if (LiveUtil.checkIsHost()) {
-//            hostExit();
-//        } else {
-//            finish();
-//        }
-
-    }
-
-    /**
-     * 主动退出直播
-     */
-    private void hostExit() {
         if (LiveUtil.checkIsHost()) {
-//            backDialog.show();
+            showBackDialog();
+        } else {
+            userExit();
         }
     }
-
 
     /**
      * 普通用户退出
      */
-
     public void userExit() {
         userClickOut = true;
         mLiveHelper.perpareQuitRoom(true);
@@ -1011,7 +1017,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (mLiveHttphelper != null) {
             mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "");
         }
-        mEnterRoomHelper.quiteLive();
+//        mEnterRoomHelper.quiteLive();
         finish();
     }
 
@@ -1027,6 +1033,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 if (null != mLiveHelper) {
                     //向后台发送主播退出
                     mLiveHelper.perpareQuitRoom(true);
+                    App.getInstance().setAvStart(false);
                     if (isPushed) {
                         mLiveHelper.stopPushAction();
                     }
@@ -1048,7 +1055,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 被动退出直播
      */
     private void quiteLivePassively() {
-        Toast.makeText(this, "Host leave Live ", Toast.LENGTH_SHORT);
+        Toast.makeText(this, "主播退出了房间", Toast.LENGTH_SHORT);
         mLiveHelper.perpareQuitRoom(false);
         mEnterRoomHelper.quiteLive();
     }
@@ -1067,7 +1074,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
-        Toast.makeText(LiveActivity.this, "EnterRoom  " + id_status + " isSucc " + isSucc, Toast.LENGTH_SHORT).show();
+//        MGToast.showToast("EnterRoom " + id_status + " isSucc " + isSucc);
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
 
@@ -1219,7 +1226,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void tokenInvalidateAndQuit() {
         onBackPressed();
-
     }
 
 
@@ -2093,19 +2099,5 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void onFailue(String responseBody) {
 
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-//            boolean isAVStart = App.getInstance().isAvStart();
-            boolean isAVStart = isAnchor;
-            if(isAVStart){
-                showBackDialog();
-            }else {
-                userExit();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

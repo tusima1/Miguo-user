@@ -130,7 +130,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      */
     public void closeCameraAndMic() {
         closeCamera();
-        closeMic();
+        muteMic();
     }
 
     /**
@@ -164,13 +164,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             enableCamera(BACK_CAMERA, false);
         }
     }
-
-    public void closeMic() {
-        AVAudioCtrl avAudioCtrl = QavsdkControl.getInstance().getAVContext().getAudioCtrl();//开启Mic
-        avAudioCtrl.enableMic(false);
-        isMicOpen = false;
-    }
-
 
     /**
      * 开启摄像头
@@ -634,6 +627,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     if(mLiveView!=null) {
                         mLiveView.hostBack(identifier, nickname, faceUrl);
                     }
+                    break;
                     /**
                      * 收到红包
                      */
@@ -643,7 +637,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     if(mLiveView!=null) {
                         mLiveView.getHostRedPacket(params);
                     }
-                default:
                     break;
             }
 
@@ -651,6 +644,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             e.printStackTrace();
         } catch (JSONException ex) {
             // 异常处理代码
+            Log.e("test","ex:"+ex);
         }
     }
 

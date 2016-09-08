@@ -22,6 +22,8 @@ import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.utils.DataFormat;
 import com.miguo.live.views.LiveActivity;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.imcore.Context;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -80,6 +82,12 @@ HomeFragmentLiveList extends BaseFragment {
                 if(TextUtils.isEmpty(App.getInstance().getToken())){
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
+                    return;
+                }
+                //判断网络环境
+                boolean connected = NetWorkStateUtil.isConnected(getContext());
+                if (!connected){
+                    MGToast.showToast("没有网络,请检测网络环境!");
                     return;
                 }
                 Room room = datas.get(position);

@@ -28,7 +28,9 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.IntentKey;
+import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -297,6 +299,12 @@ public class LiveStartActivity extends Activity implements CallbackView {
      * 进入主播页。
      */
     private void goToLive() {
+        //判断网络环境
+        boolean connected = NetWorkStateUtil.isConnected(this);
+        if (!connected){
+            MGToast.showToast("没有网络,请检测网络环境!");
+            return;
+        }
         UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
         MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
         Intent intent = new Intent(this, LiveActivity.class);

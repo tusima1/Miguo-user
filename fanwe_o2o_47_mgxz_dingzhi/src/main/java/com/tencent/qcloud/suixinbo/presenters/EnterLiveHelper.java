@@ -6,10 +6,8 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.fanwe.app.App;
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -29,7 +27,6 @@ import com.tencent.av.sdk.AVRoom;
 import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -50,7 +47,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private Context mContext;
     private static final String TAG = EnterLiveHelper.class.getSimpleName();
     private static boolean isInChatRoom = false;
-    private static boolean isInAVRoom = false;
+    private boolean isInAVRoom = false;
     private LiveHelper mLiveHelper;
     private ArrayList<String> video_ids = new ArrayList<String>();
 
@@ -196,7 +193,6 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      */
     private void createLive() {
         createIMChatRoom();
-
     }
 
     /**
@@ -411,22 +407,26 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         SxbLog.d(TAG, "quiteAVRoom ");
         if (isInAVRoom == true) {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
-//            int result = avContext.exitRoom();
+            /*退出房间时调用*/
+            avContext.exitRoom();
               mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
 
         } else {
-            quiteIMChatRoom();
-            CurLiveInfo.setCurrentRequestCount(0);
-            uninitAudioService();
-            //通知结束
-            notifyServerLiveEnd();
-            if (mStepInOutView != null) {
-                mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
-            }
+            AVContext avContext = QavsdkControl.getInstance().getAVContext();
+            /*退出房间时调用*/
+            //离开房间
+            avContext.exitRoom();
+//            quiteIMChatRoom();
+//            CurLiveInfo.setCurrentRequestCount(0);
+//            uninitAudioService();
+//            //通知结束
+//            notifyServerLiveEnd();
+//            if (mStepInOutView != null) {
+//                mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+//            }
 
         }
     }
-
     /**
      * 退出IM房间
      */
