@@ -186,4 +186,12 @@ public class UserConstants {
     public static final String USER_UPGRADE_ORDER = "UserUpgradeOrder";
     public static final String USER_UPGRADE_ORDER_GET = "UserUpgradeOrderGet";
     public static final String USER_UPGRADE_ORDER_POST = "UserUpgradeOrderPost";
+    /**
+     * 第三方登录成功。
+     */
+    public static final  String THIRD_LOGIN_SUCCESS="third_login_success";
+    /**
+     * 第三方登录未注册 手机号，
+     */
+    public static final  String  THIRD_LOGIN_UNREGISTER="third_login_unregister";
 }

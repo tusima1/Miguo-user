@@ -1,21 +1,23 @@
 package com.fanwe.user.model.postUserUpgradeOrder;
 
+import java.util.HashMap;
+
 /**
  * Created by didik on 2016/8/22.
  */
 public class ModelPostUserUpgradeOrder {
-    private Config config;
+    private HashMap<String, String> config;
 
     private String class_name;
 
     private Order_info order_info;
 
-    public void setConfig(Config config) {
-        this.config = config;
+    public HashMap<String, String> getConfig() {
+        return config;
     }
 
-    public Config getConfig() {
-        return this.config;
+    public void setConfig(HashMap<String, String> config) {
+        this.config = config;
     }
 
     public void setClass_name(String class_name) {
