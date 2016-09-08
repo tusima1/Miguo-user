@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -34,9 +33,6 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.tencent.TIMCallBack;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
-
-import org.apache.http.auth.UsernamePasswordCredentials;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -53,11 +49,10 @@ public class LoginHelper extends Presenter {
     private LoginFragment mLoginView;
     private int RoomId = -1;
     private Activity mActivity;
-    private boolean notClose =false;
+    private boolean notClose = false;
 
     private TencentHttpHelper mTencentHttpHelper;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mTLoginHelper;
-
 
 
     public LoginHelper(Context context) {
@@ -67,7 +62,8 @@ public class LoginHelper extends Presenter {
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
 
     }
-    public LoginHelper(Activity activity,Context context, LoginFragment loginView) {
+
+    public LoginHelper(Activity activity, Context context, LoginFragment loginView) {
         this.mActivity = activity;
 
         mLoginView = loginView;
@@ -75,6 +71,7 @@ public class LoginHelper extends Presenter {
         mTencentHttpHelper = new TencentHttpHelper(mContext);
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
     }
+
     public LoginHelper(Context context, LoginFragment loginView) {
 
         mLoginView = loginView;
@@ -82,27 +79,30 @@ public class LoginHelper extends Presenter {
         mTencentHttpHelper = new TencentHttpHelper(mContext);
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
     }
+
     public LoginHelper(Activity activity) {
-       this.mActivity = activity;
+        this.mActivity = activity;
         mTencentHttpHelper = new TencentHttpHelper(mContext);
         mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(activity);
     }
+
     /**
      * 快捷登录。
+     *
      * @param mobile
      * @param captcha
      */
-    public void doQuickLogin(final String mobile,String captcha){
-        TreeMap<String, String> params = new TreeMap<String,String>();
+    public void doQuickLogin(final String mobile, String captcha) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
-        params.put("captcha",captcha);
+        params.put("captcha", captcha);
         params.put("method", UserConstants.USER_QUICK_LOGIN);
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
 
-                dealLoginInfo(responseBody,mobile,null);
+                dealLoginInfo(responseBody, mobile, null);
 
             }
 
@@ -116,25 +116,24 @@ public class LoginHelper extends Presenter {
 
 
     /**
-     *
      * @param openId
      * @param platformType
-     * @param icon 头像地址
-     * @param icon 昵称
+     * @param icon         头像地址
+     * @param icon         昵称
      */
-    public void thirdLogin(final String openId , final String platformType, final String icon, final String nick, final CallbackView mCallbackView){
-        if(TextUtils.isEmpty(openId)){
+    public void thirdLogin(final String openId, final String platformType, final String icon, final String nick, final CallbackView mCallbackView) {
+        if (TextUtils.isEmpty(openId)) {
             return;
         }
-        TreeMap<String,String> params = new TreeMap<String,String>();
-        params.put("openid",openId);
-        params.put("platform",platformType);
-        if(!TextUtils.isEmpty(icon)) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("openid", openId);
+        params.put("platform", platformType);
+        if (!TextUtils.isEmpty(icon)) {
             params.put("icon", icon);
         }
         params.put("nick", nick);
 
-        params.put("method",UserConstants.TRHID_LOGIN_URL);
+        params.put("method", UserConstants.TRHID_LOGIN_URL);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
@@ -143,7 +142,6 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
                 Type type = new TypeToken<Root<UserInfoNew>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -151,7 +149,7 @@ public class LoginHelper extends Presenter {
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 List datas = new ArrayList();
-                if("210".equals(statusCode)) {
+                if ("210".equals(statusCode)) {
                     UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
                     if (userInfoNew != null) {
                         if (userInfoNew != null) {
@@ -161,27 +159,28 @@ public class LoginHelper extends Presenter {
                             model.setMobile(userInfoNew.getMobile());
                             model.setUser_name(userInfoNew.getUser_name());
                             model.setUser_pwd(userInfoNew.getPwd());
-                            dealLoginInfo(responseBody,userInfoNew.getUser_name(),userInfoNew.getPwd());
+                            dealLoginInfo(responseBody, userInfoNew.getUser_name(), userInfoNew.getPwd());
                             datas.add(model);
-                            mCallbackView.onSuccess(UserConstants.THIRD_LOGIN_SUCCESS,datas);
+                            mCallbackView.onSuccess(UserConstants.THIRD_LOGIN_SUCCESS, datas);
                         }
                     }
-                }else if("300".equals(statusCode)){
+                } else if ("300".equals(statusCode)) {
                     ThirdLoginInfo thirdLoginInfo = new ThirdLoginInfo();
                     thirdLoginInfo.setIcon(icon);
                     thirdLoginInfo.setNick(nick);
                     thirdLoginInfo.setOpenId(openId);
                     thirdLoginInfo.setPlatformType(platformType);
                     datas.add(thirdLoginInfo);
-                    mCallbackView.onSuccess(UserConstants.THIRD_LOGIN_UNREGISTER,datas);
-                }else{
-                        mCallbackView.onFailue(message);
+                    mCallbackView.onSuccess(UserConstants.THIRD_LOGIN_UNREGISTER, datas);
+                } else {
+                    mCallbackView.onFailue(message);
                 }
 
             }
         });
 
     }
+
     /**
      * 登录
      *
@@ -197,10 +196,10 @@ public class LoginHelper extends Presenter {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
-            public void onSuccessResponse(String responseBody)  {
+            public void onSuccessResponse(String responseBody) {
 
 
-                    dealLoginInfo(responseBody, userName, password);
+                dealLoginInfo(responseBody, userName, password);
 
 
             }
@@ -214,9 +213,10 @@ public class LoginHelper extends Presenter {
         });
 
     }
-    public void doLogin(final String userName, final String password, int type,boolean notClose) {
+
+    public void doLogin(final String userName, final String password, int type, boolean notClose) {
         this.notClose = notClose;
-        doLogin(userName,password,type);
+        doLogin(userName, password, type);
     }
 
     /**
@@ -231,8 +231,9 @@ public class LoginHelper extends Presenter {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                dealLoginInfo(responseBody,userName,password);
+                dealLoginInfo(responseBody, userName, password);
             }
+
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
@@ -240,13 +241,14 @@ public class LoginHelper extends Presenter {
             }
         });
     }
+
     /**
      * 第三方注册 。
      */
-    public void doThirdRegister(final  String userPhone,String openid,String captcha,String icon,String nick,String platform){
-        if (TextUtils.isEmpty(platform)||TextUtils.isEmpty(openid)) {
+    public void doThirdRegister(final String userPhone, String openid, String captcha, String icon, String nick, String platform) {
+        if (TextUtils.isEmpty(platform) || TextUtils.isEmpty(openid)) {
             SDToast.showToast("第三方登录失败");
-            if(mActivity!=null){
+            if (mActivity != null) {
                 mActivity.finish();
             }
         }
@@ -254,21 +256,21 @@ public class LoginHelper extends Presenter {
         params.put("mobile", userPhone);
         params.put("openid", openid);
         params.put("captcha", captcha);
-        if(!TextUtils.isEmpty(icon)) {
+        if (!TextUtils.isEmpty(icon)) {
             params.put("icon", icon);
         }
 
-        if(!TextUtils.isEmpty(nick)) {
+        if (!TextUtils.isEmpty(nick)) {
             params.put("nick", nick);
         }
-        params.put("platform",platform);
+        params.put("platform", platform);
         params.put("method", UserConstants.THIRD_REGISTER_URL);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
 
-                    dealLoginInfo(responseBody, userPhone, null);
+                dealLoginInfo(responseBody, userPhone, null);
 
             }
 
@@ -288,60 +290,63 @@ public class LoginHelper extends Presenter {
 
     }
 
-    public void doImLogin(){
+    public void doImLogin() {
         String userid = MySelfInfo.getInstance().getId();
-        if(TextUtils.isEmpty(userid)){
+        if (TextUtils.isEmpty(userid)) {
             userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
         }
         String userSign = App.getInstance().getUserSign();
-        mTLoginHelper.imLogin(userid,userSign,new TIMCallBack() {
+        mTLoginHelper.imLogin(userid, userSign, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
                 SDToast.showToast("IM 认证失败。");
                 App.getInstance().setImLoginSuccess(false);
             }
+
             @Override
             public void onSuccess() {
                 App.getInstance().setImLoginSuccess(true);
             }
         });
     }
+
     /**
      * 取sign.
      */
-    public void getSign(String token){
+    public void getSign(String token) {
         MgCallback mgCallback = new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Gson gson=new Gson();
+                Gson gson = new Gson();
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
-                if (resultGenerateSigns==null||resultGenerateSigns.size()<1) {
+                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
                     SDToast.showToast("获取用户签名失败。");
                     return;
                 }
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
                 List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
 
-                if(modelGenerateSign!=null&& modelGenerateSign.size()>0&&modelGenerateSign.get(0)!=null) {
+                if (modelGenerateSign != null && modelGenerateSign.size() > 0 && modelGenerateSign.get(0) != null) {
                     String usersig = modelGenerateSign.get(0).getUsersig();
                     App.getInstance().setUserSign(usersig);
                     MySelfInfo.getInstance().setUserSig(usersig);
                     App.getInstance().setUserSign(usersig);
                     String userId = MySelfInfo.getInstance().getId();
 
-                    if(TextUtils.isEmpty(userId)){
+                    if (TextUtils.isEmpty(userId)) {
                         UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-                        if(currentInfo!=null&&currentInfo.getUserInfoNew()!=null){
+                        if (currentInfo != null && currentInfo.getUserInfoNew() != null) {
                             userId = currentInfo.getUserInfoNew().getUser_id();
-                        }else{
+                        } else {
                             return;
                         }
                     }
-                    mTLoginHelper.imLoginWithoutGetRoom(userId,usersig);
+                    mTLoginHelper.imLoginWithoutGetRoom(userId, usersig);
                     loginSuccess();
 
-                };
+                }
+                ;
             }
 
             @Override
@@ -350,10 +355,10 @@ public class LoginHelper extends Presenter {
 
             }
         };
-        mTencentHttpHelper.getSign(token,mgCallback);
+        mTencentHttpHelper.getSign(token, mgCallback);
     }
 
-    public void dealLoginInfo(String responseBody,String userName,String password){
+    public void dealLoginInfo(String responseBody, String userName, String password) {
         Type type = new TypeToken<Root<UserInfoNew>>() {
         }.getType();
         Gson gson = new Gson();
@@ -363,32 +368,31 @@ public class LoginHelper extends Presenter {
 
         UserInfoNew userInfoNew = (UserInfoNew) validateInfoBody(root);
         if (userInfoNew != null) {
-                App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
-                User_infoModel model = new User_infoModel();
-                model.setUser_id(userInfoNew.getUser_id());
-                MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
-                if(!TextUtils.isEmpty(userName)) {
-                    model.setMobile(userName);
-                }
-                if(!TextUtils.isEmpty(password)) {
-                    model.setUser_pwd(password);
-                }
-                if(!TextUtils.isEmpty(userInfoNew.getPwd())){
-                    model.setUser_pwd(userInfoNew.getPwd());
-                }
-                model.setUser_name(userInfoNew.getUser_name());
+            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+            User_infoModel model = new User_infoModel();
+            model.setUser_id(userInfoNew.getUser_id());
+            MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
+            if (!TextUtils.isEmpty(userName)) {
+                model.setMobile(userName);
+            }
+            if (!TextUtils.isEmpty(password)) {
+                model.setUser_pwd(password);
+            }
+            if (!TextUtils.isEmpty(userInfoNew.getPwd())) {
+                model.setUser_pwd(userInfoNew.getPwd());
+            }
+            model.setUser_name(userInfoNew.getUser_name());
 
-                dealLoginSuccess(model);
-        }else{
-            SDToast.showToast(TextUtils.isEmpty(message)==true?"登录失败。":message);
+            dealLoginSuccess(model);
+        } else {
+            SDToast.showToast(TextUtils.isEmpty(message) == true ? "登录失败。" : message);
         }
     }
 
 
-
-    public void loginSuccess(){
+    public void loginSuccess() {
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
-        if(notClose){
+        if (notClose) {
 
             return;
         }
@@ -401,12 +405,13 @@ public class LoginHelper extends Presenter {
 
 
     }
+
     protected void dealLoginSuccess(User_infoModel actModel) {
         String token = App.getInstance().getToken();
-        if(TextUtils.isEmpty(token)){
+        if (TextUtils.isEmpty(token)) {
             //不成功也跳转。
             loginSuccess();
-        }else{
+        } else {
             //baocun
             LocalUserModel.dealLoginSuccess(actModel, true);
             putLocalShoppingToServer();
@@ -417,9 +422,9 @@ public class LoginHelper extends Presenter {
     /**
      * 把本地购物车提交到线上用户。
      */
-    public void putLocalShoppingToServer(){
+    public void putLocalShoppingToServer() {
         List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
-        if(list!=null){
+        if (list != null) {
             OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
                 @Override
                 public void onSuccess(String responseBody) {
@@ -447,18 +452,19 @@ public class LoginHelper extends Presenter {
 
     /**
      * 判断BODY对象是否存在。
+     *
      * @param root
      * @return
      */
 
     public UserInfoNew validateInfoBody(Root<UserInfoNew> root) {
 
-        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-        {
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
             return root.getResult().get(0).getBody().get(0);
         }
         return null;
     }
+
     @Override
     public void onDestory() {
         mLoginView = null;

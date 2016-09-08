@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:text="精选美食"
+        android:text="全部分类"
         android:textColor="#2e2d2d"
         android:textSize="15dp" />
 

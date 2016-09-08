@@ -28,6 +28,7 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.IntentKey;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -146,7 +147,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 break;
             case R.id.btn_start_live_start:
                 if (CurLiveInfo.modelShop == null || TextUtils.isEmpty(CurLiveInfo.modelShop.getId())) {
-                    SDToast.showToast("请选择你的消费场所");
+                    MGToast.showToast("请选择你的消费场所");
                     return;
                 } else {
                     if (!TextUtils.isEmpty(usersig)) {
