@@ -236,7 +236,6 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        Bitmap temp = null;
         if (requestCode == TAKE_PHOTO) {
         } else if (requestCode == SELECT_FILE_CODE) {
             mPhotoUri = data.getData();
@@ -245,6 +244,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 mPhotoUri = Uri.fromFile(new File(mPhotoPath));
             }
         }
+        Bitmap temp = null;
         try {
             temp = Bimp.revitionImageSize(UriUtil.getImageAbsolutePath(LiveAuthActivity.this, mPhotoUri));
         } catch (IOException e) {
