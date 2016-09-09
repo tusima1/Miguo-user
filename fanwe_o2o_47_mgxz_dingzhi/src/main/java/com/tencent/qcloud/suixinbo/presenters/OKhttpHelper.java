@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -238,14 +237,12 @@ public class OKhttpHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                SDToast.showToast("注册房间信息成功");
-             //   MGToast.showToast(responseBody);
+                SDToast.showToast("后台房间信息注册成功");
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("注册房间信息失败，请退出重试");
-             //   MGToast.showToast(message);
+                SDToast.showToast("后台房间信息注册失败，请退出重试");
             }
         });
 

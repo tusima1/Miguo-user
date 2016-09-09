@@ -13,10 +13,11 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.LiveUtil;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.LiveRoomParams;
+import com.miguo.utils.MGLog;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupManager;
@@ -45,10 +46,9 @@ import java.util.TreeMap;
 public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter {
     private EnterQuiteRoomView mStepInOutView;
     private Context mContext;
-    private static final String TAG = EnterLiveHelper.class.getSimpleName();
-    private static boolean isInChatRoom = false;
+    private static final String TAG = "EnterLiveHelper: ";
+    private boolean isInChatRoom = false;
     private boolean isInAVRoom = false;
-    private LiveHelper mLiveHelper;
     private ArrayList<String> video_ids = new ArrayList<String>();
 
     private static final int TYPE_MEMBER_CHANGE_IN = 1;//进入房间事件。
@@ -59,8 +59,6 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private static final int TYPE_MEMBER_CHANGE_NO_AUDIO = 6;//无发语音事件。
     private static final int TYPE_MEMBER_CHANGE_HAS_SCREEN_VIDEO = 7;//有发屏幕视频事件。
     private static final int TYPE_MEMBER_CHANGE_NO_SCREEN_VIDEO = 8;//无发屏幕视频事件。
-
-    private LiveHttpHelper mLiveHttpHelper;
 
     public EnterLiveHelper(Context context, EnterQuiteRoomView view) {
         mContext = context;
@@ -83,10 +81,10 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             /**
              * 用户加入直播
              */
-            SxbLog.i(TAG, "joinLiveRoom startEnterRoom ");
+            SxbLog.e(TAG, "joinLiveRoom startEnterRoom ");
             joinLive(CurLiveInfo.getRoomNum());
         }
-        Log.d(LiveActivity.TAG, "is creatroom: " + MySelfInfo.getInstance().isCreateRoom());
+        Log.e(LiveActivity.TAG, "is creatroom: " + MySelfInfo.getInstance().isCreateRoom());
     }
 
 
@@ -96,7 +94,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private AVRoomMulti.Delegate mRoomDelegate = new AVRoomMulti.Delegate() {
         // 创建房间成功回调
         public void onEnterRoomComplete(int result) {
-            SxbLog.i(TAG, "onEnterRoomComplete  PerformanceTest    " + SxbLog.getTime());
+            MGLog.e("onEnterRoomComplete: "+SxbLog.getTime()+" result: "+result);
             if (result == 0) {
                 //只有进入房间后才能初始化AvView
                 isInAVRoom = true;
@@ -104,7 +102,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                 try{
                     mStepInOutView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), true);
                 }catch (NullPointerException e){
-
+                    MGLog.e("进入房间 : NullPointerException ");
                 }
             } else {
 //                mStepInOutView.enterRoomComplete(MySelfInfo.getInstance().getIdStatus(), false);
@@ -114,8 +112,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
 
         // 离开房间成功回调
         public void onExitRoomComplete(int result) {
-            Log.d(LiveActivity.TAG, "EnterLiveActivity: " + "onExitRoomComplete..");
-
+            MGLog.e(TAG+"onExitRoomComplete: "+result);
             isInAVRoom = false;
             quiteIMChatRoom();
             CurLiveInfo.setCurrentRequestCount(0);
@@ -130,8 +127,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
 
         //房间成员变化回调
         public void onEndpointsUpdateInfo(int eventid, String[] updateList) {
-            SxbLog.d(TAG, "WL_DEBUG onEndpointsUpdateInfo. eventid = " + eventid);
-
+            MGLog.e(TAG+"onEndpointsUpdateInfo: "+" eventid= "+eventid);
             switch (eventid) {
                 case TYPE_MEMBER_CHANGE_IN:
                     SxbLog.i(TAG, "stepin id  " + updateList.length);
@@ -177,12 +173,12 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         }
 
         public void OnPrivilegeDiffNotify(int privilege) {
-            SxbLog.d(TAG, "OnPrivilegeDiffNotify. privilege = " + privilege);
+            MGLog.e(TAG+"OnPrivilegeDiffNotify: "+privilege);
         }
 
         @Override
         public void OnSemiAutoRecvCameraVideo(String[] strings) {
-
+            MGLog.e(TAG+"OnSemiAutoRecvCameraVideo: "+strings);
             mStepInOutView.alreadyInLive(strings);
         }
     };
@@ -194,7 +190,6 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private void createLive() {
         createIMChatRoom();
     }
-
     /**
      * 1_2创建一个IM聊天室
      */
@@ -206,7 +201,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         TIMGroupManager.getInstance().createGroup("AVChatRoom", list, roomName, "" + roomId, new TIMValueCallBack<String>() {
             @Override
             public void onError(int i, String s) {
-                SxbLog.i(TAG, "onError " + i + "   " + s);
+                SxbLog.e(TAG, "onError " + i + "   " + s);
                 //已在房间中,重复进入房间
                 if (i == 10025) {
                     isInChatRoom = true;
@@ -223,7 +218,6 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                 isInChatRoom = true;
                 //创建AV房间
                 createAVRoom(MySelfInfo.getInstance().getMyRoomNum());
-
             }
         });
 
@@ -244,6 +238,8 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         //初始化AVSurfaceView
         if (QavsdkControl.getInstance().getAVContext() != null) {
             QavsdkControl.getInstance().initAvUILayer(mContext.getApplicationContext(), avView);
+        }else {
+            MGToast.showToast("初始化AVUI失败!");
         }
 
     }
@@ -302,7 +298,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      * 2_2加入一个聊天室
      */
     private void joinIMChatRoom(int chatRoomId) {
-        SxbLog.i(TAG, "joinLiveRoom joinIMChatRoom " + chatRoomId);
+        SxbLog.e(TAG, "joinLiveRoom joinIMChatRoom " + chatRoomId);
         TIMGroupManager.getInstance().applyJoinGroup("" + chatRoomId, Constants.APPLY_CHATROOM + chatRoomId, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
@@ -332,7 +328,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      */
     private void joinAVRoom(int avRoomNum) {
 //        if (!mQavsdkControl.getIsInEnterRoom()) {
-//            initAudioService();
+            initAudioService();
         EnterAVRoom(avRoomNum);
 //        }
     }
@@ -404,7 +400,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      * 退出一个AV房间
      */
     public void quiteAVRoom() {
-        SxbLog.d(TAG, "quiteAVRoom ");
+        SxbLog.e(TAG, "quiteAVRoom ");
         if (isInAVRoom == true) {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
             /*退出房间时调用*/
@@ -456,7 +452,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
 
                     @Override
                     public void onSuccess() {
-                        SxbLog.i(TAG, "onSuccess ");
+                        SxbLog.e(TAG, "onSuccess ");
                         isInChatRoom = false;
                     }
                 });
@@ -473,7 +469,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      * @param roomNum
      */
     private void EnterAVRoom(int roomNum) {
-        SxbLog.i(TAG, "createlive joinLiveRoom enterAVRoom " + roomNum);
+        SxbLog.e(TAG, "createlive joinLiveRoom enterAVRoom " + roomNum);
         AVContext avContext = QavsdkControl.getInstance().getAVContext();
         byte[] authBuffer = null;//权限位加密串；TODO：请业务侧填上自己的加密串
 
@@ -498,7 +494,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         if (avContext != null) {
             // create room
             int ret = avContext.enterRoom(AVRoom.AV_ROOM_MULTI, mRoomDelegate, enterRoomParam);
-            SxbLog.i(TAG, "EnterAVRoom " + ret);
+            SxbLog.e(TAG, "EnterAVRoom " + ret);
+        }else {
+            MGLog.e("avContext is null");
         }
 
     }
@@ -512,7 +510,8 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
 
     private void uninitAudioService() {
         if ((QavsdkControl.getInstance() != null) && (QavsdkControl.getInstance().getAVContext() != null) && (QavsdkControl.getInstance().getAVContext().getAudioCtrl() != null)) {
-            QavsdkControl.getInstance().getAVContext().getAudioCtrl().startTRAEService();
+//            QavsdkControl.getInstance().getAVContext().getAudioCtrl().startTRAEService();
+            QavsdkControl.getInstance().getAVContext().getAudioCtrl().stopTRAEService();
         }
     }
 

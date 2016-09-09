@@ -165,16 +165,6 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
 
     /**
-     * 更新观众列表
-     *
-     * @return
-     */
-    public boolean updateMemberList() {
-        return true;
-    }
-
-
-    /**
      * 查看主播信息
      */
     private void userInfo() {
@@ -226,12 +216,6 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         if (!TextUtils.isEmpty(location)) {
             mUserLocation.setText(location);
         }
-    }
-
-    /*设置关键词*/
-    public void setKeyWords() {
-//        if (){}
-        mKeywords.setText("富国  明主  哈哈  大小  乌拉拉");
     }
 
     public boolean isExitDialogShowing() {

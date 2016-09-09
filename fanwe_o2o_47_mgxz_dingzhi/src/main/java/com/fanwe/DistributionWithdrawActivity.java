@@ -21,14 +21,14 @@ import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
 import com.fanwe.commission.model.CommissionConstance;
-import com.fanwe.commission.model.getUserAccount.ModelUserAccount;
-import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
+import com.fanwe.commission.model.getUserBankCardList.ModelUserBankCard;
 import com.fanwe.commission.presenter.MoneyHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -50,6 +50,7 @@ import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
+import com.miguo.utils.MGLog;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.math.BigDecimal;
@@ -119,6 +120,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     private MoneyHttpHelper moneyHttpHelper;//用户获取用户信息
     private int money_type = 0;/*1:余额,2:佣金*/
     private CommonHelper commonHelper;
+    private ModelUserBankCard modelUserBankCard;//银行卡信息
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +133,8 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     private void init() {
         getIntentData();
         moneyHttpHelper = new MoneyHttpHelper(this);
-        moneyHttpHelper.getUserAccount();
+//        moneyHttpHelper.getUserAccount();
+        moneyHttpHelper.getUserBankCardList();
         commonHelper = new CommonHelper(null, this);
         registerClick();
         hideKeyboradOnTouchOutside(DistributionWithdrawActivity.this, rootView);
@@ -150,14 +153,19 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         initTitle();
     }
 
-    private void binData(ModelUserAccount modelUserAccount) {
-        mStrMobile = modelUserAccount.getPhone();
+    private void binData() {
+        if (modelUserBankCard == null) {
+            tv_bank_card_info.setText("");
+            mLl_bank_info.setVisibility(View.VISIBLE);
+            return;
+        }
+        mStrMobile = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile();
+        MGLog.e("银行卡手机号" + mStrMobile);
         //获取银行卡信息
-        String bank_card = modelUserAccount.getBank_card();//银行卡
-        String bank_name = modelUserAccount.getBank_name();//银行名
-        String bank_type = modelUserAccount.getBank_type();//银行卡类型
-        String level_id = modelUserAccount.getLevel_id();//用户等级
-        String bank_user = modelUserAccount.getBank_user();//开户名(姓名)
+        String bank_card = modelUserBankCard.getBank_card();//银行卡
+        String bank_name = modelUserBankCard.getBank_name();//银行名
+        String bank_type = modelUserBankCard.getBank_type();//银行卡类型
+        String bank_user = modelUserBankCard.getBank_user();//开户名(姓名)
         if (TextUtils.isEmpty(bank_card) || TextUtils.isEmpty(bank_name) || TextUtils.isEmpty
                 (bank_user)) {
             tv_bank_card_info.setText("");
@@ -167,14 +175,18 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             mStrBankName = bank_name;
             mStrBankNumber = bank_card;
             int length = bank_card.length();
-            String bank_card_start = bank_card.substring(0, 4);
-            String bank_card_end = bank_card.substring(length - 4, length);
-            StringBuilder sb = new StringBuilder(bank_card_start);
-            for (int i = 0; i < length - 8; i++) {
-                sb.append("*");
+            if (length > 5) {
+                String bank_card_start = bank_card.substring(0, 4);
+                String bank_card_end = bank_card.substring(length - 4, length);
+                StringBuilder sb = new StringBuilder(bank_card_start);
+                for (int i = 0; i < length - 8; i++) {
+                    sb.append("*");
+                }
+                sb.append(bank_card_end);
+                tv_bank_card_info.setText(sb.toString());
+            } else {
+                tv_bank_card_info.setText(bank_card);
             }
-            sb.append(bank_card_end);
-            tv_bank_card_info.setText(sb.toString());
         }
     }
 
@@ -327,6 +339,11 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         if (mLl_bank_info.getVisibility() == View.VISIBLE) {
             return;
         }
+        //把获取的信息制空
+        mStrBankName = "";//银行名
+        mStrBankNumber = "";//银行卡号
+        mStrBank_UserName = "";//开户名
+        tv_bank_card_info.setText("");
         View contentView = LayoutInflater.from(this).inflate(R.layout.item_pop_bankcard, null);
         int width = mEt_money.getWidth();
         int offset = DisplayUtil.dp2px(this, 12);
@@ -393,9 +410,6 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
                     SDToast.showToast("请输入姓名");
                     return false;
                 }
-                break;
-
-            default:
                 break;
         }
 
@@ -475,15 +489,15 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (CommissionConstance.USER_ACCOUNT.equals(method)) {
-            ResultUserAccount resultUserAccount = (ResultUserAccount) datas.get(0);
-            List<ModelUserAccount> body = resultUserAccount.getBody();
-            if (body != null && body.size() > 0) {
-                ModelUserAccount modelUserAccount = body.get(0);
-                binData(modelUserAccount);
-            } else {
-                MGToast.showToast("数据获取异常!");
+        if (CommissionConstance.USER_BANK_CARD_LIST.equals(method)) {
+            for (int i = 0; i < datas.size(); i++) {
+                ModelUserBankCard item = (ModelUserBankCard) datas.get(i);
+                if ("1".equals(item.getIs_enable())) {
+                    modelUserBankCard = item;
+                    break;
+                }
             }
+            binData();
         }
         if (CommissionConstance.USER_WITHDRAW.equals(method) || CommissionConstance
                 .USER_WITHDRAW_FX.equals(method)) {
