@@ -60,7 +60,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         liveHttpHelper.getLiveList(1, 5, "", "", "");
         ImageLoader.getInstance().displayImage(CurLiveInfo.getHostAvator(), civ_user_image);
         tv_username.setText(CurLiveInfo.getHostName());
-        tv_user_location.setText(CurLiveInfo.modelShop.getAddress());
+        tv_user_location.setText(CurLiveInfo.modelShop.getShop_name());
     }
 
 

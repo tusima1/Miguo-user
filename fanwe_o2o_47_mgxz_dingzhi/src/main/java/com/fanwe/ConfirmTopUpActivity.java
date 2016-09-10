@@ -439,7 +439,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
             return;
         }
 
-        String prepayId = model.getPrepayid();
+        String prepayId = model.getPrepay_id();
         if (TextUtils.isEmpty(prepayId)) {
             SDToast.showToast("prepayId为空");
             return;

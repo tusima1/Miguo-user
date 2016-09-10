@@ -383,13 +383,10 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         //提交并生成订单。
         if (!TextUtils.isEmpty(orderId)) {
             //String order_id,String payment,String is_use_account_money
-            outSideShoppingCartHelper.payByOrderId(orderId, balances_flg, payDisp);
+            outSideShoppingCartHelper.payByOrderId(orderId, payDisp, balances_flg);
         } else {
-
             outSideShoppingCartHelper.createOrder(mCheckActModel.getId(), balances_flg, red_id, payDisp, content);
-
         }
-
     }
 
     public void onFinish() {
