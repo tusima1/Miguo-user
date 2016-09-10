@@ -36,6 +36,7 @@ public abstract class MgCallback<T> implements Callback {
 
     @Override
     public void onFailure(Call call, IOException e) {
+        onFinish();
     }
 
     @Override
@@ -61,9 +62,9 @@ public abstract class MgCallback<T> implements Callback {
                         UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }
-                    if(code ==302){
-                        onErrorResponse(message,302+"");
-                    }else {
+                    if (code == 302) {
+                        onErrorResponse(message, 302 + "");
+                    } else {
                         onSuccessResponse(body);
                     }
                 } else {
@@ -71,7 +72,7 @@ public abstract class MgCallback<T> implements Callback {
                 }
 
             } catch (Exception e) {
-               // Log.e(TAG, e.getMessage());
+                // Log.e(TAG, e.getMessage());
                 SDToast.showToast(e.getMessage());
             }
         }
@@ -84,27 +85,27 @@ public abstract class MgCallback<T> implements Callback {
 
     /**
      * 判断BODY对象是否存在。
+     *
      * @param root
      * @return
      */
-    public  T validateBody(Root<T> root) {
+    public T validateBody(Root<T> root) {
 
-        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-        {
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
             return root.getResult().get(0).getBody().get(0);
         }
         return null;
 
     }
 
-    public List<T>  validateBodyList(Root<T> root) {
+    public List<T> validateBodyList(Root<T> root) {
 
-        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0)
-        {
+        if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
             return root.getResult().get(0).getBody();
         }
         return null;
 
     }
+
     public abstract void onErrorResponse(String message, String errorCode);
 }

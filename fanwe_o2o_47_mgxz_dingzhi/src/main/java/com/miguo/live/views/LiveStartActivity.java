@@ -164,8 +164,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
     @Override
     protected void onResume() {
         super.onResume();
-        if(isShare){
-             createAvRoom();
+        if (isShare) {
+            createAvRoom();
         }
     }
 
@@ -185,9 +185,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-              UmengShareManager.share(platform, this, "", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+            UmengShareManager.share(platform, this, "分享", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
 //            createAvRoom();
-            if(isShare){
+            if (isShare) {
 //            createAvRoom();
             }
             isShare = true;
@@ -301,7 +301,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
     private void goToLive() {
         //判断网络环境
         boolean connected = NetWorkStateUtil.isConnected(this);
-        if (!connected){
+        if (!connected) {
             MGToast.showToast("没有网络,请检测网络环境!");
             return;
         }

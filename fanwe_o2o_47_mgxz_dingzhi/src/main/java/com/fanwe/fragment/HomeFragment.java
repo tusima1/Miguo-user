@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
@@ -51,7 +53,7 @@ import java.util.List;
  *
  * @author js02
  */
-public class HomeFragment extends BaseFragment implements CallbackView {
+public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2 {
     @ViewInject(R.id.frag_home_new_ptrsv_all)
     private PullToRefreshScrollView mPtrsvAll;
 
@@ -192,7 +194,7 @@ public class HomeFragment extends BaseFragment implements CallbackView {
     }
 
     private void initPullToRefreshListView() {
-        liveHelper = new LiveHttpHelper(getActivity(), this);
+        liveHelper = new LiveHttpHelper(getActivity(), this, "");
         mPtrsvAll.setMode(Mode.BOTH);
         mPtrsvAll.setOnRefreshListener(mOnRefresherListener2);
         mPtrsvAll.setRefreshing();
@@ -440,6 +442,15 @@ public class HomeFragment extends BaseFragment implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
+        //刷新页面
+        Message message = new Message();
+        message.what = 2;
+        mHandler.sendMessage(message);
+    }
+
+    @Override
+    public void onFinish(String method) {
+        Log.e("onFinish", "onFinish");
         //刷新页面
         Message message = new Message();
         message.what = 2;

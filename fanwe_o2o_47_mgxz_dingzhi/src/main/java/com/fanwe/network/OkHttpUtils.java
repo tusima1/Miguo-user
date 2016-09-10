@@ -52,8 +52,8 @@ public class OkHttpUtils {
 
 
     private OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .build();
 
     public static OkHttpUtils getInstance() {

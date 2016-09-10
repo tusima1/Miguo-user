@@ -2,6 +2,8 @@ package com.fanwe.library.alipay.easy;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.alipay.sdk.app.PayTask;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDViewUtil;
@@ -55,6 +57,7 @@ public class SDAlipayer
 			return;
 		}
 		String info = orderSpec + "&sign=" + "\"" + sign + "\"" + "&" + "sign_type=" + "\"" + signType + "\"";
+
 		pay(info);
 	}
 

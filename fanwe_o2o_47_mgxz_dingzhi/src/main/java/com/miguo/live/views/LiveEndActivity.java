@@ -18,12 +18,15 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.utils.TimeUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 主播退出
@@ -34,6 +37,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
     private boolean isShare;
     private ModelStopLive modelStopLive;
     private LiveHttpHelper mLiveHttphelper;
+    private CircleImageView ivIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,9 @@ public class LiveEndActivity extends Activity implements CallbackView {
 
         dataBindingLiveEnd.hostName.set(App.getInstance().getUserNickName());
         dataBindingLiveEnd.shopName.set(CurLiveInfo.modelShop.getShop_name());
+
+        ivIcon = (CircleImageView) findViewById(R.id.iv_portrait_live_end);
+        ImageLoader.getInstance().displayImage(App.getApplication().getUserIcon(), ivIcon);
     }
 
     @Override
@@ -122,7 +129,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
             platform = SHARE_MEDIA.QZONE;
         }
-        UmengShareManager.share(platform, this, "", "直播结束分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+        UmengShareManager.share(platform, this, "分享", "直播结束分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
@@ -93,7 +94,6 @@ import java.util.TreeMap;
  * 获取门店随机评价
  * 取直播门店的镇店之宝。
  * 获取用户主播认证时间
- *
  */
 public class LiveHttpHelper implements IHelper {
 
@@ -101,6 +101,7 @@ public class LiveHttpHelper implements IHelper {
     private Gson gson;
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
+    private CallbackView2 mView2;
     private Context mContext;
     private Activity mActivity;
 
@@ -113,9 +114,9 @@ public class LiveHttpHelper implements IHelper {
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
-    public LiveHttpHelper(Activity mActivity, CallbackView mView) {
+    public LiveHttpHelper(Activity mActivity, CallbackView2 mView2, String type) {
         this.mActivity = mActivity;
-        this.mView = mView;
+        this.mView2 = mView2;
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
@@ -141,17 +142,22 @@ public class LiveHttpHelper implements IHelper {
                 RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
                 List<ResultLive> resultLives = rootLive.getResult();
                 if (SDCollectionUtil.isEmpty(resultLives) || resultLives.size() < 1) {
-                    mView.onSuccess(LiveConstants.LIVE_LIST, null);
+                    mView2.onSuccess(LiveConstants.LIVE_LIST, null);
                     return;
                 }
                 ResultLive resultLive = resultLives.get(0);
                 List<Room> rooms = resultLive.getBody();
-                mView.onSuccess(LiveConstants.LIVE_LIST, rooms);
+                mView2.onSuccess(LiveConstants.LIVE_LIST, rooms);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mView.onFailue(message);
+                mView2.onFailue(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView2.onFinish(LiveConstants.LIVE_LIST);
             }
         });
 
@@ -192,7 +198,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootAudienceCount rootAudienceCount = gson.fromJson(responseBody,RootAudienceCount.class);
+                RootAudienceCount rootAudienceCount = gson.fromJson(responseBody, RootAudienceCount.class);
                 List<ResultAudienceCount> resultAudienceCounts = rootAudienceCount.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceCounts)) {
                     mView.onSuccess(LiveConstants.AUDIENCE_COUNT, null);

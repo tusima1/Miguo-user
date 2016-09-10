@@ -7,7 +7,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/7/26.
  * 直播退出界面
  */
-public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, CallbackView {
+public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, CallbackView2 {
 
     private Activity mActivity;
     private CircleImageView civ_user_image;
@@ -48,19 +48,18 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
-
         createDialog();
         setView();
     }
 
     private void setView() {
-        liveHttpHelper = new LiveHttpHelper(mActivity, this);
+        liveHttpHelper = new LiveHttpHelper(mActivity, this, "");
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
         liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
         liveHttpHelper.getLiveList(1, 5, "", "", "");
         ImageLoader.getInstance().displayImage(CurLiveInfo.getHostAvator(), civ_user_image);
         tv_username.setText(CurLiveInfo.getHostName());
-        tv_user_location.setText(CurLiveInfo.modelShop.getAddress());
+        tv_user_location.setText(CurLiveInfo.modelShop.getShop_name());
     }
 
 
@@ -191,6 +190,11 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

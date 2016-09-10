@@ -383,13 +383,10 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         //提交并生成订单。
         if (!TextUtils.isEmpty(orderId)) {
             //String order_id,String payment,String is_use_account_money
-            outSideShoppingCartHelper.payByOrderId(orderId, balances_flg, payDisp);
+            outSideShoppingCartHelper.payByOrderId(orderId, payDisp, balances_flg);
         } else {
-
             outSideShoppingCartHelper.createOrder(mCheckActModel.getId(), balances_flg, red_id, payDisp, content);
-
         }
-
     }
 
     public void onFinish() {
@@ -406,10 +403,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     protected void dealRequestDoneOrderSuccess(List datas) {
         if (datas != null && datas.size() > 0) {
             OrderDetailInfo orderDetailInfo = (OrderDetailInfo) datas.get(0);
-            Intent intent = null;
             CommonInterface.updateCartNumber();
             SDEventManager.post(EnumEventTag.DONE_CART_SUCCESS.ordinal());
-            intent = new Intent(mActivity, PayActivity.class);
+            Intent intent = new Intent(mActivity, PayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(PayActivity.ORDER_ENTITY, orderDetailInfo);
             bundle.putString(PayActivity.EXTRA_ORDER_ID, orderDetailInfo.getOrder_info().getOrder_id());
