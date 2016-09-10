@@ -45,6 +45,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
+import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
@@ -91,6 +92,9 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 
     @ViewInject(R.id.act_pay_tv_pay_info)
     private TextView mTvPayInfo;
+
+    @ViewInject(R.id.act_pay_layout_pay_info)
+    private LinearLayout mLayoutPayInfo;
 
     @ViewInject(R.id.act_pay_btn_pay)
     private Button mBtnPay;
@@ -177,9 +181,10 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
         }
     }
 
+    String payStatus;
+
     private void bindData() {
         SDViewBinder.setTextView(mTvOrderSn, orderDetailInfo.getOrder_info().getOrder_sn());
-        String payStatus = orderDetailInfo.getOrder_info().getOrder_status();
         if (TextUtils.isEmpty(payStatus)) {
             return;
         }
@@ -190,13 +195,12 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
             mHasPay = "all";
             mBtnPay.setVisibility(View.GONE);
             SDViewBinder.setTextView(mTvPayInfo, orderDetailInfo.getOrder_info().getName());
-
             if (!isEmpty(orderDetailInfo.getShare_url())) {
                 SDViewUtil.show(mIv_share);
             } else {
                 SDViewUtil.hide(mIv_share);
             }
-
+            mLayoutPayInfo.setVisibility(View.GONE);
         } else if (PAY_WAIT.equals(payStatus)) {
             //支付未完成。
             mPaymentCodeModel = new Payment_codeModel();
@@ -231,17 +235,28 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
         if (intent.getSerializableExtra(ORDER_ENTITY) != null && intent.getSerializableExtra(ORDER_ENTITY) instanceof OrderDetailInfo) {
             orderDetailInfo = (OrderDetailInfo) intent.getSerializableExtra(ORDER_ENTITY);
         }
-        if (TextUtils.isEmpty(mOrderId) || orderDetailInfo == null) {
-            SDToast.showToast("id为空");
+        if (orderDetailInfo == null) {
+            SDToast.showToast("订单信息为空");
             finish();
             return;
-        } else {
-            bindData();
         }
+        payStatus = orderDetailInfo.getOrder_info().getOrder_status();
+        if (!PAY_SUCCESS.equals(payStatus)) {
+            if (TextUtils.isEmpty(mOrderId)) {
+                SDToast.showToast("id为空");
+                finish();
+                return;
+            }
+        }
+        bindData();
     }
 
     private void initTitle() {
-        mTitle.setMiddleTextTop("订单支付");
+        if (!PAY_SUCCESS.equals(payStatus)) {
+            mTitle.setMiddleTextTop("订单支付");
+        } else {
+            mTitle.setMiddleTextTop("支付成功");
+        }
 
         mTitle.setLeftImageLeft(0);
         mTitle.setLeftTextBot("订单列表");
@@ -265,6 +280,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
     private void registeClick() {
         mBtnPay.setOnClickListener(this);
         mIv_share.setOnClickListener(this);
+        mBtnQuan.setOnClickListener(this);
     }
 
 
@@ -294,6 +310,10 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                 break;
             case R.id.iv_share_red:
                 clickShare();
+                break;
+            case R.id.act_quanlist_btn:
+                startActivity(new Intent(this, MyCouponListActivity.class));
+                finish();
                 break;
             default:
                 break;
@@ -531,7 +551,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
             return;
         }
 
-      String orderSpec = model.getTextHtml();
+        String orderSpec = model.getTextHtml();
 
 
         String sign = model.getSign();

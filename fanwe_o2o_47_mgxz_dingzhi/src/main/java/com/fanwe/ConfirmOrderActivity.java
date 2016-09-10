@@ -403,10 +403,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     protected void dealRequestDoneOrderSuccess(List datas) {
         if (datas != null && datas.size() > 0) {
             OrderDetailInfo orderDetailInfo = (OrderDetailInfo) datas.get(0);
-            Intent intent = null;
             CommonInterface.updateCartNumber();
             SDEventManager.post(EnumEventTag.DONE_CART_SUCCESS.ordinal());
-            intent = new Intent(mActivity, PayActivity.class);
+            Intent intent = new Intent(mActivity, PayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(PayActivity.ORDER_ENTITY, orderDetailInfo);
             bundle.putString(PayActivity.EXTRA_ORDER_ID, orderDetailInfo.getOrder_info().getOrder_id());
