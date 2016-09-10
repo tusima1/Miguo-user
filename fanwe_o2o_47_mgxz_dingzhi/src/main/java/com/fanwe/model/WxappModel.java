@@ -5,7 +5,6 @@ public class WxappModel {
     private String appid;
     private String nonce_str;
     private String package_value;
-    private String partnerid;
     private String prepay_id;
     private String time_stamp;
     private String sign;
@@ -28,14 +27,6 @@ public class WxappModel {
 
     public void setAppid(String appid) {
         this.appid = appid;
-    }
-
-    public String getPartnerid() {
-        return partnerid;
-    }
-
-    public void setPartnerid(String partnerid) {
-        this.partnerid = partnerid;
     }
 
     public String getPrepay_id() {

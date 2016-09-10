@@ -26,5 +26,8 @@ public class CommissionConstance {
      * 佣金提现
      */
     public static final String USER_WITHDRAW_FX="UserCommissionWithdraw";
-//    public static final String COMMISSION_LOG="GetBalance";
+    /**
+     * 银行卡列表
+     */
+    public static final String USER_BANK_CARD_LIST="UserBankCardList";
 }

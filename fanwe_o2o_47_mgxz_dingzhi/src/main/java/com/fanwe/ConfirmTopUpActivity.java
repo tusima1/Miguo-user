@@ -433,7 +433,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
             return;
         }
 
-        String partnerId = model.getPartnerid();
+        String partnerId = model.getMch_id();
         if (TextUtils.isEmpty(partnerId)) {
             SDToast.showToast("partnerId为空");
             return;

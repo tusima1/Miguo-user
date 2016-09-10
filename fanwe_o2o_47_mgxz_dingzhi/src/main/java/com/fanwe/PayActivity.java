@@ -151,7 +151,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
         /*
          * popupView = getLayoutInflater() .inflate(R.layout.pop_share_red,
 		 * null);
-		 * 
+		 *
 		 * popupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT,
 		 * LayoutParams.WRAP_CONTENT,true);
 		 */
@@ -205,8 +205,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
             mHasPay = "pay_wait";
             mBtnPay.setVisibility(View.VISIBLE);
             HashMap<String, String> config = orderDetailInfo.getConfig();
-            String payMoney = config.get("total_fee");
-            String payMoneyFormat = config.get("total_fee_format");
+            String payMoney = config.get("total_fee_format");
             mPaymentCodeModel.setPay_money(payMoney);
             mPaymentCodeModel.setConfig(config);
             mPaymentCodeModel.setClass_name(class_name);
@@ -214,7 +213,6 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                 mPaymentCodeModel.setPayment_name("支付宝支付");
             } else {
                 mPaymentCodeModel.setPayment_name("微信支付");
-                mPaymentCodeModel.setPay_money(payMoneyFormat);
 
             }
 
@@ -223,7 +221,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                 return;
             }
             SDViewBinder.setTextView(mTvPayInfo, class_name + orderDetailInfo.getOrder_info().getName());
-            mBtnPay.setText(mPaymentCodeModel.getPay_money());
+            mBtnPay.setText(mPaymentCodeModel.getPay_moneyFormat());
         }
     }
 
@@ -533,8 +531,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
             return;
         }
 
-
-        String orderSpec = "&partner = " + "\"" + model.getPartner() + "\"" + "&seller_id =" + "\"" + model.getSeller_id() + "\"" + "&out_trade_no=" + "\"" + model.getOut_trade_no() + "\"" + "&subject =" + "\"" + model.getSubject() + "\"" + "&body =" + model.getBody() + "\"" + "&total_fee=" + model.getTotal_fee() + "\"" + "&notify_url=" + model.getNotify_url() + "\"" + "&service=" + "\"" + model.getService() + "\"" + "&payment_type=" + "\"" + model.getPayment_type() + "\"" + "&_input_charset=" + "\"" + model.get_input_charset() + "\"";
+      String orderSpec = model.getTextHtml();
 
 
         String sign = model.getSign();

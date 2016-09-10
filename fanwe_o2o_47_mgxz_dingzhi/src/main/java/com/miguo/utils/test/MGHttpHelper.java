@@ -1,0 +1,104 @@
+package com.miguo.utils.test;
+
+import com.fanwe.app.App;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
+import com.google.gson.Gson;
+import com.miguo.live.interf.IHelper;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
+
+import java.util.TreeMap;
+
+/**
+ * Created by didik on 2016/9/9.
+ */
+public abstract class MGHttpHelper implements IHelper {
+
+    public static final int GET=0;
+    public static final int POST=-1;
+    public static final int PUT=-2;
+    public static final int DELETE=-3;
+    public static final int THIRD_LOGIN=-4;
+
+    protected Gson gson;
+
+    public MGHttpHelper(){initNeed();}
+
+    protected void initNeed(){
+        this.gson=new Gson();
+    }
+
+    public void doHttpMethod(String method, int mode){
+        doHttpMethod(method,mode,null);
+    }
+
+    public void doHttpMethod(final String method, int mode ,String customUrl){
+        TreeMap<String, String> params = new TreeMap<>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", method);
+        //添加一些参数非必须参数
+        addParams(method,params);
+        MgCallback callback=new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(final String responseBody) {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onSuccess(method,responseBody);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onFinished(method);
+                    }
+                });
+            }
+        };
+        switch (mode){
+            case GET:
+                OkHttpUtils.getInstance().get(customUrl,params,callback);
+                break;
+            case POST:
+                OkHttpUtils.getInstance().post(customUrl,params,callback);
+                break;
+            case PUT:
+                OkHttpUtils.getInstance().put(customUrl,params,callback);
+                break;
+            case DELETE:
+                OkHttpUtils.getInstance().delete(customUrl,params,callback);
+                break;
+            case THIRD_LOGIN:
+                OkHttpUtils.getInstance().thirdUrlGet(customUrl,params,callback);
+                break;
+            default:
+                OkHttpUtils.getInstance().get(null,params,callback);
+                break;
+        }
+
+    }
+
+    protected abstract TreeMap addParams(String method,TreeMap params);
+    protected abstract void onSuccess(String method,String responseBody);
+    protected abstract void onFinished(String method);
+
+//    public void doHttpMethod(String method,String page,T... targetModel){
+//
+//    }
+
+    @Override
+    public void onDestroy() {
+
+    }
+}

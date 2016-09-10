@@ -7,6 +7,9 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
 import com.fanwe.commission.model.getUserAccount.RootUserAccount;
+import com.fanwe.commission.model.getUserBankCardList.ModelUserBankCard;
+import com.fanwe.commission.model.getUserBankCardList.ResultUserBankCard;
+import com.fanwe.commission.model.getUserBankCardList.RootUserBankCard;
 import com.fanwe.commission.model.getWithdrawLog.ResultWithdrawLog;
 import com.fanwe.commission.model.getWithdrawLog.RootWithdrawLog;
 import com.fanwe.network.MgCallback;
@@ -66,7 +69,6 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-//                Log.e("Test","用户信息: "+responseBody);
                 final List<ResultUserAccount> result = gson.fromJson(responseBody, RootUserAccount
                         .class).getResult();
                 if (result!=null && result.size()>0){
@@ -92,6 +94,53 @@ public class MoneyHttpHelper implements IHelper{
                     @Override
                     public void run() {
                         mView2.onFinish(CommissionConstance.USER_ACCOUNT);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取银行卡列表
+     */
+    public void getUserBankCardList(){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", CommissionConstance.USER_BANK_CARD_LIST);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                List<ResultUserBankCard> result = gson.fromJson(responseBody, RootUserBankCard
+                        .class).getResult();
+                if (result!=null && result.size()>0){
+                    ResultUserBankCard resultUserBankCard = result.get(0);
+                    if (resultUserBankCard!=null){
+                        final List<ModelUserBankCard> body = resultUserBankCard.getBody();
+                        if (body!=null && body.size()>0){
+                            MGUIUtil.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST,body);
+                                }
+                            });
+                            return;
+                        }
+                    }
+                }
+                mView2.onFailue(CommissionConstance.USER_BANK_CARD_LIST);
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView2.onFinish(CommissionConstance.USER_BANK_CARD_LIST);
                     }
                 });
             }
