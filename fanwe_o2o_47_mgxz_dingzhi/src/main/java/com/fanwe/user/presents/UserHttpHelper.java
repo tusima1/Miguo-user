@@ -471,6 +471,35 @@ public class UserHttpHelper implements IHelper {
         });
     }
 
+    /**
+     * 用户修改密码
+     *
+     * @param mobile
+     * @param newpwd
+     * @param captcha
+     */
+    public void userChangePwd(String mobile, String newpwd, String captcha) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("mobile", mobile);
+        params.put("newpwd", newpwd);
+        params.put("captcha", captcha);
+        params.put("method", UserConstants.USER_CHANGE_PWD);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(UserConstants.USER_CHANGE_PWD, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
     @Override
     public void onDestroy() {
         mView = null;

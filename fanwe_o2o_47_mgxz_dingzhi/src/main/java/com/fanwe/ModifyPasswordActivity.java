@@ -1,320 +1,299 @@
 package com.fanwe;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CommonHelper;
+import com.fanwe.base.Root;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
-import com.fanwe.model.Check_MobActModel;
 import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
-import com.fanwe.model.User_infoModel;
+import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.user.presents.UserHttpHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.TextView;
+import java.lang.reflect.Type;
+import java.util.List;
 
-public class ModifyPasswordActivity extends BaseActivity
-{
+public class ModifyPasswordActivity extends BaseActivity implements CallbackView, CallbackView2 {
 
-	@ViewInject(R.id.svb_validate)
-	private SDSendValidateButton mSvb_validate;
+    @ViewInject(R.id.svb_validate)
+    private SDSendValidateButton mSvb_validate;
 
-	@ViewInject(R.id.cet_mobile)
-	private ClearEditText mCet_mobile;
+    @ViewInject(R.id.cet_mobile)
+    private ClearEditText mCet_mobile;
 
-	@ViewInject(R.id.cet_code)
-	private ClearEditText mCet_code;
+    @ViewInject(R.id.cet_code)
+    private ClearEditText mCet_code;
 
-	@ViewInject(R.id.cet_pwd)
-	private ClearEditText mCet_pwd;
+    @ViewInject(R.id.cet_pwd)
+    private ClearEditText mCet_pwd;
 
-	@ViewInject(R.id.cet_pwd_confirm)
-	private ClearEditText mCet_pwd_confirm;
+    @ViewInject(R.id.cet_pwd_confirm)
+    private ClearEditText mCet_pwd_confirm;
 
-	@ViewInject(R.id.tv_sbumit)
-	private TextView mTv_sbumit;
+    @ViewInject(R.id.tv_sbumit)
+    private TextView mTv_sbumit;
 
-	private String mStrMobile;
-	private String mStrCode;
-	private String mStrPwd;
-	private String mStrPwdConfirm;
+    private String mStrMobile;
+    private String mStrCode;
+    private String mStrPwd;
+    private String mStrPwdConfirm;
 
-	private String userPhone;
+    private String userPhone;
+    private CommonHelper commonHelper;
+    private UserHttpHelper userHttpHelper;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setmTitleType(TitleType.TITLE);
-		setContentView(R.layout.act_modify_password);
-		init();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setmTitleType(TitleType.TITLE);
+        setContentView(R.layout.act_modify_password);
+        init();
+    }
 
-	private void init()
-	{
-		initTitle();
-		registeClick();
-		initSDSendValidateButton();
-		showBindPhoneDialog();
-	}
+    private void init() {
+        commonHelper = new CommonHelper(this, this);
+        userHttpHelper = new UserHttpHelper(this, this);
+        initTitle();
+        registeClick();
+        initSDSendValidateButton();
+        showBindPhoneDialog();
+    }
 
-	public void initRequest()
-	{
-		RequestModel model =new RequestModel();
-		userPhone = mCet_mobile.getText().toString();
-		if (TextUtils.isEmpty(userPhone))
-		{
-			SDToast.showToast("请输入手机号码");
-			return;
-		}
-		model.putCtl("user");
-		model.putAct("check_mobile");
-		model.put("mobile", userPhone);
-		SDRequestCallBack<Check_MobActModel> handler = new SDRequestCallBack<Check_MobActModel>()
-		{
-					@Override
-					public void onStart()
-					{
-						SDDialogManager.showProgressDialog("请稍候...");
-					}
+    /**
+     * 用JAVA 接口请求验证码。
+     */
+    private void doGetCaptcha() {
+        userPhone = mCet_mobile.getText().toString();
+        if (TextUtils.isEmpty(userPhone)) {
+            SDToast.showToast("请输入手机号码");
+            return;
+        }
+        //开始倒计时。
+        mSvb_validate.setmDisableTime(60);
+        mSvb_validate.startTickWork();
 
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo)
-					{
-						if(actModel.getExists() == 1  || actModel.getIs_tmp() ==1)
-						{
-							requestSendCode();
-						}else
-						{
-							Intent intent = new Intent(ModifyPasswordActivity.this,RegisterActivity.class);
-							intent.putExtra(RegisterActivity.EXTRAS_Phone, userPhone);
-							startActivity(intent);
-						}
-					}
+        commonHelper.doGetCaptcha(userPhone, 1, new MgCallback() {
 
-					@Override
-					public void onFinish()
-					{
-						SDDialogManager.dismissProgressDialog();
-					}
-				};
-				InterfaceServer.getInstance().requestInterface(model, handler);
-			}
-	private void showBindPhoneDialog()
-	{
-		LocalUserModel user = AppHelper.getLocalUser();
-		if (user != null)
-		{
-			mCet_mobile.setEnabled(false);
-			String mobile = user.getUser_mobile();
-			if (TextUtils.isEmpty(mobile))
-			{
-				// TODO 跳到绑定手机号界面
-			} else
-			{
-				mCet_mobile.setText(mobile);
-			}
-		} else
-		{
-			mCet_mobile.setEnabled(true);
-		}
-	}
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast("验证码发送失败");
+            }
 
-	/**
-	 * 初始化发送验证码按钮
-	 */
-	private void initSDSendValidateButton()
-	{
-		mSvb_validate.setmListener(new SDSendValidateButtonListener()
-		{
-			@Override
-			public void onTick()
-			{
-			}
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<UserInfoNew>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if (UserConstants.SUCCESS.equals(status)) {
+                    SDToast.showToast("验证码发送成功");
+                } else if (UserConstants.CODE_ERROR.equals(status)) {
+                    SDToast.showToast("验证码发送失败");
+                }
+            }
+        });
+    }
 
-			@Override
-			public void onClickSendValidateButton()
-			{
-				initRequest();
-			}
-		});
-	}
+    private void showBindPhoneDialog() {
+        LocalUserModel user = AppHelper.getLocalUser();
+        if (user != null) {
+            mCet_mobile.setEnabled(false);
+            String mobile = user.getUser_mobile();
+            if (TextUtils.isEmpty(mobile)) {
+                // TODO 跳到绑定手机号界面
+            } else {
+                mCet_mobile.setText(mobile);
+            }
+        } else {
+            mCet_mobile.setEnabled(true);
+        }
+    }
 
-	private void requestSendCode()
-	{
-		mStrMobile = mCet_mobile.getText().toString();
-		if (TextUtils.isEmpty(mStrMobile))
-		{
-			SDToast.showToast("请输入手机号码");
-			return;
-		}
+    /**
+     * 初始化发送验证码按钮
+     */
+    private void initSDSendValidateButton() {
+        mSvb_validate.setmListener(new SDSendValidateButtonListener() {
+            @Override
+            public void onTick() {
+            }
 
-		CommonInterface.requestValidateCode(mStrMobile, 2, new SDRequestCallBack<Sms_send_sms_codeActModel>()
-		{
+            @Override
+            public void onClickSendValidateButton() {
+                doGetCaptcha();
+            }
+        });
+    }
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() > 0)
-				{
-					mSvb_validate.setmDisableTime(actModel.getLesstime());
-					mSvb_validate.startTickWork();
-				}
-			}
+    private void requestSendCode() {
+        mStrMobile = mCet_mobile.getText().toString();
+        if (TextUtils.isEmpty(mStrMobile)) {
+            SDToast.showToast("请输入手机号码");
+            return;
+        }
 
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
+        CommonInterface.requestValidateCode(mStrMobile, 2, new SDRequestCallBack<Sms_send_sms_codeActModel>() {
 
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                if (actModel.getStatus() > 0) {
+                    mSvb_validate.setmDisableTime(actModel.getLesstime());
+                    mSvb_validate.startTickWork();
+                }
+            }
 
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-			}
-		});
+            @Override
+            public void onStart() {
+                SDDialogManager.showProgressDialog("请稍候...");
+            }
 
-	}
+            @Override
+            public void onFinish() {
+                SDDialogManager.dismissProgressDialog();
+            }
 
-	private void initTitle()
-	{
-		mTitle.setMiddleTextTop("修改密码");
-	}
+            @Override
+            public void onFailure(HttpException error, String msg) {
+            }
+        });
 
-	private void registeClick()
-	{
-		mTv_sbumit.setOnClickListener(this);
-	}
+    }
 
-	@Override
-	public void onClick(View v)
-	{
-		switch (v.getId())
-		{
-		case R.id.tv_sbumit:
-			clickSubmit();
-			break;
+    private void initTitle() {
+        mTitle.setMiddleTextTop("修改密码");
+    }
 
-		default:
-			break;
-		}
-	}
+    private void registeClick() {
+        mTv_sbumit.setOnClickListener(this);
+    }
 
-	private void clickSubmit()
-	{
-		if (validateParam())
-		{
-			RequestModel model = new RequestModel();
-			model.putCtl("user");
-			model.putAct("phmodifypassword");
-			model.put("mobile", mStrMobile);
-			model.put("sms_verify", mStrCode);
-			model.put("new_pwd", mStrPwd);
-			SDRequestCallBack<User_infoModel> handler = new SDRequestCallBack<User_infoModel>()
-			{
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_sbumit:
+                clickSubmit();
+                break;
 
-				@Override
-				public void onStart()
-				{
-					SDDialogManager.showProgressDialog("请稍候...");
-				}
+            default:
+                break;
+        }
+    }
 
-				@Override
-				public void onSuccess(ResponseInfo<String> responseInfo)
-				{
-					if (actModel.getStatus() == 1)
-					{
-						LocalUserModel.dealLoginSuccess(actModel, false);
-						finish();
-					}
-				}
+    private void clickSubmit() {
+        validateParam();
+        userHttpHelper.userChangePwd(mStrMobile, MD5Util.MD5(mStrPwd), mStrCode);
+    }
 
-				@Override
-				public void onFinish()
-				{
-					SDDialogManager.dismissProgressDialog();
-				}
-			};
-			InterfaceServer.getInstance().requestInterface(model, handler);
-		}
+    private boolean validateParam() {
+        mStrMobile = mCet_mobile.getText().toString();
+        if (TextUtils.isEmpty(mStrMobile)) {
+            SDToast.showToast("手机号不能为空");
+            return false;
+        }
 
-	}
+        mStrCode = mCet_code.getText().toString();
+        if (TextUtils.isEmpty(mStrCode)) {
+            SDToast.showToast("验证码不能为空");
+            return false;
+        }
+        mStrPwd = mCet_pwd.getText().toString();
+        if (TextUtils.isEmpty(mStrPwd)) {
+            SDToast.showToast("新密码不能为空");
+            return false;
+        }
+        mStrPwdConfirm = mCet_pwd_confirm.getText().toString();
+        if (TextUtils.isEmpty(mStrPwdConfirm)) {
+            SDToast.showToast("确认新密码不能为空");
+            return false;
+        }
 
-	private boolean validateParam()
-	{
-		mStrMobile=mCet_mobile.getText().toString();
-		if (TextUtils.isEmpty(mStrMobile))
-		{
-			SDToast.showToast("手机号不能为空");
-			return false;
-		}
+        if (!mStrPwd.equals(mStrPwdConfirm)) {
+            SDToast.showToast("两次密码不一致");
+            return false;
+        }
 
-		mStrCode = mCet_code.getText().toString();
-		if (TextUtils.isEmpty(mStrCode))
-		{
-			SDToast.showToast("验证码不能为空");
-			return false;
-		}
-		mStrPwd = mCet_pwd.getText().toString();
-		if (TextUtils.isEmpty(mStrPwd))
-		{
-			SDToast.showToast("新密码不能为空");
-			return false;
-		}
-		mStrPwdConfirm = mCet_pwd_confirm.getText().toString();
-		if (TextUtils.isEmpty(mStrPwdConfirm))
-		{
-			SDToast.showToast("确认新密码不能为空");
-			return false;
-		}
+        return true;
+    }
 
-		if (!mStrPwd.equals(mStrPwdConfirm))
-		{
-			SDToast.showToast("两次密码不一致");
-			return false;
-		}
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case CONFIRM_IMAGE_CODE:
+                if (SDActivityManager.getInstance().isLastActivity(this)) {
+                    requestSendCode();
+                }
+                break;
 
-		return true;
-	}
+            default:
+                break;
+        }
+    }
 
-	@Override
-	public void onEventMainThread(SDBaseEvent event)
-	{
-		super.onEventMainThread(event);
-		switch (EnumEventTag.valueOf(event.getTagInt()))
-		{
-		case CONFIRM_IMAGE_CODE:
-			if (SDActivityManager.getInstance().isLastActivity(this))
-			{
-				requestSendCode();
-			}
-			break;
+    @Override
+    public void onSuccess(String responseBody) {
 
-		default:
-			break;
-		}
-	}
+    }
 
+    @Override
+    public void onSuccess(String method, List datas) {
+        Message msg = new Message();
+        if (UserConstants.USER_CHANGE_PWD.equals(method)) {
+            LocalUserModel localUserModel = LocalUserModelDao.queryModel();
+            localUserModel.setUser_pwd(MD5Util.MD5(mStrPwd));
+            LocalUserModelDao.insertModel(localUserModel);
+            msg.what = 0;
+        }
+        mHandler.sendMessage(msg);
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    SDToast.showToast("密码修改成功");
+                    finish();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

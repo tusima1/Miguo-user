@@ -1,5 +1,10 @@
 package com.fanwe.umeng;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
+
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.utils.SDToast;
@@ -10,11 +15,6 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
-
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 
 /**
  * @author didikee
