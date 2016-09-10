@@ -11,16 +11,12 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.interf.IHelper;
-import com.miguo.live.model.UserRedPacketInfo;
-
-import java.util.List;
 
 /**
  * Created by didik on 2016/8/17.
  * 用户抢完红包后结果展示界面
  */
 public class UserRobRedPacketEndDialogHelper implements IHelper {
-    private List<UserRedPacketInfo> datas;
     /**
      * 是否抢到了红包。
      */
@@ -32,34 +28,30 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
     private String type;
     private String num;
 
-    /**
-     *
-     * @param activity bindRoot
-     * @param isRob 有没有抢到红包
-     */
-    public UserRobRedPacketEndDialogHelper(Activity activity, boolean isRob) {
+    public UserRobRedPacketEndDialogHelper(Activity activity) {
         this.mActivity = activity;
-        this.mRob = isRob;
         createDialog();
     }
 
-    public UserRobRedPacketEndDialogHelper(Activity activity,  List<UserRedPacketInfo> datas) {
-        this.mActivity = activity;
-        this.datas = datas;
-        if(datas==null||datas.size()<1){
-            mRob = false;
-        }else{
-            UserRedPacketInfo  info = datas.get(0);
-            if(info!=null&&!TextUtils.isEmpty(info.getRed_packet_type())) {
-                mRob = true;
-                type = info.getRed_packet_type();
-                num = info.getRed_packet_amount();
-            }else{
-                mRob = false;
-            }
-        }
-        createDialog();
+    /**
+     * 设置显示的类型
+     * @param isRobed true 显示抢到界面
+     *                false 显示未抢到界面
+     */
+    public void setShowType(boolean isRobed){
+        this.mRob=isRobed;
     }
+
+    /**
+     * 设置展示在Layout上的数据
+     * @param type 类型
+     * @param num 数量
+     */
+    public void setData(String type,String num){
+        this.type=type;
+        this.num=num;
+    }
+
     @Override
     public void onDestroy() {
 
@@ -143,6 +135,7 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
     public void dismiss() {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
+            mRob=false;
         }
     }
 }

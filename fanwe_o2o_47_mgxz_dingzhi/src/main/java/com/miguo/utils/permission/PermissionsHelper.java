@@ -118,7 +118,7 @@ public class PermissionsHelper {
     private void showSettingPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("未获取权限");
-        builder.setMessage("权限不足无法正常使用 NB 功能,我们不会收集您的隐私(才怪嘞!=.=)");
+        builder.setMessage("权限不足无法正常使用!");
 
         // 拒绝, 退出应用
         builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {

@@ -106,7 +106,7 @@ public class RedpacketListAdapter extends BaseAdapter {
         //两种状态
         String event_flag = modelUserRedPacket.getEvent_flag();//红包过期标志
         String is_used = modelUserRedPacket.getIs_used();//是否使用
-        if ("1".equals(event_flag)){
+        if ("0".equals(event_flag)){
             //已经无效 已过期
             holder.packet_type.setTextColor(grayColor);
             holder.mTv_BigNum.setTextColor(grayColor);
@@ -130,8 +130,6 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_orange_down,null));
             holder.mIv_WaterMark.setVisibility(View.GONE);
         }
-
-
         holder.mTv_Title.setText(modelUserRedPacket.getRed_packet_name());
         holder.mTv_Content.setText(modelUserRedPacket.getSpecial_note());
         String dateStart = MGStringFormatter.getDate(modelUserRedPacket.getEvent_start());
@@ -147,13 +145,15 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.mTv_Time.setText(sb.toString());
         }
         //bind content
-        holder.mTv_BigNum.setText(MGStringFormatter.getFloat1(modelUserRedPacket.getRed_packet_amount()));
+        String red_packet_amount = modelUserRedPacket.getRed_packet_amount();
         String red_packet_type = modelUserRedPacket.getRed_packet_type();
         //红包类型 1:打折  2:现金券
         if ("1".equals(red_packet_type)){
+            holder.mTv_BigNum.setText(MGStringFormatter.getFloat2(red_packet_amount));
             holder.packet_type.setText("折");
             holder.mTv_TitleTag.setText("折扣券");
         }else if ("2".equals(red_packet_type)){
+            holder.mTv_BigNum.setText(MGStringFormatter.getFloat1(red_packet_amount));
             holder.packet_type.setText("元");
             holder.mTv_TitleTag.setText("现金券");
         }

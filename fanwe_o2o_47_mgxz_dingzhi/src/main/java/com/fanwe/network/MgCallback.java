@@ -5,13 +5,11 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
-import com.fanwe.base.Result;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
 
 import java.io.IOException;
 import java.util.List;

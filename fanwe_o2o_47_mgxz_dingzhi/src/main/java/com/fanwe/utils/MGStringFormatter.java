@@ -56,6 +56,34 @@ public class MGStringFormatter {
     }
 
     /**
+     * 获取 1.00
+     * @param maybeFloat
+     * @return 1.00
+     */
+    public static String getFloat2(String maybeFloat){
+        String result="0.00";
+        if (!TextUtils.isEmpty(maybeFloat)){
+            int length = maybeFloat.length();
+            if (maybeFloat.contains(".")){
+                int middle = maybeFloat.indexOf(".");
+                int offset = length - middle;
+                if (offset==1){
+                    result=maybeFloat+"00";
+                }else if (offset==2){
+                    result=maybeFloat+"0";
+                }else if (offset==3){
+                    result=maybeFloat;
+                }else if (offset>3){
+                    result=maybeFloat.substring(0,middle+3);
+                }
+            }else {
+                result=maybeFloat+".00";
+            }
+        }
+        return result;
+    }
+
+    /**
      *
      * @param time
      * @return
