@@ -18,6 +18,11 @@ public class MalipayModel
 	private String service;
 	private String payment_type;
 
+	/**
+	 * 签名和签名内容。未加入的串
+	 */
+	private String textHtml;
+
 	public String getSubject()
 	{
 		return subject;
@@ -150,5 +155,13 @@ public class MalipayModel
 
 	public void setPayment_type(String payment_type) {
 		this.payment_type = payment_type;
+	}
+
+	public String getTextHtml() {
+		return textHtml;
+	}
+
+	public void setTextHtml(String textHtml) {
+		this.textHtml = textHtml;
 	}
 }
