@@ -2,6 +2,7 @@ package com.miguo.live.views.customviews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.model.UserRedPacketInfo;
@@ -198,10 +200,33 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             redPacketDialogHelper.dismiss();
         }
         if(mAct!=null&&userRobRedPacketEndDialogHelper==null){
-            userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct,datas);
+            userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct);
+        }
+        boolean isRobed;
+        String type="";
+        String num="";
+        if(datas==null||datas.size()<1){
+            isRobed = false;
+        }else{
+            UserRedPacketInfo  info = datas.get(0);
+            if(info!=null&&!TextUtils.isEmpty(info.getRed_packet_type())) {
+                isRobed = true;
+                type = info.getRed_packet_type();
+                num = info.getRed_packet_amount();
+            }else{
+                isRobed = false;
+            }
+        }
+        //显示抢到界面(两种状态)
+        if (isRobed){
+            userRobRedPacketEndDialogHelper.setShowType(isRobed);
+            num= MGStringFormatter.getFloat2(num);
+            userRobRedPacketEndDialogHelper.setData(type,num);
+            userRobRedPacketEndDialogHelper.show();
+        }else {
+            userRobRedPacketEndDialogHelper.setShowType(isRobed);
             userRobRedPacketEndDialogHelper.show();
         }
-
     }
     /**
      * 点击了商品(宝贝)

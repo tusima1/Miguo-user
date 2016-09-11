@@ -49,7 +49,6 @@ import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
@@ -2058,10 +2057,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
+                MGLog.e("test: 直播过程用户抢到的红包数据: "+datas.size());
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        int size = datas == null ? 0 : datas.size();
 //                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
                         if (datas == null) {
                             mRedPacketAdapter.setMdatas(null);
@@ -2081,23 +2080,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 });
         }
     }
-
-    public List<UserRedPacketInfo> testDatas() {
-
-        List<UserRedPacketInfo> mdatas = new ArrayList<>();
-        for (int i = 0; i < 4; i++)
-
-        {
-            UserRedPacketInfo data1 = new UserRedPacketInfo();
-            data1.setId("001");
-            data1.setRed_packet_type("1");
-            data1.setAmount_limit(100 + i + "");
-            data1.setRed_packet_amount("12");
-            mdatas.add(data1);
-        }
-        return mdatas;
-    }
-
     /*校验数据*/
     public boolean checkDataIsNull(List datas) {
         if (datas != null && datas.size() > 0) {
