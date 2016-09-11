@@ -80,6 +80,7 @@
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
+
         <activity
             android:name="com.fanwe.InitAdvsMultiActivity"
             android:label="@string/app_name">
@@ -126,7 +127,10 @@
             </intent-filter>
         </activity>
         -->
-
+        <!-- 充值记录 -->
+        <activity
+            android:name="com.miguo.live.views.PayHistoryActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

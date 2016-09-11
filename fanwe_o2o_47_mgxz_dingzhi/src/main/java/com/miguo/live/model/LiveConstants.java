@@ -113,5 +113,9 @@ public class LiveConstants {
      * 抢红包结果。
      */
     public static final String GET_PACKET_RESULT = "GetRedPacketResult";
+    /**
+     * 获取充值记录
+     */
+    public static final String RECHARGE_DIAMOND_LIST = "RechargeDiamondList";
 
 }

@@ -56,6 +56,9 @@ import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
+import com.miguo.live.model.payHistory.ModelPayHistory;
+import com.miguo.live.model.payHistory.ResultPayHistory;
+import com.miguo.live.model.payHistory.RootPayHistory;
 import com.miguo.live.model.postHandOutRedPacket.ModelHandOutRedPacketPost;
 import com.miguo.live.model.postHandOutRedPacket.ResultHandOutRedPacketPost;
 import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
@@ -893,6 +896,40 @@ public class LiveHttpHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
+            }
+        });
+
+    }
+
+    /**
+     * 获取充值记录
+     */
+    public void getRechargeDiamondList() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.RECHARGE_DIAMOND_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootPayHistory root = gson.fromJson(responseBody, RootPayHistory.class);
+                List<ResultPayHistory> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView2.onSuccess(LiveConstants.RECHARGE_DIAMOND_LIST, null);
+                    return;
+                }
+                List<ModelPayHistory> items = results.get(0).getBody();
+                mView2.onSuccess(LiveConstants.RECHARGE_DIAMOND_LIST, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mView2.onFailue(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView2.onFinish(LiveConstants.RECHARGE_DIAMOND_LIST);
             }
         });
 
