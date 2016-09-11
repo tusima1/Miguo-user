@@ -63,6 +63,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.sunday.eventbus.SDBaseEvent;
@@ -522,7 +523,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(RedPacketListActivity.class);
         } else if (v == mLl_comments) {
             //我的点评
-            startActivity(MyCommentActivity.class);
+            startActivity(RechargeDiamondActivity.class);
+          //  startActivity(MyCommentActivity.class);
         } else if (v == mLl_shopping_cart) {
             //购物车
             startActivity(ShopCartActivity.class);

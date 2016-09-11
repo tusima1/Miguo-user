@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 商品评论 一般 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 初始状态 -->
+    <item android:drawable="@drawable/bg_orange_smallline" android:state_pressed="false"/>
+    <!-- 按下状态 -->
+    <item android:drawable="@drawable/bg_orange_small" android:state_pressed="true"/>
+</selector>

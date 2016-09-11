@@ -110,6 +110,8 @@
         <activity
             android:name="com.miguo.live.views.LiveAuthTagActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name="com.miguo.live.views.RechargeDiamondActivity"/>
+
         <!-- Splash页面后的引导页面 ,不要删除这段注释内容,以备后需 -->
         <!--
         <activity

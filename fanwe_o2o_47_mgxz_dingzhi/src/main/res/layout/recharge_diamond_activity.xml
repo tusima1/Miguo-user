@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="当前果钻"
+            android:textSize="@dimen/sp16" />
+
+        <TextView
+            android:id="@+id/self_diamond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="12"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/sp25" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
+        android:horizontalSpacing="@dimen/dp12"
+        android:numColumns="3"
+        android:verticalSpacing="@dimen/dp13">
+
+    </GridView>
+
+    <LinearLayout
+        android:id="@+id/big_diamond_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp12"
+        android:orientation="horizontal">
+
+        <include layout="@layout/recharge_diamond_item" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/act_confirm_order_fl_payments"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"></FrameLayout>
+
+    <Button
+        android:id="@+id/pay_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="45dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/selector_main_color_corner"
+        android:text="立即充值"
+        android:textColor="@color/white"
+        android:textSize="19.0sp" />
+
+</LinearLayout>
