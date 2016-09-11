@@ -81,4 +81,6 @@ dependencies {
      * okhttp请求计时器
      */
     compile 'com.jakewharton.timber:timber:3.1.0'
+    compile 'me.relex:circleindicator:1.2.1@aar'
+
 }
