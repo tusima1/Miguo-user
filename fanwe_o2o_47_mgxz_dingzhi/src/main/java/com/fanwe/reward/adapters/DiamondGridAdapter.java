@@ -23,7 +23,6 @@ public class DiamondGridAdapter extends BaseAdapter {
     private List<DiamondTypeEntity> datas = null;
     private LayoutInflater mInflater;
     private Context mContext;
-    private OnGridItemClickListener mOnGridItemClickListener;
 
 
     public DiamondGridAdapter(Context context) {
@@ -60,37 +59,30 @@ public class DiamondGridAdapter extends BaseAdapter {
             return convertView;
         }
         if(entity.isChecked()){
-            setCheckedColor(viewTag);
+            setCheckedColor(viewTag,true);
+        }else{
+            setCheckedColor(viewTag,false);
         }
         // set name
         viewTag.mDiamond.setText(entity.getDiamond());
         // set icon
         viewTag.mMoney.setText("￥ "+entity.getPrice());
 
-        viewTag.diamond_line.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for(int i = 0 ; i < getCount() ;i++){
-                    DiamondTypeEntity entity0 = datas.get(i);
-                    if(i==position){
-                        entity0.setChecked(true);
-                    }else{
-                        entity0.setChecked(false);
-                    }
-                }
-                notifyDataSetChanged();
-                mOnGridItemClickListener.onClick(entity);
-            }
-        });
 
         return convertView;
     }
 
 
-    public void setCheckedColor(ItemViewTag viewTag){
-        viewTag.mDiamond.setTextColor(mContext.getResources().getColor(R.color.white));
-        viewTag.mMoney.setTextColor(mContext.getResources().getColor(R.color.white));
-        viewTag.diamond_line.setBackground(mContext.getResources().getDrawable(R.drawable.bg_orange_small));
+    public void setCheckedColor(ItemViewTag viewTag,boolean checked){
+        if(checked) {
+            viewTag.mDiamond.setTextColor(mContext.getResources().getColor(R.color.white));
+            viewTag.mMoney.setTextColor(mContext.getResources().getColor(R.color.white));
+            viewTag.diamond_line.setBackground(mContext.getResources().getDrawable(R.drawable.bg_orange_small));
+        }else{
+            viewTag.mDiamond.setTextColor(mContext.getResources().getColor(R.color.main_color));
+            viewTag.mMoney.setTextColor(mContext.getResources().getColor(R.color.main_color_press));
+            viewTag.diamond_line.setBackground(mContext.getResources().getDrawable(R.drawable.bg_orange_smallline));
+        }
     }
 
     public List<DiamondTypeEntity> getDatas() {
@@ -119,15 +111,5 @@ public class DiamondGridAdapter extends BaseAdapter {
         }
     }
 
-  public  interface OnGridItemClickListener {
-        public void onClick(DiamondTypeEntity entity);
-    }
 
-    public OnGridItemClickListener getmOnGridItemClickListener() {
-        return mOnGridItemClickListener;
-    }
-
-    public void setmOnGridItemClickListener(OnGridItemClickListener mOnGridItemClickListener) {
-        this.mOnGridItemClickListener = mOnGridItemClickListener;
-    }
 }

@@ -2,10 +2,13 @@ package com.miguo.live.views;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.Text;
@@ -21,11 +24,13 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.reward.RewardConstants;
 import com.fanwe.reward.adapters.DiamondGridAdapter;
 import com.fanwe.reward.model.DiamondTypeEntity;
+import com.fanwe.reward.model.DiamondUserOwnEntity;
 import com.fanwe.reward.presenters.DiamondHelper;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.fanwe.shoppingcart.presents.CommonShoppingHelper;
+import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.utils.MGUIUtil;
 
@@ -39,16 +44,24 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
     @ViewInject(R.id.gridview)
     private GridView gridView;
+
+    @ViewInject(R.id.diamond_line)
+    private LinearLayout diamond_line;
     /**
      * 大笔对应的钻
      */
     @ViewInject(R.id.diamond_value)
     private TextView diamond_value;
+
+
     /**
      * 购买钻对应的金额。
      */
     @ViewInject(R.id.money_value)
     private TextView money_value;
+
+    @ViewInject(R.id.self_diamond)
+    private TextView self_diamond;
     /**
      * 支付按钮。
      */
@@ -61,10 +74,12 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
     private DiamondHelper diamondHelper;
 
     private DiamondGridAdapter diamondGridAdapter;
-    private DiamondGridAdapter.OnGridItemClickListener mOnGridItemClickListener;
+
 
     private DiamondTypeEntity currentDiamondType;
+    private DiamondTypeEntity  bigDiamondType;
     private PaymentTypeInfo currentPayType;
+    private List<DiamondTypeEntity> diamondTypeEntityList=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,22 +91,55 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
     private void init() {
         initTitle();
-        mOnGridItemClickListener = new DiamondGridAdapter.OnGridItemClickListener() {
-            @Override
-            public void onClick(DiamondTypeEntity entity) {
-                if (entity != null) {
-                    currentDiamondType = entity;
-                }
-            }
-        };
-        diamondGridAdapter = new DiamondGridAdapter(this);
-        diamondGridAdapter.setmOnGridItemClickListener(mOnGridItemClickListener);
-        gridView.setAdapter(diamondGridAdapter);
 
+        diamondGridAdapter = new DiamondGridAdapter(this);
+
+        gridView.setAdapter(diamondGridAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(diamondTypeEntityList==null||diamondTypeEntityList.size()<1){
+                    return;
+                }
+                for(int i = 0 ; i < diamondTypeEntityList.size() ;i++){
+                    DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
+                    if(i==position){
+                        currentDiamondType = entity0;
+                        entity0.setChecked(true);
+                    }else{
+                        entity0.setChecked(false);
+                    }
+                }
+                diamondGridAdapter.setDatas(diamondTypeEntityList);
+                diamondGridAdapter.notifyDataSetChanged();
+                setColor(false);
+            }
+        });
+
+        diamond_line.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentDiamondType = bigDiamondType;
+                setColor(true);
+            }
+        });
         initFragment();
         getBaseData();
     }
 
+
+    public void setColor(boolean checked){
+        if(checked) {
+            diamond_value.setTextColor(getResources().getColor(R.color.white));
+            money_value.setTextColor(getResources().getColor(R.color.white));
+            diamond_line.setBackground(getResources().getDrawable(R.drawable.bg_orange_small));
+        }else{
+            diamond_value.setTextColor(getResources().getColor(R.color.main_color));
+            money_value.setTextColor(getResources().getColor(R.color.main_color_press));
+            diamond_line.setBackground(getResources().getDrawable(R.drawable.bg_orange_smallline));
+        }
+    }
     private void initFragment() {
 
         // 支付方式列表
@@ -165,6 +213,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
     */
     public void getBaseData() {
         diamondHelper.GetDiamondList();
+        diamondHelper.getUserDiamond();
         commonShoppingHelper.getPayment();
     }
 
@@ -179,18 +228,30 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         }
     }
 
+    private void bindUserDiamond(List<DiamondUserOwnEntity> diamondUserOwnEntityList){
+        if(diamondUserOwnEntityList!=null){
+            DiamondUserOwnEntity entityOwn = diamondUserOwnEntityList.get(0);
+            float value = SDFormatUtil.stringToFloat(entityOwn.getDiamond_android())+SDFormatUtil.stringToFloat(entityOwn.getCommon_diamond());
+
+            self_diamond.setText(value+"");
+
+        }
+    }
+
     private void bindDiamondType(List<DiamondTypeEntity> diamondTypeEntityList) {
+
         if (diamondTypeEntityList != null) {
             int size = diamondTypeEntityList.size();
             if(size <7) {
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
             }else{
-                DiamondTypeEntity diamondTypeEntity = diamondTypeEntityList.get(size-1);
-                money_value.setText( "￥ "+diamondTypeEntity.getPrice() +"元");
-                diamond_value.setText(diamondTypeEntity.getDiamond() +"钻石");
+                bigDiamondType = diamondTypeEntityList.get(size-1);
+                money_value.setText( "￥ "+bigDiamondType.getPrice() +"元");
+                diamond_value.setText(bigDiamondType.getDiamond() +"钻石");
                 diamondTypeEntityList.remove(size-1);
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
             }
+            this.diamondTypeEntityList = diamondTypeEntityList;
             diamondGridAdapter.notifyDataSetChanged();
         }
     }
@@ -230,12 +291,21 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
                 break;
             case RewardConstants.BUY_DIAMOND:
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        bindDiamondType(datas);
-                    }
-                });
+              MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bindDiamondType(datas);
+                }
+            });
+            break;
+
+            case RewardConstants.USER_DIAMOND:
+                 MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    bindUserDiamond(datas);
+                }
+            });
                 break;
             default:
                 break;

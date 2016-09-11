@@ -7,6 +7,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.reward.RewardConstants;
 import com.fanwe.reward.model.DiamondTypeEntity;
+import com.fanwe.reward.model.DiamondUserOwnEntity;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
@@ -65,6 +66,35 @@ public class DiamondHelper  extends Presenter {
         });
     }
 
+    public void getUserDiamond(){
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", RewardConstants.USER_DIAMOND);
+
+        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<DiamondUserOwnEntity>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<DiamondUserOwnEntity> root = gson.fromJson(responseBody, type);
+
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
+                    List<DiamondUserOwnEntity> datas = validateBodyList(root);
+                    mCallbackView.onSuccess(RewardConstants.USER_DIAMOND,datas);
+                }else{
+                    mCallbackView.onFailue(RewardConstants.USER_DIAMOND,message);
+                }
+            }
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mCallbackView.onFailue(ShoppingCartconstants.GET_PAYMENT,message);
+            }
+        });
+    }
     @Override
     public void onDestory() {
         mCallbackView = null;

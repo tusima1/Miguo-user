@@ -3,7 +3,6 @@ package com.fanwe.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +13,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
-import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
@@ -65,6 +63,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.view.UserSendGiftPopHelper;
 import com.miguo.utils.MGLog;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -728,7 +727,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickMyFriends();
         } else if (v == mRDV_MyNameCard) {
             //我的名片
-            startActivity(DistributionMyQRCodeActivity.class);
+//            startActivity(DistributionMyQRCodeActivity.class);
+            UserSendGiftPopHelper giftPopHelper=new UserSendGiftPopHelper(getActivity());
+            giftPopHelper.show();
         } else if (v == mRDV_orderNotPay) {
             clickMyOrderView("pay_wait");
         } else if (v == mRDV_orderNotUse) {
