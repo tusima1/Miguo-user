@@ -29,6 +29,7 @@
 
     <color name="text_jiange">#f2f2f2</color>
     <color name="text_line">#cccccc</color>
+    <color name="text_lineE5">#e5e5e5</color>
     <color name="text_fenxiao">#595959</color>
     <color name="text_new_home">#898989</color>
     <color name="text_46b899">#46b899</color>
@@ -47,6 +48,7 @@
 
     <color name="c_F2F2F2">#F2F2F2</color>
     <color name="c_FF443E">#FF443E</color>
+    <color name="c_FF3000">#ff3000</color>
     <!-- hint 灰色字体 rgb 204,204,204 -->
     <color name="c_CCCCCC">#CCCCCC</color>
 
