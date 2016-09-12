@@ -16,97 +16,59 @@
 
 package com.miguo.live.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateUtils;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.fanwe.BaseActivity;
 import com.fanwe.base.CallbackView2;
-import com.fanwe.library.utils.SDToast;
+import com.fanwe.constant.Constant;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshPinnedSectionListView;
 import com.miguo.live.adapters.PayHistoryAdapter;
+import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.payHistory.ModelPayHistory;
 import com.miguo.live.presenters.LiveHttpHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PayHistoryActivity extends Activity implements CallbackView2 {
+public class PayHistoryActivity extends BaseActivity implements CallbackView2 {
     private Context mContext = PayHistoryActivity.this;
     private PullToRefreshPinnedSectionListView mPTR;
     private List<ModelPayHistory> datas = new ArrayList<>();
     private PayHistoryAdapter mPayHistoryAdapter;
     private LiveHttpHelper liveHttpHelper;
+    private boolean isRefresh = true;
+    private int pageNum = 1;
+    private int pageSize = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setmTitleType(Constant.TitleType.TITLE);
         setContentView(R.layout.act_pay_history);
         preWidget();
         preData();
-        getData();
+        mTitle.setMiddleTextTop("充值记录");
     }
 
     private void getData() {
-        liveHttpHelper = new LiveHttpHelper(this, this,"");
-        liveHttpHelper.getRechargeDiamondList();
+        if (liveHttpHelper == null) {
+            liveHttpHelper = new LiveHttpHelper(this, this, "");
+        }
+        liveHttpHelper.getRechargeDiamondList(pageNum, pageSize);
     }
 
     private void preData() {
         datas.clear();
-        ModelPayHistory model;
-
-        model = new ModelPayHistory();
-        model.setType(1);
-        model.setDate("2016.9.11");
-        datas.add(model);
-        for (int i = 1; i < 9; i++) {
-            model = new ModelPayHistory();
-            model.setPrice(i + ".00");
-            model.setDiamond_count(i * 5 + "");
-            model.setOrder_id("21216546465" + i);
-            model.setStatus("1");
-            model.setDate("2016.9.11");
-            model.setTime("12:24:56");
-            datas.add(model);
-        }
-
-        model = new ModelPayHistory();
-        model.setType(1);
-        model.setDate("2016.10.26");
-        datas.add(model);
-        for (int i = 3; i < 12; i++) {
-            model = new ModelPayHistory();
-            model.setPrice(i + ".00");
-            model.setDiamond_count(i * 5 + "");
-            model.setOrder_id("21216546489" + i);
-            model.setStatus("1");
-            model.setDate("2016.10.26");
-            model.setTime("12:24:56");
-            datas.add(model);
-        }
-
-        model = new ModelPayHistory();
-        model.setType(1);
-        model.setDate("2016.11.21");
-        datas.add(model);
-        for (int i = 5; i < 16; i++) {
-            model = new ModelPayHistory();
-            model.setPrice(i + ".00");
-            model.setDiamond_count(i * 5 + "");
-            model.setOrder_id("21216546426" + i);
-            model.setStatus("0");
-            model.setDate("2016.11.21");
-            model.setTime("12:24:56");
-            datas.add(model);
-        }
-
         mPayHistoryAdapter = new PayHistoryAdapter(mContext, getLayoutInflater(), datas);
         mPTR.setAdapter(mPayHistoryAdapter);
     }
@@ -121,73 +83,28 @@ public class PayHistoryActivity extends Activity implements CallbackView2 {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long positionL) {
                 position--;
                 ModelPayHistory item = datas.get(position);
-                SDToast.showToast("Item " + position + ": " + item.getDate());
+//                SDToast.showToast("Item " + position + ": " + item.getDate());
             }
         });
+        mPTR.setRefreshing();
     }
 
     private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {
         @Override
         public void onPullDownToRefresh(
                 PullToRefreshBase<ListView> refreshView) {
-            String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
-                    DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-
-            // Update the LastUpdatedLabel
-            refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-
-            //TODO Do work to refresh the list here.
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    PayHistoryActivity.this.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            // Stop refreshing
-                            mPTR.onRefreshComplete();
-                        }
-                    });
-
-                }
-            }).start();
+            isRefresh = true;
+            pageNum = 1;
+            getData();
         }
 
         @Override
         public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-            String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
-                    DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-
-            // Update the LastUpdatedLabel
-            refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    PayHistoryActivity.this.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            // Stop refreshing
-                            mPTR.onRefreshComplete();
-                        }
-                    });
-
-                }
-            }).start();
+            isRefresh = false;
+            if (!SDCollectionUtil.isEmpty(items)) {
+                pageNum++;
+            }
+            getData();
         }
     };
 
@@ -196,9 +113,16 @@ public class PayHistoryActivity extends Activity implements CallbackView2 {
 
     }
 
+    List<ModelPayHistory> items;
+
     @Override
     public void onSuccess(String method, List datas) {
-
+        Message msg = new Message();
+        if (LiveConstants.RECHARGE_DIAMOND_LIST.equals(method)) {
+            items = datas;
+            msg.what = 0;
+        }
+        mHandler.sendMessage(msg);
     }
 
     @Override
@@ -208,6 +132,59 @@ public class PayHistoryActivity extends Activity implements CallbackView2 {
 
     @Override
     public void onFinish(String method) {
+        Message msg = new Message();
+        msg.what = 1;
+        mHandler.sendMessage(msg);
+    }
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (isRefresh) {
+                        datas.clear();
+                    }
+                    if (!SDCollectionUtil.isEmpty(items)) {
+                        for (ModelPayHistory bean : items) {
+                            if (!containDate(bean.getDate())) {
+                                ModelPayHistory temp = new ModelPayHistory();
+                                temp.setType(1);
+                                temp.setDate(bean.getDate());
+                                datas.add(temp);
+                                datas.add(bean);
+                            } else {
+                                datas.add(bean);
+                            }
+                        }
+                    }
+                    mPayHistoryAdapter.notifyDataSetChanged();
+                    break;
+                case 1:
+                    mPTR.onRefreshComplete();
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 是否包含当天的title
+     *
+     * @param date
+     * @return
+     */
+    private boolean containDate(String date) {
+        if (!SDCollectionUtil.isEmpty(datas)) {
+            for (ModelPayHistory bean : datas) {
+                if (1 == bean.getType()) {
+                    if (date.equals(bean.getDate())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
     }
 }

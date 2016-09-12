@@ -49,6 +49,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
+import com.miguo.live.model.getReceiveCode.ResultReceiveCode;
+import com.miguo.live.model.getReceiveCode.RootReceiveCode;
 import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
 import com.miguo.live.model.getStoresRandomComment.ResultStoresRandomComment;
 import com.miguo.live.model.getStoresRandomComment.RootStoresRandomComment;
@@ -904,9 +907,12 @@ public class LiveHttpHelper implements IHelper {
     /**
      * 获取充值记录
      */
-    public void getRechargeDiamondList() {
+    public void getRechargeDiamondList(int page, int page_size) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
+        params.put("page", String.valueOf(page));
+        params.put("page_size", String.valueOf(page_size));
+
         params.put("method", LiveConstants.RECHARGE_DIAMOND_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -931,6 +937,40 @@ public class LiveHttpHelper implements IHelper {
             public void onFinish() {
                 mView2.onFinish(LiveConstants.RECHARGE_DIAMOND_LIST);
             }
+        });
+
+    }
+
+    /**
+     * 获取领取码接口
+     *
+     * @param room_id
+     */
+    public void getReceiveCode(String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("room_id", room_id);
+
+        params.put("method", LiveConstants.RECEIVE_CODE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootReceiveCode root = gson.fromJson(responseBody, RootReceiveCode.class);
+                List<ResultReceiveCode> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView.onSuccess(LiveConstants.RECEIVE_CODE, null);
+                    return;
+                }
+                List<ModelReceiveCode> items = results.get(0).getBody();
+                mView.onSuccess(LiveConstants.RECEIVE_CODE, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mView.onSuccess(LiveConstants.RECEIVE_CODE, null);
+            }
+
         });
 
     }

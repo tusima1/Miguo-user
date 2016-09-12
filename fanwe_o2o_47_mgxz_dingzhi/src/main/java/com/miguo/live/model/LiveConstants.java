@@ -117,5 +117,9 @@ public class LiveConstants {
      * 获取充值记录
      */
     public static final String RECHARGE_DIAMOND_LIST = "RechargeDiamondList";
+    /**
+     * 获取领取码接口
+     */
+    public static final String RECEIVE_CODE = "ReceiveCode";
 
 }
