@@ -55,6 +55,7 @@ public class LocalShoppingcartDao {
     public static void deleteAllModel()
     {
         JsonDbModelDaoX.getInstance().deleteJsonDbListModel(ShoppingCartInfo.class);
+
     }
 
     public static void deleteModel(ShoppingCartInfo model)

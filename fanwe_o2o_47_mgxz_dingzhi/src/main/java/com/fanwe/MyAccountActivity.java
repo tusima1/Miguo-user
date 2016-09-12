@@ -488,42 +488,14 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         App.getInstance().setmUserCurrentInfo(null);
         App.getInstance().setImLoginSuccess(false);
 
-
-        App.getInstance().setmLocalUser(new LocalUserModel());
-        App.getInstance().clearAppsLocalUserModel();
-        AppConfig.setSessionId("");
-        AppConfig.setUserName("");
+        LocalUserModel userModel = AppHelper.getLocalUser();
+         userModel.setUser_pwd("");
+        App.getInstance().setmLocalUser(userModel);
         AppConfig.setRefId("");
 
         App.getInstance().clearAllData();
         App.getInstance().setmUserCurrentInfo(null);
-        //调服务器退出登录接口。
-        RequestModel model = new RequestModel();
-        model.putCtl("user");
-        model.putAct("loginout");
 
-        SDRequestCallBack<Cart_check_cartActModel> handler = new SDRequestCallBack<Cart_check_cartActModel>() {
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-        SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
-
-        CommonInterface.requestLogout(null);
 
 
     }

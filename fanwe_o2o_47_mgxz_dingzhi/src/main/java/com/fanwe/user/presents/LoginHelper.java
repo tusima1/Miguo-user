@@ -428,12 +428,12 @@ public class LoginHelper extends Presenter {
             OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
                 @Override
                 public void onSuccess(String responseBody) {
-
+                    App.getInstance().deleteAllShoppingCartInfo();
                 }
 
                 @Override
                 public void onSuccess(String method, List datas) {
-
+                    App.getInstance().deleteAllShoppingCartInfo();
                 }
 
                 @Override

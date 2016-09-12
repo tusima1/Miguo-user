@@ -17,7 +17,7 @@ import com.fanwe.o2o.miguo.R;
 public class DaiYanStoreWapActivity extends BaseActivity
 {
 	
-	private int user_id;
+	private String user_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -34,7 +34,7 @@ public class DaiYanStoreWapActivity extends BaseActivity
 		String url ="";
 		if (extras!=null) {
 			url=extras.getString("url", "");
-			user_id =extras.getInt("user_id");
+			user_id =extras.getString("user_id");
 		}
 		AppWebViewFragment frag = new AppWebViewFragment();
 //		String session = AppConfig.getSessionId();

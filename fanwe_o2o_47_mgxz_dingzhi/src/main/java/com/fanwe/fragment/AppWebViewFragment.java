@@ -10,6 +10,7 @@ import com.fanwe.umeng.UmengShareManager;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,8 @@ public class AppWebViewFragment extends WebViewFragment
 {
 	
 	private String mContent;
-	private int id;
-	private String title;
+	private String id;
+	private String title="米果小站";
 	private String url;
 	private String mSummary;
 	private String imageUrl;
@@ -34,7 +35,7 @@ public class AppWebViewFragment extends WebViewFragment
 	}
 	
 	
-	public void setUserId(int id)
+	public void setUserId(String id)
 	{
 		this.id= id;
 	}
@@ -168,7 +169,7 @@ public class AppWebViewFragment extends WebViewFragment
 	private void initTitle(String title)
 	{
 		mTitle.setMiddleTextTop(title);
-		if(id == 0)
+		if(TextUtils.isEmpty(id))
 		{
 			mTitle.removeAllRightItems();
 			mTitle.addItemRight_TEXT("推广");
