@@ -38,6 +38,7 @@ import com.fanwe.seller.model.ModelComment;
 import com.fanwe.seller.model.ModelDisplayComment;
 import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.model.getShopInfo.GoodsModelShopInfo;
 import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
 import com.fanwe.seller.model.getShopInfo.StoreModelShopInfo;
@@ -121,6 +122,10 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         }
         initTitle();
         initScrollView();
+        if (sellerHttpHelper == null) {
+            sellerHttpHelper = new SellerHttpHelper(this, this);
+        }
+        sellerHttpHelper.checkShopCollect(MerchantID);
     }
 
     private void initScrollView() {
@@ -142,13 +147,24 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     private void initTitle() {
         mTitle.setMiddleTextTop(SDResourcesUtil.getString(R.string.store_detail));
-        mTitle.initRightItem(1);
+        mTitle.initRightItem(2);
         mTitle.getItemRight(0).setImageLeft(R.drawable.ic_tuan_detail_share);
+        mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_un_collection);
     }
 
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-        clickShare();
+        switch (index) {
+            case 0:
+                clickShare();
+                break;
+            case 1:
+                clickCollect();
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
@@ -171,6 +187,27 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         String clickUrl = infoModel.getShare_url();
 
         UmengShareManager.share(this, "分享", content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+    }
+
+    /**
+     * 收藏
+     */
+    private void clickCollect() {
+        requestCollect();
+    }
+
+    private int isCollect;
+
+    private void requestCollect() {
+        if (isCollect == 0) {
+            //0代表没有收藏
+            sellerHttpHelper.postShopCollect(MerchantID);
+        } else if (isCollect == 1) {
+            sellerHttpHelper.deleteShopCollect(MerchantID);
+        } else {
+            return;
+        }
+
     }
 
     private void getIntentData() {
@@ -322,15 +359,26 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     }
 
+    List<ModelCheckShopCollect> itemsCheck;
+
     @Override
     public void onSuccess(String method, List datas) {
-        if (SellerConstants.SHOP_INFO.equals(method)) {
-            results = datas;
-            Message msg = new Message();
+        Message msg = new Message();
+        if (SellerConstants.CHECK_SHOP_COLLECT.equals(method)) {
+            //检查收藏情况
+            itemsCheck = datas;
             msg.what = 0;
-            mHandler.sendMessage(msg);
+        } else if (SellerConstants.SHOP_COLLECT_DELETE.equals(method)) {
+            //取消收藏
+            msg.what = 1;
+        } else if (SellerConstants.SHOP_COLLECT_POST.equals(method)) {
+            //收藏
+            msg.what = 2;
+        } else if (SellerConstants.SHOP_INFO.equals(method)) {
+            results = datas;
+            msg.what = 3;
         }
-
+        mHandler.sendMessage(msg);
     }
 
     @Override
@@ -342,6 +390,23 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
+                    if (!SDCollectionUtil.isEmpty(itemsCheck)) {
+                        ModelCheckShopCollect temp = itemsCheck.get(0);
+                        isCollect = DataFormat.toInt(temp.getCollect());
+                        initCollectBtn(isCollect);
+                    }
+                    break;
+                case 1:
+                    //取消收藏
+                    isCollect = 0;
+                    initCollectBtn(isCollect);
+                    break;
+                case 2:
+                    //收藏
+                    isCollect = 1;
+                    initCollectBtn(isCollect);
+                    break;
+                case 3:
                     if (!SDCollectionUtil.isEmpty(results)) {
                         ResultShopInfo result = results.get(0);
                         page_title = result.getPage_title();
@@ -358,6 +423,19 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
             }
         }
     };
+
+    private void initCollectBtn(int isCollect) {
+        switch (isCollect) {
+            case 0:
+                mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_un_collection);
+                break;
+            case 1:
+                mTitle.getItemRight(1).setImageLeft(R.drawable.ic_tuan_detail_collection);
+                break;
+            default:
+                break;
+        }
+    }
 
     private List<ResultShopInfo> results;
     private String city_name;

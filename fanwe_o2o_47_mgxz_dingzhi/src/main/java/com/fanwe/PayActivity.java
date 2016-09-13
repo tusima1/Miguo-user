@@ -299,13 +299,13 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.act_pay_btn_pay:
-                if (v.isClickable()) {
-                    showPayment(false);
-                    //60s可点
-
-                } else {
-                    showPayment(true);
-                }
+//                if (v.isClickable()) {
+//                    showPayment(false);
+//                    //60s可点
+//
+//                } else {
+//                    showPayment(true);
+//                }
                 clickPay();
                 break;
             case R.id.iv_share_red:

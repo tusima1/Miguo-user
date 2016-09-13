@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.fanwe.CityListActivity;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -340,6 +341,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         } else if (LiveConstants.HOST_INFO.equals(method)) {
             SDToast.showToast("申请认证成功");
             finish();
+            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setIs_host("2");
         }
 
     }
