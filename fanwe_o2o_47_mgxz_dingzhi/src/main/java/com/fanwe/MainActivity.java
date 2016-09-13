@@ -10,6 +10,7 @@ import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.customview.SharePopHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
@@ -28,7 +29,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.presents.LoginHelper;
-import com.fanwe.user.view.AttentionListActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.LiveStartActivity;
@@ -167,7 +167,6 @@ public class MainActivity extends BaseActivity {
                         break;
                     case 1:
                         click1();
-                        startActivity(new Intent(MainActivity.this, AttentionListActivity.class));
                         break;
                     case 2:
                         click2();
