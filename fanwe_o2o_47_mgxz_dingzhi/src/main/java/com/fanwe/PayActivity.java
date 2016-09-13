@@ -217,7 +217,6 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                 mPaymentCodeModel.setPayment_name("支付宝支付");
             } else {
                 mPaymentCodeModel.setPayment_name("微信支付");
-
             }
 
             if (mPaymentCodeModel == null) {
@@ -445,9 +444,13 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
         SDViewUtil.show(mBtnQuan);
         SDViewUtil.hide(mBtnPay);
     }
-   public void payFaulse(){
+
+    /**
+     * 支付失败。
+     */
+   public void payFailue(){
        SDViewUtil.hide(mBtnQuan);
-       SDViewUtil.show(mBtnPay);
+       showPayment(true);
    }
     /**
      * 银联支付
@@ -602,7 +605,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                     payFinish();
                 } else {
                     SDToast.showToast(info);
-                    showPayment(true);
+                    payFailue();
                 }
                 //requestPayOrder();
             }
@@ -650,10 +653,12 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                         break;
                     case -1: // 可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
                         content = "支付失败";
+                        payFailue();
+
                         break;
                     case -2: // 无需处理。发生场景：用户不支付了，点击取消，返回APP。
                         content = "取消支付";
-                        //showPayment(true);
+                        payFailue();
                         break;
 
                     default:

@@ -205,9 +205,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             redPacketDialogHelper.endTimeTask();
             redPacketDialogHelper.dismiss();
         }
-        if (mAct != null && userRobRedPacketEndDialogHelper == null) {
-            userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct);
-        }
+
         boolean isRobed;
         String type = "";
         String num = "";
@@ -223,16 +221,15 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
                 isRobed = false;
             }
         }
+
+        userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct,isRobed);
         //显示抢到界面(两种状态)
         if (isRobed) {
-            userRobRedPacketEndDialogHelper.setShowType(isRobed);
             num = MGStringFormatter.getFloat2(num);
             userRobRedPacketEndDialogHelper.setData(type, num);
-            userRobRedPacketEndDialogHelper.show();
-        } else {
-            userRobRedPacketEndDialogHelper.setShowType(isRobed);
-            userRobRedPacketEndDialogHelper.show();
         }
+        userRobRedPacketEndDialogHelper.show();
+
     }
 
     /**

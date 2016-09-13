@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
 import com.fanwe.MemberRankActivity;
+import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -27,11 +29,11 @@ import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
-import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.live.views.view.UserSendGiftPopHelper;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -69,6 +71,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
     private View mAllOrder;
+    private ImageView mIvSetting;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,6 +110,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
     private void initTopView() {
         mMine = findViewById(R.id.fl_mine);
+        mIvSetting = ((ImageView) findViewById(R.id.iv_setting));
 
         mIvUserFace = ((CircleImageView) findViewById(R.id.iv_user_face));
         mUserName = ((TextView) findViewById(R.id.tv_username));
@@ -124,6 +128,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mCollect.setOnClickListener(this);
         mFans.setOnClickListener(this);
         mMine.setOnClickListener(this);
+        mIvSetting.setOnClickListener(this);
     }
 
 
@@ -222,7 +227,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             /*消费券*/
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
-            //TODO 测试部分
+            //TODO 测试部分 佣金提现
             String fx_level = modelPersonalHome.getFx_level();
             int level = MGStringFormatter.getInt(fx_level);
             if (level < 2) {
@@ -236,7 +241,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
                 startActivity(intent);
             }
         } else if (v == mSuggestion) {
-            startActivity(RedPacketListActivity.class);
+//            startActivity(RedPacketListActivity.class);
+            UserSendGiftPopHelper helper=new UserSendGiftPopHelper(getActivity());
+            helper.show();
         }else if (v==mStar){
             /*关注*/
         }else if (v==mCollect){
@@ -248,6 +255,13 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }else if (v==mAllOrder){
             /*全部订单*/
             clickMyOrderView("all");
+        }else if (v==mIvSetting){
+            /*设置页面*/
+            Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+            Bundle userData = new Bundle();
+            userData.putString("user_face", mUserFaceString);
+            intent.putExtras(userData);
+            startActivity(intent);
         }
     }
 

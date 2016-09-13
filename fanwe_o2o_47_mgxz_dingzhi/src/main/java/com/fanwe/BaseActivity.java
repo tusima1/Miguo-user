@@ -16,8 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
@@ -43,8 +41,6 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
 	private boolean mIsStartByAdvs = false;
 	private TitleType mTitleType = TitleType.TITLE_NONE;
 	protected SDTitleSimple mTitle;
-	protected TextView mTvShopcartNumber;
-	protected RelativeLayout mRlShopcart;
 	private ScanResultHandler mScanResultHandler;
 	//umeng页面统计标签
 	protected String umengTag="";

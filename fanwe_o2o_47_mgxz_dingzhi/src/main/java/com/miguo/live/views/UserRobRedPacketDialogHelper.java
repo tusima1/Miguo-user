@@ -87,11 +87,6 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
 
         @Override
         public void onFinish() {
-            isRobFinished=true;
-            if (robResult!=null){
-                //为null表示没有推送过
-                mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,robResult);
-            }
             mTvCountDown.setText("");
             mTvCountDown.setBackgroundResource(R.drawable.selector_bg_rob_redpacket);
             mTvCountDown.setClickable(true);
@@ -166,6 +161,13 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
             public void onFinish() {
                 ifClickable = true;
                 dismiss();
+
+                //抢到后30s展示
+                isRobFinished=true;
+                if (robResult!=null){
+                    //为null表示没有推送过
+                    mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,robResult);
+                }
             }
         };
     }
@@ -211,6 +213,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
      * 开启计时器。
      */
     public void startTimeTask(){
+        isRobFinished=false;
         robLiftTimer.start();
         totalTimer.start();
     }

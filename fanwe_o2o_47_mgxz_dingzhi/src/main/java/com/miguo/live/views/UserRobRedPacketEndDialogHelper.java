@@ -28,18 +28,10 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
     private String type;
     private String num;
 
-    public UserRobRedPacketEndDialogHelper(Activity activity) {
+    public UserRobRedPacketEndDialogHelper(Activity activity ,boolean isRobed) {
         this.mActivity = activity;
-        createDialog();
-    }
-
-    /**
-     * 设置显示的类型
-     * @param isRobed true 显示抢到界面
-     *                false 显示未抢到界面
-     */
-    public void setShowType(boolean isRobed){
         this.mRob=isRobed;
+        createDialog();
     }
 
     /**
