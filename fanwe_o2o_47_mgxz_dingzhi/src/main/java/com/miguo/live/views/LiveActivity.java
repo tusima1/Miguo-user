@@ -32,6 +32,7 @@ import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.LogUtil;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -52,6 +53,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
@@ -100,7 +102,7 @@ import java.util.TimerTask;
 
 /**
  * 直播类(用户+主播)
- backup
+ * backup
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView,
         LiveView, View.OnClickListener, ProfileView, CallbackView {
@@ -356,6 +358,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 登录
+     *
      * @param userid
      * @param useSign
      * @param callback
@@ -663,6 +666,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
         });
         initViewNeed();
+        //获取领取码
+        App.getInstance().setReceiveCode("");
+        mLiveHttphelper.getReceiveCode(MySelfInfo.getInstance().getMyRoomNum() + "");
     }
 
 
@@ -1091,6 +1097,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     /**
      * 完全退出房间了
      * 這裡需要判斷是否為主播退出導致的退出事件
+     *
      * @param id_status
      * @param succ
      * @param liveinfo
@@ -1969,6 +1976,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void onSuccess(String method, final List datas) {
         switch (method) {
+            case LiveConstants.RECEIVE_CODE:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    String code = ((ModelReceiveCode) datas.get(0)).getReceive_code();
+                    if (!TextUtils.isEmpty(code)) {
+                        App.getInstance().setReceiveCode(code);
+                    }
+                }
+                break;
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
                 List<ModelAudienceInfo> audienceList = datas;
@@ -2057,7 +2072,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
-                MGLog.e("test: 直播过程用户抢到的红包数据: "+datas.size());
+                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -2080,6 +2095,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 });
         }
     }
+
     /*校验数据*/
     public boolean checkDataIsNull(List datas) {
         if (datas != null && datas.size() > 0) {

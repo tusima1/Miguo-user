@@ -6,8 +6,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.interf.IHelper;
@@ -20,11 +23,9 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     private Activity mActivity;
     private PopupWindow popupWindow;
-    boolean isShowTitle;
 
-    public SharePopHelper(Activity mActivity, boolean isShowTitle) {
+    public SharePopHelper(Activity mActivity) {
         this.mActivity = mActivity;
-        this.isShowTitle = isShowTitle;
         createPopWindow();
     }
 
@@ -49,8 +50,23 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         popupWindow.setOutsideTouchable(true);
     }
 
-    private void initContentView(View contentView) {
+    private LinearLayout layoutWeixin, layoutFriends, layoutQQ, layoutQQZone, layoutSina;
+    private Button btnCancle;
 
+    private void initContentView(View contentView) {
+        layoutWeixin = ((LinearLayout) contentView.findViewById(R.id.layout_weixin_pop_share));
+        layoutFriends = ((LinearLayout) contentView.findViewById(R.id.layout_friends_pop_share));
+        layoutQQ = ((LinearLayout) contentView.findViewById(R.id.layout_qq_pop_share));
+        layoutQQZone = ((LinearLayout) contentView.findViewById(R.id.layout_qqzone_pop_share));
+        layoutSina = ((LinearLayout) contentView.findViewById(R.id.layout_sina_pop_share));
+        btnCancle = (Button) contentView.findViewById(R.id.btn_cancel_pop_share);
+
+        layoutWeixin.setOnClickListener(this);
+        layoutFriends.setOnClickListener(this);
+        layoutQQ.setOnClickListener(this);
+        layoutQQZone.setOnClickListener(this);
+        layoutSina.setOnClickListener(this);
+        btnCancle.setOnClickListener(this);
     }
 
     /*显示*/
@@ -69,35 +85,32 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.btn_cancel_pop_share:
-                popupWindow.dismiss();
-                break;
-            case R.id.layout_weixin_pop_share:
-                platform = SHARE_MEDIA.WEIXIN;
-                share();
-                break;
-            case R.id.layout_friends_pop_share:
-                platform = SHARE_MEDIA.WEIXIN_CIRCLE;
-                share();
-                break;
-            case R.id.layout_qq_pop_share:
-                platform = SHARE_MEDIA.QQ;
-                share();
-                break;
-            case R.id.layout_qqzone_pop_share:
-                platform = SHARE_MEDIA.QZONE;
-                share();
-                break;
-            case R.id.layout_sina_pop_share:
-                platform = SHARE_MEDIA.SINA;
-                share();
-                break;
+        if (v == btnCancle) {
+            popupWindow.dismiss();
+        } else if (v == layoutWeixin) {
+            platform = SHARE_MEDIA.WEIXIN;
+            share();
+            popupWindow.dismiss();
+        } else if (v == layoutFriends) {
+            platform = SHARE_MEDIA.WEIXIN_CIRCLE;
+            share();
+            popupWindow.dismiss();
+        } else if (v == layoutQQ) {
+            platform = SHARE_MEDIA.QQ;
+            share();
+            popupWindow.dismiss();
+        } else if (v == layoutQQZone) {
+            platform = SHARE_MEDIA.QZONE;
+            share();
+            popupWindow.dismiss();
+        } else if (v == layoutSina) {
+            platform = SHARE_MEDIA.SINA;
+            share();
+            popupWindow.dismiss();
         }
     }
 
     public void share() {
-        UmengShareManager.share(platform, mActivity, "分享", "直播结束分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+        UmengShareManager.share(platform, mActivity, "分享", "直播分享，领取码:" + App.getInstance().getReceiveCode(), "http://api2.w2.mgxz.com/app.html", UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 }

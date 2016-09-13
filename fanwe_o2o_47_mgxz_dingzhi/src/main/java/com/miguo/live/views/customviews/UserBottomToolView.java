@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
-import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
@@ -39,11 +39,11 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     /**
      * 红包所在的VIEWPAGER 位置。
      */
-    private final  int RED_TYPE=2;
+    private final int RED_TYPE = 2;
     /**
      * 商品类型。
      */
-    private final  int GOODS_TYPE=0;
+    private final int GOODS_TYPE = 0;
 
     private Context mContext;
     private View mTvTalk2host;
@@ -59,7 +59,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     private View rootView;//父布局,pop定位用
     private LiveUserPopHelper popHelper;
     private UserRobRedPacketDialogHelper redPacketDialogHelper;
-    private CallbackView  mCallbackView;
+    private CallbackView mCallbackView;
 
     /**
      * 门店详情。
@@ -68,16 +68,17 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     /**
      * 门店商品列表。
+     *
      * @param context
      */
-    private List<BaoBaoEntity>  baoBaoEntities;
+    private List<BaoBaoEntity> baoBaoEntities;
 
     /**
      * 用户取得的红包列表。
      */
     private PagerRedPacketAdapter mRedPacketAdapter;
 
-    private PagerBaoBaoAdapter  mBaobaoAdapter;
+    private PagerBaoBaoAdapter mBaobaoAdapter;
     /**
      * 红包结束页。
      */
@@ -120,7 +121,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     }
 
-    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout, View rootView,CallbackView mCallbackView) {
+    public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout, View rootView, CallbackView mCallbackView) {
         this.mAct = mAct;
         this.mLiveHelper = liveHelper;
         this.mHeartLayout = heartLayout;
@@ -134,15 +135,15 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             talk2host();
         } else if (v == mGoods) {
             clickGoods(GOODS_TYPE);
-        }else if(v==mRob){
+        } else if (v == mRob) {
             clickGoods(RED_TYPE);
-        }  else if (v == mGift) {
+        } else if (v == mGift) {
             clickGift();
         } else if (v == mShare) {
             clickShare();
         } else if (v == mLike) {
             clickLike2ShowHeart();
-        }else{
+        } else {
             return;
         }
     }
@@ -167,7 +168,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 分享
      */
     private void clickShare() {
-        UmengShareManager.share(mAct, "", "用户直播分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(mContext, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct);
+        sharePopHelper.show();
     }
 
     /**
@@ -175,17 +177,17 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      */
     private void clickGift() {
 //        MGToast.showToast("点击了礼物");
-        UserSendGiftPopHelper giftPopHelper=new UserSendGiftPopHelper(mAct);
+        UserSendGiftPopHelper giftPopHelper = new UserSendGiftPopHelper(mAct);
         giftPopHelper.show();
     }
 
     /**
      * 点击抢到
      */
-    public void clickRob(String red_packet_key,int duration) {
+    public void clickRob(String red_packet_key, int duration) {
 //        if (mAct != null && redPacketDialogHelper == null) {
         if (mAct != null) {
-            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct,red_packet_key,duration,mCallbackView);
+            redPacketDialogHelper = new UserRobRedPacketDialogHelper(mAct, red_packet_key, duration, mCallbackView);
             redPacketDialogHelper.createDialog();
         }
         redPacketDialogHelper.show();
@@ -195,53 +197,55 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     /**
      * 显示红包结果。
+     *
      * @param datas
      */
-    public void showRedPacketResult(List<UserRedPacketInfo> datas){
-        if(redPacketDialogHelper!=null&&redPacketDialogHelper.isShowing()){
+    public void showRedPacketResult(List<UserRedPacketInfo> datas) {
+        if (redPacketDialogHelper != null && redPacketDialogHelper.isShowing()) {
             redPacketDialogHelper.endTimeTask();
             redPacketDialogHelper.dismiss();
         }
-        if(mAct!=null&&userRobRedPacketEndDialogHelper==null){
+        if (mAct != null && userRobRedPacketEndDialogHelper == null) {
             userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct);
         }
         boolean isRobed;
-        String type="";
-        String num="";
-        if(datas==null||datas.size()<1){
+        String type = "";
+        String num = "";
+        if (datas == null || datas.size() < 1) {
             isRobed = false;
-        }else{
-            UserRedPacketInfo  info = datas.get(0);
-            if(info!=null&&!TextUtils.isEmpty(info.getRed_packet_type())) {
+        } else {
+            UserRedPacketInfo info = datas.get(0);
+            if (info != null && !TextUtils.isEmpty(info.getRed_packet_type())) {
                 isRobed = true;
                 type = info.getRed_packet_type();
                 num = info.getRed_packet_amount();
-            }else{
+            } else {
                 isRobed = false;
             }
         }
         //显示抢到界面(两种状态)
-        if (isRobed){
+        if (isRobed) {
             userRobRedPacketEndDialogHelper.setShowType(isRobed);
-            num= MGStringFormatter.getFloat2(num);
-            userRobRedPacketEndDialogHelper.setData(type,num);
+            num = MGStringFormatter.getFloat2(num);
+            userRobRedPacketEndDialogHelper.setData(type, num);
             userRobRedPacketEndDialogHelper.show();
-        }else {
+        } else {
             userRobRedPacketEndDialogHelper.setShowType(isRobed);
             userRobRedPacketEndDialogHelper.show();
         }
     }
+
     /**
      * 点击了商品(宝贝)
      */
     public void clickGoods(int type) {
         if (mAct != null && rootView != null && popHelper == null) {
-            popHelper = new LiveUserPopHelper(mAct, rootView,mCallbackView,mRedPacketAdapter,mBaobaoAdapter,type);
-        }else {
+            popHelper = new LiveUserPopHelper(mAct, rootView, mCallbackView, mRedPacketAdapter, mBaobaoAdapter, type);
+        } else {
             popHelper.setCurrentPosition(type);
         }
 
-        if(mSellerDetailInfo!=null) {
+        if (mSellerDetailInfo != null) {
             popHelper.setmSellerDetailInfo(mSellerDetailInfo);
         }
 
@@ -287,13 +291,14 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     public void setmSellerDetailInfo(SellerDetailInfo mSellerDetailInfo) {
         this.mSellerDetailInfo = mSellerDetailInfo;
-        if(popHelper!=null){
-            popHelper.setmSellerDetailInfo(this.mSellerDetailInfo );
+        if (popHelper != null) {
+            popHelper.setmSellerDetailInfo(this.mSellerDetailInfo);
         }
     }
-    public void notifyDataChange(){
-        if(popHelper!=null){
-            popHelper.setmSellerDetailInfo(this.mSellerDetailInfo );
+
+    public void notifyDataChange() {
+        if (popHelper != null) {
+            popHelper.setmSellerDetailInfo(this.mSellerDetailInfo);
             popHelper.refreshSellerDetailInfo();
         }
     }

@@ -135,9 +135,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
                 }
                 CurLiveInfo.setAdmires(1);
                 startActivity(intent);
-                //获取领取码
-                App.getInstance().setReceiveCode("");
-                liveHttpHelper.getReceiveCode(room.getId());
             }
         });
     }
@@ -184,14 +181,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (LiveConstants.RECEIVE_CODE.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                String code = ((ModelReceiveCode) datas.get(0)).getReceive_code();
-                if (!TextUtils.isEmpty(code)) {
-                    App.getInstance().setReceiveCode(code);
-                }
-            }
-        }
     }
 
     @Override
