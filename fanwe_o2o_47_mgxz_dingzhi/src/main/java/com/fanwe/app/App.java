@@ -187,13 +187,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         }
     }
 
-    public void clearAppsLocalUserModel() {
 
-        AppConfig.setSessionId("");
-        AppConfig.setRefId("");
-        LocalUserModelDao.deleteAllModel();
-
-    }
 
     public static String getStringById(int resId) {
         return getApplication().getString(resId);
@@ -381,6 +375,9 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         }
     }
 
+    public void deleteAllShoppingCartInfo(){
+        LocalShoppingcartDao.deleteAllModel();
+    }
     public boolean isImLoginSuccess() {
         return imLoginSuccess;
     }

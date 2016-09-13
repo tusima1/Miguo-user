@@ -445,7 +445,10 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
         SDViewUtil.show(mBtnQuan);
         SDViewUtil.hide(mBtnPay);
     }
-
+   public void payFaulse(){
+       SDViewUtil.hide(mBtnQuan);
+       SDViewUtil.show(mBtnPay);
+   }
     /**
      * 银联支付
      */
@@ -643,6 +646,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                 switch (resp.errCode) {
                     case 0: // 成功
                         content = "支付成功";
+                        payFinish();
                         break;
                     case -1: // 可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
                         content = "支付失败";
@@ -663,7 +667,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
             default:
                 break;
         }
-        finish();
+
     }
 
     @Override
