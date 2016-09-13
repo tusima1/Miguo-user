@@ -3,9 +3,11 @@
        >
     <!--我的订单-->
     <FrameLayout
+        android:id="@+id/fl_all_order"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:background="@color/white"
+        android:clickable="true"
+        android:background="@drawable/md_ripple_white"
         android:paddingLeft="@dimen/dp12"
         android:paddingRight="@dimen/dp12"
         >
@@ -36,39 +38,45 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="62dp"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:minHeight="62dp"
         android:orientation="horizontal">
 
         <com.fanwe.user.view.customviews.RedDotView
             android:id="@+id/rdv_order_not_paid"
+            android:paddingTop="@dimen/dp6"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             />
 
         <com.fanwe.user.view.customviews.RedDotView
             android:id="@+id/rdv_order_not_used"
+            android:paddingTop="@dimen/dp6"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             />
 
         <com.fanwe.user.view.customviews.RedDotView
             android:id="@+id/rdv_order_not_commented"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp6"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             />
 
         <com.fanwe.user.view.customviews.RedDotView
             android:id="@+id/rdv_order_to_refund"
+            android:paddingTop="@dimen/dp6"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             />
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp10"
+        android:background="@color/bg_activity_gray"/>
 </merge>

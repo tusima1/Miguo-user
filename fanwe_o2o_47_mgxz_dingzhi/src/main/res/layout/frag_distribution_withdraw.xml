@@ -124,7 +124,7 @@
                             android:layout_toLeftOf="@+id/iv_img"
                             android:layout_toRightOf="@id/tv_withdraw_type"
                             android:singleLine="true"
-                            android:text="银行卡sdsdsfrsdfsdfsdfsdgdgsdgsdgdsgsdgsgsd"
+                            android:text=""
                             android:textColor="@color/gray_cc"
                             android:textSize="@dimen/sp13"
                             />

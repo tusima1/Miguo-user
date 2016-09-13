@@ -13,7 +13,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
-import com.fanwe.fragment.MyFragment;
+import com.fanwe.fragment.MyFragment2;
 import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.jpush.MessageHelper;
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity {
 
     private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
 
-    private MyFragment mFragMyAccount;
+    private MyFragment2 mFragMyAccount;
 
     private long mExitTime = 0;
     private int preTab = 0;// 上次点击的tab标签页
@@ -284,9 +284,9 @@ public class MainActivity extends BaseActivity {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            mFragMyAccount = (MyFragment) getSDFragmentManager().toggle(R.id.act_main_fl_content,
+            mFragMyAccount = (MyFragment2) getSDFragmentManager().toggle(R.id.act_main_fl_content,
                     null,
-                    MyFragment.class);
+                    MyFragment2.class);
         }
     }
 

@@ -1,171 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.handmark.pulltorefresh.library.PullToRefreshScrollView
+    android:id="@+id/frag_my_account_ptrsv_all"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_activity_gray"
-    android:orientation="vertical"
-    tools:context="com.miguo.live.views.TestMyFragmentActivity">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp87"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp12"
-        android:paddingRight="@dimen/dp12"
-        >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_user_face"
-                android:layout_width="@dimen/dp57"
-                android:layout_height="@dimen/dp57"
-                android:src="@drawable/app_icon"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp10"
-                android:layout_toRightOf="@id/iv_user_face"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dp5"
-                    android:drawableRight="@drawable/ic_rank_1"
-                    android:text="已而已而哟"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp17"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp7"
-                    android:text="我是哈哈就是大连开发..."
-                    android:textColor="@color/gray_text_99"
-                    android:textSize="@dimen/sp17"/>
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <ImageView
-            android:layout_width="@dimen/dp9"
-            android:layout_height="@dimen/dp13"
-            android:layout_gravity="center_vertical|right"
-            android:src="@drawable/ic_arrow_right_pretty"/>
-
-    </FrameLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/bg_activity_gray"/>
+    android:scrollbars="none"
+    ptr:ptrHeaderBackground="@color/white"
+    ptr:ptrHeaderSubTextColor="@color/white"
+    ptr:ptrHeaderTextColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp50"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
-                android:gravity="center"
-                android:text="88888"
-                android:textColor="@color/gray_text_99"
-                android:textSize="@dimen/sp15"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="@color/gray_text_99"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
-                android:gravity="center"
-                android:text="88888"
-                android:textColor="@color/gray_text_99"
-                android:textSize="@dimen/sp15"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
-                android:gravity="center"
-                android:text="粉丝"
-                android:textColor="@color/gray_text_99"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
-                android:gravity="center"
-                android:text="88888"
-                android:textColor="@color/gray_text_99"
-                android:textSize="@dimen/sp15"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp5"
-                android:gravity="center"
-                android:text="收藏"
-                android:textColor="@color/gray_text_99"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
+        android:layout_height="match_parent"
+        android:background="@color/bg_activity_gray"
+        android:orientation="vertical"
+        >
+        <!--顶部mine相关-->
+        <include layout="@layout/item_my_frag_mine"/>
+        <!--订单-->
+        <include layout="@layout/item_my_frag_order"/>
+        <!--网格表-->
+        <include layout="@layout/item_my_frag_grid"/>
     </LinearLayout>
+</com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp10"
-        android:background="@color/bg_activity_gray"/>
 
-    <!--订单-->
-    <include layout="@layout/item_my_frag_order"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp10"
-        android:background="@color/bg_activity_gray"/>
-
-    <!--网格表-->
-    <include layout="@layout/item_my_frag_grid"/>
-
-</LinearLayout>
