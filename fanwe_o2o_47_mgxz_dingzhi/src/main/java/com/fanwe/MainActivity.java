@@ -29,6 +29,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.presents.LoginHelper;
+import com.fanwe.user.view.AttentionListActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.LiveStartActivity;
@@ -193,6 +194,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case 1:
                         click1();
+                        startActivity(new Intent(MainActivity.this, AttentionListActivity.class));
                         break;
                     case 2:
                         click2();
@@ -379,13 +381,11 @@ public class MainActivity extends BaseActivity {
 
         if (requestCode == 100) {
             if (resultCode == MyCaptureActivity.RESULT_CODE_SCAN_SUCCESS) {
-              //  String result = data.getStringExtra("extra_result_success_string");
-                String result = "http://m.mgxz.com/index/detail/id/000c348f-fffa-45f0-8e76-9992f272dc92";
-                Log.e("33code:",result);
+                String result = data.getStringExtra("extra_result_success_string");
+
                 //他的小店.
                 if(getCompleteUrl(result,SHOP_PATTERN)){
                     String user_id =  result.split("\\/")[result.split("\\/").length -1];
-                    Log.e("user_id:",user_id);
 
                     Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
                     intentStore.putExtra("user_id",user_id);

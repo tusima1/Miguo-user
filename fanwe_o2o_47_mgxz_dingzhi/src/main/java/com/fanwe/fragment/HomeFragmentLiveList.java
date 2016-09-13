@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.fanwe.LoginActivity;
 import com.fanwe.adapter.HomeLiveListAdapter;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.customview.SDGridViewInScroll;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
@@ -21,6 +22,9 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.utils.DataFormat;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.NetWorkStateUtil;
@@ -35,8 +39,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/7/25.
  */
-public class
-HomeFragmentLiveList extends BaseFragment {
+public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     private View view;
     private TextView tvTitle;
     private SDGridViewInScroll mSDGridViewInScroll;
@@ -44,12 +47,14 @@ HomeFragmentLiveList extends BaseFragment {
     private ArrayList<Room> datas = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
+    private LiveHttpHelper liveHttpHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = getActivity();
         // 可以初始化除了view之外的东西
+        liveHttpHelper = new LiveHttpHelper(getActivity(), this);
     }
 
     @Override
@@ -79,14 +84,14 @@ HomeFragmentLiveList extends BaseFragment {
         mSDGridViewInScroll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(TextUtils.isEmpty(App.getInstance().getToken())){
+                if (TextUtils.isEmpty(App.getInstance().getToken())) {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivity(intent);
                     return;
                 }
                 //判断网络环境
                 boolean connected = NetWorkStateUtil.isConnected(getContext());
-                if (!connected){
+                if (!connected) {
                     MGToast.showToast("没有网络,请检测网络环境!");
                     return;
                 }
@@ -130,6 +135,9 @@ HomeFragmentLiveList extends BaseFragment {
                 }
                 CurLiveInfo.setAdmires(1);
                 startActivity(intent);
+                //获取领取码
+                App.getInstance().setReceiveCode("");
+                liveHttpHelper.getReceiveCode(room.getId());
             }
         });
     }
@@ -167,5 +175,27 @@ HomeFragmentLiveList extends BaseFragment {
     @Override
     protected String setUmengAnalyticsTag() {
         return this.getClass().getName().toString();
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.RECEIVE_CODE.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                String code = ((ModelReceiveCode) datas.get(0)).getReceive_code();
+                if (!TextUtils.isEmpty(code)) {
+                    App.getInstance().setReceiveCode(code);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }

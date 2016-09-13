@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.support.multidex.MultiDex;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
@@ -32,7 +30,6 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.miguo.live.views.utils.ToasUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -82,6 +79,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 当前用户的昵称。
      */
     public String nickName;
+    /**
+     * 用户在当前直播的分享领取码
+     */
+    public String receiveCode;
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
@@ -364,11 +365,12 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     }
 
-    public List<ShoppingCartInfo> getLocalShoppingCartInfo(){
+    public List<ShoppingCartInfo> getLocalShoppingCartInfo() {
         return LocalShoppingcartDao.queryModel();
     }
-    public void setLocalShoppingCartInfo(List<ShoppingCartInfo> infoList){
-        if(infoList!=null){
+
+    public void setLocalShoppingCartInfo(List<ShoppingCartInfo> infoList) {
+        if (infoList != null) {
             LocalShoppingcartDao.insertModel(infoList);
         }
     }
@@ -390,5 +392,13 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     public void setAvStart(boolean avStart) {
         isAvStart = avStart;
+    }
+
+    public String getReceiveCode() {
+        return receiveCode;
+    }
+
+    public void setReceiveCode(String receiveCode) {
+        this.receiveCode = receiveCode;
     }
 }

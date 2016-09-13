@@ -500,6 +500,30 @@ public class UserHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 添加用户的建议
+     * @param advice
+     */
+    public void advice(String advice) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("advice", advice);
+        params.put("method", UserConstants.ADVICE);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                mView.onSuccess(UserConstants.ADVICE, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
     @Override
     public void onDestroy() {
         mView = null;

@@ -1,6 +1,7 @@
 package com.miguo.live.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,19 +85,35 @@ public class PayHistoryAdapter extends BaseAdapter implements PinnedSectionListV
             mHolder.tvTitle.setVisibility(View.GONE);
             mHolder.layoutItem.setVisibility(View.VISIBLE);
             mHolder.viewLine.setVisibility(View.VISIBLE);
-
-            SDViewBinder.setTextView(mHolder.tvMoney, "支付¥" + currModle.getPrice());
-            SDViewBinder.setTextView(mHolder.tvNum, "购买" + currModle.getDiamond_count() + "钻");
-            SDViewBinder.setTextView(mHolder.tvOrder, "订单号：" + currModle.getOrder_id());
-            if ("1".equals(currModle.getStatus())) {
-                //成功
-                mHolder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_home_recommend));
-                SDViewBinder.setTextView(mHolder.tvStatus, "充值成功");
+            if (!TextUtils.isEmpty(currModle.getPrice())) {
+                SDViewBinder.setTextView(mHolder.tvMoney, "支付¥" + currModle.getPrice());
             } else {
-                //失败
-                mHolder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.c_FF3000));
-                SDViewBinder.setTextView(mHolder.tvStatus, "充值失败");
+                SDViewBinder.setTextView(mHolder.tvMoney, "");
             }
+            if (!TextUtils.isEmpty(currModle.getDiamond_count())) {
+                SDViewBinder.setTextView(mHolder.tvNum, "购买" + currModle.getDiamond_count() + "钻");
+            } else {
+                SDViewBinder.setTextView(mHolder.tvNum, "");
+            }
+            if (!TextUtils.isEmpty(currModle.getOrder_id())) {
+                SDViewBinder.setTextView(mHolder.tvOrder, "订单号：" + currModle.getOrder_id());
+            } else {
+                SDViewBinder.setTextView(mHolder.tvOrder, "");
+            }
+            if (!TextUtils.isEmpty(currModle.getOrder_id())) {
+                if ("1".equals(currModle.getStatus())) {
+                    //成功
+                    mHolder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_home_recommend));
+                    SDViewBinder.setTextView(mHolder.tvStatus, "充值成功");
+                } else {
+                    //失败
+                    mHolder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.c_FF3000));
+                    SDViewBinder.setTextView(mHolder.tvStatus, "充值失败");
+                }
+            } else {
+                SDViewBinder.setTextView(mHolder.tvStatus, "");
+            }
+
             SDViewBinder.setTextView(mHolder.tvTime, currModle.getDate());
 
         }

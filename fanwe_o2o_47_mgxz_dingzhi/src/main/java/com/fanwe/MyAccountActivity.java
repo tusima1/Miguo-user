@@ -496,6 +496,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         App.getInstance().clearAllData();
         App.getInstance().setmUserCurrentInfo(null);
 
+        SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
 
 
     }
