@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
 import com.fanwe.MemberRankActivity;
+import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -69,6 +71,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
     private View mAllOrder;
+    private ImageView mIvSetting;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,6 +110,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
     private void initTopView() {
         mMine = findViewById(R.id.fl_mine);
+        mIvSetting = ((ImageView) findViewById(R.id.iv_setting));
 
         mIvUserFace = ((CircleImageView) findViewById(R.id.iv_user_face));
         mUserName = ((TextView) findViewById(R.id.tv_username));
@@ -124,6 +128,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mCollect.setOnClickListener(this);
         mFans.setOnClickListener(this);
         mMine.setOnClickListener(this);
+        mIvSetting.setOnClickListener(this);
     }
 
 
@@ -250,6 +255,13 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }else if (v==mAllOrder){
             /*全部订单*/
             clickMyOrderView("all");
+        }else if (v==mIvSetting){
+            /*设置页面*/
+            Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+            Bundle userData = new Bundle();
+            userData.putString("user_face", mUserFaceString);
+            intent.putExtras(userData);
+            startActivity(intent);
         }
     }
 
