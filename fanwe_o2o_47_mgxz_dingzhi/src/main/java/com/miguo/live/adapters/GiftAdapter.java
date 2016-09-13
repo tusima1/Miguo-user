@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.GiftListener;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -19,9 +21,18 @@ import java.util.List;
 public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
 
-    private List mData;
+    private List<GiftListBean> mData;
     private int selectedPosition = -1;
     private GiftListener mListener;
+
+    public GiftAdapter(List<GiftListBean> mData) {
+        this.mData = mData;
+    }
+
+    public void setData(List<GiftListBean> mData){
+        this.mData = mData;
+        notifyDataSetChanged();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,10 +44,16 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        /*bind data*/
+        GiftListBean info = mData.get(position);
+        SDViewBinder.setImageView(info.getIcon(),holder.iv_img);
+        holder.tv_name.setText(info.getName());
+        holder.tv_price.setText(info.getPrice());
+
         boolean isSelected = selectedPosition == position;
         holder.itemView.setSelected(isSelected);
         if (mListener!=null && isSelected){
-            mListener.onItemSelected(position);
+            mListener.onItemSelected(position,info);
             MGLog.e("onItemSelected:"+position);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -52,13 +69,14 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
             }
         });
 
+
     }
 
     @Override
     public int getItemCount() {
-//        return mData==null ? 0 :mData.size();
-        return 8;
+        return mData==null ? 0 :mData.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView iv_img;
@@ -73,9 +91,6 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
         }
     }
 
-    public void setData(List data){
-        this.mData=data;
-    }
     public void setGiftListener(GiftListener listener){
         this.mListener=listener;
     }

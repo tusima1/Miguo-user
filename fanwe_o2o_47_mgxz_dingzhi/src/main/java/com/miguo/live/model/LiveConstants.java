@@ -113,5 +113,7 @@ public class LiveConstants {
      * 抢红包结果。
      */
     public static final String GET_PACKET_RESULT = "GetRedPacketResult";
+    /*打赏礼物列表*/
+    public static final String GET_GIFT_INFO = "GiftInfo";
 
 }

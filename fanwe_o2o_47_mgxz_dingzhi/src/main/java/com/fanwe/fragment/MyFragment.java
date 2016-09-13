@@ -13,17 +13,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
-import com.fanwe.DistributionMyXiaoMiActivity;
-import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
 import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyCommentActivity;
-import com.fanwe.MyEventListActivity;
-import com.fanwe.MyLotteryActivity;
 import com.fanwe.MyMessageActivity;
-import com.fanwe.ShopCartActivity;
 import com.fanwe.UploadUserHeadActivity;
 import com.fanwe.WithdrawLogActivity;
 import com.fanwe.app.App;
@@ -48,7 +43,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
-import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
@@ -250,22 +244,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
                     intent.putExtra("money_type",2);
                     startActivity(intent);
                 }
-            }
-        });
-        //TODO 我的战队
-        /**
-         * 我的战队
-         */
-        mLl_Predict.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MGToast.showToast("去我的战队");
-//                Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
-//                intent.putExtra("yes", true);
-//                intent.putExtra("money", mActModel.getYuji());
-//                intent.putExtra("up_name", mActModel.getUp_name());
-//                intent.putExtra("up_id", mActModel.getUp_id());
-//                startActivity(intent);
             }
         });
 
@@ -522,37 +500,13 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mLl_comments) {
             //我的点评
             startActivity(MyCommentActivity.class);
-        } else if (v == mLl_shopping_cart) {
-            //购物车
-            startActivity(ShopCartActivity.class);
         } else if (v == mLl_my_asset) {
             //账户余额
             startActivity(AccountMoneyActivity.class);
-        } else if (v == viewAllOrdersButton) {
-            clickMyOrderView("all");
-        } else if (v == mTvUsername) {
+        }  else if (v == mTvUsername) {
             clickUserInfo();
         }
     }
-
-    private void clickMyShop() {
-        Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
-        startActivity(intent);
-    }
-
-    //TODO 朋友
-    private void clickMyFriends() {
-        Intent intent = new Intent(getActivity(), DistributionMyXiaoMiActivity.class);
-        startActivity(intent);
-    }
-
-    private void clickMyOrderView(String key) {
-        Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
-        intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, key);
-        startActivity(intent);
-    }
-
-
     private void clickUserInfo() {
         Intent intent = new Intent(getActivity(), MemberRankActivity.class);
         startActivity(intent);
@@ -596,21 +550,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         dialog.showBottom();
     }
 
-    /**
-     * 我的抽奖
-     */
-    private void clickMyLottery() {
-        startActivity(new Intent(getActivity(), MyLotteryActivity.class));
-    }
 
-    /**
-     * 未付款订单
-     */
-    private void clickOrderNotPay() {
-        Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
-        intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, 0);
-        startActivity(intent);
-    }
 
     /**
      * 已付款订单
@@ -621,13 +561,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         startActivity(intent);
     }
 
-    /**
-     * 我的活动
-     */
-    private void clickMyEvent() {
-        Intent intent = new Intent(getActivity(), MyEventListActivity.class);
-        startActivity(intent);
-    }
 
     /**
      * goto 新Activity
@@ -636,11 +569,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
      */
     public void startActivity(Class clazz) {
         startActivity(new Intent(getActivity(), clazz));
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-//        refreshMyAccountFragment();
     }
 
     @Override
@@ -714,28 +642,14 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onRedDotViewClick(View v) {
-        if (v == mRDV_Comsume) {
-            //团购消费券
-            startActivity(MyCouponListActivity.class);
-        } else if (v == mRDV_MyShop) {
-            //我的小店
-            clickMyShop();
-        } else if (v == mRDV_MyFriend) {
-            //我的战队
-            clickMyFriends();
-        } else if (v == mRDV_MyNameCard) {
+         if (v == mRDV_MyNameCard) {
             //我的名片
 //            startActivity(DistributionMyQRCodeActivity.class);
             UserSendGiftPopHelper giftPopHelper=new UserSendGiftPopHelper(getActivity());
             giftPopHelper.show();
-        } else if (v == mRDV_orderNotPay) {
-            clickMyOrderView("pay_wait");
-        } else if (v == mRDV_orderNotUse) {
-            clickMyOrderView("use_wait");
-        } else if (v == mRDV_orderNotComment) {
-            clickMyOrderView("comment_wait");
-        } else if (v == mRDV_orderNotRefund) {
-            clickMyOrderView("refund");
+//            startActivity(TestMyFragmentActivity.class);
+//            startActivity(FansActivity.class);
+//            startActivity(WalletActivity.class);
         }
     }
 

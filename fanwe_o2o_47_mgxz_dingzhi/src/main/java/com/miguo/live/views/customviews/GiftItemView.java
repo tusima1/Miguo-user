@@ -9,9 +9,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.miguo.live.interf.GiftListener;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.views.Manager.FalseScrollGridLayoutManager;
 import com.miguo.live.views.Manager.GiftGridItemDecoration;
 import com.miguo.live.adapters.GiftAdapter;
+
+import java.util.List;
 
 /**
  * Created by didik on 2016/9/11.
@@ -21,6 +24,10 @@ public class GiftItemView extends FrameLayout{
 
     private boolean isSelected=false;
     private TextView mTvSend;
+    private List<GiftListBean> mData;
+    private GiftAdapter mAdapter;
+    private int selectedPosition;
+    public GiftListBean GiftInfo;
 
     public GiftItemView(Context context) {
         this(context,null);
@@ -36,6 +43,11 @@ public class GiftItemView extends FrameLayout{
         createView();
     }
 
+    public void setData(List<GiftListBean> data){
+        this.mData=data;
+        mAdapter.setData(mData);
+    }
+
     private void createView() {
         RecyclerView item=new RecyclerView(mContext);
         FalseScrollGridLayoutManager mManager=new FalseScrollGridLayoutManager(mContext,4,
@@ -46,13 +58,15 @@ public class GiftItemView extends FrameLayout{
         GiftGridItemDecoration giftGridItemDecoration=new GiftGridItemDecoration();
         giftGridItemDecoration.setOffset(6);
         item.addItemDecoration(giftGridItemDecoration);
-        GiftAdapter mAdapter=new GiftAdapter();
+        mAdapter = new GiftAdapter(mData);
         mAdapter.setGiftListener(new GiftListener() {
+
             @Override
-            public void onItemSelected(int position) {
+            public void onItemSelected(int position, GiftListBean info) {
                 if (position>=0){
                     isSelected=true;
                     mTvSend.setEnabled(true);
+                    GiftInfo=info;
                 }else {
                     isSelected=false;
                     mTvSend.setEnabled(false);
@@ -76,8 +90,7 @@ public class GiftItemView extends FrameLayout{
         this.mTvSend = text;
     }
 
-    public Object getSelectedItemInfo(){
-
-        return "hh";
+    public GiftListBean getSelectedItemInfo(){
+        return GiftInfo;
     }
 }
