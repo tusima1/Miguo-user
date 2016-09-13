@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       >
+    <!--我的订单-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dp12"
+        android:paddingRight="@dimen/dp12"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="我的订单"
+            android:textColor="@color/gray_text_99"
+            android:textSize="@dimen/sp15"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:drawablePadding="@dimen/dp7"
+            android:drawableRight="@drawable/ic_arrow_right_pretty"
+            android:text="查看全部订单"
+            android:textColor="@color/gray_text_99"
+            android:textSize="@dimen/sp13"/>
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/bg_activity_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="62dp"
+        android:orientation="horizontal">
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_order_not_paid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_order_not_used"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_order_not_commented"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <com.fanwe.user.view.customviews.RedDotView
+            android:id="@+id/rdv_order_to_refund"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+</merge>

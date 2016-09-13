@@ -58,7 +58,7 @@ public class RedTypeAdapter extends RecyclerView.Adapter<ViewHolderRedType> {
         if (Integer.valueOf(count) > 999) {
             countTextValue = "余(999+)";
         } else {
-            countTextValue = "余(" + count + "+)";
+            countTextValue = "余(" + count + ")";
         }
         holder.countText.setText(countTextValue);
         if (modelHandOutRedPacket.isChecked()) {

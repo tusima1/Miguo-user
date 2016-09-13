@@ -40,11 +40,6 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
 
     @ViewInject(R.id.ptrlv_content)
     private PullToRefreshListView mPtrlv_content;
-
-    @ViewInject(R.id.ll_empty)
-    private View mLl_empty;
-
-//    private MyOrderListAdapter mAdapter;
     private OrderOutAdapter mAdapter;
     private List<ModelOrderItemOut> mListModel = new ArrayList<ModelOrderItemOut>();
 

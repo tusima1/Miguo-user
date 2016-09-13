@@ -4,7 +4,6 @@ import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
-import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
@@ -13,7 +12,7 @@ import java.util.TreeMap;
 /**
  * Created by didik on 2016/9/9.
  */
-public abstract class MGHttpHelper implements IHelper {
+public abstract class MGHttpHelper {
 
     public static final int GET=0;
     public static final int POST=-1;
@@ -22,7 +21,6 @@ public abstract class MGHttpHelper implements IHelper {
     public static final int THIRD_LOGIN=-4;
 
     protected Gson gson;
-
     public MGHttpHelper(){initNeed();}
 
     protected void initNeed(){
@@ -92,13 +90,4 @@ public abstract class MGHttpHelper implements IHelper {
     protected abstract TreeMap addParams(String method,TreeMap params);
     protected abstract void onSuccess(String method,String responseBody);
     protected abstract void onFinished(String method);
-
-//    public void doHttpMethod(String method,String page,T... targetModel){
-//
-//    }
-
-    @Override
-    public void onDestroy() {
-
-    }
 }

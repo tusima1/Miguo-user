@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.views.customviews.GiftItemView;
 
 import java.util.ArrayList;
@@ -17,27 +18,50 @@ import java.util.List;
  */
 public class GiftViewPagerAdapter extends PagerAdapter {
 
+    private TextView tv_send;
+    private Context mContext;
     private boolean isSelected=false;
     private List<View> viewList=new ArrayList<>();
+    private List<GiftListBean> mData;
 
-    public GiftViewPagerAdapter(Context mContext,List data,TextView tv_send) {
-        if (data!=null && data.size()>0){
-            for (int i = 0; i < data.size(); i++) {
+    public GiftViewPagerAdapter(Context mContext,List<GiftListBean> data,TextView tv_send) {
+        this.mContext=mContext;
+        this.tv_send=tv_send;
+        this.mData=data;
+        createView();
+    }
+
+    private void createView(){
+        viewList.clear();
+        int count=0;
+        if (mData!=null && mData.size()>0){
+            int size = mData.size();
+            if (size%8!=0){
+                count=size/8+1;
+            }else {
+                count=size/8;
+            }
+            for (int i = 0; i < count; i++) {
                 //TODO 装载数据
+                GiftItemView item=new GiftItemView(mContext);
+                List<GiftListBean> temp=new ArrayList<>();
+                for (int j = i*8; j < (i+1)*8; j++) {
+                    if (j>=size){
+                        break;
+                    }
+                    temp.add(mData.get(j));
+                }
+                item.setData(temp);
+                item.setText(tv_send);
+                viewList.add(item);
             }
         }
+        notifyDataSetChanged();
+    }
 
-        GiftItemView item1=new GiftItemView(mContext);
-        item1.setText(tv_send);
-
-        GiftItemView item2=new GiftItemView(mContext);
-        item2.setText(tv_send);
-
-        GiftItemView item3=new GiftItemView(mContext);
-        item3.setText(tv_send);
-        viewList.add(item1);
-        viewList.add(item2);
-        viewList.add(item3);
+    public void setData(List<GiftListBean> data){
+        this.mData=data;
+        createView();
     }
 
     @Override
@@ -73,8 +97,8 @@ public class GiftViewPagerAdapter extends PagerAdapter {
         return selected;
     }
 
-    public Object getSelectedItemInfo(){
-
-        return "hh";
+    public GiftListBean getSelectedItemInfo(int position){
+        GiftItemView view = (GiftItemView) viewList.get(position);
+        return view.getSelectedItemInfo();
     }
 }

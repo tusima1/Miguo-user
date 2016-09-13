@@ -10,18 +10,26 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView2;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.interf.IHelper;
 import com.miguo.live.adapters.GiftViewPagerAdapter;
+import com.miguo.live.interf.IHelper;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
+import com.miguo.live.presenters.GiftHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
+import com.miguo.utils.test.MGDialog;
+import com.miguo.utils.test.MGHttpHelper;
+
+import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by didik on 2016/9/11.
  */
-public class UserSendGiftPopHelper implements IHelper, View.OnClickListener {
+public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, CallbackView2 {
 
     private Activity mActivity;
     private PopupWindow popupWindow;
@@ -29,9 +37,16 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener {
     private TextView mTvSend;
     private ViewPager mGiftViewPager;
     private CircleIndicator mIndicator;
+    private GiftViewPagerAdapter mGiftAdapter;
+    private GiftListBean selectedItemInfo;//要发送的内容info
+    private int position;
+    private View mRecharge;
+    private float money;
 
     public UserSendGiftPopHelper(Activity mActivity) {
         this.mActivity = mActivity;
+        GiftHttpHelper giftHttpHelper = new GiftHttpHelper(this);
+        giftHttpHelper.doHttpMethod(LiveConstants.GET_GIFT_INFO, MGHttpHelper.GET);
         createPopWindow();
     }
 
@@ -41,7 +56,8 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener {
     }
 
     private void createPopWindow() {
-        View contentView = LayoutInflater.from(mActivity).inflate(R.layout.act_live_pop_send_gift, null);
+        View contentView = LayoutInflater.from(mActivity).inflate(R.layout
+                .act_live_pop_send_gift, null);
         initContentView(contentView);
         //设置窗体的宽高属性
         int height = DisplayUtil.dp2px(mActivity, 300);
@@ -64,6 +80,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener {
     }
 
     private void initContentView(View contentView) {
+        mRecharge = contentView.findViewById(R.id.ll_recharge);//充值
         mTvMoney = ((TextView) contentView.findViewById(R.id.tv_money));
         mTvSend = ((TextView) contentView.findViewById(R.id.tv_send));
 
@@ -71,27 +88,33 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener {
         mIndicator = ((CircleIndicator) contentView.findViewById(R.id.indicator_circle));
 
         /*init viewpager*/
-        GiftViewPagerAdapter mGiftAdapter=new GiftViewPagerAdapter(mActivity,null,mTvSend);
+        mGiftAdapter = new GiftViewPagerAdapter(mActivity, null, mTvSend);
         mGiftViewPager.setAdapter(mGiftAdapter);
         mIndicator.setViewPager(mGiftViewPager);
 
         mGiftViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset, int
+                    positionOffsetPixels) {
 
             }
 
             @Override
             public void onPageSelected(int position) {
+                UserSendGiftPopHelper.this.position = position;
                 GiftViewPagerAdapter adapter = (GiftViewPagerAdapter) mGiftViewPager.getAdapter();
                 boolean selected = adapter.getSelected(position);
-                Object selectedItemInfo = adapter.getSelectedItemInfo();
-                MGToast.showToast(selectedItemInfo.toString());
-                if (selected){
-                    mTvSend.setEnabled(true);
-                }else {
+                selectedItemInfo = adapter.getSelectedItemInfo(position);
+                if (selectedItemInfo != null) {
+                    if (selected) {
+                        mTvSend.setEnabled(true);
+                    } else {
+                        mTvSend.setEnabled(false);
+                    }
+                } else {
                     mTvSend.setEnabled(false);
                 }
+
             }
 
             @Override
@@ -100,35 +123,81 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener {
             }
         });
 
-        mTvMoney.setOnClickListener(this);
+        mRecharge.setOnClickListener(this);
         mTvSend.setOnClickListener(this);
     }
 
     /*显示*/
-    public void show(){
+    public void show() {
         /**
          * 进去的时候选择哪个界面,tab与viewpager 需要保持一致
          */
-        if (popupWindow!=null){
+        if (popupWindow != null) {
             ViewGroup contentView = (ViewGroup) mActivity.findViewById(android.R.id.content);
-            popupWindow.showAtLocation(contentView, Gravity.BOTTOM,0,0);
+            popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (v==mTvMoney){
-            clickMoney();
-        }else if (v==mTvSend){
+        if (v == mRecharge) {
+            clickRecharge();
+        } else if (v == mTvSend) {
             clickSend();
         }
     }
 
+    /*打赏*/
     private void clickSend() {
-        MGToast.showToast("clickSend");
+        //是否有钱
+        int unit=9;
+        if (money <unit){
+            showDialog();
+        }
+
+        if (mTvSend.isEnabled()) {
+            selectedItemInfo = mGiftAdapter.getSelectedItemInfo(position);
+            MGToast.showToast(selectedItemInfo.getName() + "[=.=]" + selectedItemInfo.getPrice());
+        } else {
+            MGToast.showToast("Not Enable!");
+        }
     }
 
-    private void clickMoney() {
-        MGToast.showToast("clickMoney");
+    private void showDialog() {
+        new MGDialog(mActivity)
+                .setMGTitle("余额不足")
+                .setContentText("当前余额不足,充值才能继续送礼")
+                .setOnSureClickListener(new MGDialog.OnSureClickListener() {
+                    @Override
+                    public void onSure(MGDialog dialog) {
+                        MGToast.showToast("充值");
+                    }
+                }).show();
+    }
+
+    private void clickRecharge() {
+        showDialog();
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.GET_GIFT_INFO.equals(method)) {
+            mGiftAdapter.setData(datas);
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 }

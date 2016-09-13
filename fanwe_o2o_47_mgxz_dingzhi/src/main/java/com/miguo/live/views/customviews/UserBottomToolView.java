@@ -23,6 +23,7 @@ import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
 import com.miguo.live.views.UserRobRedPacketDialogHelper;
 import com.miguo.live.views.UserRobRedPacketEndDialogHelper;
+import com.miguo.live.views.view.UserSendGiftPopHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -173,7 +174,9 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击礼物
      */
     private void clickGift() {
-        MGToast.showToast("点击了礼物");
+//        MGToast.showToast("点击了礼物");
+        UserSendGiftPopHelper giftPopHelper=new UserSendGiftPopHelper(mAct);
+        giftPopHelper.show();
     }
 
     /**
