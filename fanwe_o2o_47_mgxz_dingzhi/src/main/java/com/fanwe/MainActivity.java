@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
@@ -35,8 +36,34 @@ import com.miguo.live.views.LiveStartActivity;
 import com.miguo.live.views.LiveStartAuthActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity {
+
+
+    /**
+     * 商家id (int)
+     */
+    public static final String EXTRA_MERCHANT_ID = "extra_merchant_id";
+    public static final String EXTRA_SHOP_ID = "extra_shop_id";
+    public static final String EXTRA_GOODS_ID = "extra_goods_id";
+
+    /**
+     * http://m.w2.mgxz.com/user/shop/uid/88025143-194f-4705-991b-7f5a3587dc9c
+     * 门店详情
+     */
+   private  final static  String SHOP_DETAIL="^https?://[^/]+.mgxz.com/index/retail/id/([^/\\s]+)";
+    /**
+     * 他的小店.
+     */
+    private  final static String SHOP_PATTERN="^https?://[^/]+.mgxz.com/user/shop/uid/([^/\\s]+)";
+    /**
+     *  团购详情.
+     */
+    private  final static  String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
+
 
     @SuppressWarnings("deprecation")
     @ViewInject(R.id.act_main_tab_0)
@@ -333,49 +360,54 @@ public class MainActivity extends BaseActivity {
         mExitTime = System.currentTimeMillis();
     }
 
+
+    /**
+     * //获取完整的域名
+     *
+     * @param text 获取浏览器分享出来的text文本
+     */
+    public static boolean getCompleteUrl(String text,String pattern) {
+        Pattern p = Pattern.compile(pattern);
+        Matcher matcher = p.matcher(text);
+
+        boolean result = matcher.find();
+        return result;
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 100) {
             if (resultCode == MyCaptureActivity.RESULT_CODE_SCAN_SUCCESS) {
                 String result = data.getStringExtra("extra_result_success_string");
-                if (result.substring(0, 6).equals("https:") || result.substring(0, 6).equals
-                        ("http:/")) {
-                    if (result.contains("offline")) {
-                        Intent intentStore = new Intent(this, StoreConfirmOrderActivity.class);
-                        intentStore.putExtra("mID",
-                                Integer.parseInt(result.split("\\/")[result.split("\\/").length -
-                                        1]));
-                        startActivity(intentStore);
 
-                    } else if (result.contains(".html#") && !result.contains("offline")) {
-                        String session = AppConfig.getSessionId();
-                        String url = result.replace(".html#", ".html?from=app&sess_id=" + session
-                                + "#");
-                        Intent intentWeb = new Intent(this, CaptureResultWebActivity.class);
-                        intentWeb.putExtra("url", url);
-                        startActivity(intentWeb);
-                    } else if (result.contains(".html#") && !result.contains("offline")) {
-                        String url = result.replace(".html#", ".html?from=app#");
-                        Intent intentWeb = new Intent(this, CaptureResultWebActivity.class);
-                        intentWeb.putExtra("url", url);
-                        startActivity(intentWeb);
+                //他的小店.
+                if(getCompleteUrl(result,SHOP_PATTERN)){
+                    String user_id =  result.split("\\/")[result.split("\\/").length -1];
 
-                    } else if (result.contains(".html#") && !result.contains("offline")) {
-                        String url = result.replace(".html#", ".html?from=app#");
-                        Intent intentWeb = new Intent(this, CaptureResultWebActivity.class);
-                        intentWeb.putExtra("url", url);
-                        startActivity(intentWeb);
-                    } else if (result.contains("/#") && !result.contains("offline")) {
-                        String session = AppConfig.getSessionId();
-                        String url = result.replace("/#", "/?from=app&sess_id=" + session + "#");
-                        Intent intentWeb = new Intent(this, CaptureResultWebActivity.class);
-                        intentWeb.putExtra("url", url);
-                        startActivity(intentWeb);
-                    }
-                } else {
-                    SDToast.showToast("无法识别");
+                    Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
+                    intentStore.putExtra("user_id",user_id);
+
+                    intentStore.putExtra("url",result);
+                    startActivity(intentStore);
+                }else if(getCompleteUrl(result,SHOP_DETAIL)){
+                    //门店详情
+                    String extra_merchant_id =  result.split("\\/")[result.split("\\/").length -1];
+                    Intent intentStore = new Intent(this, StoreDetailActivity.class);
+                    intentStore.putExtra(EXTRA_MERCHANT_ID,extra_merchant_id);
+                    startActivity(intentStore);
+
+                }else if(getCompleteUrl(result,SHOPPING_DETAIL)){
+                  //团购详情
+                    String mId =  result.split("\\/")[result.split("\\/").length -1];
+                    Intent intentStore = new Intent(this, TuanDetailActivity.class);
+                    intentStore.putExtra(EXTRA_GOODS_ID,mId);
+                    startActivity(intentStore);
+                }else{
+                    SDToast.showToast("无法识别。");
                 }
+
             }
         } else if (resultCode == MarketFragment.CITY_RESULT) {
             Bundle cityData = data.getExtras();

@@ -222,12 +222,7 @@ public class RequestCallBackProxy extends RequestCallBack<String>
 					case UserLoginState.LOGIN:
 
 						break;
-					case UserLoginState.UN_LOGIN:
-						App.getApplication().clearAppsLocalUserModel();
-						SDEventManager.post(EnumEventTag.UN_LOGIN.ordinal());
-						startLoginActivity();
-						result = true;
-						break;
+
 					case UserLoginState.TEMP_LOGIN:
 						SDEventManager.post(EnumEventTag.TEMP_LOGIN.ordinal());
 						startLoginActivity();

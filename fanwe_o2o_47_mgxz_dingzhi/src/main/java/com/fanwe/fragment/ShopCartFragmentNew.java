@@ -117,6 +117,13 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetInitData();
+        initPull2RefreshSrcollView();
+    }
+
     /**
      * 添加下拉刷新功能
      */

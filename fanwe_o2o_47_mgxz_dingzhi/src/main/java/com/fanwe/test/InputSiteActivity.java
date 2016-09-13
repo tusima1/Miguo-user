@@ -208,7 +208,7 @@ public class InputSiteActivity extends BaseActivity
 				AvailableUrlModelDao.insertOrUpdate(model);
 				bindData();
 
-				App.getApplication().clearAppsLocalUserModel();
+
 				SDActivityManager.getInstance().finishAllActivityExcept(InputSiteActivity.class);
 				startInitActivity();
 			}
