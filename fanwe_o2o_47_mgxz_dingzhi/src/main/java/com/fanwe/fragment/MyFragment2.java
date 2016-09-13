@@ -27,11 +27,11 @@ import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
-import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.live.views.view.UserSendGiftPopHelper;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -222,7 +222,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             /*消费券*/
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
-            //TODO 测试部分
+            //TODO 测试部分 佣金提现
             String fx_level = modelPersonalHome.getFx_level();
             int level = MGStringFormatter.getInt(fx_level);
             if (level < 2) {
@@ -236,7 +236,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
                 startActivity(intent);
             }
         } else if (v == mSuggestion) {
-            startActivity(RedPacketListActivity.class);
+//            startActivity(RedPacketListActivity.class);
+            UserSendGiftPopHelper helper=new UserSendGiftPopHelper(getActivity());
+            helper.show();
         }else if (v==mStar){
             /*关注*/
         }else if (v==mCollect){

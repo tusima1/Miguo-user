@@ -12,13 +12,14 @@ import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.adapters.GiftViewPagerAdapter;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
+import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.test.MGDialog;
 import com.miguo.utils.test.MGHttpHelper;
 
@@ -60,7 +61,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 .act_live_pop_send_gift, null);
         initContentView(contentView);
         //设置窗体的宽高属性
-        int height = DisplayUtil.dp2px(mActivity, 300);
+//        int height = DisplayUtil.dp2px(mActivity, 300);
         popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams
                 .MATCH_PARENT, ViewGroup.LayoutParams
                 .WRAP_CONTENT);
@@ -187,7 +188,16 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.GET_GIFT_INFO.equals(method)) {
-            mGiftAdapter.setData(datas);
+            ModelGiftInfo modelGiftInfo = (ModelGiftInfo) datas.get(0);
+                if (modelGiftInfo!=null){
+                    List<GiftListBean> giftList = modelGiftInfo.getGiftList();
+                    String userdiamond = modelGiftInfo.getUserdiamond();
+                    money = MGStringFormatter.getFloat(userdiamond);
+//                    mTvMoney.setText(MGStringFormatter.getFloat1(userdiamond));
+                    mTvMoney.setText(userdiamond);
+                    mGiftAdapter.setData(giftList);
+                }
+
         }
     }
 

@@ -3,7 +3,6 @@ package com.miguo.live.presenters;
 import com.fanwe.base.CallbackView2;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.model.getGiftInfo.ResultGiftInfo;
 import com.miguo.live.model.getGiftInfo.RootGiftInfo;
@@ -51,12 +50,14 @@ public class GiftHttpHelper extends MGHttpHelper implements IHelper {
         if (resultGiftInfo!=null){
             List<ModelGiftInfo> body = resultGiftInfo.getBody();
             if (body!=null && body.size()>0){
-                ModelGiftInfo modelGiftInfo = body.get(0);
-                if (modelGiftInfo!=null){
-                    List<GiftListBean> giftList = modelGiftInfo.getGiftList();
-                    mView2.onSuccess(method,giftList);
-                    return;
-                }
+                mView2.onSuccess(method,body);
+                return;
+//                ModelGiftInfo modelGiftInfo = body.get(0);
+//                if (modelGiftInfo!=null){
+//                    List<GiftListBean> giftList = modelGiftInfo.getGiftList();
+//                    mView2.onSuccess(method,giftList);
+//                    return;
+//                }
             }
         }
         mView2.onFailue(method);

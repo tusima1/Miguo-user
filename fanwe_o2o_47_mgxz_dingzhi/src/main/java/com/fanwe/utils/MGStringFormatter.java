@@ -29,6 +29,24 @@ public class MGStringFormatter {
     }
 
     /**
+     *
+     * @param maybeFloat 可能是float类型的值
+     * @return error 0f
+     */
+    public static float getFloat(String maybeFloat){
+        if(maybeFloat == null || maybeFloat.equals("")){
+            return 0;
+        }
+        float a=0f;
+        try {
+            a= Float.valueOf(maybeFloat);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return a;
+    }
+
+    /**
      * 获取 1.0
      * @param maybeFloat
      * @return
