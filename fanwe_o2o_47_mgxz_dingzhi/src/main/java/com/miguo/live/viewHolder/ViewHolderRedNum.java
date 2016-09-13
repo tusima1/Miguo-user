@@ -28,7 +28,7 @@ public class ViewHolderRedNum extends ViewHolder implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (mListener != null) {
-            mListener.onItemClickNum(v, getPosition());
+            mListener.onItemClickNum(v, getAdapterPosition());
         }
     }
 

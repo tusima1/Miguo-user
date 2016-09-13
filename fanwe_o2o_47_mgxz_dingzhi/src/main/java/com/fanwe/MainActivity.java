@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
-import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.customview.SharePopHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
@@ -54,15 +51,15 @@ public class MainActivity extends BaseActivity {
      * http://m.w2.mgxz.com/user/shop/uid/88025143-194f-4705-991b-7f5a3587dc9c
      * 门店详情
      */
-   private  final static  String SHOP_DETAIL="^https?://[^/]+.mgxz.com/index/retail/id/([^/\\s]+)";
+    private final static String SHOP_DETAIL = "^https?://[^/]+.mgxz.com/index/retail/id/([^/\\s]+)";
     /**
      * 他的小店.
      */
-    private  final static String SHOP_PATTERN="^https?://[^/]+.mgxz.com/user/shop/uid/([^/\\s]+)";
+    private final static String SHOP_PATTERN = "^https?://[^/]+.mgxz.com/user/shop/uid/([^/\\s]+)";
     /**
-     *  团购详情.
+     * 团购详情.
      */
-    private  final static  String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
+    private final static String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
 
 
     @SuppressWarnings("deprecation")
@@ -366,7 +363,7 @@ public class MainActivity extends BaseActivity {
      *
      * @param text 获取浏览器分享出来的text文本
      */
-    public static boolean getCompleteUrl(String text,String pattern) {
+    public static boolean getCompleteUrl(String text, String pattern) {
         Pattern p = Pattern.compile(pattern);
         Matcher matcher = p.matcher(text);
 
@@ -374,6 +371,7 @@ public class MainActivity extends BaseActivity {
         return result;
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -383,28 +381,28 @@ public class MainActivity extends BaseActivity {
                 String result = data.getStringExtra("extra_result_success_string");
 
                 //他的小店.
-                if(getCompleteUrl(result,SHOP_PATTERN)){
-                    String user_id =  result.split("\\/")[result.split("\\/").length -1];
+                if (getCompleteUrl(result, SHOP_PATTERN)) {
+                    String user_id = result.split("\\/")[result.split("\\/").length - 1];
 
                     Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
-                    intentStore.putExtra("user_id",user_id);
+                    intentStore.putExtra("user_id", user_id);
 
-                    intentStore.putExtra("url",result);
+                    intentStore.putExtra("url", result);
                     startActivity(intentStore);
-                }else if(getCompleteUrl(result,SHOP_DETAIL)){
+                } else if (getCompleteUrl(result, SHOP_DETAIL)) {
                     //门店详情
-                    String extra_merchant_id =  result.split("\\/")[result.split("\\/").length -1];
+                    String extra_merchant_id = result.split("\\/")[result.split("\\/").length - 1];
                     Intent intentStore = new Intent(this, StoreDetailActivity.class);
-                    intentStore.putExtra(EXTRA_MERCHANT_ID,extra_merchant_id);
+                    intentStore.putExtra(EXTRA_MERCHANT_ID, extra_merchant_id);
                     startActivity(intentStore);
 
-                }else if(getCompleteUrl(result,SHOPPING_DETAIL)){
-                  //团购详情
-                    String mId =  result.split("\\/")[result.split("\\/").length -1];
+                } else if (getCompleteUrl(result, SHOPPING_DETAIL)) {
+                    //团购详情
+                    String mId = result.split("\\/")[result.split("\\/").length - 1];
                     Intent intentStore = new Intent(this, TuanDetailActivity.class);
-                    intentStore.putExtra(EXTRA_GOODS_ID,mId);
+                    intentStore.putExtra(EXTRA_GOODS_ID, mId);
                     startActivity(intentStore);
-                }else{
+                } else {
                     SDToast.showToast("无法识别。");
                 }
 

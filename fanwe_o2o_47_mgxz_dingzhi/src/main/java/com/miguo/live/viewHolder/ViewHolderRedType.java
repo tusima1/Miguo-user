@@ -34,7 +34,7 @@ public class ViewHolderRedType extends ViewHolder implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (mListener != null) {
-            mListener.onItemClickType(v, getPosition());
+            mListener.onItemClickType(v, getAdapterPosition());
         }
     }
 

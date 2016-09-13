@@ -185,7 +185,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-            UmengShareManager.share(platform, this, "分享", "直播开始分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+            UmengShareManager.share(platform, this, "分享", "直播开始分享", "http://api2.w2.mgxz.com/app.html", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
 //            createAvRoom();
             if (isShare) {
 //            createAvRoom();

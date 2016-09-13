@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.adapters.HeadTopAdapter;
@@ -109,8 +110,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
                 mLiveCommonHelper.switchCamera();
             }
         } else if (v == iv_share) {
-            //分享
-            UmengShareManager.share(mActivity, "", "主播直播分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(mContext, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+            SharePopHelper sharePopHelper = new SharePopHelper(mActivity);
+            sharePopHelper.show();
         }
     }
 

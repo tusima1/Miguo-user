@@ -31,7 +31,6 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.SendRedPacketDialog;
 import com.miguo.live.views.definetion.LogTag;
-import com.miguo.live.views.dialog.RedPacketDialog;
 import com.miguo.live.views.utils.ToasUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
@@ -63,7 +62,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     private LiveSwitchScreenListener mScreenListener;
     private LiveHttpHelper liveHttpHelper;
     private LiveView mLiveView;
-    private boolean clickable =true;
+    private boolean clickable = true;
 
     public HostBottomToolView(Context context) {
         super(context);
@@ -182,7 +181,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击红包
      */
     private void clickRedpacket() {
-        if(!clickable){
+        if (!clickable) {
             SDToast.showToast("红包发的太快了，请过会再发。");
             return;
         }
@@ -196,7 +195,6 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 //        redPacketDialog.show();
 
 
-
         if (dialogSendRedPacket == null) {
             SendRedPacketDialog.Builder builder = new SendRedPacketDialog.Builder(mActivity);
             builder.setItemClickType(this);
@@ -205,12 +203,12 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                 @Override
                 public void onClick(View v) {
                     int sendPacketCount = 0;
-                    if(strNum.equals("全部")){
+                    if (strNum.equals("全部")) {
                         sendPacketCount = Integer.parseInt(currModelHandOutRedPacket.getRed_packets());
-                    }else {
+                    } else {
                         sendPacketCount = Integer.parseInt(strNum);
                     }
-                    if(sendPacketCount > Integer.parseInt(currModelHandOutRedPacket.getRed_packets())){
+                    if (sendPacketCount > Integer.parseInt(currModelHandOutRedPacket.getRed_packets())) {
                         ToasUtil.showToastWithShortTime(getContext(), "选择的红包数量大于可用红包数量！");
                         return;
                     }
@@ -327,8 +325,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 
     }
 
-    ArrayList<ModelHandOutRedPacket> datas;
-
+    ArrayList<ModelHandOutRedPacket> datas = new ArrayList<>();
 
 
     @Override
@@ -337,7 +334,14 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
          * 选择红包类型数据
          */
         if (LiveConstants.HAND_OUT_RED_PACKET_GET.equals(method)) {
-            this.datas = (ArrayList<ModelHandOutRedPacket>) datas;
+            this.datas.clear();
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                for (ModelHandOutRedPacket bean : (ArrayList<ModelHandOutRedPacket>) datas) {
+                    if ("1".equals(bean.getRed_packet_type()) || "2".equals(bean.getRed_packet_type())) {
+                        this.datas.add(bean);
+                    }
+                }
+            }
             Message message = new Message();
             message.what = 1;
             mHandler.sendMessage(message);
@@ -350,8 +354,8 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                 if (mLiveHelper != null) {
                     mLiveHelper.sendHostSendRedPacketMessage(id, duration);
                 }
-                if(mLiveView!=null){
-                 mLiveView.sendHostRedPacket(id,duration);
+                if (mLiveView != null) {
+                    mLiveView.sendHostRedPacket(id, duration);
                 }
 
                 //发送自定义消息 。

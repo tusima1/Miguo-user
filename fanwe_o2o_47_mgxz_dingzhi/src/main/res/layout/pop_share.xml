@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="onClick"
             android:orientation="vertical">
 
             <ImageView
@@ -50,7 +49,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="onClick"
             android:orientation="vertical">
 
             <ImageView
@@ -73,7 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="onClick"
             android:orientation="vertical">
 
             <ImageView
@@ -96,7 +93,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="onClick"
             android:orientation="vertical">
 
             <ImageView
@@ -119,7 +115,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:onClick="onClick"
             android:orientation="vertical">
 
             <ImageView
@@ -151,7 +146,6 @@
         android:layout_height="@dimen/dp50"
         android:background="@color/transparent"
         android:gravity="center"
-        android:onClick="onClick"
         android:text="取消"
         android:textColor="@color/white"
         android:textSize="@dimen/dp17" />
