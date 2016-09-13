@@ -42,6 +42,9 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
     public void setData(String type,String num){
         this.type=type;
         this.num=num;
+        if (mRob){
+            setQuan(num,type);
+        }
     }
 
     @Override
@@ -59,41 +62,15 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
         dialog.setCanceledOnTouchOutside(false);
     }
 
-//    private void bindContentView(View contentView) {
-//        View robView = LayoutInflater.from(mActivity).inflate(mRob ? R.layout.dialog_item_robed :
-//                R.layout
-//                .dialog_item_unrob, null);
-//        FrameLayout container = (FrameLayout) contentView.findViewById(R.id.fr_container);
-//        container.addView(robView);
-//
-//        RecyclerView mReList = (RecyclerView) robView.findViewById(R.id.re_list);
-//        mReList.setLayoutManager(new LinearLayoutManager(mActivity,LinearLayoutManager.VERTICAL,false));
-//
-//        //adapter
-//        RedPacketRobEndAdapter endAdapter=new RedPacketRobEndAdapter();
-//        mReList.setAdapter(endAdapter);
-//
-//        robView.findViewById(R.id.tv_enter).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dismiss();
-//            }
-//        });
-//    }
     private void bindContentView_V2(View contentView) {
         View robView = LayoutInflater.from(mActivity).inflate(mRob ? R.layout.dialog_item_robed_v2 :
                 R.layout
                         .dialog_item_unrob_v2, null);
         FrameLayout container = (FrameLayout) contentView.findViewById(R.id.fr_container);
         container.addView(robView);
+        mTv_num = ((TextView) robView.findViewById(R.id.tv_num));
 
-        if (mRob){
-            mTv_num = ((TextView) robView.findViewById(R.id.tv_num));
-
-            mTv_tag = ((TextView) robView.findViewById(R.id.tv_tag));
-            setQuan(num,type);
-        }
-
+        mTv_tag = ((TextView) robView.findViewById(R.id.tv_tag));
         robView.findViewById(R.id.tv_enter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
