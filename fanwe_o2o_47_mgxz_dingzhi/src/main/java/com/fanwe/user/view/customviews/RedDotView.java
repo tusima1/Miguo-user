@@ -59,6 +59,7 @@ public class RedDotView extends LinearLayout {
                 }
             }
         });
+        setRotDotBackgroundDrawable(0);
     }
 
     /**
@@ -127,4 +128,14 @@ public class RedDotView extends LinearLayout {
         setTextColor(textColor);
     }
 
+    /**
+     *
+     * @param drawableId 资源id
+     */
+    public void setRotDotBackgroundDrawable(int drawableId){
+        if (drawableId==0){
+            drawableId=R.drawable.md_ripple_white;
+        }
+        this.setBackground(getResources().getDrawable(drawableId,null));
+    }
 }

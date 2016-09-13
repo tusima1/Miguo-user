@@ -166,6 +166,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         String bank_name = modelUserBankCard.getBank_name();//银行名
         String bank_type = modelUserBankCard.getBank_type();//银行卡类型
         String bank_user = modelUserBankCard.getBank_user();//开户名(姓名)
+        MGLog.e("数据:" + "银行卡="+bank_card+"  银行名称="+bank_name+"  bank_user="+bank_user);
         if (TextUtils.isEmpty(bank_card) || TextUtils.isEmpty(bank_name) || TextUtils.isEmpty
                 (bank_user)) {
             tv_bank_card_info.setText("");
@@ -393,19 +394,26 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
                 mStrBank_UserName = null;
                 break;
             case 1:
-                mStrBankName = mEt_bank_name.getText().toString().trim();
+                if (TextUtils.isEmpty(mStrBankName)){
+                    mStrBankName = mEt_bank_name.getText().toString().trim();
+                }
                 if (isEmpty(mStrBankName)) {
                     SDToast.showToast("请输入开户行名称");
                     return false;
                 }
 
-                mStrBankNumber = mEt_bank_number.getText().toString().trim();
+
+                if (TextUtils.isEmpty(mStrBankNumber)){
+                    mStrBankNumber = mEt_bank_number.getText().toString().trim();
+                }
                 if (isEmpty(mStrBankNumber)) {
                     SDToast.showToast("请输入银行卡号");
                     return false;
                 }
 
-                mStrBank_UserName = mEt_real_name.getText().toString().trim();
+                if (TextUtils.isEmpty(mStrBank_UserName)){
+                    mStrBank_UserName = mEt_real_name.getText().toString().trim();
+                }
                 if (isEmpty(mStrBank_UserName)) {
                     SDToast.showToast("请输入姓名");
                     return false;
@@ -504,6 +512,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             mEt_code.setText("");
             Intent intent = new Intent(DistributionWithdrawActivity.this,
                     DistributionWithdrawLogActivity.class);
+            intent.putExtra("money_type", money_type);
             startActivity(intent);
             finish();
         }

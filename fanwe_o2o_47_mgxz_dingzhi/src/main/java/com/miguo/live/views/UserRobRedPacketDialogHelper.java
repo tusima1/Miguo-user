@@ -18,6 +18,7 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
 
 import java.util.List;
@@ -51,6 +52,10 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
 
     private CallbackView mcallbackView;
 
+    private boolean isRobFinished=false;//抢的5秒是否已经结束
+
+    private List<UserRedPacketInfo> robResult;
+
 
 
     /**
@@ -82,6 +87,11 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
 
         @Override
         public void onFinish() {
+            isRobFinished=true;
+            if (robResult!=null){
+                //为null表示没有推送过
+                mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,robResult);
+            }
             mTvCountDown.setText("");
             mTvCountDown.setBackgroundResource(R.drawable.selector_bg_rob_redpacket);
             mTvCountDown.setClickable(true);
@@ -239,7 +249,12 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     public void onSuccess(String method, List datas) {
         switch (method){
             case LiveConstants.GET_RED_PACKETS:
-                mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,datas);
+                if (isRobFinished){
+                    mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,datas);
+                }else {
+                    robResult=datas;
+                }
+
                break;
             default:
                 break;
@@ -249,7 +264,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
 
     @Override
     public void onFailue(String responseBody) {
-        resultMessage = "没有抢到，下回再努力.";
+        resultMessage = "没有抢到，下回再努力!";
     }
 
     public String getRed_packet_key() {
