@@ -49,6 +49,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
+import com.miguo.live.model.getReceiveCode.ResultReceiveCode;
+import com.miguo.live.model.getReceiveCode.RootReceiveCode;
 import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
 import com.miguo.live.model.getStoresRandomComment.ResultStoresRandomComment;
 import com.miguo.live.model.getStoresRandomComment.RootStoresRandomComment;
@@ -56,6 +59,9 @@ import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
+import com.miguo.live.model.payHistory.ModelPayHistory;
+import com.miguo.live.model.payHistory.ResultPayHistory;
+import com.miguo.live.model.payHistory.RootPayHistory;
 import com.miguo.live.model.postHandOutRedPacket.ModelHandOutRedPacketPost;
 import com.miguo.live.model.postHandOutRedPacket.ResultHandOutRedPacketPost;
 import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
@@ -894,6 +900,77 @@ public class LiveHttpHelper implements IHelper {
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
             }
+        });
+
+    }
+
+    /**
+     * 获取充值记录
+     */
+    public void getRechargeDiamondList(int page, int page_size) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("page", String.valueOf(page));
+        params.put("page_size", String.valueOf(page_size));
+
+        params.put("method", LiveConstants.RECHARGE_DIAMOND_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootPayHistory root = gson.fromJson(responseBody, RootPayHistory.class);
+                List<ResultPayHistory> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView2.onSuccess(LiveConstants.RECHARGE_DIAMOND_LIST, null);
+                    return;
+                }
+                List<ModelPayHistory> items = results.get(0).getBody();
+                mView2.onSuccess(LiveConstants.RECHARGE_DIAMOND_LIST, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mView2.onFailue(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView2.onFinish(LiveConstants.RECHARGE_DIAMOND_LIST);
+            }
+        });
+
+    }
+
+    /**
+     * 获取领取码接口
+     *
+     * @param room_id
+     */
+    public void getReceiveCode(String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("room_id", room_id);
+
+        params.put("method", LiveConstants.RECEIVE_CODE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootReceiveCode root = gson.fromJson(responseBody, RootReceiveCode.class);
+                List<ResultReceiveCode> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView.onSuccess(LiveConstants.RECEIVE_CODE, null);
+                    return;
+                }
+                List<ModelReceiveCode> items = results.get(0).getBody();
+                mView.onSuccess(LiveConstants.RECEIVE_CODE, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mView.onSuccess(LiveConstants.RECEIVE_CODE, null);
+            }
+
         });
 
     }

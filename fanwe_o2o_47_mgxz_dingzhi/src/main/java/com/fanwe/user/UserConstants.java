@@ -195,7 +195,11 @@ public class UserConstants {
      */
     public static final String THIRD_LOGIN_UNREGISTER = "third_login_unregister";
     /**
-     *
+     * 修改密码
      */
     public static final String USER_CHANGE_PWD = "UserChangePwd";
+    /**
+     * 提交建议
+     */
+    public static final String ADVICE = "Advice";
 }

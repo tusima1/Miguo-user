@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 商品评论 一般 -->
+    <!-- 商品评论 一般 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 初始状态 -->
-    <item android:drawable="@drawable/bg_order_common_normal" android:state_enabled="true"/>
-    <!-- 按下状态 -->
-    <item android:drawable="@drawable/bg_order_common_press" android:state_enabled="false"/>
+<!-- 初始状态 -->
+<item android:drawable="@drawable/bg_order_common_normal" android:state_enabled="true"/>
+<!-- 按下状态 -->
+<item android:drawable="@drawable/bg_order_common_press" android:state_enabled="false"/>
 </selector>

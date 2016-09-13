@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.fanwe.app.App;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.RedNumGridAdapter;
@@ -23,7 +22,6 @@ import com.miguo.live.interf.MyItemClickListenerRedNum;
 import com.miguo.live.interf.MyItemClickListenerRedType;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
 import com.miguo.live.model.getHandOutRedPacket.ModelRedNum;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.RedPacketHelper;
 import com.miguo.utils.DisplayUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;

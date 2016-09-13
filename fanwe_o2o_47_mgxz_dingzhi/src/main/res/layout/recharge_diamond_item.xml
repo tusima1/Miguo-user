@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/diamond_line"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_orange_smallline"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/diamond_value"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="48钻"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/sp18"/>
+    <TextView
+        android:id="@+id/money_value"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Y4.00"
+        android:textColor="@color/main_color_press"
+        android:textSize="@dimen/sp14"/>
+
+</LinearLayout>

@@ -28,6 +28,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.presents.LoginHelper;
+import com.fanwe.user.view.AttentionListActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.LiveStartActivity;
@@ -166,6 +167,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case 1:
                         click1();
+                        startActivity(new Intent(MainActivity.this, AttentionListActivity.class));
                         break;
                     case 2:
                         click2();
