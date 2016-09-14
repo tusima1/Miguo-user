@@ -2,7 +2,10 @@ package com.miguo.live.views.view;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +13,29 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.Root;
+import com.fanwe.network.MgCallback;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.MGStringFormatter;
+import com.google.gson.Gson;
 import com.miguo.live.adapters.GiftViewPagerAdapter;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.interf.OnPayGiftSuccessListener;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
 import com.miguo.utils.test.MGHttpHelper;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.util.List;
+import java.util.TreeMap;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -43,11 +55,15 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     private int position;
     private View mRecharge;
     private float money;
+    private String liveType; //类型：1直播 2点播	播放类型
+    private OnPayGiftSuccessListener mListener;
 
-    public UserSendGiftPopHelper(Activity mActivity) {
+    public UserSendGiftPopHelper(Activity mActivity,String liveType) {
         this.mActivity = mActivity;
+        this.liveType=liveType;
         GiftHttpHelper giftHttpHelper = new GiftHttpHelper(this);
         giftHttpHelper.doHttpMethod(LiveConstants.GET_GIFT_INFO, MGHttpHelper.GET);
+
         createPopWindow();
     }
 
@@ -148,17 +164,50 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
         }
     }
 
+    private int totalCount=0;
+    private Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    endTime = System.currentTimeMillis();
+                    long offset = endTime - preTime;
+                    totalCount++;
+                    if (offset<2000){
+                        //连击
+                        Log.e("test",offset+"");
+                    }else {
+                        //TODO 支付
+                        Log.e("test","roomId: "+MySelfInfo.getInstance().getMyRoomNum()+"");
+                        Log.e("test","数量: "+totalCount+"");
+                        Log.e("test","id: "+selectedItemInfo.getId());
+                        Log.e("test","liveType: "+liveType);
+                        postGiftInfo(liveType, MySelfInfo.getInstance().getMyRoomNum()+"",totalCount+"",selectedItemInfo.getId());
+                        //reset
+                        totalCount=0;
+                        preTime=0;
+                    }
+                    break;
+            }
+        }
+    };
+
     /*打赏*/
     private void clickSend() {
         //是否有钱
-        int unit=9;
-        if (money <unit){
-            showDialog();
-        }
+//        int unit = 9;
+//        if (money < unit) {
+//            showDialog();
+//        }
 
         if (mTvSend.isEnabled()) {
-            selectedItemInfo = mGiftAdapter.getSelectedItemInfo(position);
-            MGToast.showToast(selectedItemInfo.getName() + "[=.=]" + selectedItemInfo.getPrice());
+            if (preTime==0){
+                selectedItemInfo = mGiftAdapter.getSelectedItemInfo(position);
+            }
+//            MGToast.showToast(selectedItemInfo.getName() + "[=.=]" + selectedItemInfo.getPrice());
+            preTime = System.currentTimeMillis();
+            mHandler.sendEmptyMessageDelayed(0,2000);
         } else {
             MGToast.showToast("Not Enable!");
         }
@@ -180,6 +229,10 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
         showDialog();
     }
 
+    private long preTime = 0;
+    private long endTime;
+
+
     @Override
     public void onSuccess(String responseBody) {
 
@@ -189,15 +242,14 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     public void onSuccess(String method, List datas) {
         if (LiveConstants.GET_GIFT_INFO.equals(method)) {
             ModelGiftInfo modelGiftInfo = (ModelGiftInfo) datas.get(0);
-                if (modelGiftInfo!=null){
-                    List<GiftListBean> giftList = modelGiftInfo.getGiftList();
-                    String userdiamond = modelGiftInfo.getUserdiamond();
-                    money = MGStringFormatter.getFloat(userdiamond);
+            if (modelGiftInfo != null) {
+                List<GiftListBean> giftList = modelGiftInfo.getGiftList();
+                String userdiamond = modelGiftInfo.getUserdiamond();
+                money = MGStringFormatter.getFloat(userdiamond);
 //                    mTvMoney.setText(MGStringFormatter.getFloat1(userdiamond));
-                    mTvMoney.setText(userdiamond);
-                    mGiftAdapter.setData(giftList);
-                }
-
+                mTvMoney.setText(userdiamond);
+                mGiftAdapter.setData(giftList);
+            }
         }
     }
 
@@ -210,4 +262,67 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     public void onFinish(String method) {
 
     }
+
+    /**
+     * 支付礼物
+     */
+    private void postGiftInfo(String live_type, String live_record_id, final String gift_num, String gift_id) {
+//        live_type	String	必须		类型：1直播 2点播	播放类型
+//        live_record_id	String	必须		直播id	直播id(就是房间room_id)
+//        gift_num	String	必须		礼物数量
+//        gift_id	String	必须		礼物id
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("live_type", live_type);
+        params.put("live_record_id", live_record_id);
+        params.put("gift_num", gift_num);
+        params.put("gift_id", gift_id);
+        params.put("method", LiveConstants.POST_GIFT_INFO);
+
+        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+//                {"result":[{"body":[]}],"message":"用户余额不足，无法购买","token":"8e0b891282e5d6758d06e6da8bb8fa8e","statusCode":"302"}
+//                200  正常状态
+//                302  参数错误，message中会有描述
+//                300  处理错误，礼物未赠送成功
+//                500  服务器配置错误
+                Gson gson=new Gson();
+                Root root = gson.fromJson(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if ("200".equals(statusCode)){
+                    //TODO 成功
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mListener!=null){
+                                mListener.onPaySuc(selectedItemInfo,MGStringFormatter.getInt(gift_num));
+                            }
+                        }
+                    });
+                }else {
+                    MGToast.showToast(message);
+                }
+
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+
+    }
+
+    /*展示礼物的回调*/
+    public void setOnPayGiftSuccessListener(OnPayGiftSuccessListener listener){
+        this.mListener=listener;
+    }
+
 }

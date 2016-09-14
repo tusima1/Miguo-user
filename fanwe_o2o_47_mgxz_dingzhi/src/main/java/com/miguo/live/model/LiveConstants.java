@@ -124,4 +124,7 @@ public class LiveConstants {
      */
     public static final String RECEIVE_CODE = "ReceiveCode";
 
+    /*发送礼物(支付)*/
+    public static final String POST_GIFT_INFO = "GiftInfo";
+
 }

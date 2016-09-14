@@ -148,6 +148,11 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             money = Float.parseFloat(moneyFrom);
         }
         money_type = getIntent().getIntExtra("money_type", 0);
+        if(money_type == 0){
+            MGToast.showToast("类型错误!");
+            finish();
+            return;
+        }
         //获取金额
         SDViewBinder.setTextView(mTv_circle, "可提现额（元）" + "\n" + money);
         initTitle();

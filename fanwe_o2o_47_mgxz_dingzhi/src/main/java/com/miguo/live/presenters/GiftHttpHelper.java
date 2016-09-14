@@ -24,7 +24,6 @@ public class GiftHttpHelper extends MGHttpHelper implements IHelper {
     protected TreeMap addParams(String method, TreeMap params) {
         switch (method){
             case LiveConstants.GET_GIFT_INFO:
-
             break;
         }
         return params;
@@ -52,12 +51,6 @@ public class GiftHttpHelper extends MGHttpHelper implements IHelper {
             if (body!=null && body.size()>0){
                 mView2.onSuccess(method,body);
                 return;
-//                ModelGiftInfo modelGiftInfo = body.get(0);
-//                if (modelGiftInfo!=null){
-//                    List<GiftListBean> giftList = modelGiftInfo.getGiftList();
-//                    mView2.onSuccess(method,giftList);
-//                    return;
-//                }
             }
         }
         mView2.onFailue(method);
