@@ -63,6 +63,15 @@
                 <!--android:inputType="textMultiLine"-->
                <!--android:gravity="left|top"-->
               <!--android:minLines="6" />-->
+            <!--<EditText-->
+                <!--android:id="@+id/testViews2"-->
+                <!--android:text="222"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@color/red"-->
+                <!--android:inputType="textMultiLine"-->
+                <!--android:gravity="left|top"-->
+                <!--android:minLines="2" />-->
         </LinearLayout>
         <include layout="@layout/act_third_login"></include>
     </LinearLayout>
