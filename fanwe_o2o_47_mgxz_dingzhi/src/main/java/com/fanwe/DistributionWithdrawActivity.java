@@ -159,13 +159,13 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     }
 
     private void binData() {
+        mStrMobile = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile();
+        MGLog.e("银行卡手机号" + mStrMobile);
         if (modelUserBankCard == null) {
             tv_bank_card_info.setText("");
             mLl_bank_info.setVisibility(View.VISIBLE);
             return;
         }
-        mStrMobile = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile();
-        MGLog.e("银行卡手机号" + mStrMobile);
         //获取银行卡信息
         String bank_card = modelUserBankCard.getBank_card();//银行卡
         String bank_name = modelUserBankCard.getBank_name();//银行名
@@ -503,6 +503,10 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     @Override
     public void onSuccess(String method, List datas) {
         if (CommissionConstance.USER_BANK_CARD_LIST.equals(method)) {
+            if (datas==null){
+                binData();
+                return;
+            }
             for (int i = 0; i < datas.size(); i++) {
                 ModelUserBankCard item = (ModelUserBankCard) datas.get(i);
                 if ("1".equals(item.getIs_enable())) {
