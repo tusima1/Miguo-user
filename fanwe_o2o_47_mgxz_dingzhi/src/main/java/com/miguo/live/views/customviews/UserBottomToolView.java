@@ -177,7 +177,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      */
     private void clickGift() {
 //        MGToast.showToast("点击了礼物");
-        UserSendGiftPopHelper giftPopHelper = new UserSendGiftPopHelper(mAct);
+        UserSendGiftPopHelper giftPopHelper = new UserSendGiftPopHelper(mAct,"1");
         giftPopHelper.show();
     }
 

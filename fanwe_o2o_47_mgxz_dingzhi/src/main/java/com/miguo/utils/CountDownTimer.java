@@ -9,7 +9,16 @@ import android.os.SystemClock;
  */
 public abstract class CountDownTimer {
 
-    private final int mode=0;
+    public static final int NORMAL = 0;
+    public static final int FLOOR = 1;
+    public static final int SYSTEM = 2;
+    public static final int SYSTEM_FIX = 3;
+
+    private int mCount = 0;
+
+
+    private int mode = SYSTEM_FIX;
+
     /**
      * Millis since epoch when alarm should stop.
      */
@@ -34,9 +43,10 @@ public abstract class CountDownTimer {
      * @param countDownInterval The interval along the way to receive
      *   {@link #onTick(long)} callbacks.
      */
-    public CountDownTimer(long millisInFuture, long countDownInterval) {
+    public CountDownTimer(long millisInFuture, long countDownInterval, int mode) {
         mMillisInFuture = millisInFuture;
         mCountdownInterval = countDownInterval;
+        this.mode = mode;
     }
 
     /**
@@ -84,32 +94,102 @@ public abstract class CountDownTimer {
         public void handleMessage(Message msg) {
 
             synchronized (CountDownTimer.this) {
-                if (mCancelled) {
-                    return;
-                }
-
-                final long millisLeft = mStopTimeInFuture - SystemClock.elapsedRealtime();
-
-                if (millisLeft <= 0) {
-                    onFinish();
-                } else if (millisLeft < mCountdownInterval) {
-                    // no tick, just delay until done
-                    sendMessageDelayed(obtainMessage(MSG), millisLeft);
-                } else {
-                    long lastTickStart = SystemClock.elapsedRealtime();
-                    onTick(millisLeft);
-
-                    // take into account user's onTick taking time to execute
-                    long delay = lastTickStart + mCountdownInterval - SystemClock.elapsedRealtime();
-
-                    // special case: user's onTick took more than interval to
-                    // complete, skip to next interval
-                    while (delay < 0) delay += mCountdownInterval;
-
-                    sendMessageDelayed(obtainMessage(MSG), delay);
+                switch (mode) {
+                    case NORMAL:
+                        //normal round 向上取整
+                        doNormal(mHandler, true);
+                        break;
+                    case FLOOR:
+                        //floor 向下取整
+                        doNormal(mHandler, false);
+                        break;
+                    case SYSTEM:
+                        //system
+                        doSYSTEM(mHandler, false);
+                        break;
+                    case SYSTEM_FIX:
+                        //system fix
+                        doSYSTEM(mHandler, true);
+                        break;
                 }
             }
         }
     };
+
+    /**
+     *
+     * @param handler
+     * @param isRound true 向上取整,正常状态
+     *                false 向下取整,不推荐使用
+     */
+    private void doNormal(Handler handler, boolean isRound) {
+        if (mCancelled) {
+            return;
+        }
+        if (!isRound) {
+            mCount++;
+        }
+        final long millisLeft = mStopTimeInFuture - SystemClock.elapsedRealtime();
+
+        if (millisLeft <= 0) {
+            if (isRound) {
+                onFinish();
+            }
+        } else if (millisLeft < mCountdownInterval) {
+            if (isRound) {
+                onTick(mCountdownInterval);
+                handler.sendMessageDelayed(handler.obtainMessage(MSG), millisLeft);
+            } else {
+                onFinish();
+            }
+        } else {
+            long lastTickStart = SystemClock.elapsedRealtime();
+            onTick(mMillisInFuture - mCountdownInterval * mCount);
+
+            long delay = lastTickStart + mCountdownInterval - SystemClock.elapsedRealtime();
+
+            while (delay < 0) delay += mCountdownInterval;
+
+            handler.sendMessageDelayed(handler.obtainMessage(MSG), delay);
+        }
+        if (isRound) {
+            mCount++;
+        }
+    }
+
+
+    /**
+     * 系统默认的处理方式
+     * @param handler
+     */
+    private void doSYSTEM(Handler handler, boolean fix) {
+        if (mCancelled) {
+            return;
+        }
+
+        final long millisLeft = mStopTimeInFuture - SystemClock.elapsedRealtime();
+
+        if (millisLeft <= 0) {
+            onFinish();
+        } else if (millisLeft < mCountdownInterval) {
+            // no tick, just delay until done
+            if (fix) {
+                onTick(millisLeft);
+            }
+            handler.sendMessageDelayed(handler.obtainMessage(MSG), millisLeft);
+        } else {
+            long lastTickStart = SystemClock.elapsedRealtime();
+            onTick(millisLeft);
+
+            // take into account user's onTick taking time to execute
+            long delay = lastTickStart + mCountdownInterval - SystemClock.elapsedRealtime();
+
+            // special case: user's onTick took more than interval to
+            // complete, skip to next interval
+            while (delay < 0) delay += mCountdownInterval;
+
+            handler.sendMessageDelayed(handler.obtainMessage(MSG), delay);
+        }
+    }
 
 }

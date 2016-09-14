@@ -51,12 +51,9 @@ import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.unionpay.UPPayAssistEx;
 
 import java.util.ArrayList;
@@ -64,7 +61,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
+public class PayActivity extends BaseActivity {
     /**
      * 00:正式，01:测试
      */
@@ -443,10 +440,11 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
     /**
      * 支付失败。
      */
-   public void payFailue(){
-       SDViewUtil.hide(mBtnQuan);
-       showPayment(true);
-   }
+    public void payFailue() {
+        SDViewUtil.hide(mBtnQuan);
+        showPayment(true);
+    }
+
     /**
      * 银联支付
      */
@@ -591,7 +589,6 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                     SDToast.showToast("支付成功");
                     showPayment(false);
                     payFinish();
-
                 } else if ("8000".equals(status)) // 支付结果确认中
                 {
                     SDToast.showToast("支付结果确认中");
@@ -664,11 +661,12 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
                     SDToast.showToast(content);
                 }
                 break;
-
+            case PAY_FAILUE_WEIXIN:
+                payFailue();
+                break;
             default:
                 break;
         }
-
     }
 
     @Override

@@ -373,6 +373,37 @@ public class SellerHttpHelper implements IHelper {
     }
 
     /**
+     * 检测团购是否收藏过
+     *
+     * @param tuan_id
+     */
+    public void checkGroupCollect(String tuan_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("tuan_id", tuan_id);
+        params.put("method", SellerConstants.CHECK_GROUP_BUY_COLLECT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootCheckShopCollect root = gson.fromJson(responseBody, RootCheckShopCollect.class);
+                List<ResultCheckShopCollect> result = root.getResult();
+                if (!SDCollectionUtil.isEmpty(result) && result.get(0) != null && result.get(0).getBody() != null) {
+                    List<ModelCheckShopCollect> items = result.get(0).getBody();
+                    mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
+                } else {
+                    mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
      * 取得排序列表
      */
     public void getOrderByList() {

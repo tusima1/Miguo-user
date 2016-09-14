@@ -33,7 +33,8 @@ public class CommonHelper extends Presenter {
 
 
     /**
-     *获取验证码接口。
+     * 获取验证码接口。
+     *
      * @param mobile 手机号
      * @param type 1为用户注册，2通过验证码修改密码，3为申请提现 4 快捷登录和第三方绑定手机号。
      */
@@ -70,6 +71,7 @@ public class CommonHelper extends Presenter {
 
     /**
      * 验证手机号是否已经存在。
+     *
      * @param mobile
      */
     public void doCheckMobileExist(String mobile, MgCallback callback) {

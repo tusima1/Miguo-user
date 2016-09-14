@@ -117,6 +117,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     protected void onResume() {
         super.onResume();
         if (!TextUtils.isEmpty(openid)) {
+            typeCaptcha = 4;
             mTitle.setMiddleTextTop("绑定手机");
             passline1.setVisibility(View.INVISIBLE);
             passline2.setVisibility(View.INVISIBLE);
@@ -249,6 +250,8 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         time = new TimeCount(60000, 1000);//构造CountDownTimer对象
     }
 
+    int typeCaptcha = 1;
+
     /**
      * 用JAVA 接口请求验证码。
      */
@@ -260,7 +263,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         }
         //开始倒计时。
 
-        mFragmentHelper.doGetCaptcha(userPhone, 1, new MgCallback() {
+        mFragmentHelper.doGetCaptcha(userPhone, typeCaptcha, new MgCallback() {
 
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast("验证码发送失败");

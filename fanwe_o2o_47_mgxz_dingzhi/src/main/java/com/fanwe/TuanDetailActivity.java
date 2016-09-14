@@ -111,7 +111,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
         sellerHttpHelper.getGroupBuyDetail(mId);
-        sellerHttpHelper.checkShopCollect(mId);
+        sellerHttpHelper.checkGroupCollect(mId);
     }
 
     private void init() {
@@ -310,9 +310,9 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
     private void requestCollect() {
         if (isCollect == 0) {
             //0代表没有收藏
-            sellerHttpHelper.postShopCollect(mId);
+            sellerHttpHelper.postGroupBuyCollect(mId);
         } else if (isCollect == 1) {
-            sellerHttpHelper.deleteShopCollect(mId);
+            sellerHttpHelper.deleteGroupBuyCollect(mId);
         } else {
             return;
         }
@@ -345,14 +345,14 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
     @Override
     public void onSuccess(String method, List datas) {
         Message msg = new Message();
-        if (SellerConstants.CHECK_SHOP_COLLECT.equals(method)) {
+        if (SellerConstants.CHECK_GROUP_BUY_COLLECT.equals(method)) {
             //检查收藏情况
             itemsCheck = datas;
             msg.what = 0;
-        } else if (SellerConstants.SHOP_COLLECT_DELETE.equals(method)) {
+        } else if (SellerConstants.GROUP_BUY_COLLECT_DELETE.equals(method)) {
             //取消收藏
             msg.what = 1;
-        } else if (SellerConstants.SHOP_COLLECT_POST.equals(method)) {
+        } else if (SellerConstants.GROUP_BUY_COLLECT_POST.equals(method)) {
             //收藏
             msg.what = 2;
         } else if (SellerConstants.GROUP_BUY_DETAIL.equals(method)) {
