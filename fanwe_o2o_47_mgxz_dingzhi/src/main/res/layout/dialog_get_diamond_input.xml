@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="313dp"
+        android:layout_height="@dimen/dp244"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp140"
+        android:background="@drawable/shape_cricle_solid_white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="@dimen/dp15"
+            android:src="@drawable/back_live_btn" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_diamond" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp10"
+                android:text="邀请好友 领取钻石"
+                android:textColor="@color/text_home_recommend"
+                android:textSize="@dimen/dp19" />
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp27"
+            android:layout_marginRight="@dimen/dp27"
+            android:layout_marginTop="@dimen/dp20"
+            android:background="@drawable/bg_gray_smallline"
+            android:hint="粘帖或输入领取码，获得钻石"
+            android:padding="@dimen/dp10"
+            android:textColorHint="@color/c_CCCCCC"
+            android:textSize="@dimen/dp16" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp35"
+            android:layout_marginLeft="@dimen/dp27"
+            android:layout_marginRight="@dimen/dp27"
+            android:layout_marginTop="@dimen/dp25"
+            android:background="@drawable/bg_orange"
+            android:gravity="center"
+            android:text="确 定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp17" />
+    </LinearLayout>
+</FrameLayout>
+
