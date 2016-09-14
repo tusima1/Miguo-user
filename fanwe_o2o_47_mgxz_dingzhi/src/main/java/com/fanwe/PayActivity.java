@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -298,13 +299,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.act_pay_btn_pay:
-                if (v.isClickable()) {
-                    showPayment(false);
-                    //60s可点
-
-                } else {
-                    showPayment(true);
-                }
+                showPayment(true);
                 clickPay();
                 break;
             case R.id.iv_share_red:
@@ -559,7 +554,6 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 
         String orderSpec = model.getTextHtml();
 
-
         String sign = model.getSign();
 
         String signType = model.getSign_type();
@@ -612,6 +606,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 
             @Override
             public void onFailure(Exception e, String msg) {
+                payFailue();
                 if (e != null) {
                     SDToast.showToast("错误:" + e.toString());
                 } else {
@@ -642,6 +637,7 @@ public class PayActivity extends BaseActivity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
+        Log.e("weixin：",""+resp.getType());
         int respType = resp.getType();
         switch (respType) {
             case ConstantsAPI.COMMAND_PAY_BY_WX:

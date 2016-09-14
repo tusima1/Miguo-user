@@ -130,7 +130,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		}
 
 
-		mFragmentHelper.doGetCaptcha(mNumberPhone, 0, new MgCallback() {
+		mFragmentHelper.doGetCaptcha(mNumberPhone, 4, new MgCallback() {
 
 
 			@Override

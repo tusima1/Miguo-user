@@ -46,6 +46,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler
 	@Override
 	public void onResp(BaseResp resp)
 	{
+		SDToast.showToast(resp.errCode+"");
 		int respType = resp.getType();
 		switch (respType)
 		{
@@ -75,6 +76,6 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler
 		default:
 			break;
 		}
-		finish();
+		//finish();
 	}
 }
