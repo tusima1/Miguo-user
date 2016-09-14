@@ -514,7 +514,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                                 //设置数据
                                 storeModel.setId(bean.getId());
                                 storeModel.setName(bean.getShop_name());
-                                storeModel.setPreview(bean.getPreview());
+                                storeModel.setPreview(bean.getIndex_img());
                                 storeModel.setAddress(bean.getAddress());
                                 storeModel.setTel(bean.getTel());
                                 storeModel.setAvg_point(DataFormat.toFloat(bean.getAvg_grade()));

@@ -134,7 +134,14 @@ public enum EnumEventTag {
      * 验证码输入完成确认
      */
     CONFIRM_IMAGE_CODE,
-
+    /**
+     * 微信支付成功
+     */
+    PAY_SUCCESS_WEIXIN,
+    /**
+     * 微信支付失败
+     */
+    PAY_FAILUE_WEIXIN,
     /**
      * 首页选择分类
      */

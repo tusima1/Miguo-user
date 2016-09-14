@@ -59,6 +59,10 @@ public class SellerConstants {
      */
     public static final String CHECK_SHOP_COLLECT = "CheckShopCollect";
     /**
+     * 判断是否收藏。
+     */
+    public static final String CHECK_GROUP_BUY_COLLECT = "CheckGroupBuyCollect";
+    /**
      * 通过商家id获取团购列表
      */
     public static final String GROUP_BUY_BY_MERCHANT = "CroupBuyByMerchant";
