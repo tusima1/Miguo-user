@@ -815,7 +815,7 @@
         <!-- 正式版用正式的key -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="@string/zhoutest_umeng_key" />
+            android:value="@string/umeng_key" />
         <!-- 友盟统计分析-渠道 -->
         <meta-data
             android:name="UMENG_CHANNEL"

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,8 +107,8 @@ public class LoginActivity extends BaseActivity implements CallbackView {
      */
     String nick = "";
 
-    //	@ViewInject(R.id.testViews)
-//	EditText testViews;
+//    	@ViewInject(R.id.testViews)
+//        EditText testViews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -262,8 +263,12 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             str.append(entry.getKey() + "--->" + entry.getValue() + "\n");
         }
         Log.d("11", str.toString());
-        //testViews.setText(str.toString());
+      //  testViews.setText(str.toString());
 
+    }
+
+    public void printData(String datas){
+       // ((EditText)findViewById(R.id.testViews2)).setText(datas);
     }
 
     /**
@@ -275,7 +280,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         su.login(platform, new ILoginCallback() {
             @Override
             public void onSuccess(Map<String, String> data) {
-                //printData(data);
+           //     printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
                     openId = data.get("unionid");
@@ -306,7 +311,8 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                     Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
+              //  printData("icon:"+icon+" nick:"+nick +" openid:"+openId);
+               mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
 
             }
 

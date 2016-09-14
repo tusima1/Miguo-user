@@ -100,7 +100,7 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
         mSvb_validate.setmDisableTime(60);
         mSvb_validate.startTickWork();
 
-        commonHelper.doGetCaptcha(userPhone, 1, new MgCallback() {
+        commonHelper.doGetCaptcha(userPhone, 2, new MgCallback() {
 
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast("验证码发送失败");

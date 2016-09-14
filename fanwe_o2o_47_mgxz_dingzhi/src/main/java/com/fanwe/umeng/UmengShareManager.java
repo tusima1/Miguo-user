@@ -26,8 +26,8 @@ public class UmengShareManager {
 
     public static final String wxAppKey = "wx6aafdae1bac40206";
     public static final String wxAppSecret = "5f29a228760302af0d85774d02390273";
-    public static final String qqAppKey = "1101169715";
-    public static final String qqAppSecret = "FtAZVvB6LZ85hjdE";
+    public static final String qqAppKey = "1101169715";   //1101169715
+    public static final String qqAppSecret = "FtAZVvB6LZ85hjdE";  // FtAZVvB6LZ85hjdE
 
     public static final String sinaAppKey = "3061230415";
     public static final String sinaAppSecret = "b5fe7acf5dc0eecaf23344a0f84b26e6";
