@@ -458,6 +458,8 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         bean.setShare_url(store_info.getShare());
         bean.setDp_count(store_info.getDp_count());
         bean.setShare_url(store_info.getShare());
+        bean.setXpoint(DataFormat.toDouble(store_info.getGeo_x()));
+        bean.setYpoint(DataFormat.toDouble(store_info.getGeo_y()));
         actModel.setStore_info(bean);
         //other_supplier_location
         List<StoreModel> otherStores = new ArrayList<>();

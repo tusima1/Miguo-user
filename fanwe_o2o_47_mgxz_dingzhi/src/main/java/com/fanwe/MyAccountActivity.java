@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +20,6 @@ import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView2;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.SettingModelDao;
@@ -39,7 +37,6 @@ import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
-import com.fanwe.model.Cart_check_cartActModel;
 import com.fanwe.model.Discover_indexActModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
@@ -484,21 +481,13 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void clickLogout(View v) {
-
-        App.getInstance().setmUserCurrentInfo(null);
+        App.getInstance().getmUserCurrentInfo().setUserInfoNew(null);
         App.getInstance().setImLoginSuccess(false);
-
-        LocalUserModel userModel = AppHelper.getLocalUser();
-         userModel.setUser_pwd("");
+        LocalUserModel userModel = new LocalUserModel();
         App.getInstance().setmLocalUser(userModel);
         AppConfig.setRefId("");
-
         App.getInstance().clearAllData();
-        App.getInstance().setmUserCurrentInfo(null);
-
         SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
-
-
     }
 
     /**
