@@ -31,6 +31,8 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.LiveStartActivity;
 import com.miguo.live.views.LiveStartAuthActivity;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.dialog.GetDiamondLoginDialog;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.regex.Matcher;
@@ -191,6 +193,21 @@ public class MainActivity extends BaseActivity {
                         break;
                     case 1:
                         click1();
+//                        final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
+//                        dialog.setSubmitListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                MGToast.showToast("登录");
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        dialog.setCloseListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        dialog.show();
                         break;
                     case 2:
                         click2();
