@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -628,38 +627,12 @@ public class PayActivity extends BaseActivity {
     }
 
     @Override
-    public void onReq(BaseReq arg0) {
-
-    }
-
-    @Override
-    public void onResp(BaseResp resp) {
-        Log.e("weixin：",""+resp.getType());
-        int respType = resp.getType();
-        switch (respType) {
-            case ConstantsAPI.COMMAND_PAY_BY_WX:
-                String content = null;
-                switch (resp.errCode) {
-                    case 0: // 成功
-                        content = "支付成功";
-                        payFinish();
-                        break;
-                    case -1: // 可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
-                        content = "支付失败";
-                        payFailue();
-
-                        break;
-                    case -2: // 无需处理。发生场景：用户不支付了，点击取消，返回APP。
-                        content = "取消支付";
-                        payFailue();
-                        break;
-
-                    default:
-                        break;
-                }
-                if (content != null) {
-                    SDToast.showToast(content);
-                }
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case PAY_SUCCESS_WEIXIN:
+                showPayment(false);
+                payFinish();
                 break;
             case PAY_FAILUE_WEIXIN:
                 payFailue();
