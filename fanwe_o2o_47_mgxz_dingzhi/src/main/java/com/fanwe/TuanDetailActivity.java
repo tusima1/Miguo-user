@@ -39,6 +39,7 @@ import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
+import com.fanwe.seller.model.getGroupBuyDetail.Share;
 import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
@@ -48,6 +49,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -282,21 +284,15 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
      * 分享
      */
     private void clickShare() {
-        if (mGoodsModel != null) {
-            String content = mGoodsModel.getName() + mGoodsModel.getShare_url();
-            String imageUrl = null;
-            String clickUrl = mGoodsModel.getShare_url();
+        if (share != null) {
+            String content = share.getSummary();
+            String imageUrl = share.getImageurl();
+            String clickUrl = share.getClickurl();
+            String title = share.getTitle();
 
-            imageUrl = mGoodsModel.getIcon();
-
-            if (TextUtils.isEmpty(imageUrl)) {
-                List<String> listImages = mGoodsModel.getImages();
-                if (!SDCollectionUtil.isEmpty(listImages)) {
-                    imageUrl = listImages.get(0);
-                }
-            }
-
-            UmengShareManager.share(this, "分享", content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+            UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+        }else {
+            MGToast.showToast("无分享内容");
         }
     }
 
@@ -370,6 +366,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
 
     private int isCollect;
     private ModelGroupBuyDetail modelGroupBuyDetail;
+    private Share share;
 
     Handler mHandler = new Handler() {
         @Override
@@ -396,6 +393,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                 case 3:
                     if (!SDCollectionUtil.isEmpty(itemsDetail)) {
                         modelGroupBuyDetail = itemsDetail.get(0);
+                        share = modelGroupBuyDetail.getShare();
                         Deal_indexActModel model = new Deal_indexActModel();
                         //基本信息
 
