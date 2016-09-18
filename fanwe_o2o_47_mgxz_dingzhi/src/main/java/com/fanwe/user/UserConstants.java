@@ -202,4 +202,6 @@ public class UserConstants {
      * 提交建议
      */
     public static final String ADVICE = "Advice";
+    /*粉丝*/
+    public static final String ATTENTION_Fans = "AttentionFans";
 }

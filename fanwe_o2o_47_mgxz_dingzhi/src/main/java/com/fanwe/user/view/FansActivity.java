@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.fanwe.base.CallbackView2;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.FansAdapter;
+import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-public class FansActivity extends Activity {
+import java.util.List;
+
+public class FansActivity extends Activity implements CallbackView2 {
 
     private PullToRefreshListView mPtrlv_content;
 
@@ -19,6 +23,9 @@ public class FansActivity extends Activity {
         setContentView(R.layout.activity_fans);
 
         initPullToRefreshListView();
+
+        UserHttpHelper httpHelper=new UserHttpHelper(null,this);
+        httpHelper.getAttentionFans(1,10);
     }
 
     private void initPullToRefreshListView() {
@@ -37,6 +44,28 @@ public class FansActivity extends Activity {
                 mPtrlv_content.onRefreshComplete();
             }
         });
+
+    }
+
+
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 }
