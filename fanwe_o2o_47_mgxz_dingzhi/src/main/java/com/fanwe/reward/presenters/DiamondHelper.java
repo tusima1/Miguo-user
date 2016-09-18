@@ -104,6 +104,7 @@ public class DiamondHelper  extends Presenter {
     }
 
     /**
+     * 创建购买果钻订单。
      *302：  参数错误
      200：  成功
      300：  操作失败

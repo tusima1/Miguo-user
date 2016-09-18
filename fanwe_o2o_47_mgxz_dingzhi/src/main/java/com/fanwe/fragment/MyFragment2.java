@@ -31,6 +31,7 @@ import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -97,6 +98,15 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         initGridLayout();
         initPullToRefreshScrollView();
         setUserData();
+        findViewById(R.id.testRecharge).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RechargeDiamondActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     private void setUserData() {

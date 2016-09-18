@@ -107,8 +107,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
      */
     String nick = "";
 
-//    	@ViewInject(R.id.testViews)
-//        EditText testViews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +122,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
         getIntentData();
         initTitle();
-        changeViewState();
+        changeViewUnLogin();
         registerClick();
 
     }
@@ -176,7 +174,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         EnumLoginState state = AppRuntimeWorker.getLoginState();
         switch (state) {
             case LOGIN_EMPTY_PHONE:
-                changeViewLoginEmptyPhone();
+                changeViewUnLogin();
                 break;
             case UN_LOGIN:
                 changeViewUnLogin();
