@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.fanwe.utils.BaseUtils;
+import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.List;
 

@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -67,6 +68,8 @@ import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
+import com.miguo.live.views.danmu.DanmuBean;
+import com.miguo.live.views.danmu.Danmukiller;
 import com.miguo.live.views.definetion.IntentKey;
 import com.miguo.live.views.dialog.LiveBackDialog;
 import com.miguo.utils.MGLog;
@@ -98,6 +101,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import master.flame.danmaku.ui.widget.DanmakuView;
 
 
 /**
@@ -190,6 +195,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     boolean isAnchor = false;
 
+
+    /**
+     * danmu
+     * @param savedInstanceState
+     */
+    DanmakuView danmakuView;
+    Danmukiller danmukiller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +235,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
         BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
         BtnHungup = (TextView) findViewById(R.id.close_member_video);
+
+        /**
+         * 弹幕
+         */
+        danmakuView = (DanmakuView)findViewById(R.id.danmuku);
+
     }
 
     private void setActivityParams() {
@@ -268,6 +287,13 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mHostBottomToolView1.setmLiveView(this);
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(this, mCommonHelper);
+
+        /**
+         * 弹幕
+         */
+
+        danmukiller = new Danmukiller(this.getApplicationContext());
+        danmukiller.setDanmakuView(danmakuView);
     }
 
 
@@ -2108,5 +2134,25 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void onFailue(String responseBody) {
 
+    }
+
+    /**
+     * 收到弹幕
+     */
+    @Override
+    public void getDanmu(HashMap<String, String> params) {
+        if(params != null && danmukiller != null ){
+            danmukiller.addDanmu(new DanmuBean(params.get(Constants.DANMU_USER_AVATAR_URL), params.get(Constants.DANMU_MESSAGE), params.get(Constants.DANMU_USER_USER_NAME)));
+        }
+    }
+
+    @Override
+    public void withoutEnoughMoney(final String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SDToast.showToast(msg);
+            }
+        });
     }
 }

@@ -10,12 +10,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.utils.DisplayUtil;
 import com.tencent.TIMMessage;
@@ -42,6 +44,7 @@ public class LiveInputDialogHelper {
     private Dialog dialog;
     private LinearLayout mInputLayout;
     private RelativeLayout rootLayout;
+    private CheckBox isDanmu;
 
     public LiveInputDialogHelper(LiveHelper presenter, Activity activity) {
         this.mContext=activity;
@@ -51,9 +54,14 @@ public class LiveInputDialogHelper {
 
     private void createDialog() {
         dialog = new Dialog(mContext, R.style.inputdialog);
+//        dialog = new Dialog(mContext, R.style.AppBaseTheme);
         dialog.setContentView(R.layout.input_text_dialog);
+
+
+
         mInputLayout = (LinearLayout) dialog.findViewById(R.id.rl_inputdlg_view);
         rootLayout = ((RelativeLayout) dialog.findViewById(R.id.rootView));//跟布局
+        isDanmu = ((CheckBox) dialog.findViewById(R.id.is_danmu));//跟布局
 
         messageEditView = (EditText) dialog.findViewById(R.id.input_message);
         confirmBtn = (TextView) dialog.findViewById(R.id.confrim_btn);
@@ -113,7 +121,8 @@ public class LiveInputDialogHelper {
             }
         });
         //输入法到底部的间距(按需求设置)
-        final int paddingBottom = DisplayUtil.dp2px(mContext, 5);
+//        final int paddingBottom = DisplayUtil.dp2px(mContext, 5);
+        final int paddingBottom = 0;
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -165,6 +174,12 @@ public class LiveInputDialogHelper {
             e.printStackTrace();
             return;
         }
+
+        if(isDanmu.isChecked()){
+            sendDanmu(msg);
+            return;
+        }
+
         TIMMessage Nmsg = new TIMMessage();
         TIMTextElem elem = new TIMTextElem();
         elem.setText(msg);
@@ -172,6 +187,10 @@ public class LiveInputDialogHelper {
             return;
         }
         mLiveControlHelper.sendGroupText(Nmsg);
+    }
+
+    private void sendDanmu(String danmu){
+        mLiveControlHelper.sendDanmuMessage(danmu, App.getApplication().getUserNickName(), App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(), App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
     }
 
     /*展示 代替dialog的show*/

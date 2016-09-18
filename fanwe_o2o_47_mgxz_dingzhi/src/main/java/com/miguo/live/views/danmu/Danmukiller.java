@@ -10,12 +10,12 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.fanwe.o2o.miguo.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.HashMap;
 import java.util.List;
 
-import app.xiaoneiit.com.hidanmu.entity.DanmuBean;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -154,17 +154,23 @@ public class Danmukiller {
         /**
          * 将弹幕信息保存到弹幕额外信息中
          */
+        Log.d(TAG, "danmuBean.getName: " + danmuBean.getName());
+
         danmaku.tag = danmuBean.getName();
         danmaku.text = getSpannable(danmuBean);
         danmaku.padding = getDanmuPadding();
         danmaku.priority = 0;  // 1:一定会显示, 一般用于本机发送的弹幕,但会导致行数的限制失效
         danmaku.isLive = false;
         danmaku.time = danmakuView.getCurrentTime() + (index * getDanmuLive());
-        danmaku.textSize = getTextSize();/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f)*/;
+        danmaku.textSize = getTextSize();/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f);*/
         danmaku.textColor = Color.WHITE;
         danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
         danmaku.paintWidth = 100;
         danmakuView.addDanmaku(danmaku);
+    }
+
+    public void addDanmu(DanmuBean danmuBean){
+        addDanmu(danmuBean, 0);
     }
 
     /**
@@ -179,7 +185,10 @@ public class Danmukiller {
          * 设置头像绘制区域
          */
         danmuDrawable.setBounds(0, 0, getAvatarWidth(), getAvatarHeight());
-
+        /**
+         * 如果文字内容比头像少，要设置空格
+         */
+        danmuBean.setContent(danmuBean.getContent().length() < danmuBean.getName().length() ? danmuBean.getContent() + getSpaceText(danmuBean.getName().length() - danmuBean.getContent().length()) : danmuBean.getContent());
         return newSpannable(danmuDrawable, danmuBean.getContent());
     }
 
@@ -229,6 +238,7 @@ public class Danmukiller {
     private Bitmap getAvatarBitMapFromUrl(String url){
         Bitmap bitmap = ImageLoader.getInstance().loadImageSync(url);
         Matrix matrix = new Matrix();
+        bitmap = bitmap == null ? getAvatarBitmapFromLocal(R.drawable.userlogo) : bitmap;
         matrix.postScale(getAvatarWidth() / (float)bitmap.getWidth(), getAvatarHeight() / (float)bitmap.getHeight());
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
@@ -308,6 +318,14 @@ public class Danmukiller {
             danmakuView.release();
             danmakuView = null;
         }
+    }
+
+    private String getSpaceText(int count){
+        String space = " ";
+        for(int i=0; i<count; i++){
+            space = " " + space;
+        }
+        return space;
     }
 
     public int getAvatarWidth() {

@@ -69,8 +69,8 @@ public class Constants {
      */
     public static final int AVIMCMD_CUSTOM=0x100;
     public static final int AVIMCMD_RED_PACKET=AVIMCMD_CUSTOM+1;  //红包
-    public static final int AVIMCMD_REWARD = AVIMCMD_RED_PACKET+1; //弹幕
-    public static final int AVIMCOM_GIFT_SINGLE = AVIMCMD_REWARD+1; //小礼物 非连发
+    public static final int AVIMCMD_DANMU = AVIMCMD_RED_PACKET+1; //弹幕
+    public static final int AVIMCOM_GIFT_SINGLE = AVIMCMD_DANMU+1; //小礼物 非连发
     public static final int AVIMCOM_GIFT_MULTI = AVIMCOM_GIFT_SINGLE+1; //小礼物 连发
     public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT_MULTI+1; //大礼物 非连发
     public static final int AVIMCOM_BIG_GIFT_MULTI = AVIMCOM_BIG_GIFT_SINGLE+1; //大礼物 连发
@@ -229,8 +229,16 @@ public class Constants {
 
      */
     public static final  String  RED_PACKET_ID="red_packet_id";
+    public static final  String  DANMU_ID = "danmu_id";
+    public static final  String  DANMU_MESSAGE = "message";
+    public static final  String  DANMU_USER_ID = "userId";
+    public static final  String  DANMU_USER_USER_NAME = "userName";
+    public static final  String  DANMU_USER_AVATAR_URL = "avatarUrl";
     /**
      *  red_packet_duration  红包间隔时间
      */
     public static final  String  RED_PACKET_DURATION="red_packet_duration";
+
+    public static final String GIFT_DANMU_ID = "1000";
+
 }

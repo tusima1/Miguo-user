@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.view.WindowManager;
 
-import com.fanwe.activity.hi.HiBaseActivity;
-import com.fanwe.o2o.mgxz.deal.R;
+
+import com.fanwe.o2o.miguo.R;
 
 import java.text.DecimalFormat;
 
@@ -67,7 +67,7 @@ public class BaseUtils {
     }
 
     /**跳转到新到activity*/
-    public static void jumpToNewActivity(HiBaseActivity activity, Intent intent){
+    public static void jumpToNewActivity(Activity activity, Intent intent){
         intent.putExtra("index",0);
 //        activity.startParallaxSwipeBackActivty(activity, intent);
         activity.startActivity(intent);
@@ -75,7 +75,7 @@ public class BaseUtils {
     }
 
     /**跳转到新到activit并且结束当前Activity*/
-    public static void jumpToNewActivityWithFinish(HiBaseActivity activity,Intent intent){
+    public static void jumpToNewActivityWithFinish(Activity activity,Intent intent){
 //        activity.startParallaxSwipeBackActivty(activity, intent);
         activity.startActivity(intent);
         activity.finish();
@@ -83,13 +83,13 @@ public class BaseUtils {
     }
 
     /**跳转到新到activity*/
-    public static void jumpToNewActivityWithBackway(HiBaseActivity activity, Intent intent){
+    public static void jumpToNewActivityWithBackway(Activity activity, Intent intent){
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.translate_left_out, R.anim.translate_right_out);
     }
 
     /**跳转到新到activity*/
-    public static void jumpToNewActivityForResult(HiBaseActivity activity,Intent intent, int requestCode){
+    public static void jumpToNewActivityForResult(Activity activity,Intent intent, int requestCode){
 //        activity.startParallaxSwipeBackActivty(activity, intent, requestCode);
         activity.startActivityForResult(intent, requestCode);
         activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);

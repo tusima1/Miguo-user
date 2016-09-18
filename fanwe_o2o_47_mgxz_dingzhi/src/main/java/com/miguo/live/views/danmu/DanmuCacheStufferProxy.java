@@ -16,8 +16,9 @@ public class DanmuCacheStufferProxy extends BaseCacheStuffer.Proxy{
 
     @Override
     public void prepareDrawing(BaseDanmaku danmaku, boolean fromWorkerThread) {
-
     }
+
+
 
     @Override
     public void releaseResource(BaseDanmaku danmaku) {

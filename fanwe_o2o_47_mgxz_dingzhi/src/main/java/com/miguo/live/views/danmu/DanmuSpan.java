@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Created by zlh on 2016/9/12.
- * 弹幕图文魂牌span
+ * 弹幕图文混排span
  */
 public class DanmuSpan extends ImageSpan{
 

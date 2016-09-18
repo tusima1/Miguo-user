@@ -30,6 +30,12 @@ public class DanmuBean implements Serializable{
         setUrl(avatars[avatar]);
     }
 
+    public DanmuBean(String avatar, String content, String name) {
+        this.content = content;
+        this.name = name;
+        setUrl(avatar);
+    }
+
 
     public String getName() {
         return name;

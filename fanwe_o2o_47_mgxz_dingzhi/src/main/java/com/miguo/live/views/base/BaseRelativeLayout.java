@@ -7,13 +7,13 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.fanwe.utils.BaseUtils;
+import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.List;
 
 
 /**
- * Created by mac on 16/7/15.
+ * Created by zlh on 16/7/15.
  */
 public abstract class BaseRelativeLayout extends RelativeLayout{
 

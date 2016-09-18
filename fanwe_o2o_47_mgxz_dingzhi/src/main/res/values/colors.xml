@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <color name="text_base_color">#595959</color>
+
     <!-- 分类控件项被选中颜色 -->
     <color name="bg_gray_categoryview_item_select">#f4f4f4</color>
 

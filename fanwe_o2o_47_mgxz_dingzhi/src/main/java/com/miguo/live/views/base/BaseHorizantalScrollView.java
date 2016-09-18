@@ -8,7 +8,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.fanwe.utils.BaseUtils;
+
+import com.miguo.live.views.utils.BaseUtils;
 
 
 /**
