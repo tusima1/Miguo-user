@@ -12,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
+import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
@@ -25,12 +26,14 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.FansActivity;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -53,6 +56,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private View mFriends;
     private View mQuan;
     private View mSuggestion;
+    private View mErWeiMa;
     private View mStar;
     private View mCollect;
     private View mFans;
@@ -97,6 +101,15 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         initGridLayout();
         initPullToRefreshScrollView();
         setUserData();
+        findViewById(R.id.testRecharge).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RechargeDiamondActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     private void setUserData() {
@@ -138,6 +151,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mFriends = findViewById(R.id.ll_friends);
         mQuan = findViewById(R.id.ll_quan);
         mSuggestion = findViewById(R.id.ll_suggestion);
+        mErWeiMa = findViewById(R.id.ll_erweima);
 
         mShoppingCart.setOnClickListener(this);
         mShop.setOnClickListener(this);
@@ -145,6 +159,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mFriends.setOnClickListener(this);
         mQuan.setOnClickListener(this);
         mSuggestion.setOnClickListener(this);
+        mErWeiMa.setOnClickListener(this);
     }
 
     private void initMyOrders() {
@@ -251,6 +266,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             /*收藏*/
         }else if (v==mFans){
             /*粉丝*/
+            startActivity(FansActivity.class);
         }else if (v==mMine){
             /*点击了我的区域*/
         }else if (v==mAllOrder){
@@ -263,6 +279,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             userData.putString("user_face", mUserFaceString);
             intent.putExtras(userData);
             startActivity(intent);
+        }else if (v==mErWeiMa){
+            /*二维码名片*/
+            startActivity(DistributionMyQRCodeActivity.class);
         }
     }
 

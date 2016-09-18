@@ -524,6 +524,32 @@ public class UserHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 获取粉丝页面
+     * @param page 1
+     * @param pageSize 10
+     */
+    public void getAttentionFans(int page,int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("page", page+"");
+        params.put("page_size", pageSize+"");
+        params.put("method", UserConstants.ATTENTION_Fans);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                MGLog.e("test:"+responseBody);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+
+    }
+
     @Override
     public void onDestroy() {
         mView = null;

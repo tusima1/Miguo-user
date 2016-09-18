@@ -181,8 +181,9 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
                         // 支付操作。
-
-
+                        String payment_id = currentPayType.getId();
+                        String diamond_id = currentDiamondType.getId();
+                        diamondHelper.createDiamondOrder(payment_id,diamond_id);
                     }
 
                     @Override
@@ -229,6 +230,10 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         }
     }
 
+    /**
+     * 绑定 当前用户已经有的果钻数。
+     * @param diamondUserOwnEntityList
+     */
     private void bindUserDiamond(List<DiamondUserOwnEntity> diamondUserOwnEntityList){
         if(diamondUserOwnEntityList!=null){
             DiamondUserOwnEntity entityOwn = diamondUserOwnEntityList.get(0);
@@ -237,6 +242,16 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             self_diamond.setText(value+"");
 
         }
+    }
+
+    /**
+     * 设置支付结果。
+     */
+    private void bindPayDiamondResult(){
+        Intent intent = new Intent(RechargeDiamondActivity.this,PayHistoryActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
     private void bindDiamondType(List<DiamondTypeEntity> diamondTypeEntityList) {
@@ -307,6 +322,14 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                     bindUserDiamond(datas);
                 }
             });
+                break;
+            case RewardConstants.DIAMOND_ORDER:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bindPayDiamondResult();
+                    }
+                });
                 break;
             default:
                 break;
