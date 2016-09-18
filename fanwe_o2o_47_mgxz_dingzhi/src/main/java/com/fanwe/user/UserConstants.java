@@ -202,6 +202,17 @@ public class UserConstants {
      * 提交建议
      */
     public static final String ADVICE = "Advice";
-    /*粉丝*/
+    /**
+     * 粉丝
+     */
     public static final String ATTENTION_Fans = "AttentionFans";
+    /**
+     * 获取用户关注的人的一览接口
+     */
+    public static final String ATTENTION_FOCUS = "AttentionFocus";
+    /**
+     * 我的收藏
+     */
+    public static final String SHOP_AND_USER_COLLECT = "ShopAndUserCollect";
+
 }

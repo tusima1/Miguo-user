@@ -12,6 +12,9 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
+import com.fanwe.user.model.getAttentionFocus.ResultAttentionFocus;
+import com.fanwe.user.model.getAttentionFocus.RootAttentionFocus;
 import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.model.getDistrInfo.ResultDistrInfo;
 import com.fanwe.user.model.getDistrInfo.RootDistrInfo;
@@ -25,6 +28,9 @@ import com.fanwe.user.model.getNameCardQR.RootNameCardQR;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.model.getPersonalHome.ResultPersonalHome;
 import com.fanwe.user.model.getPersonalHome.RootPersonalHome;
+import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
+import com.fanwe.user.model.getShopAndUserCollect.ResultShopAndUserCollect;
+import com.fanwe.user.model.getShopAndUserCollect.RootShopAndUserCollect;
 import com.fanwe.user.model.getUserChangeMobile.ModelUserChangeMobile;
 import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.model.getUserRedpackets.RootUserRedPacket;
@@ -502,6 +508,7 @@ public class UserHttpHelper implements IHelper {
 
     /**
      * 添加用户的建议
+     *
      * @param advice
      */
     public void advice(String advice) {
@@ -526,20 +533,21 @@ public class UserHttpHelper implements IHelper {
 
     /**
      * 获取粉丝页面
-     * @param page 1
+     *
+     * @param page     1
      * @param pageSize 10
      */
-    public void getAttentionFans(int page,int pageSize) {
+    public void getAttentionFans(int page, int pageSize) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        params.put("page", page+"");
-        params.put("page_size", pageSize+"");
+        params.put("page", page + "");
+        params.put("page_size", pageSize + "");
         params.put("method", UserConstants.ATTENTION_Fans);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                MGLog.e("test:"+responseBody);
+                MGLog.e("test:" + responseBody);
             }
 
             @Override
@@ -548,6 +556,82 @@ public class UserHttpHelper implements IHelper {
             }
         });
 
+    }
+
+    /**
+     * 获取用户关注的人的一览接口
+     *
+     * @param pageNum
+     * @param pageSize
+     */
+    public void getAttentionFocus(int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("page", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("method", UserConstants.ATTENTION_FOCUS);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootAttentionFocus root = gson.fromJson(responseBody, RootAttentionFocus.class);
+                List<ResultAttentionFocus> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.ATTENTION_FOCUS, null);
+                    return;
+                }
+                List<ModelAttentionFocus> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.ATTENTION_FOCUS, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFinish(UserConstants.ATTENTION_FOCUS);
+            }
+        });
+    }
+
+    /**
+     * 我的收藏
+     *
+     * @param pageNum
+     * @param pageSize
+     */
+    public void getShopAndUserCollect(int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("page", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("method", UserConstants.SHOP_AND_USER_COLLECT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootShopAndUserCollect root = gson.fromJson(responseBody, RootShopAndUserCollect.class);
+                List<ResultShopAndUserCollect> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.SHOP_AND_USER_COLLECT, null);
+                    return;
+                }
+                List<ModelShopAndUserCollect> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.SHOP_AND_USER_COLLECT, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFinish(UserConstants.SHOP_AND_USER_COLLECT);
+            }
+        });
     }
 
     @Override
