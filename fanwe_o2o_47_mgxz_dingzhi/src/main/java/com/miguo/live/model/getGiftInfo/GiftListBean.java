@@ -4,6 +4,12 @@ package com.miguo.live.model.getGiftInfo;
  * Created by didik on 2016/9/12.
  */
 public class GiftListBean {
+//    "price":"30.00",     价格（果钻）
+//            "icon":"1",          图标地址（七牛云）
+//            "name":"测试礼物1",  礼物名称
+//    "id":"1",            礼物id，用于和效果图做映射
+//    "type":"2",          类型：1、弹幕 2、小礼物 3、大礼物
+//    "is_delete":"0"      删除标识：0、存在，1、删除
     private String price;
     private String icon;
     private String name;

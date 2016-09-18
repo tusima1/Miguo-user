@@ -295,13 +295,7 @@ public class PayActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.act_pay_btn_pay:
-//                if (v.isClickable()) {
-//                    showPayment(false);
-//                    //60s可点
-//
-//                } else {
-//                    showPayment(true);
-//                }
+                showPayment(true);
                 clickPay();
                 break;
             case R.id.iv_share_red:
@@ -557,7 +551,6 @@ public class PayActivity extends BaseActivity {
 
         String orderSpec = model.getTextHtml();
 
-
         String sign = model.getSign();
 
         String signType = model.getSign_type();
@@ -609,6 +602,7 @@ public class PayActivity extends BaseActivity {
 
             @Override
             public void onFailure(Exception e, String msg) {
+                payFailue();
                 if (e != null) {
                     SDToast.showToast("错误:" + e.toString());
                 } else {

@@ -1,6 +1,9 @@
 package com.miguo.live.views;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.PagerAdapter;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.fanwe.ShopCartActivity;
 import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
@@ -20,10 +24,10 @@ import com.miguo.live.adapters.LiveViewPagerItemAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.interf.IHelper;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.live.views.customviews.PagerRedPacketView;
 import com.miguo.utils.DisplayUtil;
+import com.miguo.utils.MGUIUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
@@ -227,15 +231,35 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v==mShopCart){
-            clickShopCart();
+            clickShopCart(v);
         }
     }
 
     /**
      * 点击了购物车
+     * @param v
      */
-    private void clickShopCart() {
-        MGToast.showToast("购物车");
+    private void clickShopCart(View v) {
+        startAnimation(v);
+    }
+    public void startAnimation(final View v){
+        ObjectAnimator anim=ObjectAnimator.ofFloat(v,"dd",1.0f,1.3f,0.8f,1.0f).setDuration(500);
+        anim.start();
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                v.setScaleX(animatedValue);
+                v.setScaleY(animatedValue);
+            }
+        });
+        MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mActivity.startActivity(new Intent(mActivity, ShopCartActivity.class));
+            }
+        },500);
+
     }
 
     public int getCurrentPosition() {

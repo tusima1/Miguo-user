@@ -19,8 +19,6 @@ import com.fanwe.fragment.StoreDetailInfoFragment.OnStoreDetailListener;
 import com.fanwe.fragment.StoreDetailOtherStoreFragment;
 import com.fanwe.fragment.StoreDetailTuanFragment;
 import com.fanwe.fragment.StoreDetailYouhuiFragment;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
@@ -29,7 +27,6 @@ import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.GoodsModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.StoreActModel;
 import com.fanwe.model.StoreModel;
 import com.fanwe.model.Store_infoModel;
@@ -41,6 +38,7 @@ import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.model.getShopInfo.GoodsModelShopInfo;
 import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
+import com.fanwe.seller.model.getShopInfo.Share;
 import com.fanwe.seller.model.getShopInfo.StoreModelShopInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
@@ -49,8 +47,8 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -171,22 +169,16 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
      * 分享
      */
     private void clickShare() {
-        if (mActModel == null) {
-            SDToast.showToast("未找到可分享内容");
-            return;
+        if (share != null) {
+            String content = share.getSummary();
+            String imageUrl = share.getImageurl();
+            String clickUrl = share.getClickurl();
+            String title = share.getTitle();
+
+            UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+        }else {
+            MGToast.showToast("无分享内容");
         }
-
-        Store_infoModel infoModel = mActModel.getStore_info();
-        if (infoModel == null) {
-            SDToast.showToast("未找到可分享内容");
-            return;
-        }
-
-        String content = infoModel.getName() + infoModel.getShare_url();
-        String imageUrl = infoModel.getPreview();
-        String clickUrl = infoModel.getShare_url();
-
-        UmengShareManager.share(this, "分享", content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 
     /**
@@ -225,47 +217,6 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         setIntent(intent);
         init();
         super.onNewIntent(intent);
-    }
-
-    /**
-     * 加载商家详细信息
-     */
-    private void requestDetail() {
-        RequestModel model = new RequestModel();
-        model.putCtl("store");
-        model.putUser();
-        model.put("cate_id", mType);
-
-        if (TextUtils.isEmpty(MerchantID)) {
-            model.put("data_id", mShopId);
-        } else if (mShopId <= 0) {
-            model.put("data_id", MerchantID);
-        } else {
-            return;
-        }
-        //model.put("data_id",mShopId);
-        SDRequestCallBack<StoreActModel> handler = new SDRequestCallBack<StoreActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    mActModel = actModel;
-                    addFragments(actModel);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-                mScrollView.onRefreshComplete();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
     }
 
     private void addFragments(final StoreActModel model) {
@@ -415,6 +366,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
                         other_supplier_location = result.getOther_supplier_location();
                         dp_list = result.getDp_list();
                         city_name = result.getCity_name();
+                        share = result.getShare();
                         setView();
                         mScrollView.onRefreshComplete();
                         SDDialogManager.dismissProgressDialog();
@@ -444,6 +396,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
     private List<GoodsModelShopInfo> tuan_list;
     private List<StoreModelShopInfo> other_supplier_location;
     private List<ModelComment> dp_list;
+    private Share share;
 
     private void setView() {
         StoreActModel actModel = new StoreActModel();
@@ -458,6 +411,8 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
         bean.setShare_url(store_info.getShare());
         bean.setDp_count(store_info.getDp_count());
         bean.setShare_url(store_info.getShare());
+        bean.setXpoint(DataFormat.toDouble(store_info.getGeo_x()));
+        bean.setYpoint(DataFormat.toDouble(store_info.getGeo_y()));
         actModel.setStore_info(bean);
         //other_supplier_location
         List<StoreModel> otherStores = new ArrayList<>();

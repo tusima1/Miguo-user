@@ -129,6 +129,14 @@ public class MoneyHttpHelper implements IHelper{
                                 }
                             });
                             return;
+                        }else {
+                            MGUIUtil.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST,null);
+                                }
+                            });
+                            return;
                         }
                     }
                 }

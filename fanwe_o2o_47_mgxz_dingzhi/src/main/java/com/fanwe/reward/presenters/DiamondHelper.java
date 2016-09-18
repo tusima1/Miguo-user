@@ -10,6 +10,7 @@ import com.fanwe.reward.model.DiamondTypeEntity;
 import com.fanwe.reward.model.DiamondUserOwnEntity;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +36,9 @@ public class DiamondHelper  extends Presenter {
         this.mCallbackView = mCallbackView;
     }
 
+    /**
+     * 获取果钻列表。
+     */
 
     public void GetDiamondList(){
         TreeMap<String, String> params = new TreeMap<String,String>();
@@ -61,11 +65,14 @@ public class DiamondHelper  extends Presenter {
             }
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mCallbackView.onFailue(ShoppingCartconstants.GET_PAYMENT,message);
+                mCallbackView.onFailue(RewardConstants.BUY_DIAMOND,message);
             }
         });
     }
 
+    /**
+     * 获取当前用户已有的果钻。
+     */
     public void getUserDiamond(){
         TreeMap<String, String> params = new TreeMap<String,String>();
         params.put("token", App.getInstance().getToken());
@@ -91,7 +98,48 @@ public class DiamondHelper  extends Presenter {
             }
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mCallbackView.onFailue(ShoppingCartconstants.GET_PAYMENT,message);
+                mCallbackView.onFailue(RewardConstants.USER_DIAMOND,message);
+            }
+        });
+    }
+
+    /**
+     * 创建购买果钻订单。
+     *302：  参数错误
+     200：  成功
+     300：  操作失败
+     * @param payment_id 支付方式id
+     * @param diamond_id 钻id
+     */
+
+    public void createDiamondOrder(String  payment_id,String diamond_id){
+        TreeMap<String, String> params = new TreeMap<String,String>();
+        params.put("payment_id", payment_id);
+        params.put("diamond_id", diamond_id);
+        params.put("token", App.getInstance().getToken());
+        params.put("method", RewardConstants.DIAMOND_ORDER);
+
+        OkHttpUtils.getInstance().put(null,params,new MgCallback(){
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<OrderDetailInfo>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<OrderDetailInfo> root = gson.fromJson(responseBody, type);
+
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
+                    List<OrderDetailInfo> datas = validateBodyList(root);
+                    mCallbackView.onSuccess(RewardConstants.DIAMOND_ORDER,datas);
+                }else{
+                    mCallbackView.onFailue(RewardConstants.DIAMOND_ORDER,message);
+                }
+            }
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mCallbackView.onFailue(RewardConstants.DIAMOND_ORDER,message);
             }
         });
     }

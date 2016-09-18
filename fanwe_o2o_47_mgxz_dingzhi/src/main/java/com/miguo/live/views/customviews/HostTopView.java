@@ -1,6 +1,8 @@
 package com.miguo.live.views.customviews;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,13 +13,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.StoreDetailActivity;
+import com.fanwe.app.App;
 import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.views.LiveActivity;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.List;
 
@@ -74,6 +78,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         iv_close.setOnClickListener(this);
         iv_photo.setOnClickListener(this);
         iv_share.setOnClickListener(this);
+        mTv_location.setOnClickListener(this);
 
         //init recycler view
         mRecyclerView.setHasFixedSize(true);
@@ -112,7 +117,12 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
         } else if (v == iv_share) {
             SharePopHelper sharePopHelper = new SharePopHelper(mActivity);
             sharePopHelper.show();
+        }else if (v==mTv_location){
+            //去商家店铺
+            String shop_id = CurLiveInfo.shopID;
+            gotoShopDetailActivity(shop_id);
         }
+
     }
 
     /**
@@ -149,6 +159,18 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             mAV_members_num.setText(num + "人");
         }else{
             mAV_members_num.setText( "0 人");
+        }
+    }
+
+    public void gotoShopDetailActivity(String shop_id){
+        Intent itemintent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, shop_id);
+        bundle.putInt("type",0);
+        itemintent.putExtras(bundle);
+        itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+        if(mActivity!=null) {
+            mActivity.startActivity(itemintent);
         }
     }
     /**

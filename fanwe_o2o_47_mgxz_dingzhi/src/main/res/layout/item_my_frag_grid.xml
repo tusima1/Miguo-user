@@ -192,5 +192,44 @@
                 android:textColor="@color/main_color"
                 android:textSize="10sp"/>
         </LinearLayout>
+
     </LinearLayout>
+
+    <!--3-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp97"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <LinearLayout
+            android:id="@+id/ll_erweima"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/md_ripple_white"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_erweima"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:text="个人名片"
+                android:textColor="@color/gray_text_59"
+                android:textSize="@dimen/sp13"/>
+        </LinearLayout>
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/bg_activity_gray"/>
+    </LinearLayout>
+
+
+
 </android.support.v7.widget.LinearLayoutCompat>

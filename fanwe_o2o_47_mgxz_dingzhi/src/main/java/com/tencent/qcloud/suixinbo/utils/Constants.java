@@ -72,7 +72,10 @@ public class Constants {
     public static final int AVIMCMD_DANMU = AVIMCMD_RED_PACKET+1; //弹幕
     public static final int AVIMCOM_GIFT_SINGLE = AVIMCMD_DANMU+1; //小礼物 非连发
     public static final int AVIMCOM_GIFT_MULTI = AVIMCOM_GIFT_SINGLE+1; //小礼物 连发
-    public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT_MULTI+1; //大礼物 非连发
+//    public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT_MULTI+1; //大礼物 非连发
+    public static final int AVIMCMD_REWARD = AVIMCMD_RED_PACKET+1; //弹幕
+    public static final int AVIMCOM_GIFT = AVIMCMD_REWARD+1; //小礼物 非连发
+    public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT+1; //大礼物 非连发
     public static final int AVIMCOM_BIG_GIFT_MULTI = AVIMCOM_BIG_GIFT_SINGLE+1; //大礼物 连发
 
 

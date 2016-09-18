@@ -136,6 +136,6 @@ public class RedDotView extends LinearLayout {
         if (drawableId==0){
             drawableId=R.drawable.md_ripple_white;
         }
-        this.setBackground(getResources().getDrawable(drawableId,null));
+        this.setBackground(getResources().getDrawable(drawableId));
     }
 }

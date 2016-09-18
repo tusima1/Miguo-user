@@ -57,6 +57,13 @@
         <include layout="@layout/item_my_frag_order"/>
         <!--网格表-->
         <include layout="@layout/item_my_frag_grid"/>
+
+        <Button
+            android:text="测试充值果钻"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/testRecharge"/>
+
     </LinearLayout>
 </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 

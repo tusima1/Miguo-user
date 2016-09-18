@@ -69,6 +69,7 @@ import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
 import com.miguo.live.views.definetion.LogTag;
+import com.miguo.utils.MGLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -974,11 +975,53 @@ public class LiveHttpHelper implements IHelper {
         });
 
     }
+    /**
+     * 支付礼物
+     */
+    public void postGiftInfo(String live_type,String live_record_id,String gift_num,String gift_id) {
+//        live_type	String	必须		类型：1直播 2点播	播放类型
+//        live_record_id	String	必须		直播id	直播id(就是房间room_id)
+//        gift_num	String	必须		礼物数量
+//        token	String	必须		共通参数	用户需登录
+//        gift_id	String	必须		礼物id
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("live_type", live_type);
+        params.put("live_record_id", live_record_id);
+        params.put("gift_num", gift_num);
+        params.put("gift_id", gift_id);
+        params.put("method", LiveConstants.POST_GIFT_INFO);
+
+        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+//                200  正常状态
+//                302  参数错误，message中会有描述
+//                300  处理错误，礼物未赠送成功
+//                500  服务器配置错误
+
+                MGLog.e(responseBody);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {
         mContext = null;
         mView = null;
+        mView2=null;
         gson = null;
         userCurrentInfo = null;
         mActivity = null;
