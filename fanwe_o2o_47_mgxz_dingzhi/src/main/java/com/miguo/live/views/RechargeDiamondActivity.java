@@ -182,6 +182,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
                         // 支付操作。
 
+
                     }
 
                     @Override

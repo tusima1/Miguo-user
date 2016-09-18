@@ -17,4 +17,11 @@ public class RewardConstants {
      * 用户可用果钻。
      */
     public static final String  USER_DIAMOND = "UserDiamond";
+    /**
+     * 生成购买钻订单。
+     */
+
+    public static final String  DIAMOND_ORDER = "DiamondOrder";
+
+
 }
