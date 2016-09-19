@@ -12,7 +12,7 @@ public interface CallbackView {
 
     void onSuccess(String responseBody);
 
-    void onSuccess(String method, List datas);
+    void onSuccess(String method,List datas);
 
     void onFailue(String responseBody);
 }

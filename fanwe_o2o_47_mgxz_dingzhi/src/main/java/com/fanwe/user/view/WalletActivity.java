@@ -127,7 +127,7 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
     public void onClick(View v) {
         if (v==mRedPacket){
             //点击红包
-            MGToast.showToast("红包");
+            startActivity(RedPacketListActivity.class);
         }else if (v==mMGDiamond){
             //米果钻
             MGToast.showToast("米果钻");
