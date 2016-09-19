@@ -2021,30 +2021,33 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 break;
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
-                List<ModelAudienceInfo> audienceList = datas;
-                if (audienceList != null && audienceList.size() >= 0) {
-                    final boolean isHost = LiveUtil.checkIsHost();
-                    final int size = datas.size();
-                    CurLiveInfo.setMembers(size);
+                final List<ModelAudienceInfo> audienceList = datas;
 
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isHost) {
-                                if (mHostTopView != null) {
-                                    mHostTopView.refreshData(datas);
-                                }
-                            } else {
-                                if (mUserHeadTopView != null) {
-                                    mUserHeadTopView.refreshData(datas);
-                                }
-                            }
-                            doUpdateMembersCount();
-                            mHeadTopAdapter.notifyDataSetChanged();
+
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final boolean isHost = LiveUtil.checkIsHost();
+                        final int size = datas.size();
+                        if (audienceList != null && audienceList.size() >= 0) {
+
+                            CurLiveInfo.setMembers(size);
                         }
-                    });
+                        if (isHost) {
+                            if (mHostTopView != null) {
+                                mHostTopView.refreshData(datas);
+                            }
+                        } else {
+                            if (mUserHeadTopView != null) {
+                                mUserHeadTopView.refreshData(datas);
+                            }
+                        }
+                        doUpdateMembersCount();
+                        mHeadTopAdapter.notifyDataSetChanged();
+                    }
+                });
 
-                }
+
                 break;
             case LiveConstants.END_INFO:
                 //直播结束
@@ -2073,18 +2076,23 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 //获取主播标签
                 break;
             case LiveConstants.AUDIENCE_COUNT:
-                //获取观众人数
-                if (checkDataIsNull(datas)) {
-                    MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
-                    return;
-                }
-                ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
-                //更新观众人数
-                if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //获取观众人数
+                        if (checkDataIsNull(datas)) {
+                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                            return;
+                        }
+                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+                        //更新观众人数
+                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
 
-                    CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
-                    doUpdateMembersCount();
-                }
+                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                            doUpdateMembersCount();
+                        }
+                    }
+                });
                 break;
             case LiveConstants.LIST_OF_STORES:
                 MGUIUtil.runOnUiThread(new Runnable() {
@@ -2101,10 +2109,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
                 break;
             case SellerConstants.LIVE_BIZ_SHOP:
-                if (datas != null && datas.size() > 0) {
-                    mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
-                    mUserBottomTool.notifyDataChange();
-                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas != null && datas.size() > 0) {
+                            mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                            mUserBottomTool.notifyDataChange();
+                        }
+                    }
+                });
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
                 MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());

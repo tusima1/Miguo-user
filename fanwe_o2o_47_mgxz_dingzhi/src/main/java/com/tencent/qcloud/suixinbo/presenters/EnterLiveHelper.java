@@ -119,8 +119,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             uninitAudioService();
             //通知结束
             notifyServerLiveEnd();
-            if (mStepInOutView != null)
+            if (mStepInOutView != null) {
                 mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            }
             SxbLog.d(TAG, "WL_DEBUG mRoomDelegate.onExitRoomComplete result = " + result);
 
         }
@@ -405,21 +406,14 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
             /*退出房间时调用*/
             avContext.exitRoom();
-              mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
-
+            if(mStepInOutView!=null) {
+                mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
+            }
         } else {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
             /*退出房间时调用*/
             //离开房间
             avContext.exitRoom();
-//            quiteIMChatRoom();
-//            CurLiveInfo.setCurrentRequestCount(0);
-//            uninitAudioService();
-//            //通知结束
-//            notifyServerLiveEnd();
-//            if (mStepInOutView != null) {
-//                mStepInOutView.quiteRoomComplete(MySelfInfo.getInstance().getIdStatus(), true, null);
-//            }
 
         }
     }
@@ -458,7 +452,6 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                 });
             }
 
-            //
         }
     }
 
