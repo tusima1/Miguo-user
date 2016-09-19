@@ -53,3 +53,4 @@ captures/
 /.idea/libraries/recyclerview_v7_23_0_0.xml
 /.idea/libraries/appcompat_v7_23_0_0.xml
 /.idea/misc.xml
+/build.gradle
