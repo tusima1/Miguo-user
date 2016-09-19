@@ -4,18 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.generic.RoundingParams;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.fanwe.app.App;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
-import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.views.base.BaseLinearLayout;
+import com.miguo.live.views.customviews.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,17 +78,20 @@ public class SmallGifView extends BaseLinearLayout{
          */
         int avatarWidth = leftHeight - dip2px(2 * 2);
         int avatarHeight = avatarWidth;
-        SimpleDraweeView avatar = new SimpleDraweeView(getContext());
+        RoundedImageView avatar = new RoundedImageView(getContext());
         RelativeLayout.LayoutParams avatarParams = getRelativeLayoutParams(avatarWidth, avatarHeight);
         avatarParams.addRule(RelativeLayout.CENTER_VERTICAL);
         avatarParams.setMargins(dip2px(2), 0, 0, 0);
         avatar.setLayoutParams(avatarParams);
+        avatar.setBorderWidth(dip2px(2));
+        avatar.setBorderColor(Color.WHITE);
+        SDViewBinder.setImageView(gift.getUserAvatar(), avatar);
 
-        RoundingParams params = new RoundingParams();
-        params.setRoundAsCircle(true);
-        params.setBorder(Color.WHITE, dip2px(1));
+//        RoundingParams params = new RoundingParams();
+//        params.setRoundAsCircle(true);
+//        params.setBorder(Color.WHITE, dip2px(1));
 
-        avatar.getHierarchy().setRoundingParams(params);
+//        avatar.getHierarchy().setRoundingParams(params);
         String avatarUrl = App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon();
         if(avatarUrl.equals("") || avatarUrl == null){
             avatar.setImageResource(R.drawable.userlogo);
@@ -134,11 +135,12 @@ public class SmallGifView extends BaseLinearLayout{
 
         int giftIconWidth = leftHeight + dip2px(3 * 2);
         int giftIconHeight = giftIconWidth;
-        SimpleDraweeView giftIcon = new SimpleDraweeView(getContext());
+        ImageView giftIcon = new ImageView(getContext());
         RelativeLayout.LayoutParams giftIconParams = getRelativeLayoutParams(giftIconWidth, giftIconHeight);
         giftIconParams.addRule(RelativeLayout.ALIGN_LEFT, LEFT_ID);
         giftIcon.setLayoutParams(giftIconParams);
-        giftIcon.setImageURI(Uri.parse(gift.getIcon()));
+        SDViewBinder.setImageView(gift.getIcon(), giftIcon);
+
         group.addView(giftIcon);
         addView(group);
 

@@ -7,10 +7,6 @@ import android.support.multidex.MultiDex;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.facebook.cache.disk.DiskCacheConfig;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.backends.okhttp.OkHttpImagePipelineConfigFactory;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.common.ImageLoaderManager;
@@ -35,8 +31,6 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.miguo.live.factory.ImagePipelineConfigFactory;
-import com.squareup.okhttp.OkHttpClient;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -133,6 +127,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
         mUserCurrentInfo = UserCurrentInfo.getInstance();
         initFreso();
+
     }
 
 
@@ -196,7 +191,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     private void initFreso(){
-        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
+//        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
     }
 
     public static String getStringById(int resId) {
