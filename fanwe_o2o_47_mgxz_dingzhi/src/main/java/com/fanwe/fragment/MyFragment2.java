@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MemberRankActivity;
-import com.fanwe.MessageActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
@@ -75,7 +73,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
     private View mAllOrder;
-    private ImageView mIvMsg;//消息
+//    private ImageView mIvMsg;//消息
     private View mUpgrade;
     private TextView mTvRedShopCart;
     private TextView mTvRedFriends;
@@ -128,7 +126,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
     private void initTopView() {
         mMine = findViewById(R.id.fl_mine);
-        mIvMsg = ((ImageView) findViewById(R.id.iv_msg));
+//        mIvMsg = ((ImageView) findViewById(R.id.iv_msg));
         mUpgrade = findViewById(R.id.ll_my_upgrade);
 
         mIvUserFace = ((CircleImageView) findViewById(R.id.iv_user_face));
@@ -147,7 +145,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mCollect.setOnClickListener(this);
         mFans.setOnClickListener(this);
         mMine.setOnClickListener(this);
-        mIvMsg.setOnClickListener(this);
+//        mIvMsg.setOnClickListener(this);
         mIvUserFace.setOnClickListener(this);
         mUserName.setOnClickListener(this);
     }
@@ -291,9 +289,6 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }else if (v==mAllOrder){
             /*全部订单*/
             clickMyOrderView("all");
-        }else if (v== mIvMsg){
-            //消息
-            startActivity(MessageActivity.class);
         }else if (v==mErWeiMa){
             /*二维码名片*/
             startActivity(DistributionMyQRCodeActivity.class);
@@ -303,6 +298,10 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             //跳转至会员升级
             startActivity(MemberRankActivity.class);
         }
+        /*else if (v== mIvMsg){
+            //消息
+            startActivity(MessageActivity.class);
+        }*/
     }
 
     /**
