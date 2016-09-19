@@ -29,7 +29,7 @@ import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.user.view.FansActivity;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
-import com.fanwe.user.view.RedPacketListActivity;
+import com.fanwe.user.view.WalletActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
@@ -232,7 +232,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
             //TODO 测试部分 佣金提现
-                        startActivity(RedPacketListActivity.class);
+                        startActivity(WalletActivity.class);
 //            String fx_level = modelPersonalHome.getFx_level();
 //            int level = MGStringFormatter.getInt(fx_level);
 //            if (level < 2) {

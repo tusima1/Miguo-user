@@ -204,4 +204,8 @@ public class UserConstants {
     public static final String ADVICE = "Advice";
     /*粉丝*/
     public static final String ATTENTION_Fans = "AttentionFans";
+    /*粉丝关注*/
+    public static final String ATTENTION = "Attention";
+    /*钱包*/
+    public static final String MY_WALLET = "MyWallet";
 }

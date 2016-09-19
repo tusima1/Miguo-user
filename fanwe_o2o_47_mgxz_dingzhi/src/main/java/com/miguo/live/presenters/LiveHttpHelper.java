@@ -16,7 +16,6 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -106,26 +105,19 @@ public class LiveHttpHelper implements IHelper {
 
     private static final String TAG = LiveHttpHelper.class.getSimpleName();
     private Gson gson;
-    private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
     private CallbackView2 mView2;
-    private Context mContext;
-    private Activity mActivity;
 
     public static final String RESULT_OK = "no_body_but_is_ok";
 
     public LiveHttpHelper(Context mContext, CallbackView mView) {
-        this.mContext = mContext;
         this.mView = mView;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
     public LiveHttpHelper(Activity mActivity, CallbackView2 mView2, String type) {
-        this.mActivity = mActivity;
         this.mView2 = mView2;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
     /**
@@ -1019,12 +1011,9 @@ public class LiveHttpHelper implements IHelper {
 
     @Override
     public void onDestroy() {
-        mContext = null;
         mView = null;
         mView2=null;
         gson = null;
-        userCurrentInfo = null;
-        mActivity = null;
     }
 
     public CallbackView getmView() {

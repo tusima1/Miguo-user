@@ -1,20 +1,43 @@
 package com.fanwe.user.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.fanwe.base.CallbackView2;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.getAttentionFans.ModelFans;
+import com.fanwe.user.model.putAttention.ModelAttention;
+import com.fanwe.user.presents.UserHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by didik on 2016/8/25.
  */
 public class FansAdapter extends BaseAdapter {
+
+    private List<ModelFans> mFansList;
+
+    public FansAdapter() {
+
+    }
+
+    public void setData(List<ModelFans> fansList){
+        this.mFansList=fansList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return 20;
+        return mFansList==null ? 0: mFansList.size();
     }
 
     @Override
@@ -28,15 +51,134 @@ public class FansAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView==null){
             holder=new ViewHolder();
             convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_listview_fans,null);
+            holder.civ_face= (CircleImageView) convertView.findViewById(R.id.iv_user_face);
+            holder.tv_userName= (TextView) convertView.findViewById(R.id.tv_username);
+            holder.tv_subName= (TextView) convertView.findViewById(R.id.tv_subName);
+            holder.ll_star= convertView.findViewById(R.id.ll_star);
+            holder.tv_focus= (TextView) convertView.findViewById(R.id.tv_focus);
             convertView.setTag(holder);
         }
         holder= (ViewHolder) convertView.getTag();
+        ModelFans modelFans = mFansList.get(position);
+        holder.tv_userName.setText(modelFans.getNick());
+        String fx_level = modelFans.getFx_level();
+        Drawable rankDrawable=null;
+        if ("1".equals(fx_level)) {
+            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_3);
+        } else if ("2".equals(fx_level)) {
+            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_2);
+        } else if ("3".equals(fx_level)) {
+            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_1);
+        }
+        if (rankDrawable!=null){
+            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable.getMinimumHeight());
+            holder.tv_userName.setCompoundDrawables(null,null,rankDrawable,null);
+        }
+        holder.tv_subName.setText(modelFans.getPersonality());
+        SDViewBinder.setImageView(modelFans.getIcon(),holder.civ_face);
+
+        String attention_status = modelFans.getAttention_status();
+        //状态：1：未关注 2：已关注 3：互相关注
+
+//        android:textColor="@color/orange"
+//        android:gravity="center_vertical|right"
+//        android:text="已关注"
+        if ("1".equals(attention_status)){
+            //显示关注按钮
+            //TODO 关注
+            holder.ll_star.setVisibility(View.VISIBLE);
+            holder.tv_focus.setVisibility(View.GONE);
+            holder.ll_star.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doFocus(position);
+                }
+            });
+
+        }else if("2".equals(attention_status)) {
+            holder.ll_star.setVisibility(View.GONE);
+            holder.tv_focus.setVisibility(View.VISIBLE);
+            holder.tv_focus.setText("已关注");
+        }else if("3".equals(attention_status)) {
+            holder.ll_star.setVisibility(View.GONE);
+            holder.tv_focus.setVisibility(View.VISIBLE);
+            holder.tv_focus.setText("相互关注");
+        }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doFocus(position);
+            }
+        });
         return convertView;
+    }
+
+    private void doFocus(final int position) {
+        ModelFans modelFans = mFansList.get(position);
+        String fans_user_id = modelFans.getFans_user_id();
+        String attention_status = modelFans.getAttention_status();
+//        状态：1：未关注 2：已关注 3：互相关注
+        if ("1".equals(attention_status)){
+            //TODO 关注
+            new UserHttpHelper(null, new CallbackView2() {
+                @Override
+                public void onSuccess(String responseBody) {
+
+                }
+
+                @Override
+                public void onSuccess(String method, List datas) {
+                    ModelAttention modelAttention= (ModelAttention) datas.get(0);
+                    if (modelAttention!=null){
+                        mFansList.get(position).setAttention_status(modelAttention.getAttention_status());
+                        mFansList.get(position).setFans_user_id(modelAttention.getFocus_user_id());
+                        notifyDataSetChanged();
+                    }else {
+                        MGToast.showToast("关注失败!");
+                    }
+                }
+
+                @Override
+                public void onFailue(String responseBody) {
+                    MGToast.showToast("关注失败!");
+                }
+
+                @Override
+                public void onFinish(String method) {
+
+                }
+            }).putAttention(fans_user_id,"1");
+        }
+        //取消关注
+//        else {
+//            new UserHttpHelper(null, new CallbackView2() {
+//                @Override
+//                public void onSuccess(String responseBody) {
+//
+//                }
+//
+//                @Override
+//                public void onSuccess(String method, List datas) {
+//
+//                }
+//
+//                @Override
+//                public void onFailue(String responseBody) {
+//
+//                }
+//
+//                @Override
+//                public void onFinish(String method) {
+//
+//                }
+//            }).putAttention(fans_user_id,"0");
+//        }
+
     }
 
 //    public void setData(List<ModelShopInfo2> data){
@@ -45,8 +187,11 @@ public class FansAdapter extends BaseAdapter {
 //    }
 
     private class ViewHolder{
-        public TextView tv_shopName;
-        public TextView tv_shopTel;
-        public TextView tv_shopAddress;
+        public CircleImageView civ_face;
+        public TextView tv_userName;
+        public TextView tv_subName;
+//        public DrawableCenterTextView dctv_star;
+        public View ll_star;
+        public TextView tv_focus;
     }
 }

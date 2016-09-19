@@ -1070,7 +1070,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
-        MGToast.showToast("EnterRoom " + id_status + " isSucc " + isSucc);
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
 

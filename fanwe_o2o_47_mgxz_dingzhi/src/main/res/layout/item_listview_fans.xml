@@ -20,9 +20,11 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp10"
         android:layout_toRightOf="@id/iv_user_face"
+        android:layout_toLeftOf="@+id/ll_location"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/dp5"
@@ -32,10 +34,12 @@
             android:textSize="@dimen/sp17"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_subName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp7"
             android:text="我是哈哈就是大连开发..."
+            android:singleLine="true"
             android:textColor="@color/gray_text_99"
             android:textSize="@dimen/sp17"/>
     </LinearLayout>
@@ -48,22 +52,66 @@
         android:layout_marginLeft="@dimen/dp10"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/shape_circle_st_orange_sl_white_big"
         android:textSize="@dimen/sp16"
+
+        android:background="@drawable/shape_circle_st_orange_sl_white_big"
         android:textColor="@color/orange"
         android:gravity="center_vertical"
         android:drawableLeft="@drawable/ic_add"
         android:drawablePadding="@dimen/dp6"
         android:text="已关注"/>-->
-    <com.fanwe.user.view.customviews.DrawableCenterTextView
-        android:id="@+id/tv_star"
+    <!--<com.fanwe.user.view.customviews.DrawableCenterTextView-->
+        <!--android:id="@+id/tv_star"-->
+        <!--android:layout_width="85dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:textSize="@dimen/sp16"-->
+        <!--android:layout_marginLeft="@dimen/dp10"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--/>-->
+    <FrameLayout
+        android:id="@+id/ll_location"
         android:layout_width="85dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="@dimen/dp10"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:textSize="@dimen/sp16"
-        android:textColor="@color/orange"
-        android:gravity="center_vertical|right"
-        android:text="已关注"/>
+        >
+        <LinearLayout
+            android:id="@+id/ll_star"
+            android:layout_width="85dp"
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shape_circle_st_orange_sl_white_big"
+            android:gravity="center_horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                android:scaleType="centerInside"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp16"
+                android:textColor="@color/orange"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp10"
+                android:text="关注"/>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_focus"
+            android:layout_gravity="center|right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_text_59"
+            android:textSize="@dimen/sp16"
+            android:text="互相关注"
+            android:visibility="gone"
+            />
+    </FrameLayout>
+
 </RelativeLayout>
