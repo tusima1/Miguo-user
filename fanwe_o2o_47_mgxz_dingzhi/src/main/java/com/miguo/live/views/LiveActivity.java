@@ -53,6 +53,7 @@ import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.presenters.LiveCommonHelper;
@@ -111,7 +112,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
  * backup
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView,
-        LiveView, View.OnClickListener, ProfileView, CallbackView {
+        LiveView, View.OnClickListener, ProfileView, CallbackView ,UserBottomToolView.OnGiftSendListener{
     public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     /**
@@ -229,6 +230,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
+        mUserBottomTool.setOnGiftSendListener(this);
 
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);
         //直播2的工具栏
@@ -2174,5 +2176,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 SDToast.showToast(msg);
             }
         });
+    }
+
+    /**
+     * 发礼物回调
+     */
+    @Override
+    public void requestSendGift(GiftListBean giftInfo, int num) {
+        giftInfo.setNum(num);
+        giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
+        giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        smallGifView.addGift(giftInfo);
     }
 }

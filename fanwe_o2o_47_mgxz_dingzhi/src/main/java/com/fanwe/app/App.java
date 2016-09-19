@@ -8,7 +8,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.common.ImageLoaderManager;
@@ -26,13 +25,13 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.miguo.live.factory.ImagePipelineConfigFactory;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -134,6 +133,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
         mUserCurrentInfo = UserCurrentInfo.getInstance();
         initFreso();
+
     }
 
 
@@ -197,7 +197,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     private void initFreso(){
-        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
+//        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
     }
 
     public static String getStringById(int resId) {

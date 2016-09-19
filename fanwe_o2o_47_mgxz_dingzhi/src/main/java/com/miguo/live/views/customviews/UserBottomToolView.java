@@ -17,7 +17,9 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
+import com.miguo.live.interf.OnPayGiftSuccessListener;
 import com.miguo.live.model.UserRedPacketInfo;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
@@ -92,6 +94,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     public UserBottomToolView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
+    OnGiftSendListener onGiftSendListener;
 
     public UserBottomToolView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -176,9 +180,16 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击礼物
      */
     private void clickGift() {
-//        MGToast.showToast("点击了礼物");
         UserSendGiftPopHelper giftPopHelper = new UserSendGiftPopHelper(mAct,"1");
         giftPopHelper.show();
+        giftPopHelper.setOnPayGiftSuccessListener(new OnPayGiftSuccessListener() {
+            @Override
+            public void onPaySuc(GiftListBean giftInfo, int num) {
+                if(onGiftSendListener != null){
+                    onGiftSendListener.requestSendGift(giftInfo, num);
+                }
+            }
+        });
     }
 
     /**
@@ -323,5 +334,13 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     public void setmBaobaoAdapter(PagerBaoBaoAdapter mBaobaoAdapter) {
         this.mBaobaoAdapter = mBaobaoAdapter;
+    }
+
+    public interface OnGiftSendListener{
+        void requestSendGift(GiftListBean giftInfo, int num);
+    }
+
+    public void setOnGiftSendListener(OnGiftSendListener onGiftSendListener) {
+        this.onGiftSendListener = onGiftSendListener;
     }
 }
