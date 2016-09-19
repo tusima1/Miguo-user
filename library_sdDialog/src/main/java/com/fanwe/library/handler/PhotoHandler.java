@@ -70,7 +70,7 @@ public class PhotoHandler extends OnActivityResultHandler {
     }
 
     public void getPhotoFromCamera() {
-        String name = "uploadimg.jpg";
+        String name = System.currentTimeMillis() + ".jpg";
         String mPhotoPath = getPath(name);
         File file = new File(mPhotoPath);
         if (file.exists()) {

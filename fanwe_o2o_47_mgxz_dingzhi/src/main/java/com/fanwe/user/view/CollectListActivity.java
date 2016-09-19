@@ -14,8 +14,8 @@ import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
-import com.fanwe.user.adapters.AttentionListAdapter;
-import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
+import com.fanwe.user.adapters.CollectListAdapter;
+import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -25,25 +25,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 关注列表
+ * 收藏列表
  * Created by Administrator on 2016/9/12.
  */
-public class AttentionListActivity extends BaseActivity implements CallbackView2 {
-    private Context mContext = AttentionListActivity.this;
+public class CollectListActivity extends BaseActivity implements CallbackView2 {
+    private Context mContext = CollectListActivity.this;
     private UserHttpHelper userHttpHelper;
     private PullToRefreshListView ptrl;
-    private List<ModelAttentionFocus> datas = new ArrayList<>();
-    private AttentionListAdapter mAttentionListAdapter;
+    private List<ModelShopAndUserCollect> datas = new ArrayList<>();
+    private CollectListAdapter mCollectListAdapter;
     private boolean isRefresh = true;
     private int pageNum = 1;
-    private int pageSize = 5;
+    private int pageSize = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setmTitleType(Constant.TitleType.TITLE);
-        setContentView(R.layout.act_attention_list);
-        mTitle.setMiddleTextTop("我的关注");
+        setContentView(R.layout.act_collect_list);
+        mTitle.setMiddleTextTop("我的收藏");
         preWidget();
         setListener();
         userHttpHelper = new UserHttpHelper(this, this);
@@ -51,19 +51,26 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
     }
 
     private void getData() {
-        userHttpHelper.getAttentionFocus(pageNum, pageSize);
+        userHttpHelper.getShopAndUserCollect(pageNum, pageSize);
     }
 
     private void preData() {
-        mAttentionListAdapter = new AttentionListAdapter(mContext, getLayoutInflater(), datas);
-        ptrl.setAdapter(mAttentionListAdapter);
+        ModelShopAndUserCollect bean;
+        for (int i = 1; i < 10; i++) {
+            bean = new ModelShopAndUserCollect();
+            datas.add(bean);
+        }
+
+        mCollectListAdapter = new CollectListAdapter(mContext, getLayoutInflater(), datas);
+        ptrl.setAdapter(mCollectListAdapter);
+
     }
 
     private void setListener() {
     }
 
     private void preWidget() {
-        ptrl = (PullToRefreshListView) findViewById(R.id.ptrl_act_attention);
+        ptrl = (PullToRefreshListView) findViewById(R.id.ptrl_act_collect);
         ptrl.setMode(PullToRefreshBase.Mode.BOTH);
         ptrl.setOnRefreshListener(mOnRefresherListener2);
         ptrl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,11 +78,11 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long positionL) {
                 position--;
-                ModelAttentionFocus item = datas.get(position);
+                ModelShopAndUserCollect item = datas.get(position);
                 MGToast.showToast(item.getNick());
             }
         });
-        ptrl.setRefreshing();
+//        ptrl.setRefreshing();
     }
 
     private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -102,7 +109,7 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
 
     }
 
-    List<ModelAttentionFocus> items;
+    List<ModelShopAndUserCollect> items;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -126,7 +133,7 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
                     if (!SDCollectionUtil.isEmpty(items)) {
                         datas.addAll(items);
                     }
-                    mAttentionListAdapter.notifyDataSetChanged();
+                    mCollectListAdapter.notifyDataSetChanged();
                     break;
                 case 1:
                     ptrl.onRefreshComplete();

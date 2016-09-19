@@ -58,6 +58,13 @@ public class ImageFileCompresser
 		this.mMaxLength = mMaxLength;
 	}
 
+	public void compressImageFile(File imageFile)
+	{
+		List<File> listImageFile = new ArrayList<File>();
+		listImageFile.add(imageFile);
+		compressImageFile(listImageFile);
+	}
+
 	public void compressImageFile(final List<File> listImageFile)
 	{
 		if (listImageFile == null)
@@ -109,13 +116,6 @@ public class ImageFileCompresser
 			}
 		}).start();
 
-	}
-
-	public void compressImageFile(File imageFile)
-	{
-		List<File> listImageFile = new ArrayList<File>();
-		listImageFile.add(imageFile);
-		compressImageFile(listImageFile);
 	}
 
 	private File createCompressedImageFile()

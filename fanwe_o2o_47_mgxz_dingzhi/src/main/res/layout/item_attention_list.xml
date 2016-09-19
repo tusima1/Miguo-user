@@ -11,8 +11,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp12"
         android:layout_marginTop="@dimen/dp15"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_live_start" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -30,21 +29,21 @@
             android:textSize="@dimen/dp17" />
 
         <TextView
+            android:id="@+id/tv_signature_item_attention"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="个性签名"
             android:textColor="@color/text_hongbao_title"
             android:textSize="@dimen/dp13" />
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_status_item_attention"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/dp12"
-        android:text="已关注"
         android:textColor="@color/text_home_recommend"
         android:textSize="@dimen/dp16" />
 
