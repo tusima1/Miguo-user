@@ -17,7 +17,7 @@ public class ServerUrl {
 
 
 
-
+    /*袁浩*/
 //     public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.37:8080/mgxz.BussRPC/";
 
    //  public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.36:8080/mgxz.BussRPC/";
@@ -25,6 +25,11 @@ public class ServerUrl {
 // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";
 
 //   public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.31:8080/mgxz.BussRPC/";
+
+    //开发环境。
+    public static final String SERVER_API_JAVA_TEST_URL= "http://mapi.dev.mgxz.com/";
+    //测试环境。
+    //public static final String SERVER_API_JAVA_TEST_URL= "http://mapi.test.mgxz.com/";
 
 
 

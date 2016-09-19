@@ -36,6 +36,7 @@
                     android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/dp7"
                     android:drawablePadding="@dimen/dp5"
                     android:drawableRight="@drawable/ic_rank_1"
                     android:text="已而已而哟"
@@ -46,7 +47,6 @@
                     android:id="@+id/tv_username2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp7"
                     android:text="我是哈哈就是大连开发..."
                     android:textColor="@color/gray_text_99"
                     android:textSize="@dimen/sp17"/>
@@ -71,7 +71,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp50"
         android:background="@color/white"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <LinearLayout
             android:id="@+id/ll_star"

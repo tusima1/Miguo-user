@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -15,6 +14,7 @@ import com.fanwe.AccountMoneyActivity;
 import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
+import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
@@ -34,6 +34,7 @@ import com.fanwe.user.view.customviews.RedDotView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.miguo.live.views.RechargeDiamondActivity;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -72,8 +73,12 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
     private View mAllOrder;
-    private ImageView mIvSetting;
+//    private ImageView mIvMsg;//消息
     private View mUpgrade;
+    private TextView mTvRedShopCart;
+    private TextView mTvRedFriends;
+    private TextView mTvRedQuan;
+
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,7 +126,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
     private void initTopView() {
         mMine = findViewById(R.id.fl_mine);
-        mIvSetting = ((ImageView) findViewById(R.id.iv_setting));
+//        mIvMsg = ((ImageView) findViewById(R.id.iv_msg));
         mUpgrade = findViewById(R.id.ll_my_upgrade);
 
         mIvUserFace = ((CircleImageView) findViewById(R.id.iv_user_face));
@@ -140,7 +145,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mCollect.setOnClickListener(this);
         mFans.setOnClickListener(this);
         mMine.setOnClickListener(this);
-        mIvSetting.setOnClickListener(this);
+//        mIvMsg.setOnClickListener(this);
+        mIvUserFace.setOnClickListener(this);
+        mUserName.setOnClickListener(this);
     }
 
 
@@ -152,6 +159,10 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mQuan = findViewById(R.id.ll_quan);
         mSuggestion = findViewById(R.id.ll_suggestion);
         mErWeiMa = findViewById(R.id.ll_erweima);
+
+        mTvRedShopCart = ((TextView) findViewById(R.id.tv_red_shopcart));
+        mTvRedFriends = ((TextView) findViewById(R.id.tv_red_friends));
+        mTvRedQuan = ((TextView) findViewById(R.id.tv_red_quan));
 
         mShoppingCart.setOnClickListener(this);
         mShop.setOnClickListener(this);
@@ -242,7 +253,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
             //TODO 测试部分 佣金提现
-                        startActivity(WalletActivity.class);
+            startActivity(WalletActivity.class);
 //            String fx_level = modelPersonalHome.getFx_level();
 //            int level = MGStringFormatter.getInt(fx_level);
 //            if (level < 2) {
@@ -269,20 +280,28 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             startActivity(FansActivity.class);
         }else if (v==mMine){
             /*点击了我的区域*/
-        }else if (v==mAllOrder){
-            /*全部订单*/
-            clickMyOrderView("all");
-        }else if (v==mIvSetting){
             /*设置页面*/
             Intent intent = new Intent(getActivity(), MyAccountActivity.class);
             Bundle userData = new Bundle();
             userData.putString("user_face", mUserFaceString);
             intent.putExtras(userData);
             startActivity(intent);
+        }else if (v==mAllOrder){
+            /*全部订单*/
+            clickMyOrderView("all");
         }else if (v==mErWeiMa){
             /*二维码名片*/
             startActivity(DistributionMyQRCodeActivity.class);
+        }else if (v==mIvUserFace){
+            MGToast.showToast("主播首页");
+        }else if (v==mUserName){
+            //跳转至会员升级
+            startActivity(MemberRankActivity.class);
         }
+        /*else if (v== mIvMsg){
+            //消息
+            startActivity(MessageActivity.class);
+        }*/
     }
 
     /**
@@ -336,6 +355,16 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         String refundCountStr = modelPersonalHome.getRefunt();
         Integer refundCount = Integer.parseInt(refundCountStr);
         mRDV_orderNotRefund.setRedNum(refundCount);
+
+        //--------------红点数量
+//        private TextView mTvRedShopCart;
+//        private TextView mTvRedFriends;
+//        private TextView mTvRedQuan;
+
+        mTvRedShopCart.setText("123");
+        mTvRedFriends.setText("123");
+        mTvRedQuan.setText("123");
+
     }
 
     //------------http start---------------
