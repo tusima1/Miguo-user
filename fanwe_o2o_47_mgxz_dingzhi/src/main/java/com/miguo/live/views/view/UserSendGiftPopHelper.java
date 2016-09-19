@@ -1,6 +1,7 @@
 package com.miguo.live.views.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +29,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper;
+import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
@@ -220,11 +222,17 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 .setOnSureClickListener(new MGDialog.OnSureClickListener() {
                     @Override
                     public void onSure(MGDialog dialog) {
-                        MGToast.showToast("充值");
+                      //  MGToast.showToast("充值");
+                        gotoRechargeActivity();
                     }
                 }).show();
     }
 
+
+    private void gotoRechargeActivity(){
+        Intent intent = new Intent(mActivity, RechargeDiamondActivity.class);
+        mActivity.startActivity(intent);
+    }
     private void clickRecharge() {
         showDialog();
     }

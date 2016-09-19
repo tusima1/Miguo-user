@@ -123,6 +123,8 @@ public class DiamondHelper  extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+
+
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
                 }.getType();
                 Gson gson = new Gson();

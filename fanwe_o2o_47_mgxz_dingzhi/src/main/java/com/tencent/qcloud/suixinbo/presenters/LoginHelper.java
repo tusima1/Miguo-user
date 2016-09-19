@@ -135,8 +135,8 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
-                        startAVSDK();
                         getRoomNum();
+                        startAVSDK();
                         App.getInstance().setAvStart(true);
                         callback.onSuccessResponse("");
                     }
@@ -172,14 +172,14 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
                     @Override
                     public void onSuccess() {
+                        if (MySelfInfo.getInstance().isCreateRoom() == true) {
+                            getRoomNum();
+                        }
                         startAVSDK();
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
                         App.getInstance().setAvStart(true);
-                        if (MySelfInfo.getInstance().isCreateRoom() == true) {
-                            getRoomNum();
-                        }
 
                     }
                 });
@@ -346,6 +346,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         return;
                     } else {
                         MySelfInfo.getInstance().setMyRoomNum(roomId);
+                        App.getInstance().setCurrentRoomId(room_id);
                         MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
 
                        // goToLive();
