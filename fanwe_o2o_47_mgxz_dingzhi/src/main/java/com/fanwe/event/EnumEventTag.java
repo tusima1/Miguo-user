@@ -145,7 +145,11 @@ public enum EnumEventTag {
     /**
      * 首页选择分类
      */
-    HOME_TYPE_CHANGE;
+    HOME_TYPE_CHANGE,
+    /**
+     * TOKEN失效 。
+     */
+    TOKEN_FAILUE;
 
     public static EnumEventTag valueOf(int index) {
         if (index >= 0 && index < values().length) {
