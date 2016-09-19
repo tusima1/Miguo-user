@@ -14,6 +14,15 @@ public class ResultShopInfo {
     private List<GoodsModelShopInfo> tuan_list;
     private List<StoreModelShopInfo> other_supplier_location;
     private List<ModelComment> dp_list;
+    private Share share;
+
+    public Share getShare() {
+        return share;
+    }
+
+    public void setShare(Share share) {
+        this.share = share;
+    }
 
     public String getCity_name() {
         return city_name;

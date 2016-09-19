@@ -462,7 +462,6 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
 
 			@Override
 			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
 				if (mListener != null) {
 					mListener.onCompressFinish(nListFile);
 				}
