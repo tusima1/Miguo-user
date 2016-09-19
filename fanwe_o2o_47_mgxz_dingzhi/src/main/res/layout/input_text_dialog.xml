@@ -6,13 +6,31 @@
     >
 
     <LinearLayout
+        android:gravity="center_vertical"
+        android:padding="5dp"
         android:id="@+id/rl_inputdlg_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
+        android:background="@color/white"
         android:orientation="horizontal">
 
+        <CheckBox
+            android:id="@+id/is_danmu"
+            android:button="@null"
+            android:background="@drawable/checkbox_danmu_selector"
+            android:layout_width="50dp"
+            android:layout_height="25dp" />
+
+        <View
+            android:layout_marginLeft="5dp"
+            android:background="@color/gray_30"
+            android:layout_width="1dp"
+            android:layout_height="28dp"/>
+
+        <!--
+        android:background="@drawable/shape_cricle_gray_solid_white"
+        -->
         <EditText
             android:id="@+id/input_message"
             android:layout_width="0dp"
@@ -22,28 +40,40 @@
             android:paddingLeft="@dimen/dp2"
             android:paddingRight="@dimen/dp2"
             android:layout_weight="1"
-            android:background="@drawable/shape_cricle_gray_solid_white"
+            android:background="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="left"
             android:imeOptions="actionSend"
+            android:hint="说点什么..."
             android:maxLength="32"
             android:singleLine="true"
             android:text=""
-            android:textColor="@color/black"
+            android:textColor="@color/text_base_color"
             android:textSize="20sp"/>
 
+
+        <!--
+
+                    android:background="@drawable/shape_cricle_solid_orange"
+        -->
+        
+        <View
+            android:background="@color/gray_30"
+            android:layout_width="1dp"
+            android:layout_height="28dp"/>
+        
         <TextView
+            android:textSize="16sp"
             android:id="@+id/confrim_btn"
             android:layout_width="@dimen/dp50"
             android:layout_height="@dimen/dp30"
             android:layout_gravity="center|right"
             android:layout_marginLeft="@dimen/dp11"
-            android:layout_marginRight="@dimen/dp12"
-            android:background="@drawable/shape_cricle_solid_orange"
+            android:layout_marginRight="@dimen/dp5"
             android:gravity="center"
             android:text="@string/send"
-            android:textColor="@color/white"/>
+            android:textColor="@color/main_color"/>
     </LinearLayout>
 
 </RelativeLayout>

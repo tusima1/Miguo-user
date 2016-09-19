@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -52,6 +53,7 @@ import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.presenters.LiveCommonHelper;
@@ -67,8 +69,11 @@ import com.miguo.live.views.customviews.HostTopView;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.UserBottomToolView;
 import com.miguo.live.views.customviews.UserHeadTopView;
+import com.miguo.live.views.danmu.DanmuBean;
+import com.miguo.live.views.danmu.Danmukiller;
 import com.miguo.live.views.definetion.IntentKey;
 import com.miguo.live.views.dialog.LiveBackDialog;
+import com.miguo.live.views.gift.SmallGifView;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
@@ -99,13 +104,15 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import master.flame.danmaku.ui.widget.DanmakuView;
+
 
 /**
  * 直播类(用户+主播)
  * backup
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView,
-        LiveView, View.OnClickListener, ProfileView, CallbackView {
+        LiveView, View.OnClickListener, ProfileView, CallbackView ,UserBottomToolView.OnGiftSendListener{
     public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     /**
@@ -190,6 +197,20 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     boolean isAnchor = false;
 
+
+    /**
+     * danmu
+     * @param savedInstanceState
+     */
+    DanmakuView danmakuView;
+    Danmukiller danmukiller;
+
+    /**
+     * 小礼物动画view
+     * @param savedInstanceState
+     */
+    SmallGifView smallGifView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,6 +230,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mHostBottomToolView1 = (HostBottomToolView) findViewById(R.id.host_bottom_layout);//主播的工具栏1
         mHostBottomMeiView2 = ((HostMeiToolView) findViewById(R.id.host_mei_layout));//主播的美颜工具2
         mUserBottomTool = (UserBottomToolView) findViewById(R.id.normal_user_bottom_tool);//用户的工具栏
+        mUserBottomTool.setOnGiftSendListener(this);
 
         mVideoMemberCtrlView = (LinearLayout) findViewById(R.id.video_member_bottom_layout);
         //直播2的工具栏
@@ -222,6 +244,13 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         BtnCtrlVideo = (TextView) findViewById(R.id.camera_controll);
         BtnCtrlMic = (TextView) findViewById(R.id.mic_controll);
         BtnHungup = (TextView) findViewById(R.id.close_member_video);
+
+        /**
+         * 弹幕
+         */
+        danmakuView = (DanmakuView)findViewById(R.id.danmuku);
+        smallGifView = (SmallGifView) findViewById(R.id.small_gift_view);
+
     }
 
     private void setActivityParams() {
@@ -268,6 +297,13 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mHostBottomToolView1.setmLiveView(this);
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(this, mCommonHelper);
+
+        /**
+         * 弹幕
+         */
+
+        danmukiller = new Danmukiller(this.getApplicationContext());
+        danmukiller.setDanmakuView(danmakuView);
     }
 
 
@@ -1985,30 +2021,33 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 break;
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
-                List<ModelAudienceInfo> audienceList = datas;
-                if (audienceList != null && audienceList.size() >= 0) {
-                    final boolean isHost = LiveUtil.checkIsHost();
-                    final int size = datas.size();
-                    CurLiveInfo.setMembers(size);
+                final List<ModelAudienceInfo> audienceList = datas;
 
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isHost) {
-                                if (mHostTopView != null) {
-                                    mHostTopView.refreshData(datas);
-                                }
-                            } else {
-                                if (mUserHeadTopView != null) {
-                                    mUserHeadTopView.refreshData(datas);
-                                }
-                            }
-                            doUpdateMembersCount();
-                            mHeadTopAdapter.notifyDataSetChanged();
+
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final boolean isHost = LiveUtil.checkIsHost();
+                        final int size = datas.size();
+                        if (audienceList != null && audienceList.size() >= 0) {
+
+                            CurLiveInfo.setMembers(size);
                         }
-                    });
+                        if (isHost) {
+                            if (mHostTopView != null) {
+                                mHostTopView.refreshData(datas);
+                            }
+                        } else {
+                            if (mUserHeadTopView != null) {
+                                mUserHeadTopView.refreshData(datas);
+                            }
+                        }
+                        doUpdateMembersCount();
+                        mHeadTopAdapter.notifyDataSetChanged();
+                    }
+                });
 
-                }
+
                 break;
             case LiveConstants.END_INFO:
                 //直播结束
@@ -2037,18 +2076,23 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 //获取主播标签
                 break;
             case LiveConstants.AUDIENCE_COUNT:
-                //获取观众人数
-                if (checkDataIsNull(datas)) {
-                    MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
-                    return;
-                }
-                ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
-                //更新观众人数
-                if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //获取观众人数
+                        if (checkDataIsNull(datas)) {
+                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                            return;
+                        }
+                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+                        //更新观众人数
+                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
 
-                    CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
-                    doUpdateMembersCount();
-                }
+                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                            doUpdateMembersCount();
+                        }
+                    }
+                });
                 break;
             case LiveConstants.LIST_OF_STORES:
                 MGUIUtil.runOnUiThread(new Runnable() {
@@ -2065,10 +2109,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
                 break;
             case SellerConstants.LIVE_BIZ_SHOP:
-                if (datas != null && datas.size() > 0) {
-                    mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
-                    mUserBottomTool.notifyDataChange();
-                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas != null && datas.size() > 0) {
+                            mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                            mUserBottomTool.notifyDataChange();
+                        }
+                    }
+                });
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
                 MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
@@ -2107,5 +2156,37 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void onFailue(String responseBody) {
 
+    }
+
+    /**
+     * 收到弹幕
+     */
+    @Override
+    public void getDanmu(HashMap<String, String> params) {
+        if(params != null && danmukiller != null ){
+            danmukiller.addDanmu(new DanmuBean(params.get(Constants.DANMU_USER_AVATAR_URL), params.get(Constants.DANMU_MESSAGE), params.get(Constants.DANMU_USER_USER_NAME)));
+        }
+    }
+
+    @Override
+    public void withoutEnoughMoney(final String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SDToast.showToast(msg);
+            }
+        });
+    }
+
+    /**
+     * 发礼物回调
+     */
+    @Override
+    public void requestSendGift(GiftListBean giftInfo, int num) {
+        giftInfo.setNum(num);
+        giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
+        giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        smallGifView.addGift(giftInfo);
     }
 }

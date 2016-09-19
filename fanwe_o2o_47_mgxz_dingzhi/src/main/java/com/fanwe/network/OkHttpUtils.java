@@ -425,4 +425,8 @@ public class OkHttpUtils {
         }
         return sb.toString();
     }
+
+    public OkHttpClient getClient() {
+        return client;
+    }
 }

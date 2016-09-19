@@ -4,6 +4,7 @@ package com.miguo.live.views;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,14 +13,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.Text;
+import com.fanwe.AppWebViewActivity;
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
+import com.fanwe.app.App;
 import com.fanwe.constant.Constant;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
+import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDToast;
+import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.MalipayModel;
+import com.fanwe.model.Payment_codeModel;
+import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.reward.RewardConstants;
 import com.fanwe.reward.adapters.DiamondGridAdapter;
@@ -28,12 +38,18 @@ import com.fanwe.reward.model.DiamondUserOwnEntity;
 import com.fanwe.reward.presenters.DiamondHelper;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.fanwe.shoppingcart.presents.CommonShoppingHelper;
 import com.fanwe.utils.SDFormatUtil;
+import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.utils.MGUIUtil;
+import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
+import com.tencent.mm.sdk.modelpay.PayReq;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,6 +57,24 @@ import java.util.List;
  * Created by Administrator on 2016/9/11.
  */
 public class RechargeDiamondActivity extends BaseActivity implements RefreshCalbackView {
+
+    /**
+     * 00:正式，01:测试
+     */
+    private static final String UPACPAPP_MODE = "00";
+    /**
+     * 支付完成。
+     */
+    private final String PAY_SUCCESS = "3";
+    /**
+     * 未支付。
+     */
+    private final String PAY_WAIT = "0";
+    /**
+     * ALIpay.
+     */
+    private final String ALIPAY = "Aliapp";
+
 
     @ViewInject(R.id.gridview)
     private GridView gridView;
@@ -77,9 +111,11 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
 
     private DiamondTypeEntity currentDiamondType;
-    private DiamondTypeEntity  bigDiamondType;
+    private DiamondTypeEntity bigDiamondType;
     private PaymentTypeInfo currentPayType;
-    private List<DiamondTypeEntity> diamondTypeEntityList=null;
+    private List<DiamondTypeEntity> diamondTypeEntityList = null;
+
+    private OrderDetailInfo orderDetailInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,15 +135,15 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(diamondTypeEntityList==null||diamondTypeEntityList.size()<1){
+                if (diamondTypeEntityList == null || diamondTypeEntityList.size() < 1) {
                     return;
                 }
-                for(int i = 0 ; i < diamondTypeEntityList.size() ;i++){
+                for (int i = 0; i < diamondTypeEntityList.size(); i++) {
                     DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
-                    if(i==position){
+                    if (i == position) {
                         currentDiamondType = entity0;
                         entity0.setChecked(true);
-                    }else{
+                    } else {
                         entity0.setChecked(false);
                     }
                 }
@@ -129,17 +165,18 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
     }
 
 
-    public void setColor(boolean checked){
-        if(checked) {
+    public void setColor(boolean checked) {
+        if (checked) {
             diamond_value.setTextColor(getResources().getColor(R.color.white));
             money_value.setTextColor(getResources().getColor(R.color.white));
             diamond_line.setBackground(getResources().getDrawable(R.drawable.bg_orange_small));
-        }else{
+        } else {
             diamond_value.setTextColor(getResources().getColor(R.color.main_color));
             money_value.setTextColor(getResources().getColor(R.color.main_color_press));
             diamond_line.setBackground(getResources().getDrawable(R.drawable.bg_orange_smallline));
         }
     }
+
     private void initFragment() {
 
         // 支付方式列表
@@ -183,7 +220,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                         // 支付操作。
                         String payment_id = currentPayType.getId();
                         String diamond_id = currentDiamondType.getId();
-                        diamondHelper.createDiamondOrder(payment_id,diamond_id);
+                        diamondHelper.createDiamondOrder(payment_id, diamond_id);
                     }
 
                     @Override
@@ -232,39 +269,287 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
     /**
      * 绑定 当前用户已经有的果钻数。
+     *
      * @param diamondUserOwnEntityList
      */
-    private void bindUserDiamond(List<DiamondUserOwnEntity> diamondUserOwnEntityList){
-        if(diamondUserOwnEntityList!=null){
+    private void bindUserDiamond(List<DiamondUserOwnEntity> diamondUserOwnEntityList) {
+        if (diamondUserOwnEntityList != null) {
             DiamondUserOwnEntity entityOwn = diamondUserOwnEntityList.get(0);
-            float value = SDFormatUtil.stringToFloat(entityOwn.getDiamond_android())+SDFormatUtil.stringToFloat(entityOwn.getCommon_diamond());
+            float value = SDFormatUtil.stringToFloat(entityOwn.getDiamond_android()) + SDFormatUtil.stringToFloat(entityOwn.getCommon_diamond());
 
-            self_diamond.setText(value+"");
+            self_diamond.setText(value + "");
 
         }
     }
 
+    String payStatus;
+    String mOrderId;
+
     /**
      * 设置支付结果。
      */
-    private void bindPayDiamondResult(){
-        Intent intent = new Intent(RechargeDiamondActivity.this,PayHistoryActivity.class);
-        startActivity(intent);
-        finish();
+    private void bindPayDiamondResult(List<OrderDetailInfo> datas) {
+
+        if (datas != null && datas.size() > 0) {
+            orderDetailInfo = datas.get(0);
+
+
+            payStatus = orderDetailInfo.getOrder_info().getOrder_status();
+            mOrderId = orderDetailInfo.getOrder_info().getOrder_id();
+            if (!PAY_SUCCESS.equals(payStatus)) {
+                if (TextUtils.isEmpty(mOrderId)) {
+                    SDToast.showToast("id为空");
+                    finish();
+                    return;
+                }
+            }
+            bindData();
+        } else {
+            payFailue();
+        }
+
 
     }
+
+    private void gotoPayHistoryActivity() {
+        Intent intent = new Intent(RechargeDiamondActivity.this, PayHistoryActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private Payment_codeModel mPaymentCodeModel;
+
+    private void bindData() {
+        if (TextUtils.isEmpty(payStatus)) {
+            return;
+        }
+        if (PAY_SUCCESS.equals(payStatus)) {
+            //支付成功 处理。
+            gotoPayHistoryActivity();
+        } else if (PAY_WAIT.equals(payStatus)) {
+            //支付未完成。
+            mPaymentCodeModel = new Payment_codeModel();
+            String class_name = orderDetailInfo.getClass_name();
+
+            HashMap<String, String> config = orderDetailInfo.getConfig();
+            String payMoney = config.get("total_fee_format");
+            mPaymentCodeModel.setPay_money(payMoney);
+            mPaymentCodeModel.setConfig(config);
+            mPaymentCodeModel.setClass_name(class_name);
+            if (!TextUtils.isEmpty(class_name) && ALIPAY.equals(class_name)) {
+                mPaymentCodeModel.setPayment_name("支付宝支付");
+            } else {
+                mPaymentCodeModel.setPayment_name("微信支付");
+            }
+
+            if (mPaymentCodeModel == null) {
+                SDToast.showToast("支付信息为空。");
+                return;
+            }
+            clickPay();
+        }
+    }
+
+    private void payFailue(){
+        SDToast.showToast("支付失败。");
+    }
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case PAY_SUCCESS_WEIXIN:
+               gotoPayHistoryActivity();
+                break;
+            case PAY_FAILUE_WEIXIN:
+                payFailue();
+                break;
+            default:
+                break;
+        }
+    }
+    private void clickPay() {
+        if (mPaymentCodeModel == null) {
+            return;
+        }
+        String payAction = mPaymentCodeModel.getPay_action();
+        String className = mPaymentCodeModel.getClass_name();
+        if (!TextUtils.isEmpty(payAction)) // wap
+        {
+            Intent intent = new Intent(App.getApplication(), AppWebViewActivity.class);
+            intent.putExtra(AppWebViewActivity.EXTRA_URL, payAction);
+            startActivity(intent);
+            return;
+        } else {
+            if (Constant.PaymentType.MALIPAY.equals(className) || Constant.PaymentType.ALIAPP.equals(className)) // 支付宝sdk新
+            {
+                payMalipay();
+            } else if (Constant.PaymentType.WXAPP.equals(className)) // 微信
+            {
+                payWxapp();
+            }
+        }
+
+    }
+
+    /**
+     * 支付宝sdk支付(新)
+     */
+    private void payMalipay() {
+        if (mPaymentCodeModel == null) {
+            return;
+        }
+        MalipayModel model = mPaymentCodeModel.getMalipay();
+        if (model == null) {
+            SDToast.showToast("获取支付宝支付参数失败");
+            return;
+        }
+
+        String orderSpec = model.getTextHtml();
+
+        String sign = model.getSign();
+
+        String signType = model.getSign_type();
+
+        if (TextUtils.isEmpty(orderSpec)) {
+            SDToast.showToast("order_spec为空");
+            return;
+        }
+
+        if (TextUtils.isEmpty(sign)) {
+            SDToast.showToast("sign为空");
+            return;
+        }
+
+        if (TextUtils.isEmpty(signType)) {
+            SDToast.showToast("signType为空");
+            return;
+        }
+
+        com.fanwe.library.alipay.easy.SDAlipayer payer = new com.fanwe.library.alipay.easy.SDAlipayer(mActivity);
+        payer.setmListener(new com.fanwe.library.alipay.easy.SDAlipayer.SDAlipayerListener() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onFinish(PayResult result) {
+                String info = result.getMemo();
+                String status = result.getResultStatus();
+
+                if ("9000".equals(status)) // 支付成功
+                {
+                    SDToast.showToast("支付成功");
+                    gotoPayHistoryActivity();
+                } else if ("8000".equals(status)) // 支付结果确认中
+                {
+                    SDToast.showToast("支付结果确认中");
+                    gotoPayHistoryActivity();
+                } else {
+                    SDToast.showToast(info);
+                }
+                //requestPayOrder();
+            }
+
+            @Override
+            public void onFailure(Exception e, String msg) {
+
+                if (e != null) {
+                    SDToast.showToast("错误:" + e.toString());
+                } else {
+                    if (!TextUtils.isEmpty(msg)) {
+                        SDToast.showToast(msg);
+                    }
+                }
+            }
+        });
+        payer.pay(orderSpec, sign, signType);
+    }
+
+    /**
+     * 微信支付
+     */
+    private void payWxapp() {
+        if (mPaymentCodeModel == null) {
+            return;
+        }
+
+        WxappModel model = mPaymentCodeModel.getWxapp();
+        if (model == null) {
+            SDToast.showToast("获取微信支付参数失败");
+            return;
+        }
+
+        String appId = model.getAppid();
+        if (TextUtils.isEmpty(appId)) {
+            SDToast.showToast("appId为空");
+            return;
+        }
+
+        String partnerId = model.getMch_id();
+        if (TextUtils.isEmpty(partnerId)) {
+            SDToast.showToast("partnerId为空");
+            return;
+        }
+
+        String prepayId = model.getPrepay_id();
+        if (TextUtils.isEmpty(prepayId)) {
+            SDToast.showToast("prepayId为空");
+            return;
+        }
+
+        String nonceStr = model.getNonce_str();
+        if (TextUtils.isEmpty(nonceStr)) {
+            SDToast.showToast("nonceStr为空");
+            return;
+        }
+
+        String timeStamp = model.getTime_stamp();
+        if (TextUtils.isEmpty(timeStamp)) {
+            SDToast.showToast("timeStamp为空");
+            return;
+        }
+
+        String packageValue = model.getPackage_value();
+        if (TextUtils.isEmpty(packageValue)) {
+            SDToast.showToast("packageValue为空");
+            return;
+        }
+
+        String sign = model.getSign();
+        if (TextUtils.isEmpty(sign)) {
+            SDToast.showToast("sign为空");
+            return;
+        }
+
+        SDWxappPay.getInstance().setAppId(appId);
+
+        PayReq req = new PayReq();
+        req.appId = appId;
+        req.partnerId = partnerId;
+        req.prepayId = prepayId;
+        req.nonceStr = nonceStr;
+        req.timeStamp = timeStamp;
+        req.packageValue = packageValue;
+        req.sign = sign;
+
+        SDWxappPay.getInstance().pay(req);
+    }
+
+
 
     private void bindDiamondType(List<DiamondTypeEntity> diamondTypeEntityList) {
 
         if (diamondTypeEntityList != null) {
             int size = diamondTypeEntityList.size();
-            if(size <7) {
+            if (size < 7) {
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
-            }else{
-                bigDiamondType = diamondTypeEntityList.get(size-1);
-                money_value.setText( "￥ "+bigDiamondType.getPrice() +"元");
-                diamond_value.setText(bigDiamondType.getDiamond() +"钻石");
-                diamondTypeEntityList.remove(size-1);
+            } else {
+                bigDiamondType = diamondTypeEntityList.get(size - 1);
+                money_value.setText("￥ " + bigDiamondType.getPrice() + "元");
+                diamond_value.setText(bigDiamondType.getDiamond() + "钻石");
+                diamondTypeEntityList.remove(size - 1);
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
             }
             this.diamondTypeEntityList = diamondTypeEntityList;
@@ -307,27 +592,27 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
                 break;
             case RewardConstants.BUY_DIAMOND:
-              MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    bindDiamondType(datas);
-                }
-            });
-            break;
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bindDiamondType(datas);
+                    }
+                });
+                break;
 
             case RewardConstants.USER_DIAMOND:
-                 MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    bindUserDiamond(datas);
-                }
-            });
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bindUserDiamond(datas);
+                    }
+                });
                 break;
             case RewardConstants.DIAMOND_ORDER:
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        bindPayDiamondResult();
+                        bindPayDiamondResult(datas);
                     }
                 });
                 break;

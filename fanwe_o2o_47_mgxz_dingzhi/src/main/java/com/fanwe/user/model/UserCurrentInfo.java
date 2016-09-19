@@ -18,6 +18,7 @@ public class UserCurrentInfo  {
      * 用户当前TOKEN.
      */
     public String token="";
+
     public static UserCurrentInfo getInstance(){
         if(currentInfo == null){
             currentInfo = new UserCurrentInfo();

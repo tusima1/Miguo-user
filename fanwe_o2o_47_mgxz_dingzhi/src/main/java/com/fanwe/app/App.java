@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.multidex.MultiDex;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.MainActivity;
@@ -24,6 +25,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
+import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
@@ -36,6 +38,7 @@ import com.sunday.eventbus.SDEventObserver;
 import com.ta.util.netstate.TANetChangeObserver;
 import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
+import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
 import com.umeng.analytics.MobclickAgent;
 
@@ -83,6 +86,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 用户在当前直播的分享领取码
      */
     public String receiveCode;
+    /**
+     * 直播房间列表。
+     */
+    public String  currentRoomId;
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
@@ -125,6 +132,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         LogUtil.isDebug = ServerUrl.DEBUG;
 
         mUserCurrentInfo = UserCurrentInfo.getInstance();
+        initFreso();
+
     }
 
 
@@ -187,7 +196,9 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         }
     }
 
-
+    private void initFreso(){
+//        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
+    }
 
     public static String getStringById(int resId) {
         return getApplication().getString(resId);
@@ -400,5 +411,20 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     public void setReceiveCode(String receiveCode) {
         this.receiveCode = receiveCode;
+    }
+
+    public String getCurrentRoomId() {
+        return currentRoomId;
+    }
+
+    public void setCurrentRoomId(String newRoomId) {
+        Log.e("App setCurrentRoomId",newRoomId+"newRoomId ");
+        EnterLiveHelper liveHelper = new EnterLiveHelper(this,null);
+        if(!TextUtils.isEmpty(currentRoomId)&&!currentRoomId.equals(newRoomId)){
+            liveHelper.quiteAVRoom();
+            App.getInstance().setAvStart(false);
+            Log.e("App setCurrentRoomId",currentRoomId+"oldRoomId quiteAVRoom");
+        }
+        this.currentRoomId = newRoomId;
     }
 }

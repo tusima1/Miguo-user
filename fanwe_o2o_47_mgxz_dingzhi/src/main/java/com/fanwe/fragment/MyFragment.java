@@ -645,7 +645,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
          if (v == mRDV_MyNameCard) {
             //我的名片
 //            startActivity(DistributionMyQRCodeActivity.class);
-            UserSendGiftPopHelper giftPopHelper=new UserSendGiftPopHelper(getActivity(),"1");
+            UserSendGiftPopHelper giftPopHelper = new UserSendGiftPopHelper(getActivity(),"1");
             giftPopHelper.show();
 //            startActivity(TestMyFragmentActivity.class);
 //            startActivity(FansActivity.class);
