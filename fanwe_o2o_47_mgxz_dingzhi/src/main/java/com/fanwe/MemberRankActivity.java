@@ -275,7 +275,7 @@ public class MemberRankActivity extends BaseActivity implements CallbackView2 {
             switch (msg.what) {
                 case 0:
                     if (modelDistrInfo != null) {
-                        SDViewBinder.setTextView(mTv_name, modelDistrInfo.getNick(), "未找到");
+                        SDViewBinder.setTextView(mTv_name, modelDistrInfo.getNick(), modelDistrInfo.getPhone());
                         if ("1".equals(modelDistrInfo.getFx_level())) {
                             SDViewBinder.setTextView(mTv_rank, "青铜", "未找到");
                         } else if ("2".equals(modelDistrInfo.getFx_level())) {
@@ -283,7 +283,6 @@ public class MemberRankActivity extends BaseActivity implements CallbackView2 {
                         } else if ("3".equals(modelDistrInfo.getFx_level())) {
                             SDViewBinder.setTextView(mTv_rank, "钻石", "未找到");
                         }
-
                         SDViewBinder.setTextView(mTv_address, AppRuntimeWorker.getCity_name(),
                                 "未找到");
                         user_avatar = modelDistrInfo.getIcon();
