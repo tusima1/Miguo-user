@@ -57,6 +57,8 @@ import com.miguo.live.model.getStoresRandomComment.RootStoresRandomComment;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.model.getUpToken.ResultUpToken;
 import com.miguo.live.model.getUpToken.RootUpToken;
+import com.miguo.live.model.getUseReceiveCode.ResultUseReceiveCode;
+import com.miguo.live.model.getUseReceiveCode.RootUseReceiveCode;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.model.payHistory.ModelPayHistory;
 import com.miguo.live.model.payHistory.ResultPayHistory;
@@ -939,10 +941,12 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param room_id
      */
-    public void getReceiveCode(String room_id) {
+    public void getReceiveCode(String room_id, String live_type) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
+        params.put("live_type", live_type);
+        params.put("user_id", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
 
         params.put("method", LiveConstants.RECEIVE_CODE);
 
@@ -967,10 +971,11 @@ public class LiveHttpHelper implements IHelper {
         });
 
     }
+
     /**
      * 支付礼物
      */
-    public void postGiftInfo(String live_type,String live_record_id,String gift_num,String gift_id) {
+    public void postGiftInfo(String live_type, String live_record_id, String gift_num, String gift_id) {
 //        live_type	String	必须		类型：1直播 2点播	播放类型
 //        live_record_id	String	必须		直播id	直播id(就是房间room_id)
 //        gift_num	String	必须		礼物数量
@@ -1008,11 +1013,44 @@ public class LiveHttpHelper implements IHelper {
 
     }
 
+    /**
+     * 使用分享领取码进入房间并领钻
+     *
+     * @param receive_code
+     */
+    public void getUseReceiveCode(String receive_code) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("receive_code", receive_code);
+
+        params.put("method", LiveConstants.USE_RECEIVE_CODE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootUseReceiveCode root = gson.fromJson(responseBody, RootUseReceiveCode.class);
+                List<ResultUseReceiveCode> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, null);
+                    return;
+                }
+                List<Room> items = results.get(0).getBody();
+                mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, null);
+            }
+
+        });
+
+    }
 
     @Override
     public void onDestroy() {
         mView = null;
-        mView2=null;
+        mView2 = null;
         gson = null;
     }
 

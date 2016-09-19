@@ -704,7 +704,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initViewNeed();
         //获取领取码
         App.getInstance().setReceiveCode("");
-        mLiveHttphelper.getReceiveCode(MySelfInfo.getInstance().getMyRoomNum() + "");
+        mLiveHttphelper.getReceiveCode(CurLiveInfo.getRoomNum() + "", "1");
     }
 
 

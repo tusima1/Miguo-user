@@ -1,5 +1,8 @@
 package com.fanwe;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,37 +12,53 @@ import android.view.View;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
 import com.fanwe.fragment.MyFragment2;
 import com.fanwe.fragment.StoreListContainerFragment;
+import com.fanwe.home.model.Host;
+import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.customview.SDTabItemBottom;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
+import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.presents.LoginHelper;
-import com.fanwe.user.view.AttentionListActivity;
-import com.fanwe.user.view.CollectListActivity;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.LiveStartActivity;
 import com.miguo.live.views.LiveStartAuthActivity;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.dialog.GetDiamondInputDialog;
+import com.miguo.live.views.dialog.GetDiamondLoginDialog;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements CallbackView {
 
 
     /**
@@ -94,8 +113,10 @@ public class MainActivity extends BaseActivity {
     private int preTab = 0;// 上次点击的tab标签页
     private String preHomeCityID = "";//记录首页cityid-->0为异常
     private LoginHelper mLoginHelper;
+    private LiveHttpHelper liveHttpHelper;
     private String token;
-
+    private ClipboardManager clipboardManager;
+    private String code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +124,9 @@ public class MainActivity extends BaseActivity {
         BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
         setContentView(R.layout.act_main);
         mLoginHelper = new LoginHelper(MainActivity.this);
+        liveHttpHelper = new LiveHttpHelper(this, this);
 
         init();
-
     }
 
 
@@ -119,7 +140,12 @@ public class MainActivity extends BaseActivity {
     }
 
     //初始化用户信息。
-    public void initUserInfo() {
+    private void initUserInfo() {
+        //取剪切板中的领取码
+        clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboardManager.hasPrimaryClip()) {
+            code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+        }
         LocalUserModel userModel = AppHelper.getLocalUser();
 
         //当前还未登录，并且用户存储中的用户信息不为空。
@@ -128,8 +154,26 @@ public class MainActivity extends BaseActivity {
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
                 mLoginHelper.doLogin(userid, password, 0, true);
+            } else {
+                final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
+                dialog.setSubmitListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setCloseListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
-
+        } else {
+            //分享码
+            liveHttpHelper.getUseReceiveCode(code);
         }
     }
 
@@ -339,6 +383,8 @@ public class MainActivity extends BaseActivity {
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case LOGIN_SUCCESS:
                 mViewManager.setSelectIndex(preTab, mTab0, true);
+                //分享码
+                liveHttpHelper.getUseReceiveCode(code);
                 break;
             case LOGOUT:
                 mTab3.setTextTitleNumber(null);
@@ -538,4 +584,85 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (LiveConstants.USE_RECEIVE_CODE.equals(method)) {
+            List<Room> items = datas;
+            if (!SDCollectionUtil.isEmpty(items)) {
+                if (clipboardManager != null)
+                    clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "mgxz"));
+                Room room = items.get(0);
+                MGToast.showToast(room.getInner_message());
+                Host host = room.getHost();
+                Intent intent = new Intent(this, LiveActivity.class);
+                intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
+                MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+                String nickName = App.getInstance().getUserNickName();
+                String avatar = "";
+                if (App.getInstance().getmUserCurrentInfo() != null) {
+                    UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
+                    if (currentInfo.getUserInfoNew() != null) {
+                        avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+                    }
+                }
+                MySelfInfo.getInstance().setAvatar(avatar);
+                MySelfInfo.getInstance().setNickName(nickName);
+                MySelfInfo.getInstance().setJoinRoomWay(false);
+                CurLiveInfo.setHostID(host.getHost_user_id());
+                CurLiveInfo.setHostName(host.getNickname());
+
+                CurLiveInfo.setHostAvator(room.getHost().getAvatar());
+                CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
+                if (room.getLbs() != null) {
+                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
+                    ModelStoreList modelStoreList = new ModelStoreList();
+                    modelStoreList.setShop_name(room.getLbs().getShop_name());
+                    modelStoreList.setId(room.getLbs().getShop_id());
+                    CurLiveInfo.setModelShop(modelStoreList);
+                }
+                CurLiveInfo.setHostUserID(room.getHost().getUid());
+//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
+                CurLiveInfo.setMembers(1); // 添加自己
+//                CurLiveInfo.setAddress(item.getLbs().getAddress());
+                if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
+                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
+                }
+                CurLiveInfo.setAdmires(1);
+                startActivity(intent);
+            } else {
+                MGToast.showToast("领取码无效");
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final GetDiamondInputDialog dialog = new GetDiamondInputDialog(MainActivity.this);
+                        dialog.setSubmitListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //分享码
+                                liveHttpHelper.getUseReceiveCode(dialog.getCode());
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.setCloseListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
 }

@@ -1,6 +1,5 @@
 package com.fanwe.library.dialog;
 
-import android.R.integer;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.text.TextUtils;
