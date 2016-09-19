@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 充值记录适配器
@@ -49,6 +52,9 @@ public class AttentionListAdapter extends BaseAdapter {
             mHolder = new Holder();
             convertView = inflater.inflate(R.layout.item_attention_list, null);
             mHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_item_attention);
+            mHolder.tvSign = (TextView) convertView.findViewById(R.id.tv_signature_item_attention);
+            mHolder.tvStatus = (TextView) convertView.findViewById(R.id.tv_status_item_attention);
+            mHolder.ivIcon = (CircleImageView) convertView.findViewById(R.id.iv_icon_item_attention);
 
             convertView.setTag(mHolder);
         } else {
@@ -63,11 +69,23 @@ public class AttentionListAdapter extends BaseAdapter {
     private void setData(Holder mHolder, final int position) {
         currModle = datas.get(position);
         mHolder.tvName.setText(currModle.getNick());
+        mHolder.tvSign.setText(currModle.getPersonality());
+        if ("1".equals(currModle.getAttention_status())) {
+            mHolder.tvStatus.setText("未关注");
+        } else if ("2".equals(currModle.getAttention_status())) {
+            mHolder.tvStatus.setText("已关注");
+        } else if ("3".equals(currModle.getAttention_status())) {
+            mHolder.tvStatus.setText("互相关注");
+        } else {
+            mHolder.tvStatus.setText("");
+        }
+        ImageLoader.getInstance().displayImage(currModle.getIcon(), mHolder.ivIcon);
     }
 
 
     private static class Holder {
-        TextView tvName;
+        TextView tvName, tvSign, tvStatus;
+        CircleImageView ivIcon;
     }
 
 }

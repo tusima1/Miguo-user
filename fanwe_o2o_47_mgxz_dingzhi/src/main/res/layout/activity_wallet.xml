@@ -178,6 +178,7 @@
             </LinearLayout>
 
             <ImageView
+                android:clickable="true"
                 android:layout_width="@dimen/dp36"
                 android:layout_height="@dimen/dp36"
                 android:layout_alignParentBottom="true"

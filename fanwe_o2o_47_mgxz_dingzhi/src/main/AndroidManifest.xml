@@ -138,6 +138,9 @@
         <activity
             android:name="com.fanwe.user.view.AttentionListActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.fanwe.user.view.CollectListActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".wxapi.WXPayEntryActivity"
@@ -1033,10 +1036,8 @@
 
         <activity android:name="com.fanwe.user.view.RedPacketListActivity" />
         <activity android:name="com.miguo.live.views.TestMyFragmentActivity"></activity>
-        <activity android:name="com.fanwe.user.view.FansActivity">
-        </activity>
-        <activity android:name="com.fanwe.user.view.WalletActivity">
-        </activity>
+        <activity android:name="com.fanwe.user.view.FansActivity"></activity>
+        <activity android:name="com.fanwe.user.view.WalletActivity"></activity>
     </application>
 
 </manifest>

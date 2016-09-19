@@ -12,6 +12,11 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
+import com.fanwe.user.model.getAttentionFocus.ResultAttentionFocus;
+import com.fanwe.user.model.getAttentionFocus.RootAttentionFocus;
+import com.fanwe.user.model.getAttentionFans.ResultFans;
+import com.fanwe.user.model.getAttentionFans.RootFans;
 import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.model.getDistrInfo.ResultDistrInfo;
 import com.fanwe.user.model.getDistrInfo.RootDistrInfo;
@@ -25,6 +30,9 @@ import com.fanwe.user.model.getNameCardQR.RootNameCardQR;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.model.getPersonalHome.ResultPersonalHome;
 import com.fanwe.user.model.getPersonalHome.RootPersonalHome;
+import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
+import com.fanwe.user.model.getShopAndUserCollect.ResultShopAndUserCollect;
+import com.fanwe.user.model.getShopAndUserCollect.RootShopAndUserCollect;
 import com.fanwe.user.model.getUserChangeMobile.ModelUserChangeMobile;
 import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.model.getUserRedpackets.RootUserRedPacket;
@@ -34,6 +42,9 @@ import com.fanwe.user.model.getUserUpgradeOrder.RootGetUserUpgradeOrder;
 import com.fanwe.user.model.postUserUpgradeOrder.ModelPostUserUpgradeOrder;
 import com.fanwe.user.model.postUserUpgradeOrder.ResultPostUserUpgradeOrder;
 import com.fanwe.user.model.postUserUpgradeOrder.RootPostUserUpgradeOrder;
+import com.fanwe.user.model.putAttention.ModelAttention;
+import com.fanwe.user.model.putAttention.ResultAttention;
+import com.fanwe.user.model.putAttention.RootAttention;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -144,7 +155,8 @@ public class UserHttpHelper implements IHelper {
     /**
      * 我的战队
      */
-    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize, String user_id) {
+    public void getMyDistributionCorps(String type, String rank, int pageNum, int pageSize,
+                                       String user_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("type", type);
@@ -157,7 +169,8 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootMyDistributionCorps root = gson.fromJson(responseBody, RootMyDistributionCorps.class);
+                RootMyDistributionCorps root = gson.fromJson(responseBody,
+                        RootMyDistributionCorps.class);
                 List<ResultMyDistributionCorps> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
                     mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
@@ -423,7 +436,8 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootGetUserUpgradeOrder root = gson.fromJson(responseBody, RootGetUserUpgradeOrder.class);
+                RootGetUserUpgradeOrder root = gson.fromJson(responseBody,
+                        RootGetUserUpgradeOrder.class);
                 List<ResultGetUserUpgradeOrder> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
                     mView.onSuccess(UserConstants.USER_UPGRADE_ORDER_GET, null);
@@ -454,7 +468,8 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootPostUserUpgradeOrder root = gson.fromJson(responseBody, RootPostUserUpgradeOrder.class);
+                RootPostUserUpgradeOrder root = gson.fromJson(responseBody,
+                        RootPostUserUpgradeOrder.class);
                 List<ResultPostUserUpgradeOrder> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
                     mView.onSuccess(UserConstants.USER_UPGRADE_ORDER_POST, null);
@@ -502,6 +517,7 @@ public class UserHttpHelper implements IHelper {
 
     /**
      * 添加用户的建议
+     *
      * @param advice
      */
     public void advice(String advice) {
@@ -526,28 +542,202 @@ public class UserHttpHelper implements IHelper {
 
     /**
      * 获取粉丝页面
-     * @param page 1
+     *
+     * @param page     1
      * @param pageSize 10
      */
-    public void getAttentionFans(int page,int pageSize) {
+    public void getAttentionFans(int page, int pageSize) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        params.put("page", page+"");
-        params.put("page_size", pageSize+"");
+        params.put("page", page + "");
+        params.put("page_size", pageSize + "");
         params.put("method", UserConstants.ATTENTION_Fans);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                MGLog.e("test:"+responseBody);
+                final List<ResultFans> result = gson.fromJson(responseBody, RootFans.class)
+                        .getResult();
+                if (result != null && result.size() > 0) {
+                    final ResultFans resultFans = result.get(0);
+                    if (resultFans != null) {
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mView.onSuccess(UserConstants.ATTENTION_Fans, resultFans.getBody());
+                            }
+                        });
+                        return;
+                    }
+                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFailue(UserConstants.ATTENTION_Fans);
+                    }
+                });
+
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
             }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFinish(UserConstants.ATTENTION_Fans);
+                    }
+                });
+            }
         });
 
+    }
+
+    /**
+     * 获取用户关注的人的一览接口
+     *
+     * @param pageNum
+     * @param pageSize
+     */
+    public void getAttentionFocus(int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("page", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("method", UserConstants.ATTENTION_FOCUS);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootAttentionFocus root = gson.fromJson(responseBody, RootAttentionFocus.class);
+                List<ResultAttentionFocus> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.ATTENTION_FOCUS, null);
+                    return;
+                }
+                List<ModelAttentionFocus> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.ATTENTION_FOCUS, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFinish(UserConstants.ATTENTION_FOCUS);
+            }
+        });
+    }
+
+    /**
+     * 我的收藏
+     *
+     * @param pageNum
+     * @param pageSize
+     */
+    public void getShopAndUserCollect(int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("page", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("method", UserConstants.SHOP_AND_USER_COLLECT);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootShopAndUserCollect root = gson.fromJson(responseBody, RootShopAndUserCollect.class);
+                List<ResultShopAndUserCollect> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.SHOP_AND_USER_COLLECT, null);
+                    return;
+                }
+                List<ModelShopAndUserCollect> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.SHOP_AND_USER_COLLECT, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFinish(UserConstants.SHOP_AND_USER_COLLECT);
+            }
+        });
+    }
+
+/**
+     * 粉丝页面关注
+     * @param focus_user_id 必须	 关注，取关对象的id(user_id)
+     * @param attention_status 必须 如果要进行关注操作，传1，取消关注传非1即可
+     */
+    public void putAttention(String focus_user_id,String attention_status){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("focus_user_id", focus_user_id);
+        params.put("attention_status", attention_status);
+        params.put("method", UserConstants.ATTENTION);
+
+        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                List<ResultAttention> result = gson.fromJson(responseBody, RootAttention.class)
+                        .getResult();
+                if (result!=null && result.size()>0){
+                    ResultAttention resultAttention = result.get(0);
+                    if (resultAttention!=null){
+                        final List<ModelAttention> body = resultAttention.getBody();
+                        if (body!=null && body.size()>0){
+                            MGUIUtil.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mView.onSuccess(UserConstants.ATTENTION,body);
+                                }
+                            });
+                        }
+                        return;
+                    }
+                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFailue(UserConstants.ATTENTION);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 获取钱包页面数据
+     */
+    public void getMyWallet(){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.MY_WALLET);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                MGLog.e(responseBody);
+            }
+        });
     }
 
     @Override

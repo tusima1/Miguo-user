@@ -2,12 +2,16 @@ package com.fanwe.user.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.adapters.AttentionListAdapter;
@@ -30,6 +34,9 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
     private PullToRefreshListView ptrl;
     private List<ModelAttentionFocus> datas = new ArrayList<>();
     private AttentionListAdapter mAttentionListAdapter;
+    private boolean isRefresh = true;
+    private int pageNum = 1;
+    private int pageSize = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +50,11 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
         preData();
     }
 
+    private void getData() {
+        userHttpHelper.getAttentionFocus(pageNum, pageSize);
+    }
+
     private void preData() {
-        for (int i = 0; i < 20; i++) {
-            ModelAttentionFocus bean = new ModelAttentionFocus();
-            bean.setNick("昵称：" + i);
-            datas.add(bean);
-        }
         mAttentionListAdapter = new AttentionListAdapter(mContext, getLayoutInflater(), datas);
         ptrl.setAdapter(mAttentionListAdapter);
     }
@@ -59,31 +65,75 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
     private void preWidget() {
         ptrl = (PullToRefreshListView) findViewById(R.id.ptrl_act_attention);
         ptrl.setMode(PullToRefreshBase.Mode.BOTH);
-//        ptrl.setOnRefreshListener(mOnRefresherListener2);
+        ptrl.setOnRefreshListener(mOnRefresherListener2);
         ptrl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long positionL) {
                 position--;
                 ModelAttentionFocus item = datas.get(position);
-//                SDToast.showToast("Item " + position + ": " + item.getDate());
+                MGToast.showToast(item.getNick());
             }
         });
-//        ptrl.setRefreshing();
+        ptrl.setRefreshing();
     }
+
+    private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        @Override
+        public void onPullDownToRefresh(
+                PullToRefreshBase<ListView> refreshView) {
+            isRefresh = true;
+            pageNum = 1;
+            getData();
+        }
+
+        @Override
+        public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+            isRefresh = false;
+            if (!SDCollectionUtil.isEmpty(items)) {
+                pageNum++;
+            }
+            getData();
+        }
+    };
 
     @Override
     public void onSuccess(String responseBody) {
 
     }
 
+    List<ModelAttentionFocus> items;
+
     @Override
     public void onSuccess(String method, List datas) {
-        if (UserConstants.ADVICE.equals(method)) {
-            MGToast.showToast("提交成功");
-            finish();
+        Message msg = new Message();
+        if (UserConstants.ATTENTION_FOCUS.equals(method)) {
+            items = datas;
+            msg.what = 0;
         }
+        mHandler.sendMessage(msg);
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (isRefresh) {
+                        datas.clear();
+                    }
+                    if (!SDCollectionUtil.isEmpty(items)) {
+                        datas.addAll(items);
+                    }
+                    mAttentionListAdapter.notifyDataSetChanged();
+                    break;
+                case 1:
+                    ptrl.onRefreshComplete();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onFailue(String responseBody) {
@@ -92,6 +142,8 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
 
     @Override
     public void onFinish(String method) {
-
+        Message msg = new Message();
+        msg.what = 1;
+        mHandler.sendMessage(msg);
     }
 }

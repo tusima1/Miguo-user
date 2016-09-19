@@ -4,6 +4,13 @@ package com.fanwe.user.model.getAttentionFans;
  * Created by didik on 2016/9/18.
  */
 public class ModelFans {
+//    "nick":"谷俊山",//粉丝昵称
+//            "attention_status":"1",//状态：1：未关注 2：已关注 3：互相关注
+//            "fansid":"5b143a5a-7129-4823-a8d9-a15255d78f31",
+//            "personality":"",//个性签名
+//            "fans_user_id":"602e1285-0948-4dbd-ba10-ad3d6710eee3",//粉丝的用户id
+//            "fx_level":"3",//分销等级，应用于列表昵称旁的图标
+//            "icon":"http://obc58vgro.bkt.clouddn.com/2016/09/Fh1TTwGfMJbeX7lMSj6EHBOoHG6x"//头像
     private String nick;
     private String attention_status;
     private String fansid;
