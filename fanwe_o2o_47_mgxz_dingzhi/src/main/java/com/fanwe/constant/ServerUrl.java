@@ -9,7 +9,7 @@ public class ServerUrl {
     public static final boolean DEBUG = true;
     public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
 
-    public static final String SERVER_API_JAVA_TEST_URL = "http://api.test.mgxz.com/";
+    public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.dev.mgxz.com/";
 
 
 

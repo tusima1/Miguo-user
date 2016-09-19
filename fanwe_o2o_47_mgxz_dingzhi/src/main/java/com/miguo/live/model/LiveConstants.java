@@ -113,7 +113,9 @@ public class LiveConstants {
      * 抢红包结果。
      */
     public static final String GET_PACKET_RESULT = "GetRedPacketResult";
-    /*打赏礼物列表*/
+    /**
+     * 打赏礼物列表
+     */
     public static final String GET_GIFT_INFO = "GiftInfo";
     /**
      * 获取充值记录
@@ -124,7 +126,14 @@ public class LiveConstants {
      */
     public static final String RECEIVE_CODE = "ReceiveCode";
 
-    /*发送礼物(支付)*/
+    /**
+     * 发送礼物(支付)
+     */
     public static final String POST_GIFT_INFO = "GiftInfo";
+    /**
+     * 使用分享领取码进入房间并领钻
+     */
+    public static final String USE_RECEIVE_CODE = "UseReceiveCode";
+
 
 }

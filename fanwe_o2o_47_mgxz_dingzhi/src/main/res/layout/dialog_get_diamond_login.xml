@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp10"
-                android:text="邀请好友 领取钻石"
+                android:text="登录帐号 领取钻石"
                 android:textColor="@color/text_home_recommend"
                 android:textSize="@dimen/dp19" />
         </LinearLayout>
@@ -48,7 +48,7 @@
             android:layout_marginTop="@dimen/dp30"
             android:background="@drawable/bg_orange"
             android:gravity="center"
-            android:text="确 定"
+            android:text="登 录"
             android:textColor="@color/white"
             android:textSize="@dimen/dp17" />
     </LinearLayout>

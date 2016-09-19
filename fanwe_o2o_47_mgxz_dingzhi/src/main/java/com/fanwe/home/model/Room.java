@@ -16,12 +16,21 @@ public class Room extends Body {
     private Host host;
 
     private String av_room_id;
+    private String inner_message;
 
     private String id;
 
     private String title;
 
     private Lbs lbs;
+
+    public String getInner_message() {
+        return inner_message;
+    }
+
+    public void setInner_message(String inner_message) {
+        this.inner_message = inner_message;
+    }
 
     public String getCover() {
         return cover;
