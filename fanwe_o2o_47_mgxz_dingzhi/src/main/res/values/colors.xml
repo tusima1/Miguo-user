@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <color name="text_base_color">#595959</color>
+
     <!-- 分类控件项被选中颜色 -->
     <color name="bg_gray_categoryview_item_select">#f4f4f4</color>
 
@@ -55,6 +58,7 @@
     <!--color mgxz-->
     <!--说明,color_数字,数字代表color的透明度,例如80代表80%的透明度-->
     <color name="gray_30">#4D999999</color>
+    <color name="gray_gift">#32999999</color>
     <color name="orange">#ff6600</color>
     <color name="dark_80">#CC000000</color>
     <color name="dark_20">#33000000</color>

@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,11 +14,8 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
-import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.MGStringFormatter;
 import com.google.gson.Gson;
@@ -27,15 +25,14 @@ import com.miguo.live.interf.OnPayGiftSuccessListener;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
-import com.miguo.live.presenters.GiftHttpHelper;
+import com.miguo.live.presenters.GiftHttpHelper2;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
-import com.miguo.utils.test.MGHttpHelper;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.util.List;
-import java.util.TreeMap;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -57,12 +54,13 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     private float money;
     private String liveType; //类型：1直播 2点播	播放类型
     private OnPayGiftSuccessListener mListener;
+    private final GiftHttpHelper2 httpHelper2;
 
     public UserSendGiftPopHelper(Activity mActivity,String liveType) {
         this.mActivity = mActivity;
         this.liveType=liveType;
-        GiftHttpHelper giftHttpHelper = new GiftHttpHelper(this);
-        giftHttpHelper.doHttpMethod(LiveConstants.GET_GIFT_INFO, MGHttpHelper.GET);
+        httpHelper2 = new GiftHttpHelper2(this);
+        httpHelper2.getGiftList();
 
         createPopWindow();
     }
@@ -165,6 +163,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     }
 
     private int totalCount=0;
+    private int sendCount=0;
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -183,7 +182,17 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                         Log.e("test","数量: "+totalCount+"");
                         Log.e("test","id: "+selectedItemInfo.getId());
                         Log.e("test","liveType: "+liveType);
-                        postGiftInfo(liveType, MySelfInfo.getInstance().getMyRoomNum()+"",totalCount+"",selectedItemInfo.getId());
+
+                        sendCount=totalCount;
+//                        MySelfInfo.getInstance().getMyRoomNum()+""
+                        int roomNum = CurLiveInfo.getRoomNum();
+                        if (roomNum==-1){
+                            MGToast.showToast("异常直播房间");
+                            totalCount=0;
+                            preTime=0;
+                            return;
+                        }
+                        httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
                         //reset
                         totalCount=0;
                         preTime=0;
@@ -232,97 +241,65 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     private long preTime = 0;
     private long endTime;
 
+    /*展示礼物的回调*/
+    public void setOnPayGiftSuccessListener(OnPayGiftSuccessListener listener){
+        this.mListener=listener;
+    }
 
     @Override
     public void onSuccess(String responseBody) {
-
+        Gson gson=new Gson();
+        Root root = gson.fromJson(responseBody, Root.class);
+        String statusCode = root.getStatusCode();
+        String message = root.getMessage();
+//                {"result":[{"body":[]}],"message":"用户余额不足，无法购买","token":"8e0b891282e5d6758d06e6da8bb8fa8e","statusCode":"302"}
+//                200  正常状态
+//                302  参数错误，message中会有描述
+//                300  处理错误，礼物未赠送成功
+//                500  服务器配置错误
+        if ("200".equals(statusCode)){
+            //TODO 成功
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mListener!=null){
+                        mListener.onPaySuc(selectedItemInfo, sendCount);
+                    }
+                }
+            });
+        }else {
+            MGToast.showToast("ERROR:"+message);
+        }
+        sendCount=0;
     }
 
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.GET_GIFT_INFO.equals(method)) {
-            ModelGiftInfo modelGiftInfo = (ModelGiftInfo) datas.get(0);
-            if (modelGiftInfo != null) {
-                List<GiftListBean> giftList = modelGiftInfo.getGiftList();
-                String userdiamond = modelGiftInfo.getUserdiamond();
-                money = MGStringFormatter.getFloat(userdiamond);
+                    ModelGiftInfo modelGiftInfo = (ModelGiftInfo) datas.get(0);
+                    if (modelGiftInfo != null) {
+                        List<GiftListBean> giftList = modelGiftInfo.getGiftList();
+                        String userdiamond = modelGiftInfo.getUserdiamond();
+                        money = MGStringFormatter.getFloat(userdiamond);
 //                    mTvMoney.setText(MGStringFormatter.getFloat1(userdiamond));
-                mTvMoney.setText(userdiamond);
-                mGiftAdapter.setData(giftList);
-            }
-        }
+                        mTvMoney.setText(userdiamond);
+                        mGiftAdapter.setData(giftList);
+                    }
+                }
     }
 
     @Override
     public void onFailue(String responseBody) {
-
+        if (!TextUtils.isEmpty(responseBody) && responseBody.startsWith("####")){
+            int length = responseBody.length();
+            String msg = responseBody.substring(4, length);
+            MGToast.showToast(msg);
+            sendCount=0;
+        }
     }
 
     @Override
     public void onFinish(String method) {
 
     }
-
-    /**
-     * 支付礼物
-     */
-    private void postGiftInfo(String live_type, String live_record_id, final String gift_num, String gift_id) {
-//        live_type	String	必须		类型：1直播 2点播	播放类型
-//        live_record_id	String	必须		直播id	直播id(就是房间room_id)
-//        gift_num	String	必须		礼物数量
-//        gift_id	String	必须		礼物id
-        TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", App.getInstance().getToken());
-        params.put("live_type", live_type);
-        params.put("live_record_id", live_record_id);
-        params.put("gift_num", gift_num);
-        params.put("gift_id", gift_id);
-        params.put("method", LiveConstants.POST_GIFT_INFO);
-
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
-            @Override
-            public void onErrorResponse(String message, String errorCode) {
-
-            }
-
-            @Override
-            public void onSuccessResponse(String responseBody) {
-//                {"result":[{"body":[]}],"message":"用户余额不足，无法购买","token":"8e0b891282e5d6758d06e6da8bb8fa8e","statusCode":"302"}
-//                200  正常状态
-//                302  参数错误，message中会有描述
-//                300  处理错误，礼物未赠送成功
-//                500  服务器配置错误
-                Gson gson=new Gson();
-                Root root = gson.fromJson(responseBody, Root.class);
-                String statusCode = root.getStatusCode();
-                String message = root.getMessage();
-                if ("200".equals(statusCode)){
-                    //TODO 成功
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (mListener!=null){
-                                mListener.onPaySuc(selectedItemInfo,MGStringFormatter.getInt(gift_num));
-                            }
-                        }
-                    });
-                }else {
-                    MGToast.showToast(message);
-                }
-
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
-
-    }
-
-    /*展示礼物的回调*/
-    public void setOnPayGiftSuccessListener(OnPayGiftSuccessListener listener){
-        this.mListener=listener;
-    }
-
 }

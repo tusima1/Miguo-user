@@ -47,6 +47,9 @@ import com.fanwe.user.model.putAttention.ResultAttention;
 import com.fanwe.user.model.putAttention.RootAttention;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.model.getWallet.ModelMyWallet;
+import com.miguo.live.model.getWallet.ResultMyWallet;
+import com.miguo.live.model.getWallet.RootMyWallet;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
@@ -735,9 +738,39 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                MGLog.e(responseBody);
+                ResultMyWallet resultMyWallet = gson.fromJson(responseBody, RootMyWallet.class)
+                        .getResult().get(0);
+                if (resultMyWallet!=null){
+                    final List<ModelMyWallet> body = resultMyWallet.getBody();
+                    if (body!=null && body.size()>0){
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mView.onSuccess(UserConstants.MY_WALLET,body);
+                            }
+                        });
+                        return;
+                    }
+                }
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFailue(UserConstants.MY_WALLET);
+                    }
+                });
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.onFinish(UserConstants.MY_WALLET);
+                    }
+                });
             }
         });
+
     }
 
     @Override

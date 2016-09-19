@@ -31,12 +31,12 @@ public abstract class MGHttpHelper {
         doHttpMethod(method,mode,null);
     }
 
-    public void doHttpMethod(final String method, int mode ,String customUrl){
+    public void doHttpMethod(final String method, final int mode , String customUrl){
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("method", method);
         //添加一些参数非必须参数
-        addParams(method,params);
+        addParams(method,params,mode);
         MgCallback callback=new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
@@ -48,7 +48,7 @@ public abstract class MGHttpHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        onSuccess(method,responseBody);
+                        onSuccess(method,responseBody,mode);
                     }
                 });
 
@@ -59,7 +59,7 @@ public abstract class MGHttpHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        onFinished(method);
+                        onFinished(method,mode);
                     }
                 });
             }
@@ -87,7 +87,7 @@ public abstract class MGHttpHelper {
 
     }
 
-    protected abstract TreeMap addParams(String method,TreeMap params);
-    protected abstract void onSuccess(String method,String responseBody);
-    protected abstract void onFinished(String method);
+    protected abstract TreeMap addParams(String method,TreeMap params,int mode);
+    protected abstract void onSuccess(String method,String responseBody,int mode);
+    protected abstract void onFinished(String method,int mode);
 }

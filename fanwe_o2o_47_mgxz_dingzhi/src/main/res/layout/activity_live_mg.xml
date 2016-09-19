@@ -186,6 +186,9 @@
             android:layout_width="@dimen/dp60"
             android:layout_height="@dimen/dp200"/>
 
+
+
+
         <com.miguo.live.views.customviews.HostRedPacketTimeView
             android:id="@+id/host_red_countdown"
             android:visibility="gone"
@@ -194,6 +197,10 @@
             android:layout_height="@dimen/dp34"
             android:layout_marginLeft="@dimen/dp12"
             android:layout_marginTop="160dp"/>
+
+
+
+
 
         <!--飘心-->
         <RelativeLayout
@@ -212,6 +219,31 @@
         </RelativeLayout>
 
     </FrameLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.miguo.live.views.gift.SmallGifView
+            android:id="@+id/small_gift_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.miguo.live.views.gift.SmallGifView>
+
+        <master.flame.danmaku.ui.widget.DanmakuView
+            android:layout_marginBottom="150dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/danmuku"
+            android:layout_marginTop="130dp"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+
+    </RelativeLayout>
 
 
     <!--美颜调节(类似dialog)-->

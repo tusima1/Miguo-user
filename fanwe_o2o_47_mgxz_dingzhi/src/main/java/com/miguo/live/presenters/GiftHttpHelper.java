@@ -21,39 +21,43 @@ public class GiftHttpHelper extends MGHttpHelper implements IHelper {
         this.mView2=mView2;
     }
     @Override
-    protected TreeMap addParams(String method, TreeMap params) {
+    protected TreeMap addParams(String method, TreeMap params,int mode) {
         switch (method){
             case LiveConstants.GET_GIFT_INFO:
+                if (mode==MGHttpHelper.PUT){
+                }
             break;
         }
         return params;
     }
 
     @Override
-    protected void onSuccess(String method, String responseBody) {
+    protected void onSuccess(String method, String responseBody,int mode) {
         switch (method) {
             case LiveConstants.GET_GIFT_INFO:
-                getGiftInfo(method,responseBody);
+                if (mode==MGHttpHelper.GET){
+                    getGiftInfo(method,responseBody,mode);
+                }
                 break;
         }
     }
 
     @Override
-    protected void onFinished(String method) {
-        mView2.onFinish(method);
+    protected void onFinished(String method,int mode) {
+        mView2.onFinish(method+mode);
     }
 
-    private void getGiftInfo(String method, String responseBody) {
+    private void getGiftInfo(String method, String responseBody,int mode) {
         ResultGiftInfo resultGiftInfo = gson.fromJson(responseBody, RootGiftInfo.class).getResult
                 ().get(0);
         if (resultGiftInfo!=null){
             List<ModelGiftInfo> body = resultGiftInfo.getBody();
             if (body!=null && body.size()>0){
-                mView2.onSuccess(method,body);
+                mView2.onSuccess(method+mode,body);
                 return;
             }
         }
-        mView2.onFailue(method);
+        mView2.onFailue(method+mode);
     }
 
     @Override

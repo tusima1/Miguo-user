@@ -62,6 +62,10 @@ public interface LiveView extends MvpView {
      * 收到红包。
      */
     void getHostRedPacket(HashMap<String,String> params);
+    /**
+     * 收到弹幕
+     */
+    void getDanmu(HashMap<String,String> params);
 
     /**
      * 主播发送红包。
@@ -77,6 +81,9 @@ public interface LiveView extends MvpView {
      * 用户退出 。
      */
     void userExit();
-
+    /**
+     * 花钻石钱不够
+     */
+    void withoutEnoughMoney(String msg);
 
 }

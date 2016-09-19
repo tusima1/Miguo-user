@@ -2,7 +2,9 @@ package com.fanwe.user.view;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.o2o.miguo.R;
@@ -29,11 +31,20 @@ public class FansActivity extends Activity implements CallbackView2 {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fans);
-
+        initTitle();
         initPullToRefreshListView();
 
         httpHelper = new UserHttpHelper(null,this);
         httpHelper.getAttentionFans(1,10);
+    }
+    private void initTitle() {
+        findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        ((TextView) findViewById(R.id.tv_middle)).setText("我的粉丝");
     }
 
     private void initPullToRefreshListView() {

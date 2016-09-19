@@ -73,7 +73,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
 
     public void init() {
-//        token = App.getApplication().getToken();
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
             goToLoginActivity();
         } else {
@@ -227,10 +226,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
      */
 
     public void createAvRoom() {
-        boolean isAvStart = App.getInstance().isAvStart();
         boolean isImlogin = App.getInstance().isImLoginSuccess();
         if (!isImlogin) {
-            //
             mLoginHelper.imLogin(userid, usersig, new MgCallback() {
                 @Override
                 public void onErrorResponse(String message, String errorCode) {
@@ -272,7 +269,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
                                 return;
                             } else {
                                 App.getInstance().setAvStart(true);
+                                App.getInstance().setCurrentRoomId(room_id);
                                 MySelfInfo.getInstance().setMyRoomNum(roomId);
+
                                 MySelfInfo.getInstance().writeToCache(getApplicationContext());
 
                                 goToLive();

@@ -14,6 +14,8 @@ import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.google.gson.Gson;
+import com.miguo.live.model.GiftDanmuBean;
 import com.miguo.live.model.LiveConstants;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversation;
@@ -54,6 +56,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -293,6 +296,68 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
                 }
             });
+    }
+
+    public void sendDanmuMessage(final String message, final String userName, final String userId, final String avatarUrl){
+        TreeMap<String, String> params = new TreeMap<>();
+        params.put("method", "GiftInfo"); //方法名
+        params.put("live_type", "1"); //类型：1直播 2点播
+        params.put("live_record_id", CurLiveInfo.getChatRoomId()); //直播id
+        params.put("token", App.getApplication().getToken()); //token
+        params.put("gift_id", Constants.GIFT_DANMU_ID); //弹幕ID iOS和Android端协商好
+        params.put("gift_num", "1"); //弹幕ID iOS和Android端协商好
+        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Log.d(TAG, "sendDanmuMessage responbody: " + responseBody);
+                GiftDanmuBean bean = new Gson().fromJson(responseBody, GiftDanmuBean.class);
+                if(bean.getStatusCode() == 200){
+                    sendIMDanmuMessage(message, userName, userId, avatarUrl);
+                }else{
+                    if(mLiveView != null){
+                        mLiveView.withoutEnoughMoney(bean.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                Log.d(TAG, "sendDanmuMessage onErrorResponse: " + message);
+                if(mLiveView != null){
+                    mLiveView.withoutEnoughMoney(message);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 发送弹幕
+     */
+    public void sendIMDanmuMessage(String message, String userName, String userId, String avatarUrl){
+        HashMap<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put(Constants.DANMU_MESSAGE, message);
+        paramsMap.put(Constants.DANMU_USER_USER_NAME, userName);
+        paramsMap.put(Constants.DANMU_USER_ID, userId);
+        paramsMap.put(Constants.DANMU_USER_AVATAR_URL, avatarUrl);
+        String jsonParams = HashmapToJson.hashMapToJson(paramsMap);
+        sendGroupMessage(Constants.AVIMCMD_DANMU, jsonParams, new TIMValueCallBack<TIMMessage>() {
+            @Override
+            public void onError(int i, String s) {
+                if (i == 85) { //消息体太长
+                    Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();
+                } else if (i == 6011) {//群主不存在
+                    Toast.makeText(mContext, "Host don't exit ", Toast.LENGTH_SHORT).show();
+                }
+                SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
+            }
+            @Override
+            public void onSuccess(TIMMessage timMessage) {
+                Log.d(TAG, timMessage.msg.customStr());
+                Log.d(TAG,"弹幕发送成功...!");
+//                SDToast.showToast("红包发送成功!");
+            }
+        });
     }
 
     /**
@@ -638,6 +703,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                         mLiveView.getHostRedPacket(params);
                     }
                     break;
+                case Constants.AVIMCMD_DANMU:
+                    String danmus = json.getString(Constants.CMD_PARAM);
+                    if(mLiveView!=null) {
+                        mLiveView.getDanmu(parseDanmu(danmus));
+                    }
+                    break;
             }
 
         } catch (UnsupportedEncodingException e) {
@@ -646,6 +717,17 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             // 异常处理代码
             Log.e("test","ex:"+ex);
         }
+    }
+
+    public HashMap<String, String> parseDanmu(String danmus){
+        HashMap<String, String> map = new HashMap<>();
+        Map danmuParams = JSON.parseObject(danmus);
+        for (Object o : danmuParams.entrySet()) {
+            Map.Entry<String,String> entry = (Map.Entry<String,String>)o;
+            Log.d(TAG,entry.getKey()+"--->"+entry.getValue());
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
     }
 
     public HashMap<String,String> parseRedPacket(String datas){
