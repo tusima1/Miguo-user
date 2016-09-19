@@ -51,6 +51,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.math.BigDecimal;
@@ -240,14 +241,19 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             }
 
             @Override
-            public void onSuccessResponse(String responseBody) {
-                Gson gson = new Gson();
-                Root root = gson.fromJson(responseBody, Root.class);
-                String statusCode = root.getStatusCode();
-                if ("200".equals(statusCode)) {
-                    mBtn_send_code.setmDisableTime(5 * 60);
-                    mBtn_send_code.startTickWork();
-                }
+            public void onSuccessResponse(final String responseBody) {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gson gson = new Gson();
+                        Root root = gson.fromJson(responseBody, Root.class);
+                        String statusCode = root.getStatusCode();
+                        if ("200".equals(statusCode)) {
+                            mBtn_send_code.setmDisableTime(5 * 60);
+                            mBtn_send_code.startTickWork();
+                        }
+                    }
+                });
             }
         });
     }
@@ -345,11 +351,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         if (mLl_bank_info.getVisibility() == View.VISIBLE) {
             return;
         }
-        //把获取的信息制空
-        mStrBankName = "";//银行名
-        mStrBankNumber = "";//银行卡号
-        mStrBank_UserName = "";//开户名
-        tv_bank_card_info.setText("");
+
         View contentView = LayoutInflater.from(this).inflate(R.layout.item_pop_bankcard, null);
         int width = mEt_money.getWidth();
         int offset = DisplayUtil.dp2px(this, 12);
@@ -358,6 +360,11 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         tv_bank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //把获取的信息制空
+                mStrBankName = "";//银行名
+                mStrBankNumber = "";//银行卡号
+                mStrBank_UserName = "";//开户名
+                tv_bank_card_info.setText("");
                 mLl_bank_info.setVisibility(View.VISIBLE);
                 pop.dismiss();
             }

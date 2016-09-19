@@ -5,6 +5,7 @@ import android.content.Context;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.TreeMap;
 
@@ -51,8 +52,13 @@ public class CommonHelper extends Presenter {
             mgCallback = new MgCallback() {
 
                 @Override
-                public void onSuccessResponse(String body) {
-                    mView.onSuccess(body);
+                public void onSuccessResponse(final String body) {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.onSuccess(body);
+                        }
+                    });
                 }
 
                 @Override

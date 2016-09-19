@@ -30,6 +30,9 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
     private View mIvShareInfo;//分享收益帮助说明
     private View mIvLiveInfo;//直播收益帮助说明
     private View mBtTiXian;//提现按钮
+    private View mLL_DaiYan;
+    private View mLL_Share;
+    private View mLL_Live;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
     }
 
     private void initView() {
+        initTitle();
         mTvTiXian = ((TextView) findViewById(R.id.tv_tixian));
         mTvDaiYan = ((TextView) findViewById(R.id.tv_daiyan));
 
@@ -52,6 +56,10 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
 
         mBtTiXian = findViewById(R.id.tv_tixian_action);
 
+        mLL_DaiYan = findViewById(R.id.ll_daiyan);
+        mLL_Share = findViewById(R.id.ll_share);
+        mLL_Live = findViewById(R.id.ll_live);
+
 
         mRedPacket = findViewById(R.id.ll_redPacket);
         mMGDiamond = findViewById(R.id.ll_mg_diamond);
@@ -62,6 +70,19 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
         mIvShareInfo.setOnClickListener(this);
         mIvLiveInfo.setOnClickListener(this);
         mBtTiXian.setOnClickListener(this);
+        mLL_DaiYan.setOnClickListener(this);
+        mLL_Share.setOnClickListener(this);
+        mLL_Live.setOnClickListener(this);
+    }
+
+    private void initTitle() {
+        findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        ((TextView) findViewById(R.id.tv_middle)).setText("我的钱包");
     }
 
     private void bindData() {
@@ -112,13 +133,21 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
             MGToast.showToast("米果钻");
         }else if (v==mIvLiveInfo){
             //直播收益说明
-            MGToast.showToast("直播info");
+            MGToast.showToast("info");
         }else if (v==mIvShareInfo){
             //分享收益说明
-            MGToast.showToast("分享info");
+            MGToast.showToast("info");
         }else if (v==mBtTiXian){
             //提现按钮点击
             clickTiXian();
+        }else if (v==mLL_DaiYan){
+            //代言
+        }else if (v==mLL_Live){
+            //直播
+            MGToast.showToast("系统升级,敬请期待");
+        }else if (v==mLL_Share){
+            //分享
+            MGToast.showToast("系统升级,敬请期待");
         }
     }
 

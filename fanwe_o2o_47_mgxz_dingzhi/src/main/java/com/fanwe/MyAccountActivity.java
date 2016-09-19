@@ -276,7 +276,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void registerClick() {
-        mLl_bind_mobile.setOnClickListener(this);
+//        mLl_bind_mobile.setOnClickListener(this);
         mLl_modify_password.setOnClickListener(this);
         mLl_delivery_address.setOnClickListener(this);
         mLl_delivery_address_dc.setOnClickListener(this);

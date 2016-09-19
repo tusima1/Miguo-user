@@ -9,6 +9,8 @@
     android:orientation="vertical"
     tools:context="com.fanwe.user.view.WalletActivity">
 
+    <include layout="@layout/item_layout_sample_title"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp128"
@@ -63,6 +65,7 @@
         >
 
         <LinearLayout
+            android:id="@+id/ll_daiyan"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:clickable="true"
@@ -119,6 +122,7 @@
             android:layout_weight="1">
 
             <LinearLayout
+                android:id="@+id/ll_share"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -201,6 +205,7 @@
             android:layout_weight="1">
 
             <LinearLayout
+                android:id="@+id/ll_live"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
