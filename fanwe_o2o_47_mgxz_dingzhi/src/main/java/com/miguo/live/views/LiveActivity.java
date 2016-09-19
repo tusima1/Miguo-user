@@ -72,6 +72,7 @@ import com.miguo.live.views.danmu.DanmuBean;
 import com.miguo.live.views.danmu.Danmukiller;
 import com.miguo.live.views.definetion.IntentKey;
 import com.miguo.live.views.dialog.LiveBackDialog;
+import com.miguo.live.views.gift.SmallGifView;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
@@ -203,6 +204,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     DanmakuView danmakuView;
     Danmukiller danmukiller;
 
+    /**
+     * 小礼物动画view
+     * @param savedInstanceState
+     */
+    SmallGifView smallGifView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -240,6 +247,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
          * 弹幕
          */
         danmakuView = (DanmakuView)findViewById(R.id.danmuku);
+        smallGifView = (SmallGifView) findViewById(R.id.small_gift_view);
 
     }
 

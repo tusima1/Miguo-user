@@ -17,6 +17,25 @@ public class GiftListBean {
     private String type;
     private String is_delete;
 
+    private String userName;
+    private String userAvatar;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
+    }
+
     public String getPrice() {
         return price;
     }

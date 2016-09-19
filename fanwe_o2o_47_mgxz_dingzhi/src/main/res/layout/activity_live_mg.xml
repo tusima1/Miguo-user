@@ -227,6 +227,13 @@
         android:layout_height="match_parent">
 
 
+        <com.miguo.live.views.gift.SmallGifView
+            android:id="@+id/small_gift_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.miguo.live.views.gift.SmallGifView>
+
         <master.flame.danmaku.ui.widget.DanmakuView
             android:layout_marginBottom="150dp"
             android:layout_alignParentBottom="true"
