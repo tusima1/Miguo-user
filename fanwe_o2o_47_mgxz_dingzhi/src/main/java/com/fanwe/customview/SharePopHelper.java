@@ -11,9 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.fanwe.app.App;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.interf.IHelper;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
@@ -111,6 +113,8 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     }
 
     public void share() {
-        UmengShareManager.share(platform, mActivity, "分享", "直播分享，领取码:" + App.getInstance().getReceiveCode(), "http://api2.w2.mgxz.com/app.html", UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+        UmengShareManager.share(platform, mActivity, "分享", "直播分享，领取码:" + App.getInstance().getReceiveCode(),
+                ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 }

@@ -36,7 +36,7 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
     private AttentionListAdapter mAttentionListAdapter;
     private boolean isRefresh = true;
     private int pageNum = 1;
-    private int pageSize = 5;
+    private int pageSize = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

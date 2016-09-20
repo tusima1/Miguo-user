@@ -237,24 +237,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
-
-//                        startActivity(new Intent(MainActivity.this, CollectListActivity.class));
-
-//                        final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
-//                        dialog.setSubmitListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                MGToast.showToast("登录");
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        dialog.setCloseListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        dialog.show();
+//                        startActivity(new Intent(MainActivity.this, UserHomeActivity.class));
                         break;
                     case 2:
                         click2();

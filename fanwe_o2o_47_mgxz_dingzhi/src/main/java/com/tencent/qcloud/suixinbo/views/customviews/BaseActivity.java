@@ -34,6 +34,8 @@ public class BaseActivity extends Activity{
         registerReceiver(recv, filter);
     }
 
+
+
     @Override
     protected void onDestroy() {
         try {

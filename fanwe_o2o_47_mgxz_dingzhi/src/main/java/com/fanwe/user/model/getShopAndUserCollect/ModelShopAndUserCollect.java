@@ -1,73 +1,85 @@
 package com.fanwe.user.model.getShopAndUserCollect;
 
+import java.util.List;
+
 public class ModelShopAndUserCollect {
-    private String nick;
+    private List<Image> img_arr;
 
-    private String attention_status;
+    private String index_img;
 
-    private String personality;
+    private String cons_count;
 
-    private String fx_level;
+    private String collect_type;
 
-    private String icon;
+    private String coll_count;
 
-    private String focusid;
+    private String id;
 
-    private String focus_user_id;
+    private String mobile_brief;
 
-    public void setNick(String nick) {
-        this.nick = nick;
+    private String shop_name;
+
+    public void setImg_arr(List<Image> img_arr) {
+        this.img_arr = img_arr;
     }
 
-    public String getNick() {
-        return this.nick;
+    public List<Image> getImg_arr() {
+        return this.img_arr;
     }
 
-    public void setAttention_status(String attention_status) {
-        this.attention_status = attention_status;
+    public void setIndex_img(String index_img) {
+        this.index_img = index_img;
     }
 
-    public String getAttention_status() {
-        return this.attention_status;
+    public String getIndex_img() {
+        return this.index_img;
     }
 
-    public void setPersonality(String personality) {
-        this.personality = personality;
+    public void setCons_count(String cons_count) {
+        this.cons_count = cons_count;
     }
 
-    public String getPersonality() {
-        return this.personality;
+    public String getCons_count() {
+        return this.cons_count;
     }
 
-    public void setFx_level(String fx_level) {
-        this.fx_level = fx_level;
+    public void setCollect_type(String collect_type) {
+        this.collect_type = collect_type;
     }
 
-    public String getFx_level() {
-        return this.fx_level;
+    public String getCollect_type() {
+        return this.collect_type;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setColl_count(String coll_count) {
+        this.coll_count = coll_count;
     }
 
-    public String getIcon() {
-        return this.icon;
+    public String getColl_count() {
+        return this.coll_count;
     }
 
-    public void setFocusid(String focusid) {
-        this.focusid = focusid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getFocusid() {
-        return this.focusid;
+    public String getId() {
+        return this.id;
     }
 
-    public void setFocus_user_id(String focus_user_id) {
-        this.focus_user_id = focus_user_id;
+    public void setMobile_brief(String mobile_brief) {
+        this.mobile_brief = mobile_brief;
     }
 
-    public String getFocus_user_id() {
-        return this.focus_user_id;
+    public String getMobile_brief() {
+        return this.mobile_brief;
+    }
+
+    public void setShop_name(String shop_name) {
+        this.shop_name = shop_name;
+    }
+
+    public String getShop_name() {
+        return this.shop_name;
     }
 }

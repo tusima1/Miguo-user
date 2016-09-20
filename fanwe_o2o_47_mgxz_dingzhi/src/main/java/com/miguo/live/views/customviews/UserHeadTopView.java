@@ -32,6 +32,7 @@ import com.miguo.live.views.LiveUserExitDialogHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -111,6 +112,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void initNeed(Activity activity) {
         this.mActivity = activity;
         userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
+    }
+
+    public void setViews(){
+        userExitDialogHelper.setView(this);
     }
 
 
@@ -248,10 +253,11 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onSuccess(String method, List datas) {
+        ArrayList d = (ArrayList)datas;
         Message message = new Message();
         if (LiveConstants.CHECK_FOCUS.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                ModelCheckFocus modelCheckFocus = (ModelCheckFocus) datas.get(0);
+            if (!SDCollectionUtil.isEmpty(d)) {
+                ModelCheckFocus modelCheckFocus = (ModelCheckFocus) d.get(0);
                 if ("1".equals(modelCheckFocus.getFocus())) {
                     //已关注
                     message.what = 1;

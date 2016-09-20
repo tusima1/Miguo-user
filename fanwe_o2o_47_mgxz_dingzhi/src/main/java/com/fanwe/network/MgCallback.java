@@ -5,11 +5,14 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
+import com.fanwe.base.ErrorCodeParse;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.sunday.eventbus.SDEventManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -56,18 +59,24 @@ public abstract class MgCallback<T> implements Callback {
                 String token = root.getToken();
                 int code = Integer.valueOf(statusCode);
                 String message = root.getMessage();
+                String newMessage = ErrorCodeParse.getErrorCodeMap().get(statusCode);
+                if(newMessage!=null&&!TextUtils.isEmpty(newMessage)&&!"null".equals(newMessage)){
+                    message = newMessage;
+                }
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
                     if (!TextUtils.isEmpty(token) && !"null".equals(token)) {
                         UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }
-                    if (code == 302) {
-                        onErrorResponse(message, 302 + "");
+                    if (code == 320||code==321) {
+                        SDToast.showToast(message);
+                        SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {
                         onSuccessResponse(body);
                     }
                 } else {
+
                     onErrorResponse(message, statusCode);
                 }
 

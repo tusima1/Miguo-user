@@ -456,7 +456,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
 
 			@Override
 			public void onStart() {
-				SDDialogManager.showProgressDialog("正在处理图片");
+				SDDialogManager.showProgressDialog("请稍等...");
 				nListFile.clear();
 			}
 
