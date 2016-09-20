@@ -36,6 +36,8 @@ import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.presents.LoginHelper;
+import com.fanwe.user.view.AttentionListActivity;
+import com.fanwe.user.view.CollectListActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
