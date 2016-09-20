@@ -8,36 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
-import com.fanwe.base.Result;
-import com.fanwe.base.Root;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
-import com.fanwe.library.customview.SDSendValidateButton;
-import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
-import com.fanwe.library.utils.MD5Util;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.Check_MobActModel;
-import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.UserConstants;
-import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.LoginHelper;
-import com.fanwe.utils.Contance;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.TreeMap;
 
 public class LoginPhoneFragment extends LoginBaseFragment implements CallbackView
 {
@@ -177,6 +162,8 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			break;
 		}
 	}
+	private int count;
+	private boolean showToast=false;
 	/**
 	 *快捷 登录 接口。
 	 */
@@ -193,9 +180,23 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			SDToast.showToast("请输入验证码!");
 			return;
 		}
+		count++;
+		if (count>=4){
+			if (!showToast){
+				showToast=true;
+				MGToast.showToast("操作过于频繁,请稍候再试!");
+				MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+					@Override
+					public void run() {
+						count=0;
+						showToast=false;
+					}
+				},10000);
+			}
+			return;
+		}
 		mLoginHelper.doQuickLogin(mNumberPhone,mStrCode);
-
-
+		SDDialogManager.showProgressDialog("请稍候...");
 	}
 
 

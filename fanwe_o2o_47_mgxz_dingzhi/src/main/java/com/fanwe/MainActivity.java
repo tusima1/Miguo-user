@@ -21,7 +21,6 @@ import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;
-import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.customview.SDTabItemBottom;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
@@ -134,7 +133,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
         startUpgradeService();
         initBottom();
         JpushHelper.initJPushConfig();
-        MessageHelper.updateMessageCount();
+//        MessageHelper.updateMessageCount();
         initOthers();
         initUserInfo();
     }

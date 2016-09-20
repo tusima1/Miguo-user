@@ -2,7 +2,6 @@ package com.fanwe.jpush;
 
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.MessageCount;
 import com.fanwe.model.RequestModel;
 import com.lidroid.xutils.exception.HttpException;
@@ -33,7 +32,7 @@ public class MessageHelper {
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
-				SDToast.showToast("获取消息数量失败!");
+//				SDToast.showToast("获取消息数量失败!");
 			}
 
 			@Override

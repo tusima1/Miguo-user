@@ -13,6 +13,7 @@ import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.fragment.LoginFragment;
 import com.fanwe.library.common.SDActivityManager;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.LocalUserModel;
@@ -101,13 +102,14 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                SDDialogManager.dismissProgressDialog();
                 dealLoginInfo(responseBody, mobile, null);
 
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                SDDialogManager.dismissProgressDialog();
                 SDToast.showToast(message);
             }
         });
@@ -198,16 +200,15 @@ public class LoginHelper extends Presenter {
             @Override
             public void onSuccessResponse(String responseBody) {
 
-
+                SDDialogManager.dismissProgressDialog();
                 dealLoginInfo(responseBody, userName, password);
-
-
             }
 
 
             @Override
 
             public void onErrorResponse(String message, String errorCode) {
+                SDDialogManager.dismissProgressDialog();
                 SDToast.showToast(message);
             }
         });
@@ -346,7 +347,6 @@ public class LoginHelper extends Presenter {
                     loginSuccess();
 
                 }
-                ;
             }
 
             @Override

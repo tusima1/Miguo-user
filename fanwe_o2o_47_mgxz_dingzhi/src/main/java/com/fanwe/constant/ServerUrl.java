@@ -13,7 +13,7 @@ public class ServerUrl {
     //开发环境。
     public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.dev.mgxz.com/";
     //测试环境。
-    //public static final String SERVER_API_JAVA_TEST_URL= "http://mapi.test.mgxz.com/";
+//    public static final String SERVER_API_JAVA_TEST_URL= "http://mapi.test.mgxz.com/";
 
 
 

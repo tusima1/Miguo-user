@@ -1,18 +1,14 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import cn.jpush.android.api.JPushInterface;
 
 import com.fanwe.DaiYanStoreWapActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
@@ -29,7 +25,6 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.Message;
@@ -38,6 +33,10 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+
+import java.util.List;
+
+import cn.jpush.android.api.JPushInterface;
 
 public class MyMessageAdapter extends SDBaseAdapter<Message> {
 
@@ -178,7 +177,7 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
-				SDToast.showToast("获取消息数量失败!");
+//				SDToast.showToast("获取消息数量失败!");
 			}
 
 			@Override
