@@ -30,6 +30,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.permission.DangerousPermissions;
@@ -319,6 +320,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
                             if (defaultCity != null) {
                                 actModel.setCity_id(defaultCity.getId());
                                 actModel.setCity_name(defaultCity.getName());
+                                AppRuntimeWorker.setCity_name(defaultCity.getName());
                             }
                         }
                         InitActModelDao.insertOrUpdateModel(actModel);

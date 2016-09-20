@@ -96,7 +96,7 @@ public class AlbumActivity extends BaseActivity
 	{
 		if (SDCollectionUtil.isIndexLegalInList(mListUrl, position))
 		{
-			String textIndex = position + 1 + " of " + mListUrl.size();
+			String textIndex = position + 1 + "/" + mListUrl.size();
 			mTitle.setMiddleTextTop(textIndex);
 		}
 	}
