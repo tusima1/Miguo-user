@@ -6,6 +6,8 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.NetWorkStateUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -71,6 +73,20 @@ public class OkHttpUtils {
     }
 
     /**
+     * 判斷网络是否连接。
+     * @return
+     */
+    public boolean checkNetWorkValidate() {
+                //判断网络环境
+        boolean connected = NetWorkStateUtil.isConnected(App.getInstance());
+        if (!connected) {
+            MGToast.showToast("没有网络,请检测网络环境!");
+            return  false;
+        }
+        return true;
+    }
+
+    /**
      * 异步POST提交，带TAG 的 请求
      * POST方法发送请求时，仍然使用基本的URL，将参数信息放在请求实体中发送。
      *
@@ -84,6 +100,9 @@ public class OkHttpUtils {
 
     public void post(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
         String serverUrl = "";
+        if(!checkNetWorkValidate()){
+            return;
+        }
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
         } else {
@@ -136,6 +155,9 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void put(String url, TreeMap<String, String> params, Callback mCallback) {
+        if(!checkNetWorkValidate()){
+            return;
+        }
         String serverUrl = "";
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
@@ -189,6 +211,9 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
+        if(!checkNetWorkValidate()){
+            return;
+        }
         String serverUrl = "";
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
@@ -237,7 +262,9 @@ public class OkHttpUtils {
      * @throws IOException
      */
     public String synchronousPost(String url, String json) throws IOException {
-
+        if(!checkNetWorkValidate()){
+            return "";
+        }
         RequestBody body = RequestBody.create(JSON, json);
 
         Request request = new Request.Builder()
@@ -261,7 +288,9 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback) {
-
+        if(!checkNetWorkValidate()){
+            return;
+        }
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
@@ -293,7 +322,9 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void get(String url, TreeMap<String, String> params, Callback mCallback) {
-
+        if(!checkNetWorkValidate()){
+            return;
+        }
         String serverUrl = "";
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;

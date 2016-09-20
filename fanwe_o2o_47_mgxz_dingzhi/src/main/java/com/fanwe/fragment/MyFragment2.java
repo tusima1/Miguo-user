@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -74,7 +73,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
     private View mAllOrder;
-    private ImageView mIvSetting;
+//    private ImageView mIvMsg;//消息
     private View mUpgrade;
     private TextView mTvRedShopCart;
     private TextView mTvRedFriends;
@@ -127,7 +126,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
     private void initTopView() {
         mMine = findViewById(R.id.fl_mine);
-        mIvSetting = ((ImageView) findViewById(R.id.iv_setting));
+//        mIvMsg = ((ImageView) findViewById(R.id.iv_msg));
         mUpgrade = findViewById(R.id.ll_my_upgrade);
 
         mIvUserFace = ((CircleImageView) findViewById(R.id.iv_user_face));
@@ -146,7 +145,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mCollect.setOnClickListener(this);
         mFans.setOnClickListener(this);
         mMine.setOnClickListener(this);
-        mIvSetting.setOnClickListener(this);
+//        mIvMsg.setOnClickListener(this);
         mIvUserFace.setOnClickListener(this);
         mUserName.setOnClickListener(this);
     }
@@ -254,7 +253,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
             //TODO 测试部分 佣金提现
-                        startActivity(WalletActivity.class);
+            startActivity(WalletActivity.class);
 //            String fx_level = modelPersonalHome.getFx_level();
 //            int level = MGStringFormatter.getInt(fx_level);
 //            if (level < 2) {
@@ -290,8 +289,6 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }else if (v==mAllOrder){
             /*全部订单*/
             clickMyOrderView("all");
-        }else if (v==mIvSetting){
-
         }else if (v==mErWeiMa){
             /*二维码名片*/
             startActivity(DistributionMyQRCodeActivity.class);
@@ -300,8 +297,11 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }else if (v==mUserName){
             //跳转至会员升级
             startActivity(MemberRankActivity.class);
-//            MGToast.showToast("会员升级");
         }
+        /*else if (v== mIvMsg){
+            //消息
+            startActivity(MessageActivity.class);
+        }*/
     }
 
     /**

@@ -588,6 +588,7 @@ public class LiveHttpHelper implements IHelper {
                 }
                 ResultCheckFocus resultCheckFocus = resultCheckFocuss.get(0);
                 List<ModelCheckFocus> modelCheckFocus = resultCheckFocus.getBody();
+//                mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
                 mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
             }
 

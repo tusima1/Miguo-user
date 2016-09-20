@@ -373,6 +373,8 @@ public class SDBaseActivity extends FragmentActivity implements SDEventObserver,
 	public void onEventMainThread(SDBaseEvent event)
 	{
 
+
+
 	}
 
 	@Override
@@ -392,6 +394,8 @@ public class SDBaseActivity extends FragmentActivity implements SDEventObserver,
 	{
 
 	}
+
+
 
 	public interface SDBaseActivityOnActivityResultListener
 	{
