@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fanwe.AccountMoneyActivity;
 import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
@@ -26,15 +25,18 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.AdviceActivity;
+import com.fanwe.user.view.AttentionListActivity;
+import com.fanwe.user.view.CollectListActivity;
 import com.fanwe.user.view.FansActivity;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.user.view.WalletActivity;
 import com.fanwe.user.view.customviews.RedDotView;
+import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.miguo.live.views.RechargeDiamondActivity;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -45,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/9/13.
  */
 public class MyFragment2 extends BaseFragment implements RedDotView
-        .OnRedDotViewClickListener, View.OnClickListener,CallbackView2 {
+        .OnRedDotViewClickListener, View.OnClickListener, CallbackView2 {
 
     private RedDotView mRDV_orderNotPay;//待付款订单
     private RedDotView mRDV_orderNotUse;//待使用
@@ -73,7 +75,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
     private View mAllOrder;
-//    private ImageView mIvMsg;//消息
+    //    private ImageView mIvMsg;//消息
     private View mUpgrade;
     private TextView mTvRedShopCart;
     private TextView mTvRedFriends;
@@ -81,7 +83,8 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
 
     @Override
-    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         setmTitleType(Constant.TitleType.TITLE_NONE);
         return setContentView(R.layout.activity_test_my_fragment);
     }
@@ -105,16 +108,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         initMyOrders();
         initGridLayout();
         initPullToRefreshScrollView();
-        setUserData();
-        findViewById(R.id.testRecharge).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), RechargeDiamondActivity.class);
-                startActivity(intent);
-
-
-            }
-        });
+//        setUserData();
     }
 
     private void setUserData() {
@@ -193,8 +187,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mRDV_orderNotRefund.setOnRedDotViewClickListener(this);
         mAllOrder.setOnClickListener(this);
     }
+
     private void initPullToRefreshScrollView() {
-        mPtrsvAll= (PullToRefreshScrollView) findViewById(R.id.frag_my_account_ptrsv_all);
+        mPtrsvAll = (PullToRefreshScrollView) findViewById(R.id.frag_my_account_ptrsv_all);
         mPtrsvAll.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         mPtrsvAll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
 
@@ -210,6 +205,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         });
         mPtrsvAll.setRefreshing();
     }
+
     /**
      * 请求我的账户接口
      */
@@ -267,18 +263,18 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 //                startActivity(intent);
 //            }
         } else if (v == mSuggestion) {
-
-//            UserSendGiftPopHelper helper=new UserSendGiftPopHelper(getActivity(),"1");
-//            helper.show();
-            startActivity(AccountMoneyActivity.class);
-        }else if (v==mStar){
+            //建议
+            startActivity(AdviceActivity.class);
+        } else if (v == mStar) {
             /*关注*/
-        }else if (v==mCollect){
+            startActivity(AttentionListActivity.class);
+        } else if (v == mCollect) {
             /*收藏*/
-        }else if (v==mFans){
+            startActivity(CollectListActivity.class);
+        } else if (v == mFans) {
             /*粉丝*/
             startActivity(FansActivity.class);
-        }else if (v==mMine){
+        } else if (v == mMine) {
             /*点击了我的区域*/
             /*设置页面*/
             Intent intent = new Intent(getActivity(), MyAccountActivity.class);
@@ -286,15 +282,15 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             userData.putString("user_face", mUserFaceString);
             intent.putExtras(userData);
             startActivity(intent);
-        }else if (v==mAllOrder){
+        } else if (v == mAllOrder) {
             /*全部订单*/
             clickMyOrderView("all");
-        }else if (v==mErWeiMa){
+        } else if (v == mErWeiMa) {
             /*二维码名片*/
             startActivity(DistributionMyQRCodeActivity.class);
-        }else if (v==mIvUserFace){
-            MGToast.showToast("主播首页");
-        }else if (v==mUserName){
+        } else if (v == mIvUserFace) {
+            startActivity(UserHomeActivity.class);
+        } else if (v == mUserName) {
             //跳转至会员升级
             startActivity(MemberRankActivity.class);
         }
@@ -315,56 +311,86 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 
     protected void bindData() {
         if (modelPersonalHome == null) {
+            mUserFaceString = App.getInstance().getUserIcon();
+            SDViewBinder.setTextView(mUserName, App.getInstance().getUserNickName(), "");
+            SDViewBinder.setImageView(App.getInstance().getUserIcon(), mIvUserFace,
+                    ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
             MGLog.e("personalHome 为null");
             return;
         }
+        //设置用户信息
+        SDViewBinder.setTextView(mUserName, modelPersonalHome.getNick());
+        SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(modelPersonalHome.getPersonality(),10));
+        mUserFaceString = modelPersonalHome.getIcon();
+        SDViewBinder.setImageView(mUserFaceString, mIvUserFace);
+
         String fx_level = modelPersonalHome.getFx_level();
-        Drawable rankDrawable=null;
+        Drawable rankDrawable = null;
         if ("1".equals(fx_level)) {
-            rankDrawable=getResources().getDrawable(R.drawable.ic_rank_3);
+            rankDrawable = getResources().getDrawable(R.drawable.ic_rank_3);
         } else if ("2".equals(fx_level)) {
-            rankDrawable=getResources().getDrawable(R.drawable.ic_rank_2);
+            rankDrawable = getResources().getDrawable(R.drawable.ic_rank_2);
         } else if ("3".equals(fx_level)) {
-            rankDrawable=getResources().getDrawable(R.drawable.ic_rank_1);
+            rankDrawable = getResources().getDrawable(R.drawable.ic_rank_1);
         }
-        if (rankDrawable!=null){
-            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable.getMinimumHeight());
-            mUserName.setCompoundDrawables(null,null,rankDrawable,null);
+        if (rankDrawable != null) {
+            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable
+                    .getMinimumHeight());
+            mUserName.setCompoundDrawables(null, null, rankDrawable, null);
         }
         //粉丝
         mTvFansNum.setText(modelPersonalHome.getFans_count());
-        //TODO 收藏 & 关注
+        //关注
+        mTvStarNum.setText(modelPersonalHome.getFocus_count());
         //收藏
         mTvCollectNum.setText(modelPersonalHome.getCollect());
 
         // 待付款订单数量
-        String notPaidCountStr = modelPersonalHome.getPending_pay();
-        Integer notPaidCount = Integer.parseInt(notPaidCountStr);
-        mRDV_orderNotPay.setRedNum(notPaidCount);
-
+        setCustomRedText(mRDV_orderNotPay, modelPersonalHome.getPending_pay());
         //待使用
-        String readyForUseCountStr = modelPersonalHome.getPending_use();
-        Integer readyForUseCount = Integer.parseInt(readyForUseCountStr);
-        mRDV_orderNotUse.setRedNum(readyForUseCount);
+        setCustomRedText(mRDV_orderNotUse, modelPersonalHome.getPending_use());
         //待评价
-        String notCommentedCountStr = modelPersonalHome.getPending_evaluation();
-        Integer notCommentedCount = Integer.parseInt(notCommentedCountStr);
-        mRDV_orderNotComment.setRedNum(notCommentedCount);
-
+        setCustomRedText(mRDV_orderNotComment, modelPersonalHome.getPending_evaluation());
         //退款
-        String refundCountStr = modelPersonalHome.getRefunt();
-        Integer refundCount = Integer.parseInt(refundCountStr);
-        mRDV_orderNotRefund.setRedNum(refundCount);
+        setCustomRedText(mRDV_orderNotRefund, modelPersonalHome.getRefunt());
 
         //--------------红点数量
 //        private TextView mTvRedShopCart;
 //        private TextView mTvRedFriends;
 //        private TextView mTvRedQuan;
 
-        mTvRedShopCart.setText("123");
-        mTvRedFriends.setText("123");
-        mTvRedQuan.setText("123");
+        //购物车数量
+        setRedText(mTvRedShopCart, modelPersonalHome.getCart_count());
+        //战队数量
+        setRedText(mTvRedFriends, modelPersonalHome.getFx_count());
+        //券数量
+        setRedText(mTvRedQuan, modelPersonalHome.getCoupon_count());
 
+    }
+
+    /**
+     * 设置自定义的小红点数字显示
+     * @param redDotView
+     * @param count
+     */
+    private void setCustomRedText(RedDotView redDotView, String count) {
+        int intCount = Integer.parseInt(count);
+        redDotView.setRedNum(intCount);
+    }
+
+    /**
+     * 设置红点数量
+     * @param tvRed textView
+     * @param count count
+     */
+    private void setRedText(TextView tvRed, String count) {
+        int anInt = MGStringFormatter.getInt(count);
+        if (anInt > 0) {
+            tvRed.setText(anInt + "");
+            tvRed.setVisibility(View.VISIBLE);
+        } else {
+            tvRed.setVisibility(View.GONE);
+        }
     }
 
     //------------http start---------------

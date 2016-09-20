@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -858,8 +857,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
 
         mUserHeadTopView.setVisibility(View.VISIBLE);
-        //普通用户退出
-//            userExitDialogHelper = new LiveUserExitDialogHelper(this);
         mUserHeadTopView.initNeed(this);
 
         mUserBottomTool.setVisibility(View.VISIBLE);
@@ -872,20 +869,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         doUpdateMembersCount();
 
+
         if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop()
                 .getShop_name())) {
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
-//            List<String> ids = new ArrayList<>();
-//            ids.add(CurLiveInfo.getHostID());干嘛的???
         if (mLiveHttphelper != null) {
             mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "");
 
         }
         mRedPacketAdapter = new PagerRedPacketAdapter();
         mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
-//            mRedPacketAdapter.setMdatas(testDatas());
-//            mRedPacketAdapter.notifyDataSetChanged();
+
+        mUserHeadTopView.setViews();
     }
 
     /**
@@ -908,6 +904,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         MGTimer.showTime();
         mLiveHelper.resume();
         QavsdkControl.getInstance().onResume();
+    }
+
+    private boolean showBaoBao=false;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && !showBaoBao){
+            //弹出宝宝
+            mUserBottomTool.clickBaoBao();
+            showBaoBao=true;
+        }
     }
 
     @Override

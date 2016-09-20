@@ -26,9 +26,8 @@ public class ServerUrl {
 
 //   public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.31:8080/mgxz.BussRPC/";
 
-
-    //测试环境。
-    //public static final String SERVER_API_JAVA_TEST_URL= "http://mapi.test.mgxz.com/";
+    //H5分享地址
+    public static final String SERVER_H5 = "http://m.dev.mgxz.com/";
 
 
 

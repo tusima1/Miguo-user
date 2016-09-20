@@ -21,7 +21,6 @@ import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;
-import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.customview.SDTabItemBottom;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
@@ -134,7 +133,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
         startUpgradeService();
         initBottom();
         JpushHelper.initJPushConfig();
-        MessageHelper.updateMessageCount();
+//        MessageHelper.updateMessageCount();
         initOthers();
         initUserInfo();
     }
@@ -237,24 +236,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
-
-//                        startActivity(new Intent(MainActivity.this, CollectListActivity.class));
-
-//                        final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
-//                        dialog.setSubmitListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                MGToast.showToast("登录");
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        dialog.setCloseListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        dialog.show();
+//                        startActivity(new Intent(MainActivity.this, UserHomeActivity.class));
                         break;
                     case 2:
                         click2();

@@ -202,12 +202,23 @@ public class LiveHttpHelper implements IHelper {
                 RootAudienceCount rootAudienceCount = gson.fromJson(responseBody, RootAudienceCount.class);
                 List<ResultAudienceCount> resultAudienceCounts = rootAudienceCount.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceCounts)) {
-                    mView.onSuccess(LiveConstants.AUDIENCE_COUNT, null);
+                    if(mView2 != null){
+                        mView2.onSuccess(LiveConstants.AUDIENCE_COUNT, new ArrayList());
+                    }
+                    if(mView != null){
+                        mView.onSuccess(LiveConstants.AUDIENCE_COUNT, new ArrayList());
+
+                    }
                     return;
                 }
                 ResultAudienceCount resultAudienceCount = resultAudienceCounts.get(0);
                 List<ModelAudienceCount> modelAudienceCounts = resultAudienceCount.getBody();
-                mView.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
+                if(mView2 != null){
+                    mView2.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
+                }
+                if(mView != null){
+                    mView.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
+                }
             }
 
             @Override
@@ -583,18 +594,33 @@ public class LiveHttpHelper implements IHelper {
                 RootCheckFocus rootCheckFocus = gson.fromJson(responseBody, RootCheckFocus.class);
                 List<ResultCheckFocus> resultCheckFocuss = rootCheckFocus.getResult();
                 if (SDCollectionUtil.isEmpty(resultCheckFocuss)) {
-                    mView.onSuccess(LiveConstants.CHECK_FOCUS, null);
+
+                    if(mView2!=null){
+                        mView2.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
+                    }
+                    if(mView != null){
+                        mView.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
+                    }
+
                     return;
                 }
+
                 ResultCheckFocus resultCheckFocus = resultCheckFocuss.get(0);
-                List<ModelCheckFocus> modelCheckFocus = resultCheckFocus.getBody();
-//                mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
-                mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
+                List<ModelCheckFocus> modelCheckFocus;
+                modelCheckFocus = resultCheckFocus.getBody();
+//                modelCheckFocus = modelCheckFocus == null ? new ArrayList<ModelCheckFocus>() : modelCheckFocus;
+
+                if(mView2!=null){
+                    mView2.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
+                }
+                if(mView != null){
+                    mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
+                }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+//                SDToast.showToast(message);
             }
         });
 

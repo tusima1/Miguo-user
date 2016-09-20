@@ -32,14 +32,16 @@
                 <TextView
                     android:id="@+id/tv_red_shopcart"
                     android:layout_width="wrap_content"
+                    android:minWidth="@dimen/dp15"
                     android:layout_height="@dimen/dp13"
                     android:paddingLeft="@dimen/dp2"
                     android:paddingRight="@dimen/dp2"
                     android:gravity="center"
-                    android:text="330"
+                    android:text=""
                     android:textSize="9sp"
                     android:textColor="@android:color/white"
                     android:background="@drawable/reddot_13dp"
+                    android:visibility="gone"
                     android:layout_gravity="right"/>
                 <ImageView
                     android:layout_width="wrap_content"
@@ -140,12 +142,14 @@
                 <TextView
                     android:id="@+id/tv_red_friends"
                     android:layout_width="wrap_content"
+                    android:minWidth="@dimen/dp15"
                     android:layout_height="@dimen/dp13"
                     android:paddingLeft="@dimen/dp2"
                     android:paddingRight="@dimen/dp2"
                     android:gravity="center"
-                    android:text="330"
+                    android:text=""
                     android:textSize="9sp"
+                    android:visibility="gone"
                     android:textColor="@android:color/white"
                     android:background="@drawable/reddot_13dp"
                     android:layout_gravity="right"/>
@@ -191,11 +195,13 @@
                     android:id="@+id/tv_red_quan"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp13"
+                    android:minWidth="@dimen/dp15"
                     android:paddingLeft="@dimen/dp2"
                     android:paddingRight="@dimen/dp2"
                     android:gravity="center"
-                    android:text="330"
+                    android:text=""
                     android:textSize="9sp"
+                    android:visibility="gone"
                     android:textColor="@android:color/white"
                     android:background="@drawable/reddot_13dp"
                     android:layout_gravity="right"/>

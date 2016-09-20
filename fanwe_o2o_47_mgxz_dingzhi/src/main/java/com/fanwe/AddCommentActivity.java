@@ -21,6 +21,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.sunday.eventbus.SDEventManager;
@@ -157,13 +158,13 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
     }
 
     protected void requestComments() {
+        SDDialogManager.showProgressDialog("请稍等...");
         if (!validateParam()) {
             return;
         }
         if (!pointParam()) {
             return;
         }
-        SDDialogManager.showProgressDialog("请稍等...");
         if (!SDCollectionUtil.isEmpty(mListFile)) {
             //上传文件
             liveHttpHelper.getBussDictionInfo("Client");
@@ -204,6 +205,7 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
                 }
             }
         } else if (SellerConstants.SHOP_COMMENT.equals(method)) {
+            MGToast.showToast("评论成功");
             SDDialogManager.dismissProgressDialog();
             SDEventManager.post(EnumEventTag.COMMENT_SUCCESS.ordinal());
             Intent intent = new Intent(mActivity, CommentListActivity.class);

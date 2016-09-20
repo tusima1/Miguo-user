@@ -47,7 +47,7 @@
                     android:id="@+id/tv_username2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我是哈哈就是大连开发..."
+                    android:text=""
                     android:textColor="@color/gray_text_99"
                     android:textSize="@dimen/sp17"/>
             </LinearLayout>

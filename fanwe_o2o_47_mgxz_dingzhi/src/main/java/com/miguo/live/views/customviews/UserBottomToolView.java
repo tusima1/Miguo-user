@@ -153,6 +153,12 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     }
 
     /**
+     * 进入页面后就立刻弹出宝宝
+     */
+    public void clickBaoBao(){
+        mGoods.performClick();
+    }
+    /**
      * 点击出星星
      */
     private boolean clickLike2ShowHeart() {
