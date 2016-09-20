@@ -298,7 +298,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(this, mCommonHelper);
 
-        /**
+        /**mNetWorkReceiver
          * 弹幕
          */
 

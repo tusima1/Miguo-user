@@ -162,8 +162,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
             return true;
         } else {
-            //Toast.makeText(this, getString(R.string.text_live_admire_limit), Toast
-            // .LENGTH_SHORT).show();
+
             return false;
         }
     }
