@@ -858,8 +858,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
 
         mUserHeadTopView.setVisibility(View.VISIBLE);
-        //普通用户退出
-//            userExitDialogHelper = new LiveUserExitDialogHelper(this);
         mUserHeadTopView.initNeed(this);
 
         mUserBottomTool.setVisibility(View.VISIBLE);
@@ -872,20 +870,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         doUpdateMembersCount();
 
+
         if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop()
                 .getShop_name())) {
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
-//            List<String> ids = new ArrayList<>();
-//            ids.add(CurLiveInfo.getHostID());干嘛的???
         if (mLiveHttphelper != null) {
             mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "");
 
         }
         mRedPacketAdapter = new PagerRedPacketAdapter();
         mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
-//            mRedPacketAdapter.setMdatas(testDatas());
-//            mRedPacketAdapter.notifyDataSetChanged();
+
+        mUserHeadTopView.setViews();
     }
 
     /**
