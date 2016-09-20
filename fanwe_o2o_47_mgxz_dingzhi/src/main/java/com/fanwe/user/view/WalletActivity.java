@@ -12,6 +12,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.miguo.live.model.getWallet.ModelMyWallet;
+import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
@@ -127,10 +128,10 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
     public void onClick(View v) {
         if (v==mRedPacket){
             //点击红包
-            MGToast.showToast("红包");
+            startActivity(RedPacketListActivity.class);
         }else if (v==mMGDiamond){
             //米果钻
-            MGToast.showToast("米果钻");
+            startActivity(RechargeDiamondActivity.class);
         }else if (v==mIvLiveInfo){
             //直播收益说明
             MGToast.showToast("info");

@@ -606,7 +606,7 @@ public class LiveHttpHelper implements IHelper {
                 }
 
                 ResultCheckFocus resultCheckFocus = resultCheckFocuss.get(0);
-                List<ModelCheckFocus> modelCheckFocus = new ArrayList<ModelCheckFocus>();
+                List<ModelCheckFocus> modelCheckFocus;
                 modelCheckFocus = resultCheckFocus.getBody();
 //                modelCheckFocus = modelCheckFocus == null ? new ArrayList<ModelCheckFocus>() : modelCheckFocus;
 

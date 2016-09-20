@@ -36,12 +36,13 @@
                 android:textStyle="bold"/>
 
             <ImageView
-                android:id="@+id/iv_setting"
+                android:id="@+id/iv_msg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right|center_vertical"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_setting"
+                android:src="@drawable/ic_msg_black"
+                android:visibility="gone"
                 />
 
             <View
