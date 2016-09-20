@@ -31,6 +31,7 @@ import com.fanwe.user.view.CollectListActivity;
 import com.fanwe.user.view.FansActivity;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.user.view.WalletActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;

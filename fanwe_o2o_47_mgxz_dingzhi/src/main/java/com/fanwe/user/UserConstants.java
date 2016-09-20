@@ -206,11 +206,15 @@ public class UserConstants {
      * 粉丝
      */
     public static final String ATTENTION_Fans = "AttentionFans";
-    /*粉丝关注*/
+    /**
+     * 粉丝关注
+     */
     public static final String ATTENTION = "Attention";
-    /*钱包*/
+    /**
+     * 钱包
+     */
     public static final String MY_WALLET = "MyWallet";
-/**
+    /**
      * 获取用户关注的人的一览接口
      */
     public static final String ATTENTION_FOCUS = "AttentionFocus";
@@ -218,4 +222,16 @@ public class UserConstants {
      * 我的收藏
      */
     public static final String SHOP_AND_USER_COLLECT = "ShopAndUserCollect";
+    /**
+     * 获取个人主页信息（头像，昵称，签名，关注，赞，粉丝）
+     */
+    public static final String PERSON_HOME_PAGE = "PersonHomePage";
+    /**
+     * 获得TA的最爱
+     */
+    public static final String GET_PRODUCT_LIST = "GetProductList";
+    /**
+     * 获得网红的直播场次
+     */
+    public static final String GET_SPOKE_PLAY = "GetSpokePlay";
 }
