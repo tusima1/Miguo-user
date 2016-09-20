@@ -36,8 +36,6 @@ import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.presents.LoginHelper;
-import com.fanwe.user.view.AttentionListActivity;
-import com.fanwe.user.view.CollectListActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -239,24 +237,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
-
-//                        startActivity(new Intent(MainActivity.this, CollectListActivity.class));
-
-//                        final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
-//                        dialog.setSubmitListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                MGToast.showToast("登录");
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        dialog.setCloseListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        dialog.show();
+//                        startActivity(new Intent(MainActivity.this, UserHomeActivity.class));
                         break;
                     case 2:
                         click2();

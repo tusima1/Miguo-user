@@ -1,16 +1,25 @@
 package com.fanwe.user.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.fanwe.StoreDetailActivity;
+import com.fanwe.app.App;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.getShopAndUserCollect.Image;
 import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +57,7 @@ public class CollectListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Holder mHolder = null;
         if (null == convertView) {
             mHolder = new Holder();
@@ -64,6 +73,25 @@ public class CollectListAdapter extends BaseAdapter {
             mHolder = (Holder) convertView.getTag();
         }
         setData(mHolder, position);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ModelShopAndUserCollect temp = datas.get(position);
+                if ("1".equals(temp.getCollect_type())) {
+                    //门店
+                    Intent itemintent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, temp.getId());
+                    bundle.putInt("type", 0);
+                    itemintent.putExtras(bundle);
+                    itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+                    mContext.startActivity(itemintent);
+                } else {
+                    //网红小店
+                }
+            }
+        });
         return convertView;
     }
 
@@ -71,17 +99,27 @@ public class CollectListAdapter extends BaseAdapter {
 
     private void setData(Holder mHolder, final int position) {
         currModle = datas.get(position);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mHolder.recyclerView.setLayoutManager(layoutManager);
+        SDViewBinder.setTextView(mHolder.tvName, currModle.getShop_name(), "");
+        SDViewBinder.setTextView(mHolder.tvNum, "销售量" + currModle.getCons_count() + "  收藏数" + currModle.getColl_count());
+        ImageLoader.getInstance().displayImage(currModle.getIndex_img(), mHolder.ivIcon);
         List<String> listData = new ArrayList<String>();
-        for (int i = 0; i < 5; ++i) {
-            String uBean = "http://img15.3lian.com/2015/f1/119/d/47.jpg";
-            listData.add(uBean);
+        if (!SDCollectionUtil.isEmpty(currModle.getImg_arr())) {
+            for (Image img : currModle.getImg_arr()) {
+                if (!TextUtils.isEmpty(img.getImg_url()))
+                    listData.add(img.getImg_url());
+            }
         }
-        ImageAdapter adapter = new ImageAdapter(mContext, listData);
-        mHolder.recyclerView.setAdapter(adapter);
+        if (SDCollectionUtil.isEmpty(listData)) {
+            mHolder.recyclerView.setVisibility(View.GONE);
+        } else {
+            mHolder.recyclerView.setVisibility(View.VISIBLE);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            mHolder.recyclerView.setLayoutManager(layoutManager);
+            ImageAdapter adapter = new ImageAdapter(mContext, listData);
+            mHolder.recyclerView.setAdapter(adapter);
+        }
     }
 
 
