@@ -117,4 +117,31 @@ public class MGStringFormatter {
         }
         return result;
     }
+
+    public static String getLimitedString(String txt,int limitNum){
+        return getLimitedString(txt,limitNum,"...");
+    }
+    public static String getLimitedString(String txt,int limitNum,String endStr){
+        return getLimitedString(txt,limitNum,endStr,"");
+    }
+    /**
+     * 获取截取限制的字符串
+     * @param txt
+     * @param limitNum
+     * @param endStr
+     * @return
+     */
+    public static String getLimitedString(String txt,int limitNum,String endStr,String emptyStr){
+        String result="";
+        if(!TextUtils.isEmpty(txt)){
+            int length = txt.length();
+            if (length>limitNum){
+                result=txt.substring(0,limitNum);
+                result=result+endStr;
+            }
+        }else {
+            result=emptyStr;
+        }
+        return result;
+    }
 }

@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -908,6 +907,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         MGTimer.showTime();
         mLiveHelper.resume();
         QavsdkControl.getInstance().onResume();
+    }
+
+    private boolean showBaoBao=false;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && !showBaoBao){
+            //弹出宝宝
+            mUserBottomTool.clickBaoBao();
+            showBaoBao=true;
+        }
     }
 
     @Override
