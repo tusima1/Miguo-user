@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -19,10 +20,10 @@ import java.util.List;
 public class UserHomeLiveImgAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater inflater;
-    private List<String> datas;
+    private List<ModelSpokePlay> datas;
+    private ModelSpokePlay currModelSpokePlay;
 
-
-    public UserHomeLiveImgAdapter(Context mContext, LayoutInflater layoutInflater, List<String> datas) {
+    public UserHomeLiveImgAdapter(Context mContext, LayoutInflater layoutInflater, List<ModelSpokePlay> datas) {
         this.mContext = mContext;
         this.inflater = layoutInflater;
         this.datas = datas;
@@ -60,7 +61,8 @@ public class UserHomeLiveImgAdapter extends BaseAdapter {
     }
 
     private void setData(Holder mHolder, final int position) {
-        ImageLoader.getInstance().displayImage(datas.get(position), mHolder.ivBg);
+        currModelSpokePlay = datas.get(position);
+        ImageLoader.getInstance().displayImage(currModelSpokePlay.getCover(), mHolder.ivBg);
     }
 
     private static class Holder {

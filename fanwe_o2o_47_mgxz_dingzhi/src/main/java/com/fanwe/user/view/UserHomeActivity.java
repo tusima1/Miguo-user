@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.app.App;
@@ -15,6 +16,8 @@ import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
 import com.fanwe.library.title.SDTitleItem;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
@@ -24,9 +27,12 @@ import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
 import com.fanwe.user.model.getProductList.ModelProductList;
 import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 网红主页
@@ -38,6 +44,11 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
     private String id;
     private RecyclerView recyclerViewShop;
     private MyGridView gridViewLive;
+    private CircleImageView circleImageView;
+    private TextView tvName, tvAttention, tvFans, tvSupport, tvSign;
+
+    private List<String> imgsProduct = new ArrayList<>();
+    private List<ModelSpokePlay> datasLive = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +64,7 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
         preData();
     }
 
-    private List<String> imgs = new ArrayList<>();
-
     private void getData() {
-        for (int i = 0; i < 10; i++) {
-            imgs.add("http://b.hiphotos.baidu.com/image/pic/item/a686c9177f3e670900d880193fc79f3df9dc5578.jpg");
-        }
-
         userHttpHelper.getPersonHomePage(id);
         userHttpHelper.getProductList(id);
         userHttpHelper.getSpokePlay(id);
@@ -97,15 +102,18 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
                 UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }
 
+    ImageAdapter adapterShop;
+    UserHomeLiveImgAdapter adapterLive;
+
     private void preData() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewShop.setLayoutManager(layoutManager);
-        ImageAdapter adapterShop = new ImageAdapter(mContext, imgs);
+        adapterShop = new ImageAdapter(mContext, imgsProduct);
         recyclerViewShop.setAdapter(adapterShop);
 
         //GridLayout 3列
-        UserHomeLiveImgAdapter adapterLive = new UserHomeLiveImgAdapter(mContext, getLayoutInflater(), imgs);
+        adapterLive = new UserHomeLiveImgAdapter(mContext, getLayoutInflater(), datasLive);
         gridViewLive.setAdapter(adapterLive);
     }
 
@@ -115,6 +123,12 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
     private void preWidget() {
         recyclerViewShop = (RecyclerView) findViewById(R.id.recyclerview_shop_act_user_home);
         gridViewLive = (MyGridView) findViewById(R.id.gridView_live_act_user_home);
+        circleImageView = (CircleImageView) findViewById(R.id.iv_icon_act_user_home);
+        tvName = (TextView) findViewById(R.id.tv_name_act_user_home);
+        tvAttention = (TextView) findViewById(R.id.tv_num_attention_act_user_home);
+        tvFans = (TextView) findViewById(R.id.tv_num_fans_act_user_home);
+        tvSupport = (TextView) findViewById(R.id.tv_support_attention_act_user_home);
+        tvSign = (TextView) findViewById(R.id.tv_sign_act_user_home);
     }
 
     @Override
@@ -142,12 +156,43 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
         mHandler.sendMessage(msg);
     }
 
+    ModelPersonHomePage currModelPersonHomePage = new ModelPersonHomePage();
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    //个人信息
+                    if (!SDCollectionUtil.isEmpty(itemsPerson)) {
+                        currModelPersonHomePage = itemsPerson.get(0);
+                        SDViewBinder.setTextView(tvName, currModelPersonHomePage.getNick(), "");
+                        SDViewBinder.setTextView(tvAttention, currModelPersonHomePage.getFocus(), "");
+                        SDViewBinder.setTextView(tvFans, currModelPersonHomePage.getFans(), "");
+                        SDViewBinder.setTextView(tvSupport, currModelPersonHomePage.getLove_count(), "");
+                        SDViewBinder.setTextView(tvSign, currModelPersonHomePage.getPersonality(), "");
+                        ImageLoader.getInstance().displayImage(currModelPersonHomePage.getIcon(), circleImageView);
+                    }
+                    break;
+                case 1:
+                    //TA的最爱
+                    imgsProduct.clear();
+                    if (!SDCollectionUtil.isEmpty(itemsProduct)) {
+                        for (ModelProductList bean : itemsProduct) {
+                            if (!TextUtils.isEmpty(bean.getIcon())) {
+                                imgsProduct.add(bean.getIcon());
+                            }
+                        }
+                    }
+                    adapterShop.notifyDataSetChanged();
+                    break;
+                case 2:
+                    //TA的直播
+                    datasLive.clear();
+                    if (!SDCollectionUtil.isEmpty(itemsLive))
+                        datasLive.addAll(itemsLive);
+                    adapterLive.notifyDataSetChanged();
                     break;
             }
         }
