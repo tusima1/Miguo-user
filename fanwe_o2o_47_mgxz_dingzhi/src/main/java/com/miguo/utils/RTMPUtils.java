@@ -1,10 +1,14 @@
 package com.miguo.utils;
 
+import android.text.TextUtils;
+
 import com.miguo.live.model.PlaySetInfo;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
+ * 点播视频处理。
  * Created by Administrator on 2016/9/21.
  */
 public class RTMPUtils {
@@ -16,8 +20,16 @@ public class RTMPUtils {
     public static final int  SD_FLV=120;
     public static final int  HD_FLV=130;
 
+    /**
+     * 根据当前 用户的网络情况 选择拉流的地址。
+     * @param playSetInfoList
+     * @return
+     */
+    public static String checkUrlByWIFI(HashMap<Integer,PlaySetInfo> playSetInfoList){
 
-    public String checkUrlByWIFI(List<PlaySetInfo> playSetInfoList){
+        if(playSetInfoList==null||playSetInfoList.size()<1){
+            return "";
+        }
         int networkClass = NetWorkStateUtil.getNetworkClass();
         //默认110 手机  FLV
         int definition=MOBILE_FLV;
@@ -51,7 +63,13 @@ public class RTMPUtils {
                 //   type = "未知";
                 break;
         }
-        return type;
+        PlaySetInfo playSetInfo = playSetInfoList.get(definition);
+        if(!TextUtils.isEmpty(playSetInfo.getUrl())) {
+            return playSetInfo.getUrl();
+        }else{
+            PlaySetInfo playSetInfo2 = playSetInfoList.get(0);
+            return playSetInfo2.getUrl();
+        }
 
     }
 }

@@ -33,7 +33,7 @@
         <!--左侧消息列表-->
         <ListView
             android:id="@+id/im_msg_listview"
-            android:layout_width="250dp"
+            android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_gravity="left|bottom"
             android:layout_marginBottom="60dp"
@@ -43,6 +43,11 @@
             android:scrollbarStyle="outsideOverlay"
             android:stackFromBottom="true"
             android:transcriptMode="normal" />
+        <com.miguo.live.views.customviews.PlayBackSeekBarView
+            android:id="@+id/play_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
 
         <!--点播底部工具栏目-->
         <com.miguo.live.views.customviews.PlayBackBottomToolView
@@ -50,7 +55,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom" />
-
 
     </FrameLayout>
 
