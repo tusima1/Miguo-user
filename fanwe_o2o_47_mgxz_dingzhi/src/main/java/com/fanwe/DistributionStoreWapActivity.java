@@ -2,6 +2,7 @@ package com.fanwe;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.ServerUrl;
@@ -19,7 +20,7 @@ import com.fanwe.o2o.miguo.R;
  */
 public class DistributionStoreWapActivity extends BaseActivity {
     private String user_id = "";
-    private String url="";
+    private String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
         LocalUserModel userModel = AppHelper.getLocalUser();
         if (userModel == null) {
             SDToast.showToast("请先登录");
-            Intent intent = new Intent(this,LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
@@ -44,18 +45,17 @@ public class DistributionStoreWapActivity extends BaseActivity {
         frag.setShowTitle(true);
         String url;
         if (ServerUrl.DEBUG) {
-            url = ServerUrl.SERVER_API_URL_PRE + "m.w2.mgxz.com" + "/user/applogin?name=" + name + "&pwd=" + pwd;
         } else {
-            url = ServerUrl.SERVER_API_URL_PRE + ServerUrl.SERVER_API_URL_MID + ServerUrl.URL_PART_MOB + "/user/applogin?name=" + name + "&pwd=" + pwd;
         }
+        url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd;
         frag.setUrl(url);
         frag.setmProgressMode(EnumProgressMode.NONE);
         getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
     }
 
-    private void getIntentData(){
+    private void getIntentData() {
         Intent intent = getIntent();
-        if(intent.hasExtra("user_id")&&intent.hasExtra("url")){
+        if (intent.hasExtra("user_id") && intent.hasExtra("url")) {
             //进别人的小店。
             user_id = intent.getStringExtra("user_id");
             String url = intent.getStringExtra("url");
@@ -66,7 +66,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
             frag.setUserId(user_id);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
-        }else{
+        } else {
             //进我的小店。
             init();
         }

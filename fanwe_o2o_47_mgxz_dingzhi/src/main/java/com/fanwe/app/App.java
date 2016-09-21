@@ -25,7 +25,6 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
-import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
@@ -89,7 +88,9 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     /**
      * 直播房间列表。
      */
-    public String  currentRoomId;
+    public String currentRoomId;
+
+    public boolean isShowCode = true;
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
@@ -196,7 +197,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         }
     }
 
-    private void initFreso(){
+    private void initFreso() {
 //        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
     }
 
@@ -386,9 +387,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         }
     }
 
-    public void deleteAllShoppingCartInfo(){
+    public void deleteAllShoppingCartInfo() {
         LocalShoppingcartDao.deleteAllModel();
     }
+
     public boolean isImLoginSuccess() {
         return imLoginSuccess;
     }
@@ -418,12 +420,12 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public void setCurrentRoomId(String newRoomId) {
-        Log.e("App setCurrentRoomId",newRoomId+"newRoomId ");
-        EnterLiveHelper liveHelper = new EnterLiveHelper(this,null);
-        if(!TextUtils.isEmpty(currentRoomId)&&!currentRoomId.equals(newRoomId)){
+        Log.e("App setCurrentRoomId", newRoomId + "newRoomId ");
+        EnterLiveHelper liveHelper = new EnterLiveHelper(this, null);
+        if (!TextUtils.isEmpty(currentRoomId) && !currentRoomId.equals(newRoomId)) {
             liveHelper.quiteAVRoom();
             App.getInstance().setAvStart(false);
-            Log.e("App setCurrentRoomId",currentRoomId+"oldRoomId quiteAVRoom");
+            Log.e("App setCurrentRoomId", currentRoomId + "oldRoomId quiteAVRoom");
         }
         this.currentRoomId = newRoomId;
     }
