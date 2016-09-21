@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--点播video-->
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/controll_ui"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--观众的顶部view-->
+        <com.miguo.live.views.customviews.UserHeadTopView
+            android:id="@+id/user_top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <!--左侧消息列表-->
+        <ListView
+            android:id="@+id/im_msg_listview"
+            android:layout_width="250dp"
+            android:layout_height="220dp"
+            android:layout_gravity="left|bottom"
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="50dp"
+            android:cacheColorHint="#00000000"
+            android:divider="#3c421b1b"
+            android:scrollbarStyle="outsideOverlay"
+            android:stackFromBottom="true"
+            android:transcriptMode="normal" />
+
+        <!--点播底部工具栏目-->
+        <com.miguo.live.views.customviews.PlayBackBottomToolView
+            android:id="@+id/normal_user_bottom_tool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
+
+
+    </FrameLayout>
+
+
+</FrameLayout>

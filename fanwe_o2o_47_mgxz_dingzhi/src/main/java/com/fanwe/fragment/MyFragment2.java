@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fanwe.AccountMoneyActivity;
 import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
@@ -26,6 +25,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.AdviceActivity;
 import com.fanwe.user.view.AttentionListActivity;
 import com.fanwe.user.view.CollectListActivity;
 import com.fanwe.user.view.FansActivity;
@@ -37,7 +37,6 @@ import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -110,15 +109,6 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         initGridLayout();
         initPullToRefreshScrollView();
 //        setUserData();
-        findViewById(R.id.testRecharge).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), RechargeDiamondActivity.class);
-                startActivity(intent);
-
-
-            }
-        });
     }
 
     private void setUserData() {
@@ -273,10 +263,8 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 //                startActivity(intent);
 //            }
         } else if (v == mSuggestion) {
-
-//            UserSendGiftPopHelper helper=new UserSendGiftPopHelper(getActivity(),"1");
-//            helper.show();
-            startActivity(AccountMoneyActivity.class);
+            //建议
+            startActivity(AdviceActivity.class);
         } else if (v == mStar) {
             /*关注*/
             startActivity(AttentionListActivity.class);

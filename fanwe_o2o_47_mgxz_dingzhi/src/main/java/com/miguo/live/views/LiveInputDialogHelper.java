@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.utils.DisplayUtil;
 import com.tencent.TIMMessage;
 import com.tencent.TIMTextElem;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
@@ -78,9 +76,10 @@ public class LiveInputDialogHelper {
                     imm.showSoftInput(messageEditView, InputMethodManager.SHOW_FORCED);
                     imm.hideSoftInputFromWindow(messageEditView.getWindowToken(), 0);
                     dialog.dismiss();
-                } else {
+                } //测试报bug了,所以注释了吐司,什么也不做!
+                /*else {
                     Toast.makeText(mContext, "input can not be empty!", Toast.LENGTH_LONG).show();
-                }
+                }*/
             }
         });
 
@@ -98,9 +97,10 @@ public class LiveInputDialogHelper {
                             imm.showSoftInput(messageEditView, InputMethodManager.SHOW_FORCED);
                             imm.hideSoftInputFromWindow(messageEditView.getWindowToken(), 0);
                             dismiss();
-                        } else {
+                        }//测试报bug了,所以注释了吐司,什么也不做!
+                        /*else {
                             Toast.makeText(mContext, "input can not be empty!", Toast.LENGTH_LONG).show();
-                        }
+                        }*/
                         return true;
                     default:
                         return false;
@@ -126,20 +126,6 @@ public class LiveInputDialogHelper {
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-//                Rect r = new Rect();
-//                //获取当前界面可视部分
-//                getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-//                //获取屏幕的高度
-//                int screenHeight =  getWindow().getDecorView().getRootView().getHeight();
-//                //此处就是用来获取键盘的高度的， 在键盘没有弹出的时候 此高度为0 键盘弹出的时候为一个正数
-//                int heightDifference = screenHeight - r.bottom;
-//
-//                if (heightDifference <= 0 && mLastDiff > 0){
-//                    imm.hideSoftInputFromWindow(messageTextView.getWindowToken(), 0);
-//                    dismiss();
-//                }
-//                mLastDiff = heightDifference;
-
                 Rect r = new Rect();
                 rootLayout.getWindowVisibleDisplayFrame(r);
                 //r.top 是状态栏高度
@@ -147,9 +133,7 @@ public class LiveInputDialogHelper {
                 int softHeight = screenHeight - r.bottom ;
                 if (softHeight>100){//当输入法高度大于100判定为输入法打开了
                     rootLayout.scrollTo(0, softHeight+paddingBottom);
-                    Log.e("test","开启");
                 }else {//否则判断为输入法隐藏了
-                    Log.e("test","关闭");
                     rootLayout.scrollTo(0, paddingBottom);
                 }
             }

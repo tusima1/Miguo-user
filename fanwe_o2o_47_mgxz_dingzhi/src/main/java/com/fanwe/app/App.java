@@ -39,6 +39,8 @@ import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
 import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
+import com.tencent.rtmp.ITXLiveBaseListener;
+import com.tencent.rtmp.TXLiveBase;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 
 
-public class App extends Application implements SDEventObserver, TANetChangeObserver {
+public class App extends Application implements SDEventObserver, TANetChangeObserver , ITXLiveBaseListener {
 
     private static App mApp = null;
 
@@ -103,7 +105,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     public void onCreate() {
         super.onCreate();
         myApplication = this;
-
+        TXLiveBase.getInstance().listener = this;
         init();
     }
 
@@ -428,5 +430,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
             Log.e("App setCurrentRoomId", currentRoomId + "oldRoomId quiteAVRoom");
         }
         this.currentRoomId = newRoomId;
+    }
+
+    @Override
+    public void OnLog(int i, String s, String s1) {
+
     }
 }

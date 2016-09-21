@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -453,6 +452,4 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         super.onActivityResult(requestCode, resultCode, data);
         su.onActivityResult(requestCode, resultCode, data);
     }
-
-
 }
