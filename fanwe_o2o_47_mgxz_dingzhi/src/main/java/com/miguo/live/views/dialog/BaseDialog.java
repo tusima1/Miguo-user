@@ -3,7 +3,6 @@ package com.miguo.live.views.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 
 import com.fanwe.o2o.miguo.R;
@@ -18,7 +17,7 @@ public abstract class BaseDialog extends Dialog{
     DialogCategory category;
 
     public BaseDialog(Context context) {
-        this(context, R.style.dialog);
+        this(context, R.style.floag_dialog);
     }
 
     public BaseDialog(Context context, int themeResId) {

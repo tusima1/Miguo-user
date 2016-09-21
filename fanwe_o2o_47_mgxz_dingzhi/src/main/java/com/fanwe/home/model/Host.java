@@ -9,6 +9,17 @@ import java.util.List;
  * Created by Administrator on 2016/7/27.
  */
 public class Host {
+//        "host": {
+//            "uid": "9d861276-8ddd-4d47-83f0-512dcc5efdcb",                              主播id
+//            "host_user_id": "9d861276-8ddd-4d47-83f0-512dcc5efdcb",
+//                    "nickname": "19999999996",                                                  主播昵称
+//            "avatar": "",                                                                主播头像
+//            "tags": ["可爱",
+//                    "意识流",																  主播的标签
+//            "腿长一米八",
+//                    "小吃搜街",
+//                    "试睡"]                                                                  主播的标签
+//        },
 
     private String uid;
 

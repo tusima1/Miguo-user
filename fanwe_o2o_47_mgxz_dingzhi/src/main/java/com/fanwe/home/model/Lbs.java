@@ -5,6 +5,13 @@ package com.fanwe.home.model;
  * Created by Administrator on 2016/7/27.
  */
 public class Lbs {
+    //                "lbs": {                                                                        门店信息
+//            "geo_y": "0",                                                                经纬度
+//            "geo_x": "0",
+//                    "shop_id": "4cb975c9-bf4c-4a23-95b1-9b7f3cc1c4b2",                           门店id
+//            "address": "浦沿",                                                           地址
+//            "shop_name": "爆米花"                                                        门店名称
+//        }
     private String geo_y;
 
     private String geo_x;
