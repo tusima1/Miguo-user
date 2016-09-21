@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
+import com.fanwe.model.GiftBean;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.MGStringFormatter;
 import com.google.gson.Gson;
@@ -180,23 +181,25 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                         Log.e("test",offset+"");
                     }else {
                         //TODO 支付
-                        Log.e("test","roomId: "+MySelfInfo.getInstance().getMyRoomNum()+"");
-                        Log.e("test","数量: "+totalCount+"");
-                        Log.e("test","id: "+selectedItemInfo.getId());
-                        Log.e("test","liveType: "+liveType);
-
-                        sendCount=totalCount;
-                        int roomNum = CurLiveInfo.getRoomNum();
-                        if (roomNum==-1){
-                            MGToast.showToast("异常直播房间");
+//                        Log.e("test","roomId: "+MySelfInfo.getInstance().getMyRoomNum()+"");
+//                        Log.e("test","数量: "+totalCount+"");
+//                        Log.e("test","id: "+selectedItemInfo.getId());
+//                        Log.e("test","liveType: "+liveType);
+                        if(selectedItemInfo!=null && selectedItemInfo.getId() != null){
+                            sendCount=totalCount;
+                            int roomNum = CurLiveInfo.getRoomNum();
+                            if (roomNum==-1){
+                                MGToast.showToast("异常直播房间");
+                                totalCount=0;
+                                preTime=0;
+                                return;
+                            }
+                            httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
+                            //reset
                             totalCount=0;
                             preTime=0;
-                            return;
                         }
-                        httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
-                        //reset
-                        totalCount=0;
-                        preTime=0;
+
                     }
                     break;
             }
@@ -253,21 +256,21 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     @Override
     public void onSuccess(String responseBody) {
         Gson gson=new Gson();
-        Root root = gson.fromJson(responseBody, Root.class);
-        String statusCode = root.getStatusCode();
+        final GiftBean root = gson.fromJson(responseBody, GiftBean.class);
+        int statusCode = root.getStatusCode();
         String message = root.getMessage();
 //                {"result":[{"body":[]}],"message":"用户余额不足，无法购买","token":"8e0b891282e5d6758d06e6da8bb8fa8e","statusCode":"302"}
 //                200  正常状态
 //                302  参数错误，message中会有描述
 //                300  处理错误，礼物未赠送成功
 //                500  服务器配置错误
-        if ("200".equals(statusCode)){
+        if (statusCode == 200){
             //TODO 成功
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (mListener!=null){
-                        mListener.onPaySuc(selectedItemInfo, sendCount);
+                        mListener.onPaySuc(selectedItemInfo, root.getResult().get(0).getBody().get(0).getGift_num());
                     }
                 }
             });

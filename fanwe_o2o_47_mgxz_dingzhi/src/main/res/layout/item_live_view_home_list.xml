@@ -15,6 +15,7 @@
         android:layout_height="165dp">
 
         <TextView
+            android:id="@+id/tv_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -23,7 +24,7 @@
             android:background="@drawable/bg_orange"
             android:gravity="center"
             android:padding="5dp"
-            android:text="正在直播"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="11dp" />
 

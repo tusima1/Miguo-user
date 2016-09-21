@@ -8,37 +8,37 @@
 
     <TextView
         android:id="@+id/tv_talk2host"
-        android:layout_width="@dimen/dp250"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp27"
         android:layout_marginLeft="@dimen/dp12"
+        android:layout_toLeftOf="@+id/goods"
         android:background="@drawable/shape_bg_dark_30"
         android:gravity="center"
         android:text="没赶上直播?也要吐槽！"
         android:textColor="@color/gray_cc"
         android:textSize="@dimen/sp12" />
+    <ImageView
+        android:id="@+id/iv_share"
+        android:layout_width="@dimen/dp27"
+        android:layout_height="@dimen/dp27"
+        android:layout_marginLeft="@dimen/dp23"
+        android:layout_marginRight="@dimen/dp10"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_share" />
 
     <TextView
         android:id="@+id/goods"
         android:layout_width="@dimen/dp45"
         android:layout_height="@dimen/dp27"
-        android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp23"
-        android:layout_toEndOf="@+id/tv_talk2host"
+        android:layout_toLeftOf="@+id/iv_share"
         android:background="@drawable/shape_bg_white_80"
         android:gravity="center"
         android:text="宝贝"
         android:textColor="@color/orange"
         android:textSize="@dimen/sp13" />
 
-    <ImageView
-        android:id="@+id/iv_share"
-        android:layout_width="@dimen/dp27"
-        android:layout_height="@dimen/dp27"
-        android:layout_marginLeft="@dimen/dp23"
 
-        android:layout_marginRight="@dimen/dp10"
-        android:layout_toEndOf="@+id/goods"
-        android:src="@drawable/ic_share" />
 
 
 </RelativeLayout>

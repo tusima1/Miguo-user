@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.GiftId;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -72,6 +73,7 @@ import com.miguo.live.views.danmu.DanmuBean;
 import com.miguo.live.views.danmu.Danmukiller;
 import com.miguo.live.views.definetion.IntentKey;
 import com.miguo.live.views.dialog.LiveBackDialog;
+import com.miguo.live.views.gift.BigGifView;
 import com.miguo.live.views.gift.SmallGifView;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
@@ -209,6 +211,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * @param savedInstanceState
      */
     SmallGifView smallGifView;
+    /**
+     * 大礼物动画
+     */
+    BigGifView bigGifView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +255,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
          */
         danmakuView = (DanmakuView)findViewById(R.id.danmuku);
         smallGifView = (SmallGifView) findViewById(R.id.small_gift_view);
+        bigGifView = (BigGifView) findViewById(R.id.biggift_view);
 
     }
 
@@ -2166,6 +2173,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
     /**
+     * 显示用户自己的弹幕
+     * @param params
+     */
+    @Override
+    public void showDanmuSelf(HashMap<String, String> params) {
+        getDanmu(params);
+    }
+
+    /**
      * 收到弹幕
      */
     @Override
@@ -2190,10 +2206,91 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void requestSendGift(GiftListBean giftInfo, int num) {
-        giftInfo.setNum(num);
+        giftInfo.setNum(new Random().nextInt(50) + 60);
         giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
         giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
-        giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
-        smallGifView.addGift(giftInfo);
+        giftInfo.setUserName(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getNick());
+        showGift(giftInfo);
+        mLiveHelper.sendGift(giftInfo);
     }
+
+    /**
+     * 接收到IM礼物消息，需要处理小礼物大礼物的id，作不同的展现方式
+     * @param params
+     */
+    @Override
+    public void getGift(HashMap<String, String> params) {
+        GiftListBean bean = new GiftListBean();
+        bean.setId(params.get("id"));
+        bean.setName(params.get("name"));
+        bean.setIcon(params.get("icon"));
+        bean.setType(params.get("type"));
+        bean.setNum(Integer.parseInt(params.get("count")));
+        bean.setUserAvatar(params.get("avatar"));
+        bean.setUserName(params.get("nickname"));
+        showGift(bean);
+    }
+
+    private void showGift(GiftListBean bean){
+        switch (bean.getId()){
+            /**
+             * 小礼物 随弹幕出现
+             */
+            case GiftId.STAR:
+            case GiftId.FLOWER:
+            case GiftId.SWEET:
+            case GiftId.MIGUO_BABY:
+                showSmallGift(bean);
+                break;
+            /**
+             * 么么哒 屏幕随机出现
+             * 福气临门 屏幕中心出现，慢慢消失
+             */
+            case GiftId.KISS:
+                showRandomGift(bean);
+                break;
+            case GiftId.GOOD_FORTUNE:
+                showRedPacket(bean);
+                break;
+            /**
+             * 大礼物，动图序列帧
+             */
+            case GiftId.BEST_LOVE:
+            case GiftId.FIREWORKS:
+            case GiftId.BASKETS:
+            case GiftId.BOMBARDIER:
+            case GiftId.FERRARI:
+            case GiftId.SOAR:
+                showBigGift(bean);
+                break;
+        }
+    }
+
+    /**
+     * 小礼物
+     * @param bean
+     */
+    private void showSmallGift(GiftListBean bean){
+        smallGifView.addGift(bean);
+    }
+
+    /**
+     * 屏幕随机出现的礼物
+     */
+    private void showRandomGift(GiftListBean bean){
+        bigGifView.addKiss(bean);
+    }
+
+    private void showRedPacket(GiftListBean bean){
+        bigGifView.addRedPacket(bean);
+    }
+
+    /**
+     * 大礼物
+     * @param bean
+     */
+    private void showBigGift(GiftListBean bean){
+        bigGifView.addBigGift(bean);
+    }
+
 }
