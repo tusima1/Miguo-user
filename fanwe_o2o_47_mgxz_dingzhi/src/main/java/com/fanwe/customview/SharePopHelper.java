@@ -113,7 +113,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     }
 
     public void share() {
-        UmengShareManager.share(platform, mActivity, "分享", "直播分享，领取码:" + App.getInstance().getReceiveCode(),
+        UmengShareManager.share(platform, mActivity, "分享", "直接领钻石，打赏有底气！我送你钻石，来陪我吧？",
                 ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
                 UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }

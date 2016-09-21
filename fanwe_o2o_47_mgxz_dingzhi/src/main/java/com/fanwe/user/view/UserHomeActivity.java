@@ -7,6 +7,8 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.BaseActivity;
@@ -26,6 +28,8 @@ import com.fanwe.user.adapters.UserHomeLiveImgAdapter;
 import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
 import com.fanwe.user.model.getProductList.ModelProductList;
 import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
+import com.fanwe.user.model.getUserAttention.ModelUserAttention;
+import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -45,10 +49,11 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
     private RecyclerView recyclerViewShop;
     private MyGridView gridViewLive;
     private CircleImageView circleImageView;
-    private TextView tvName, tvAttention, tvFans, tvSupport, tvSign;
+    private TextView tvName, tvAttention, tvFans, tvSupport, tvSign, tvAttentionStatus;
 
     private List<String> imgsProduct = new ArrayList<>();
     private List<ModelSpokePlay> datasLive = new ArrayList<>();
+    private RelativeLayout layoutShopEmpty, layoutLiveEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,28 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
         userHttpHelper = new UserHttpHelper(this, this);
         getData();
         preData();
+        preView();
+    }
+
+    private void preView() {
+        if (id.equals(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id())) {
+            //当前用户
+            tvAttentionStatus.setVisibility(View.GONE);
+        } else {
+            userHttpHelper.getUserAttention(id);
+            tvAttentionStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ("已关注".equals(tvAttentionStatus.getText().toString())) {
+                        //取消关注
+                        userHttpHelper.putAttention(id, "0");
+                    } else {
+                        //关注
+                        userHttpHelper.putAttention(id, "1");
+                    }
+                }
+            });
+        }
     }
 
     private void getData() {
@@ -129,6 +156,9 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
         tvFans = (TextView) findViewById(R.id.tv_num_fans_act_user_home);
         tvSupport = (TextView) findViewById(R.id.tv_support_attention_act_user_home);
         tvSign = (TextView) findViewById(R.id.tv_sign_act_user_home);
+        tvAttentionStatus = (TextView) findViewById(R.id.tv_attention_status_act_user_home);
+        layoutShopEmpty = (RelativeLayout) findViewById(R.id.layout_shop_empty_act_user_home);
+        layoutLiveEmpty = (RelativeLayout) findViewById(R.id.layout_live_empty_act_user_home);
     }
 
     @Override
@@ -139,6 +169,8 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
     List<ModelPersonHomePage> itemsPerson;
     List<ModelProductList> itemsProduct;
     List<ModelSpokePlay> itemsLive;
+    List<ModelUserAttention> itemsAttention;
+    List<ModelAttention> itemsForcus;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -152,11 +184,18 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
         } else if (UserConstants.GET_SPOKE_PLAY.equals(method)) {
             itemsLive = datas;
             msg.what = 2;
+        } else if (UserConstants.USER_ATTENTION.equals(method)) {
+            itemsAttention = datas;
+            msg.what = 3;
+        } else if (UserConstants.ATTENTION.equals(method)) {
+            itemsForcus = datas;
+            msg.what = 4;
         }
         mHandler.sendMessage(msg);
     }
 
     ModelPersonHomePage currModelPersonHomePage = new ModelPersonHomePage();
+    ModelUserAttention modelUserAttention;
 
     Handler mHandler = new Handler() {
         @Override
@@ -185,14 +224,55 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
                             }
                         }
                     }
+                    if (SDCollectionUtil.isEmpty(imgsProduct)) {
+                        recyclerViewShop.setVisibility(View.GONE);
+                        layoutShopEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        recyclerViewShop.setVisibility(View.VISIBLE);
+                        layoutShopEmpty.setVisibility(View.GONE);
+                    }
                     adapterShop.notifyDataSetChanged();
                     break;
                 case 2:
                     //TA的直播
                     datasLive.clear();
-                    if (!SDCollectionUtil.isEmpty(itemsLive))
+                    if (!SDCollectionUtil.isEmpty(itemsLive)) {
                         datasLive.addAll(itemsLive);
+                    }
+                    if (SDCollectionUtil.isEmpty(datasLive)) {
+                        gridViewLive.setVisibility(View.GONE);
+                        layoutLiveEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        gridViewLive.setVisibility(View.VISIBLE);
+                        layoutLiveEmpty.setVisibility(View.GONE);
+                    }
                     adapterLive.notifyDataSetChanged();
+                    break;
+                case 3:
+                    if (!SDCollectionUtil.isEmpty(itemsAttention)) {
+                        modelUserAttention = itemsAttention.get(0);
+                        // 0：未关注 1：已关注
+                        if ("0".equals(modelUserAttention.getAttention())) {
+                            tvAttentionStatus.setText("+ 关注");
+                        } else {
+                            tvAttentionStatus.setText("已关注");
+                        }
+                    }
+                    break;
+                case 4:
+                    if (!SDCollectionUtil.isEmpty(itemsForcus)) {
+                        ModelAttention modelAttention = itemsForcus.get(0);
+                        //操作后与该对象的状态1：未关注 2：已关注 3：互相关注
+                        if ("1".equals(modelAttention.getAttention_status())) {
+                            tvAttentionStatus.setText("+ 关注");
+                        } else if ("2".equals(modelAttention.getAttention_status())) {
+                            tvAttentionStatus.setText("已关注");
+                        } else if ("3".equals(modelAttention.getAttention_status())) {
+                            tvAttentionStatus.setText("已关注");
+                        } else {
+                            tvAttentionStatus.setText("+ 关注");
+                        }
+                    }
                     break;
             }
         }

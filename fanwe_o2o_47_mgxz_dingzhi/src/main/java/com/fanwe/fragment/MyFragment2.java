@@ -432,4 +432,5 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     public void refreshFragment() {
         httpHelper.getPersonalHome();
     }
+
 }

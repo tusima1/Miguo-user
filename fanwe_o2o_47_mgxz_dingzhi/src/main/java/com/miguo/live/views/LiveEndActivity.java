@@ -42,7 +42,14 @@ public class LiveEndActivity extends Activity implements CallbackView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        /*set it to be no title*/
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        /*set it to be full screen*/
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ActLiveEndBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_end);
+//
+//        this.findViewById(android.R.id.content).setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         dataBindingLiveEnd = new DataBindingLiveEnd();
         preData();
         binding.setLive(dataBindingLiveEnd);

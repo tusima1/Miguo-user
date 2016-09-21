@@ -36,6 +36,7 @@
                 android:textSize="@dimen/dp20" />
 
             <TextView
+                android:id="@+id/tv_attention_status_act_user_home"
                 android:layout_width="@dimen/dp74"
                 android:layout_height="@dimen/dp34"
                 android:layout_alignParentRight="true"
@@ -189,7 +190,29 @@
             android:layout_height="@dimen/dp94"
             android:layout_below="@+id/iv_icon_item_collect"
             android:background="@color/white"
-            android:scrollbars="none" />
+            android:scrollbars="none"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/layout_shop_empty_act_user_home"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp94"
+            android:layout_below="@+id/iv_icon_item_collect"
+            android:background="@color/white">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/c_CCCCCC" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="用户暂未代言小店"
+                android:textColor="@color/text_hongbao_title"
+                android:textSize="@dimen/dp15" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -216,5 +239,26 @@
             android:numColumns="3"
             android:scrollbars="none"
             android:stretchMode="columnWidth" />
+
+        <RelativeLayout
+            android:id="@+id/layout_live_empty_act_user_home"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp94"
+            android:layout_below="@+id/iv_icon_item_collect"
+            android:background="@color/white">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/c_CCCCCC" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="用户暂无直播"
+                android:textColor="@color/text_hongbao_title"
+                android:textSize="@dimen/dp15" />
+        </RelativeLayout>
     </LinearLayout>
 </ScrollView>

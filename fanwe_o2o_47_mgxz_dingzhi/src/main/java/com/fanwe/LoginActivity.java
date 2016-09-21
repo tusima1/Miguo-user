@@ -37,6 +37,7 @@ import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -260,13 +261,16 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             str.append(entry.getKey() + "--->" + entry.getValue() + "\n");
         }
         Log.d("11", str.toString());
-      //  testViews.setText(str.toString());
+        //  testViews.setText(str.toString());
 
     }
 
-    public void printData(String datas){
-       // ((EditText)findViewById(R.id.testViews2)).setText(datas);
+    public void printData(String datas) {
+        // ((EditText)findViewById(R.id.testViews2)).setText(datas);
     }
+
+    int flag = 1;
+    long time;
 
     /**
      * 跳转到相应的授权页。
@@ -277,7 +281,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         su.login(platform, new ILoginCallback() {
             @Override
             public void onSuccess(Map<String, String> data) {
-           //     printData(data);
+                //     printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
                     openId = data.get("unionid");
@@ -308,8 +312,15 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                     Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                     return;
                 }
-              //  printData("icon:"+icon+" nick:"+nick +" openid:"+openId);
-               mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
+                //避免过快请求
+                if ((System.currentTimeMillis() - time) < 100) {
+                    return;
+                } else {
+                    time = System.currentTimeMillis();
+                }
+                //MGToast.showToast("flag:" + flag);
+                flag++;
+                mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
 
             }
 

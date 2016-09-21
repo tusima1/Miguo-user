@@ -11,7 +11,13 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:visibility="gone" />
-
+    <ImageView
+        android:id="@+id/loadingImageView"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:src="@drawable/loading_animation"
+        android:visibility="gone"/>
     <FrameLayout
         android:id="@+id/controll_ui"
         android:layout_width="match_parent"
