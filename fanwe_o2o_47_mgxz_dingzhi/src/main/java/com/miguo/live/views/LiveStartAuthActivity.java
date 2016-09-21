@@ -19,6 +19,7 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHostAuthTime.ModelHostAuthTime;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
@@ -88,13 +89,14 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
     }
 
     long tempTime;
+    ModelHostAuthTime modelHostAuthTime;
 
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.HOST_AUTH_TIME.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 long currTime = System.currentTimeMillis();
-                ModelHostAuthTime modelHostAuthTime = (ModelHostAuthTime) datas.get(0);
+                modelHostAuthTime = (ModelHostAuthTime) datas.get(0);
                 tempTime = currTime - Long.valueOf(modelHostAuthTime.getInsert_time());
                 Message msg = new Message();
                 msg.what = 0;
@@ -113,10 +115,17 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    // 设置开始讲时时间
-                    chronometer.setBase(SystemClock.elapsedRealtime() - tempTime);
-                    // 开始记时
-                    chronometer.start();
+                    if ("1".equals(modelHostAuthTime.getIs_host())) {
+                        MGToast.showToast("认证已通过");
+                        //已经是主播
+                        startActivity(new Intent(LiveStartAuthActivity.this, LiveStartActivity.class));
+                        finish();
+                    } else {
+                        // 设置开始讲时时间
+                        chronometer.setBase(SystemClock.elapsedRealtime() - tempTime);
+                        // 开始记时
+                        chronometer.start();
+                    }
                     break;
             }
         }

@@ -60,7 +60,7 @@ public abstract class MgCallback<T> implements Callback {
                 int code = Integer.valueOf(statusCode);
                 String message = root.getMessage();
                 String newMessage = ErrorCodeParse.getErrorCodeMap().get(statusCode);
-                if(newMessage!=null&&!TextUtils.isEmpty(newMessage)&&!"null".equals(newMessage)){
+                if (newMessage != null && !TextUtils.isEmpty(newMessage) && !"null".equals(newMessage) && !"404".equals(statusCode)) {
                     message = newMessage;
                 }
                 if (code >= 200 && code <= 400) {
@@ -69,14 +69,13 @@ public abstract class MgCallback<T> implements Callback {
                         UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }
-                    if (code == 320||code==321) {
+                    if (code == 320 || code == 321) {
                         SDToast.showToast(message);
                         SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {
                         onSuccessResponse(body);
                     }
                 } else {
-
                     onErrorResponse(message, statusCode);
                 }
 
