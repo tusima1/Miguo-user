@@ -17,6 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.library.utils.SDToast;
+import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,16 +29,22 @@ import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.PlaySetInfo;
+import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
+import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.receiver.NetWorkStateReceiver;
 import com.miguo.live.views.LiveOrientationHelper;
+import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.PlayBackBottomToolView;
 import com.miguo.live.views.customviews.PlayBackSeekBarView;
 import com.miguo.live.views.customviews.UserHeadTopView;
-import com.miguo.live.views.danmu.Danmukiller;
+import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.av.TIMAvManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -42,12 +52,14 @@ import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
-import com.tencent.qcloud.suixinbo.presenters.ProfileInfoHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
-import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
-import com.fanwe.base.CallbackView;
+import com.tencent.rtmp.ITXLivePlayListener;
+import com.tencent.rtmp.TXLiveConstants;
+import com.tencent.rtmp.TXLivePlayConfig;
+import com.tencent.rtmp.TXLivePlayer;
+import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -56,14 +68,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.fanwe.o2o.miguo.R;
-import com.tencent.rtmp.ITXLivePlayListener;
-import com.tencent.rtmp.TXLiveConstants;
-import com.tencent.rtmp.TXLivePlayConfig;
-import com.tencent.rtmp.TXLivePlayer;
-
-import com.tencent.rtmp.ui.TXCloudVideoView;
 
 /**
  * 点播页面。
@@ -147,6 +151,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         super.onCreate(savedInstanceState);
         setActivityParams();
         setContentView(R.layout.act_play_back);
+        getIntentData();
         initHelper();
         initView();
         mCurrentRenderMode = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
@@ -172,7 +177,26 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         }
     }
 
-    public void initView() {
+
+
+    private void getIntentData() {
+        Bundle data=getIntent().getExtras();
+        if (data==null){
+            MGToast.showToast("数据传输错误!");
+            finish();
+            return;
+        }
+        String chat_room_id = data.getString("chat_room_id", "");
+        String file_size = data.getString("file_size", "");
+        String duration = data.getString("duration", "");
+        String file_id = data.getString("file_id", "");
+        String vid = data.getString("vid", "");
+        String playset = data.getString("playset", "");
+        Log.e("test",chat_room_id+"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
+
+    }
+
+    public void initView(){
         root = findViewById(R.id.root);
 
         mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
@@ -198,6 +222,17 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mUserHeadTopView.init();
         mUserHeadTopView.setVisibility(View.VISIBLE);
         mUserHeadTopView.initNeed(this);
+        doUpdateMembersCount();
+
+        String hostImg = CurLiveInfo.getHostAvator();
+        mUserHeadTopView.setHostImg(hostImg);
+        mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
+        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop()
+                .getShop_name())) {
+            mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
+        }
+
+
         mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
     }
 
@@ -493,21 +528,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     }
 
     @Override
-    public void onSuccess(String responseBody) {
-
-    }
-
-    @Override
-    public void onSuccess(String method, List datas) {
-
-    }
-
-    @Override
-    public void onFailue(String responseBody) {
-
-    }
-
-    @Override
     public void showVideoView(boolean isHost, String id) {
 
     }
@@ -660,5 +680,175 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     @Override
     public void alreadyInLive(String[] list) {
 
+    }
+
+    //--------------- http请求 -------------
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, final List datas) {
+        switch (method) {
+            case LiveConstants.RECEIVE_CODE:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    String code = ((ModelReceiveCode) datas.get(0)).getReceive_code();
+                    if (!TextUtils.isEmpty(code)) {
+                        App.getInstance().setReceiveCode(code);
+                    }
+                }
+                break;
+            case LiveConstants.AUDIENCE_LIST:
+                //观众列表
+                final List<ModelAudienceInfo> audienceList = datas;
+
+
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final boolean isHost = LiveUtil.checkIsHost();
+                        final int size = datas.size();
+                        if (audienceList != null && audienceList.size() >= 0) {
+
+                            CurLiveInfo.setMembers(size);
+                        }
+                        if (isHost) {
+//                            if (mHostTopView != null) {
+//                                mHostTopView.refreshData(datas);
+//                            }
+                        } else {
+                            if (mUserHeadTopView != null) {
+                                mUserHeadTopView.refreshData(datas);
+                            }
+                        }
+                        doUpdateMembersCount();
+                        mHeadTopAdapter.notifyDataSetChanged();
+                    }
+                });
+
+
+                break;
+            case LiveConstants.END_INFO:
+                //直播结束
+                break;
+            case LiveConstants.ENTER_ROOM:
+                //观众进入房间
+                if (!checkDataIsNull(datas)) {
+                    //成功
+                }
+                break;
+            case LiveConstants.EXIT_ROOM:
+                //观众退出房间
+                break;
+            case LiveConstants.HOST_INFO:
+                //获取host资料
+                if (checkDataIsNull(datas)) {
+                    MGLog.e("LiveConstants.HOST_INFO 返回数据失败!");
+                    return;
+                }
+                ModelHostInfo hostInfo = (ModelHostInfo) datas.get(0);
+                if (hostInfo != null && mUserHeadTopView != null) {
+                    //TODO 主播的资料放哪里?
+                }
+                break;
+            case LiveConstants.HOST_TAGS:
+                //获取主播标签
+                break;
+//            case LiveConstants.AUDIENCE_COUNT:
+//                MGUIUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //获取观众人数
+//                        if (checkDataIsNull(datas)) {
+//                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+//                            return;
+//                        }
+//                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+//                        //更新观众人数
+//                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
+//
+//                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+//                            doUpdateMembersCount();
+//                        }
+//                    }
+//                });
+//                break;
+            case LiveConstants.LIST_OF_STORES:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas == null) {
+                            mBaoBaoAdapter.setData(null);
+                        } else {
+                            mBaoBaoAdapter.setData(datas);
+                        }
+                        mBaoBaoAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                break;
+//            case SellerConstants.LIVE_BIZ_SHOP:
+//                MGUIUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (datas != null && datas.size() > 0) {
+//                            mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+//                            mUserBottomTool.notifyDataChange();
+//                        }
+//                    }
+//                });
+//                break;
+//            case LiveConstants.GET_USER_RED_PACKETS:
+//                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
+//                MGUIUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+//                        if (datas == null) {
+//                            mRedPacketAdapter.setMdatas(null);
+//                        } else {
+//                            mRedPacketAdapter.setMdatas(datas);
+//                        }
+//                        mRedPacketAdapter.notifyDataSetChanged();
+//                    }
+//                });
+//                break;
+//            case LiveConstants.GET_PACKET_RESULT:
+//                MGUIUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        mUserBottomTool.showRedPacketResult(datas);
+//                    }
+//                });
+        }
+    }
+    /*校验数据*/
+    public boolean checkDataIsNull(List datas) {
+        if (datas != null && datas.size() > 0) {
+            return false;//不为空
+        } else {
+            return true;//为null
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    /**
+     * update 观众 数量 。
+     */
+    public void doUpdateMembersCount() {
+
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                    if (mUserHeadTopView != null) {
+                        mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+                    }
+            }
+        });
     }
 }

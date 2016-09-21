@@ -22,11 +22,10 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.utils.DataFormat;
-import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.imcore.Context;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -62,7 +61,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
                              Bundle savedInstanceState) {
         if (view == null) {
             initView(inflater, container);
-            preParam();
             preView();
             setListener();
         }
@@ -96,52 +94,91 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
                     return;
                 }
                 Room room = datas.get(position);
-                Host host = room.getHost();
-                Intent intent = new Intent(getActivity(), LiveActivity.class);
-                intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
-                MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-                String nickName = App.getInstance().getUserNickName();
-                String avatar = "";
-                if (App.getInstance().getmUserCurrentInfo() != null) {
-                    UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-                    if (currentInfo.getUserInfoNew() != null) {
-                        avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-                    }
+                //分点播和直播 直播类型  1 表示直播，2表示点播
+                String live_type = room.getLive_type();
+                if ("1".equals(live_type)){
+                    //直播
+                    gotoLiveActivity(room);
+                }else if ("2".equals(live_type)){
+                    //点播
+                    gotoPlayBackActivity(room);
+                }else {
+                    //异常数据
+                    MGToast.showToast("异常数据");
+                    return;
                 }
-                MySelfInfo.getInstance().setAvatar(avatar);
-
-                MySelfInfo.getInstance().setNickName(nickName);
-                MySelfInfo.getInstance().setJoinRoomWay(false);
-                CurLiveInfo.setHostID(host.getHost_user_id());
-                CurLiveInfo.setHostName(host.getNickname());
-
-                CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-                App.getInstance().setCurrentRoomId(room.getId());
-                CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
-                if (room.getLbs() != null) {
-                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
-                    ModelStoreList modelStoreList = new ModelStoreList();
-                    modelStoreList.setShop_name(room.getLbs().getShop_name());
-                    modelStoreList.setId(room.getLbs().getShop_id());
-                    CurLiveInfo.setModelShop(modelStoreList);
-                }
-
-
-                CurLiveInfo.setHostUserID(room.getHost().getUid());
-//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-                CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
-                if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
-                }
-                CurLiveInfo.setAdmires(1);
-                startActivity(intent);
             }
         });
     }
+    private void gotoLiveActivity(Room room){
+        Intent intent = new Intent(getActivity(), LiveActivity.class);
+        intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
+        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+        addCommonData(room);
+        startActivity(intent);
+    }
 
-    private void preParam() {
+    private void addCommonData(Room room){
+        Host host = room.getHost();
+        String nickName = App.getInstance().getUserNickName();
+        String avatar = "";
+        if (App.getInstance().getmUserCurrentInfo() != null) {
+            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
+            if (currentInfo.getUserInfoNew() != null) {
+                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            }
+        }
+        MySelfInfo.getInstance().setAvatar(avatar);
+        MySelfInfo.getInstance().setNickName(nickName);
+        MySelfInfo.getInstance().setJoinRoomWay(false);
+        CurLiveInfo.setHostID(host.getHost_user_id());
+        CurLiveInfo.setHostName(host.getNickname());
 
+        CurLiveInfo.setHostAvator(room.getHost().getAvatar());
+        App.getInstance().setCurrentRoomId(room.getId());
+        CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
+        if (room.getLbs() != null) {
+            CurLiveInfo.setShopID(room.getLbs().getShop_id());
+            ModelStoreList modelStoreList = new ModelStoreList();
+            modelStoreList.setShop_name(room.getLbs().getShop_name());
+            modelStoreList.setId(room.getLbs().getShop_id());
+            CurLiveInfo.setModelShop(modelStoreList);
+        }
+        CurLiveInfo.setLive_type(room.getLive_type());
+
+        CurLiveInfo.setHostUserID(room.getHost().getUid());
+//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
+        CurLiveInfo.setMembers(1); // 添加自己
+//                CurLiveInfo.setAddress(item.getLbs().getAddress());
+        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
+            CurLiveInfo.setShopID(room.getLbs().getShop_id());
+        }
+        CurLiveInfo.setAdmires(1);
+    }
+
+    /**
+     * 进入点播页面
+     * @param room
+     */
+    private void gotoPlayBackActivity(Room room){
+        addCommonData(room);
+        String chat_room_id = room.getChat_room_id();//im的id
+        String file_size = room.getFile_size();//文件大小
+        String duration = room.getDuration();//时长
+        String file_id = room.getFile_id();
+        String vid = room.getVid();
+        String playset = room.getPlayset();
+
+        Intent intent=new Intent(getActivity(), PlayBackActivity.class);
+        Bundle data=new Bundle();
+        data.putString("chat_room_id",chat_room_id);
+        data.putString("file_size",file_size);
+        data.putString("duration",duration);
+        data.putString("file_id",file_id);
+        data.putString("vid",vid);
+        data.putString("playset",playset);
+        intent.putExtras(data);
+        startActivity(intent);
     }
 
     private void initView(LayoutInflater inflater, ViewGroup container) {
