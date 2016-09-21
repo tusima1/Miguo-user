@@ -18,6 +18,7 @@ import java.util.List;
 public abstract class BaseRelativeLayout extends RelativeLayout{
 
     List datas;
+    protected String tag = getClass().getSimpleName();
 
     public BaseRelativeLayout(Context context) {
         super(context);

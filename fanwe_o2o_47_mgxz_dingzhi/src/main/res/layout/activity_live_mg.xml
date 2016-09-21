@@ -243,6 +243,14 @@
             android:layout_height="300dp" />
 
 
+        <com.miguo.live.views.gift.BigGifView
+            android:id="@+id/biggift_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.miguo.live.views.gift.BigGifView>
+
+
     </RelativeLayout>
 
 
