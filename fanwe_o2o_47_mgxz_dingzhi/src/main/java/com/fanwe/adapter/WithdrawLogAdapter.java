@@ -44,23 +44,24 @@ public class WithdrawLogAdapter extends SDBaseAdapter<ModelCommissionLog>
 		if(model != null)
 		{
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String typeTitle="测试测试";
+			String typeTitle="";
+			//TODO 说是后台给描述type类型
 //			switch (MGStringFormatter.getInt(model.getMoney_type())) {
-			//0：获得佣金, 我的佣金
-			//1：获得会员升级费用,1 //推广服务费
-			//2：用户余额充值，0//
-			//3:佣金消费，1 消费
-			//4:佣金提现，1 提现
-			//5:会员升级费用消费， 消费
-			//6:会员升级费用提现， 提现
-			//7:余额消费，消费
-			//8：余额提现， 提现
-			//9:在线支付记录, 消费
-
-			//10:用户余额退款,
-				// 11:用户佣金退款,  退款返回
-			//12:会员升级费用退款，
-			//13：在线支付退款,
+//			//0：获得佣金, 我的佣金
+//			//1：获得会员升级费用,1 //推广服务费
+//			//2：用户余额充值，0//
+//			//3:佣金消费，1 消费
+//			//4:佣金提现，1 提现
+//			//5:会员升级费用消费， 消费
+//			//6:会员升级费用提现， 提现
+//			//7:余额消费，消费
+//			//8：余额提现， 提现
+//			//9:在线支付记录, 消费
+//
+//			//10:用户余额退款,
+//				// 11:用户佣金退款,  退款返回
+//			//12:会员升级费用退款，
+//			//13：在线支付退款,
 //			case 0:
 //				typeTitle="我的佣金";
 //				break;
@@ -118,15 +119,15 @@ public class WithdrawLogAdapter extends SDBaseAdapter<ModelCommissionLog>
 			String money = model.getMoney();
 			Float moneyShow = Float.valueOf(money);
 			if (moneyShow>0) {
-				SDViewBinder.setTextView(tv_money,"+"+TextMoney.textFarmat(model.getMoney()));
+				SDViewBinder.setTextView(tv_money,"+"+TextMoney.textFarmat(model.getMoney())+"元");
 				iv_image.setImageResource(R.drawable.bg_int);
 				tv_money.setTextColor(Color.parseColor("#2ee17c"));
 			}else if (moneyShow<0) {
-				SDViewBinder.setTextView(tv_money, TextMoney.textFarmat(model.getMoney()));
+				SDViewBinder.setTextView(tv_money, TextMoney.textFarmat(model.getMoney())+"元");
 				tv_money.setTextColor(Color.parseColor("#FB6F08"));
 				iv_image.setImageResource(R.drawable.bg_out);
 			}else {
-				SDViewBinder.setTextView(tv_money, "0.00");
+				SDViewBinder.setTextView(tv_money, "0.00元");
 				iv_image.setImageResource(R.drawable.bg_int);
 				tv_money.setTextColor(Color.parseColor("#2ee17c"));
 			}

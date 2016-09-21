@@ -17,17 +17,22 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
+import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.receiver.NetWorkStateReceiver;
 import com.miguo.live.views.LiveOrientationHelper;
@@ -62,7 +67,7 @@ import java.util.TimerTask;
  * 点播页面。
  * Created by Administrator on 2016/9/20.
  */
-public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListener, View.OnClickListener,LiveView,CallbackView,EnterQuiteRoomView {
+public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListener, View.OnClickListener,LiveView,CallbackView,EnterQuiteRoomView ,ShopAndProductView {
 
 
     private TXLivePlayer     mLivePlayer = null;
@@ -89,6 +94,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private SellerHttpHelper mSellerHttpHelper;
     private LiveHelper mLiveHelper;
     private EnterLiveHelper mEnterRoomHelper;
+    private GetAudienceTask mGetAudienceTask;//取观众 列表。
 
     private LoginHelper mTLoginHelper;
     private LiveCommonHelper mCommonHelper;
@@ -119,6 +125,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private PlayBackBottomToolView playBackBottomToolView;
 
     private PagerBaoBaoAdapter mBaoBaoAdapter;
+    private PagerRedPacketAdapter mRedPacketAdapter;
 
     private Timer mVideoTimer, mAudienceTimer ;
 
@@ -172,6 +179,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
         mUserHeadTopView.setmLiveView(this);
+        mHeadTopAdapter = new HeadTopAdapter(null, this);
         mUserHeadTopView.setmAdapter(mHeadTopAdapter);
         mUserHeadTopView.init();
         mUserHeadTopView.setVisibility(View.VISIBLE);
@@ -187,7 +195,37 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         }
 
 
+        mRedPacketAdapter = new PagerRedPacketAdapter();
+        playBackBottomToolView.setmRedPacketAdapter(mRedPacketAdapter);
+        initViewNeed();
         mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
+
+        //顶部用户头像列表
+        mAudienceTimer = new Timer(true);
+        mGetAudienceTask = new GetAudienceTask();
+        mAudienceTimer.schedule(mGetAudienceTask, 1000, 30 * 1000);
+    }
+
+    /**
+     * 观众 底部操作view需要的参数
+     */
+    private void initViewNeed() {
+        //初始化底部
+        if (playBackBottomToolView != null) {
+            playBackBottomToolView.initView(this, mLiveHelper, root, this);
+        }
+        if (!TextUtils.isEmpty(CurLiveInfo.shopID) && !LiveUtil.checkIsHost()) {
+            getShopDetail(CurLiveInfo.shopID);
+        }
+    }
+    /**
+     * 发起请求商店详情和商品列表的请求。
+     *
+     * @param shopId 门店ID
+     */
+    @Override
+    public void getShopDetail(String shopId) {
+        mSellerHttpHelper.getSellerDetail(shopId);
     }
 
 
@@ -490,25 +528,25 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
             case LiveConstants.HOST_TAGS:
                 //获取主播标签
                 break;
-//            case LiveConstants.AUDIENCE_COUNT:
-//                MGUIUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //获取观众人数
-//                        if (checkDataIsNull(datas)) {
-//                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
-//                            return;
-//                        }
-//                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
-//                        //更新观众人数
-//                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
-//
-//                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
-//                            doUpdateMembersCount();
-//                        }
-//                    }
-//                });
-//                break;
+            case LiveConstants.AUDIENCE_COUNT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //获取观众人数
+                        if (checkDataIsNull(datas)) {
+                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                            return;
+                        }
+                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+                        //更新观众人数
+                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
+
+                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                            doUpdateMembersCount();
+                        }
+                    }
+                });
+                break;
             case LiveConstants.LIST_OF_STORES:
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
@@ -523,32 +561,32 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                 });
 
                 break;
-//            case SellerConstants.LIVE_BIZ_SHOP:
-//                MGUIUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (datas != null && datas.size() > 0) {
-//                            mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
-//                            mUserBottomTool.notifyDataChange();
-//                        }
-//                    }
-//                });
-//                break;
-//            case LiveConstants.GET_USER_RED_PACKETS:
-//                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
-//                MGUIUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
-//                        if (datas == null) {
-//                            mRedPacketAdapter.setMdatas(null);
-//                        } else {
-//                            mRedPacketAdapter.setMdatas(datas);
-//                        }
-//                        mRedPacketAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//                break;
+            case SellerConstants.LIVE_BIZ_SHOP:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas != null && datas.size() > 0) {
+                            playBackBottomToolView.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                            playBackBottomToolView.notifyDataChange();
+                        }
+                    }
+                });
+                break;
+            case LiveConstants.GET_USER_RED_PACKETS:
+                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+                        if (datas == null) {
+                            mRedPacketAdapter.setMdatas(null);
+                        } else {
+                            mRedPacketAdapter.setMdatas(datas);
+                        }
+                        mRedPacketAdapter.notifyDataSetChanged();
+                    }
+                });
+                break;
 //            case LiveConstants.GET_PACKET_RESULT:
 //                MGUIUtil.runOnUiThread(new Runnable() {
 //                    @Override
@@ -595,5 +633,11 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     @Override
     public void getGift(HashMap<String, String> params) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver();
     }
 }
