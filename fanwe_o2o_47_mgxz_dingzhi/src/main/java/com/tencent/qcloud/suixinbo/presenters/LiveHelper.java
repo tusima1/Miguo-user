@@ -17,6 +17,7 @@ import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.live.model.GiftDanmuBean;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
@@ -331,6 +332,42 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
     }
 
+    public void sendGift(GiftListBean bean){
+        sendGift(bean.getId(), bean.getName(), bean.getIcon(), bean.getType(), bean.getNum() + "", bean.getUserAvatar(),bean.getUserName());
+    }
+
+
+    public void sendGift(String id, String name, String icon, String type, String count, String avatar, String nickname){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("method", "GiftInfo"); //方法名
+        params.put("id", id); //类型：1直播 2点播
+        params.put("name", name); //直播id
+        params.put("token", App.getApplication().getToken()); //token
+        params.put("icon", icon); //弹幕ID iOS和Android端协商好
+        params.put("nickname", nickname); //弹幕ID iOS和Android端协商好
+        params.put("type", type); //弹幕ID iOS和Android端协商好
+        params.put("count", count); //弹幕ID iOS和Android端协商好
+        params.put("avatar", avatar); //弹幕ID iOS和Android端协商好
+        String jsonParams = HashmapToJson.hashMapToJson(params);
+        sendGroupMessage(Constants.AVIMCOM_GIFT_SINGLE, jsonParams, new TIMValueCallBack<TIMMessage>() {
+            @Override
+            public void onError(int i, String s) {
+                if (i == 85) { //消息体太长
+                    Toast.makeText(mContext, "Text too long ", Toast.LENGTH_SHORT).show();
+                } else if (i == 6011) {//群主不存在
+                    Toast.makeText(mContext, "Host don't exit ", Toast.LENGTH_SHORT).show();
+                }
+                SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
+            }
+            @Override
+            public void onSuccess(TIMMessage timMessage) {
+                Log.d(TAG, timMessage.msg.customStr());
+                Log.d(TAG,"小礼物成功...!");
+//                SDToast.showToast("红包发送成功!");
+            }
+        });
+    }
+
     /**
      * 发送弹幕
      */
@@ -341,6 +378,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         paramsMap.put(Constants.DANMU_USER_ID, userId);
         paramsMap.put(Constants.DANMU_USER_AVATAR_URL, avatarUrl);
         String jsonParams = HashmapToJson.hashMapToJson(paramsMap);
+        sendLoalDanmu(paramsMap);
         sendGroupMessage(Constants.AVIMCMD_DANMU, jsonParams, new TIMValueCallBack<TIMMessage>() {
             @Override
             public void onError(int i, String s) {
@@ -358,6 +396,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 //                SDToast.showToast("红包发送成功!");
             }
         });
+    }
+
+    private void sendLoalDanmu(HashMap<String, String> params){
+        if(mLiveView != null){
+            mLiveView.showDanmuSelf(params);
+        }
     }
 
     /**
@@ -709,6 +753,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                         mLiveView.getDanmu(parseDanmu(danmus));
                     }
                     break;
+                case Constants.AVIMCOM_GIFT_SINGLE:
+                    String gifts = json.getString(Constants.CMD_PARAM);
+                    if(mLiveView != null){
+                        mLiveView.getGift(parseGift(gifts));
+                    }
+                    break;
             }
 
         } catch (UnsupportedEncodingException e) {
@@ -717,6 +767,17 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             // 异常处理代码
             Log.e("test","ex:"+ex);
         }
+    }
+
+    public HashMap<String, String> parseGift(String gifts){
+        HashMap<String, String> map = new HashMap<>();
+        Map danmuParams = JSON.parseObject(gifts);
+        for (Object o : danmuParams.entrySet()) {
+            Map.Entry<String,String> entry = (Map.Entry<String,String>)o;
+            Log.d(TAG,entry.getKey()+"--->"+entry.getValue());
+            map.put(entry.getKey(), entry.getValue());
+        }
+        return map;
     }
 
     public HashMap<String, String> parseDanmu(String danmus){
