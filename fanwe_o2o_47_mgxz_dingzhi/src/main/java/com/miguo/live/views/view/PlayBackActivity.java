@@ -122,7 +122,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setActivityParams();
-        setContentView(R.layout.activity_live_mg);
+        setContentView(R.layout.act_play_back);
         initHelper();
         initView();
         mCurrentRenderMode     = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
