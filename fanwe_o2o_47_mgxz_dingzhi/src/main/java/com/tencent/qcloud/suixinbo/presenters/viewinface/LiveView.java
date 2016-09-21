@@ -63,9 +63,17 @@ public interface LiveView extends MvpView {
      */
     void getHostRedPacket(HashMap<String,String> params);
     /**
-     * 收到弹幕
+     * IM收到弹幕
      */
     void getDanmu(HashMap<String,String> params);
+    /**
+     * 用户自己发送弹幕显示
+     */
+    void showDanmuSelf(HashMap<String,String> params);
+    /**
+     * 收到礼物
+     */
+    void getGift(HashMap<String,String> params);
 
     /**
      * 主播发送红包。

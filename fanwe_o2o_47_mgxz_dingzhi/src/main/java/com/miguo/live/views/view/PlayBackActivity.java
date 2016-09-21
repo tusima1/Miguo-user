@@ -851,4 +851,14 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             }
         });
     }
+
+    @Override
+    public void showDanmuSelf(HashMap<String, String> params) {
+        
+    }
+
+    @Override
+    public void getGift(HashMap<String, String> params) {
+
+    }
 }
