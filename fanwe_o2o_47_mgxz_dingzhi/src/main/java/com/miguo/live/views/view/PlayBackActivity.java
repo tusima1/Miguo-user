@@ -1,7 +1,9 @@
 package com.miguo.live.views.view;
 
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -100,6 +102,10 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private boolean mBoolRefreshLock = false;
     private boolean mBoolNeedRefresh = true;
     private final Timer mTimer = new Timer();
+    private long             mTrackingTouchTS = 0;
+    private boolean          mStartSeek = false;
+    private boolean          mVideoPause = false;
+    private int              mPlayType = TXLivePlayer.PLAY_TYPE_LIVE_RTMP;
     private ArrayList<LiveChatEntity> mTmpChatList = new ArrayList<LiveChatEntity>();//缓冲队列
     private TimerTask mTimerTask = null;
 
@@ -129,10 +135,16 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
 
         mPlayConfig = new TXLivePlayConfig();
-
+        if (mLivePlayer == null){
+            mLivePlayer = new TXLivePlayer(this);
+        }
     }
     public void initView(){
         root = findViewById(R.id.root);
+
+        mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
+        mLoadingView = (ImageView) findViewById(R.id.loadingImageView);
+
         playBackBottomToolView =(PlayBackBottomToolView) findViewById(R.id.normal_user_bottom_tool);
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
         playBackBottomToolView.setmBaobaoAdapter(mBaoBaoAdapter);
