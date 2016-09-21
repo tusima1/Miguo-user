@@ -632,7 +632,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private UserBottomToolView mUserBottomTool;
 
-    /**
+    /**GetAudienceTask
      * 初始化界面
      */
     private void initView() {

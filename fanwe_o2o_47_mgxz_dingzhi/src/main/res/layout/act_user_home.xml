@@ -31,7 +31,7 @@
                 android:layout_marginLeft="@dimen/dp13"
                 android:layout_marginTop="@dimen/dp20"
                 android:layout_toRightOf="@+id/iv_icon_act_user_home"
-                android:text="啊哈哟哦我"
+                android:text=""
                 android:textColor="@color/text_fenxiao"
                 android:textSize="@dimen/dp20" />
 
@@ -65,7 +65,7 @@
                         android:id="@+id/tv_num_attention_act_user_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="26"
+                        android:text=""
                         android:textColor="@color/text_fenxiao"
                         android:textSize="@dimen/dp16" />
 
@@ -89,7 +89,7 @@
                         android:id="@+id/tv_num_fans_act_user_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8626"
+                        android:text=""
                         android:textColor="@color/text_fenxiao"
                         android:textSize="@dimen/dp16" />
 
@@ -114,7 +114,7 @@
                         android:id="@+id/tv_support_attention_act_user_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3.5w"
+                        android:text=""
                         android:textColor="@color/text_fenxiao"
                         android:textSize="@dimen/dp16" />
 
