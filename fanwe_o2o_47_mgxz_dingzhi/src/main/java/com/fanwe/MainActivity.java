@@ -236,7 +236,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
-//                        startActivity(new Intent(MainActivity.this, UserHomeActivity.class));
                         break;
                     case 2:
                         click2();
@@ -366,7 +365,9 @@ public class MainActivity extends BaseActivity implements CallbackView {
             case LOGIN_SUCCESS:
                 mViewManager.setSelectIndex(preTab, mTab0, true);
                 //分享码
-                liveHttpHelper.getUseReceiveCode(code);
+                if (App.getInstance().isShowCode) {
+                    liveHttpHelper.getUseReceiveCode(code);
+                }
                 break;
             case LOGOUT:
                 mTab3.setTextTitleNumber(null);
@@ -633,6 +634,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         dialog.setCloseListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                App.getInstance().isShowCode = false;
                                 dialog.dismiss();
                             }
                         });

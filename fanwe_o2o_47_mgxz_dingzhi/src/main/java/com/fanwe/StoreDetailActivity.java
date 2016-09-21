@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.event.EnumEventTag;
@@ -59,7 +61,7 @@ import java.util.List;
  *
  * @author js02
  */
-public class StoreDetailActivity extends BaseActivity implements CallbackView {
+public class StoreDetailActivity extends BaseActivity implements CallbackView, CallbackView2 {
 
     /**
      * 商家id (int)
@@ -94,6 +96,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     protected HoltelDetailFragment mFragHotel2;
     private SellerHttpHelper sellerHttpHelper;
+    private SellerHttpHelper sellerHttpHelper2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +108,10 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     private void getData() {
         SDDialogManager.showProgressDialog("请稍候...");
-        if (sellerHttpHelper == null) {
-            sellerHttpHelper = new SellerHttpHelper(this, this);
+        if (sellerHttpHelper2 == null) {
+            sellerHttpHelper2 = new SellerHttpHelper(this, this, "");
         }
-        sellerHttpHelper.getShopInfo(MerchantID, AppRuntimeWorker.getCity_id());
+        sellerHttpHelper2.getShopInfo(MerchantID, AppRuntimeWorker.getCity_id());
     }
 
     private void init() {
@@ -176,7 +179,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
             String title = share.getTitle();
 
             UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
-        }else {
+        } else {
             MGToast.showToast("无分享内容");
         }
     }
@@ -337,6 +340,13 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+        Message msg = new Message();
+        msg.what = 4;
+        mHandler.sendMessage(msg);
+    }
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -369,8 +379,11 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
                         share = result.getShare();
                         setView();
                         mScrollView.onRefreshComplete();
-                        SDDialogManager.dismissProgressDialog();
                     }
+                    break;
+                case 4:
+                    SDDialogManager.dismissProgressDialog();
+                    mScrollView.onRefreshComplete();
                     break;
             }
         }

@@ -56,7 +56,7 @@
             android:layout_height="1px"
             android:layout_below="@+id/iv_icon_item_collect"
             android:layout_marginTop="@dimen/dp15"
-            android:background="#eeeeee" />
+            android:background="@color/text_line" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

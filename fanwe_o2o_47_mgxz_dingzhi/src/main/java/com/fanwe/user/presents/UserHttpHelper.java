@@ -12,11 +12,11 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.getAttentionFans.ResultFans;
+import com.fanwe.user.model.getAttentionFans.RootFans;
 import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
 import com.fanwe.user.model.getAttentionFocus.ResultAttentionFocus;
 import com.fanwe.user.model.getAttentionFocus.RootAttentionFocus;
-import com.fanwe.user.model.getAttentionFans.ResultFans;
-import com.fanwe.user.model.getAttentionFans.RootFans;
 import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.model.getDistrInfo.ResultDistrInfo;
 import com.fanwe.user.model.getDistrInfo.RootDistrInfo;
@@ -27,12 +27,21 @@ import com.fanwe.user.model.getMyDistributionCorps.RootMyDistributionCorps;
 import com.fanwe.user.model.getNameCardQR.ModelNameCardQR;
 import com.fanwe.user.model.getNameCardQR.ResultNameCardQR;
 import com.fanwe.user.model.getNameCardQR.RootNameCardQR;
+import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
+import com.fanwe.user.model.getPersonHomePage.ResultPersonHomePage;
+import com.fanwe.user.model.getPersonHomePage.RootPersonHomePage;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.model.getPersonalHome.ResultPersonalHome;
 import com.fanwe.user.model.getPersonalHome.RootPersonalHome;
+import com.fanwe.user.model.getProductList.ModelProductList;
+import com.fanwe.user.model.getProductList.ResultProductList;
+import com.fanwe.user.model.getProductList.RootProductList;
 import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
 import com.fanwe.user.model.getShopAndUserCollect.ResultShopAndUserCollect;
 import com.fanwe.user.model.getShopAndUserCollect.RootShopAndUserCollect;
+import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
+import com.fanwe.user.model.getSpokePlay.ResultSpokePlay;
+import com.fanwe.user.model.getSpokePlay.RootSpokePlay;
 import com.fanwe.user.model.getUserChangeMobile.ModelUserChangeMobile;
 import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.model.getUserRedpackets.RootUserRedPacket;
@@ -676,12 +685,13 @@ public class UserHttpHelper implements IHelper {
         });
     }
 
-/**
+    /**
      * 粉丝页面关注
-     * @param focus_user_id 必须	 关注，取关对象的id(user_id)
+     *
+     * @param focus_user_id    必须	 关注，取关对象的id(user_id)
      * @param attention_status 必须 如果要进行关注操作，传1，取消关注传非1即可
      */
-    public void putAttention(String focus_user_id,String attention_status){
+    public void putAttention(String focus_user_id, String attention_status) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("focus_user_id", focus_user_id);
@@ -698,15 +708,15 @@ public class UserHttpHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 List<ResultAttention> result = gson.fromJson(responseBody, RootAttention.class)
                         .getResult();
-                if (result!=null && result.size()>0){
+                if (result != null && result.size() > 0) {
                     ResultAttention resultAttention = result.get(0);
-                    if (resultAttention!=null){
+                    if (resultAttention != null) {
                         final List<ModelAttention> body = resultAttention.getBody();
-                        if (body!=null && body.size()>0){
+                        if (body != null && body.size() > 0) {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView.onSuccess(UserConstants.ATTENTION,body);
+                                    mView.onSuccess(UserConstants.ATTENTION, body);
                                 }
                             });
                         }
@@ -726,7 +736,7 @@ public class UserHttpHelper implements IHelper {
     /**
      * 获取钱包页面数据
      */
-    public void getMyWallet(){
+    public void getMyWallet() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.MY_WALLET);
@@ -740,13 +750,13 @@ public class UserHttpHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 ResultMyWallet resultMyWallet = gson.fromJson(responseBody, RootMyWallet.class)
                         .getResult().get(0);
-                if (resultMyWallet!=null){
+                if (resultMyWallet != null) {
                     final List<ModelMyWallet> body = resultMyWallet.getBody();
-                    if (body!=null && body.size()>0){
+                    if (body != null && body.size() > 0) {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(UserConstants.MY_WALLET,body);
+                                mView.onSuccess(UserConstants.MY_WALLET, body);
                             }
                         });
                         return;
@@ -771,6 +781,99 @@ public class UserHttpHelper implements IHelper {
             }
         });
 
+    }
+
+    /**
+     * 查询用户主页
+     *
+     * @param user_id
+     */
+    public void getPersonHomePage(String user_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("user_id", user_id);
+        params.put("method", UserConstants.PERSON_HOME_PAGE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootPersonHomePage root = gson.fromJson(responseBody, RootPersonHomePage.class);
+                List<ResultPersonHomePage> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.PERSON_HOME_PAGE, null);
+                    return;
+                }
+                List<ModelPersonHomePage> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.PERSON_HOME_PAGE, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 获得TA的最爱
+     *
+     * @param user_id
+     */
+    public void getProductList(String user_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("user_id", user_id);
+        params.put("method", UserConstants.GET_PRODUCT_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootProductList root = gson.fromJson(responseBody, RootProductList.class);
+                List<ResultProductList> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.GET_PRODUCT_LIST, null);
+                    return;
+                }
+                List<ModelProductList> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.GET_PRODUCT_LIST, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 获得网红的直播场次
+     *
+     * @param user_id
+     */
+    public void getSpokePlay(String user_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("user_id", user_id);
+        params.put("method", UserConstants.GET_SPOKE_PLAY);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootSpokePlay root = gson.fromJson(responseBody, RootSpokePlay.class);
+                List<ResultSpokePlay> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.GET_SPOKE_PLAY, null);
+                    return;
+                }
+                List<ModelSpokePlay> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.GET_SPOKE_PLAY, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                SDToast.showToast(message);
+            }
+        });
     }
 
     @Override

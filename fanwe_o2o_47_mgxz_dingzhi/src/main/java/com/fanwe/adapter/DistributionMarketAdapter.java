@@ -183,7 +183,7 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
                 case 0:
                     mListModel.get(currPosition).setIs_delete(1);
                     notifyDataSetChanged();
-                    showDialog("代言成功，请进入我的小店查看");
+                    showDialog("代言成功，请进入店铺查看");
                     break;
             }
         }
