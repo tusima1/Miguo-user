@@ -35,7 +35,6 @@
         android:layout_width="@dimen/dp27"
         android:layout_height="@dimen/dp27"
         android:layout_marginLeft="@dimen/dp23"
-
         android:layout_marginRight="@dimen/dp10"
         android:layout_toEndOf="@+id/goods"
         android:src="@drawable/ic_share" />

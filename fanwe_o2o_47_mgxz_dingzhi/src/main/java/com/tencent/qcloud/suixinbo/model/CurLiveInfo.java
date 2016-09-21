@@ -14,6 +14,7 @@ public class CurLiveInfo {
     private static double long1;
     private static String address = "";
     private static String coverurl = "";
+    private static String live_type ="";//直播类型  1 表示直播，2表示点播
 
     public static int roomNum;//room id(chatRoomId 其实就是房间id的string格式)
 
@@ -33,6 +34,13 @@ public class CurLiveInfo {
      * 门店ID.
      */
     public static String shopID;
+
+    public static void setLive_type(String live_type_out){
+        live_type=live_type_out;
+    }
+    public static String getLive_type(){
+        return live_type;
+    }
 
     public static int getCurrentRequestCount() {
         return currentRequestCount;
