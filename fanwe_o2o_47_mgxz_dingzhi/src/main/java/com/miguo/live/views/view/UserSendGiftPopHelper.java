@@ -181,23 +181,25 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                         Log.e("test",offset+"");
                     }else {
                         //TODO 支付
-                        Log.e("test","roomId: "+MySelfInfo.getInstance().getMyRoomNum()+"");
-                        Log.e("test","数量: "+totalCount+"");
-                        Log.e("test","id: "+selectedItemInfo.getId());
-                        Log.e("test","liveType: "+liveType);
-
-                        sendCount=totalCount;
-                        int roomNum = CurLiveInfo.getRoomNum();
-                        if (roomNum==-1){
-                            MGToast.showToast("异常直播房间");
+//                        Log.e("test","roomId: "+MySelfInfo.getInstance().getMyRoomNum()+"");
+//                        Log.e("test","数量: "+totalCount+"");
+//                        Log.e("test","id: "+selectedItemInfo.getId());
+//                        Log.e("test","liveType: "+liveType);
+                        if(selectedItemInfo!=null && selectedItemInfo.getId() != null){
+                            sendCount=totalCount;
+                            int roomNum = CurLiveInfo.getRoomNum();
+                            if (roomNum==-1){
+                                MGToast.showToast("异常直播房间");
+                                totalCount=0;
+                                preTime=0;
+                                return;
+                            }
+                            httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
+                            //reset
                             totalCount=0;
                             preTime=0;
-                            return;
                         }
-                        httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
-                        //reset
-                        totalCount=0;
-                        preTime=0;
+
                     }
                     break;
             }

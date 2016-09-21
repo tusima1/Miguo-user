@@ -629,7 +629,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
     @Override
     public void showDanmuSelf(HashMap<String, String> params) {
-        
+
     }
 
     @Override
