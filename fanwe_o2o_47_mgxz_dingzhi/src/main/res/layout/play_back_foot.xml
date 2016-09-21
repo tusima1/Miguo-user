@@ -36,8 +36,8 @@
 
             android:max="0"
             android:progress="0"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:progressDrawable="@drawable/play_seekbar_progress"
             android:thumb="@drawable/play_seekbar_icon"
             android:layout_weight="18"/>

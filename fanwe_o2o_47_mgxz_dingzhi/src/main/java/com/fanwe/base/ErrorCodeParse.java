@@ -66,7 +66,7 @@ public class ErrorCodeParse {
         errorCodeMap.put("401", "出错啦");
         errorCodeMap.put("402", "来晚一步，商品下架啦");
         errorCodeMap.put("403", "请去手机客户端购买");
-        errorCodeMap.put("404", "出错啦");
+        errorCodeMap.put("404", "对不起，超出购买限制");
         errorCodeMap.put("405", "库存不足");
         errorCodeMap.put("406", "您的等级不足，无法购买");
         errorCodeMap.put("500", "出错啦");

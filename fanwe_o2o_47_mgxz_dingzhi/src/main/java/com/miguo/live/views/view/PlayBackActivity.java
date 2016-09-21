@@ -45,6 +45,7 @@ import com.miguo.live.views.customviews.PlayBackSeekBarView;
 import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.RTMPUtils;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.av.TIMAvManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -139,12 +140,23 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
      */
     private HeadTopAdapter mHeadTopAdapter;
     private HashMap<Integer,PlaySetInfo> playUrlList;
+
+    PlaySetInfo currentPlayInfo;
     /**
      * 拉流地址。
      */
     String playUrl = "";
-    float width = 0.0f;
-    float height = 0.0f;
+
+    /**
+     *  聊天室ID。
+     */
+    String chat_room_id ;
+    String file_size ;
+
+    String duration ;
+    String file_id;
+    String vid ;
+    String playset;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,31 +164,40 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
+        getPlayUrlList();
         initHelper();
         initView();
-        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
 
+        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
         mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
-
         mPlayConfig = new TXLivePlayConfig();
         if (mLivePlayer == null) {
             mLivePlayer = new TXLivePlayer(this);
         }
     }
+
+    /**
+     * 解析直播流地址。
+     */
     public void getPlayUrlList(){
         if(playUrlList ==null){
             playUrlList = new HashMap<>();
           }
-        String playSet = "";
         Type listType = new TypeToken<List<PlaySetInfo>>(){}.getType();
         Gson gson = new Gson();
-        List<PlaySetInfo> playSetInfoList = gson.fromJson(playSet, listType);
+        List<PlaySetInfo> playSetInfoList = gson.fromJson(playset, listType);
         for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext();) {
             PlaySetInfo o = (PlaySetInfo) iterator.next();
             playUrlList.put(o.getDefinition(),o);
         }
+        PlaySetInfo currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
+        if(currentPlayInfo==null){
+            showInvalidateToast("网络有问题或者当前点播地址错误。");
+            finish();
+        }
+        playUrl = currentPlayInfo.getUrl();
+        changeOrientation();
     }
-
 
 
     private void getIntentData() {
@@ -186,25 +207,51 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             finish();
             return;
         }
-        String chat_room_id = data.getString("chat_room_id", "");
-        String file_size = data.getString("file_size", "");
-        String duration = data.getString("duration", "");
-        String file_id = data.getString("file_id", "");
-        String vid = data.getString("vid", "");
-        String playset = data.getString("playset", "");
+         chat_room_id = data.getString("chat_room_id", "");
+         file_size = data.getString("file_size", "");
+         duration = data.getString("duration", "");
+         file_id = data.getString("file_id", "");
+         vid = data.getString("vid", "");
+         playset = data.getString("playset", "");
         Log.e("test",chat_room_id+"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
-
     }
 
     public void initView(){
         root = findViewById(R.id.root);
-
+        mVideoPlay = false;
         mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
         mLoadingView = (ImageView) findViewById(R.id.loadingImageView);
 
         //播放进度条。
         playBackSeekBarView = (PlayBackSeekBarView) findViewById(R.id.play_seekbar);
+        //播放、暂停播放。
         mBtnPlay = (ImageView) playBackSeekBarView.findViewById(R.id.btnPlay);
+        mBtnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mVideoPlay) {
+                    if (mPlayType == TXLivePlayer.PLAY_TYPE_VOD_FLV || mPlayType == TXLivePlayer.PLAY_TYPE_VOD_HLS || mPlayType == TXLivePlayer.PLAY_TYPE_VOD_MP4) {
+                        if (mVideoPause) {
+                            mLivePlayer.resume();
+                            mBtnPlay.setBackgroundResource(R.drawable.play_pause);
+                        } else {
+                            mLivePlayer.pause();
+                            mBtnPlay.setBackgroundResource(R.drawable.play_start);
+                        }
+                        mVideoPause = !mVideoPause;
+
+                    } else {
+                        stopPlayRtmp();
+                        mVideoPlay = !mVideoPlay;
+                    }
+
+                } else {
+                    if (startPlayRtmp()) {
+                        mVideoPlay = !mVideoPlay;
+                    }
+                }
+            }
+        });
         mSeekBar = (SeekBar) playBackSeekBarView.findViewById(R.id.seekbar);
         initSeekBar();
         mTextStart = (TextView) playBackSeekBarView.findViewById(R.id.play_start);
@@ -320,6 +367,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private boolean checkPlayUrl(final String playUrl) {
         if (TextUtils.isEmpty(playUrl) || (!playUrl.startsWith("http://") && !playUrl.startsWith("https://") && !playUrl.startsWith("rtmp://"))) {
             showInvalidateToast("");
+            finish();
             return false;
         }
         if (playUrl.startsWith("http://") || playUrl.startsWith("https://")) {
@@ -331,24 +379,24 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 mPlayType = TXLivePlayer.PLAY_TYPE_VOD_MP4;
             } else {
                 showInvalidateToast("");
+                finish();
                 return false;
             }
         } else {
             showInvalidateToast("");
+            finish();
             return false;
         }
         return true;
     }
 
     private boolean startPlayRtmp() {
-
         if (!checkPlayUrl(playUrl)) {
             return false;
         }
         mBtnPlay.setBackgroundResource(R.drawable.play_pause);
         mLivePlayer.setPlayerView(mPlayerView);
         mLivePlayer.setPlayListener(this);
-
         // 硬件加速在1080p解码场景下效果显著，但细节之处并不如想象的那么美好：
         // (1) 只有 4.3 以上android系统才支持
         // (2) 兼容性我们目前还仅过了小米华为等常见机型，故这里的返回值您先不要太当真
@@ -363,7 +411,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
         int result = mLivePlayer.startPlay(playUrl, mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
         if (result == -2) {
-            showInvalidateToast("非腾讯云链接地址，若要放开限制，请联系腾讯云商务团队");
+            showInvalidateToast("非腾讯云链接地址。");
         }
         if (result != 0) {
             mBtnPlay.setBackgroundResource(R.drawable.play_start);
@@ -432,6 +480,9 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         if (mLivePlayer == null) {
             return;
         }
+        float width = currentPlayInfo.getVwidth();
+        float height = currentPlayInfo.getVheight();
+
         //横屏。
         if (width - height > 0) {
             mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
@@ -452,6 +503,9 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 }
             } else if (Build.VERSION.SDK_INT >= 23) { //目前android6.0以上暂不支持后台播放
                 startPlayRtmp();
+                if (mLiveHttphelper != null) {
+                    mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
+                }
             }
         }
 
@@ -475,6 +529,67 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         if (mPlayerView != null) {
             mPlayerView.onPause();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mLivePlayer != null) {
+            mLivePlayer.stopPlay(true);
+        }
+        if (mPlayerView != null){
+            mPlayerView.onDestroy();
+        }
+
+
+        if (null != mVideoTimer) {
+            mVideoTimer.cancel();
+            mVideoTimer = null;
+        }
+        if (null != mAudienceTimer) {
+            mAudienceTimer.cancel();
+            mAudienceTimer = null;
+        }
+
+        CurLiveInfo.setMembers(0);
+        CurLiveInfo.setAdmires(0);
+        CurLiveInfo.setCurrentRequestCount(0);
+        unregisterReceiver();
+        if (mLiveHelper != null) {
+            mLiveHelper.closeCameraAndMic();
+            mLiveHelper.onDestory();
+        }
+        if (mEnterRoomHelper != null) {
+            mEnterRoomHelper.onDestory();
+        }
+        //mLiveHelper;
+        if (mTLoginHelper != null) {
+            mTLoginHelper.onDestory();
+        }
+        if (tencentHttpHelper != null) {
+            tencentHttpHelper.onDestroy();
+        }
+        if (mUserHeadTopView != null) {
+            mUserHeadTopView.ondestroy();
+            mUserHeadTopView = null;
+        }
+        if (playBackSeekBarView != null) {
+            playBackSeekBarView.onDestroy();
+            playBackSeekBarView = null;
+        }
+        if (playBackBottomToolView != null) {
+            playBackBottomToolView.onDestroy();
+            playBackBottomToolView = null;
+        }
+
+
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     private void stopPlayRtmp() {
@@ -644,6 +759,13 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void userExit() {
+
+        if (mLiveHttphelper != null) {
+            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "","2");
+        }
+      //退出群
+
+        finish();
 
     }
 

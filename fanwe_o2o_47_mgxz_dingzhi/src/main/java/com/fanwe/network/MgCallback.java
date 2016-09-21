@@ -76,7 +76,6 @@ public abstract class MgCallback<T> implements Callback {
                         onSuccessResponse(body);
                     }
                 } else {
-
                     onErrorResponse(message, statusCode);
                 }
 
