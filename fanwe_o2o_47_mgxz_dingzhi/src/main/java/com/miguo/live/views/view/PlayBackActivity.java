@@ -133,6 +133,8 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
      * 头部头像adapter.
      */
     private HeadTopAdapter mHeadTopAdapter;
+    private String chat_room_id;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,13 +159,13 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
             finish();
             return;
         }
-        String chat_room_id = data.getString("chat_room_id", "");
+        chat_room_id = data.getString("chat_room_id", "");
         String file_size = data.getString("file_size", "");
         String duration = data.getString("duration", "");
         String file_id = data.getString("file_id", "");
         String vid = data.getString("vid", "");
         String playset = data.getString("playset", "");
-        Log.e("test",chat_room_id+"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
+        Log.e("test", chat_room_id +"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
 
     }
 
@@ -279,7 +281,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private class GetAudienceTask extends TimerTask {
         @Override
         public void run() {
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.getAudienceList(chat_room_id);
         }
     }
     private void unregisterReceiver() {
@@ -573,19 +575,19 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                 });
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
-                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
-                        if (datas == null) {
-                            mRedPacketAdapter.setMdatas(null);
-                        } else {
-                            mRedPacketAdapter.setMdatas(datas);
-                        }
-                        mRedPacketAdapter.notifyDataSetChanged();
-                    }
-                });
+//                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
+//                MGUIUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+//                        if (datas == null) {
+//                            mRedPacketAdapter.setMdatas(null);
+//                        } else {
+//                            mRedPacketAdapter.setMdatas(datas);
+//                        }
+//                        mRedPacketAdapter.notifyDataSetChanged();
+//                    }
+//                });
                 break;
 //            case LiveConstants.GET_PACKET_RESULT:
 //                MGUIUtil.runOnUiThread(new Runnable() {
