@@ -19,6 +19,7 @@ import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.presenters.LiveCommonHelper;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.receiver.NetWorkStateReceiver;
 import com.miguo.live.views.LiveOrientationHelper;
@@ -28,6 +29,7 @@ import com.miguo.live.views.customviews.UserHeadTopView;
 import com.miguo.live.views.danmu.Danmukiller;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.av.TIMAvManager;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
@@ -88,6 +90,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private LiveCommonHelper mCommonHelper;
     private LiveOrientationHelper mOrientationHelper;
     private TencentHttpHelper tencentHttpHelper;
+    private LiveHttpHelper mLiveHttphelper;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
 
@@ -109,6 +112,8 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
     private PagerBaoBaoAdapter mBaoBaoAdapter;
 
+    private Timer mVideoTimer, mAudienceTimer ;
+
     /**
      * 头部头像adapter.
      */
@@ -117,18 +122,18 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setActivityParams();
-        setContentView(R.layout.activity_live_mg);
+        setContentView(R.layout.act_play_back);
+        initHelper();
         initView();
         mCurrentRenderMode     = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
         mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
 
         mPlayConfig = new TXLivePlayConfig();
-        initHelper();
+
     }
     public void initView(){
         root = findViewById(R.id.root);
         playBackBottomToolView =(PlayBackBottomToolView) findViewById(R.id.normal_user_bottom_tool);
-
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
         playBackBottomToolView.setmBaobaoAdapter(mBaoBaoAdapter);
 
@@ -138,6 +143,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         mUserHeadTopView.init();
         mUserHeadTopView.setVisibility(View.VISIBLE);
         mUserHeadTopView.initNeed(this);
+        mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
     }
 
 
@@ -174,6 +180,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
         mSellerHttpHelper = new SellerHttpHelper(this, this);
+        mLiveHttphelper = new LiveHttpHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
         // 用户资料类
@@ -184,6 +191,15 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
     }
 
+    /**
+     * 取观众 列表
+     */
+    private class GetAudienceTask extends TimerTask {
+        @Override
+        public void run() {
+            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
+        }
+    }
     private void unregisterReceiver() {
 
         unregisterReceiver(mNetWorkReceiver);
