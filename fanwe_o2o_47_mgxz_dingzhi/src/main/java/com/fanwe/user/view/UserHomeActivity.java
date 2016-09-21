@@ -20,7 +20,9 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.adapters.ImageAdapter;
 import com.fanwe.user.adapters.UserHomeLiveImgAdapter;
-import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
+import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
+import com.fanwe.user.model.getProductList.ModelProductList;
+import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.fanwe.user.presents.UserHttpHelper;
 
 import java.util.ArrayList;
@@ -120,14 +122,22 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
 
     }
 
-    List<ModelShopAndUserCollect> items;
+    List<ModelPersonHomePage> itemsPerson;
+    List<ModelProductList> itemsProduct;
+    List<ModelSpokePlay> itemsLive;
 
     @Override
     public void onSuccess(String method, List datas) {
         Message msg = new Message();
-        if (UserConstants.SHOP_AND_USER_COLLECT.equals(method)) {
-            items = datas;
+        if (UserConstants.PERSON_HOME_PAGE.equals(method)) {
+            itemsPerson = datas;
             msg.what = 0;
+        } else if (UserConstants.GET_PRODUCT_LIST.equals(method)) {
+            itemsProduct = datas;
+            msg.what = 1;
+        } else if (UserConstants.GET_SPOKE_PLAY.equals(method)) {
+            itemsLive = datas;
+            msg.what = 2;
         }
         mHandler.sendMessage(msg);
     }
