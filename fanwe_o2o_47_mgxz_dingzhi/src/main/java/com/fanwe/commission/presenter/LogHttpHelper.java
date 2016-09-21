@@ -37,12 +37,13 @@ public class LogHttpHelper implements IHelper{
      * @param page 默认1
      * @param page_size 默认10
      */
-    public void getCommissionLog(String page,String page_size){
+    public void getCommissionLog(String page,String page_size,String select_type){
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.COMMISSION_LOG);
         params.put("page", page);
         params.put("page_size", page_size);
+        params.put("select_type", select_type);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {

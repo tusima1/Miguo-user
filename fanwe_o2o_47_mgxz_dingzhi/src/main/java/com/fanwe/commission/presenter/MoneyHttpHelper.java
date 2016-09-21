@@ -1,6 +1,7 @@
 package com.fanwe.commission.presenter;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -42,13 +43,25 @@ public class MoneyHttpHelper implements IHelper{
      * @param page 默认1
      * @param page_size 默认10
      */
-    public void getGetBalance(String page,String page_size){
+    public void getGetBalance(String page,String page_size,String select_type){
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.COMMISSION_LOG);
         params.put("page", page);
         params.put("page_size", page_size);
+        params.put("select_type", select_type);
         //TODO 资金日志
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Log.e("test",responseBody);
+            }
+        });
 
     }
 
@@ -156,7 +169,7 @@ public class MoneyHttpHelper implements IHelper{
     }
 
     /**
-     * 提现日志
+     * 提现日志 Error 这是商家版
      * @param money_type 1:余额提现，2:佣金提现
      */
     public void getUserWithdrawLog(String money_type){

@@ -199,7 +199,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 
 	private void requestData(boolean isLoadMore) {
 		this.isLoadMore=isLoadMore;
-		httpHelper.getCommissionLog(mPage.getPage()+"","10");
+		httpHelper.getCommissionLog(mPage.getPage()+"","10","1");
 	}
 
 	private void initTitle() {
