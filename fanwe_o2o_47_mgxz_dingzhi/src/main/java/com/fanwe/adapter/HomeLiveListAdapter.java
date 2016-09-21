@@ -62,6 +62,7 @@ public class HomeLiveListAdapter extends BaseAdapter {
             convertView = inflater.inflate(
                     R.layout.item_live_view_home_list, null);
             mHolder.ivBg = (ImageView) convertView.findViewById(R.id.iv_bg_item_live);
+            mHolder.tvType = (TextView) convertView.findViewById(R.id.tv_type);
             mHolder.tvAdd = (TextView) convertView.findViewById(R.id.tv_shop_item_live_list_home_fragment);
             mHolder.layoutTags = (LinearLayout) convertView.findViewById(R.id.layout_tags_item_live_list_home_fragment);
             convertView.setTag(mHolder);
@@ -81,6 +82,16 @@ public class HomeLiveListAdapter extends BaseAdapter {
             mHolder.tvAdd.setText(room.getLbs().getAddress());
         } else {
             mHolder.tvAdd.setText("");
+        }
+        //直播类型  1 表示直播，2表示点播
+        String live_type = room.getLive_type();
+        if ("1".equals(live_type)){
+            mHolder.tvType.setText("正在直播");
+        }else if ("2".equals(live_type)){
+            mHolder.tvType.setText("点播");
+        }else {
+            //异常数据
+            mHolder.tvType.setText("=_=");
         }
         //标签
         mHolder.layoutTags.removeAllViews();
@@ -127,6 +138,7 @@ public class HomeLiveListAdapter extends BaseAdapter {
     private static class Holder {
         private ImageView ivBg;
         private TextView tvAdd;
+        private TextView tvType;//直播类型  1 表示直播，2表示点播
         private LinearLayout layoutTags;
     }
 

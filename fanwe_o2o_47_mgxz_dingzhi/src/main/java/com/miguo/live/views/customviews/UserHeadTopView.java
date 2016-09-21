@@ -138,8 +138,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 //        if (mActivity != null && userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
 //            userExitDialogHelper.show();
 //        }
-        if (mLiveView != null) {
+        if (mLiveView != null && "1".equals(CurLiveInfo.getLive_type())) {
             mLiveView.userExit();
+        }else {
+            mActivity.finish();
         }
         isUserClose = true;
     }
@@ -306,7 +308,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     public void ondestroy(){
         if(userExitDialogHelper!=null){
-            userExitDialogHelper.dismiss();;
+            userExitDialogHelper.dismiss();
             userExitDialogHelper = null;
         }
     }
