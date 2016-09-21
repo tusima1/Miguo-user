@@ -74,6 +74,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
 
     }
 
+
     private void createPopWindow() {
         View contentView = LayoutInflater.from(mActivity).inflate(R.layout.act_live_pop_viewpager, null);
         mShopCart = ((ImageView) contentView.findViewById(R.id.iv_shop_cart));
@@ -108,6 +109,8 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
             popupWindow.showAtLocation(rootView, Gravity.BOTTOM,0,0);
         }
     }
+
+
 
     private void initContentView(final View contentView) {
         ViewPagerItems pagerItems = new ViewPagerItems(mActivity);

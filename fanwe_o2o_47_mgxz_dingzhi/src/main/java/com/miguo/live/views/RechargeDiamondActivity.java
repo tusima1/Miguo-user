@@ -561,12 +561,14 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         mTitle.setMiddleTextTop("充值页面");
         mTitle.initRightItem(1);
         mTitle.getItemRight(0).setTextTop("充值记录");
+
     }
 
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
         super.onCLickRight_SDTitleSimple(v, index);
         //进入充值记录页。
+        gotoPayHistoryActivity();
     }
 
     @Override

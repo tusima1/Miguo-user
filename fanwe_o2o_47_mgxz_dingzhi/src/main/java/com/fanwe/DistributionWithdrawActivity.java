@@ -259,7 +259,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     }
 
     private void registerClick() {
-        mLl_withdraw_type.setOnClickListener(this);
+//        mLl_withdraw_type.setOnClickListener(this);
         mBtn_submit.setOnClickListener(this);
         mEt_money.setOnKeyListener(new OnKeyListener() {
 
@@ -334,9 +334,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
     @Override
     public void onClick(View v) {
-        if (v == mLl_withdraw_type) {
-            clickWithDrawType();
-        } else if (v == mBtn_submit) {
+        if (v == mBtn_submit) {
             clickSubmit();
         } else if (v == iv_select) {
             clickCardSelect();

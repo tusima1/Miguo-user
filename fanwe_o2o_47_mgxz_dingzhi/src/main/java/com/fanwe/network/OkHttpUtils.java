@@ -74,14 +74,15 @@ public class OkHttpUtils {
 
     /**
      * 判斷网络是否连接。
+     *
      * @return
      */
     public boolean checkNetWorkValidate() {
-                //判断网络环境
+        //判断网络环境
         boolean connected = NetWorkStateUtil.isConnected(App.getInstance());
         if (!connected) {
             MGToast.showToast("没有网络,请检测网络环境!");
-            return  false;
+            return false;
         }
         return true;
     }
@@ -100,7 +101,7 @@ public class OkHttpUtils {
 
     public void post(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
         String serverUrl = "";
-        if(!checkNetWorkValidate()){
+        if (!checkNetWorkValidate()) {
             return;
         }
         if (ServerUrl.DEBUG) {
@@ -155,7 +156,7 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void put(String url, TreeMap<String, String> params, Callback mCallback) {
-        if(!checkNetWorkValidate()){
+        if (!checkNetWorkValidate()) {
             return;
         }
         String serverUrl = "";
@@ -211,7 +212,7 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
-        if(!checkNetWorkValidate()){
+        if (!checkNetWorkValidate()) {
             return;
         }
         String serverUrl = "";
@@ -262,7 +263,7 @@ public class OkHttpUtils {
      * @throws IOException
      */
     public String synchronousPost(String url, String json) throws IOException {
-        if(!checkNetWorkValidate()){
+        if (!checkNetWorkValidate()) {
             return "";
         }
         RequestBody body = RequestBody.create(JSON, json);
@@ -288,7 +289,7 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback) {
-        if(!checkNetWorkValidate()){
+        if (!checkNetWorkValidate()) {
             return;
         }
         StringBuilder paramStr = new StringBuilder();
@@ -322,7 +323,8 @@ public class OkHttpUtils {
      * @param mCallback
      */
     public void get(String url, TreeMap<String, String> params, Callback mCallback) {
-        if(!checkNetWorkValidate()){
+        if (!checkNetWorkValidate()) {
+            mCallback.onFailure(null, null);
             return;
         }
         String serverUrl = "";

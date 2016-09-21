@@ -128,8 +128,6 @@
                             android:textColor="@color/gray_cc"
                             android:textSize="@dimen/sp13"
                             />
-
-
                     </RelativeLayout>
                 </LinearLayout>
                 <!-- 新添加银行卡操作ui -->

@@ -153,6 +153,12 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     }
 
     /**
+     * 进入页面后就立刻弹出宝宝
+     */
+    public void clickBaoBao(){
+        mGoods.performClick();
+    }
+    /**
      * 点击出星星
      */
     private boolean clickLike2ShowHeart() {
@@ -162,8 +168,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             CurLiveInfo.setAdmires(CurLiveInfo.getAdmires() + 1);
             return true;
         } else {
-            //Toast.makeText(this, getString(R.string.text_live_admire_limit), Toast
-            // .LENGTH_SHORT).show();
+
             return false;
         }
     }

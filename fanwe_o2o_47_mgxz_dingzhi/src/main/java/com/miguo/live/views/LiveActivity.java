@@ -31,7 +31,6 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.constant.Constant;
 import com.fanwe.constant.GiftId;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -299,7 +298,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mHostBottomToolView1.setNeed(mCommonHelper, mLiveHelper, this);
         mHostBottomMeiView2.setNeed(this, mCommonHelper);
 
-        /**
+        /**mNetWorkReceiver
          * 弹幕
          */
 
@@ -634,7 +633,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private UserBottomToolView mUserBottomTool;
 
-    /**
+    /**GetAudienceTask
      * 初始化界面
      */
     private void initView() {
@@ -906,6 +905,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         MGTimer.showTime();
         mLiveHelper.resume();
         QavsdkControl.getInstance().onResume();
+    }
+
+    private boolean showBaoBao=false;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && !showBaoBao){
+            //弹出宝宝
+            mUserBottomTool.clickBaoBao();
+            showBaoBao=true;
+        }
     }
 
     @Override

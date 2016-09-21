@@ -48,7 +48,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
         GiftListBean info = mData.get(position);
         SDViewBinder.setImageView(info.getIcon(),holder.iv_img);
         holder.tv_name.setText(info.getName());
-        holder.tv_price.setText(info.getPrice());
+        holder.tv_price.setText(info.getPrice()+"米果钻");
 
         boolean isSelected = selectedPosition == position;
         holder.itemView.setSelected(isSelected);

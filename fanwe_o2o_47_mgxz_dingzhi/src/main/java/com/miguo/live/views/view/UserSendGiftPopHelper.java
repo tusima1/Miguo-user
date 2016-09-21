@@ -1,6 +1,7 @@
 package com.miguo.live.views.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +28,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper2;
+import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
@@ -185,7 +187,6 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                         Log.e("test","liveType: "+liveType);
 
                         sendCount=totalCount;
-//                        MySelfInfo.getInstance().getMyRoomNum()+""
                         int roomNum = CurLiveInfo.getRoomNum();
                         if (roomNum==-1){
                             MGToast.showToast("异常直播房间");
@@ -230,13 +231,16 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 .setOnSureClickListener(new MGDialog.OnSureClickListener() {
                     @Override
                     public void onSure(MGDialog dialog) {
-                        MGToast.showToast("充值");
+                        clickRecharge();
+                        dialog.dismiss();
                     }
                 }).show();
     }
 
     private void clickRecharge() {
-        showDialog();
+        if (mActivity!=null){
+            mActivity.startActivity(new Intent(mActivity, RechargeDiamondActivity.class));
+        }
     }
 
     private long preTime = 0;
@@ -268,8 +272,12 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                     }
                 }
             });
-        }else {
-            MGToast.showToast("ERROR:"+message);
+        }else if(!TextUtils.isEmpty(message)){
+            if (message.contains("余额不足")){
+                showDialog();
+            }else {
+                MGToast.showToast("ERROR_OK:"+message);
+            }
         }
         sendCount=0;
     }
@@ -294,7 +302,11 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
         if (!TextUtils.isEmpty(responseBody) && responseBody.startsWith("####")){
             int length = responseBody.length();
             String msg = responseBody.substring(4, length);
-            MGToast.showToast(msg);
+            if (msg.contains("余额不足")){
+                showDialog();
+            }else {
+                MGToast.showToast(msg);
+            }
             sendCount=0;
         }
     }

@@ -36,7 +36,7 @@ public class CollectListActivity extends BaseActivity implements CallbackView2 {
     private CollectListAdapter mCollectListAdapter;
     private boolean isRefresh = true;
     private int pageNum = 1;
-    private int pageSize = 2;
+    private int pageSize = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +55,8 @@ public class CollectListActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void preData() {
-        ModelShopAndUserCollect bean;
-        for (int i = 1; i < 10; i++) {
-            bean = new ModelShopAndUserCollect();
-            datas.add(bean);
-        }
-
         mCollectListAdapter = new CollectListAdapter(mContext, getLayoutInflater(), datas);
         ptrl.setAdapter(mCollectListAdapter);
-
     }
 
     private void setListener() {
@@ -79,10 +72,10 @@ public class CollectListActivity extends BaseActivity implements CallbackView2 {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long positionL) {
                 position--;
                 ModelShopAndUserCollect item = datas.get(position);
-                MGToast.showToast(item.getNick());
+                MGToast.showToast(item.getShop_name());
             }
         });
-//        ptrl.setRefreshing();
+        ptrl.setRefreshing();
     }
 
     private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -114,7 +107,7 @@ public class CollectListActivity extends BaseActivity implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         Message msg = new Message();
-        if (UserConstants.ATTENTION_FOCUS.equals(method)) {
+        if (UserConstants.SHOP_AND_USER_COLLECT.equals(method)) {
             items = datas;
             msg.what = 0;
         }

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -74,6 +75,7 @@ public class SellerHttpHelper implements IHelper {
     private Gson gson;
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
+    private CallbackView2 mView2;
     private Context mContext;
     private String token;
 
@@ -82,6 +84,13 @@ public class SellerHttpHelper implements IHelper {
     public SellerHttpHelper(Context mContext, CallbackView mView) {
         this.mContext = mContext;
         this.mView = mView;
+        gson = new Gson();
+        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+    }
+
+    public SellerHttpHelper(Context mContext, CallbackView2 mView2, String type) {
+        this.mContext = mContext;
+        this.mView2 = mView2;
         gson = new Gson();
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
@@ -584,15 +593,20 @@ public class SellerHttpHelper implements IHelper {
                 RootShopInfo root = gson.fromJson(responseBody, RootShopInfo.class);
                 List<ResultShopInfo> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(SellerConstants.SHOP_INFO, null);
+                    mView2.onSuccess(SellerConstants.SHOP_INFO, null);
                     return;
                 }
-                mView.onSuccess(SellerConstants.SHOP_INFO, result);
+                mView2.onSuccess(SellerConstants.SHOP_INFO, result);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 SDToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView2.onFinish(SellerConstants.SHOP_INFO);
             }
         });
     }
@@ -603,7 +617,11 @@ public class SellerHttpHelper implements IHelper {
     public void getBusinessDistributionList(int pageNum, int pageSize, String ent_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
-        params.put("user_id", userCurrentInfo.getUserInfoNew().getUser_id());
+        if (userCurrentInfo.getUserInfoNew() != null) {
+            params.put("user_id", userCurrentInfo.getUserInfoNew().getUser_id());
+        } else {
+            params.put("user_id", "");
+        }
         params.put("page_size", String.valueOf(pageSize));
         params.put("page", String.valueOf(pageNum));
         params.put("ent_id", ent_id);

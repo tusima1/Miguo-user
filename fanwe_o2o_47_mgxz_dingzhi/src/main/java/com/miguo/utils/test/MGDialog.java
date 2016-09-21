@@ -30,7 +30,7 @@ public class MGDialog extends Dialog implements View.OnClickListener {
     private OnSureClickListener mSureListener;
 
     public MGDialog(Context context) {
-        super(context,R.style.dialog);
+        super(context,R.style.floag_dialog);
         this.mContext=context;
         setCancelable(true);
         setCanceledOnTouchOutside(false);

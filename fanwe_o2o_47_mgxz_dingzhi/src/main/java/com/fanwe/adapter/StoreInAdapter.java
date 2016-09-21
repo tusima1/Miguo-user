@@ -67,7 +67,11 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
         if (model != null) {
             SDViewBinder.setTextView(tv_title, model.getName());
             if ("1".equals(model.getIs_delete())) {
-                fx_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
+                    fx_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                } else {
+                    fx_id = "";
+                }
                 //代言商品，显示佣金
                 layout_priceOrigin.setVisibility(View.VISIBLE);
                 SDViewBinder.setTextView(tv_priceCurrent, TextMoney.textFarmat3(model.getSalary()));
@@ -147,7 +151,10 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
      * 添加到购物车。
      */
     public void addGoodsToShoppingPacket() {
-        String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        String lgn_user_id = "";
+        if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
+            lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        }
         String goods_id = currStoreIn_list.getId();
         String cart_type = "1";
         String add_goods_num = "1";
