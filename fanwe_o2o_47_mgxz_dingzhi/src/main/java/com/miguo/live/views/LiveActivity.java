@@ -73,6 +73,7 @@ import com.miguo.live.views.danmu.DanmuBean;
 import com.miguo.live.views.danmu.Danmukiller;
 import com.miguo.live.views.definetion.IntentKey;
 import com.miguo.live.views.dialog.LiveBackDialog;
+import com.miguo.live.views.gift.BigGifView;
 import com.miguo.live.views.gift.SmallGifView;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
@@ -210,6 +211,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * @param savedInstanceState
      */
     SmallGifView smallGifView;
+    /**
+     * 大礼物动画
+     */
+    BigGifView bigGifView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,6 +255,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
          */
         danmakuView = (DanmakuView)findViewById(R.id.danmuku);
         smallGifView = (SmallGifView) findViewById(R.id.small_gift_view);
+        bigGifView = (BigGifView) findViewById(R.id.biggift_view);
 
     }
 
@@ -2204,7 +2210,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
         giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
         giftInfo.setUserName(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getNick());
-        showSmallGift(giftInfo);
+        showGift(giftInfo);
         mLiveHelper.sendGift(giftInfo);
     }
 
@@ -2222,6 +2228,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         bean.setNum(Integer.parseInt(params.get("count")));
         bean.setUserAvatar(params.get("avatar"));
         bean.setUserName(params.get("nickname"));
+        showGift(bean);
+    }
+
+    private void showGift(GiftListBean bean){
         switch (bean.getId()){
             /**
              * 小礼物 随弹幕出现
@@ -2237,8 +2247,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
              * 福气临门 屏幕中心出现，慢慢消失
              */
             case GiftId.KISS:
-            case GiftId.GOOD_FORTUNE:
                 showRandomGift(bean);
+                break;
+            case GiftId.GOOD_FORTUNE:
+                showRedPacket(bean);
                 break;
             /**
              * 大礼物，动图序列帧
@@ -2266,7 +2278,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 屏幕随机出现的礼物
      */
     private void showRandomGift(GiftListBean bean){
+        bigGifView.addKiss(bean);
+    }
 
+    private void showRedPacket(GiftListBean bean){
+        bigGifView.addRedPacket(bean);
     }
 
     /**
@@ -2274,7 +2290,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * @param bean
      */
     private void showBigGift(GiftListBean bean){
-
+        bigGifView.addBigGift(bean);
     }
 
 }

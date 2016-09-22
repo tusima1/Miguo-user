@@ -20,7 +20,8 @@
             android:button="@null"
             android:background="@drawable/checkbox_danmu_selector"
             android:layout_width="50dp"
-            android:layout_height="25dp" />
+            android:layout_height="25dp"
+            android:checked="false" />
 
         <View
             android:layout_marginLeft="5dp"

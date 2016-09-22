@@ -76,11 +76,6 @@
                 android:layout_gravity="bottom"
                 android:textSize="16sp" />
         </LinearLayout>
-        <View 
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/stroke"
-            />
     </LinearLayout>
 
 </LinearLayout>

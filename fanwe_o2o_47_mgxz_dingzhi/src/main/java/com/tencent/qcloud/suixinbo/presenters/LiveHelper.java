@@ -470,7 +470,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccess(TIMMessage timMessage) {
-                SxbLog.i(TAG, "onSuccess ");
+                SxbLog.i(TAG, " send message onSuccess ");
             }
         });
     }
@@ -775,7 +775,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         for (Object o : danmuParams.entrySet()) {
             Map.Entry<String,String> entry = (Map.Entry<String,String>)o;
             Log.d(TAG,entry.getKey()+"--->"+entry.getValue());
-            map.put(entry.getKey(), entry.getValue());
+            map.put(entry.getKey(), entry.getValue() + "");
         }
         return map;
     }
@@ -786,7 +786,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         for (Object o : danmuParams.entrySet()) {
             Map.Entry<String,String> entry = (Map.Entry<String,String>)o;
             Log.d(TAG,entry.getKey()+"--->"+entry.getValue());
-            map.put(entry.getKey(), entry.getValue());
+            map.put(entry.getKey(), entry.getValue() + "");
         }
         return map;
     }

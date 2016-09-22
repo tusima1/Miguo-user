@@ -275,65 +275,6 @@ public class SmallGifView extends BaseLinearLayout{
             x1.setVisibility(i == 0 ? View.VISIBLE : View.INVISIBLE);
             linearLayout.addView(x1);
         }
-
-//        for(){
-//
-//        }
-
-//        if(number < 10){
-//            ImageView x1 = new ImageView(getContext());
-//            LinearLayout.LayoutParams x1Params = getLinearLayoutParams(width, height);
-//            x1Params.setMargins(dip2px(1), 0, 0, 0);
-//            x1.setLayoutParams(x1Params);
-//            x1.setImageResource(X_IMAGES[number]);
-//            linearLayout.addView(x1);
-//        }
-
-
-
-//        if(number < 100 && number >= 10){
-//            int a = Integer.parseInt((number + "").substring(0, 1));
-//            int b = Integer.parseInt((number + "").substring(1, 2));
-//            ImageView x1 = new ImageView(getContext());
-//            LinearLayout.LayoutParams x1Params = getLinearLayoutParams(width, height);
-//            x1.setLayoutParams(x1Params);
-//            x1.setImageResource(X_IMAGES[0]);
-//            linearLayout.addView(x1);
-//
-//            ImageView x2 = new ImageView(getContext());
-//            LinearLayout.LayoutParams x2Params = getLinearLayoutParams(width, height);
-//            x2Params.setMargins(dip2px(1), 0, 0, 0);
-//            x2.setLayoutParams(x2Params);
-//            x2.setImageResource(X_IMAGES[b]);
-//            x2.setVisibility(View.INVISIBLE);
-//            linearLayout.addView(x2);
-//        }
-//        if(number < 1000 && number >= 100){
-//            int a = Integer.parseInt((number + "").substring(0, 1));
-//            int b = Integer.parseInt((number + "").substring(1, 2));
-//            int c = Integer.parseInt((number + "").substring(2, 3));
-//            ImageView x1 = new ImageView(getContext());
-//            LinearLayout.LayoutParams x1Params = getLinearLayoutParams(width, height);
-//            x1.setLayoutParams(x1Params);
-//            x1.setImageResource(X_IMAGES[0]);
-//            linearLayout.addView(x1);
-//
-//            ImageView x2 = new ImageView(getContext());
-//            LinearLayout.LayoutParams x2Params = getLinearLayoutParams(width, height);
-//            x2Params.setMargins(dip2px(1), 0, 0, 0);
-//            x2.setLayoutParams(x2Params);
-//            x2.setImageResource(X_IMAGES[b]);
-//            x2.setVisibility(View.INVISIBLE);
-//            linearLayout.addView(x2);
-//
-//            ImageView x3 = new ImageView(getContext());
-//            LinearLayout.LayoutParams x3Params = getLinearLayoutParams(width, height);
-//            x3Params.setMargins(dip2px(1), 0, 0, 0);
-//            x3.setLayoutParams(x3Params);
-//            x3.setImageResource(X_IMAGES[c]);
-//            x3.setVisibility(View.INVISIBLE);
-//            linearLayout.addView(x3);
-//        }
         return linearLayout;
     }
 

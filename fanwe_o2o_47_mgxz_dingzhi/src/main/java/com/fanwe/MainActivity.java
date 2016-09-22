@@ -171,8 +171,21 @@ public class MainActivity extends BaseActivity implements CallbackView {
                 dialog.show();
             }
         } else {
-            //分享码
-            liveHttpHelper.getUseReceiveCode(code);
+            final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
+            dialog.setSubmitListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    dialog.dismiss();
+                }
+            });
+            dialog.setCloseListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     }
 

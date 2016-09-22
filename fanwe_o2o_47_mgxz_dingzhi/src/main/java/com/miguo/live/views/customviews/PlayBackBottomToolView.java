@@ -18,7 +18,6 @@ import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
-import com.miguo.live.views.UserRobRedPacketDialogHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 
 import java.util.List;
@@ -46,7 +45,6 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
     private long admireTime = 0;//♥的时间
     private View rootView;//父布局,pop定位用
     private LiveUserPopHelper popHelper;
-    private UserRobRedPacketDialogHelper redPacketDialogHelper;
     private CallbackView mCallbackView;
 
     /**
@@ -107,7 +105,6 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
     public void initView(Activity mAct, LiveHelper liveHelper, View rootView, CallbackView mCallbackView) {
         this.mAct = mAct;
         this.mLiveHelper = liveHelper;
-
         this.rootView = rootView;
         this.mCallbackView = mCallbackView;
     }
@@ -167,6 +164,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
             return;
         }
         LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mAct);
+        inputDialogHelper.dismissDanmu();
 
         inputDialogHelper.show();
     }

@@ -1,9 +1,10 @@
 package com.miguo.live.views.view;
 
-import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -11,33 +12,37 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
+import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.model.LiveChatEntity;
-import com.miguo.live.model.PlaySetInfo;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.PlaySetInfo;
+import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
-import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.receiver.NetWorkStateReceiver;
-import com.miguo.live.views.LiveOrientationHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.PlayBackBottomToolView;
@@ -47,6 +52,8 @@ import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.RTMPUtils;
 import com.miguo.utils.test.MGTimer;
+import com.tencent.TIMCallBack;
+import com.tencent.TIMGroupManager;
 import com.tencent.av.TIMAvManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
@@ -55,6 +62,7 @@ import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.rtmp.ITXLivePlayListener;
 import com.tencent.rtmp.TXLiveConstants;
@@ -74,7 +82,7 @@ import java.util.TimerTask;
  * 点播页面。
  * Created by Administrator on 2016/9/20.
  */
-public class PlayBackActivity extends BaseActivity implements ITXLivePlayListener, View.OnClickListener, LiveView, CallbackView, EnterQuiteRoomView {
+public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListener, View.OnClickListener,LiveView,CallbackView,EnterQuiteRoomView ,ShopAndProductView {
 
 
     private TXLivePlayer mLivePlayer = null;
@@ -101,18 +109,16 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private SellerHttpHelper mSellerHttpHelper;
     private LiveHelper mLiveHelper;
     private EnterLiveHelper mEnterRoomHelper;
-
+    private GetAudienceTask mGetAudienceTask;//取观众 列表。
     private LoginHelper mTLoginHelper;
-    private LiveCommonHelper mCommonHelper;
-    private LiveOrientationHelper mOrientationHelper;
     private TencentHttpHelper tencentHttpHelper;
     private LiveHttpHelper mLiveHttphelper;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
 
     private static final int MINFRESHINTERVAL = 500;
-    private static final int UPDAT_WALL_TIME_TIMER_TASK = 1;
-    private static final int TIMEOUT_INVITE = 2;
+
+
     private boolean mBoolRefreshLock = false;
     private boolean mBoolNeedRefresh = true;
     private final Timer mTimer = new Timer();
@@ -124,6 +130,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private TimerTask mTimerTask = null;
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
+    private ListView mListViewMsgItems;
+    private static final int REFRESH_LISTVIEW = 5;
 
 
     private UserHeadTopView mUserHeadTopView;
@@ -132,6 +140,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private PlayBackBottomToolView playBackBottomToolView;
 
     private PagerBaoBaoAdapter mBaoBaoAdapter;
+    private PagerRedPacketAdapter mRedPacketAdapter;
 
     private Timer mVideoTimer, mAudienceTimer;
 
@@ -161,6 +170,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int roomNum=744239969;
+        CurLiveInfo.setRoomNum(roomNum);
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
@@ -174,6 +185,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         if (mLivePlayer == null) {
             mLivePlayer = new TXLivePlayer(this);
         }
+
     }
 
     /**
@@ -265,6 +277,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
         mUserHeadTopView.setmLiveView(this);
+        mHeadTopAdapter = new HeadTopAdapter(null, this);
         mUserHeadTopView.setmAdapter(mHeadTopAdapter);
         mUserHeadTopView.init();
         mUserHeadTopView.setVisibility(View.VISIBLE);
@@ -280,7 +293,21 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         }
 
 
+        mRedPacketAdapter = new PagerRedPacketAdapter();
+        playBackBottomToolView.setmRedPacketAdapter(mRedPacketAdapter);
+        initViewNeed();
         mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
+
+        //顶部用户头像列表
+        mAudienceTimer = new Timer(true);
+        mGetAudienceTask = new GetAudienceTask();
+        mAudienceTimer.schedule(mGetAudienceTask, 1000, 30 * 1000);
+
+        mListViewMsgItems = (ListView) findViewById(R.id.im_msg_listview);
+        mArrayListChatEntity = new ArrayList<LiveChatEntity>();
+        mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems,
+                mArrayListChatEntity);
+        mListViewMsgItems.setAdapter(mChatMsgListAdapter);
     }
 
     public void initSeekBar() {
@@ -304,6 +331,27 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 mStartSeek = false;
             }
         });
+    }
+    /**
+     * 观众 底部操作view需要的参数
+     */
+    private void initViewNeed() {
+        //初始化底部
+        if (playBackBottomToolView != null) {
+            playBackBottomToolView.initView(this, mLiveHelper, root, this);
+        }
+        if (!TextUtils.isEmpty(CurLiveInfo.shopID) && !LiveUtil.checkIsHost()) {
+            getShopDetail(CurLiveInfo.shopID);
+        }
+    }
+    /**
+     * 发起请求商店详情和商品列表的请求。
+     *
+     * @param shopId 门店ID
+     */
+    @Override
+    public void getShopDetail(String shopId) {
+        mSellerHttpHelper.getSellerDetail(shopId);
     }
 
     private void setActivityParams() {
@@ -345,10 +393,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mLiveHelper = new LiveHelper(this, this);
         // 用户资料类
         tencentHttpHelper = new TencentHttpHelper(this);
-        //屏幕方向管理,初始化
-        mOrientationHelper = new LiveOrientationHelper();
-        //公共功能管理类
-        mCommonHelper = new LiveCommonHelper(mLiveHelper, this);
+        enterImGroup();
     }
 
     /**
@@ -418,6 +463,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             return false;
         }
         mLivePlayer.setLogLevel(TXLiveConstants.LOG_LEVEL_DEBUG);
+
         startLoadingAnimation();
         return true;
     }
@@ -492,6 +538,34 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mLivePlayer.setRenderRotation(mCurrentRenderRotation);
     }
 
+
+    /**
+     * 进入chartroom.
+     */
+    public void enterImGroup(){
+        TIMGroupManager.getInstance().applyJoinGroup(CurLiveInfo.getRoomNum()+"", "点播用户", new TIMCallBack() {
+            @java.lang.Override
+            public void onError(int code, String desc) {
+                //接口返回了错误码code和错误描述desc，可用于原因
+                //错误码code列表请参见错误码表
+                Log.e("进来了errorcode:"+code+",",desc);
+
+            }
+
+            @java.lang.Override
+            public void onSuccess() {
+                Log.e("进来了success:","desc");
+
+                mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
+
+
+                    //发消息通知上线
+                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
+
+
+            }
+        });
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -556,7 +630,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         CurLiveInfo.setCurrentRequestCount(0);
         unregisterReceiver();
         if (mLiveHelper != null) {
-            mLiveHelper.closeCameraAndMic();
+
             mLiveHelper.onDestory();
         }
         if (mEnterRoomHelper != null) {
@@ -689,13 +763,109 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void memberJoin(String id, String name, String faceUrl) {
+        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "进入房间", Constants
+                .MEMBER_ENTER);
+        int members = CurLiveInfo.getMembers() + 1;
+        CurLiveInfo.setMembers(members);
+
+        //人数加1,可以设置到界面上
+        doUpdateMembersCount();
 
     }
 
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
+        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间了", Constants
+                .MEMBER_EXIT);
 
+        if (CurLiveInfo.getMembers() > 1) {
+            int members = CurLiveInfo.getMembers() - 1;
+            CurLiveInfo.setMembers(members);
+            doUpdateMembersCount();
+        }
     }
+
+    /**
+     * 消息刷新显示
+     *
+     * @param name    发送者
+     * @param context 内容
+     * @param type    类型 （上线线消息和 聊天消息）
+     */
+    public void refreshTextListView(String faceUrl, String name, String context, int type) {
+        LiveChatEntity entity = new LiveChatEntity();
+        entity.setFaceUrl(faceUrl);
+        entity.setSenderName(name);
+        entity.setContent(context);
+        entity.setType(type);
+        notifyRefreshListView(entity);
+
+
+        mListViewMsgItems.setVisibility(View.VISIBLE);
+
+        if (mListViewMsgItems.getCount() > 1) {
+            if (true)
+                mListViewMsgItems.setSelection(0);
+            else
+                mListViewMsgItems.setSelection(mListViewMsgItems.getCount() - 1);
+        }
+    }
+
+
+    /**
+     * 通知刷新消息ListView
+     */
+    private void notifyRefreshListView(LiveChatEntity entity) {
+        mBoolNeedRefresh = true;
+        mTmpChatList.add(entity);
+        if (mBoolRefreshLock) {
+            return;
+        } else {
+            doRefreshListView();
+        }
+    }
+
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case REFRESH_LISTVIEW:
+                    doRefreshListView();
+                    break;
+               default:
+                   break;
+
+            }
+            return false;
+        }
+    });
+    /**
+     * 刷新ListView并重置状态
+     */
+    private void doRefreshListView() {
+        if (mBoolNeedRefresh) {
+            mBoolRefreshLock = true;
+            mBoolNeedRefresh = false;
+            mArrayListChatEntity.addAll(mTmpChatList);
+            mTmpChatList.clear();
+            mChatMsgListAdapter.notifyDataSetChanged();
+
+            if (null != mTimerTask) {
+                mTimerTask.cancel();
+            }
+            mTimerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    mHandler.sendEmptyMessage(REFRESH_LISTVIEW);
+                }
+            };
+            //mTimer.cancel();
+            mTimer.schedule(mTimerTask, MINFRESHINTERVAL);
+        } else {
+            mBoolRefreshLock = false;
+        }
+    }
+
 
     @Override
     public void readyToQuit() {
@@ -775,7 +945,21 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     }
 
     @Override
-    public void enterRoomComplete(int id_status, boolean succ) {
+    public void enterRoomComplete(int id_status, boolean isSucc) {
+
+        if (isSucc == true) {
+            //IM初始化
+            mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
+
+            if (id_status == Constants.HOST) {//主播方式加入房间成功
+                //开启摄像头渲染画面
+
+            } else {
+                //发消息通知上线
+                mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
+
+            }
+        }
 
     }
 
@@ -877,25 +1061,25 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             case LiveConstants.HOST_TAGS:
                 //获取主播标签
                 break;
-//            case LiveConstants.AUDIENCE_COUNT:
-//                MGUIUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //获取观众人数
-//                        if (checkDataIsNull(datas)) {
-//                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
-//                            return;
-//                        }
-//                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
-//                        //更新观众人数
-//                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
-//
-//                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
-//                            doUpdateMembersCount();
-//                        }
-//                    }
-//                });
-//                break;
+            case LiveConstants.AUDIENCE_COUNT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //获取观众人数
+                        if (checkDataIsNull(datas)) {
+                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                            return;
+                        }
+                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+                        //更新观众人数
+                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
+
+                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                            doUpdateMembersCount();
+                        }
+                    }
+                });
+                break;
             case LiveConstants.LIST_OF_STORES:
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
@@ -910,32 +1094,32 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 });
 
                 break;
-//            case SellerConstants.LIVE_BIZ_SHOP:
-//                MGUIUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (datas != null && datas.size() > 0) {
-//                            mUserBottomTool.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
-//                            mUserBottomTool.notifyDataChange();
-//                        }
-//                    }
-//                });
-//                break;
-//            case LiveConstants.GET_USER_RED_PACKETS:
-//                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
-//                MGUIUtil.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
-//                        if (datas == null) {
-//                            mRedPacketAdapter.setMdatas(null);
-//                        } else {
-//                            mRedPacketAdapter.setMdatas(datas);
-//                        }
-//                        mRedPacketAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//                break;
+            case SellerConstants.LIVE_BIZ_SHOP:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (datas != null && datas.size() > 0) {
+                            playBackBottomToolView.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                            playBackBottomToolView.notifyDataChange();
+                        }
+                    }
+                });
+                break;
+            case LiveConstants.GET_USER_RED_PACKETS:
+                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+                        if (datas == null) {
+                            mRedPacketAdapter.setMdatas(null);
+                        } else {
+                            mRedPacketAdapter.setMdatas(datas);
+                        }
+                        mRedPacketAdapter.notifyDataSetChanged();
+                    }
+                });
+                break;
 //            case LiveConstants.GET_PACKET_RESULT:
 //                MGUIUtil.runOnUiThread(new Runnable() {
 //                    @Override
@@ -976,11 +1160,13 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void showDanmuSelf(HashMap<String, String> params) {
-        
+
     }
 
     @Override
     public void getGift(HashMap<String, String> params) {
 
     }
+
+
 }
