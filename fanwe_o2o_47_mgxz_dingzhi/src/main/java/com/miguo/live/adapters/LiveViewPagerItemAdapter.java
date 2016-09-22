@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.seller.model.SellerDetailInfo;
-import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.customviews.PagerBaoBaoView;
 import com.miguo.live.views.customviews.PagerMainHostView;
 import com.miguo.live.views.customviews.PagerRedPacketView;
@@ -16,7 +15,6 @@ import com.ogaclejapan.smarttablayout.utils.ViewPagerItem;
 import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
 
 
 /**

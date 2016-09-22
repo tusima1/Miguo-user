@@ -10,14 +10,12 @@ import org.json.JSONObject;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.http.InterfaceServer;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 
-import android.R.integer;
 import android.text.TextUtils;
 import android.util.Log;
 import cn.jpush.android.api.JPushInterface;

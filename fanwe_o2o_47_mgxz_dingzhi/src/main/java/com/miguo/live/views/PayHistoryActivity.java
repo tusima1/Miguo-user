@@ -83,7 +83,7 @@ public class PayHistoryActivity extends BaseActivity implements CallbackView2 {
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long positionL) {
                 position--;
                 ModelPayHistory item = datas.get(position);
-//                SDToast.showToast("Item " + position + ": " + item.getDate());
+//                MGToast.showToast("Item " + position + ": " + item.getDate());
             }
         });
         mPTR.setRefreshing();

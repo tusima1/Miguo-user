@@ -20,6 +20,7 @@ public class ServerUrl {
     /*袁浩*/
 //     public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.37:8080/mgxz.BussRPC/";
 
+    //齐齐
 //     public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.36:8080/mgxz.BussRPC/";
 
 // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";

@@ -1,42 +1,34 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Bundle;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.fanwe.adapter.MyDistributionAdapter;
-import com.fanwe.app.AppHelper;
-import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDListViewInScroll;
 import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.DistributionGoodsModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_fx_my_fxActModel;
-import com.fanwe.model.User_center_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.JsonUtil;
 import com.fanwe.utils.SDInterfaceUtil;
-import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.umeng.socialize.utils.Log;
+import com.miguo.live.views.customviews.MGToast;
 
-import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 /*
  * 商品管理
  * @Autor cxk
@@ -153,7 +145,7 @@ public class DistributionCommodityManagementActivity extends BaseActivity {
 			requestData(true);
 		} else
 		{
-			SDToast.showToast("没有更多数据了");
+			MGToast.showToast("没有更多数据了");
 			mTo_refresh.onRefreshComplete();
 		}
 	}

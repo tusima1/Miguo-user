@@ -19,7 +19,7 @@ public class MGStringFormatter {
         if(maybeInt == null || maybeInt.equals("")){
             return 0;
         }
-        int a=Integer.MIN_VALUE;
+        int a=0;
         try {
             a= Integer.valueOf(maybeInt);
         } catch (NumberFormatException e) {
@@ -99,6 +99,10 @@ public class MGStringFormatter {
             }
         }
         return result;
+    }
+    public static String getFloat2(float oldFloat){
+        float  newFloat   =  (float)(Math.round(oldFloat*100))/100;//(这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
+        return getFloat2(newFloat+"");
     }
 
     /**

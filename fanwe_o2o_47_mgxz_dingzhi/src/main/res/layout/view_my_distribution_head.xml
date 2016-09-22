@@ -137,7 +137,6 @@
                 android:src="@drawable/my_distribution_tixian" />
 
             <TextView
-                android:id="@+id/frag_my_tv_tixian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
@@ -247,7 +246,6 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tv_look_dianpu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
@@ -443,7 +441,6 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tv_erweima"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"

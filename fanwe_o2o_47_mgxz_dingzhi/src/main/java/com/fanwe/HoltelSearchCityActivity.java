@@ -1,9 +1,7 @@
 package com.fanwe;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,12 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.CityListActivity.CityListActivity_OnTouchingLetterChangedListener;
 import com.fanwe.adapter.CityListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
@@ -34,7 +28,7 @@ import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
@@ -246,7 +240,7 @@ public class HoltelSearchCityActivity extends BaseActivity {
                     String locationCity = mTv_location.getText().toString();
                     String cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
                     if (TextUtils.isEmpty(cityId)) {
-                        SDToast.showToast("不支持当前城市:" + locationCity);
+                        MGToast.showToast("不支持当前城市:" + locationCity);
                     } else {
                         Intent intent = new Intent();
                         intent.putExtra("city", locationCity);

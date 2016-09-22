@@ -6,25 +6,18 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewUtil;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.User_InfoActModel;
-import com.fanwe.model.User_RegisterAndLoginModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -96,17 +89,17 @@ public class SetPwActivity extends BaseActivity {
 	private boolean validateParams() {
 		passWord = mEt_pwd_into.getText().toString();
 		if (TextUtils.isEmpty(passWord)) {
-			SDToast.showToast("请输入密码");
+			MGToast.showToast("请输入密码");
 			return false;
 		}
 		if (passWord.length() < 6) {
-			SDToast.showToast("密码不少于6位");
+			MGToast.showToast("密码不少于6位");
 			return false;
 		}
 
 		passWordSecond = mEt_pwd.getText().toString();
 		if (TextUtils.isEmpty(passWordSecond)) {
-			SDToast.showToast("请输入确认密码");
+			MGToast.showToast("请输入确认密码");
 			return false;
 		}
 		return true;
@@ -117,7 +110,7 @@ public class SetPwActivity extends BaseActivity {
 		if (!passWord.equals(passWordSecond)) {
 			mEt_pwd_into.setText("");
 			mEt_pwd.setText("");
-			SDToast.showToast("输入的密码不一致");
+			MGToast.showToast("输入的密码不一致");
 			return;
 		}
 		model.putCtl("user");

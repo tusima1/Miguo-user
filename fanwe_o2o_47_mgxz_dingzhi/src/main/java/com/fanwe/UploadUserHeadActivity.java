@@ -16,7 +16,7 @@ import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -79,7 +79,7 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
     private void getIntentData() {
         mStrUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
         if (isEmpty(mStrUrl)) {
-            SDToast.showToast("图片不存在");
+            MGToast.showToast("图片不存在");
             finish();
         }
 
@@ -108,7 +108,7 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
             mStrUrl = fileTempPath;
             mFileOriginal = new File(fileTempPath);
             if (!mFileOriginal.exists()) {
-                SDToast.showToast("图片不存在");
+                MGToast.showToast("图片不存在");
                 finish();
             }
         } catch (IOException e) {
@@ -198,7 +198,7 @@ public class UploadUserHeadActivity extends BaseActivity implements CallbackView
             switch (msg.what) {
                 case 1:
                     SDDialogManager.dismissProgressDialog();
-                    SDToast.showToast("修改头像成功");
+                    MGToast.showToast("修改头像成功");
                     finish();
                     App.getInstance().setUserIcon(urlIcon);
                     SDEventManager.post(EnumEventTag.UPLOAD_USER_HEAD_SUCCESS.ordinal());

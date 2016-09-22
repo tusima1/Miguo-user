@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.fanwe.EventDetailActivity;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.EventModel;
 import com.fanwe.o2o.miguo.R;

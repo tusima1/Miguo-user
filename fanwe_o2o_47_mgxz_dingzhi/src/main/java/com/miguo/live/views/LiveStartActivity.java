@@ -11,7 +11,6 @@ import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
@@ -101,7 +100,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
                 if (SDCollectionUtil.isEmpty(resultGenerateSigns)) {
-                    SDToast.showToast("获取用户签名失败。");
+                    MGToast.showToast("获取用户签名失败。");
                     return;
                 }
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
@@ -117,7 +116,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("获取用户签名失败。");
+                MGToast.showToast("获取用户签名失败。");
             }
         };
         tencentHttpHelper.getSign(App.getInstance().getToken(), mgCallback);
@@ -231,7 +230,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             mLoginHelper.imLogin(userid, usersig, new MgCallback() {
                 @Override
                 public void onErrorResponse(String message, String errorCode) {
-                    SDToast.showToast("IM 注册失败，请重试");
+                    MGToast.showToast("IM 注册失败，请重试");
                 }
 
                 @Override
@@ -250,7 +249,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                         RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
                         List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
                         if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
-                            SDToast.showToast("申请房间号失败");
+                            MGToast.showToast("申请房间号失败");
                             return;
                         }
                         ResultApplyRoom resultApplyRoom = resultApplyRooms.get(0);
@@ -261,11 +260,11 @@ public class LiveStartActivity extends Activity implements CallbackView {
                             try {
                                 roomId = Integer.valueOf(room_id);
                             } catch (Exception e) {
-                                SDToast.showToast("获取房间号错误!");
+                                MGToast.showToast("获取房间号错误!");
                                 return;
                             }
                             if (roomId == -1) {
-                                SDToast.showToast("获取房间号错误!");
+                                MGToast.showToast("获取房间号错误!");
                                 return;
                             } else {
                                 App.getInstance().setAvStart(true);
@@ -281,13 +280,13 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
                     @Override
                     public void onErrorResponse(String message, String errorCode) {
-                        SDToast.showToast(message);
+                        MGToast.showToast(message);
                     }
                 };
                 mLoginHelper.applyRoom(CurLiveInfo.modelShop.getId(), mgCallback);
                 //--------------------向业务服务器申请房间号-------------------------
             } else {
-                SDToast.showToast("请先选择一个直播场所。");
+                MGToast.showToast("请先选择一个直播场所。");
             }
         }
 
@@ -353,6 +352,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-        SDToast.showToast(responseBody);
+        MGToast.showToast(responseBody);
     }
 }

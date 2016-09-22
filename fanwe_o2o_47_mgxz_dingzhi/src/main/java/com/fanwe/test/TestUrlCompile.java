@@ -1,9 +1,5 @@
 package com.fanwe.test;
 
-import android.content.Intent;
-
-import com.fanwe.StoreDetailActivity;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

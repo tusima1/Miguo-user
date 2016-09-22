@@ -1,6 +1,5 @@
 package com.fanwe.shoppingcart.presents;
 
-import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
@@ -13,8 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import com.tencent.imcore.Context;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 

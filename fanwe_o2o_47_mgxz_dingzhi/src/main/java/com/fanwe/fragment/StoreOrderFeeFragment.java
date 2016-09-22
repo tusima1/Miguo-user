@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import com.fanwe.adapter.OrderFeeItemAdapter;
 import com.fanwe.model.FeeinfoModel;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class StoreOrderFeeFragment extends StoreConfirmOrderBaseFragment{
 	

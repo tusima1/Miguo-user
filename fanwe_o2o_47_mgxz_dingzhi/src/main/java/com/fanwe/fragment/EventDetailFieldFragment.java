@@ -27,7 +27,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Event_fieldsModel;
@@ -139,7 +139,7 @@ public class EventDetailFieldFragment extends EventDetailBaseFragment
 					String strScope = btnScope.getText().toString();
 					if (EventDetailFieldFragment.SELECT_BTN_STRING.equals(strScope))
 					{
-						SDToast.showToast("请选择" + fieldModel.getField_show_name());
+						MGToast.showToast("请选择" + fieldModel.getField_show_name());
 						return false;
 					} else
 					{
@@ -151,7 +151,7 @@ public class EventDetailFieldFragment extends EventDetailBaseFragment
 					String strInfo = etInfo.getText().toString();
 					if (TextUtils.isEmpty(strInfo))
 					{
-						SDToast.showToast("请输入" + fieldModel.getField_show_name());
+						MGToast.showToast("请输入" + fieldModel.getField_show_name());
 						return false;
 					} else
 					{

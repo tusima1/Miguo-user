@@ -9,7 +9,7 @@ import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.ResultHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.RootHomeClassifyList;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -66,7 +66,7 @@ public class CommonHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }

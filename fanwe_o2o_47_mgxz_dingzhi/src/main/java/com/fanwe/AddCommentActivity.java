@@ -13,7 +13,6 @@ import com.fanwe.fragment.AddCommentFragment.AddCommentFragmentListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.presenters.SellerHttpHelper;
@@ -110,11 +109,11 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
         mStrType = getIntent().getStringExtra(EXTRA_TYPE);
         mStrName = getIntent().getStringExtra(EXTRA_NAME);
         if (TextUtils.isEmpty(mId)) {
-            SDToast.showToast("id为空");
+            MGToast.showToast("id为空");
             finish();
         }
         if (TextUtils.isEmpty(mStrType)) {
-            SDToast.showToast("评论类型为空");
+            MGToast.showToast("评论类型为空");
             finish();
         }
     }
@@ -144,14 +143,14 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
                 return false;
             }
         } else {
-            SDToast.showToast("评论内容不能为空");
+            MGToast.showToast("评论内容不能为空");
             return false;
         }
     }
 
     protected boolean pointParam() {
         if (mPoint == 0) {
-            SDToast.showToast("还没有对评价项评分哦");
+            MGToast.showToast("还没有对评价项评分哦");
             return false;
         }
         return true;

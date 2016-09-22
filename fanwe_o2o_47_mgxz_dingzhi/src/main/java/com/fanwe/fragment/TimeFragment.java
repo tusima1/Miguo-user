@@ -6,13 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.CalendarListActivity;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.umeng.socialize.utils.Log;
-	/**
+
+/**
 	 * 酒店日期选择
 	 * @author cxk
 	 *

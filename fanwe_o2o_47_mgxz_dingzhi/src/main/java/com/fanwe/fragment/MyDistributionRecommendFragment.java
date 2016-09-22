@@ -16,7 +16,7 @@ import com.fanwe.adapter.DistributionRecommendAdapter;
 import com.fanwe.adapter.DistributionRecommendAdapter.DistributionRecommendAdapterListener;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.DistributionRecommendModel;
@@ -112,7 +112,7 @@ public class MyDistributionRecommendFragment extends BaseFragment
 					requestData(true);
 				} else
 				{
-					SDToast.showToast("未找到更多数据");
+					MGToast.showToast("未找到更多数据");
 					mPtrlv_content.onRefreshComplete();
 				}
 			}

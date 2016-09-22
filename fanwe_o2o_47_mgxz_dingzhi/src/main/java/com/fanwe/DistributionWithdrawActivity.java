@@ -39,7 +39,6 @@ import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonLis
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.listener.NumLimitWatcher;
@@ -393,7 +392,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     private boolean validateParams() {
         mStrMoney = mEt_money.getText().toString().trim();
         if (isEmpty(mStrMoney)) {
-            SDToast.showToast("请输入提现金额");
+            MGToast.showToast("请输入提现金额");
             return false;
         }
 
@@ -408,7 +407,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
                     mStrBankName = mEt_bank_name.getText().toString().trim();
                 }
                 if (isEmpty(mStrBankName)) {
-                    SDToast.showToast("请输入开户行名称");
+                    MGToast.showToast("请输入开户行名称");
                     return false;
                 }
 
@@ -417,7 +416,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
                     mStrBankNumber = mEt_bank_number.getText().toString().trim();
                 }
                 if (isEmpty(mStrBankNumber)) {
-                    SDToast.showToast("请输入银行卡号");
+                    MGToast.showToast("请输入银行卡号");
                     return false;
                 }
 
@@ -425,7 +424,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
                     mStrBank_UserName = mEt_real_name.getText().toString().trim();
                 }
                 if (isEmpty(mStrBank_UserName)) {
-                    SDToast.showToast("请输入姓名");
+                    MGToast.showToast("请输入姓名");
                     return false;
                 }
                 break;
@@ -433,7 +432,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
         mStrCode = mEt_code.getText().toString().trim();
         if (isEmpty(mStrCode)) {
-            SDToast.showToast("请输入验证码");
+            MGToast.showToast("请输入验证码");
             return false;
         }
         return true;

@@ -13,7 +13,7 @@ import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.model.RootLive;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -223,7 +223,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -258,7 +258,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -284,7 +284,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -294,12 +294,17 @@ public class LiveHttpHelper implements IHelper {
      * 观众进入房间
      *
      * @param room_id
+     * @param  type 1直播 2点播
      */
-    public void enterRoom(String room_id) {
+    public void enterRoom(String room_id,String type) {
+        if(TextUtils.isEmpty(type)){
+            type = "1";
+        }
 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
+        params.put("type", type);
         params.put("method", LiveConstants.ENTER_ROOM);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -310,7 +315,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -320,11 +325,16 @@ public class LiveHttpHelper implements IHelper {
      * 观众退出房间
      *
      * @param room_id
+     * @param  type
      */
-    public void exitRoom(String room_id) {
+    public void exitRoom(String room_id,String type) {
+        if(TextUtils.isEmpty(type)){
+            type = "1";
+        }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
+        params.put("type", type);
         params.put("method", LiveConstants.EXIT_ROOM);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -335,7 +345,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -367,7 +377,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -401,7 +411,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -444,7 +454,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -477,7 +487,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -509,7 +519,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("stopLive on error: " + message);
+                MGToast.showToast("stopLive on error: " + message);
             }
         });
 
@@ -542,7 +552,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -572,7 +582,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -620,7 +630,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-//                SDToast.showToast(message);
+//                MGToast.showToast(message);
             }
         });
 
@@ -644,7 +654,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -680,7 +690,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -725,7 +735,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -768,7 +778,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -809,7 +819,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
                 mView.onFailue(message);
             }
         });
@@ -845,7 +855,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -889,7 +899,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
                 mView.onFailue(message);
             }
         });
@@ -920,7 +930,7 @@ public class LiveHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 

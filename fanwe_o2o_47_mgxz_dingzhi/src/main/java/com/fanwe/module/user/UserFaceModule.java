@@ -9,7 +9,7 @@ import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.handler.PhotoHandler;
 import com.fanwe.library.handler.PhotoHandler.PhotoHandlerListener;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -58,7 +58,7 @@ public class UserFaceModule {
 
 			@Override
 			public void onFailure(String msg) {
-				SDToast.showToast(msg);
+				MGToast.showToast(msg);
 			}
 		});
 	}

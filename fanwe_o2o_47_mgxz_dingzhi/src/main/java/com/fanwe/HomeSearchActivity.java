@@ -23,7 +23,7 @@ import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.fragment.TuanListFragment;
 import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.library.customview.ClearEditText;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.SearchTypeModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -203,7 +203,7 @@ public class HomeSearchActivity extends BaseActivity
 			startActivity(intent);
 			break;
 		default:
-			SDToast.showToast("未知搜索类型");
+			MGToast.showToast("未知搜索类型");
 			break;
 		}
 	}

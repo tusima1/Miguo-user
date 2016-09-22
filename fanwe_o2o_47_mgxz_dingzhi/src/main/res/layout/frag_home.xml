@@ -56,7 +56,6 @@
                 android:layout_height="wrap_content" />
 
             <FrameLayout
-                android:id="@+id/frag_home_new_fl_recommend_supplier"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 

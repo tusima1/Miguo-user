@@ -7,13 +7,11 @@ import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 

@@ -27,7 +27,6 @@ import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.Deal_indexActModel;
@@ -63,6 +62,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
     public static final String EXTRA_GOODS_ID = "extra_goods_id";
     public static final String EXTRA_HOTEL_NUM = "extra_number";
     public static final String EXTRA_DETAIL_ID = "detail_id";
+    public static final String EXTRA_FX_ID = "fx_id";
 
     @ViewInject(R.id.ll_add_distribution)
     private LinearLayout mLl_add_distribution;
@@ -92,6 +92,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
     private TuanDetailBuyNoticelFragment mFragBuyNotice;
     private TuanDetailCommentFragment mFragComment;
     private int mNumber = 1;
+    private String fx_id = "";
 
     public TuanDetailAttrsFragment getTuanDetailAttrsFragment() {
         return mFragAttr;
@@ -119,7 +120,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
     private void init() {
         getIntentData();
         if (TextUtils.isEmpty(mId)) {
-            SDToast.showToast("id为空");
+            MGToast.showToast("id为空");
             finish();
             return;
         }
@@ -213,6 +214,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
         Intent intent = getIntent();
         mId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
+        fx_id = intent.getStringExtra(EXTRA_FX_ID);
     }
 
     /**
@@ -289,9 +291,11 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             String imageUrl = share.getImageurl();
             String clickUrl = share.getClickurl();
             String title = share.getTitle();
-
+            if (!TextUtils.isEmpty(fx_id)) {
+                clickUrl = clickUrl + "/ref_id/" + fx_id;
+            }
             UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
-        }else {
+        } else {
             MGToast.showToast("无分享内容");
         }
     }

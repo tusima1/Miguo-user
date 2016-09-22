@@ -8,7 +8,7 @@ import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Notice_detailActModel;
 import com.fanwe.model.Notice_detailResultModel;
 import com.fanwe.model.RequestModel;
@@ -51,7 +51,7 @@ public class NoticeDetailActivity extends BaseActivity
 		mNoticeId = getIntent().getIntExtra(EXTRA_NOTICE_ID, 0);
 		if (mNoticeId <= 0)
 		{
-			SDToast.showToast("id 为空");
+			MGToast.showToast("id 为空");
 			finish();
 		}
 	}

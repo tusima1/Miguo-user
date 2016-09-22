@@ -4,11 +4,10 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.RefreshCalbackView;
@@ -83,7 +82,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -156,7 +155,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 

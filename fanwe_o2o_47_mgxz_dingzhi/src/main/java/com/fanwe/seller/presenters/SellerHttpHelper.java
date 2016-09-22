@@ -9,7 +9,7 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.ModelComment;
@@ -48,6 +48,7 @@ import com.fanwe.seller.model.getMarketList.ResultMarketList;
 import com.fanwe.seller.model.getMarketList.RootMarketList;
 import com.fanwe.seller.model.getOrderByList.ResultOrderByList;
 import com.fanwe.seller.model.getOrderByList.RootOrderByList;
+import com.fanwe.seller.model.getRepresentMerchant.RootRepresentMerchant;
 import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
 import com.fanwe.seller.model.getShopInfo.RootShopInfo;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
@@ -126,7 +127,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -171,7 +172,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -193,7 +194,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -221,7 +222,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -243,7 +244,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -266,7 +267,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -294,7 +295,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -316,7 +317,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -345,7 +346,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -376,7 +377,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -407,7 +408,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -435,7 +436,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -463,7 +464,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -511,7 +512,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -539,7 +540,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -572,7 +573,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -601,7 +602,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
 
             @Override
@@ -641,7 +642,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -672,7 +673,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -704,7 +705,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -735,7 +736,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -753,12 +754,18 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
+                RootRepresentMerchant root = gson.fromJson(responseBody, RootRepresentMerchant.class);
+                if ("307".equals(root.getStatusCode())) {
+                    List<RootRepresentMerchant> roots = new ArrayList<RootRepresentMerchant>();
+                    roots.add(root);
+                    mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, roots);
+                } else
+                    mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -807,7 +814,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -837,7 +844,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -867,7 +874,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -885,7 +892,7 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }

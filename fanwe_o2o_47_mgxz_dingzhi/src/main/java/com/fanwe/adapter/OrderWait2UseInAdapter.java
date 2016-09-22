@@ -1,10 +1,18 @@
 package com.fanwe.adapter;
 
-import java.util.List;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fanwe.AddCommentActivity;
 import com.fanwe.AppWebViewActivity;
-import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
@@ -16,7 +24,6 @@ import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -26,19 +33,12 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_orderGoodsModel;
 import com.fanwe.model.Uc_order_check_deliveryActModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.view.RefundApplicationActivity;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDEventManager;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import java.util.List;
 
 public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 
@@ -175,7 +175,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 							try {
 								id = Integer.valueOf(model.getId()).intValue();
 							} catch (NumberFormatException e) {
-								SDToast.showToast("id错误!");
+								MGToast.showToast("id错误!");
 								return;
 							}
 							gotoRefundApplication(id);
@@ -224,7 +224,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 						intent.putExtras(bundle);
 						mActivity.startActivity(intent);
 					} else {
-						SDToast.showToast("未找到商品ID");
+						MGToast.showToast("未找到商品ID");
 					}
 				}
 			});

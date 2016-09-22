@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
@@ -26,7 +25,6 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.StoreActModel;
@@ -117,7 +115,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
     private void init() {
         getIntentData();
         if (mShopId <= 0 && TextUtils.isEmpty(MerchantID)) {
-            SDToast.showToast("id为空");
+            MGToast.showToast("id为空");
             finish();
             return;
         }

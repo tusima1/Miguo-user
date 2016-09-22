@@ -18,7 +18,6 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/qav_tips_msg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
@@ -83,7 +82,6 @@
 
         <!--开启推流-->
         <TextView
-            android:id="@+id/push_btn"
             android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_gravity="top|left"
@@ -96,7 +94,6 @@
 
         <!--录制图标(右上)-->
         <TextView
-            android:id="@+id/record_btn"
             android:layout_width="30dp"
             android:layout_height="20dp"
             android:layout_gravity="top|left"
@@ -110,7 +107,6 @@
 
         <!--互动连线图标-->
         <TextView
-            android:id="@+id/video_interact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
@@ -256,7 +252,6 @@
 
     <!--美颜调节(类似dialog)-->
     <include
-        android:id="@+id/qav_beauty_setting"
         layout="@layout/qav_beauty_setting"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -267,7 +262,6 @@
 
     <!-- 未知 gone -->
     <include
-        android:id="@+id/invite_views"
         layout="@layout/invite_views"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

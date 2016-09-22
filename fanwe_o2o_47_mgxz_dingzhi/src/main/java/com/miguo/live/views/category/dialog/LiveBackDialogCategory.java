@@ -3,10 +3,7 @@ package com.miguo.live.views.category.dialog;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.dialog.BaseDialog;
 import com.miguo.live.views.dialog.LiveBackDialog;
 import com.miguo.live.views.listener.dialog.DialogListener;

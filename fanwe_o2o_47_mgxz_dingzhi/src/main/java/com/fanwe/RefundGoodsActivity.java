@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.adapter.MyOrderListGoodsAdapter;
 import com.fanwe.adapter.MyRefundListGoodsAdapter;
 import com.fanwe.adapter.MyRefundListGoodsAdapter.OnPaymentId;
 import com.fanwe.constant.Constant.TitleType;
@@ -20,11 +19,9 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_orderGoodsModel;
-import com.fanwe.model.Uc_orderModel;
 import com.fanwe.model.Uc_orderModelParcelable;
 import com.fanwe.model.Uc_order_refundActModel;
 import com.fanwe.o2o.miguo.R;
@@ -33,7 +30,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
-import com.umeng.socialize.utils.Log;
 
 /**
  * 商品申请退款
@@ -94,7 +90,7 @@ public class RefundGoodsActivity extends BaseActivity
 		mListModel.add(uc_orderModel);
 		if (mId <= 0)
 		{
-			SDToast.showToast("id为空");
+			MGToast.showToast("id为空");
 			finish();
 		}
 	}
@@ -141,7 +137,7 @@ public class RefundGoodsActivity extends BaseActivity
 		mStrContent = mEt_content.getText().toString();
 		if (isEmpty(mStrContent))
 		{
-			SDToast.showToast("请输入内容");
+			MGToast.showToast("请输入内容");
 			return ;
 		}
 		tuiKuan();//退款

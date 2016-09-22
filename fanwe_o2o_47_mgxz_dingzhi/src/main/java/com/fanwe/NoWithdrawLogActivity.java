@@ -4,18 +4,16 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.fanwe.adapter.NoWithdrawLogAdapter;
-import com.fanwe.adapter.WithdrawLogAdapter;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDListViewInScroll;
 import com.fanwe.http.InterfaceServer;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
@@ -111,7 +109,7 @@ public class NoWithdrawLogActivity extends BaseActivity {
 					requestData(true);
 
 				} else {
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mPtrlv_noContent.onRefreshComplete();
 				}
 			}

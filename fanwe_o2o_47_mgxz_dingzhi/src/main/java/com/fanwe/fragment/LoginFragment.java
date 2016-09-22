@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -102,13 +101,13 @@ public class LoginFragment extends LoginBaseFragment {
     private boolean validateParam() {
         mStrUserName = mEtEmail.getText().toString();
         if (TextUtils.isEmpty(mStrUserName)) {
-            SDToast.showToast("请输入账号");
+            MGToast.showToast("请输入账号");
             mEtEmail.requestFocus();
             return false;
         }
         mStrPassword = mEtPwd.getText().toString();
         if (TextUtils.isEmpty(mStrPassword)) {
-            SDToast.showToast("密码不能为空");
+            MGToast.showToast("密码不能为空");
             mEtPwd.requestFocus();
             return false;
         }

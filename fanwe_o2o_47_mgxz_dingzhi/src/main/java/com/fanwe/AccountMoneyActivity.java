@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
@@ -78,7 +77,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
                         intent.putExtra("money_type",1);
                         startActivity(intent);
                     } else {
-                        SDToast.showToast("没有余额可提现");
+                        MGToast.showToast("没有余额可提现");
                     }
             }
         });

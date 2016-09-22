@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.model.UserInfoNew;
@@ -88,7 +87,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                             if (mView != null) {
                                 mView.onFailue("IM 认证失败。");
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
 
@@ -206,7 +205,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 new TIMCallBack() {
                     @Override
                     public void onError(int i, String s) {
-
+                        Log.e("loginhelper", i + "errorcode :" + s);
                         mView.onFailue("IM 认证失败。");
                         if (callback != null) {
                             callback.onErrorResponse("IM 认证失败。", "400");
@@ -215,6 +214,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
                     @Override
                     public void onSuccess() {
+                        Log.e("loginhelper", "im login success :");
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
@@ -241,13 +241,13 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
             if (host) {
                 getRoomNum();
             }
-            if(!oldAvStart) {
+            if (!oldAvStart) {
                 startAVSDK();
             }
             callback.onSuccessResponse("");
         } else {
             callback.onErrorResponse("", null);
-            SDToast.showToast("未进行IM 注册");
+            MGToast.showToast("未进行IM 注册");
         }
     }
 
@@ -324,7 +324,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 RootApplyRoom rootApplyRoom = gson.fromJson(responseBody, RootApplyRoom.class);
                 List<ResultApplyRoom> resultApplyRooms = rootApplyRoom.getResult();
                 if (SDCollectionUtil.isEmpty(resultApplyRooms)) {
-                    SDToast.showToast("申请房间号失败");
+                    MGToast.showToast("申请房间号失败");
                     mView.onFailue("获取房间号错误!");
                     return;
                 }
@@ -349,7 +349,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         App.getInstance().setCurrentRoomId(room_id);
                         MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
 
-                       // goToLive();
+                        // goToLive();
                         mView.onSuccess("");
 
                         Log.e("live", "room_id:" + room_id);
@@ -359,7 +359,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         };
 
@@ -374,7 +374,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     public void applyRoom(String shop_id, MgCallback mgCallback) {
         String token = App.getInstance().getToken();
         if (TextUtils.isEmpty(token)) {
-            SDToast.showToast("token为空。");
+            MGToast.showToast("token为空。");
             return;
         }
 

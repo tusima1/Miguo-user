@@ -2,13 +2,12 @@ package com.fanwe;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.library.fragment.WebViewFragment.EnumProgressMode;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 
@@ -32,7 +31,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
     private void init() {
         LocalUserModel userModel = AppHelper.getLocalUser();
         if (userModel == null) {
-            SDToast.showToast("请先登录");
+            MGToast.showToast("请先登录");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

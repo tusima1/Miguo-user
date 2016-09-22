@@ -20,7 +20,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.RequestModel;
@@ -203,7 +203,7 @@ public class MemberRankActivity extends BaseActivity implements CallbackView2 {
 
     private void clickBt() {
         if (DataFormat.toInt(modelDistrInfo.getFx_level()) >= 2) {
-            SDToast.showToast("您还没有达到升级要求!");
+            MGToast.showToast("您还没有达到升级要求!");
             return;
         }
         Intent intent = new Intent(this, ConfirmTopUpActivity.class);
@@ -227,7 +227,7 @@ public class MemberRankActivity extends BaseActivity implements CallbackView2 {
         super.onCLickRight_SDTitleSimple(v, index);
 
         if (DataFormat.toInt(modelDistrInfo.getFx_level()) >= 2) {
-            SDToast.showToast("您还没有达到升级要求!");
+            MGToast.showToast("您还没有达到升级要求!");
             return;
         }
         clickBt();

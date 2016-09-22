@@ -13,7 +13,6 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.library.customview.StickyScrollView;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getRefundPage.ModelRefundPage;
@@ -128,7 +127,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 //		model.putCtl("uc_order");
 //		model.putAct("refund_item");
 //		if (mOrderItemID==-1) {
-//			SDToast.showToast("商品id错误!");
+//			MGToast.showToast("商品id错误!");
 //			finish();
 //			return;
 //		}
@@ -143,7 +142,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 //				if (actModel.getStatus() == 1) {
 //					bindData(actModel.getOrder());
 //				}else {
-//					SDToast.showToast(actModel.getInfo());
+//					MGToast.showToast(actModel.getInfo());
 //				}
 //			}
 //
@@ -224,7 +223,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 	
 	private void clickDec() {
 		if (mNum<=1) {
-			SDToast.showToast("退货商品数量最少为1");
+			MGToast.showToast("退货商品数量最少为1");
 			return;
 		}
 		mNum--;
@@ -234,7 +233,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 
 	private void clickAdd() {
 		if (mNum>=mGoodsTotalNum) {
-			SDToast.showToast("退货商品数量最多为"+mGoodsTotalNum);
+			MGToast.showToast("退货商品数量最多为"+mGoodsTotalNum);
 			return;
 		}
 		mNum++;
@@ -256,7 +255,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 //		model.putCtl("uc_order");
 //		model.putAct("do_refund_item");
 //		if (mOrderItemID==-1) {
-//			SDToast.showToast("商品id错误!");
+//			MGToast.showToast("商品id错误!");
 //			return;
 //		}
 //		model.put("id", mOrderItemID);
@@ -272,7 +271,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 //			@Override
 //			public void onSuccess(ResponseInfo<String> responseInfo) {
 //
-//				SDToast.showToast(actModel.getInfo());
+//				MGToast.showToast(actModel.getInfo());
 //				if (actModel.getStatus() == 1) {
 //					finish();
 //				}

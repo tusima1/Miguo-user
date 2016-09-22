@@ -16,7 +16,6 @@ import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.library.customview.ClearEditText;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -194,7 +193,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     public void checkMobileExist() {
         userPhone = mEtUserphone.getText().toString();
         if (TextUtils.isEmpty(userPhone)) {
-            SDToast.showToast("请输入手机号码");
+            MGToast.showToast("请输入手机号码");
             return;
         }
         mFragmentHelper.doCheckMobileExist(userPhone, new MgCallback() {
@@ -225,7 +224,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -258,7 +257,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     private void doGetCaptcha() {
         userPhone = mEtUserphone.getText().toString();
         if (TextUtils.isEmpty(userPhone)) {
-            SDToast.showToast("请输入手机号码");
+            MGToast.showToast("请输入手机号码");
             return;
         }
         //开始倒计时。
@@ -266,7 +265,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         mFragmentHelper.doGetCaptcha(userPhone, typeCaptcha, new MgCallback() {
 
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("验证码发送失败");
+                MGToast.showToast("验证码发送失败");
             }
 
             public void onSuccessResponse(String responseBody) {
@@ -276,9 +275,9 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
                 Root root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
                 if (UserConstants.SUCCESS.equals(status)) {
-                    SDToast.showToast("验证码发送成功");
+                    MGToast.showToast("验证码发送成功");
                 } else if (UserConstants.CODE_ERROR.equals(status)) {
-                    SDToast.showToast("验证码发送失败");
+                    MGToast.showToast("验证码发送失败");
                 }
             }
         });
@@ -292,22 +291,22 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     private boolean validateParam() {
         userPhone = mEtUserphone.getText().toString();
         if (TextUtils.isEmpty(userPhone)) {
-            SDToast.showToast("手机号不能为空");
+            MGToast.showToast("手机号不能为空");
             return false;
         }
         mStrPwd = mEtPwd.getText().toString();
         if (TextUtils.isEmpty(mStrPwd)) {
-            SDToast.showToast("验证码不能为空");
+            MGToast.showToast("验证码不能为空");
             return false;
         }
         if (mCh_register.isChecked()) {
-            SDToast.showToast("请先同意用户注册协议");
+            MGToast.showToast("请先同意用户注册协议");
             return false;
         }
         String pwd2 = pwd.getText().toString();
         String pwd1 = mEt_pwd_into.getText().toString();
         if (!pwd2.equals(pwd1)) {
-            SDToast.showToast("两次密码输入不一致。");
+            MGToast.showToast("两次密码输入不一致。");
             return false;
         }
         passwordStr = pwd1;

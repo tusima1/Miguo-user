@@ -40,7 +40,7 @@ import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 
 /**
@@ -366,7 +366,7 @@ public class BaseBaiduMapFragment extends BaseFragment implements OnMapStatusCha
 
 	public void startLocation(boolean isNeedAnimateMap, boolean isLocationAllTheTime)
 	{
-		SDToast.showToast("定位中...");
+		MGToast.showToast("定位中...");
 		this.mIsNeedAnimateMap = isNeedAnimateMap;
 		this.mIsLocationAllTheTime = isLocationAllTheTime;
 		BaiduMapManager.getInstance().startLocation(this); // 定位监听

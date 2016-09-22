@@ -2,7 +2,6 @@ package com.miguo.live.views.listener;
 
 import android.view.View;
 
-import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.category.Category;
 
 /**

@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.fanwe.user.view.MyCouponDetailActivity;
 import com.fanwe.adapter.MyCouponsListAdapter;
 import com.fanwe.base.CallbackView2;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
@@ -102,7 +102,7 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (!mPage.increment()) {
-                    SDToast.showToast("没有更多数据了");
+                    MGToast.showToast("没有更多数据了");
                     mPtrlv_content.onRefreshComplete();
                 } else {
                     requestCoupons(true);

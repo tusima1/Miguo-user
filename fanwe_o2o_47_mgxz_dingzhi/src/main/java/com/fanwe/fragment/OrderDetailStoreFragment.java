@@ -3,12 +3,8 @@ package com.fanwe.fragment;
 
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -82,7 +78,7 @@ public class OrderDetailStoreFragment extends StoreConfirmOrderBaseFragment{
 					int money = Integer.parseInt(number);
 					if(money <= 0 )
 					{
-						SDToast.showToast("请输入金额");
+						MGToast.showToast("请输入金额");
 						mEt_money.setTextColor(Color.parseColor("#ff0000"));
 					}else
 					{

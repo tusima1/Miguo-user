@@ -14,7 +14,6 @@
         android:src="@drawable/ic_arrow_left_white" />
 
     <TextView
-        android:id="@+id/textview_title"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerHorizontal="true"

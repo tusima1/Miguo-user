@@ -19,7 +19,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.DistributionGoodsModel;
@@ -214,7 +214,7 @@ public class MyDistributionFragment extends BaseFragment
 				{
 					Intent intent = new Intent(getActivity(),MemberRankActivity.class);
 					startActivity(intent);
-					SDToast.showToast("您还没有提现权限");
+					MGToast.showToast("您还没有提现权限");
 				}else
 				{
 					Intent intent = new Intent(getActivity(),DistributionWithdrawActivity.class);
@@ -451,7 +451,7 @@ public class MyDistributionFragment extends BaseFragment
 			requestData(true);
 		} else
 		{
-			SDToast.showToast("没有更多数据了");
+			MGToast.showToast("没有更多数据了");
 			frag_PullTo.onRefreshComplete();
 		}
 	}

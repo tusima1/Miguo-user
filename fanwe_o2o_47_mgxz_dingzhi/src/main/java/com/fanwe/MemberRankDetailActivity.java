@@ -6,7 +6,6 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_DistModel;
-import com.fanwe.model.Uc_HomeModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;

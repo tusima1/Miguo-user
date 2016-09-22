@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,10 +8,12 @@ import android.view.ViewGroup;
 
 import com.fanwe.gif.SDImageTextView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.ExpressionModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.List;
 
 public class ExpressionAdapter extends SDBaseAdapter<ExpressionModel>
 {
@@ -58,7 +58,7 @@ public class ExpressionAdapter extends SDBaseAdapter<ExpressionModel>
 			@Override
 			public boolean onLongClick(View v)
 			{
-				SDToast.showToast(model.getTitle());
+				MGToast.showToast(model.getTitle());
 				return true;
 			}
 		});

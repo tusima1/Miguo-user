@@ -1,22 +1,16 @@
 package com.fanwe.adapter;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fanwe.UserWithdrawLogActivity;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.listener.TextMoney;
-import com.fanwe.model.DistributionWithdrawLogModel;
 import com.fanwe.model.Uc_money_withdrawActModel;
 import com.fanwe.o2o.miguo.R;
 

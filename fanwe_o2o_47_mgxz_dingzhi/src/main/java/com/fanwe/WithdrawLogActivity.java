@@ -17,7 +17,7 @@ import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
 import com.fanwe.commission.presenter.LogHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
@@ -145,7 +145,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 			public void onClick(View v) {
 				if (rank == -1) {
 					tempHttp.getDistrInfo();
-					SDToast.showToast("网络异常,请重新点击!");
+					MGToast.showToast("网络异常,请重新点击!");
 				} else {
 					if (rank == 1) {// 青铜
 						startActivity(new Intent(WithdrawLogActivity.this, MemberRankActivity.class));
@@ -183,7 +183,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 				if (mPage.increment()) {
 					requestData(true);
 				} else {
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mPtrlv_content.onRefreshComplete();
 				}
 			}

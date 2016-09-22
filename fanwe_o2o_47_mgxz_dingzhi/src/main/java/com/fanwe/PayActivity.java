@@ -31,7 +31,7 @@ import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.listener.TextMoney;
@@ -217,7 +217,7 @@ public class PayActivity extends BaseActivity {
             }
 
             if (mPaymentCodeModel == null) {
-                SDToast.showToast("payment_code is null");
+                MGToast.showToast("payment_code is null");
                 return;
             }
             SDViewBinder.setTextView(mTvPayInfo, class_name + orderDetailInfo.getOrder_info().getName());
@@ -232,14 +232,14 @@ public class PayActivity extends BaseActivity {
             orderDetailInfo = (OrderDetailInfo) intent.getSerializableExtra(ORDER_ENTITY);
         }
         if (orderDetailInfo == null) {
-            SDToast.showToast("订单信息为空");
+            MGToast.showToast("订单信息为空");
             finish();
             return;
         }
         payStatus = orderDetailInfo.getOrder_info().getOrder_status();
         if (!PAY_SUCCESS.equals(payStatus)) {
             if (TextUtils.isEmpty(mOrderId)) {
-                SDToast.showToast("id为空");
+                MGToast.showToast("id为空");
                 finish();
                 return;
             }
@@ -454,13 +454,13 @@ public class PayActivity extends BaseActivity {
 
         UpacpappModel model = mPaymentCodeModel.getUpacpapp();
         if (model == null) {
-            SDToast.showToast("获取银联支付参数失败");
+            MGToast.showToast("获取银联支付参数失败");
             return;
         }
 
         String tn = model.getTn();
         if (TextUtils.isEmpty(tn)) {
-            SDToast.showToast("tn 为空");
+            MGToast.showToast("tn 为空");
             return;
         }
         UPPayAssistEx.startPayByJAR(mActivity, com.unionpay.uppay.PayActivity.class, null, null, tn, UPACPAPP_MODE);
@@ -476,49 +476,49 @@ public class PayActivity extends BaseActivity {
 
         WxappModel model = mPaymentCodeModel.getWxapp();
         if (model == null) {
-            SDToast.showToast("获取微信支付参数失败");
+            MGToast.showToast("获取微信支付参数失败");
             return;
         }
 
         String appId = model.getAppid();
         if (TextUtils.isEmpty(appId)) {
-            SDToast.showToast("appId为空");
+            MGToast.showToast("appId为空");
             return;
         }
 
         String partnerId = model.getMch_id();
         if (TextUtils.isEmpty(partnerId)) {
-            SDToast.showToast("partnerId为空");
+            MGToast.showToast("partnerId为空");
             return;
         }
 
         String prepayId = model.getPrepay_id();
         if (TextUtils.isEmpty(prepayId)) {
-            SDToast.showToast("prepayId为空");
+            MGToast.showToast("prepayId为空");
             return;
         }
 
         String nonceStr = model.getNonce_str();
         if (TextUtils.isEmpty(nonceStr)) {
-            SDToast.showToast("nonceStr为空");
+            MGToast.showToast("nonceStr为空");
             return;
         }
 
         String timeStamp = model.getTime_stamp();
         if (TextUtils.isEmpty(timeStamp)) {
-            SDToast.showToast("timeStamp为空");
+            MGToast.showToast("timeStamp为空");
             return;
         }
 
         String packageValue = model.getPackage_value();
         if (TextUtils.isEmpty(packageValue)) {
-            SDToast.showToast("packageValue为空");
+            MGToast.showToast("packageValue为空");
             return;
         }
 
         String sign = model.getSign();
         if (TextUtils.isEmpty(sign)) {
-            SDToast.showToast("sign为空");
+            MGToast.showToast("sign为空");
             return;
         }
 
@@ -545,7 +545,7 @@ public class PayActivity extends BaseActivity {
         }
         MalipayModel model = mPaymentCodeModel.getMalipay();
         if (model == null) {
-            SDToast.showToast("获取支付宝支付参数失败");
+            MGToast.showToast("获取支付宝支付参数失败");
             return;
         }
 
@@ -556,17 +556,17 @@ public class PayActivity extends BaseActivity {
         String signType = model.getSign_type();
 
         if (TextUtils.isEmpty(orderSpec)) {
-            SDToast.showToast("order_spec为空");
+            MGToast.showToast("order_spec为空");
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
-            SDToast.showToast("sign为空");
+            MGToast.showToast("sign为空");
             return;
         }
 
         if (TextUtils.isEmpty(signType)) {
-            SDToast.showToast("signType为空");
+            MGToast.showToast("signType为空");
             return;
         }
 
@@ -585,16 +585,16 @@ public class PayActivity extends BaseActivity {
 
                 if ("9000".equals(status)) // 支付成功
                 {
-                    SDToast.showToast("支付成功");
+                    MGToast.showToast("支付成功");
                     showPayment(false);
                     payFinish();
                 } else if ("8000".equals(status)) // 支付结果确认中
                 {
-                    SDToast.showToast("支付结果确认中");
+                    MGToast.showToast("支付结果确认中");
                     showPayment(false);
                     payFinish();
                 } else {
-                    SDToast.showToast(info);
+                    MGToast.showToast(info);
                     payFailue();
                 }
                 //requestPayOrder();
@@ -604,10 +604,10 @@ public class PayActivity extends BaseActivity {
             public void onFailure(Exception e, String msg) {
                 payFailue();
                 if (e != null) {
-                    SDToast.showToast("错误:" + e.toString());
+                    MGToast.showToast("错误:" + e.toString());
                 } else {
                     if (!TextUtils.isEmpty(msg)) {
-                        SDToast.showToast(msg);
+                        MGToast.showToast(msg);
                     }
                 }
             }

@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.interf.MyItemClickListenerRedNum;
@@ -182,7 +182,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      */
     private void clickRedpacket() {
         if (!clickable) {
-            SDToast.showToast("红包发的太快了，请过会再发。");
+            MGToast.showToast("红包发的太快了，请过会再发。");
             return;
         }
         if (liveHttpHelper == null) {
@@ -359,9 +359,9 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                 }
 
                 //发送自定义消息 。
-                SDToast.showToast("发送红包成功");
+                MGToast.showToast("发送红包成功");
             } else {
-                SDToast.showToast("发送红包失败");
+                MGToast.showToast("发送红包失败");
             }
         }
     }

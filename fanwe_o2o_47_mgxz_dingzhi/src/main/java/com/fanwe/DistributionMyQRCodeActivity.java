@@ -129,7 +129,7 @@ public class DistributionMyQRCodeActivity extends BaseActivity implements OnLong
         String content = AppConfig.getUserName();
         String imageUrl = img_user_avater;
         String clickUrl = img_bg;
-        UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+        UmengShareManager.share(this, title, content, imageUrl, UmengShareManager.getUMImage(this, clickUrl), null);
     }
 
     @Override
@@ -155,8 +155,7 @@ public class DistributionMyQRCodeActivity extends BaseActivity implements OnLong
                     if (nameCardQR!=null){
                         bindData(nameCardQR);
                     }else {
-                        MGToast.showToast("请求失败!");
-                        finish();
+                        MGToast.showToast("请求数据失败!");
                     }
                 }
            }

@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.MyItemClickListenerRedNum;
-import com.miguo.live.interf.MyItemClickListenerRedType;
 
 public class ViewHolderRedNum extends ViewHolder implements OnClickListener {
 

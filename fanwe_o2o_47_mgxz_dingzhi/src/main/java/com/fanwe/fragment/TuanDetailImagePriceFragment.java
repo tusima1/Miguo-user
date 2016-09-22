@@ -11,44 +11,26 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.fanwe.AlbumActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.common.CommonInterface;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBasePagerAdapter.SDBasePagerAdapterOnItemClickListener;
 import com.fanwe.library.adapter.SDSimpleAdvsAdapter;
 import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.customview.SDSlidingPlayView.SDSlidingPlayViewOnPageChangeListener;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.Deal_attrModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengEventStatistics;
-import com.fanwe.utils.SDFormatUtil;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.presenters.ShoppingCartHelper;
-import com.miguo.utils.MGUIUtil;
-import com.sunday.eventbus.SDEventManager;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment implements CallbackView {
     @ViewInject(R.id.frag_tuan_detail_first_spv_image)
@@ -237,13 +219,13 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
             //当前未登录.
             int status = mDealModel.getTime_status();
             if (status == 0) {
-                SDToast.showToast("商品活动未开始。");
+                MGToast.showToast("商品活动未开始。");
                 return;
             } else if (status == 1) {
                 addToLocalShopping();
                 goToShopping();
             } else if (status == 2) {
-                SDToast.showToast("商品已经过期。");
+                MGToast.showToast("商品已经过期。");
                 return;
             }
         }
@@ -305,7 +287,7 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
 
     @Override
     public void onFailue(String responseBody) {
-        SDToast.showToast(responseBody);
+        MGToast.showToast(responseBody);
 
     }
 }

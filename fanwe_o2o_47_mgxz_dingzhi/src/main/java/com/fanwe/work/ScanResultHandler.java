@@ -12,11 +12,11 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.handler.OnActivityResultHandler;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.AdvsDataModel;
 import com.fanwe.model.Mobile_qrcode_indexActModel;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.live.views.customviews.MGToast;
 
 public class ScanResultHandler extends OnActivityResultHandler
 {
@@ -78,7 +78,7 @@ public class ScanResultHandler extends OnActivityResultHandler
 	{
 		if (TextUtils.isEmpty(scanResult))
 		{
-			SDToast.showToast("扫描结果为空");
+			MGToast.showToast("扫描结果为空");
 			return;
 		}
 
@@ -120,7 +120,7 @@ public class ScanResultHandler extends OnActivityResultHandler
 						}
 					} else
 					{
-						SDToast.showToast("未知的类型：" + type);
+						MGToast.showToast("未知的类型：" + type);
 					}
 				}
 			}
@@ -140,7 +140,7 @@ public class ScanResultHandler extends OnActivityResultHandler
 			@Override
 			public void onFailure(HttpException error, String msg)
 			{
-				SDToast.showToast("解释失败");
+				MGToast.showToast("解释失败");
 			}
 		});
 	}

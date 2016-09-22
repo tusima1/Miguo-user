@@ -34,7 +34,6 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.GiftId;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
@@ -113,7 +112,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
  * backup
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView,
-        LiveView, View.OnClickListener, ProfileView, CallbackView ,UserBottomToolView.OnGiftSendListener{
+        LiveView, View.OnClickListener, ProfileView, CallbackView, UserBottomToolView.OnGiftSendListener {
     public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     /**
@@ -201,6 +200,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * danmu
+     *
      * @param savedInstanceState
      */
     DanmakuView danmakuView;
@@ -208,6 +208,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 小礼物动画view
+     *
      * @param savedInstanceState
      */
     SmallGifView smallGifView;
@@ -253,7 +254,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         /**
          * 弹幕
          */
-        danmakuView = (DanmakuView)findViewById(R.id.danmuku);
+        danmakuView = (DanmakuView) findViewById(R.id.danmuku);
         smallGifView = (SmallGifView) findViewById(R.id.small_gift_view);
         bigGifView = (BigGifView) findViewById(R.id.biggift_view);
 
@@ -316,7 +317,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     MgCallback imLoginSuccessCallback = new MgCallback() {
         @Override
         public void onErrorResponse(String message, String errorCode) {
-            SDToast.showToast("进入房间失败");
+            MGToast.showToast("进入房间失败");
             finish();
         }
 
@@ -436,7 +437,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
 //                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
 //
-//                    SDToast.showToast("获取用户签名失败。");
+//                    MGToast.showToast("获取用户签名失败。");
 //                    finish();
 //                    return;
 //                }
@@ -456,7 +457,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //
 //            @Override
 //            public void onErrorResponse(String message, String errorCode) {
-//                SDToast.showToast("获取用户签名失败。");
+//                MGToast.showToast("获取用户签名失败。");
 //                finish();
 //            }
 //        };
@@ -639,7 +640,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private UserBottomToolView mUserBottomTool;
 
-    /**GetAudienceTask
+    /**
+     * GetAudienceTask
      * 初始化界面
      */
     private void initView() {
@@ -721,7 +723,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //房间创建成功,向后台注册信息
         int i = new Random().nextInt();
         int roomId = MySelfInfo.getInstance().getMyRoomNum();
-        SDToast.showToast(roomId + "");
+        MGToast.showToast(roomId + "");
         LogUtil.d("roomId: " + roomId);
         String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
         String title = "米果小站";
@@ -882,7 +884,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
         if (mLiveHttphelper != null) {
-            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", null);
 
         }
         mRedPacketAdapter = new PagerRedPacketAdapter();
@@ -913,14 +915,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         QavsdkControl.getInstance().onResume();
     }
 
-    private boolean showBaoBao=false;
+    private boolean showBaoBao = false;
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && !showBaoBao){
+        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()){
             //弹出宝宝
             mUserBottomTool.clickBaoBao();
-            showBaoBao=true;
+            showBaoBao = true;
         }
     }
 
@@ -979,7 +982,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     protected void onDestroy() {
-
         try {
             /**
              * 一定要退出聊天室
@@ -1062,7 +1064,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mLiveHelper.perpareQuitRoom(true);
         App.getInstance().setAvStart(false);
         if (mLiveHttphelper != null) {
-            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "", "1");
         }
         finish();
     }
@@ -1335,6 +1337,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     }
 
+    @Override
+    public void exitActivity() {
+        userExit();
+    }
+
     /**
      * update 观众 数量 。
      */
@@ -1575,10 +1582,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     public void onClick(View view) {
         switch (view.getId()) {
 //                new PopWindow().show(this,R.layout.host_beauty_setting,-1,-2,0,false,root);
-            case R.id.fullscreen_btn:
-                //显示或者清除屏幕
-                switchScreen();
-                break;
+//            case R.id.fullscreen_btn:
+//                //显示或者清除屏幕
+//                switchScreen();
+//                break;
 
             //host2的控制台---------------
             case R.id.camera_controll:
@@ -1608,11 +1615,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 cancelMemberView(backGroundId);
                 break;
             //host2的控制台 end-------------
-            case R.id.beauty_btn:
-                //美颜
-                Log.i(TAG, "onClick " + mBeautyRate);
-
-                mProfile = mBeatuy;
+//            case R.id.beauty_btn:
+//                //美颜
+//                Log.i(TAG, "onClick " + mBeautyRate);
+//
+//                mProfile = mBeatuy;
 //                if (mBeautySettings != null) {
 //                    if (mBeautySettings.getVisibility() == View.GONE) {
 //                        mBeautySettings.setVisibility(View.VISIBLE);
@@ -1625,12 +1632,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                } else {
 //                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
 //                }
-                break;
+//                break;
 
-            case R.id.white_btn:
-                //美白
-                Log.i(TAG, "onClick " + mWhiteRate);
-                mProfile = mWhite;
+//            case R.id.white_btn:
+//                //美白
+//                Log.i(TAG, "onClick " + mWhiteRate);
+//                mProfile = mWhite;
 //                if (mBeautySettings != null) {
 //                    if (mBeautySettings.getVisibility() == View.GONE) {
 //                        mBeautySettings.setVisibility(View.VISIBLE);
@@ -1643,7 +1650,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                } else {
 //                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
 //                }
-                break;
+//                break;
             case R.id.qav_beauty_setting_finish:
 //                mBeautySettings.setVisibility(View.GONE);
 //                mFullControllerUi.setVisibility(View.VISIBLE);
@@ -2174,6 +2181,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 显示用户自己的弹幕
+     *
      * @param params
      */
     @Override
@@ -2186,7 +2194,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void getDanmu(HashMap<String, String> params) {
-        if(params != null && danmukiller != null ){
+        if (params != null && danmukiller != null) {
             danmukiller.addDanmu(new DanmuBean(params.get(Constants.DANMU_USER_AVATAR_URL), params.get(Constants.DANMU_MESSAGE), params.get(Constants.DANMU_USER_USER_NAME)));
         }
     }
@@ -2196,7 +2204,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                SDToast.showToast(msg);
+                MGToast.showToast(msg);
             }
         });
     }
@@ -2216,6 +2224,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 接收到IM礼物消息，需要处理小礼物大礼物的id，作不同的展现方式
+     *
      * @param params
      */
     @Override
@@ -2231,8 +2240,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         showGift(bean);
     }
 
-    private void showGift(GiftListBean bean){
-        switch (bean.getId()){
+    private void showGift(GiftListBean bean) {
+        switch (bean.getId()) {
             /**
              * 小礼物 随弹幕出现
              */
@@ -2268,28 +2277,30 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 小礼物
+     *
      * @param bean
      */
-    private void showSmallGift(GiftListBean bean){
+    private void showSmallGift(GiftListBean bean) {
         smallGifView.addGift(bean);
     }
 
     /**
      * 屏幕随机出现的礼物
      */
-    private void showRandomGift(GiftListBean bean){
+    private void showRandomGift(GiftListBean bean) {
         bigGifView.addKiss(bean);
     }
 
-    private void showRedPacket(GiftListBean bean){
+    private void showRedPacket(GiftListBean bean) {
         bigGifView.addRedPacket(bean);
     }
 
     /**
      * 大礼物
+     *
      * @param bean
      */
-    private void showBigGift(GiftListBean bean){
+    private void showBigGift(GiftListBean bean) {
         bigGifView.addBigGift(bean);
     }
 
