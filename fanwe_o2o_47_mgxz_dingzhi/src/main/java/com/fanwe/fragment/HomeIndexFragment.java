@@ -61,11 +61,13 @@ public class HomeIndexFragment extends BaseFragment {
             return;
         }
 
-        if (mList.size() > 10) {
+        //小红点
+        if (mList.size() > 5) {
             SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(20));
         }
 
-        mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mList, 10), getActivity());
+        //一排几个
+        mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mList, 5), getActivity());
         mSpvAd.setAdapter(mAdapter);
     }
 
