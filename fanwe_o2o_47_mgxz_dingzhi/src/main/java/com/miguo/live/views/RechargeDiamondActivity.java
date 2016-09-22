@@ -2,7 +2,6 @@ package com.miguo.live.views;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,10 +11,8 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.fanwe.AppWebViewActivity;
 import com.fanwe.BaseActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant;
 import com.fanwe.event.EnumEventTag;
@@ -24,9 +21,6 @@ import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.MalipayModel;
 import com.fanwe.model.Payment_codeModel;
 import com.fanwe.model.WxappModel;
@@ -44,9 +38,9 @@ import com.fanwe.shoppingcart.presents.CommonShoppingHelper;
 import com.fanwe.utils.SDFormatUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
-import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
 
 import java.util.HashMap;
@@ -157,6 +151,12 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             @Override
             public void onClick(View v) {
                 currentDiamondType = bigDiamondType;
+                for (int i = 0; i < diamondTypeEntityList.size(); i++) {
+                    DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
+                        entity0.setChecked(false);
+                }
+                diamondGridAdapter.setDatas(diamondTypeEntityList);
+                diamondGridAdapter.notifyDataSetChanged();
                 setColor(true);
             }
         });
