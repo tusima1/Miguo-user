@@ -34,7 +34,7 @@ public class GetDiamondInputDialog extends BaseDialog {
     public String getCode() {
         String code = etCode.getText().toString();
         if (TextUtils.isEmpty(code)) {
-            code = "请输入领取码";
+            code = "";
         }
         return code;
     }

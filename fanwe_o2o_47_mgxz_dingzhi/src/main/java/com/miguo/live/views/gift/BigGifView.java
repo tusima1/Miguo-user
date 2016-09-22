@@ -162,13 +162,10 @@ public class BigGifView extends BaseRelativeLayout{
         @Override
         public void run() {
             if(getCurrentIndex() < getCount()){
-//                SDViewBinder.setImageView(GiftPictures.getImageUri(bean.getId(), getCurrentIndex()), gift);
                 gift.setImageResource(GiftPictures.getItem(bean.getId(), getCurrentIndex()));
                 setCurrentIndex(getCurrentIndex() + 1);
                 gift.postDelayed(this,getSpeed(bean.getId()));
-                Log.d(tag, "run...");
             }else {
-                Log.d(tag, "start leave animtion...");
                 removeView(gift);
             }
         }
@@ -197,8 +194,6 @@ public class BigGifView extends BaseRelativeLayout{
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    animation.cancel();
-                    Log.d(tag, "onAnimationEnd...");
                     removeView(gift);
                     invalidate();
                 }

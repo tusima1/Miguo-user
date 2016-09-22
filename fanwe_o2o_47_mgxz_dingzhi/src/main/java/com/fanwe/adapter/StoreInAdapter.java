@@ -18,7 +18,6 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -30,12 +29,13 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.miguo.live.presenters.ShoppingCartHelper;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
 public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements CallbackView {
     private ShoppingCartHelper mShoppingCartHelper;
-//    private StoreIn_list currStoreIn_list;
+    //    private StoreIn_list currStoreIn_list;
     private String fx_id;
 
     public StoreInAdapter(List<StoreIn_list> listModel, Activity activity) {
@@ -95,6 +95,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
             public void onClick(View v) {
                 Intent intent = new Intent(mActivity, TuanDetailActivity.class);
                 intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());
+                intent.putExtra(TuanDetailActivity.EXTRA_FX_ID, fx_id);
                 mActivity.startActivity(intent);
             }
         });
@@ -103,6 +104,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
 
     /**
      * 加入本地购物车。
+     *
      * @param position
      */
     private void addToLocalShopping(int position) {
@@ -152,6 +154,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
 
     /**
      * 添加到购物车。
+     *
      * @param position
      */
     public void addGoodsToShoppingPacket(int position) {

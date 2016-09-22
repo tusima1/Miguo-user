@@ -112,7 +112,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
  * backup
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView,
-        LiveView, View.OnClickListener, ProfileView, CallbackView ,UserBottomToolView.OnGiftSendListener{
+        LiveView, View.OnClickListener, ProfileView, CallbackView, UserBottomToolView.OnGiftSendListener {
     public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     /**
@@ -200,6 +200,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * danmu
+     *
      * @param savedInstanceState
      */
     DanmakuView danmakuView;
@@ -207,6 +208,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 小礼物动画view
+     *
      * @param savedInstanceState
      */
     SmallGifView smallGifView;
@@ -252,7 +254,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         /**
          * 弹幕
          */
-        danmakuView = (DanmakuView)findViewById(R.id.danmuku);
+        danmakuView = (DanmakuView) findViewById(R.id.danmuku);
         smallGifView = (SmallGifView) findViewById(R.id.small_gift_view);
         bigGifView = (BigGifView) findViewById(R.id.biggift_view);
 
@@ -638,7 +640,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private UserBottomToolView mUserBottomTool;
 
-    /**GetAudienceTask
+    /**
+     * GetAudienceTask
      * 初始化界面
      */
     private void initView() {
@@ -881,7 +884,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
         if (mLiveHttphelper != null) {
-            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "",null);
+            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", null);
 
         }
         mRedPacketAdapter = new PagerRedPacketAdapter();
@@ -912,14 +915,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         QavsdkControl.getInstance().onResume();
     }
 
-    private boolean showBaoBao=false;
+    private boolean showBaoBao = false;
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()){
             //弹出宝宝
             mUserBottomTool.clickBaoBao();
-            showBaoBao=true;
+            showBaoBao = true;
         }
     }
 
@@ -978,7 +982,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     protected void onDestroy() {
-
         try {
             /**
              * 一定要退出聊天室
@@ -1061,7 +1064,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mLiveHelper.perpareQuitRoom(true);
         App.getInstance().setAvStart(false);
         if (mLiveHttphelper != null) {
-            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "","1");
+            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "", "1");
         }
         finish();
     }
@@ -1332,6 +1335,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
         }
 
+    }
+
+    @Override
+    public void exitActivity() {
+        userExit();
     }
 
     /**
@@ -2173,6 +2181,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 显示用户自己的弹幕
+     *
      * @param params
      */
     @Override
@@ -2185,7 +2194,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void getDanmu(HashMap<String, String> params) {
-        if(params != null && danmukiller != null ){
+        if (params != null && danmukiller != null) {
             danmukiller.addDanmu(new DanmuBean(params.get(Constants.DANMU_USER_AVATAR_URL), params.get(Constants.DANMU_MESSAGE), params.get(Constants.DANMU_USER_USER_NAME)));
         }
     }
@@ -2205,7 +2214,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void requestSendGift(GiftListBean giftInfo, int num) {
-        giftInfo.setNum(new Random().nextInt(50) + 60);
+        giftInfo.setNum(num);
         giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
         giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
         giftInfo.setUserName(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getNick());
@@ -2215,6 +2224,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 接收到IM礼物消息，需要处理小礼物大礼物的id，作不同的展现方式
+     *
      * @param params
      */
     @Override
@@ -2230,8 +2240,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         showGift(bean);
     }
 
-    private void showGift(GiftListBean bean){
-        switch (bean.getId()){
+    private void showGift(GiftListBean bean) {
+        switch (bean.getId()) {
             /**
              * 小礼物 随弹幕出现
              */
@@ -2267,28 +2277,30 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 小礼物
+     *
      * @param bean
      */
-    private void showSmallGift(GiftListBean bean){
+    private void showSmallGift(GiftListBean bean) {
         smallGifView.addGift(bean);
     }
 
     /**
      * 屏幕随机出现的礼物
      */
-    private void showRandomGift(GiftListBean bean){
+    private void showRandomGift(GiftListBean bean) {
         bigGifView.addKiss(bean);
     }
 
-    private void showRedPacket(GiftListBean bean){
+    private void showRedPacket(GiftListBean bean) {
         bigGifView.addRedPacket(bean);
     }
 
     /**
      * 大礼物
+     *
      * @param bean
      */
-    private void showBigGift(GiftListBean bean){
+    private void showBigGift(GiftListBean bean) {
         bigGifView.addBigGift(bean);
     }
 

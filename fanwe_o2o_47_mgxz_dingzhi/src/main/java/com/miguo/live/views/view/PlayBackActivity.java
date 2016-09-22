@@ -1017,6 +1017,11 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
     }
 
+    @Override
+    public void exitActivity() {
+
+    }
+
     //--------------- http请求 -------------
     @Override
     public void onSuccess(String responseBody) {
