@@ -2,7 +2,6 @@ package com.fanwe;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.ServerUrl;

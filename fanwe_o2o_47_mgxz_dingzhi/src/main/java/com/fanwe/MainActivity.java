@@ -236,7 +236,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
         mTab0.setTextTitle(SDResourcesUtil.getString(R.string.home));
         mTab1.setTextTitle(SDResourcesUtil.getString(R.string.supplier));
-        mTab2.setTextTitle("直播");
+        mTab2.setTextTitle("我要直播");
         mTab3.setTextTitle(SDResourcesUtil.getString(R.string.market));
         mTab4.setTextTitle(SDResourcesUtil.getString(R.string.mine));
 

@@ -3,7 +3,6 @@ package com.fanwe.user.view;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -26,9 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -40,7 +38,9 @@ import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
+import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -340,7 +340,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 
 				model.setSumPrice(sumPrice);
 				SDViewBinder.setTextView(tvSinglePrice, model.getTuan_price());
-				SDViewBinder.setTextView(tvTotalPrice, sumPrice+"");
+				SDViewBinder.setTextView(tvTotalPrice, MGStringFormatter.getFloat2(sumPrice));
 			}
 	}
 

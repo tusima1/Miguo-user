@@ -7,24 +7,17 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.User_InfoActModel;
-import com.fanwe.model.User_RegisterAndLoginModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 

@@ -3,7 +3,6 @@ package com.fanwe.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;

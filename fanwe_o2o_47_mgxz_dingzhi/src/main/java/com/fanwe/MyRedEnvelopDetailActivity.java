@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 	/**
 	 * 我的红包详情

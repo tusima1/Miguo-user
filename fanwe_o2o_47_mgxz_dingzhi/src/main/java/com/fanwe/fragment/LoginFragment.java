@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.view.annotation.ViewInject;

@@ -3,27 +3,19 @@ package com.fanwe;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.adapter.MyRefundListGoodsAdapter;
 import com.fanwe.adapter.MyRefundListGoodsAdapter.OnPaymentId;
-import com.fanwe.adapter.RefundCouponAdapter;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDResourcesUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
-import com.fanwe.model.OrderCoupon_listModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_orderModel;
 import com.fanwe.model.Uc_orderModelParcelable;
 import com.fanwe.model.Uc_order_refund_couponActModel;
-import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
 

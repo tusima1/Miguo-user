@@ -13,7 +13,6 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.library.customview.StickyScrollView;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getRefundPage.ModelRefundPage;

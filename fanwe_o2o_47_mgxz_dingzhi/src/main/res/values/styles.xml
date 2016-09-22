@@ -99,11 +99,8 @@
     <style name="RedPacketCheckModeCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/selector_checkbox_check</item>
     </style>
-    <style name="menu_labels_style">
-        <item name="android:background">@drawable/ic_mei</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-  <style name="Translucent_NoTitle_Dialog" parent="@android:style/Theme.Dialog">
+
+    <style name="Translucent_NoTitle_Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:background">#00000000</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

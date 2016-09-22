@@ -4,14 +4,12 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.fanwe.adapter.NoWithdrawLogAdapter;
-import com.fanwe.adapter.WithdrawLogAdapter;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDListViewInScroll;
 import com.fanwe.http.InterfaceServer;

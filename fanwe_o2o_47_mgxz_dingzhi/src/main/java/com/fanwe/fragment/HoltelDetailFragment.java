@@ -1,11 +1,8 @@
 package com.fanwe.fragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fanwe.adapter.HotelListTuanAdapter;
-import com.fanwe.adapter.TuanListAdapter;
 import com.fanwe.library.customview.SDMoreLinearLayout;
 import com.fanwe.library.customview.SDMoreLinearLayout.OnOpenCloseListener;
 import com.fanwe.library.utils.SDViewBinder;

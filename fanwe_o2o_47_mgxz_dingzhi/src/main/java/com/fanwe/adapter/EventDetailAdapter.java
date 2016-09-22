@@ -4,19 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-
-
-
-
-
-
-
-
-
-
-
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -38,14 +25,10 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.BaseActModel;
-import com.fanwe.model.Deal_attrModel;
 import com.fanwe.model.Event_edtailModelList;
-import com.fanwe.model.Event_indexActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;

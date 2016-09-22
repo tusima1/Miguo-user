@@ -105,6 +105,7 @@ public class Constants {
     public static final int AVIMCMD_Host_Leave = AVIMCMD_Praise + 1;         // 主播离开, Group消息 ： 4
     public static final int AVIMCMD_Host_Back = AVIMCMD_Host_Leave + 1;         // 主播回来, Demo中使用Group消息 ： 5
 
+
     public static final String CMD_KEY = "userAction";
     public static final String CMD_PARAM = "actionParam";
 

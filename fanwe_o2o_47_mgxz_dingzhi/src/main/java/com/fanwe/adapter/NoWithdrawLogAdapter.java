@@ -1,6 +1,5 @@
 package com.fanwe.adapter;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,8 +17,6 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.ZijinLogModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.o2o.miguo.R.color;
-import com.umeng.socialize.utils.Log;
 
 public class NoWithdrawLogAdapter extends SDBaseAdapter<ZijinLogModel>
 {

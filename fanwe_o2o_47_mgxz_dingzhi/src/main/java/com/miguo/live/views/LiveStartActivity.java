@@ -11,7 +11,6 @@ import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;

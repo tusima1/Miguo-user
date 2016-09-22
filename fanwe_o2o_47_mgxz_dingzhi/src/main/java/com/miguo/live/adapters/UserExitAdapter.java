@@ -8,12 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.fanwe.home.model.Room;
-import com.fanwe.home.views.customerView.XCRoundRectImageView;
 import com.fanwe.o2o.miguo.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

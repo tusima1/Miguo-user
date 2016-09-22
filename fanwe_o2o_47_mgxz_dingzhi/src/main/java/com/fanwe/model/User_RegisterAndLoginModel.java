@@ -1,7 +1,5 @@
 package com.fanwe.model;
 
-import java.util.List;
-
 public class User_RegisterAndLoginModel {
 
 	private int verify_status;

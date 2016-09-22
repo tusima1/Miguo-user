@@ -9,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.fanwe.adapter.OrderDetailGroupGoodsAdapter;
-import com.fanwe.model.CartGroupGoodsModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.Deals;
-import com.fanwe.shoppingcart.model.ShoppingBody;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 /**

@@ -12,7 +12,6 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;

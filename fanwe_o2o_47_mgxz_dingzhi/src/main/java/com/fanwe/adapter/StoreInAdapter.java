@@ -35,7 +35,7 @@ import java.util.List;
 
 public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements CallbackView {
     private ShoppingCartHelper mShoppingCartHelper;
-    private StoreIn_list currStoreIn_list;
+//    private StoreIn_list currStoreIn_list;
     private String fx_id;
 
     public StoreInAdapter(List<StoreIn_list> listModel, Activity activity) {
@@ -44,9 +44,9 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent,
+    public View getView(final int position, View convertView, ViewGroup parent,
                         final StoreIn_list model) {
-        currStoreIn_list = model;
+        StoreIn_list currStoreIn_list = model;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_store_in, null);
         }
@@ -86,7 +86,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
             bt_buy.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clickBuyGoods();
+                    clickBuyGoods(position);
                 }
             });
         }
@@ -103,8 +103,10 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
 
     /**
      * 加入本地购物车。
+     * @param position
      */
-    private void addToLocalShopping() {
+    private void addToLocalShopping(int position) {
+        StoreIn_list currStoreIn_list = mListModel.get(position);
         ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
         shoppingCartInfo.setId(currStoreIn_list.getId());
         shoppingCartInfo.setFx_user_id(fx_id);
@@ -121,13 +123,14 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
         LocalShoppingcartDao.insertModel(shoppingCartInfo);
     }
 
-    private void clickBuyGoods() {
+    private void clickBuyGoods(int position) {
+        StoreIn_list currStoreIn_list = mListModel.get(position);
         if (currStoreIn_list == null || TextUtils.isEmpty(currStoreIn_list.getId())) {
             return;
         }
         if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             //当前已经登录，
-            addGoodsToShoppingPacket();
+            addGoodsToShoppingPacket(position);
         } else {
             //当前未登录.
             int status = currStoreIn_list.getTime_status();
@@ -135,7 +138,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
                 MGToast.showToast("商品活动未开始。");
                 return;
             } else if (status == 1) {
-                addToLocalShopping();
+                addToLocalShopping(position);
                 goToShopping();
             } else if (status == 2) {
                 MGToast.showToast("商品已经过期。");
@@ -149,8 +152,10 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
 
     /**
      * 添加到购物车。
+     * @param position
      */
-    public void addGoodsToShoppingPacket() {
+    public void addGoodsToShoppingPacket(int position) {
+        StoreIn_list currStoreIn_list = mListModel.get(position);
         String lgn_user_id = "";
         if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
             lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();

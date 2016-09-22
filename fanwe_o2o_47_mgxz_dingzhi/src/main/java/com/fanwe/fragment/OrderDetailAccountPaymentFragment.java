@@ -1,21 +1,16 @@
 package com.fanwe.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.customview.SDPaymentListView;
-import com.fanwe.library.customview.SDViewBase.SDViewBaseListener;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 /**

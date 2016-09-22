@@ -16,7 +16,6 @@ import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.library.customview.ClearEditText;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;

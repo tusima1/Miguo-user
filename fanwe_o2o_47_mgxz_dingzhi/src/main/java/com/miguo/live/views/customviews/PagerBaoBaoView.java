@@ -7,22 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
-import com.miguo.live.model.LiveConstants;
-import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.utils.DisplayUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

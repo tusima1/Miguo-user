@@ -480,6 +480,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      */
     public void initTIMListener(String chatRoomId) {
         SxbLog.v(TAG, "initTIMListener->current room id: " + chatRoomId);
+        Object o = TIMManager.getInstance();
         mGroupConversation = TIMManager.getInstance().getConversation(TIMConversationType.Group, chatRoomId);
         TIMManager.getInstance().addMessageListener(msgListener);
         mC2CConversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, chatRoomId);
@@ -571,6 +572,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      * @param list 消息列表
      */
     private void parseIMMessage(List<TIMMessage> list) {
+        SxbLog.d(TAG+"################################", "parseIMMessage readMessage " + list.toString());
         List<TIMMessage> tlist = list;
 
 

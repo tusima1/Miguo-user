@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.RedEnvelopeModel;
 import com.fanwe.o2o.miguo.R;
 

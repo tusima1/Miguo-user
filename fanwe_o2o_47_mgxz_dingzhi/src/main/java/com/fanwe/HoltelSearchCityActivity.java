@@ -1,9 +1,7 @@
 package com.fanwe;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,12 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
-
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.CityListActivity.CityListActivity_OnTouchingLetterChangedListener;
 import com.fanwe.adapter.CityListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
