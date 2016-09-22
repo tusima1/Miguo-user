@@ -63,8 +63,7 @@ public class AdviceActivity extends BaseActivity implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         if (UserConstants.ADVICE.equals(method)) {
-            MGToast.showToast("提交成功");
-            finish();
+            MGToast.showToast("成功提交，谢谢！");
         }
     }
 
