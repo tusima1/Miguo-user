@@ -88,7 +88,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                             if (mView != null) {
                                 mView.onFailue("IM 认证失败。");
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
 
@@ -206,7 +206,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 new TIMCallBack() {
                     @Override
                     public void onError(int i, String s) {
-
+                        Log.e("loginhelper", i + "errorcode :" + s);
                         mView.onFailue("IM 认证失败。");
                         if (callback != null) {
                             callback.onErrorResponse("IM 认证失败。", "400");
@@ -215,6 +215,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
 
                     @Override
                     public void onSuccess() {
+                        Log.e("loginhelper", "im login success :");
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
                         App.getInstance().setImLoginSuccess(true);
@@ -241,7 +242,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
             if (host) {
                 getRoomNum();
             }
-            if(!oldAvStart) {
+            if (!oldAvStart) {
                 startAVSDK();
             }
             callback.onSuccessResponse("");
@@ -349,7 +350,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         App.getInstance().setCurrentRoomId(room_id);
                         MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
 
-                       // goToLive();
+                        // goToLive();
                         mView.onSuccess("");
 
                         Log.e("live", "room_id:" + room_id);

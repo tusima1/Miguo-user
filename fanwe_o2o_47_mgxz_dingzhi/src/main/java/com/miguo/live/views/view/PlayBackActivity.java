@@ -170,7 +170,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int roomNum=744239969;
+        int roomNum=87654321;
         CurLiveInfo.setRoomNum(roomNum);
         setActivityParams();
         setContentView(R.layout.act_play_back);
@@ -179,7 +179,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         initHelper();
         initView();
 
-        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
+        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
         mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
         mPlayConfig = new TXLivePlayConfig();
         if (mLivePlayer == null) {
@@ -548,6 +548,13 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
             public void onError(int code, String desc) {
                 //接口返回了错误码code和错误描述desc，可用于原因
                 //错误码code列表请参见错误码表
+                if(10013==code){
+                    Log.e("进来了errorcode:"+code+",",desc);
+
+                    mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
+                    //发消息通知上线
+                    mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
+                }
                 Log.e("进来了errorcode:"+code+",",desc);
 
             }
@@ -956,7 +963,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
             } else {
                 //发消息通知上线
-                mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
+                mLiveHelper.sendGroupMessage(Constants.AVIMCMD_Text, CurLiveInfo.getHostName()+"进入房间。");
 
             }
         }
