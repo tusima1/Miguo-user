@@ -299,7 +299,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             });
     }
 
-    public void sendDanmuMessage(final String message, final String userName, final String userId, final String avatarUrl){
+    public void sendDanmuMessage(final String message, final String userName, final String userId, final String avatarUrl) {
         TreeMap<String, String> params = new TreeMap<>();
         params.put("method", "GiftInfo"); //方法名
         params.put("live_type", "1"); //类型：1直播 2点播
@@ -312,10 +312,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccessResponse(String responseBody) {
                 Log.d(TAG, "sendDanmuMessage responbody: " + responseBody);
                 GiftDanmuBean bean = new Gson().fromJson(responseBody, GiftDanmuBean.class);
-                if(bean.getStatusCode() == 200){
+                if (bean.getStatusCode() == 200) {
                     sendIMDanmuMessage(message, userName, userId, avatarUrl);
-                }else{
-                    if(mLiveView != null){
+                } else {
+                    if (mLiveView != null) {
                         mLiveView.withoutEnoughMoney(bean.getMessage());
                     }
                 }
@@ -324,7 +324,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 Log.d(TAG, "sendDanmuMessage onErrorResponse: " + message);
-                if(mLiveView != null){
+                if (mLiveView != null) {
                     mLiveView.withoutEnoughMoney(message);
                 }
             }
@@ -332,12 +332,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
     }
 
-    public void sendGift(GiftListBean bean){
-        sendGift(bean.getId(), bean.getName(), bean.getIcon(), bean.getType(), bean.getNum() + "", bean.getUserAvatar(),bean.getUserName());
+    public void sendGift(GiftListBean bean) {
+        sendGift(bean.getId(), bean.getName(), bean.getIcon(), bean.getType(), bean.getNum() + "", bean.getUserAvatar(), bean.getUserName());
     }
 
 
-    public void sendGift(String id, String name, String icon, String type, String count, String avatar, String nickname){
+    public void sendGift(String id, String name, String icon, String type, String count, String avatar, String nickname) {
         HashMap<String, String> params = new HashMap<>();
         params.put("method", "GiftInfo"); //方法名
         params.put("id", id); //类型：1直播 2点播
@@ -359,10 +359,11 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 }
                 SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
             }
+
             @Override
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
-                Log.d(TAG,"小礼物成功...!");
+                Log.d(TAG, "小礼物成功...!");
 //                MGToast.showToast("红包发送成功!");
             }
         });
@@ -371,7 +372,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     /**
      * 发送弹幕
      */
-    public void sendIMDanmuMessage(String message, String userName, String userId, String avatarUrl){
+    public void sendIMDanmuMessage(String message, String userName, String userId, String avatarUrl) {
         HashMap<String, String> paramsMap = new HashMap<String, String>();
         paramsMap.put(Constants.DANMU_MESSAGE, message);
         paramsMap.put(Constants.DANMU_USER_USER_NAME, userName);
@@ -389,17 +390,18 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 }
                 SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
             }
+
             @Override
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
-                Log.d(TAG,"弹幕发送成功...!");
+                Log.d(TAG, "弹幕发送成功...!");
 //                MGToast.showToast("红包发送成功!");
             }
         });
     }
 
-    private void sendLoalDanmu(HashMap<String, String> params){
-        if(mLiveView != null){
+    private void sendLoalDanmu(HashMap<String, String> params) {
+        if (mLiveView != null) {
             mLiveView.showDanmuSelf(params);
         }
     }
@@ -426,6 +428,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 }
                 SxbLog.e(TAG, "send message failed. code: " + i + " errmsg: " + s);
             }
+
             @Override
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
@@ -435,6 +438,8 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         });
 
     }
+
+
 
     public void sendGroupMessage(int cmd, String param, TIMValueCallBack<TIMMessage> callback) {
         JSONObject inviteCmd = new JSONObject();
@@ -572,7 +577,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      * @param list 消息列表
      */
     private void parseIMMessage(List<TIMMessage> list) {
-        SxbLog.d(TAG+"################################", "parseIMMessage readMessage " + list.toString());
+        SxbLog.d(TAG + "################################", "parseIMMessage readMessage " + list.toString());
         List<TIMMessage> tlist = list;
 
 
@@ -586,7 +591,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
         for (int i = tlist.size() - 1; i >= 0; i--) {
             TIMMessage currMsg = tlist.get(i);
-//
 
 
             for (int j = 0; j < currMsg.getElementCount(); j++) {
@@ -604,7 +608,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 //系统消息
                 if (type == TIMElemType.GroupSystem) {
                     if (TIMGroupSystemElemType.TIM_GROUP_SYSTEM_DELETE_GROUP_TYPE == ((TIMGroupSystemElem) elem).getSubtype()) {
-                        if(mContext!=null) {
+                        if (mContext != null) {
                             mContext.sendBroadcast(new Intent(
                                     Constants.ACTION_HOST_LEAVE));
                         }
@@ -659,7 +663,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     private void handleTextMessage(TIMElem elem, String name, String faceUrl) {
         TIMTextElem textElem = (TIMTextElem) elem;
 //        Toast.makeText(mContext, "" + textElem.getText(), Toast.LENGTH_SHORT).show();
-        if(mLiveView!=null) {
+        if (mLiveView != null) {
 
             mLiveView.refreshText(textElem.getText(), name, faceUrl);
         }
@@ -730,36 +734,48 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     toggleMic();
                     break;
                 case Constants.AVIMCMD_Host_Leave:
-                    if(mLiveView!=null) {
+                    if (mLiveView != null) {
                         mLiveView.hostLeave(identifier, nickname, faceUrl);
                     }
                     break;
                 case Constants.AVIMCMD_Host_Back:
-                    if(mLiveView!=null) {
+                    if (mLiveView != null) {
                         mLiveView.hostBack(identifier, nickname, faceUrl);
                     }
                     break;
-                    /**
-                     * 收到红包
-                     */
+                /**
+                 * 收到红包
+                 */
                 case Constants.AVIMCMD_RED_PACKET:
                     String datas = json.getString(Constants.CMD_PARAM);
-                    HashMap<String,String> params = parseRedPacket(datas);
-                    if(mLiveView!=null) {
+                    HashMap<String, String> params = parseRedPacket(datas);
+                    if (mLiveView != null) {
                         mLiveView.getHostRedPacket(params);
                     }
                     break;
                 case Constants.AVIMCMD_DANMU:
                     String danmus = json.getString(Constants.CMD_PARAM);
-                    if(mLiveView!=null) {
+                    if (mLiveView != null) {
                         mLiveView.getDanmu(parseDanmu(danmus));
                     }
                     break;
                 case Constants.AVIMCOM_GIFT_SINGLE:
                     String gifts = json.getString(Constants.CMD_PARAM);
-                    if(mLiveView != null){
+                    if (mLiveView != null) {
                         mLiveView.getGift(parseGift(gifts));
                     }
+                    break;
+                //--------------点播的消息
+                //进入点播
+                case Constants.PALYBACK_ENTERROOM:
+                    //mLiveView.refreshText("Step in live", sendId);
+                    if (mLiveView != null)
+                        mLiveView.memberJoin(identifier, nickname, faceUrl);
+                    break;
+                case Constants.PALYBACK_EXITROOM:
+                    //mLiveView.refreshText("Step in live", sendId);
+                    if (mLiveView != null)
+                        mLiveView.memberQuit(identifier, nickname, faceUrl);
                     break;
             }
 
@@ -767,41 +783,41 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             e.printStackTrace();
         } catch (JSONException ex) {
             // 异常处理代码
-            Log.e("test","ex:"+ex);
+            Log.e("test", "ex:" + ex);
         }
     }
 
-    public HashMap<String, String> parseGift(String gifts){
+    public HashMap<String, String> parseGift(String gifts) {
         HashMap<String, String> map = new HashMap<>();
         Map danmuParams = JSON.parseObject(gifts);
         for (Object o : danmuParams.entrySet()) {
-            Map.Entry<String,String> entry = (Map.Entry<String,String>)o;
-            Log.d(TAG,entry.getKey()+"--->"+entry.getValue());
+            Map.Entry<String, String> entry = (Map.Entry<String, String>) o;
+            Log.d(TAG, entry.getKey() + "--->" + entry.getValue());
             map.put(entry.getKey(), entry.getValue() + "");
         }
         return map;
     }
 
-    public HashMap<String, String> parseDanmu(String danmus){
+    public HashMap<String, String> parseDanmu(String danmus) {
         HashMap<String, String> map = new HashMap<>();
         Map danmuParams = JSON.parseObject(danmus);
         for (Object o : danmuParams.entrySet()) {
-            Map.Entry<String,String> entry = (Map.Entry<String,String>)o;
-            Log.d(TAG,entry.getKey()+"--->"+entry.getValue());
+            Map.Entry<String, String> entry = (Map.Entry<String, String>) o;
+            Log.d(TAG, entry.getKey() + "--->" + entry.getValue());
             map.put(entry.getKey(), entry.getValue() + "");
         }
         return map;
     }
 
-    public HashMap<String,String> parseRedPacket(String datas){
-        HashMap<String,String>map = new HashMap<String,String>();
+    public HashMap<String, String> parseRedPacket(String datas) {
+        HashMap<String, String> map = new HashMap<String, String>();
         try {
             JSONObject json = new JSONObject(datas);
-            if(json!=null){
+            if (json != null) {
                 String id = json.getString(Constants.RED_PACKET_ID);
                 String duration = json.getString(Constants.RED_PACKET_DURATION);
-                map.put(Constants.RED_PACKET_ID,id);
-                map.put(Constants.RED_PACKET_DURATION,duration);
+                map.put(Constants.RED_PACKET_ID, id);
+                map.put(Constants.RED_PACKET_DURATION, duration);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1140,11 +1156,11 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 String token = root.getToken();
-                if("200".equals(statusCode)){
+                if ("200".equals(statusCode)) {
 
-                }else if("320".equals(statusCode)){
+                } else if ("320".equals(statusCode)) {
                     MGToast.showToast("账户已失效");
-                   mLiveView.tokenInvalidateAndQuit();
+                    mLiveView.tokenInvalidateAndQuit();
 
                 }
             }

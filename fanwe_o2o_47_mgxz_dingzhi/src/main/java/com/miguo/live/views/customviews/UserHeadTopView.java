@@ -23,6 +23,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.view.UserHomeActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
@@ -175,7 +176,8 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      * 查看主播信息
      */
     private void userInfo() {
-        MGToast.showToast("查看主播信息");
+        Intent intent = new Intent(getContext(), UserHomeActivity.class);
+        getContext().startActivity(intent);
     }
 
     /**
