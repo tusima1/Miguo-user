@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;
@@ -210,7 +210,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     return;
                 }
                 // 创建IM房间失败，提示失败原因，并关闭等待对话框
-                SDToast.showToast("创建房间失败，请重试。");
+                MGToast.showToast("创建房间失败，请重试。");
                 quiteLive();
             }
 
@@ -385,7 +385,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
 
                 @Override
                 public void onErrorResponse(String message, String errorCode) {
-                    SDToast.showToast(message);
+                    MGToast.showToast(message);
                 }
             });
             return "";

@@ -29,7 +29,7 @@ import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManage
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogProgress;
 import com.fanwe.library.dialog.SDDialogProgress.SDDialogProgressListener;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -135,7 +135,7 @@ public class RouteInformationActivity extends BaseActivity
 
 		if (endLat == EMPTY_NUMBER || endLon == EMPTY_NUMBER)
 		{
-			SDToast.showToast("未找到终点位置信息");
+			MGToast.showToast("未找到终点位置信息");
 			finish();
 			return;
 		}

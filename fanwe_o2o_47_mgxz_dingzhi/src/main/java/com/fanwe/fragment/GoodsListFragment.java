@@ -30,7 +30,7 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Brand_listModel;
 import com.fanwe.model.GoodsModel;
@@ -198,7 +198,7 @@ public class GoodsListFragment extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (!mPage.increment()) {
-                    SDToast.showToast("没有更多数据了");
+                    MGToast.showToast("没有更多数据了");
                     mPtrlvContent.onRefreshComplete();
                 } else {
                     requestData(true);

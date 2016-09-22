@@ -39,7 +39,7 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.BaseActModel;

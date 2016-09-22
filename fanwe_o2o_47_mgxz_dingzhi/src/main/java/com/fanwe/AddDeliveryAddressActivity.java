@@ -1,8 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -26,7 +23,6 @@ import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Consignee_infoModel;
 import com.fanwe.model.Delivery_region_indexActModel;
@@ -37,7 +33,11 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDEventManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 添加配送地址
@@ -275,7 +275,7 @@ public class AddDeliveryAddressActivity extends BaseActivity
 				public void onSuccess(ResponseInfo<String> responseInfo)
 				{
 					String info = actModel.getString("infos");
-					SDToast.showToast(info);
+					MGToast.showToast(info);
 
 					int status = actModel.getIntValue("add_status");
 					if (status == 1)
@@ -316,7 +316,7 @@ public class AddDeliveryAddressActivity extends BaseActivity
 		String consignee = mEtConsignee.getText().toString().trim();
 		if (TextUtils.isEmpty(consignee)) // 名字为空
 		{
-			SDToast.showToast("姓名不能为空");
+			MGToast.showToast("姓名不能为空");
 			return false;
 		}
 		mModel.setConsignee(consignee);
@@ -324,13 +324,13 @@ public class AddDeliveryAddressActivity extends BaseActivity
 		String phone = mEtPhone.getText().toString().trim();
 		if (TextUtils.isEmpty(phone)) // 手机号为空
 		{
-			SDToast.showToast("手机号不能为空");
+			MGToast.showToast("手机号不能为空");
 			return false;
 		} else
 		{
 			if (phone.length() < 11)
 			{
-				SDToast.showToast("手机号不能少于11位");
+				MGToast.showToast("手机号不能少于11位");
 				return false;
 			}
 		}
@@ -338,14 +338,14 @@ public class AddDeliveryAddressActivity extends BaseActivity
 
 		if (mModel.getRegion_lv1() <= 0 || mModel.getRegion_lv2() <= 0 || mModel.getRegion_lv3() <= 0 || mModel.getRegion_lv4() <= 0)
 		{
-			SDToast.showToast("请选择省市地区");
+			MGToast.showToast("请选择省市地区");
 			return false;
 		}
 
 		String addressDetail = mEtAddressDetail.getText().toString().trim();
 		if (TextUtils.isEmpty(addressDetail)) // 详细地址为空
 		{
-			SDToast.showToast("详细地址不能为空");
+			MGToast.showToast("详细地址不能为空");
 			return false;
 		}
 		mModel.setAddress(addressDetail);
@@ -353,7 +353,7 @@ public class AddDeliveryAddressActivity extends BaseActivity
 		String postCode = mEtPostcode.getText().toString().trim();
 		if (TextUtils.isEmpty(postCode)) // 邮政编码为空
 		{
-			SDToast.showToast("邮政编码不能为空");
+			MGToast.showToast("邮政编码不能为空");
 			return false;
 		}
 		mModel.setZip(postCode);
@@ -580,7 +580,7 @@ public class AddDeliveryAddressActivity extends BaseActivity
 		{
 			if (localVersion <= 0) // 本地也没有数据
 			{
-				SDToast.showToast("未获取到服务器地区区域数据");
+				MGToast.showToast("未获取到服务器地区区域数据");
 				return;
 			} else
 			{

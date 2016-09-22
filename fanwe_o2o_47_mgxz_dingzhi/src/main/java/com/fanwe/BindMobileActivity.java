@@ -15,7 +15,7 @@ import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
@@ -119,13 +119,13 @@ public class BindMobileActivity extends BaseActivity
 	{
 		if (TextUtils.isEmpty(mStrMobile))
 		{
-			SDToast.showToast("手机号不能为空");
+			MGToast.showToast("手机号不能为空");
 			return false;
 		}
 		mStrCode = mEt_code.getText().toString();
 		if (TextUtils.isEmpty(mStrCode))
 		{
-			SDToast.showToast("验证码不能为空");
+			MGToast.showToast("验证码不能为空");
 			return false;
 		}
 
@@ -158,7 +158,7 @@ public class BindMobileActivity extends BaseActivity
 		mStrMobile = mEt_mobile.getText().toString();
 		if (TextUtils.isEmpty(mStrMobile))
 		{
-			SDToast.showToast("请输入手机号码");
+			MGToast.showToast("请输入手机号码");
 			return;
 		}
 

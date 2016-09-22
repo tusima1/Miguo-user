@@ -28,7 +28,7 @@ import android.widget.Toast;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -217,7 +217,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 				public void onClick(View v) {
 					int curNumber = getNumberFromEditText(et_number);
 					if(curNumber>=999){
-						SDToast.showToast("该宝贝不能购买更多哦！",Toast.LENGTH_LONG);
+						MGToast.showToast("该宝贝不能购买更多哦！",Toast.LENGTH_LONG);
 						return;
 					}
 					int maxNumber = SDFormatUtil.stringToInteger(model.getLimit_num());

@@ -18,7 +18,7 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -132,13 +132,13 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
             //当前未登录.
             int status = currStoreIn_list.getTime_status();
             if (status == 0) {
-                SDToast.showToast("商品活动未开始。");
+                MGToast.showToast("商品活动未开始。");
                 return;
             } else if (status == 1) {
                 addToLocalShopping();
                 goToShopping();
             } else if (status == 2) {
-                SDToast.showToast("商品已经过期。");
+                MGToast.showToast("商品已经过期。");
                 return;
             }
         }

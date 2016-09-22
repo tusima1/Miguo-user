@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
@@ -92,7 +92,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
             mTvCountDown.setClickable(true);
 
             if(resultMessage!=null){
-                SDToast.showToast(resultMessage, Toast.LENGTH_LONG);
+                MGToast.showToast(resultMessage, Toast.LENGTH_LONG);
             }
         }
     };

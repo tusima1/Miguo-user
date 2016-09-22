@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -15,11 +13,13 @@ import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.utils.SDIntentUtil;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.List;
 
 public class GoodsDetailMerchantAdapter extends SDSimpleBaseAdapter<StoreModel>
 {
@@ -66,7 +66,7 @@ public class GoodsDetailMerchantAdapter extends SDSimpleBaseAdapter<StoreModel>
 					mActivity.startActivity(intent);
 				} else
 				{
-					SDToast.showToast("未找到号码");
+					MGToast.showToast("未找到号码");
 				}
 			}
 		});

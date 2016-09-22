@@ -15,7 +15,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
@@ -107,7 +107,7 @@ public class StoreLocationFragment extends BaseBaiduMapFragment
 		mModel = (Store_infoModel) getActivity().getIntent().getSerializableExtra(EXTRA_MODEL_MERCHANTITEMACTMODEL);
 		if (mModel == null)
 		{
-			SDToast.showToast("Store_infoModel is null");
+			MGToast.showToast("Store_infoModel is null");
 			getActivity().finish();
 		}
 	}
@@ -165,7 +165,7 @@ public class StoreLocationFragment extends BaseBaiduMapFragment
 				startActivity(intent);
 			} else
 			{
-				SDToast.showToast("打开本地地图失败");
+				MGToast.showToast("打开本地地图失败");
 			}
 		}
 	}

@@ -15,7 +15,7 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
@@ -154,19 +154,19 @@ public class RegisterMobileActivity extends BaseActivity
 	{
 		if (TextUtils.isEmpty(mStrMobile))
 		{
-			SDToast.showToast("请输入手机号码!");
+			MGToast.showToast("请输入手机号码!");
 			return false;
 		}
 		if (mStrMobile.length() != 11)
 		{
-			SDToast.showToast("请输入11位的手机号码");
+			MGToast.showToast("请输入11位的手机号码");
 			return false;
 		}
 
 		mStrCode = mEtCode.getText().toString().trim();
 		if (TextUtils.isEmpty(mStrCode))
 		{
-			SDToast.showToast("请输入验证码!");
+			MGToast.showToast("请输入验证码!");
 			return false;
 		}
 
@@ -187,7 +187,7 @@ public class RegisterMobileActivity extends BaseActivity
 		mStrMobile = mEtMobile.getText().toString();
 		if (TextUtils.isEmpty(mStrMobile))
 		{
-			SDToast.showToast("请输入手机号码");
+			MGToast.showToast("请输入手机号码");
 			mEtMobile.requestFocus();
 			return;
 		}

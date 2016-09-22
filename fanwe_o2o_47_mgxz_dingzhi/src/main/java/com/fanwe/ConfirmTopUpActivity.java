@@ -21,7 +21,7 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MalipayModel;
 import com.fanwe.model.PayResultModel;
@@ -131,11 +131,11 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         switch (v.getId()) {
             case R.id.act_confirm_order_btn_confirm_order:
                 if (TextUtils.isEmpty(mFragPayments.getPaymentId())) {
-                    SDToast.showToast("请选择支付方式");
+                    MGToast.showToast("请选择支付方式");
                     return;
                 }
                 if (TextUtils.isEmpty(orderMoney)) {
-                    SDToast.showToast("支付金额为空");
+                    MGToast.showToast("支付金额为空");
                     return;
                 }
                 if (v.isClickable()) {
@@ -227,7 +227,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
                 if (actModel.getStatus() == 1) {
                     int rank = actModel.getDist().getRank();
                     if (rank >= 2) {
-                        SDToast.showToast("升级成功!");
+                        MGToast.showToast("升级成功!");
                         finish();
                     } else {
                         //DoNothing
@@ -354,7 +354,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
                         break;
                 }
                 if (content != null) {
-                    SDToast.showToast(content);
+                    MGToast.showToast(content);
                 }
                 break;
 
@@ -401,13 +401,13 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 
         UpacpappModel model = mPaymentCodeModel.getUpacpapp();
         if (model == null) {
-            SDToast.showToast("获取银联支付参数失败");
+            MGToast.showToast("获取银联支付参数失败");
             return;
         }
 
         String tn = model.getTn();
         if (TextUtils.isEmpty(tn)) {
-            SDToast.showToast("tn 为空");
+            MGToast.showToast("tn 为空");
             return;
         }
         UPPayAssistEx.startPayByJAR(mActivity, com.unionpay.uppay.PayActivity.class, null, null, tn, UPACPAPP_MODE);
@@ -423,49 +423,49 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 
         WxappModel model = mPaymentCodeModel.getWxapp();
         if (model == null) {
-            SDToast.showToast("获取微信支付参数失败");
+            MGToast.showToast("获取微信支付参数失败");
             return;
         }
 
         String appId = model.getAppid();
         if (TextUtils.isEmpty(appId)) {
-            SDToast.showToast("appId为空");
+            MGToast.showToast("appId为空");
             return;
         }
 
         String partnerId = model.getMch_id();
         if (TextUtils.isEmpty(partnerId)) {
-            SDToast.showToast("partnerId为空");
+            MGToast.showToast("partnerId为空");
             return;
         }
 
         String prepayId = model.getPrepay_id();
         if (TextUtils.isEmpty(prepayId)) {
-            SDToast.showToast("prepayId为空");
+            MGToast.showToast("prepayId为空");
             return;
         }
 
         String nonceStr = model.getNonce_str();
         if (TextUtils.isEmpty(nonceStr)) {
-            SDToast.showToast("nonceStr为空");
+            MGToast.showToast("nonceStr为空");
             return;
         }
 
         String timeStamp = model.getTime_stamp();
         if (TextUtils.isEmpty(timeStamp)) {
-            SDToast.showToast("timeStamp为空");
+            MGToast.showToast("timeStamp为空");
             return;
         }
 
         String packageValue = model.getPackage_value();
         if (TextUtils.isEmpty(packageValue)) {
-            SDToast.showToast("packageValue为空");
+            MGToast.showToast("packageValue为空");
             return;
         }
 
         String sign = model.getSign();
         if (TextUtils.isEmpty(sign)) {
-            SDToast.showToast("sign为空");
+            MGToast.showToast("sign为空");
             return;
         }
 
@@ -492,7 +492,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         }
         MalipayModel model = mPaymentCodeModel.getMalipay();
         if (model == null) {
-            SDToast.showToast("获取支付宝支付参数失败");
+            MGToast.showToast("获取支付宝支付参数失败");
             return;
         }
 
@@ -505,17 +505,17 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         String signType = model.getSign_type();
 
         if (TextUtils.isEmpty(orderSpec)) {
-            SDToast.showToast("order_spec为空");
+            MGToast.showToast("order_spec为空");
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
-            SDToast.showToast("sign为空");
+            MGToast.showToast("sign为空");
             return;
         }
 
         if (TextUtils.isEmpty(signType)) {
-            SDToast.showToast("signType为空");
+            MGToast.showToast("signType为空");
             return;
         }
 
@@ -533,22 +533,22 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
                 String status = result.getResultStatus();
                 if ("9000".equals(status)) // 支付成功
                 {
-                    SDToast.showToast("支付成功");
+                    MGToast.showToast("支付成功");
                 } else if ("8000".equals(status)) // 支付结果确认中
                 {
-                    SDToast.showToast("支付结果确认中");
+                    MGToast.showToast("支付结果确认中");
                 } else {
-                    SDToast.showToast(info);
+                    MGToast.showToast(info);
                 }
             }
 
             @Override
             public void onFailure(Exception e, String msg) {
                 if (e != null) {
-                    SDToast.showToast("错误:" + e.toString());
+                    MGToast.showToast("错误:" + e.toString());
                 } else {
                     if (!TextUtils.isEmpty(msg)) {
-                        SDToast.showToast(msg);
+                        MGToast.showToast(msg);
                     }
                 }
             }

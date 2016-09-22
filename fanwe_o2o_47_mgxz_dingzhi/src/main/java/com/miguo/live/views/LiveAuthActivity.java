@@ -22,7 +22,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveAuthBinding;
 import com.fanwe.utils.Bimp;
@@ -129,13 +129,13 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     private void submitAuth() {
         phone = etPhone.getText().toString().trim();
         if (TextUtils.isEmpty(dataBindingLiveAuth.interest.get())) {
-            SDToast.showToast("请选择兴趣");
+            MGToast.showToast("请选择兴趣");
         } else if (TextUtils.isEmpty(cityId)) {
-            SDToast.showToast("请选择城市");
+            MGToast.showToast("请选择城市");
         } else if (TextUtils.isEmpty(phone)) {
-            SDToast.showToast("请输入手机号");
+            MGToast.showToast("请输入手机号");
         } else if (datas.size() < 3) {
-            SDToast.showToast("请上传2-3张生活照");
+            MGToast.showToast("请上传2-3张生活照");
         } else {
             liveHttpHelper.getBussDictionInfo("Client");
         }
@@ -339,7 +339,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 }
             }
         } else if (LiveConstants.HOST_INFO.equals(method)) {
-            SDToast.showToast("申请认证成功");
+            MGToast.showToast("申请认证成功");
             finish();
             App.getInstance().getmUserCurrentInfo().getUserInfoNew().setIs_host("2");
         }

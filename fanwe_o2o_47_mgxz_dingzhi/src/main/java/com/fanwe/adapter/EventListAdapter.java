@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.fanwe.EventDetailActivity;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.EventModel;
 import com.fanwe.o2o.miguo.R;

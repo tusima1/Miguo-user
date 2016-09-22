@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.EnumLoginState;
@@ -25,8 +24,8 @@ import com.fanwe.library.customview.SDTabItemCorner.EnumTabPosition;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
@@ -37,6 +36,7 @@ import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -277,6 +277,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         su.login(platform, new ILoginCallback() {
             @Override
             public void onSuccess(Map<String, String> data) {
+                SDDialogManager.showProgressDialog("正在登录,请稍候...");
            //     printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
@@ -305,7 +306,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
                 }
                 if (TextUtils.isEmpty(openId)) {
-                    Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                    MGToast.showToast("登录失败");
                     return;
                 }
               //  printData("icon:"+icon+" nick:"+nick +" openid:"+openId);
@@ -315,12 +316,12 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
             @Override
             public void onFaild(String msg) {
-                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                MGToast.showToast("登录失败");
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(LoginActivity.this, "取消登录", Toast.LENGTH_SHORT).show();
+                MGToast.showToast("取消登录");
             }
         });
     }
@@ -443,7 +444,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-        SDToast.showToast(responseBody);
+        MGToast.showToast(responseBody);
     }
 
 

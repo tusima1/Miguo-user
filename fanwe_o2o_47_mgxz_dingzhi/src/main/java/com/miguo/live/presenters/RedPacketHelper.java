@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -45,7 +45,7 @@ public class RedPacketHelper extends Presenter {
      */
     public void getHostRedPacketList(String userid, String shopId, MgCallback<RedPacketInfo> callback){
         if(TextUtils.isEmpty(userid) || TextUtils.isEmpty(shopId)){
-            SDToast.showToast("主播ID或者店铺ID 为空。");
+            MGToast.showToast("主播ID或者店铺ID 为空。");
             return;
         }
         TreeMap<String,String> params = new TreeMap<String,String>();

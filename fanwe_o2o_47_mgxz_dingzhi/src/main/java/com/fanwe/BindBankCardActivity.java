@@ -18,7 +18,7 @@ import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.RequestModel;
@@ -204,7 +204,7 @@ public class BindBankCardActivity extends BaseActivity
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				super.onFailure(error, msg);
-				SDToast.showToast(msg);
+				MGToast.showToast(msg);
 			}
 		});
 	}
@@ -215,34 +215,34 @@ public class BindBankCardActivity extends BaseActivity
 		mStrBankAccount = mStrBankAccount.replace(SPLIT_STRING, "");
 		if (isEmpty(mStrBankAccount))
 		{
-			SDToast.showToast("请输入银行卡号");
+			MGToast.showToast("请输入银行卡号");
 			return false;
 		}
 
 		mStrBankName = mEt_bank_name.getText().toString();
 		if (isEmpty(mStrBankName))
 		{
-			SDToast.showToast("请输入开户行名称");
+			MGToast.showToast("请输入开户行名称");
 			return false;
 		}
 
 		mStrBankUser = mEt_bank_user.getText().toString();
 		if (isEmpty(mStrBankUser))
 		{
-			SDToast.showToast("请输入持卡人姓名");
+			MGToast.showToast("请输入持卡人姓名");
 			return false;
 		}
 
 		if (isEmpty(mStrBankMobile))
 		{
-			SDToast.showToast("请输入银行预留手机号");
+			MGToast.showToast("请输入银行预留手机号");
 			return false;
 		}
 
 		mStrCode = mEt_code.getText().toString();
 		if (isEmpty(mStrCode))
 		{
-			SDToast.showToast("请输入验证码");
+			MGToast.showToast("请输入验证码");
 			return false;
 		}
 
@@ -273,7 +273,7 @@ public class BindBankCardActivity extends BaseActivity
 		mStrBankMobile = mEt_bank_mobile.getText().toString();
 		if (isEmpty(mStrBankMobile))
 		{
-			SDToast.showToast("请输入手机号");
+			MGToast.showToast("请输入手机号");
 			return;
 		}
 

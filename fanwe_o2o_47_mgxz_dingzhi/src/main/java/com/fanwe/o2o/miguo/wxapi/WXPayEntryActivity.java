@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.wxapp.SDWxappPay;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
@@ -65,7 +65,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                         break;
                 }
                 if (content != null) {
-                    SDToast.showToast(content);
+                    MGToast.showToast(content);
                 }
                 break;
 

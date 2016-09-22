@@ -17,7 +17,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.NearbyuserActItemModel;
 import com.fanwe.model.NearbyuserActModel;
 import com.fanwe.model.PageModel;
@@ -94,7 +94,7 @@ public class NearbyVipActivity extends BaseActivity
 					BaiduMapManager.getInstance().stopLocation();
 				} else
 				{
-					SDToast.showToast("定位失败无法获取附近的会员...");
+					MGToast.showToast("定位失败无法获取附近的会员...");
 					SDDialogManager.dismissProgressDialog();
 				}
 			}
@@ -134,7 +134,7 @@ public class NearbyVipActivity extends BaseActivity
 						mlistModel.addAll(actModel.getItem());
 					} else
 					{
-						SDToast.showToast("未找到数据");
+						MGToast.showToast("未找到数据");
 					}
 					mAdapter.updateData(mlistModel);
 				}
@@ -176,7 +176,7 @@ public class NearbyVipActivity extends BaseActivity
 			{
 				if (!mPage.increment())
 				{
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mLvVip.onRefreshComplete();
 				} else
 				{

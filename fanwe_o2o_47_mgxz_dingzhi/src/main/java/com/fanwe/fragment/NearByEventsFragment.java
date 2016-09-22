@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.fanwe.adapter.EventListAdapter;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.EventModel;
 import com.fanwe.model.Events_indexActModel;
@@ -94,7 +94,7 @@ public class NearByEventsFragment extends BaseFragment
 						mlistModel.addAll(actModel.getItem());
 					} else
 					{
-						SDToast.showToast("没有更多数据了");
+						MGToast.showToast("没有更多数据了");
 					}
 					mAdapter.updateData(mlistModel);
 				}
@@ -136,7 +136,7 @@ public class NearByEventsFragment extends BaseFragment
 			{
 				if (!mPage.increment())
 				{
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mIpLvVip.onRefreshComplete();
 				} else
 				{

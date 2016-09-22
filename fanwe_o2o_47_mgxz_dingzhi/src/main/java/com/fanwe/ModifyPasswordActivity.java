@@ -23,7 +23,7 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.network.MgCallback;
@@ -93,7 +93,7 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
     private void doGetCaptcha() {
         userPhone = mCet_mobile.getText().toString();
         if (TextUtils.isEmpty(userPhone)) {
-            SDToast.showToast("请输入手机号码");
+            MGToast.showToast("请输入手机号码");
             return;
         }
         //开始倒计时。
@@ -103,7 +103,7 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
         commonHelper.doGetCaptcha(userPhone, 2, new MgCallback() {
 
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("验证码发送失败");
+                MGToast.showToast("验证码发送失败");
             }
 
             public void onSuccessResponse(String responseBody) {
@@ -113,9 +113,9 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
                 Root root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
                 if (UserConstants.SUCCESS.equals(status)) {
-                    SDToast.showToast("验证码发送成功");
+                    MGToast.showToast("验证码发送成功");
                 } else if (UserConstants.CODE_ERROR.equals(status)) {
-                    SDToast.showToast("验证码发送失败");
+                    MGToast.showToast("验证码发送失败");
                 }
             }
         });
@@ -155,7 +155,7 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
     private void requestSendCode() {
         mStrMobile = mCet_mobile.getText().toString();
         if (TextUtils.isEmpty(mStrMobile)) {
-            SDToast.showToast("请输入手机号码");
+            MGToast.showToast("请输入手机号码");
             return;
         }
 
@@ -214,28 +214,28 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
     private boolean validateParam() {
         mStrMobile = mCet_mobile.getText().toString();
         if (TextUtils.isEmpty(mStrMobile)) {
-            SDToast.showToast("手机号不能为空");
+            MGToast.showToast("手机号不能为空");
             return false;
         }
 
         mStrCode = mCet_code.getText().toString();
         if (TextUtils.isEmpty(mStrCode)) {
-            SDToast.showToast("验证码不能为空");
+            MGToast.showToast("验证码不能为空");
             return false;
         }
         mStrPwd = mCet_pwd.getText().toString();
         if (TextUtils.isEmpty(mStrPwd)) {
-            SDToast.showToast("新密码不能为空");
+            MGToast.showToast("新密码不能为空");
             return false;
         }
         mStrPwdConfirm = mCet_pwd_confirm.getText().toString();
         if (TextUtils.isEmpty(mStrPwdConfirm)) {
-            SDToast.showToast("确认新密码不能为空");
+            MGToast.showToast("确认新密码不能为空");
             return false;
         }
 
         if (!mStrPwd.equals(mStrPwdConfirm)) {
-            SDToast.showToast("两次密码不一致");
+            MGToast.showToast("两次密码不一致");
             return false;
         }
 
@@ -280,7 +280,7 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    SDToast.showToast("密码修改成功");
+                    MGToast.showToast("密码修改成功");
                     finish();
                     break;
             }

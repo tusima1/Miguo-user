@@ -23,7 +23,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.HorizontalSlideDeleteListView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CartGoodsModel;
 import com.fanwe.o2o.miguo.R;
@@ -576,7 +576,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 });
                 break;
             case ShoppingCartconstants.SHOPPING_CART_DELETE:
-                SDToast.showToast(responseBody);
+                MGToast.showToast(responseBody);
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -586,7 +586,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 });
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
-                SDToast.showToast(responseBody);
+                MGToast.showToast(responseBody);
                 break;
             default:
                 break;

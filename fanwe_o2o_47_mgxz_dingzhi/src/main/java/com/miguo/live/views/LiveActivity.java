@@ -34,7 +34,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.GiftId;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
@@ -316,7 +316,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     MgCallback imLoginSuccessCallback = new MgCallback() {
         @Override
         public void onErrorResponse(String message, String errorCode) {
-            SDToast.showToast("进入房间失败");
+            MGToast.showToast("进入房间失败");
             finish();
         }
 
@@ -436,7 +436,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
 //                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
 //
-//                    SDToast.showToast("获取用户签名失败。");
+//                    MGToast.showToast("获取用户签名失败。");
 //                    finish();
 //                    return;
 //                }
@@ -456,7 +456,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //
 //            @Override
 //            public void onErrorResponse(String message, String errorCode) {
-//                SDToast.showToast("获取用户签名失败。");
+//                MGToast.showToast("获取用户签名失败。");
 //                finish();
 //            }
 //        };
@@ -721,7 +721,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //房间创建成功,向后台注册信息
         int i = new Random().nextInt();
         int roomId = MySelfInfo.getInstance().getMyRoomNum();
-        SDToast.showToast(roomId + "");
+        MGToast.showToast(roomId + "");
         LogUtil.d("roomId: " + roomId);
         String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
         String title = "米果小站";
@@ -2196,7 +2196,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                SDToast.showToast(msg);
+                MGToast.showToast(msg);
             }
         });
     }

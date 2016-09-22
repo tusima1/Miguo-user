@@ -34,7 +34,7 @@ import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Cart_check_cartActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.umeng.UmengShareManager;
@@ -240,7 +240,7 @@ public class AppJsHandler extends BaseJsHandler {
 						message = "服务器君不在状态了，请稍后再试！";
 					}
 
-					SDToast.showToast(message);
+					MGToast.showToast(message);
 				}
 			}
 

@@ -31,7 +31,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
@@ -366,7 +366,7 @@ public class DistributionWithdrawFragment extends BaseFragment
 		mStrMoney = mEt_money.getText().toString().trim();
 		if (isEmpty(mStrMoney))
 		{
-			SDToast.showToast("请输入提现金额");
+			MGToast.showToast("请输入提现金额");
 			return false;
 		}
 
@@ -381,21 +381,21 @@ public class DistributionWithdrawFragment extends BaseFragment
 			mStrBankName = mEt_bank_name.getText().toString().trim();
 			if (isEmpty(mStrBankName))
 			{
-				SDToast.showToast("请输入开户行名称");
+				MGToast.showToast("请输入开户行名称");
 				return false;
 			}
 
 			mStrBankNumber = mEt_bank_number.getText().toString().trim();
 			if (isEmpty(mStrBankNumber))
 			{
-				SDToast.showToast("请输入银行卡号");
+				MGToast.showToast("请输入银行卡号");
 				return false;
 			}
 
 			mStrRealName = mEt_real_name.getText().toString().trim();
 			if (isEmpty(mStrRealName))
 			{
-				SDToast.showToast("请输入姓名");
+				MGToast.showToast("请输入姓名");
 				return false;
 			}
 			break;
@@ -407,7 +407,7 @@ public class DistributionWithdrawFragment extends BaseFragment
 		mStrCode = mEt_code.getText().toString().trim();
 		if (isEmpty(mStrCode))
 		{
-			SDToast.showToast("请输入验证码");
+			MGToast.showToast("请输入验证码");
 			return false;
 		}
 

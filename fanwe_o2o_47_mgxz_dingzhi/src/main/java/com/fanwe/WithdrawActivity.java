@@ -20,7 +20,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_money_do_withdrawActModel;
@@ -253,7 +253,7 @@ public class WithdrawActivity extends BaseActivity
 			public void onFailure(HttpException error, String msg) {
 				
 				super.onFailure(error, msg);
-				SDToast.showToast(msg);
+				MGToast.showToast(msg);
 			}
 		});
 	}
@@ -263,7 +263,7 @@ public class WithdrawActivity extends BaseActivity
 		mStrMoney = mEt_money.getText().toString();
 		if (isEmpty(mStrMoney))
 		{
-			SDToast.showToast("请输入提现金额");
+			MGToast.showToast("请输入提现金额");
 			return false;
 		}
 		return true;

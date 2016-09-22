@@ -19,7 +19,7 @@ import com.fanwe.fragment.OrderDetailFeeFragment;
 import com.fanwe.fragment.OrderDetailGoodsFragment;
 import com.fanwe.fragment.OrderDetailParamsFragment;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
@@ -413,7 +413,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             startActivity(intent);
             finish();
         } else {
-            SDToast.showToast("订单提交失败。");
+            MGToast.showToast("订单提交失败。");
         }
 
     }
@@ -428,7 +428,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                     return;
                 }
                 if (!ifMoneyEnough()) {
-                    SDToast.showToast("请选择一种支付方式");
+                    MGToast.showToast("请选择一种支付方式");
                     return;
                 }
                 if (v.isClickable()) {
@@ -467,7 +467,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
 
     private void onError(String message) {
-        SDToast.showToast(message);
+        MGToast.showToast(message);
         MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {

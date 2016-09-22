@@ -26,7 +26,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.StoreActModel;
@@ -117,7 +117,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
     private void init() {
         getIntentData();
         if (mShopId <= 0 && TextUtils.isEmpty(MerchantID)) {
-            SDToast.showToast("id为空");
+            MGToast.showToast("id为空");
             finish();
             return;
         }

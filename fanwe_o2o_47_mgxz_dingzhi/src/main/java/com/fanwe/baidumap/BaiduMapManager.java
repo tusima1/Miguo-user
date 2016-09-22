@@ -35,7 +35,7 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.miguo.utils.MGLog;
 
@@ -512,7 +512,7 @@ public class BaiduMapManager
 			{
 				startLocation(null);
 				mIsLocationBySearcher = true;
-				SDToast.showToast("对不起未获取到当前城市，无法查询公交线路");
+				MGToast.showToast("对不起未获取到当前城市，无法查询公交线路");
 				return;
 			}
 			search.setOnGetRoutePlanResultListener(new OnGetRoutePlanResultListener()

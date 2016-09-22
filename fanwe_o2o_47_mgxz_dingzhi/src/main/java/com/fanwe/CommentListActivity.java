@@ -23,7 +23,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
@@ -163,11 +163,11 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         modelDisplayComment = (ModelDisplayComment) getIntent().getSerializableExtra("modelDisplayComment");
 
         if (TextUtils.isEmpty(mId)) {
-            SDToast.showToast("id为空");
+            MGToast.showToast("id为空");
             finish();
         }
         if (TextUtils.isEmpty(mStrType)) {
-            SDToast.showToast("评论类型为空");
+            MGToast.showToast("评论类型为空");
             finish();
         }
     }

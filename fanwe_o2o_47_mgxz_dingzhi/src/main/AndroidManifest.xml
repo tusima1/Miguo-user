@@ -861,7 +861,13 @@
             android:theme="@style/Theme.UMDialog"
             android:windowSoftInputMode="stateVisible|adjustResize" />
 
-        <!-- 微信回调activity -->
+        <!-- 微信第三方登录回调activity -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <!-- QQ登录start -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -363,7 +363,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
                 Log.d(TAG,"小礼物成功...!");
-//                SDToast.showToast("红包发送成功!");
+//                MGToast.showToast("红包发送成功!");
             }
         });
     }
@@ -393,7 +393,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
                 Log.d(TAG,"弹幕发送成功...!");
-//                SDToast.showToast("红包发送成功!");
+//                MGToast.showToast("红包发送成功!");
             }
         });
     }
@@ -430,7 +430,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
 //                Log.d(TAG,"红包发送成功!");
-//                SDToast.showToast("红包发送成功!");
+//                MGToast.showToast("红包发送成功!");
             }
         });
 
@@ -1141,7 +1141,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 if("200".equals(statusCode)){
 
                 }else if("320".equals(statusCode)){
-                    SDToast.showToast("账户已失效");
+                    MGToast.showToast("账户已失效");
                    mLiveView.tokenInvalidateAndQuit();
 
                 }

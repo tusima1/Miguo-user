@@ -3,7 +3,7 @@ package com.fanwe;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Cart_checkActModel;
 import com.fanwe.model.Cart_count_buy_totalModel;
 import com.fanwe.model.Cart_doneActModel;
@@ -23,7 +23,7 @@ public class OrderDetailActivity extends ConfirmOrderActivity
 		mId = getIntent().getIntExtra(EXTRA_ORDER_ID, 0);
 		if (mId <= 0)
 		{
-			SDToast.showToast("订单id为空");
+			MGToast.showToast("订单id为空");
 			finish();
 		}
 		super.init();

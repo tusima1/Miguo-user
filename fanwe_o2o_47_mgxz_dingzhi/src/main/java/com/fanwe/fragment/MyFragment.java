@@ -34,7 +34,7 @@
 //import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 //import com.fanwe.library.handler.PhotoHandler;
 //import com.fanwe.library.handler.PhotoHandler.PhotoHandlerListener;
-//import com.fanwe.library.utils.SDToast;
+//import com.miguo.live.views.customviews.MGToast;
 //import com.fanwe.library.utils.SDTypeParseUtil;
 //import com.fanwe.library.utils.SDViewBinder;
 //import com.fanwe.model.MessageCount;
@@ -237,7 +237,7 @@
 //                if (level < 2) {
 //                    Intent intent = new Intent(getActivity(), MemberRankActivity.class);
 //                    startActivity(intent);
-//                    SDToast.showToast("您还没有提现权限");
+//                    MGToast.showToast("您还没有提现权限");
 //                } else {
 //                    Intent intent = new Intent(getActivity(), DistributionWithdrawActivity.class);
 //                    intent.putExtra("money", modelPersonalHome.getWithdrawals());
@@ -325,7 +325,7 @@
 //            @Override
 //            public void onFailure(String msg) {
 //
-//                SDToast.showToast(msg);
+//                MGToast.showToast(msg);
 //            }
 //        });
 //    }
@@ -599,7 +599,7 @@
 //
 //            @Override
 //            public void onFailure(HttpException error, String msg) {
-//                SDToast.showToast("获取消息数量失败!");
+//                MGToast.showToast("获取消息数量失败!");
 //            }
 //
 //            @Override

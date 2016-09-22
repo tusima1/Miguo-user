@@ -14,7 +14,7 @@ import com.fanwe.RouteDetailActivity;
 import com.fanwe.adapter.MapWalkingRouteAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.baidumap.BaiduMapManager.OnGetWalkingRoutePlanResultListener;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.MapWalkingRouteModel;
 
 /**
@@ -77,11 +77,11 @@ public class RouteinfoTabWalkingFragment extends RouteinfoTabBaseFragment
 						mAdapter.updateData(mListModel);
 					} else
 					{
-						SDToast.showToast("未获取到步行线路");
+						MGToast.showToast("未获取到步行线路");
 					}
 				} else
 				{
-					SDToast.showToast("未获取到步行线路");
+					MGToast.showToast("未获取到步行线路");
 				}
 				if (mListener != null)
 				{

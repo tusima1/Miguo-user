@@ -34,7 +34,7 @@ import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -142,7 +142,7 @@ public class MarketCityListActivity extends BaseActivity {
                     // finish();
                     // } else
                     // {
-                    // SDToast.showToast("设置失败");
+                    // MGToast.showToast("设置失败");
                     // }
                     setResultCity(model.getName(), model.getId());
 //					if (listener!=null) {
@@ -268,7 +268,7 @@ public class MarketCityListActivity extends BaseActivity {
                     String cityId = AppRuntimeWorker
                             .getCityIdByCityName(locationCity);
                     if (TextUtils.isEmpty(cityId)) {
-                        SDToast.showToast("不支持当前城市:" + locationCity);
+                        MGToast.showToast("不支持当前城市:" + locationCity);
                     } else {
                         setResultCity(locationCity, cityId);
                     }
@@ -367,7 +367,7 @@ public class MarketCityListActivity extends BaseActivity {
 //								mActivity.finish();
 //							} else
 //							{
-//								SDToast.showToast("设置城市失败");
+//								MGToast.showToast("设置城市失败");
 //							}
 //						}else if(mTag==2)
 //						{

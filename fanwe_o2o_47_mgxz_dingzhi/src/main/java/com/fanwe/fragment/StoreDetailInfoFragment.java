@@ -25,7 +25,7 @@ import com.fanwe.constant.Constant.CommentType;
 import com.fanwe.library.customview.SDScaleImageView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -295,7 +295,7 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
             Intent intent = SDIntentUtil.getIntentCallPhone(tel);
             startActivity(intent);
         } else {
-            SDToast.showToast("未找到号码");
+            MGToast.showToast("未找到号码");
         }
     }
 
