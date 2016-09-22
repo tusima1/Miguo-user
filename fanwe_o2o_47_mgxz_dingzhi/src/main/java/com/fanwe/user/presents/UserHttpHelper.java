@@ -41,6 +41,9 @@ import com.fanwe.user.model.getShopAndUserCollect.RootShopAndUserCollect;
 import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.fanwe.user.model.getSpokePlay.ResultSpokePlay;
 import com.fanwe.user.model.getSpokePlay.RootSpokePlay;
+import com.fanwe.user.model.getUserAttention.ModelUserAttention;
+import com.fanwe.user.model.getUserAttention.ResultUserAttention;
+import com.fanwe.user.model.getUserAttention.RootUserAttention;
 import com.fanwe.user.model.getUserChangeMobile.ModelUserChangeMobile;
 import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.model.getUserRedpackets.RootUserRedPacket;
@@ -866,6 +869,37 @@ public class UserHttpHelper implements IHelper {
                 }
                 List<ModelSpokePlay> items = result.get(0).getBody();
                 mView.onSuccess(UserConstants.GET_SPOKE_PLAY, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 获得关注状态
+     *
+     * @param user_id
+     */
+    public void getUserAttention(String user_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("user_id", user_id);
+        params.put("method", UserConstants.USER_ATTENTION);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootUserAttention root = gson.fromJson(responseBody, RootUserAttention.class);
+                List<ResultUserAttention> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(UserConstants.USER_ATTENTION, null);
+                    return;
+                }
+                List<ModelUserAttention> items = result.get(0).getBody();
+                mView.onSuccess(UserConstants.USER_ATTENTION, items);
             }
 
             @Override

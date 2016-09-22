@@ -470,7 +470,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccess(TIMMessage timMessage) {
-                SxbLog.i(TAG, "onSuccess ");
+                SxbLog.i(TAG, " send message onSuccess ");
             }
         });
     }

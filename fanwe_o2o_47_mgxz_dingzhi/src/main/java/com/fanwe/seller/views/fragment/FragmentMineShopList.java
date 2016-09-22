@@ -16,12 +16,14 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.ShopListAdapter;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getRepresentMerchant.RootRepresentMerchant;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
@@ -136,6 +138,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     }
 
     private ArrayList<ModelStoreList> temps;
+    List<RootRepresentMerchant> roots;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -144,6 +147,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
             temps = (ArrayList<ModelStoreList>) datas;
             message.what = 0;
         } else if (SellerConstants.REPRESENT_MERCHANT.equals(method)) {
+            roots = datas;
             message.what = 1;
         }
         mHandler.sendMessage(message);
@@ -167,9 +171,15 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
                     mPtrlvContent.onRefreshComplete();
                     break;
                 case 1:
-                    CurLiveInfo.modelShop = tempBean;
-                    getActivity().setResult(8888);
-                    getActivity().finish();
+                    if (!SDCollectionUtil.isEmpty(roots)) {
+                        //代言失败
+                        MGToast.showToast(roots.get(0).getMessage());
+                        getActivity().finish();
+                    } else {
+                        CurLiveInfo.modelShop = tempBean;
+                        getActivity().setResult(8888);
+                        getActivity().finish();
+                    }
                     break;
             }
         }

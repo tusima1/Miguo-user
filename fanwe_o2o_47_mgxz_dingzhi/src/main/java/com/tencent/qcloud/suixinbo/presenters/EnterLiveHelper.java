@@ -410,9 +410,11 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
             }
         } else {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
+            if(avContext!=null){
+                avContext.exitRoom();
+            }
             /*退出房间时调用*/
             //离开房间
-            avContext.exitRoom();
 
         }
     }

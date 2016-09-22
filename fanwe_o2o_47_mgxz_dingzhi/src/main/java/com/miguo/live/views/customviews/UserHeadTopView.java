@@ -138,7 +138,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 //        if (mActivity != null && userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
 //            userExitDialogHelper.show();
 //        }
-        if (mLiveView != null && "1".equals(CurLiveInfo.getLive_type())) {
+        if (mLiveView != null) {
             mLiveView.userExit();
         }else {
             mActivity.finish();

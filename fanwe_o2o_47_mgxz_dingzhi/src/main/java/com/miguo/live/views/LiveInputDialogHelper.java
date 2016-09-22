@@ -142,6 +142,12 @@ public class LiveInputDialogHelper {
     }
 
     /**
+     * 隐藏弹幕功能。
+     */
+    public void dismissDanmu(){
+        isDanmu.setVisibility(View.GONE);
+    }
+    /**
      * 发送消息
      * @param msg
      */
