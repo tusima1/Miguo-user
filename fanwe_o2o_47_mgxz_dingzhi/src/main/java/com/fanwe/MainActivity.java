@@ -148,44 +148,73 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
         //当前还未登录，并且用户存储中的用户信息不为空。
         if (TextUtils.isEmpty(App.getInstance().getToken()) && userModel != null) {
+            //需要登录
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
                 mLoginHelper.doLogin(userid, password, 0, true);
             } else {
-                final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
+                showDialogLogin();
+            }
+        } else {
+            if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+                //不需要登录
+                //分享码
+                doCode();
+            }
+            if (userModel == null) {
+                //需要登录
+                showDialogLogin();
+            }
+        }
+    }
+
+    private void doCode() {
+        if (App.getInstance().isShowCode) {
+            if ("miguo".equals(code) || TextUtils.isEmpty(code)) {
+                final GetDiamondInputDialog dialog = new GetDiamondInputDialog(MainActivity.this);
                 dialog.setSubmitListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        //分享码
+                        if (TextUtils.isEmpty(dialog.getCode())) {
+                            App.getInstance().isShowCode = false;
+                        } else {
+                            liveHttpHelper.getUseReceiveCode(dialog.getCode());
+                        }
                         dialog.dismiss();
                     }
                 });
                 dialog.setCloseListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        App.getInstance().isShowCode = false;
                         dialog.dismiss();
                     }
                 });
                 dialog.show();
+            } else {
+                liveHttpHelper.getUseReceiveCode(code);
             }
-        } else {
-            final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
-            dialog.setSubmitListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    dialog.dismiss();
-                }
-            });
-            dialog.setCloseListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
         }
+    }
+
+    public void showDialogLogin() {
+        final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
+        dialog.setSubmitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                dialog.dismiss();
+            }
+        });
+        dialog.setCloseListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void initOthers() {
@@ -377,9 +406,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             case LOGIN_SUCCESS:
                 mViewManager.setSelectIndex(preTab, mTab0, true);
                 //分享码
-                if (App.getInstance().isShowCode) {
-                    liveHttpHelper.getUseReceiveCode(code);
-                }
+                doCode();
                 break;
             case LOGOUT:
                 mTab3.setTextTitleNumber(null);
@@ -397,6 +424,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             default:
                 break;
         }
+
     }
 
     private void removeMyAccountFragment() {
@@ -639,7 +667,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
                             @Override
                             public void onClick(View v) {
                                 //分享码
-                                liveHttpHelper.getUseReceiveCode(dialog.getCode());
+                                if (TextUtils.isEmpty(dialog.getCode())) {
+                                    App.getInstance().isShowCode = false;
+                                } else {
+                                    liveHttpHelper.getUseReceiveCode(dialog.getCode());
+                                }
                                 dialog.dismiss();
                             }
                         });
@@ -660,5 +692,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
     @Override
     public void onFailue(String responseBody) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        App.getInstance().isShowCode = true;
     }
 }
