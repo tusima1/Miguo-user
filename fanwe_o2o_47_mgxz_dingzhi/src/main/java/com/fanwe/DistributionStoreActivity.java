@@ -18,7 +18,7 @@ import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.customview.StickyScrollView;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MyDistributionUser_dataModel;
 import com.fanwe.model.PageModel;
@@ -213,7 +213,7 @@ public class DistributionStoreActivity extends BaseActivity
 				requestData(true);
 			} else
 			{
-				SDToast.showToast("没有更多数据了");
+				MGToast.showToast("没有更多数据了");
 				mSsv_all.onRefreshComplete();
 			}
 		}

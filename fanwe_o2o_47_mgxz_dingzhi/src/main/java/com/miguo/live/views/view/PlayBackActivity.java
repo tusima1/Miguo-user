@@ -225,7 +225,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
          file_id = data.getString("file_id", "");
          vid = data.getString("vid", "");
          playset = data.getString("playset", "");
-        Log.e("test",chat_room_id+"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
+        Log.e("test", chat_room_id +"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
     }
 
     public void initView(){
@@ -696,7 +696,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private class GetAudienceTask extends TimerTask {
         @Override
         public void run() {
-            mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.getAudienceList(chat_room_id);
         }
     }
 
@@ -1106,19 +1106,19 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                 });
                 break;
             case LiveConstants.GET_USER_RED_PACKETS:
-                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-//                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
-                        if (datas == null) {
-                            mRedPacketAdapter.setMdatas(null);
-                        } else {
-                            mRedPacketAdapter.setMdatas(datas);
-                        }
-                        mRedPacketAdapter.notifyDataSetChanged();
-                    }
-                });
+//                MGLog.e("test: 直播过程用户抢到的红包数据: " + datas.size());
+//                MGUIUtil.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        List<UserRedPacketInfo> userRedPacketInfos = testDatas();
+//                        if (datas == null) {
+//                            mRedPacketAdapter.setMdatas(null);
+//                        } else {
+//                            mRedPacketAdapter.setMdatas(datas);
+//                        }
+//                        mRedPacketAdapter.notifyDataSetChanged();
+//                    }
+//                });
                 break;
 //            case LiveConstants.GET_PACKET_RESULT:
 //                MGUIUtil.runOnUiThread(new Runnable() {

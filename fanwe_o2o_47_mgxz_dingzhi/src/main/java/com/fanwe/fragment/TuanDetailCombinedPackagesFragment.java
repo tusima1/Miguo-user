@@ -29,7 +29,7 @@ import com.fanwe.library.dialog.SDDialogListView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDNumberUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Deal_attrModel;
@@ -127,7 +127,7 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
 
         List<Deal_indexActModel> listSelectedModel = getSelectedModel();
         if (isEmpty(listSelectedModel)) {
-            SDToast.showToast("请选择组合商品");
+            MGToast.showToast("请选择组合商品");
             return;
         }
 
@@ -195,7 +195,7 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
             List<Deal_attrModel> listUnSelected = mDealModel.getUnSelectedAttr();
             if (!SDCollectionUtil.isEmpty(listUnSelected)) // 有属性未被选中
             {
-                SDToast.showToast("请选择主商品" + listUnSelected.get(0).getName());
+                MGToast.showToast("请选择主商品" + listUnSelected.get(0).getName());
                 scrollToAttr();
                 return false;
             }

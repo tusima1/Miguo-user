@@ -2,7 +2,6 @@ package com.miguo.live.views;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,10 +11,8 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.fanwe.AppWebViewActivity;
 import com.fanwe.BaseActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant;
 import com.fanwe.event.EnumEventTag;
@@ -24,9 +21,6 @@ import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
-import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.MalipayModel;
 import com.fanwe.model.Payment_codeModel;
 import com.fanwe.model.WxappModel;
@@ -44,9 +38,9 @@ import com.fanwe.shoppingcart.presents.CommonShoppingHelper;
 import com.fanwe.utils.SDFormatUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
-import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
 
 import java.util.HashMap;
@@ -157,6 +151,12 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             @Override
             public void onClick(View v) {
                 currentDiamondType = bigDiamondType;
+                for (int i = 0; i < diamondTypeEntityList.size(); i++) {
+                    DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
+                        entity0.setChecked(false);
+                }
+                diamondGridAdapter.setDatas(diamondTypeEntityList);
+                diamondGridAdapter.notifyDataSetChanged();
                 setColor(true);
             }
         });
@@ -237,11 +237,11 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
      */
     public boolean checkValidate() {
         if (currentDiamondType == null) {
-            SDToast.showToast("请选择您想购买的米钻。");
+            MGToast.showToast("请选择您想购买的米钻。");
             return false;
         }
         if (currentPayType == null) {
-            SDToast.showToast("请选择一种支付方式。");
+            MGToast.showToast("请选择一种支付方式。");
             return false;
         }
         return true;
@@ -298,7 +298,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             mOrderId = orderDetailInfo.getOrder_info().getOrder_id();
             if (!PAY_SUCCESS.equals(payStatus)) {
                 if (TextUtils.isEmpty(mOrderId)) {
-                    SDToast.showToast("id为空");
+                    MGToast.showToast("id为空");
                     finish();
                     return;
                 }
@@ -343,7 +343,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             }
 
             if (mPaymentCodeModel == null) {
-                SDToast.showToast("支付信息为空。");
+                MGToast.showToast("支付信息为空。");
                 return;
             }
             clickPay();
@@ -351,7 +351,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
     }
 
     private void payFailue(){
-        SDToast.showToast("支付失败。");
+        MGToast.showToast("支付失败。");
     }
     @Override
     public void onEventMainThread(SDBaseEvent event) {
@@ -400,7 +400,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         }
         MalipayModel model = mPaymentCodeModel.getMalipay();
         if (model == null) {
-            SDToast.showToast("获取支付宝支付参数失败");
+            MGToast.showToast("获取支付宝支付参数失败");
             return;
         }
 
@@ -411,17 +411,17 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         String signType = model.getSign_type();
 
         if (TextUtils.isEmpty(orderSpec)) {
-            SDToast.showToast("order_spec为空");
+            MGToast.showToast("order_spec为空");
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
-            SDToast.showToast("sign为空");
+            MGToast.showToast("sign为空");
             return;
         }
 
         if (TextUtils.isEmpty(signType)) {
-            SDToast.showToast("signType为空");
+            MGToast.showToast("signType为空");
             return;
         }
 
@@ -440,14 +440,14 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
                 if ("9000".equals(status)) // 支付成功
                 {
-                    SDToast.showToast("支付成功");
+                    MGToast.showToast("支付成功");
                     gotoPayHistoryActivity();
                 } else if ("8000".equals(status)) // 支付结果确认中
                 {
-                    SDToast.showToast("支付结果确认中");
+                    MGToast.showToast("支付结果确认中");
                     gotoPayHistoryActivity();
                 } else {
-                    SDToast.showToast(info);
+                    MGToast.showToast(info);
                 }
                 //requestPayOrder();
             }
@@ -456,10 +456,10 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
             public void onFailure(Exception e, String msg) {
 
                 if (e != null) {
-                    SDToast.showToast("错误:" + e.toString());
+                    MGToast.showToast("错误:" + e.toString());
                 } else {
                     if (!TextUtils.isEmpty(msg)) {
-                        SDToast.showToast(msg);
+                        MGToast.showToast(msg);
                     }
                 }
             }
@@ -477,49 +477,49 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
         WxappModel model = mPaymentCodeModel.getWxapp();
         if (model == null) {
-            SDToast.showToast("获取微信支付参数失败");
+            MGToast.showToast("获取微信支付参数失败");
             return;
         }
 
         String appId = model.getAppid();
         if (TextUtils.isEmpty(appId)) {
-            SDToast.showToast("appId为空");
+            MGToast.showToast("appId为空");
             return;
         }
 
         String partnerId = model.getMch_id();
         if (TextUtils.isEmpty(partnerId)) {
-            SDToast.showToast("partnerId为空");
+            MGToast.showToast("partnerId为空");
             return;
         }
 
         String prepayId = model.getPrepay_id();
         if (TextUtils.isEmpty(prepayId)) {
-            SDToast.showToast("prepayId为空");
+            MGToast.showToast("prepayId为空");
             return;
         }
 
         String nonceStr = model.getNonce_str();
         if (TextUtils.isEmpty(nonceStr)) {
-            SDToast.showToast("nonceStr为空");
+            MGToast.showToast("nonceStr为空");
             return;
         }
 
         String timeStamp = model.getTime_stamp();
         if (TextUtils.isEmpty(timeStamp)) {
-            SDToast.showToast("timeStamp为空");
+            MGToast.showToast("timeStamp为空");
             return;
         }
 
         String packageValue = model.getPackage_value();
         if (TextUtils.isEmpty(packageValue)) {
-            SDToast.showToast("packageValue为空");
+            MGToast.showToast("packageValue为空");
             return;
         }
 
         String sign = model.getSign();
         if (TextUtils.isEmpty(sign)) {
-            SDToast.showToast("sign为空");
+            MGToast.showToast("sign为空");
             return;
         }
 
@@ -573,7 +573,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
     @Override
     public void onFailue(String method, String responseBody) {
-        SDToast.showToast(responseBody);
+        MGToast.showToast(responseBody);
     }
 
     @Override

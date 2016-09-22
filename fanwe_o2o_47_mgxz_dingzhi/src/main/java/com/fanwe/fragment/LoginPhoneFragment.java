@@ -12,7 +12,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -82,7 +82,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 	public void checkMobileExist() {
 		mNumberPhone = mEtMobile.getText().toString();
 		if (TextUtils.isEmpty(mNumberPhone)) {
-			SDToast.showToast("请输入手机号码");
+			MGToast.showToast("请输入手机号码");
 			return;
 		}
 
@@ -97,7 +97,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 			@Override
 			public void onErrorResponse(String message, String errorCode)
 			{
-				SDToast.showToast(message);
+				MGToast.showToast(message);
 			}
 		});
 	}
@@ -110,7 +110,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 		if (TextUtils.isEmpty(mNumberPhone))
 		{
-			SDToast.showToast("请输入手机号码");
+			MGToast.showToast("请输入手机号码");
 			return;
 		}
 
@@ -120,7 +120,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
-				SDToast.showToast("验证码发送失败，请重新发送");
+				MGToast.showToast("验证码发送失败，请重新发送");
 				mBtnSendCode.setText("重新发送验证码");
 				time.onFinish();
 
@@ -128,7 +128,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 			@Override
 			public void onSuccessResponse(String responseBody) {
-				SDToast.showToast("验证码发送成功");
+				MGToast.showToast("验证码发送成功");
 			}
 		});
 		}
@@ -171,13 +171,13 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 		mNumberPhone = mEtMobile.getText().toString();
 		if (TextUtils.isEmpty(mNumberPhone))
 		{
-			SDToast.showToast("请输入手机号码!");
+			MGToast.showToast("请输入手机号码!");
 			return;
 		}
 		mStrCode = mEtCode.getText().toString();
 		if (TextUtils.isEmpty(mStrCode))
 		{
-			SDToast.showToast("请输入验证码!");
+			MGToast.showToast("请输入验证码!");
 			return;
 		}
 		count++;
@@ -216,7 +216,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
 	@Override
 	public void onSuccess(String responseBody) {
-		SDToast.showToast("验证码发送成功");
+		MGToast.showToast("验证码发送成功");
 	}
 
 	@Override

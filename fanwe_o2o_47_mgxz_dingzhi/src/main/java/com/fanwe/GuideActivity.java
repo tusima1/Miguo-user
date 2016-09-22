@@ -4,7 +4,7 @@ import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.sunday.eventbus.SDEventManager;
 

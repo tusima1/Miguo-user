@@ -20,7 +20,7 @@ import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.LocalImageFinder;
 import com.fanwe.library.utils.LocalImageFinder.LocalImageFinderListener;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalImageModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -148,7 +148,7 @@ public class LocalImageActivity extends BaseActivity
 				{
 					if (mAdapter.getmListSelectedModel().size() >= mMaxSelectImageCount)
 					{
-						SDToast.showToast("最多选择" + mMaxSelectImageCount + "张图片");
+						MGToast.showToast("最多选择" + mMaxSelectImageCount + "张图片");
 						checkBox.setCheckState(false);
 						return true;
 					}
@@ -185,7 +185,7 @@ public class LocalImageActivity extends BaseActivity
 		List<LocalImageModel> listModel = mAdapter.getmListSelectedModel();
 		if (listModel.size() <= 0)
 		{
-			SDToast.showToast("您还未选择图片");
+			MGToast.showToast("您还未选择图片");
 		} else
 		{
 			Intent data = new Intent();

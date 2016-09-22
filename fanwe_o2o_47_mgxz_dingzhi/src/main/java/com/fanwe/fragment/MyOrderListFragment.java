@@ -10,7 +10,7 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
@@ -135,7 +135,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
                 if (hasMore){
                     requestData(true);
                 }else {
-                    SDToast.showToast("没有更多数据了");
+                    MGToast.showToast("没有更多数据了");
                     mPtrlv_content.onRefreshComplete();
                 }
             }

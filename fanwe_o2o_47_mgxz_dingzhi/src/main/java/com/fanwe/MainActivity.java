@@ -27,7 +27,7 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
@@ -412,7 +412,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private void exitApp() {
         if (System.currentTimeMillis() - mExitTime > 2000) {
-            SDToast.showToast("再按一次退出!");
+            MGToast.showToast("再按一次退出!");
         } else {
             App.getApplication().exitApp(true);
         }
@@ -465,14 +465,14 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     intentStore.putExtra(EXTRA_GOODS_ID, mId);
                     startActivity(intentStore);
                 } else {
-                    SDToast.showToast("无法识别。");
+                    MGToast.showToast("无法识别。");
                 }
 
             }
         } else if (resultCode == MarketFragment.CITY_RESULT) {
             Bundle cityData = data.getExtras();
             if (cityData == null) {
-                SDToast.showToast("位置信息获取失败!");
+                MGToast.showToast("位置信息获取失败!");
                 return;
             }
             String cityName = cityData.getString("city", "");

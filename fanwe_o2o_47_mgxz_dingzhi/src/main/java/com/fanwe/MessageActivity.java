@@ -11,7 +11,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Message;
 import com.fanwe.model.PageModel;
@@ -101,7 +101,7 @@ public class MessageActivity extends BaseActivity {
 		if (mPage.increment()) {
 			requestData(true);
 		} else {
-			SDToast.showToast("没有更多数据了");
+			MGToast.showToast("没有更多数据了");
 			mPtr.onRefreshComplete();
 		}
 	}

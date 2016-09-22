@@ -15,7 +15,7 @@ import com.fanwe.BaseActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.ShopListAdapter;
@@ -93,7 +93,7 @@ public class MyCouponDetailActivity extends BaseActivity {
         Intent intent = getIntent();
         mModel = (ModelGroupCoupon) intent.getSerializableExtra(EXTRA_COUPONLISTACTITEMMODEL);
         if (mModel == null) {
-            SDToast.showToast("实体为空");
+            MGToast.showToast("实体为空");
             finish();
         }
     }

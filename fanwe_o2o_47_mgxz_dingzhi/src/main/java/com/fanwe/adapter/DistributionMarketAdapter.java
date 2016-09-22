@@ -19,7 +19,7 @@ import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -73,7 +73,7 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
                 @Override
                 public void onClick(View v) {
                     if (model.getIs_delete() == 1) {
-                        SDToast.showToast("已经代言过了!");
+                        MGToast.showToast("已经代言过了!");
                         return;
                     }
                     currPosition = position;

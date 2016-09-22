@@ -33,7 +33,7 @@ import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDOtherUtil;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
@@ -321,7 +321,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             clickModifyPassword(v);
         } else if (v == mLl_delivery_address) {
             // clickDeliveryAddress(v);
-            SDToast.showToast("此功能已下线,暂不可用.");
+            MGToast.showToast("此功能已下线,暂不可用.");
         } else if (v == mLl_delivery_address_dc) {
             clickDeliveryAddressDc(v);
         } else if (v == mLl_bind_qq) {
@@ -364,7 +364,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             intent.putExtra(NoticeDetailActivity.EXTRA_NOTICE_ID, noticeId);
             startActivity(intent);
         } else {
-            SDToast.showToast("未找到关于我们ID");
+            MGToast.showToast("未找到关于我们ID");
         }
     }
 
@@ -377,7 +377,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             Intent intent = SDIntentUtil.getIntentCallPhone(kfPhone);
             SDActivityUtil.startActivity(this, intent);
         } else {
-            SDToast.showToast("未找到客服电话");
+            MGToast.showToast("未找到客服电话");
         }
     }
 
@@ -411,11 +411,11 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             @Override
             public void onClick(View v) {
                 if ("".equals(mInputName.getText().toString())) {
-                    SDToast.showToast("名字不能为空!");
+                    MGToast.showToast("名字不能为空!");
                     return;
                 }
                 if (mInputName.getText().toString().contains("米果")) {
-                    SDToast.showToast("用户已被占用!");
+                    MGToast.showToast("用户已被占用!");
                     return;
                 }
                 nickName = mInputName.getText().toString();
@@ -464,7 +464,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
                     @Override
                     public void onFailure(HttpException error, String msg) {
-                        SDToast.showToast("修改失败,请检查网络...");
+                        MGToast.showToast("修改失败,请检查网络...");
                     }
                 });
     }
@@ -501,7 +501,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
                 SDHandlerUtil.runOnUiThread(new Runnable() {
                     public void run() {
                         mTv_cache_size.setText("0.00B");
-                        SDToast.showToast("清除完毕");
+                        MGToast.showToast("清除完毕");
                     }
                 });
             }
@@ -674,12 +674,12 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     private boolean validateParams() {
         mStrUsername = mEt_username.getText().toString();
         if (isEmpty(mStrUsername)) {
-            SDToast.showToast("用户名不能为空");
+            MGToast.showToast("用户名不能为空");
             return false;
         }
         mStrEmail = mEt_email.getText().toString();
         if (isEmpty(mStrEmail)) {
-            SDToast.showToast("邮箱不能为空");
+            MGToast.showToast("邮箱不能为空");
             return false;
         }
         return true;
@@ -730,7 +730,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         if (UserConstants.USER_INFO_METHOD.equals(method)) {
-            SDToast.showToast("修改成功");
+            MGToast.showToast("修改成功");
             App.getInstance().setUserNickName(nickName);
             SDEventManager.post(EnumEventTag.UPLOAD_USER_INFO_SUCCESS.ordinal());
         }

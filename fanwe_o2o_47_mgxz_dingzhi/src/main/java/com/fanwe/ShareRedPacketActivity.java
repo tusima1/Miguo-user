@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.listener.TextMoney;
 import com.fanwe.model.RedPacket_WithdrawModel;
@@ -135,12 +135,12 @@ public class ShareRedPacketActivity extends BaseActivity{
 		
 		
 		if (number.startsWith("0")||money.startsWith("0")) {
-			SDToast.showToast("不能以 0 开头,请输入一个正确的数");
+			MGToast.showToast("不能以 0 开头,请输入一个正确的数");
 			mTv_commitMoney.setText("0.00");
 			return;
 		}
 		if ("".equals(number)|| "".equals(money)) {
-			SDToast.showToast("金额或红包个数不能为空");
+			MGToast.showToast("金额或红包个数不能为空");
 			mTv_commitMoney.setText("0.00");
 			return;
 		}
@@ -150,12 +150,12 @@ public class ShareRedPacketActivity extends BaseActivity{
 		commitMoney=Integer.valueOf(money).intValue();
 		
 		if (this.money <commitMoney) {
-			SDToast.showToast("不能超过总金额!");
+			MGToast.showToast("不能超过总金额!");
 			mTv_commitMoney.setText("0.00");
 			return;
 		}
 		if (commitMoney<num) {
-			SDToast.showToast("金额不得小于红包个数");
+			MGToast.showToast("金额不得小于红包个数");
 			mTv_commitMoney.setText("0.00");
 			return;
 		}
@@ -210,7 +210,7 @@ public class ShareRedPacketActivity extends BaseActivity{
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
 				if (actModel.getStatus()==1) {
-//					SDToast.showToast("红包发送成功!");
+//					MGToast.showToast("红包发送成功!");
 					getData();
 //					UmengSocialManager.openShare(
 //							actModel.getShare_title(),

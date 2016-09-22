@@ -117,14 +117,14 @@ public class Fx_GoodsMarketActivity extends BaseActivity{
 				
 				@Override
 				public void onClick(View v) {
-					SDToast.showToast("position-fx:"+position);
+					MGToast.showToast("position-fx:"+position);
 				}
 			});
 			holder.commit_buy.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					SDToast.showToast("position-buy:"+position);
+					MGToast.showToast("position-buy:"+position);
 				}
 			});
 			

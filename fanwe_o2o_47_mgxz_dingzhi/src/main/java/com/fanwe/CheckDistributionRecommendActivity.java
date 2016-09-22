@@ -12,7 +12,7 @@ import com.fanwe.adapter.DistributionRecommendAdapter.DistributionRecommendAdapt
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.DistributionRecommendModel;
 import com.fanwe.model.PageModel;
@@ -83,7 +83,7 @@ public class CheckDistributionRecommendActivity extends BaseActivity
 
 		if (mUserId <= 0)
 		{
-			SDToast.showToast("id为空");
+			MGToast.showToast("id为空");
 		}
 	}
 
@@ -127,7 +127,7 @@ public class CheckDistributionRecommendActivity extends BaseActivity
 					requestData(true);
 				} else
 				{
-					SDToast.showToast("未找到更多数据");
+					MGToast.showToast("未找到更多数据");
 					mPtrlv_content.onRefreshComplete();
 				}
 			}

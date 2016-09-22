@@ -10,7 +10,7 @@ import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.BaseActModel;
@@ -332,7 +332,7 @@ public class OrderWait2UseOutAdapter extends SDBaseAdapter<OrderOutItem> {
 					@Override
 					public void onSuccess(ResponseInfo<String> responseInfo) {
 						if (actModel.getStatus() == 1) {
-							SDToast.showToast("订单取消成功");
+							MGToast.showToast("订单取消成功");
 							mListModel.remove(position);
 							notifyDataSetChanged();
 						}

@@ -14,7 +14,7 @@ import com.fanwe.RouteDetailActivity;
 import com.fanwe.adapter.MapDrivingRouteAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.baidumap.BaiduMapManager.OnGetDrivingRoutePlanResultListener;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.MapDrivingRouteModel;
 
 /**
@@ -76,11 +76,11 @@ public class RouteinfoTabDrivingFragment extends RouteinfoTabBaseFragment
 						mAdapter.updateData(mListModel);
 					} else
 					{
-						SDToast.showToast("未获取到驾驶线路");
+						MGToast.showToast("未获取到驾驶线路");
 					}
 				} else
 				{
-					SDToast.showToast("未获取到驾驶线路");
+					MGToast.showToast("未获取到驾驶线路");
 				}
 				if (mListener != null)
 				{

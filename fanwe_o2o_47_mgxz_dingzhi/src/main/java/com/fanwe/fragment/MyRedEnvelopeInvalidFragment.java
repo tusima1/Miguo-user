@@ -15,7 +15,7 @@ import com.fanwe.adapter.MyRedEnvelopeAdapter;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RedEnvelopeModel;
@@ -102,7 +102,7 @@ public class MyRedEnvelopeInvalidFragment extends BaseFragment
 					requestData(true);
 				} else
 				{
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mPtrlv_content.onRefreshComplete();
 				}
 			}

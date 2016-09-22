@@ -22,7 +22,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.ExpressionContainerModel;
@@ -249,7 +249,7 @@ public class AddDynamicActivity extends BaseActivity
 		mStrContent = mEt_content.getText().toString();
 		if (isEmpty(mStrContent))
 		{
-			SDToast.showToast("请输入内容");
+			MGToast.showToast("请输入内容");
 			return;
 		}
 

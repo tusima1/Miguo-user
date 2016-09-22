@@ -19,7 +19,7 @@ public class MGStringFormatter {
         if(maybeInt == null || maybeInt.equals("")){
             return 0;
         }
-        int a=Integer.MIN_VALUE;
+        int a=0;
         try {
             a= Integer.valueOf(maybeInt);
         } catch (NumberFormatException e) {

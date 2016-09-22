@@ -24,7 +24,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.utils.SDOtherUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
@@ -130,14 +130,14 @@ public class InputSiteActivity extends BaseActivity
 		List<RequestUrlModel> listModel = RequestUrlModelDao.queryAll();
 		if (listModel == null || listModel.isEmpty())
 		{
-			SDToast.showToast("未找到请求链接");
+			MGToast.showToast("未找到请求链接");
 			return;
 		}
 
 		Activity activity = SDActivityManager.getInstance().getLastActivity();
 		if (activity == null)
 		{
-			SDToast.showToast("获得最后一个activity为空");
+			MGToast.showToast("获得最后一个activity为空");
 			return;
 		}
 
@@ -153,7 +153,7 @@ public class InputSiteActivity extends BaseActivity
 				RequestUrlModel model = adapter.getItem(index);
 				String text = model.toString();
 				SDOtherUtil.copyText(text);
-				SDToast.showToast("已经复制链接");
+				MGToast.showToast("已经复制链接");
 			}
 
 			@Override
@@ -217,7 +217,7 @@ public class InputSiteActivity extends BaseActivity
 			public void onFailure(HttpException error, String msg)
 			{
 				
-				SDToast.showToast("地址不可用");
+				MGToast.showToast("地址不可用");
 			}
 
 			@Override
@@ -240,7 +240,7 @@ public class InputSiteActivity extends BaseActivity
 		mStrSite = mActv_site.getText().toString();
 		if (isEmpty(mStrSite))
 		{
-			SDToast.showToast("地址不能为空");
+			MGToast.showToast("地址不能为空");
 			return false;
 		}
 		return true;

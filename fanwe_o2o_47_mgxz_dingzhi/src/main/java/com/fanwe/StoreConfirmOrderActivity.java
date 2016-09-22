@@ -16,7 +16,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Cart_doneActModel;
@@ -276,7 +276,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 					culcalatePay();
 				} else {
 					if (number.startsWith(".")) {
-						SDToast.showToast("请输入一个正确的数字!");
+						MGToast.showToast("请输入一个正确的数字!");
 						return;
 					}
 					money = Float.parseFloat(number);
@@ -307,7 +307,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 
 				if (!isEmpty(number)) {
 					if (number.startsWith(".")) {
-						SDToast.showToast("请输入一个正确的数字!");
+						MGToast.showToast("请输入一个正确的数字!");
 						return;
 					}
 					money = Float.parseFloat(number);
@@ -368,7 +368,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 					culcalatePay();
 				} else {
 					if (number.startsWith(".")) {
-						SDToast.showToast("请输入一个正确的数字!");
+						MGToast.showToast("请输入一个正确的数字!");
 						return;
 					}
 					money2 = Float.parseFloat(number);
@@ -416,7 +416,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 				}
 				if (!isEmpty(number)) {
 					if (number.startsWith(".")) {
-						SDToast.showToast("请输入一个正确的数字!");
+						MGToast.showToast("请输入一个正确的数字!");
 						return;
 					}
 					money2 = Float.parseFloat(number);
@@ -622,9 +622,9 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 				bd4 = bd4.setScale(1, BigDecimal.ROUND_HALF_UP);
 				float yueMoney = Float.parseFloat(bd4 + "");
 				if (money == 0) {
-					SDToast.showToast("请输入消费金额");
+					MGToast.showToast("请输入消费金额");
 				} else if (money > yueMoney && payId == 0) {
-					SDToast.showToast("请选择支付方式");
+					MGToast.showToast("请选择支付方式");
 
 				} else {
 					if (v.isClickable()) {
@@ -670,7 +670,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 			mEt_NoYouhui.setTextColor(getResources().getColor(
 					R.color.store_youhui_money));
 			if (showToast) {
-				SDToast.showToast("不参与优惠的金额过大!");
+				MGToast.showToast("不参与优惠的金额过大!");
 			}
 			return false;
 		}

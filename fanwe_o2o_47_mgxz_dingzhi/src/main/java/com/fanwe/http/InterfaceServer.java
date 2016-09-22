@@ -14,7 +14,7 @@ import com.fanwe.http.listener.proxy.RequestCallBackProxy;
 import com.fanwe.library.utils.AESUtil;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDBase64;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.RequestModel.MultiFile;
 import com.fanwe.model.RequestModel.RequestDataType;
@@ -97,7 +97,7 @@ public class InterfaceServer
 			}
 		} else
 		{
-			SDToast.showToast("网络不可用");
+			MGToast.showToast("网络不可用");
 			responseListener.onFailure(null, "网络不可用");
 			responseListener.onFinish();
 			return null;

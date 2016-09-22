@@ -12,7 +12,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Message;
 import com.fanwe.model.Message_Activty;
@@ -157,7 +157,7 @@ public class MyMessageActivity extends BaseActivity {
 		if (mPage.increment()) {
 			requestData(true);
 		} else {
-			SDToast.showToast("没有更多数据了");
+			MGToast.showToast("没有更多数据了");
 			mTo_message.onRefreshComplete();
 		}
 	}
@@ -222,7 +222,7 @@ public class MyMessageActivity extends BaseActivity {
 	protected void bindActivityData(Message_Activty activitiy) {
 		iv_icon1.setBackgroundResource(R.drawable.my_activities_photo);
 		if (activitiy == null) {
-			SDToast.showToast("活动消息的数据不存在!服务器没有传递或者解析错误!");
+			MGToast.showToast("活动消息的数据不存在!服务器没有传递或者解析错误!");
 		} else {
 
 			int activity_msg_count = activitiy.getNum();

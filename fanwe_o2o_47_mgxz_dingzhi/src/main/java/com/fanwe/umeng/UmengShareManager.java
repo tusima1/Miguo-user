@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
 import com.umeng.socialize.PlatformConfig;
@@ -122,7 +122,7 @@ public class UmengShareManager {
                         onSharedListener.doFail();
                     }
                 } else {
-                    SDToast.showToast(arg0 + "分享失败");
+                    MGToast.showToast(arg0 + "分享失败");
                 }
             }
 
@@ -133,7 +133,7 @@ public class UmengShareManager {
                         onSharedListener.doFail();
                     }
                 }
-                SDToast.showToast(arg0 + "分享取消");
+                MGToast.showToast(arg0 + "分享取消");
 
             }
         };
@@ -201,7 +201,7 @@ public class UmengShareManager {
             umImage = new UMImage(mContext, BitmapFactory.decodeResource(mContext.getResources(), resId));
         } catch (Exception e) {
             e.printStackTrace();
-            SDToast.showToast("解析资源id错误");
+            MGToast.showToast("解析资源id错误");
         }
         return umImage;
     }

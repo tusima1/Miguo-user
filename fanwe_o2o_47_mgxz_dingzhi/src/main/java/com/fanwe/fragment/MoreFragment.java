@@ -28,7 +28,7 @@ import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
@@ -218,7 +218,7 @@ public class MoreFragment extends BaseFragment
 			SDActivityUtil.startActivity(this, intent);
 		} else
 		{
-			SDToast.showToast("未找到客服电话");
+			MGToast.showToast("未找到客服电话");
 		}
 	}
 
@@ -243,7 +243,7 @@ public class MoreFragment extends BaseFragment
 			startActivity(intent);
 		} else
 		{
-			SDToast.showToast("未找到关于我们ID");
+			MGToast.showToast("未找到关于我们ID");
 		}
 	}
 
@@ -277,7 +277,7 @@ public class MoreFragment extends BaseFragment
 					public void run()
 					{
 						mTv_cache_size.setText("0.00B");
-						SDToast.showToast("清除完毕");
+						MGToast.showToast("清除完毕");
 					}
 				});
 			}

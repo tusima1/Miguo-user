@@ -34,7 +34,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.HoltelModel;
@@ -196,7 +196,7 @@ public class HoltelSearchListActivity extends BaseActivity {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (mActModel.getList() != null) {
                     if (mActModel.getList().size() < mActModel.getPage_size()) {
-                        SDToast.showToast("没有更多数据了");
+                        MGToast.showToast("没有更多数据了");
                         mPtrlvContent.onRefreshComplete();
                     } else {
                         page = mActModel.getPage_now() + 1;

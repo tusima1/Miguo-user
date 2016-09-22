@@ -20,7 +20,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_orderGoodsModel;
@@ -94,7 +94,7 @@ public class RefundGoodsActivity extends BaseActivity
 		mListModel.add(uc_orderModel);
 		if (mId <= 0)
 		{
-			SDToast.showToast("id为空");
+			MGToast.showToast("id为空");
 			finish();
 		}
 	}
@@ -141,7 +141,7 @@ public class RefundGoodsActivity extends BaseActivity
 		mStrContent = mEt_content.getText().toString();
 		if (isEmpty(mStrContent))
 		{
-			SDToast.showToast("请输入内容");
+			MGToast.showToast("请输入内容");
 			return ;
 		}
 		tuiKuan();//退款

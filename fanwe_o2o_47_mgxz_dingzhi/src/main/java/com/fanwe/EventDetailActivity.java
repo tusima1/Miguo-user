@@ -13,7 +13,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Event_edtailModelList;
@@ -148,7 +148,7 @@ private void registerMessageReceiver() {
 					requestDetail(true);
 				}else
 				{
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mPtrsvAll.onRefreshComplete();
 				}
 			}
@@ -256,14 +256,14 @@ private void registerMessageReceiver() {
 	{
 		if (mActModel == null)
 		{
-			SDToast.showToast("未找到可分享内容");
+			MGToast.showToast("未找到可分享内容");
 			return;
 		}
 
 		Event_infoModel infoModel = mActModel.getEvent_info();
 		if (infoModel == null)
 		{
-			SDToast.showToast("未找到可分享内容");
+			MGToast.showToast("未找到可分享内容");
 			return;
 		}
 		String content = infoModel.getName() + infoModel.getShare_url();
