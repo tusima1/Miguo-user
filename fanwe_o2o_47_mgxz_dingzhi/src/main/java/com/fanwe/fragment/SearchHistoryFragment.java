@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.fanwe.adapter.HoltelSearchAdapter;
 import com.fanwe.adapter.SearchHistoryAdapter;
 import com.fanwe.adapter.SearchHistoryAdapter.OnSearchHistoryListener;
 import com.fanwe.library.utils.SDViewUtil;

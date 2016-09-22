@@ -13,12 +13,10 @@ import com.fanwe.fragment.HoltelSearchFragment.OnHoltelSearchListener;
 import com.fanwe.fragment.TimeFragment;
 import com.fanwe.fragment.TimeFragment.OnTimeListener;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;

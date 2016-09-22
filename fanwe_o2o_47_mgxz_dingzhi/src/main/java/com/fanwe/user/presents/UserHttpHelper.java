@@ -7,7 +7,6 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;

@@ -4,15 +4,12 @@ import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.sunday.eventbus.SDEventManager;
 
-import android.R.integer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 public class GuideActivity extends BaseActivity {

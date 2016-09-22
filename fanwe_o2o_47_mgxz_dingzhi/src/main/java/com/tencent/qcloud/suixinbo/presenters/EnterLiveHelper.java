@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.o2o.miguo.R;

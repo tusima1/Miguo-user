@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.InitAdvsMultiActivity;
-import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;

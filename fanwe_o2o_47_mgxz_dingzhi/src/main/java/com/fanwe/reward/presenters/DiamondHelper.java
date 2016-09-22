@@ -11,7 +11,6 @@ import com.fanwe.reward.model.DiamondUserOwnEntity;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
-import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.imcore.Context;

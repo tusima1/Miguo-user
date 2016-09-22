@@ -41,7 +41,6 @@
     <color name="store_youhui_money">#f50c0c</color>
 
     <color name="text_order_select">#75bdb9</color>
-    <color name="text_top_bar_name">#4d4d4d</color>
     <color name="text_cart_shop">#2ee6d3</color>
 
     <color name="rgb_898989">#595959</color>
@@ -64,7 +63,6 @@
     <color name="dark_20">#33000000</color>
     <color name="gray_cc">#CCCCCC</color>
     <color name="dark_30">#1E000000</color>
-    <color name="dark_14">#0E000000</color>
     <color name="white_80">#CCFFFFFF</color>
     <color name="orange_red_packet">#FFCC00</color><!--红包界面的颜色-->
     <color name="white_30">#4D000000</color>

@@ -3,17 +3,14 @@ package com.miguo.live.views.customviews;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
-import com.tencent.rtmp.TXLivePlayer;
 
 /**
  *

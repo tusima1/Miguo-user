@@ -4,7 +4,6 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.library.fragment.WebViewFragment.EnumProgressMode;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 import android.os.Bundle;
 

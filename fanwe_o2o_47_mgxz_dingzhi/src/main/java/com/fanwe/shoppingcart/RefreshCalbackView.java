@@ -2,8 +2,6 @@ package com.fanwe.shoppingcart;
 
 import com.fanwe.base.CallbackView;
 
-import java.util.List;
-
 /**
  * Created by Administrator on 2016/8/22.
  */

@@ -7,7 +7,6 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
-import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 /**
  * Created by Administrator on 2016/8/4.

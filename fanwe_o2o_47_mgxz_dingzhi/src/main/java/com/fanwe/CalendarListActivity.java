@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.MyCalendar;
 import com.fanwe.customview.MyCalendar.OnDaySelectListener;
-import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.sunday.eventbus.SDBaseEvent;
 
 import android.content.Context;
 import android.content.Intent;

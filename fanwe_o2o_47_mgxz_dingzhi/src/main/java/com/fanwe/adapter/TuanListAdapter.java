@@ -1,7 +1,6 @@
 package com.fanwe.adapter;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 import android.app.Activity;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fanwe.MyCollectionActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
@@ -22,7 +20,6 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.o2o.miguo.R;
-import com.umeng.socialize.utils.Log;
 
 public class TuanListAdapter extends SDSimpleBaseAdapter<GoodsModel>
 {

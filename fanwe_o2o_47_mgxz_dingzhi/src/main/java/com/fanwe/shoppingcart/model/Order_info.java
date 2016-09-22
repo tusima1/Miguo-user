@@ -1,7 +1,5 @@
 package com.fanwe.shoppingcart.model;
 
-import org.stringtemplate.v4.STErrorListener;
-
 import java.io.Serializable;
 
 /**

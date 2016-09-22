@@ -68,7 +68,6 @@
     <!-- 新增 -->
     <string name="commit">提现</string>
     <string name="text_fenxiao_tui">推广我的小店</string>
-    <string name="text_dingdan">本次结算生成一个订单,商品不可单独退款</string>
     <string name="action_settings">Settings</string>
     <string name="store_youhui_text">除详询商家、酒水、特价菜不可用</string>
 
@@ -98,11 +97,8 @@
 
     <string name="red_dialog_title">发红包给粉丝</string>
     <string name="red_type_string">选择类型</string>
-    <string name="shop_name">商店名称</string>
     <string name="red_count_string">选择数量</string>
-    <string name="red_count_all">全部</string>
 
-    <string name="red_send">发送</string>
     <string name="red_time_countdown">抢红包倒计时</string>
     <string name="pop_share_live">送朋友20钻，如果朋友本场有消费，你可以共享直播收益的5%</string>
 

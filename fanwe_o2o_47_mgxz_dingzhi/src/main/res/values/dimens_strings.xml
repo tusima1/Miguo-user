@@ -2,6 +2,5 @@
 <resources>
 
     <!-- item的左边宽度 -->
-    <string name="layout_widthPercent_item_left">24.2%w</string>
-   
+
 </resources>

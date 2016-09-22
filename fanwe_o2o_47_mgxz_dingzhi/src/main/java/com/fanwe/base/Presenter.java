@@ -1,7 +1,5 @@
 package com.fanwe.base;
 
-import com.fanwe.user.model.UserInfoNew;
-
 /*
  * 页面展示逻辑基类
  */

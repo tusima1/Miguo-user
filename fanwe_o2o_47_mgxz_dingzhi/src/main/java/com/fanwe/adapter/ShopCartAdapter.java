@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;

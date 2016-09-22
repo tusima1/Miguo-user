@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.List;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +8,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.DeliveryAddressSelectActivty;
 import com.fanwe.app.App;
-import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
-import com.fanwe.library.dialog.SDDialogMenu;
-import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.Consignee_infoModel;
-import com.fanwe.model.Delivery_listModel;
-import com.fanwe.model.VoucherModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
 

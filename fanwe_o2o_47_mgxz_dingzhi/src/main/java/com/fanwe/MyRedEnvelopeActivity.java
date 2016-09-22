@@ -16,12 +16,8 @@ import android.widget.TextView;
 
 import com.fanwe.adapter.MyDistritionPagerAdapter;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.fragment.ExchangeRedEnvelopeFragment;
 import com.fanwe.fragment.MyRedEnvelopeFragment;
 import com.fanwe.fragment.MyRedEnvelopeInvalidFragment;
-import com.fanwe.library.customview.SDTabItemCorner;
-import com.fanwe.library.customview.SDTabItemCorner.EnumTabPosition;
-import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
 

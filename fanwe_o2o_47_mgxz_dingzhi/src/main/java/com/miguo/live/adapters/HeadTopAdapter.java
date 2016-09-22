@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
