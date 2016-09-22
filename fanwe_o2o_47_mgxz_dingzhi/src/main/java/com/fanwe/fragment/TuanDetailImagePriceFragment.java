@@ -25,7 +25,7 @@ import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.customview.SDSlidingPlayView.SDSlidingPlayViewOnPageChangeListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Deal_attrModel;
@@ -237,13 +237,13 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
             //当前未登录.
             int status = mDealModel.getTime_status();
             if (status == 0) {
-                SDToast.showToast("商品活动未开始。");
+                MGToast.showToast("商品活动未开始。");
                 return;
             } else if (status == 1) {
                 addToLocalShopping();
                 goToShopping();
             } else if (status == 2) {
-                SDToast.showToast("商品已经过期。");
+                MGToast.showToast("商品已经过期。");
                 return;
             }
         }
@@ -305,7 +305,7 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
 
     @Override
     public void onFailue(String responseBody) {
-        SDToast.showToast(responseBody);
+        MGToast.showToast(responseBody);
 
     }
 }

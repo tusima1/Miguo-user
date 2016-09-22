@@ -13,7 +13,7 @@ import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.utils.AESUtil;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDBase64;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.RequestModel.ResponseDataType;
@@ -211,7 +211,7 @@ public class RequestCallBackProxy extends RequestCallBack<String> {
 
     private void showErrorToast(String text) {
         if (mRequestModel != null && mRequestModel.ismIsNeedShowErrorTip()) {
-            SDToast.showToast(text);
+            MGToast.showToast(text);
         }
     }
 

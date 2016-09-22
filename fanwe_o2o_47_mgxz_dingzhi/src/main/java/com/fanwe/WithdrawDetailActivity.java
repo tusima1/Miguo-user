@@ -12,7 +12,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
@@ -135,7 +135,7 @@ public class WithdrawDetailActivity extends BaseActivity
 		} else
 		{
 			finish();
-			SDToast.showToast("提现提交申请成功，等待审核");
+			MGToast.showToast("提现提交申请成功，等待审核");
 		}
 	}
 
@@ -161,7 +161,7 @@ public class WithdrawDetailActivity extends BaseActivity
 				if (actModel.getStatus() > 0)
 				{
 					finish();
-					SDToast.showToast("绑定银行 卡申请成功，等待审核");
+					MGToast.showToast("绑定银行 卡申请成功，等待审核");
 				}
 				super.onSuccess(responseInfo);
 			}
@@ -175,7 +175,7 @@ public class WithdrawDetailActivity extends BaseActivity
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				super.onFailure(error, msg);
-				SDToast.showToast(msg);
+				MGToast.showToast(msg);
 			}
 
 		});

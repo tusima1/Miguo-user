@@ -14,7 +14,7 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Youhui_indexActModel;
 import com.fanwe.model.Youhui_infoModel;
@@ -63,7 +63,7 @@ public class YouHuiDetailActivity extends BaseActivity
 		getIntentData();
 		if (mId <= 0)
 		{
-			SDToast.showToast("id为空");
+			MGToast.showToast("id为空");
 			finish();
 			return;
 		}
@@ -113,14 +113,14 @@ public class YouHuiDetailActivity extends BaseActivity
 	{
 		if (mActModel == null)
 		{
-			SDToast.showToast("未找到可分享内容");
+			MGToast.showToast("未找到可分享内容");
 			return;
 		}
 
 		Youhui_infoModel infoModel = mActModel.getYouhui_info();
 		if (infoModel == null)
 		{
-			SDToast.showToast("未找到可分享内容");
+			MGToast.showToast("未找到可分享内容");
 			return;
 		}
 

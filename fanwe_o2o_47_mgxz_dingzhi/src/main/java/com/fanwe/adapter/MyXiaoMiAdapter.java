@@ -22,7 +22,6 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -37,6 +36,7 @@ import com.fanwe.utils.RemineContance;
 import com.fanwe.utils.RemineHelper;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
                         if (insertHistory(String.valueOf(model.getId()), simpleDateFormat.format(date))) {
                             clickAlert(model.getId());
                         } else {
-                            SDToast.showToast("您已经提醒过该成员，明天再试试吧!");
+                            MGToast.showToast("您已经提醒过该成员，明天再试试吧!");
                         }
                     }
                 });

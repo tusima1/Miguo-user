@@ -21,7 +21,7 @@ import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Version_indexActModel;
 import com.fanwe.o2o.miguo.R;
@@ -116,12 +116,12 @@ public class AppUpgradeService extends Service {
                 // TODO 弹窗口提示升级
                 showDialogUpgrade();
             } else {
-                SDToast.showToast("未找到下载地址");
+                MGToast.showToast("未找到下载地址");
             }
         } else {
             if (mStartType == 1) // 用户手动检测版本
             {
-                SDToast.showToast("当前已是最新版本!");
+                MGToast.showToast("当前已是最新版本!");
             }
         }
 
@@ -210,7 +210,7 @@ public class AppUpgradeService extends Service {
                         return;
                     }
                 }
-                SDToast.showToast("下载失败");
+                MGToast.showToast("下载失败");
             }
 
         });
@@ -227,7 +227,7 @@ public class AppUpgradeService extends Service {
             mNotificationManager.notify(mNotificationId, mNotification);
             mNotificationManager.cancel(mNotificationId);
             SDPackageUtil.installApkPackage(filePath);
-            SDToast.showToast("下载完成");
+            MGToast.showToast("下载完成");
         }
     }
 

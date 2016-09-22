@@ -21,7 +21,7 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.CartGoodsModel;
@@ -208,7 +208,7 @@ public class ShopCartFragment extends BaseFragment {
 	protected void requestSendCode() {
 		mStrMobile = mEt_mobile.getText().toString();
 		if (TextUtils.isEmpty(mStrMobile)) {
-			SDToast.showToast("请输入手机号码");
+			MGToast.showToast("请输入手机号码");
 			mEt_mobile.requestFocus();
 			return;
 		}
@@ -570,19 +570,19 @@ public class ShopCartFragment extends BaseFragment {
 
 			mStrMobile =mEt_mobile.getText().toString();
 			if (TextUtils.isEmpty(mStrMobile)) {
-				SDToast.showToast("请输入手机号");
+				MGToast.showToast("请输入手机号");
 				return;
 			}
 			mStrCode = mEt_code.getText().toString();
 			if (TextUtils.isEmpty(mStrCode)) {
-				SDToast.showToast("请输入验证码");
+				MGToast.showToast("请输入验证码");
 				return;
 			}
 			mStrReference = mEt_reference.getText().toString();
 		}
 		/*
 		 * if (!AppHelper.isLogin(getActivity())) // 未登录 {
-		 * SDToast.showToast("登入后立即去结算！"); }else{
+		 * MGToast.showToast("登入后立即去结算！"); }else{
 		 */
 		// TODO 去结算
 		requestCheckCart();
@@ -791,7 +791,7 @@ public class ShopCartFragment extends BaseFragment {
 		// 如果是从移除收藏夹跳转过来。
 		int size = getSumSeleted(2);
 		if (size == 0) {
-			SDToast.showToast("请选择想删除的商品");
+			MGToast.showToast("请选择想删除的商品");
 			return;
 		}
 		RequestModel request = new RequestModel();
@@ -863,11 +863,11 @@ public class ShopCartFragment extends BaseFragment {
 	private void clickAddToCollect() {
 		int size = getSumSeleted(2);
 		if (size == 0) {
-			SDToast.showToast("请选择想移动到收藏夹的商品");
+			MGToast.showToast("请选择想移动到收藏夹的商品");
 			return;
 		}
 		if (!AppHelper.isLogin()) {
-			SDToast.showToast("请先登入!");
+			MGToast.showToast("请先登入!");
 			return;
 		}
 		RequestModel model = new RequestModel();
@@ -888,7 +888,7 @@ public class ShopCartFragment extends BaseFragment {
 			public void onSuccess(ResponseInfo<String> responseInfo) {
 				if (actModel.getStatus() == 1) {
 					clickDelect(true);
-					SDToast.showToast(actModel.getInfo());
+					MGToast.showToast(actModel.getInfo());
 				}
 			}
 

@@ -40,7 +40,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.EventModel;
 import com.fanwe.model.Events_indexActModel;
@@ -245,7 +245,7 @@ public class EventListFragment extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (!mPage.increment()) {
-                    SDToast.showToast("没有更多数据了");
+                    MGToast.showToast("没有更多数据了");
                     mPtrlvContent.onRefreshComplete();
                 } else {
                     requestData(true);

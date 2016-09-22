@@ -10,8 +10,8 @@ import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDEventManager;
 
 import java.io.IOException;
@@ -70,7 +70,7 @@ public abstract class MgCallback<T> implements Callback {
                         userCurrentInfo.setToken(token);
                     }
                     if (code == 320 || code == 321) {
-                        SDToast.showToast(message);
+                        MGToast.showToast(message);
                         SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {
                         onSuccessResponse(body);
@@ -81,7 +81,7 @@ public abstract class MgCallback<T> implements Callback {
 
             } catch (Exception e) {
                 // Log.e(TAG, e.getMessage());
-                SDToast.showToast(e.getMessage());
+                MGToast.showToast(e.getMessage());
             }
         }
         onFinish();

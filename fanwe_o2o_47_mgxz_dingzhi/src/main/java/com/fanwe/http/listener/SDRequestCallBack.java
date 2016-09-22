@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.library.utils.SDOtherUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -50,7 +50,7 @@ public abstract class SDRequestCallBack<E> extends RequestCallBack<String>
 		if (showToast && actModel instanceof BaseActModel)
 		{
 			BaseActModel baseActModel = (BaseActModel) actModel;
-			SDToast.showToast(baseActModel.getInfo());
+			MGToast.showToast(baseActModel.getInfo());
 		}
 	}
 

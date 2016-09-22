@@ -15,7 +15,6 @@ import com.fanwe.fragment.LoginFragment;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
@@ -32,6 +31,7 @@ import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.TIMCallBack;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
@@ -110,7 +110,7 @@ public class LoginHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 SDDialogManager.dismissProgressDialog();
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -179,6 +179,11 @@ public class LoginHelper extends Presenter {
                 }
 
             }
+
+            @Override
+            public void onFinish() {
+                SDDialogManager.dismissProgressDialog();
+            }
         });
 
     }
@@ -209,7 +214,7 @@ public class LoginHelper extends Presenter {
 
             public void onErrorResponse(String message, String errorCode) {
                 SDDialogManager.dismissProgressDialog();
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
 
@@ -238,7 +243,7 @@ public class LoginHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -248,7 +253,7 @@ public class LoginHelper extends Presenter {
      */
     public void doThirdRegister(final String userPhone, String openid, String captcha, String icon, String nick, String platform) {
         if (TextUtils.isEmpty(platform) || TextUtils.isEmpty(openid)) {
-            SDToast.showToast("第三方登录失败");
+            MGToast.showToast("第三方登录失败");
             if (mActivity != null) {
                 mActivity.finish();
             }
@@ -278,7 +283,7 @@ public class LoginHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
-                SDToast.showToast(message);
+                MGToast.showToast(message);
             }
         });
     }
@@ -300,7 +305,7 @@ public class LoginHelper extends Presenter {
         mTLoginHelper.imLogin(userid, userSign, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
-                SDToast.showToast("IM 认证失败。");
+                MGToast.showToast("IM 认证失败。");
                 App.getInstance().setImLoginSuccess(false);
             }
 
@@ -322,7 +327,7 @@ public class LoginHelper extends Presenter {
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
                 if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
-                    SDToast.showToast("获取用户签名失败。");
+                    MGToast.showToast("获取用户签名失败。");
                     return;
                 }
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
@@ -351,7 +356,7 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast("获取用户签名失败。");
+                MGToast.showToast("获取用户签名失败。");
 
             }
         };
@@ -385,7 +390,7 @@ public class LoginHelper extends Presenter {
 
             dealLoginSuccess(model);
         } else {
-            SDToast.showToast(TextUtils.isEmpty(message) == true ? "登录失败。" : message);
+            MGToast.showToast(TextUtils.isEmpty(message) == true ? "登录失败。" : message);
         }
     }
 

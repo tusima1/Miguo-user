@@ -14,7 +14,7 @@ import com.fanwe.RouteDetailActivity;
 import com.fanwe.adapter.MapBusRouteAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.baidumap.BaiduMapManager.OnGetBusRoutePlanResultListener;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.MapBusRouteModel;
 
 /**
@@ -76,11 +76,11 @@ public class RouteinfoTabBusFragment extends RouteinfoTabBaseFragment
 						mAdapter.updateData(mListModel);
 					} else
 					{
-						SDToast.showToast("未获取到公交线路");
+						MGToast.showToast("未获取到公交线路");
 					}
 				} else
 				{
-					SDToast.showToast("未获取到公交线路");
+					MGToast.showToast("未获取到公交线路");
 				}
 				if (mListener != null)
 				{

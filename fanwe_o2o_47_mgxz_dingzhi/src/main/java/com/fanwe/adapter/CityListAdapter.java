@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
@@ -68,7 +68,7 @@ public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
                             mActivity.setResult(8888);
                             mActivity.finish();
                         } else {
-                            SDToast.showToast("设置城市失败");
+                            MGToast.showToast("设置城市失败");
                         }
                     } else if (mTag == 2) {
                         mActivity.setResult(8888);

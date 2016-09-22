@@ -27,7 +27,7 @@ import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.Deal_indexActModel;
@@ -119,7 +119,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
     private void init() {
         getIntentData();
         if (TextUtils.isEmpty(mId)) {
-            SDToast.showToast("id为空");
+            MGToast.showToast("id为空");
             finish();
             return;
         }

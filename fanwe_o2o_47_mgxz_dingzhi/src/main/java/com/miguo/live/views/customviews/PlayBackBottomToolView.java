@@ -164,6 +164,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
             return;
         }
         LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mAct);
+        inputDialogHelper.dismissDanmu();
 
         inputDialogHelper.show();
     }

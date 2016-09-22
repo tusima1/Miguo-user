@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.EnumLoginState;
@@ -25,8 +24,8 @@ import com.fanwe.library.customview.SDTabItemCorner.EnumTabPosition;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
@@ -261,16 +260,13 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             str.append(entry.getKey() + "--->" + entry.getValue() + "\n");
         }
         Log.d("11", str.toString());
-        //  testViews.setText(str.toString());
+      //  testViews.setText(str.toString());
 
     }
 
-    public void printData(String datas) {
-        // ((EditText)findViewById(R.id.testViews2)).setText(datas);
+    public void printData(String datas){
+       // ((EditText)findViewById(R.id.testViews2)).setText(datas);
     }
-
-    int flag = 1;
-    long time;
 
     /**
      * 跳转到相应的授权页。
@@ -281,7 +277,8 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         su.login(platform, new ILoginCallback() {
             @Override
             public void onSuccess(Map<String, String> data) {
-                //     printData(data);
+                SDDialogManager.showProgressDialog("正在登录,请稍候...");
+           //     printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
                     openId = data.get("unionid");
@@ -309,29 +306,22 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
                 }
                 if (TextUtils.isEmpty(openId)) {
-                    Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                    MGToast.showToast("登录失败");
                     return;
                 }
-                //避免过快请求
-                if ((System.currentTimeMillis() - time) < 100) {
-                    return;
-                } else {
-                    time = System.currentTimeMillis();
-                }
-                //MGToast.showToast("flag:" + flag);
-                flag++;
-                mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
+              //  printData("icon:"+icon+" nick:"+nick +" openid:"+openId);
+               mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
 
             }
 
             @Override
             public void onFaild(String msg) {
-                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                MGToast.showToast("登录失败");
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(LoginActivity.this, "取消登录", Toast.LENGTH_SHORT).show();
+                MGToast.showToast("取消登录");
             }
         });
     }
@@ -454,7 +444,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-        SDToast.showToast(responseBody);
+        MGToast.showToast(responseBody);
     }
 
 

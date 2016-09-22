@@ -82,7 +82,7 @@ public class OrderDetailStoreFragment extends StoreConfirmOrderBaseFragment{
 					int money = Integer.parseInt(number);
 					if(money <= 0 )
 					{
-						SDToast.showToast("请输入金额");
+						MGToast.showToast("请输入金额");
 						mEt_money.setTextColor(Color.parseColor("#ff0000"));
 					}else
 					{

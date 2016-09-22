@@ -255,7 +255,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
 //            if (level < 2) {
 //                Intent intent = new Intent(getActivity(), MemberRankActivity.class);
 //                startActivity(intent);
-//                SDToast.showToast("您还没有提现权限");
+//                MGToast.showToast("您还没有提现权限");
 //            } else {
 //                Intent intent = new Intent(getActivity(), DistributionWithdrawActivity.class);
 //                intent.putExtra("money", modelPersonalHome.getWithdrawals());

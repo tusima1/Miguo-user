@@ -29,7 +29,7 @@ import com.fanwe.library.dialog.SDDialogBase;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -177,7 +177,7 @@ public class MerchantListOrderActivity extends BaseActivity
 		if (++mPage > mTotalPage && mTotalPage > 0)
 		{
 			mPrlvStores.onRefreshComplete();
-			SDToast.showToast("没有更多数据了");
+			MGToast.showToast("没有更多数据了");
 		} else
 		{
 			requestMerchantList(true);

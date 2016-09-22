@@ -5,7 +5,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.miguo.live.model.LiveConstants;
@@ -55,7 +55,7 @@ public class ShoppingCartHelper extends Presenter {
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
-                    SDToast.showToast("添加购物车成功");
+                    MGToast.showToast("添加购物车成功");
                     if(mView!=null){
                         mView.onSuccess(LiveConstants.SHOPPING_CART, null);
                     }
@@ -68,7 +68,7 @@ public class ShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
                 mView.onFailue(message);
             }
         });
@@ -90,7 +90,7 @@ public class ShoppingCartHelper extends Presenter {
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
-                    SDToast.showToast("添加购物车成功。");
+                    MGToast.showToast("添加购物车成功。");
                     if(mView!=null){
                         mView.onSuccess(LiveConstants.SHOPPING_CART, null);
                     }
@@ -104,7 +104,7 @@ public class ShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                SDToast.showToast(message);
+                MGToast.showToast(message);
                 mView.onFailue(message);
             }
         });

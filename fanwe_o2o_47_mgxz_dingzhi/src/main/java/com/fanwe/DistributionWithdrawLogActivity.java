@@ -13,7 +13,7 @@ import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
 import com.fanwe.commission.presenter.LogHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
@@ -106,7 +106,7 @@ public class DistributionWithdrawLogActivity extends BaseActivity implements Cal
                 if (mPage.increment()) {
                     requestData(true);
                 } else {
-                    SDToast.showToast("没有更多数据了");
+                    MGToast.showToast("没有更多数据了");
                     mPtrlv_content.onRefreshComplete();
                 }
             }

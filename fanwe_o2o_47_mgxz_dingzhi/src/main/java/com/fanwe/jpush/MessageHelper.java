@@ -32,7 +32,7 @@ public class MessageHelper {
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
-//				SDToast.showToast("获取消息数量失败!");
+//				MGToast.showToast("获取消息数量失败!");
 			}
 
 			@Override

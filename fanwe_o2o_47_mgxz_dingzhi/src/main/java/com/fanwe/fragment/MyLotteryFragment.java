@@ -17,7 +17,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
@@ -129,7 +129,7 @@ public class MyLotteryFragment extends BaseFragment
 			{
 				if (!mPage.increment())
 				{
-					SDToast.showToast("没有更多数据了");
+					MGToast.showToast("没有更多数据了");
 					mPtrlvContent.onRefreshComplete();
 				} else
 				{

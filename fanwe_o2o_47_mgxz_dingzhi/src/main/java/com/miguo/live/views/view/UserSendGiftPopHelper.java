@@ -16,7 +16,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
-import com.fanwe.base.Root;
 import com.fanwe.model.GiftBean;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.MGStringFormatter;
@@ -33,7 +32,6 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.util.List;
 
@@ -269,8 +267,13 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    String userdiamond = root.getResult().get(0).getBody().get(0).getUserdiamond();
+                    int gift_num = root.getResult().get(0).getBody().get(0).getGift_num();
+                    if (!TextUtils.isEmpty(userdiamond)){
+                        mTvMoney.setText(userdiamond);
+                    }
                     if (mListener!=null){
-                        mListener.onPaySuc(selectedItemInfo, root.getResult().get(0).getBody().get(0).getGift_num());
+                        mListener.onPaySuc(selectedItemInfo, gift_num);
                     }
                 }
             });

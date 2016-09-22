@@ -9,7 +9,7 @@ import com.fanwe.adapter.UserWithdrawLogAdapter;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
@@ -84,7 +84,7 @@ public class UserWithdrawLogActivity extends BaseActivity {
                 if (mPage.increment()) {
                     requestData(true);
                 } else {
-                    SDToast.showToast("未找到更多数据");
+                    MGToast.showToast("未找到更多数据");
                     mPtrlv_content.onRefreshComplete();
                 }
             }

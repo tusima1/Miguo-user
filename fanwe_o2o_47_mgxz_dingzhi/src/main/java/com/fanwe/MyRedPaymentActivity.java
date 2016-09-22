@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.fanwe.adapter.MyRedPaymentAdapter;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.RedEnvelopeModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_ecv_indexActModel;
@@ -106,7 +106,7 @@ public class MyRedPaymentActivity extends BaseActivity {
 				
 				if(mList == null || isEmpty(mList) && mCh_box.isChecked() == false)
 				{
-					SDToast.showToast("请选择红包");
+					MGToast.showToast("请选择红包");
 					return;
 				}
 				Intent intent = new Intent();

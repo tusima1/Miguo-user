@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -123,6 +124,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
 //            refund_status    2   已退款 状态
 //            refund_status    3    退款失败状态
             int consume_count = MGStringFormatter.getInt(model.getConsume_count());
+            Log.e("test","count:"+consume_count);
             int number = MGStringFormatter.getInt(model.getNumber());
             int refunded = MGStringFormatter.getInt(model.getRefunded());
             int refunding = MGStringFormatter.getInt(model.getRefunding());
@@ -156,6 +158,8 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                         mActivity.startActivity(intent);
                     }
                 });
+            }else {
+                tv_evaluate.setVisibility(View.GONE);
             }
 //            int cal_temp = number - refunded - refunding;
 //            if ((mStatus_value == 3 || mStatus_value == 4) && cal_temp - consume_count > 0) {
@@ -169,6 +173,8 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                         gotoRefundApplication(tuan_id);
                     }
                 });
+            }else {
+                tv_tuikuan.setVisibility(View.GONE);
             }
             if (dp_id > 0) {
                 tv_order.setText("已评价");

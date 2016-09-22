@@ -8,7 +8,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.OrderOutItem;
 import com.fanwe.model.RequestModel;
@@ -71,7 +71,7 @@ public class OrderWait2UseActivity extends BaseActivity {
 			public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 				if (mActModel.getItem() != null) {
 					if (mActModel.getItem().size() < mActModel.getPage_size()) {
-						SDToast.showToast("没有更多数据了");
+						MGToast.showToast("没有更多数据了");
 						mPtrlv_content.onRefreshComplete();
 					} else {
 						mPage = mActModel.getPage_now() + 1;

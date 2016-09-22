@@ -28,7 +28,7 @@ import com.fanwe.library.handler.PhotoHandler.PhotoHandlerListener;
 import com.fanwe.library.utils.ImageFileCompresser;
 import com.fanwe.library.utils.ImageFileCompresser.ImageFileCompresserListener;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDToast;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalImageModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -133,7 +133,7 @@ public class SelectImageFragment extends BaseFragment
 			@Override
 			public void onFailure(String msg)
 			{
-				SDToast.showToast(msg);
+				MGToast.showToast(msg);
 			}
 		});
 	}
@@ -154,7 +154,7 @@ public class SelectImageFragment extends BaseFragment
 			@Override
 			public void onFailure(String msg)
 			{
-				SDToast.showToast(msg);
+				MGToast.showToast(msg);
 			}
 
 			@Override
