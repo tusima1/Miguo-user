@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.adapter.MyOrderListGoodsAdapter;
 import com.fanwe.adapter.MyRefundListGoodsAdapter;
 import com.fanwe.adapter.MyRefundListGoodsAdapter.OnPaymentId;
 import com.fanwe.constant.Constant.TitleType;
@@ -23,8 +22,6 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_orderGoodsModel;
-import com.fanwe.model.Uc_orderModel;
 import com.fanwe.model.Uc_orderModelParcelable;
 import com.fanwe.model.Uc_order_refundActModel;
 import com.fanwe.o2o.miguo.R;
@@ -33,7 +30,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
-import com.umeng.socialize.utils.Log;
 
 /**
  * 商品申请退款

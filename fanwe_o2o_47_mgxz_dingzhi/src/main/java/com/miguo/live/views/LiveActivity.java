@@ -34,7 +34,6 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.GiftId;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
@@ -917,7 +916,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && !showBaoBao){
+        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()){
             //弹出宝宝
             mUserBottomTool.clickBaoBao();
             showBaoBao=true;
@@ -1575,10 +1574,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     public void onClick(View view) {
         switch (view.getId()) {
 //                new PopWindow().show(this,R.layout.host_beauty_setting,-1,-2,0,false,root);
-            case R.id.fullscreen_btn:
-                //显示或者清除屏幕
-                switchScreen();
-                break;
+//            case R.id.fullscreen_btn:
+//                //显示或者清除屏幕
+//                switchScreen();
+//                break;
 
             //host2的控制台---------------
             case R.id.camera_controll:
@@ -1608,11 +1607,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 cancelMemberView(backGroundId);
                 break;
             //host2的控制台 end-------------
-            case R.id.beauty_btn:
-                //美颜
-                Log.i(TAG, "onClick " + mBeautyRate);
-
-                mProfile = mBeatuy;
+//            case R.id.beauty_btn:
+//                //美颜
+//                Log.i(TAG, "onClick " + mBeautyRate);
+//
+//                mProfile = mBeatuy;
 //                if (mBeautySettings != null) {
 //                    if (mBeautySettings.getVisibility() == View.GONE) {
 //                        mBeautySettings.setVisibility(View.VISIBLE);
@@ -1625,12 +1624,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                } else {
 //                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
 //                }
-                break;
+//                break;
 
-            case R.id.white_btn:
-                //美白
-                Log.i(TAG, "onClick " + mWhiteRate);
-                mProfile = mWhite;
+//            case R.id.white_btn:
+//                //美白
+//                Log.i(TAG, "onClick " + mWhiteRate);
+//                mProfile = mWhite;
 //                if (mBeautySettings != null) {
 //                    if (mBeautySettings.getVisibility() == View.GONE) {
 //                        mBeautySettings.setVisibility(View.VISIBLE);
@@ -1643,7 +1642,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                } else {
 //                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
 //                }
-                break;
+//                break;
             case R.id.qav_beauty_setting_finish:
 //                mBeautySettings.setVisibility(View.GONE);
 //                mFullControllerUi.setVisibility(View.VISIBLE);

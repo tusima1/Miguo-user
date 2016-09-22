@@ -13,7 +13,6 @@ import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
 import com.fanwe.commission.presenter.LogHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;

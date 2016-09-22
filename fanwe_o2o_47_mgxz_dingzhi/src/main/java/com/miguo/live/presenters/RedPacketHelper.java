@@ -3,7 +3,6 @@ package com.miguo.live.presenters;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.miguo.live.views.customviews.MGToast;

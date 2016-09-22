@@ -209,7 +209,6 @@
                 android:src="@drawable/ic_my_account_change_password" />
 
             <TextView
-                android:id="@+id/tv_modify_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -320,7 +319,6 @@
                 android:src="@drawable/ic_wutu" />
 
             <TextView
-                android:id="@+id/act_more_tv_load_image_in_mobile_net"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="15dip"
@@ -343,7 +341,6 @@
         <!-- 消息提醒 -->
 
         <RelativeLayout
-            android:id="@+id/rl_jpush"
             android:layout_width="fill_parent"
             android:layout_height="55dip"
             android:background="@drawable/selector_white_gray_stroke_top_left_right"
@@ -359,7 +356,6 @@
                 android:src="@drawable/ic_guanyu" />
 
             <TextView
-                android:id="@+id/tv_jpush"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="15dip"
@@ -370,7 +366,6 @@
                 android:textSize="16sp" />
 
             <CheckBox
-                android:id="@+id/cb_jpush"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
@@ -400,7 +395,6 @@
                 android:src="@drawable/ic_qingkong" />
 
             <TextView
-                android:id="@+id/tv_clear_cache"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="15dip"
@@ -595,7 +589,6 @@
                 android:src="@drawable/ic_guanyu" />
 
             <TextView
-                android:id="@+id/tv_about_us"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="15dip"

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.EventDetailActivity;
-import com.fanwe.app.App;
 import com.fanwe.customview.SnapUpCountDownTimerView;
 import com.fanwe.home.viewHolder.ViewHolderTimeLimit;
 import com.fanwe.model.EventModel_List;

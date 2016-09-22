@@ -22,7 +22,6 @@
                 android:src="@drawable/nopic" />
 
             <ImageView
-                android:id="@+id/iv_bc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="1dp"

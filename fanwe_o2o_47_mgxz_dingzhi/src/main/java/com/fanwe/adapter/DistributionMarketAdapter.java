@@ -19,6 +19,7 @@ import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -26,7 +27,9 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.Supplier_fx;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getRepresentMerchant.RootRepresentMerchant;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
@@ -162,10 +165,13 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
 
     }
 
+    List<RootRepresentMerchant> roots;
+
     @Override
     public void onSuccess(String method, List datas) {
         Message message = new Message();
         if (SellerConstants.REPRESENT_MERCHANT.equals(method)) {
+            roots = datas;
             message.what = 0;
         }
         mHandler.sendMessage(message);
@@ -174,16 +180,20 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
 
     @Override
     public void onFailue(String responseBody) {
-
     }
 
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    mListModel.get(currPosition).setIs_delete(1);
-                    notifyDataSetChanged();
-                    showDialog("代言成功，请进入店铺查看");
+                    if (!SDCollectionUtil.isEmpty(roots)) {
+                        //代言失败
+                        MGToast.showToast(roots.get(0).getMessage());
+                    } else {
+                        mListModel.get(currPosition).setIs_delete(1);
+                        notifyDataSetChanged();
+                        showDialog("代言成功，请进入店铺查看");
+                    }
                     break;
             }
         }

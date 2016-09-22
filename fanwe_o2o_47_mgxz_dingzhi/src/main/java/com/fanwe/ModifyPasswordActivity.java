@@ -207,8 +207,9 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
     }
 
     private void clickSubmit() {
-        validateParam();
-        userHttpHelper.userChangePwd(mStrMobile, MD5Util.MD5(mStrPwd), mStrCode);
+        if (validateParam()) {
+            userHttpHelper.userChangePwd(mStrMobile, MD5Util.MD5(mStrPwd), mStrCode);
+        }
     }
 
     private boolean validateParam() {

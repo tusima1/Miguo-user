@@ -39,7 +39,6 @@ import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonLis
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.listener.NumLimitWatcher;

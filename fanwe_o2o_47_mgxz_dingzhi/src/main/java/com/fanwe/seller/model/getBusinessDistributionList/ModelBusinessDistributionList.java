@@ -8,7 +8,7 @@ public class ModelBusinessDistributionList {
 
     private String img;
 
-    private String tuan_name;
+    private String subname;
 
     private String id;
 
@@ -32,12 +32,12 @@ public class ModelBusinessDistributionList {
         return this.img;
     }
 
-    public void setTuan_name(String tuan_name) {
-        this.tuan_name = tuan_name;
+    public String getSubname() {
+        return subname;
     }
 
-    public String getTuan_name() {
-        return this.tuan_name;
+    public void setSubname(String subname) {
+        this.subname = subname;
     }
 
     public void setId(String id) {

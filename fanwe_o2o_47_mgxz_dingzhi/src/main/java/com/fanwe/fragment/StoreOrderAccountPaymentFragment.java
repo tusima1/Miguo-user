@@ -9,11 +9,9 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 
 import com.fanwe.customview.SDPaymentListView;
-import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPaymentFragmentListener;
 import com.fanwe.library.customview.SDViewBase.SDViewBaseListener;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class StoreOrderAccountPaymentFragment extends StoreConfirmOrderBaseFragment{
 

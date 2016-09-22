@@ -2,8 +2,6 @@ package com.fanwe.listener;
 
 import java.math.BigDecimal;
 
-import android.R.integer;
-
 public class TextMoney {
 	/**
 	 * 对金钱的字符串进行处理,保留两位和四舍五入

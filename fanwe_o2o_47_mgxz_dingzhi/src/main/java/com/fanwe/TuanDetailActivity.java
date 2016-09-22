@@ -27,7 +27,6 @@ import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
 import com.fanwe.model.Deal_indexActModel;

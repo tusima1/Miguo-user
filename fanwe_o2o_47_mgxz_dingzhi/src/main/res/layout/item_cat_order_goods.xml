@@ -127,7 +127,6 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/tv_refund"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/selector_white_gray_stroke_bot_left_right"
@@ -138,7 +137,6 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/tv_delivery"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/selector_white_gray_stroke_bot_left_right"
@@ -149,14 +147,12 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/ll_tv_delivery_receive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone" >
 
         <TextView
-            android:id="@+id/tv_query_logistics"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/selector_white_gray_stroke_bot_left_right"
@@ -166,7 +162,6 @@
             android:textColor="@color/main_color" />
 
         <TextView
-            android:id="@+id/tv_confirmation_receipt"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/selector_white_gray_stroke_bot_left_right"
@@ -176,7 +171,6 @@
             android:textColor="@color/main_color" />
 
         <TextView
-            android:id="@+id/tv_did_not_receive"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/selector_white_gray_stroke_bot_left_right"

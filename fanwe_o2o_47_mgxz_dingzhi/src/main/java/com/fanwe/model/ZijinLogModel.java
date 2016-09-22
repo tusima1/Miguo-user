@@ -1,8 +1,6 @@
 package com.fanwe.model;
 
-import com.fanwe.utils.SDFormatUtil;
-
-public class ZijinLogModel 
+public class ZijinLogModel
 {
 	
 	private String desc;

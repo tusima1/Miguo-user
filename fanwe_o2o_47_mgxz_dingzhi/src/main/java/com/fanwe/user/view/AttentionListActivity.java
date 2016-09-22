@@ -1,6 +1,7 @@
 package com.fanwe.user.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,7 +20,6 @@ import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.miguo.live.views.customviews.MGToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,9 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long positionL) {
                 position--;
                 ModelAttentionFocus item = datas.get(position);
-                MGToast.showToast(item.getNick());
+                Intent intent = new Intent(AttentionListActivity.this, UserHomeActivity.class);
+                intent.putExtra("id", item.getFocus_user_id());
+                startActivity(intent);
             }
         });
         ptrl.setRefreshing();

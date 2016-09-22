@@ -7,7 +7,6 @@
         android:layout_width="313dp"
         android:layout_height="@dimen/dp244"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dp140"
         android:background="@drawable/shape_cricle_solid_white"
         android:orientation="vertical">
 

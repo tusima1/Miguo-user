@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Deal_attrModel;
-import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
 

@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.view.RedPacketListActivity;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	

@@ -160,7 +160,7 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
                             for (ModelBusinessDistributionList bean : result.getList()) {
                                 StoreIn_list storeIn_list = new StoreIn_list();
                                 storeIn_list.setId(bean.getId());
-                                storeIn_list.setName(bean.getTuan_name());
+                                storeIn_list.setName(bean.getSubname());
                                 storeIn_list.setImg(bean.getImg());
                                 storeIn_list.setCurrent_price(DataFormat.toFloat(bean.getTuan_price()));
                                 storeIn_list.setOrigin_price(DataFormat.toFloat(bean.getOrigin_price()));

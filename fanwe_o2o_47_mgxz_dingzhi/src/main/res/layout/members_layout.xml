@@ -8,7 +8,6 @@
 
 
     <TextView
-        android:id="@+id/member_tips"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

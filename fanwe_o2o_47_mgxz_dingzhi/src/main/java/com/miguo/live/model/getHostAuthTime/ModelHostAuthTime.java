@@ -5,6 +5,15 @@ package com.miguo.live.model.getHostAuthTime;
  */
 public class ModelHostAuthTime {
     private String insert_time;
+    private String is_host;
+
+    public String getIs_host() {
+        return is_host;
+    }
+
+    public void setIs_host(String is_host) {
+        this.is_host = is_host;
+    }
 
     public String getInsert_time() {
         return insert_time;

@@ -1,8 +1,5 @@
 package com.fanwe.model;
 
-import com.fanwe.library.utils.SDTypeParseUtil;
-import com.fanwe.utils.SDFormatUtil;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 

@@ -234,4 +234,8 @@ public class UserConstants {
      * 获得网红的直播场次
      */
     public static final String GET_SPOKE_PLAY = "GetSpokePlay";
+    /**
+     * 获得关注状态
+     */
+    public static final String USER_ATTENTION = "UserAttention";
 }

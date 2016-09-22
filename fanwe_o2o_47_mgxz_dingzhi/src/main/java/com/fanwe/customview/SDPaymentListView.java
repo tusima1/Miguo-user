@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.model.Payment_listModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 

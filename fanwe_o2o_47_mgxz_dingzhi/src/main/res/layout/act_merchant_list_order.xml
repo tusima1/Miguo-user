@@ -13,7 +13,6 @@
         android:padding="10dp" >
 
         <ImageView
-            android:id="@+id/act_merchant_list_order_iv_search"
             android:layout_width="30dip"
             android:layout_height="30dip"
             android:src="@drawable/search_2" />
