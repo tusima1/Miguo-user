@@ -2206,7 +2206,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void requestSendGift(GiftListBean giftInfo, int num) {
-        giftInfo.setNum(new Random().nextInt(50) + 60);
+        giftInfo.setNum(num);
         giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
         giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
         giftInfo.setUserName(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getNick());
