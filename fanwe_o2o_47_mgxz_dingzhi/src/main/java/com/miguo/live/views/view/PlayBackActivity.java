@@ -168,8 +168,8 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int roomNum=87654321;
-        CurLiveInfo.setRoomNum(roomNum);
+     //   int roomNum=87654321;
+      //  CurLiveInfo.setRoomNum(roomNum);
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
