@@ -20,6 +20,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.MGStringFormatter;
 
 public class TuanListAdapter extends SDSimpleBaseAdapter<GoodsModel>
 {
@@ -93,8 +94,9 @@ public class TuanListAdapter extends SDSimpleBaseAdapter<GoodsModel>
 		}
 		
 		SDViewBinder.setImageView(model.getIcon(), iv_image);
-		SDViewBinder.setTextView(tv_name, model.getSub_name());
-		SDViewBinder.setTextView(tv_brief, model.getBrief());
+
+		SDViewBinder.setTextView(tv_name, MGStringFormatter.getLimitedString(model.getSub_name(),13));
+		SDViewBinder.setTextView(tv_brief, MGStringFormatter.getLimitedString(model.getBrief(),46));
 		
 		tv_original_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); // 设置中划线效果
 		SDViewBinder.setTextView(tv_buy_count, String.valueOf(model.getBuy_count()));
