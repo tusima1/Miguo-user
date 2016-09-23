@@ -136,11 +136,11 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     }
 
 
-    public void onRefreshTuan(boolean refresh,List<CommandGroupBuyBean.Result.Body> bodys1){
-        List<CommandGroupBuyBean.Result.Body> bodys = new ArrayList<>();
-        for(int i = 0; i<12; i++){
-            bodys.addAll(bodys1);
-        }
+    public void onRefreshTuan(boolean refresh,List<CommandGroupBuyBean.Result.Body> bodys){
+//        List<CommandGroupBuyBean.Result.Body> bodys = new ArrayList<>();
+//        for(int i = 0; i<12; i++){
+//            bodys.addAll(bodys1);
+//        }
         if(bodys != null){
             if(refresh){
                 mainActivityHomeFragmentTuanAdapter.notifyDataSetChanged(bodys);
