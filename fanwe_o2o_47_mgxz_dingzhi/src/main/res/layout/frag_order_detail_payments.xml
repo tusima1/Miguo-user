@@ -26,6 +26,13 @@
                 android:textSize="@dimen/text_size_home_recommend_title" />
         </LinearLayout>
 
+        <com.fanwe.customview.MaxHeightListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="1dip"
+            android:id="@+id/paylistview"></com.fanwe.customview.MaxHeightListView>
+
         <LinearLayout
             android:id="@+id/ll_payment"
             android:layout_width="match_parent"

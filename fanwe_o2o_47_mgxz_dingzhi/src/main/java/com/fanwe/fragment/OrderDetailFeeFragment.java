@@ -75,7 +75,7 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
      */
     PaymentTypeInfo currentFeeInfoModel;
 
-    boolean ifYueChecked = true;
+    boolean ifYueChecked = false;
 
     //总金额。
     float totalFloat = 0.00f;
@@ -163,10 +163,10 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         } else {
             if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(needFloat2 + "");
+                yue_fee.setText(yueFloat + "");
                 yue_line.setVisibility(View.VISIBLE);
 
-                need_pay_fee.setText(needFloat2 + "");
+                need_pay_fee.setText(needFloat + "");
                 if (currentFeeInfoModel != null) {
                     pay_type.setText(currentFeeInfoModel.getName());
 

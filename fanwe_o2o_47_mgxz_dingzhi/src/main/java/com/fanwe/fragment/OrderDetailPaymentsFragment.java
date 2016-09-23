@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.ConfirmTopUpActivity;
+import com.fanwe.adapter.PaymentAdapter;
+import com.fanwe.customview.MaxHeightListView;
 import com.fanwe.customview.SDPaymentListView;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
@@ -29,25 +32,28 @@ import java.util.List;
  */
 public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 {
-	@ViewInject(R.id.ll_payment)
-	private LinearLayout mLl_payment;
 
-	private OrderDetailPaymentsFragmentListener mListener;
-	private SDViewNavigatorManager mManager = new SDViewNavigatorManager();
+
+	private PaymentAdapter.PaymentTypeChangeListener mListener;
+
 	/** 选中的支付方式id */
 	private String mPaymentId;
+	@ViewInject(R.id.paylistview)
+	private MaxHeightListView paylistview;
 
 	private List<PaymentTypeInfo> listPayment;
 
+	private PaymentAdapter paymentAdapter;
 
-	public void setmListener(OrderDetailPaymentsFragmentListener listener)
+
+	public void setmListener(PaymentAdapter.PaymentTypeChangeListener listener)
 	{
 		this.mListener = listener;
 	}
 
 	public String  getPaymentId()
 	{
-		return mPaymentId;
+		return paymentAdapter.getCurrentPaymentId();
 	}
 
 	@Override
@@ -60,8 +66,11 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 	protected void init()
 	{
 		super.init();
-		mManager.setmMode(Mode.CAN_NONE_SELECT);
-		//bindData();
+		paymentAdapter = new PaymentAdapter(listPayment,true);
+		if(mListener!=null){
+			paymentAdapter.setPaymentTypeChangeListener(mListener);
+		}
+		paylistview.setAdapter(paymentAdapter);
 	}
 
 	private void resetParams()
@@ -73,71 +82,8 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 	{
 		resetParams();
 		// TODO 生成支付方式
+		paymentAdapter.update(listPayment);
 
-		if(mLl_payment!=null){
-			mLl_payment.removeAllViews();
-		}
-		List<SDViewBase> listView = new ArrayList<SDViewBase>();
-		PaymentTypeInfo foundModel = null;
-		for (PaymentTypeInfo model : listPayment)
-		{
-			if (model.getId() == this.mPaymentId)
-			{
-				foundModel = model;
-			}
-			SDPaymentListView view = new SDPaymentListView(getActivity());
-			view.setData(model);
-			listView.add(view);
-			mLl_payment.addView(view);
-		}
-
-		mManager.setItems(SDCollectionUtil.toArray(listView));
-		mManager.setmListener(new SDViewNavigatorManagerListener()
-		{
-
-			@Override
-			public void onItemClick(View v, int index)
-			{
-
-				/**
-				 * @author didikee
-				 * @date 2016年6月15日 上午10:24:16
-				 * 一行代码
-				 * #14 通过我的小店购买商品，在订单确认页面，如果已经选择了余额付，不能选择支付宝或者微信付，不勾选余额付，可以选择支付宝或者微信付，但是通过线下付的方式到订单确认页面，如果选择了余额付，可以选择支付宝或者微信付
-				 */
-				if (OrderDetailPaymentsFragment.this.getActivity() instanceof ConfirmOrderActivity) {
-//					ConfirmOrderActivity activity = (ConfirmOrderActivity)OrderDetailPaymentsFragment.this.getActivity();
-//					activity.checkPaymentMethod();
-				}else if (OrderDetailPaymentsFragment.this.getActivity() instanceof ConfirmTopUpActivity) {
-					ConfirmTopUpActivity activity = (ConfirmTopUpActivity)OrderDetailPaymentsFragment.this.getActivity();
-					activity.sonFragemtMethod();
-				}
-
-				PaymentTypeInfo model = SDCollectionUtil.get(listPayment, index);
-				if (model != null)
-				{
-					mPaymentId = model.getId();
-				} else
-				{
-					resetParams();
-				}
-				if (mListener != null)
-				{
-					mListener.onPaymentChange(model);
-				}
-			}
-		});
-
-		// 还原选中
-		if (foundModel != null)
-		{
-			int index = listPayment.indexOf(foundModel);
-			mManager.setSelectIndex(index, null, true);
-			mPaymentId = foundModel.getId();
-		} else
-		{
-			resetParams();
-		}
 	}
 
 	@Override
@@ -149,7 +95,11 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 
 	public void clearSelectedPayment(boolean notify)
 	{
-		mManager.clearSelected();
+		for(int i = 0 ; i < listPayment.size() ;i ++) {
+			PaymentTypeInfo paymentTypeInfo = listPayment.get(i);
+			paymentTypeInfo.setChecked(false);
+		}
+		paymentAdapter.update(listPayment);
 		resetParams();
 		if (notify)
 		{
@@ -160,15 +110,6 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 		}
 	}
 
-	public void setIsCanSelected(boolean isCanSelected)
-	{
-		mManager.setmClickAble(isCanSelected);
-	}
-
-	public interface OrderDetailPaymentsFragmentListener
-	{
-		public void onPaymentChange(PaymentTypeInfo model);
-	}
 
 	public List<PaymentTypeInfo> getListPayment() {
 		return listPayment;

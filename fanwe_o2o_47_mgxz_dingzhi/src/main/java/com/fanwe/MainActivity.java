@@ -475,7 +475,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
                     Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
                     intentStore.putExtra("user_id", user_id);
-
                     intentStore.putExtra("url", result);
                     startActivity(intentStore);
                 } else if (getCompleteUrl(result, SHOP_DETAIL)) {
