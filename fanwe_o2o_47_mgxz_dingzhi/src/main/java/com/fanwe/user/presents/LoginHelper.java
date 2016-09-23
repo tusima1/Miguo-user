@@ -51,6 +51,8 @@ public class LoginHelper extends Presenter {
     private int RoomId = -1;
     private Activity mActivity;
     private boolean notClose = false;
+    private boolean ifShowToast =true;
+
 
     private TencentHttpHelper mTencentHttpHelper;
     private com.tencent.qcloud.suixinbo.presenters.LoginHelper mTLoginHelper;
@@ -214,13 +216,30 @@ public class LoginHelper extends Presenter {
 
             public void onErrorResponse(String message, String errorCode) {
                 SDDialogManager.dismissProgressDialog();
-                MGToast.showToast(message);
+                if(ifShowToast) {
+                    MGToast.showToast(message);
+                }
             }
         });
 
     }
 
     public void doLogin(final String userName, final String password, int type, boolean notClose) {
+        this.ifShowToast = true;
+        this.notClose = notClose;
+        doLogin(userName, password, type);
+    }
+
+    /**
+     * 登录时候是否要提示错误信息。
+     * @param userName
+     * @param password
+     * @param type
+     * @param notClose
+     * @param ifShowToast
+     */
+    public void doLogin(final String userName, final String password, int type, boolean notClose,boolean ifShowToast) {
+        this.ifShowToast = ifShowToast;
         this.notClose = notClose;
         doLogin(userName, password, type);
     }
@@ -350,7 +369,6 @@ public class LoginHelper extends Presenter {
                     }
                     mTLoginHelper.imLoginWithoutGetRoom(userId, usersig);
                     loginSuccess();
-
                 }
             }
 
@@ -390,7 +408,9 @@ public class LoginHelper extends Presenter {
 
             dealLoginSuccess(model);
         } else {
-            MGToast.showToast(TextUtils.isEmpty(message) == true ? "登录失败。" : message);
+            if(ifShowToast) {
+                MGToast.showToast(TextUtils.isEmpty(message) == true ? "登录失败。" : message);
+            }
         }
     }
 

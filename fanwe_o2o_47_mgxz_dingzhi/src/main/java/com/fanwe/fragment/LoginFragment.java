@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
@@ -43,7 +42,7 @@ public class LoginFragment extends LoginBaseFragment {
     protected void init() {
         super.init();
         registeClick();
-        mLoginHelper = new LoginHelper(getActivity(),getActivity(), this);
+        mLoginHelper = new LoginHelper(getActivity(), getActivity(), this);
     }
 
 
@@ -67,29 +66,22 @@ public class LoginFragment extends LoginBaseFragment {
 
 
     private int count;
-    private boolean showToast=false;
-    public void doLogin(){
+    private boolean showToast = false;
+
+    public void doLogin() {
         if (validateParam()) {
-            if (TextUtils.isEmpty(mStrUserName)) {
-                Toast.makeText(getActivity(), "name can not be empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (TextUtils.isEmpty(mStrPassword)) {
-                Toast.makeText(getActivity(), "password can not be empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
             count++;
-            if (count>=4){
-                if (!showToast){
-                    showToast=true;
+            if (count >= 4) {
+                if (!showToast) {
+                    showToast = true;
                     MGToast.showToast("操作过于频繁,请稍候再试!");
                     MGUIUtil.runOnUiThreadDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            count=0;
-                            showToast=false;
+                            count = 0;
+                            showToast = false;
                         }
-                    },10000);
+                    }, 10000);
                 }
                 return;
             }
@@ -101,13 +93,28 @@ public class LoginFragment extends LoginBaseFragment {
     private boolean validateParam() {
         mStrUserName = mEtEmail.getText().toString();
         if (TextUtils.isEmpty(mStrUserName)) {
-            MGToast.showToast("请输入账号");
+            MGToast.showToast("请输入手机号");
+            mEtEmail.requestFocus();
+            return false;
+        }
+        if (mStrUserName.length() != 11) {
+            MGToast.showToast("请输入正确的手机号");
             mEtEmail.requestFocus();
             return false;
         }
         mStrPassword = mEtPwd.getText().toString();
         if (TextUtils.isEmpty(mStrPassword)) {
             MGToast.showToast("密码不能为空");
+            mEtPwd.requestFocus();
+            return false;
+        }
+        if (mStrPassword.length() < 6) {
+            MGToast.showToast("密码不能小于6位");
+            mEtPwd.requestFocus();
+            return false;
+        }
+        if (mStrPassword.length() > 20) {
+            MGToast.showToast("密码不能大于20位");
             mEtPwd.requestFocus();
             return false;
         }

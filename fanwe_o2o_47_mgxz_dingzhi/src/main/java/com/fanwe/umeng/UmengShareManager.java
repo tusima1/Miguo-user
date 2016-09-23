@@ -7,13 +7,15 @@ import android.text.TextUtils;
 
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
+import com.miguo.live.views.customviews.MGToast;
+import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.editorpage.ShareActivity;
 import com.umeng.socialize.media.UMImage;
 
 /**
@@ -42,6 +44,8 @@ public class UmengShareManager {
         // 初始化 微信 appid appsecret
         PlatformConfig.setWeixin(wxAppKey, wxAppSecret);
         PlatformConfig.setSinaWeibo(sinaAppKey, sinaAppSecret);
+
+        Config.REDIRECT_URL="http://sns.whalecloud.com";
     }
 
     /**
@@ -67,7 +71,7 @@ public class UmengShareManager {
                 .withTitle(title)
                 .withTargetUrl(url)
                 .withMedia(umImage)
-                .setListenerList(shareListener).open();
+                .setCallback(shareListener).open();
     }
 
     public static void share(SHARE_MEDIA platform, Activity mActivity, String title, String content, String url, UMImage umImage, UMShareListener shareListener) {
@@ -75,12 +79,12 @@ public class UmengShareManager {
             shareListener = getDefaultListener();
         }
         new ShareAction(mActivity)
-                .setPlatform(platform)
                 .withTitle(title)
                 .withText(content)
                 .withTargetUrl(url)
                 .withMedia(umImage)
-                .setListenerList(shareListener)
+                .setPlatform(platform)
+                .setCallback(shareListener)
                 .share();
     }
 

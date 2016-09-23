@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.fanwe.AppWebViewActivity;
 import com.fanwe.BaseActivity;
+import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant;
 import com.fanwe.event.EnumEventTag;
@@ -182,7 +183,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         // 支付方式列表
         mFragPayments = new OrderDetailPaymentsFragment();
 
-        mFragPayments.setmListener(new OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener() {
+        mFragPayments.setmListener(new PaymentAdapter.PaymentTypeChangeListener() {
 
             @Override
             public void onPaymentChange(PaymentTypeInfo model) {

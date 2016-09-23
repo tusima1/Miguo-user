@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ScrollView;
 
+import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -19,8 +20,9 @@ import com.fanwe.fragment.OrderDetailFeeFragment;
 import com.fanwe.fragment.OrderDetailGoodsFragment;
 import com.fanwe.fragment.OrderDetailParamsFragment;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.customviews.MGToast;
+
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
@@ -145,11 +147,15 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragPayments = new OrderDetailPaymentsFragment();
 
 
-        mFragPayments.setmListener(new OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener() {
+        mFragPayments.setmListener(new PaymentAdapter.PaymentTypeChangeListener() {
 
             @Override
             public void onPaymentChange(PaymentTypeInfo model) {
-                currentPayType = model;
+                if(model.isChecked()) {
+                    currentPayType = model;
+                }else{
+                    currentPayType =null;
+                }
                 changePayType(1, false);
             }
         });
@@ -223,13 +229,16 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         //用户余额。
         yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
 
-        if ("0".equals(thirdPaymentId)) {
+        if (TextUtils.isEmpty(thirdPaymentId)) {
             //未选择第三方支付
             if (yuePay == 0) {
                 //未选择余额支付
+                MGToast.showToast("请选择一种支付方式");
                 return false;
             } else {
+                //选择了余额支付 。
                 if (totalFloat > yueFloat) {
+                    MGToast.showToast("当前余额不够，请再选择一种支付方式");
                     return false;
                 } else {
                     return true;
@@ -318,7 +327,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragParams.setmCheckActModel(mCheckActModel);
 
         // 支付方式列表
-        mFragPayments.setmCheckActModel(mCheckActModel);
+       // mFragPayments.setmCheckActModel(mCheckActModel);
 
         // 余额支付
         mFragAccountPayment.setmCheckActModel(mCheckActModel);
@@ -339,6 +348,12 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
         if (datas != null && datas.size() > 0) {
+            for(int i = 0 ; i < datas.size() ; i++){
+                PaymentTypeInfo paymentTypeInfo = datas.get(i);
+                if(paymentTypeInfo!=null&&"1".equals(paymentTypeInfo.getDefault_pay())){
+                    paymentTypeInfo.setChecked(true);
+                }
+            }
             mFragPayments.setListPayment(datas);
         }
     }
@@ -428,7 +443,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                     return;
                 }
                 if (!ifMoneyEnough()) {
-                    MGToast.showToast("请选择一种支付方式");
                     return;
                 }
                 if (v.isClickable()) {

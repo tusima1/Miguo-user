@@ -1,5 +1,7 @@
 package com.fanwe.shoppingcart.model;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 
 /**
@@ -33,6 +35,8 @@ public class PaymentTypeInfo implements Serializable {
     private String config;
 
     private boolean checked=false;
+
+    private String default_pay="0";
 
     public void setOnline_pay(String online_pay){
         this.online_pay = online_pay;
@@ -113,5 +117,16 @@ public class PaymentTypeInfo implements Serializable {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public String getDefault_pay() {
+        return default_pay;
+    }
+
+    public void setDefault_pay(String default_pay) {
+        this.default_pay = default_pay;
+        if(!TextUtils.isEmpty(default_pay)&&"1".equals(default_pay)){
+            checked = true;
+        }
     }
 }
