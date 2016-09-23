@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context="com.fanwe.user.view.FansActivity">
-    <include layout="@layout/item_layout_sample_title"/>
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+
+    <include layout="@layout/item_layout_sample_title" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ptrlv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

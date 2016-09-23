@@ -20,7 +20,7 @@ public class ShoppingCartconstants {
     /**
      * 商品ID 列表。
      */
-    public static final String LIST_DEAL_IDS="mListDeal_id";
+    public static final String LIST_DEAL_IDS = "mListDeal_id";
     /**
      *
      */
@@ -45,42 +45,45 @@ public class ShoppingCartconstants {
      */
     public static final String SHOPPING_CART_ADD = "ShopingCart_add";
     /**
-     *  购物车列表。
+     * 购物车列表。
      */
-    public static final String SHOPPING_CART_LIST= "ShopingCart_list";
+    public static final String SHOPPING_CART_LIST = "ShopingCart_list";
     /**
      * 购物车结算按钮。
      */
-    public static final String  SP_CART_TOORDER ="SpCartToOrder";
+    public static final String SP_CART_TOORDER = "SpCartToOrder";
     /**
      * 未支付订单。
      */
-    public static final String  PENDIING_ORDER ="PendingOrder";
+    public static final String PENDIING_ORDER = "PendingOrder";
 
     /**
      * 购物车结算按钮 get。
      */
-    public static final String  SP_CART_TOORDER_GET ="SpCartToOrder_get";
+    public static final String SP_CART_TOORDER_GET = "SpCartToOrder_get";
     /**
      * 购物车结算按钮 POST.
      */
-    public static final String  SP_CART_TOORDER_POST ="SpCartToOrder_post";
+    public static final String SP_CART_TOORDER_POST = "SpCartToOrder_post";
     /**
      * 生成订单。
      */
-    public static final String  ORDER_INFO ="OrderInfo";
+    public static final String ORDER_INFO = "OrderInfo";
     /**
      * 生成订单。
      */
-    public static final String  ORDER_INFO_CREATE ="OrderInfo_put";
+    public static final String ORDER_INFO_CREATE = "OrderInfo_put";
     /**
      * 获取支付方式列表。
      */
-    public static final  String  GET_PAYMENT = "GetPayment";
+    public static final String GET_PAYMENT = "GetPayment";
     /**
      * 取可用红包。
      */
-    public static  final  String    GET_USERING_REDPACKETS="GetUseingRedPackets";
-
+    public static final String GET_USERING_REDPACKETS = "GetUseingRedPackets";
+    /**
+     * 订单提交画面表示内容取得
+     */
+    public static final String GET_ORDER_INFO = "GetOrderInfo";
 
 }

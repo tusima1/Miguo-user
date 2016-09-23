@@ -110,6 +110,10 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         }
     }
 
+    public void dismissLiveUserPop(){
+        popupWindow.dismiss();
+    }
+
 
 
     private void initContentView(final View contentView) {
@@ -118,12 +122,12 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
         ViewPagerItem item1 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
         ViewPagerItem item2 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
         ViewPagerItem item3 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
-        ViewPagerItem item4 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
+//        ViewPagerItem item4 = ViewPagerItem.of("title1", R.layout.item_pager_baobao);
 
         pagerItems.add(item1);
         pagerItems.add(item2);
         pagerItems.add(item3);
-        pagerItems.add(item4);
+//        pagerItems.add(item4);
 
         adapter1 = new LiveViewPagerItemAdapter(pagerItems,mCallbackView,mRedPacketAdapter,mBaobaoAdapter);
         if(mSellerDetailInfo!=null){
@@ -154,9 +158,9 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
                     case 2:
                         textView.setText("红包");
                         break;
-                    case 3:
-                        textView.setText("服务");
-                        break;
+//                    case 3:
+//                        textView.setText("服务");
+//                        break;
                 }
                 return inflate;
             }

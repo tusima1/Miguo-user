@@ -18,6 +18,7 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getRefundPage.ModelRefundPage;
 import com.fanwe.user.model.getRefundPage.ResultRefundPage;
 import com.fanwe.user.presents.OrderHttpHelper;
+import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -64,6 +65,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 
 	private String mOrder_id;
 	private String mTuan_id;
+	private int mRefunding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,41 +125,6 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		mRootView = findViewById(R.id.froot);
 	}
 	private void requestData() {
-//		RequestModel model = new RequestModel();
-//		model.putCtl("uc_order");
-//		model.putAct("refund_item");
-//		if (mOrderItemID==-1) {
-//			MGToast.showToast("商品id错误!");
-//			finish();
-//			return;
-//		}
-//		model.put("order_item_id", mOrderItemID);
-//		SDRequestCallBack<RefundItemInfo> handler = new SDRequestCallBack<RefundItemInfo>() {
-//			@Override
-//			public void onStart() {
-//				SDDialogManager.showProgressDialog("请稍等");
-//			}
-//			@Override
-//			public void onSuccess(ResponseInfo<String> responseInfo) {
-//				if (actModel.getStatus() == 1) {
-//					bindData(actModel.getOrder());
-//				}else {
-//					MGToast.showToast(actModel.getInfo());
-//				}
-//			}
-//
-//			@Override
-//			public void onFailure(HttpException error, String msg) {
-//
-//			}
-//
-//			@Override
-//			public void onFinish() {
-//				SDDialogManager.dismissProgressDialog();
-//				mPtr.onRefreshComplete();
-//			}
-//		};
-//		InterfaceServer.getInstance().requestInterface(model, handler);
 		if ("".endsWith(mOrder_id)|| "".endsWith(mTuan_id)){
 			MGToast.showToast("订单参数缺失!");
 			finish();
@@ -179,12 +146,17 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		mTv_total_price.setText(info.getTotal_price());
 		mTv_used.setText(info.getConsume_count());
 		mTv_has_refund.setText(info.getRefunded());
-		mTv_refunding.setText(info.getRefunding());
+
+		String refunding = info.getRefunding();
+		mRefunding = MGStringFormatter.getInt(refunding);
+		mTv_refunding.setText(refunding);
 		mTv_payed.setText(",  已支付:"+info.getPay_amount());
 		
 		mUnitPrice=info.getRefund_unit_price();
 		float refundMoney = getCalculateRefundMoney(mUnitPrice, 1);
 		mTv_refund_money.setText(""+refundMoney);
+
+		mGoodsTotalNum-=mRefunding;
 	}
 
 	/**
@@ -250,46 +222,6 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 			mEtContent=mEt.getText().toString();
 		}
 		httpHelper.postRefundApply(mNum+"",mOrder_id,mTuan_id);
-
-//		RequestModel model = new RequestModel();
-//		model.putCtl("uc_order");
-//		model.putAct("do_refund_item");
-//		if (mOrderItemID==-1) {
-//			MGToast.showToast("商品id错误!");
-//			return;
-//		}
-//		model.put("id", mOrderItemID);
-//
-//		model.put("number", mNum);
-//
-//		model.put("content", mEtContent);
-//		SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>() {
-//			@Override
-//			public void onStart() {
-//				SDDialogManager.showProgressDialog("请稍等");
-//			}
-//			@Override
-//			public void onSuccess(ResponseInfo<String> responseInfo) {
-//
-//				MGToast.showToast(actModel.getInfo());
-//				if (actModel.getStatus() == 1) {
-//					finish();
-//				}
-//
-//			}
-//
-//			@Override
-//			public void onFailure(HttpException error, String msg) {
-//
-//			}
-//
-//			@Override
-//			public void onFinish() {
-//				SDDialogManager.dismissProgressDialog();
-//				mPtr.onRefreshComplete();
-//			}
-//		};
-//		InterfaceServer.getInstance().requestInterface(model, handler);
 
 	}
 	private void initTitle() {

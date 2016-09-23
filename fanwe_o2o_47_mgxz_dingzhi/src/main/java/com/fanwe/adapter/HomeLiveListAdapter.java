@@ -1,6 +1,3 @@
-/**
- * @版权所有 聚光科技（杭州）股份有限公司
- */
 package com.fanwe.adapter;
 
 import android.content.Context;
@@ -85,11 +82,11 @@ public class HomeLiveListAdapter extends BaseAdapter {
         }
         //直播类型  1 表示直播，2表示点播
         String live_type = room.getLive_type();
-        if ("1".equals(live_type)){
+        if ("1".equals(live_type)) {
             mHolder.tvType.setText("正在直播");
-        }else if ("2".equals(live_type)){
+        } else if ("2".equals(live_type)) {
             mHolder.tvType.setText("点播");
-        }else {
+        } else {
             //异常数据
             mHolder.tvType.setText("=_=");
         }

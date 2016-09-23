@@ -1,5 +1,6 @@
 package com.fanwe.user.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +9,9 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.fanwe.BaseActivity;
 import com.fanwe.base.CallbackView2;
-import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -28,7 +28,7 @@ import java.util.List;
  * 关注列表
  * Created by Administrator on 2016/9/12.
  */
-public class AttentionListActivity extends BaseActivity implements CallbackView2 {
+public class AttentionListActivity extends Activity implements CallbackView2 {
     private Context mContext = AttentionListActivity.this;
     private UserHttpHelper userHttpHelper;
     private PullToRefreshListView ptrl;
@@ -41,13 +41,22 @@ public class AttentionListActivity extends BaseActivity implements CallbackView2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setmTitleType(Constant.TitleType.TITLE);
         setContentView(R.layout.act_attention_list);
-        mTitle.setMiddleTextTop("我的关注");
+        initTitle();
         preWidget();
         setListener();
         userHttpHelper = new UserHttpHelper(this, this);
         preData();
+    }
+
+    private void initTitle() {
+        findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        ((TextView) findViewById(R.id.tv_middle)).setText("我的关注");
     }
 
     private void getData() {

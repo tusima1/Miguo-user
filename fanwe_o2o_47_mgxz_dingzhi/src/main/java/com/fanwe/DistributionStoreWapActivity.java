@@ -46,7 +46,8 @@ public class DistributionStoreWapActivity extends BaseActivity {
         if (ServerUrl.DEBUG) {
         } else {
         }
-        url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd;
+        //9月23日添加  &from=app
+        url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd+"&from=app";
         frag.setUrl(url);
         frag.setmProgressMode(EnumProgressMode.NONE);
         getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);

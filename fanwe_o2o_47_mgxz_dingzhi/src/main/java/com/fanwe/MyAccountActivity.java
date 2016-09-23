@@ -33,7 +33,6 @@ import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDOtherUtil;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
@@ -52,6 +51,7 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -238,9 +238,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         String mobile = mUser.getUser_mobile();
         if (isEmpty(mobile)) {
             SDViewUtil.hide(mTv_mobile_tip);
-            mTv_bind_mobile.setText("绑定手机");
+            mTv_bind_mobile.setText("未绑定手机");
         } else {
-            SDViewUtil.show(mTv_mobile_tip);
+            SDViewUtil.hide(mTv_mobile_tip);
             mTv_bind_mobile.setText("已绑定手机");
             mTv_mobile.setText(SDOtherUtil.hideMobile(mobile));
         }
@@ -482,6 +482,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     private void clickLogout(View v) {
         App.getInstance().getmUserCurrentInfo().setUserInfoNew(null);
+        App.getInstance().setmUserCurrentInfo(null);
         App.getInstance().setImLoginSuccess(false);
         LocalUserModel userModel = new LocalUserModel();
         App.getInstance().setmLocalUser(userModel);

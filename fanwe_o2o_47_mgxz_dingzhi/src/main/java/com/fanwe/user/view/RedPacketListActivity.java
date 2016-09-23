@@ -18,6 +18,7 @@ import com.fanwe.user.model.getUserRedpackets.ResultUserRedPacket;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 mPull2Refresh.onRefreshComplete();
+                MGToast.showToast("没有更多数据");
             }
         });
 
@@ -87,10 +89,10 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
     }
 
     @Override
-    protected int setRightImageSrcId() {
-        int resId;
+    protected Object setRightImageSrcId() {
+        Object resId;
         if (isCheckMode){
-            resId=R.drawable.app_icon;
+            resId="确定";
         }else {
             resId=0;
         }
