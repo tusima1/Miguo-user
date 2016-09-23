@@ -49,4 +49,10 @@ public class DataFormat {
         }
         return false;
     }
+
+    static java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+
+    public static String toDoubleTwo(String str) {
+        return df.format(toDouble(str));
+    }
 }

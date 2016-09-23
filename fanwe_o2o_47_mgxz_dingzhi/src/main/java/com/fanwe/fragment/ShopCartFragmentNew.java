@@ -23,7 +23,6 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.HorizontalSlideDeleteListView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CartGoodsModel;
 import com.fanwe.o2o.miguo.R;
@@ -38,6 +37,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -49,7 +49,6 @@ import java.util.List;
  * 购物车
  *
  * @author js02
- *
  */
 public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackView {
     @ViewInject(R.id.lv_cart_goods)
@@ -59,7 +58,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     @ViewInject(R.id.rl_empty)
     private RelativeLayout mRlEmpty;
-    /** 结算 */
+    /**
+     * 结算
+     */
     @ViewInject(R.id.ll_bottom)
     private LinearLayout mLl_count;
     /**
@@ -88,7 +89,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     /**
      * 当前操作，是返回，还是结算 进入下一步，默认是结算 1 ，返回2
      */
-    private int currentGoTo=1;
+    private int currentGoTo = 1;
     private boolean ifLogin = false;
 
     @Override
@@ -102,17 +103,18 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     protected void init() {
         super.init();
         checkLogin();
-        outSideShoppingCartHelper= new OutSideShoppingCartHelper(this);
+        outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
         initTitle();
         registeClick();
         resetInitData();
         initPull2RefreshSrcollView();
     }
-    public void checkLogin(){
-        if(!TextUtils.isEmpty(App.getInstance().getToken())){
-            ifLogin=true;
-        }else{
-            ifLogin=false;
+
+    public void checkLogin() {
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            ifLogin = true;
+        } else {
+            ifLogin = false;
         }
 
     }
@@ -133,6 +135,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             @Override
             public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
                 requestData();
+                resetInitData();
             }
         });
         mContentPtr.setRefreshing();
@@ -140,7 +143,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     protected void resetInitData() {
 
-        listModel=new ArrayList<>();
+        listModel = new ArrayList<>();
         mCb_xuanze.setChecked(false);
         //重置下巴(结算)
         mBt_account.setText("结算");
@@ -153,6 +156,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         mLvCartGoods.setAdapter(mAdapter);
         getmAdapterListener();
     }
+
     private void registeClick() {
         mBt_account.setOnClickListener(new View.OnClickListener() {
                                            @Override
@@ -198,8 +202,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     /**
      * 改变购物车列表里面的商品是否被选择属性,同时计算总金额。。
      *
-     * @param isChecked
-     *            是否被选择。
+     * @param isChecked 是否被选择。
      */
     private BigDecimal checkListModelStateAndSumMoney(boolean isChecked) {
         int size = 0;
@@ -242,12 +245,13 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                     R.color.text_fenxiao));
             mBt_account.setClickable(false);
         }
-        if(listModel!=null&&(count>0)&&(count==listModel.size())){
+        if (listModel != null && (count > 0) && (count == listModel.size())) {
             mCb_xuanze.setChecked(true);
-        }else{
+        } else {
             mCb_xuanze.setChecked(false);
         }
     }
+
     /**
      * 获取总金额。
      *
@@ -301,7 +305,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         if (listModel == null || listModel.size() < 1) {
             return null;
         }
-        StringBuffer selectedIds= new StringBuffer();
+        StringBuffer selectedIds = new StringBuffer();
 
 
         size = listModel.size();
@@ -310,12 +314,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             boolean checked = false;
             checked = model.isChecked();
             if (checked) {
-                selectedIds.append(model.getId()+",");
+                selectedIds.append(model.getId() + ",");
 
             }
         }
-        if(selectedIds!=null&&selectedIds.length()>1){
-            return  selectedIds.substring(0,selectedIds.length()-1);
+        if (selectedIds != null && selectedIds.length() > 1) {
+            return selectedIds.substring(0, selectedIds.length() - 1);
         }
         return "";
     }
@@ -334,7 +338,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             ShoppingCartInfo model = listModel.get(i);
 
             int firstNum = SDFormatUtil.stringToInteger(model.getIs_first());
-            int number= SDFormatUtil.stringToInteger(model.getNumber());
+            int number = SDFormatUtil.stringToInteger(model.getNumber());
 
 
             if (firstNum > 0) {
@@ -348,7 +352,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
              * 总金额-首几单 优惠 金额 - = 总金额。
              */
             sumPrice = firstNum * SDFormatUtil.stringToFloat(model.getIs_first_price());
-            sumPrice = number* SDFormatUtil.stringToFloat(model.getTuan_price())-sumPrice;
+            sumPrice = number * SDFormatUtil.stringToFloat(model.getTuan_price()) - sumPrice;
             model.setSumPrice(sumPrice);
         }
     }
@@ -371,12 +375,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             public void onDelSelectedListener(CartGoodsModel model,
                                               boolean isChecked) {
                 // 非编辑状态
-                    int count = getSumSeleted();
-                    if (count == listModel.size()) {
-                        mCb_xuanze.setChecked(true);
-                    } else {
-                        mCb_xuanze.setChecked(false);
-                    }
+                int count = getSumSeleted();
+                if (count == listModel.size()) {
+                    mCb_xuanze.setChecked(true);
+                } else {
+                    mCb_xuanze.setChecked(false);
+                }
             }
 
             @Override
@@ -390,11 +394,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     /**
      * 返回按扭，先提交购物车，后返回。
      */
-    private void returnToLastActivity(){
+    private void returnToLastActivity() {
         currentGoTo = 2;
-        if(ifLogin) {
+        if (ifLogin) {
             outSideShoppingCartHelper.multiAddShopCart(listModel);
-        }else{
+        } else {
             LocalShoppingcartDao.insertModel(listModel);
         }
 
@@ -405,23 +409,25 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void clickSettleAccounts() {
         currentGoTo = 1;
-        if(ifLogin) {
+        if (ifLogin) {
             outSideShoppingCartHelper.multiAddShopCart(listModel);
-        }else{
+        } else {
             LocalShoppingcartDao.insertModel(listModel);
             gotoLogin();
             setmIsNeedRefreshOnResume(true);
         }
     }
-    private void gotoLogin(){
+
+    private void gotoLogin() {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         getContext().startActivity(intent);
     }
+
     /**
      * 进入商品购买确认页。
      */
     private void startConfirmOrderActivity() {
-        if (listModel != null && listModel.size() > 0 ) {
+        if (listModel != null && listModel.size() > 0) {
             String mSeletedGoods = getSumSeletedIds();
 
             Intent intent = new Intent(getActivity(),
@@ -436,12 +442,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     private void requestData() {
-        if(ifLogin) {
+        if (ifLogin) {
             outSideShoppingCartHelper.getUserShopCartList();
-        }else{
+        } else {
             SDDialogManager.dismissProgressDialog();
             List<ShoppingCartInfo> datas = LocalShoppingcartDao.queryModel();
-            onSuccess(ShoppingCartconstants.SHOPPING_CART_LIST,datas);
+            onSuccess(ShoppingCartconstants.SHOPPING_CART_LIST, datas);
         }
     }
 
@@ -455,9 +461,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             mTitle.setMiddleTextTop("购物车" + "（" + listModel.size() + "）");
         }
         initSumPrice();
-        if(listModel==null||listModel.size()<1) {
+        if (listModel == null || listModel.size() < 1) {
             mRlEmpty.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mRlEmpty.setVisibility(View.GONE);
         }
     }
@@ -474,17 +480,17 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     /**
      * 更新Title上的商品数量
+     *
      * @param num
      */
-    private void updateTitleNum(int num){
+    private void updateTitleNum(int num) {
         if (num == 0) {
             SDViewUtil.hide(mLl_count);
             mTitle.setMiddleTextTop("购物车");
-        }else {
+        } else {
             mTitle.setMiddleTextTop("购物车" + "（" + num + "）");
         }
     }
-
 
 
     @Override
@@ -512,13 +518,13 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     @Override
     public void onSuccess(String method, List datas) {
-        switch (method){
+        switch (method) {
             case ShoppingCartconstants.SHOPPING_CART_LIST:
                 this.listModel = datas;
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(mAdapter!=null){
+                        if (mAdapter != null) {
                             mAdapter.setData(listModel);
                             bindData();
                             mAdapter.notifyDataSetChanged();
@@ -533,7 +539,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(mAdapter!=null){
+                        if (mAdapter != null) {
                             mAdapter.setData(listModel);
                             mAdapter.notifyDataSetChanged();
                             updateTitleNum(listModel.size());
@@ -542,7 +548,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 });
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
-                if(currentGoTo==1) {
+                if (currentGoTo == 1) {
                     startConfirmOrderActivity();
                 }
                 break;

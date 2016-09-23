@@ -1,5 +1,6 @@
 package com.fanwe.user.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,13 +12,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.BaseActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
-import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
-import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -42,7 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 网红主页
  * Created by Administrator on 2016/9/20.
  */
-public class UserHomeActivity extends BaseActivity implements CallbackView2 {
+public class UserHomeActivity extends Activity implements CallbackView2 {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;
@@ -58,7 +56,6 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setmTitleType(Constant.TitleType.TITLE);
         setContentView(R.layout.act_user_home);
         initTitle();
         getIntentData();
@@ -105,21 +102,21 @@ public class UserHomeActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void initTitle() {
-        mTitle.setMiddleTextTop("网红主页");
-        mTitle.initRightItem(1);
-        mTitle.getItemRight(0).setImageLeft(R.drawable.ic_tuan_detail_share);
+        findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        findViewById(R.id.iv_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickShare();
+            }
+        });
+        ((TextView) findViewById(R.id.tv_middle)).setText("网红主页");
     }
 
-    @Override
-    public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-        switch (index) {
-            case 0:
-                clickShare();
-                break;
-            default:
-                break;
-        }
-    }
 
     /**
      * 分享

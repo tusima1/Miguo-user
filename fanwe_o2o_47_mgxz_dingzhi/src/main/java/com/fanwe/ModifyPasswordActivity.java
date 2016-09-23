@@ -23,10 +23,12 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.UserHttpHelper;
@@ -266,10 +268,21 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
 
     }
 
+    List<RootShopComment> roots;
+
     @Override
     public void onSuccess(String method, List datas) {
         Message msg = new Message();
         if (UserConstants.USER_CHANGE_PWD.equals(method)) {
+            roots = datas;
+            if (!SDCollectionUtil.isEmpty(roots)) {
+                RootShopComment root = roots.get(0);
+                if (!"212".equals(root.getStatusCode())) {
+                    //错误
+                    MGToast.showToast(root.getMessage());
+                    return;
+                }
+            }
             LocalUserModel localUserModel = LocalUserModelDao.queryModel();
             localUserModel.setUser_pwd(MD5Util.MD5(mStrPwd));
             LocalUserModelDao.insertModel(localUserModel);

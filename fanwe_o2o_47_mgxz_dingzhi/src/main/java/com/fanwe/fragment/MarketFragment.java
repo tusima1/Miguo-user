@@ -24,6 +24,7 @@ import com.fanwe.adapter.DistributionMarketAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
@@ -48,9 +49,7 @@ import com.sunday.eventbus.SDBaseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketFragment extends BaseFragment implements CallbackView {
-
-
+public class MarketFragment extends BaseFragment implements CallbackView, CallbackView2 {
     /**
      * 要搜索的商品的id (int)
      */
@@ -207,6 +206,10 @@ public class MarketFragment extends BaseFragment implements CallbackView {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 isRefresh = true;
                 pageNum = 1;
+
+                mListModel.clear();
+                mAdapter.notifyDataSetChanged();
+
                 getMarketList();
             }
 
@@ -224,7 +227,7 @@ public class MarketFragment extends BaseFragment implements CallbackView {
 
     private void getMarketList() {
         if (sellerHttpHelper == null) {
-            sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
+            sellerHttpHelper = new SellerHttpHelper(getActivity(), this, "");
         }
         sellerHttpHelper.getMarketList(pageNum, pageSize, mCate_id, keyword, AppRuntimeWorker.getCity_id());
     }
@@ -292,6 +295,13 @@ public class MarketFragment extends BaseFragment implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+        Message message = new Message();
+        message.what = 2;
+        mHandler.sendMessage(message);
+    }
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -345,18 +355,18 @@ public class MarketFragment extends BaseFragment implements CallbackView {
                             }
                         });
                         mCateView.mSpv_content.setAdapter(adapter);
-
-                        break;
                     }
+                    break;
+                case 2:
+                    mPtrlv_content.onRefreshComplete();
+                    break;
             }
         }
 
     };
 
     private void initSlidingPlayView() {
-
         mCateView.mSpv_content.setmImageNormalResId(R.drawable.ic_small_dot_normal);
         mCateView.mSpv_content.setmImageSelectedResId(R.drawable.ic_small_dot_slecet);
-
     }
 }

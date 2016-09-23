@@ -9,7 +9,6 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.ModelComment;
@@ -57,10 +56,12 @@ import com.fanwe.seller.model.getShopList.RootShopList;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
+import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public class SellerHttpHelper implements IHelper {
     }
 
     public String getToken() {
-        return userCurrentInfo.getToken();
+        return App.getInstance().getToken();
     }
 
     /**
@@ -564,11 +565,16 @@ public class SellerHttpHelper implements IHelper {
                 RootMarketList root = gson.fromJson(responseBody, RootMarketList.class);
                 List<ResultMarketList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(SellerConstants.MARKET_LIST, null);
+                    mView2.onSuccess(SellerConstants.MARKET_LIST, null);
                     return;
                 }
                 List<ModelMarketListItem> items = result.get(0).getList();
-                mView.onSuccess(SellerConstants.MARKET_LIST, items);
+                mView2.onSuccess(SellerConstants.MARKET_LIST, items);
+            }
+
+            @Override
+            public void onFinish() {
+                mView2.onFinish(SellerConstants.MARKET_LIST);
             }
 
             @Override
@@ -839,6 +845,13 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
+                if (!"200".equals(root.getStatusCode())) {
+                    List<RootShopComment> roots = new ArrayList<RootShopComment>();
+                    roots.add(root);
+                    mView.onSuccess(SellerConstants.SHOP_COMMENT, roots);
+                    return;
+                }
                 mView.onSuccess(SellerConstants.SHOP_COMMENT, null);
             }
 
@@ -869,7 +882,14 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(SellerConstants.GROUP_BUY_COMMENT, null);
+                RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
+                if (!"200".equals(root.getStatusCode())) {
+                    List<RootShopComment> roots = new ArrayList<RootShopComment>();
+                    roots.add(root);
+                    mView.onSuccess(SellerConstants.SHOP_COMMENT, roots);
+                    return;
+                }
+                mView.onSuccess(SellerConstants.SHOP_COMMENT, null);
             }
 
             @Override

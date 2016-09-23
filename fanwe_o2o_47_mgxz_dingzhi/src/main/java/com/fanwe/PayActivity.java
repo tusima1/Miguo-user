@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -31,7 +33,7 @@ import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.listener.TextMoney;
@@ -42,7 +44,11 @@ import com.fanwe.model.Payment_doneActCouponlistModel;
 import com.fanwe.model.UpacpappModel;
 import com.fanwe.model.WxappModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.RefreshCalbackView;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
+import com.fanwe.shoppingcart.model.Order_info;
+import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
 import com.fanwe.user.view.MyCouponListActivity;
@@ -50,6 +56,7 @@ import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
@@ -60,7 +67,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PayActivity extends BaseActivity {
+public class PayActivity extends BaseActivity implements RefreshCalbackView {
     /**
      * 00:正式，01:测试
      */
@@ -128,7 +135,7 @@ public class PayActivity extends BaseActivity {
     protected String imageUrl;
     protected String content;
     private PopupWindow pop;
-
+    private OutSideShoppingCartHelper outSideShoppingCartHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +227,7 @@ public class PayActivity extends BaseActivity {
                 MGToast.showToast("payment_code is null");
                 return;
             }
-            SDViewBinder.setTextView(mTvPayInfo, class_name + orderDetailInfo.getOrder_info().getName());
+            SDViewBinder.setTextView(mTvPayInfo, orderDetailInfo.getOrder_info().getName());
             mBtnPay.setText(mPaymentCodeModel.getPay_moneyFormat());
         }
     }
@@ -272,6 +279,13 @@ public class PayActivity extends BaseActivity {
         // finish();
     }
 
+    @Override
+    public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
+        if (outSideShoppingCartHelper == null) {
+            outSideShoppingCartHelper = new OutSideShoppingCartHelper(PayActivity.this);
+        }
+        outSideShoppingCartHelper.getOrderInfo(mOrderId);
+    }
 
     private void registeClick() {
         mBtnPay.setOnClickListener(this);
@@ -707,4 +721,80 @@ public class PayActivity extends BaseActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
+    @Override
+    public void onFailue(String method, String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    List<OrderDetailInfo> items;
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        Message msg = new Message();
+        if (ShoppingCartconstants.GET_ORDER_INFO.equals(method)) {
+            items = datas;
+            msg.what = 0;
+        }
+        mHandler.sendMessage(msg);
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    if (!SDCollectionUtil.isEmpty(items)) {
+                        OrderDetailInfo orderDetailInfo = items.get(0);
+                        Order_info order_info = orderDetailInfo.getOrder_info();
+                        if ("3".equals(order_info.getOrder_status()) || "5".equals(order_info.getOrder_status())) {
+                            //支付成功 处理。
+                            SDViewUtil.show(mBtnQuan);
+                            SDEventManager.post(EnumEventTag.PAY_ORDER_SUCCESS.ordinal());
+                            mHasPay = "all";
+                            mBtnPay.setVisibility(View.GONE);
+                            SDViewBinder.setTextView(mTvPayInfo, orderDetailInfo.getOrder_info().getName());
+                            if (!isEmpty(orderDetailInfo.getShare_url())) {
+                                SDViewUtil.show(mIv_share);
+                            } else {
+                                SDViewUtil.hide(mIv_share);
+                            }
+                            mLayoutPayInfo.setVisibility(View.GONE);
+                        } else {
+                            mPaymentCodeModel = new Payment_codeModel();
+                            String class_name = orderDetailInfo.getClass_name();
+                            HashMap<String, String> config = orderDetailInfo.getConfig();
+                            String payMoney = config.get("total_fee_format");
+                            mPaymentCodeModel.setPay_money(payMoney);
+                            mPaymentCodeModel.setConfig(config);
+                            mPaymentCodeModel.setClass_name(class_name);
+                            if (!TextUtils.isEmpty(class_name) && ALIPAY.equals(class_name)) {
+                                mPaymentCodeModel.setPayment_name("支付宝支付");
+                            } else {
+                                mPaymentCodeModel.setPayment_name("微信支付");
+                            }
+
+                            if (mPaymentCodeModel == null) {
+                                MGToast.showToast("payment_code is null");
+                                return;
+                            }
+                            SDViewBinder.setTextView(mTvOrderSn, orderDetailInfo.getOrder_info().getOrder_sn());
+                            SDViewBinder.setTextView(mTvPayInfo, orderDetailInfo.getOrder_info().getName());
+                            mBtnPay.setText(mPaymentCodeModel.getPay_moneyFormat());
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 }
