@@ -3,6 +3,7 @@ package com.fanwe.user.view;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,11 +70,15 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
         }
         if (resId instanceof String){
             String txt= (String) resId;
-            ib_right.setText(txt);
-            ib_right.setTextSize(16);
-            ib_right.setOnClickListener(this);
+            if (!TextUtils.isEmpty(txt)){
+                ib_right.setText(txt);
+                ib_right.setTextSize(16);
+                ib_right.setOnClickListener(this);
+            }else {
+                ib_right.setText(txt);
+                ib_right.setTextSize(16);
+            }
         }
-
 
         ib_left.setOnClickListener(this);
     }

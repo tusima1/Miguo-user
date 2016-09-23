@@ -94,7 +94,7 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
         if (isCheckMode){
             resId="确定";
         }else {
-            resId=0;
+            resId="";
         }
         return resId;
     }
