@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
-                mLoginHelper.doLogin(userid, password, 0, true);
+                mLoginHelper.doLogin(userid, password, 0, true,false);
             } else {
                 showDialogLogin();
             }

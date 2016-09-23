@@ -43,10 +43,21 @@ public class LiveInputDialogHelper {
     private LinearLayout mInputLayout;
     private RelativeLayout rootLayout;
     private CheckBox isDanmu;
+    /**
+     * 是否是点播 消息。
+     */
+    private boolean isPlayBack = false;
 
     public LiveInputDialogHelper(LiveHelper presenter, Activity activity) {
         this.mContext=activity;
         this.mLiveControlHelper=presenter;
+        createDialog();
+    }
+
+    public LiveInputDialogHelper(LiveHelper presenter, Activity activity,boolean isPlayBack) {
+        this.mContext=activity;
+        this.mLiveControlHelper=presenter;
+        this.isPlayBack = isPlayBack;
         createDialog();
     }
 
