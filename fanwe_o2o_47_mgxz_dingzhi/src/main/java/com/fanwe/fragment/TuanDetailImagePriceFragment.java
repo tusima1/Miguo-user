@@ -77,11 +77,11 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
         }
 
         bindGoodsImage(mDealModel.getImages());
-        if (mDealModel.getIs_first() - mDealModel.getCheck_first() > 0) {
-            youhuiPrice = "￥" + mDealModel.getIs_first_price();
-        } else {
+//        if (mDealModel.getIs_first() - mDealModel.getCheck_first() > 0) {
+//            youhuiPrice = "￥" + mDealModel.getIs_first_price();
+//        } else {
             curPriceFormat = mDealModel.getCurrent_priceFormat();
-        }
+//        }
 
         String oriPriceFormat = mDealModel.getOrigin_priceFormat();
 
@@ -92,11 +92,11 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
                 mBtnBuyGoods.setText("立即兑换");
                 break;
             default:
-                if (mDealModel.getIs_first() - mDealModel.getCheck_first() > 0) {
-                    SDViewBinder.setTextView(mTvCurrentPrice, youhuiPrice, "未找到");
-                } else {
+//                if (mDealModel.getIs_first() - mDealModel.getCheck_first() > 0) {
+//                    SDViewBinder.setTextView(mTvCurrentPrice, youhuiPrice, "未找到");
+//                } else {
                     SDViewBinder.setTextView(mTvCurrentPrice, curPriceFormat, "未找到");
-                }
+//                }
                 SDViewBinder.setTextView(mTvOriginalPrice, oriPriceFormat, "未找到");
                 mBtnBuyGoods.setText("立即购买");
                 break;
