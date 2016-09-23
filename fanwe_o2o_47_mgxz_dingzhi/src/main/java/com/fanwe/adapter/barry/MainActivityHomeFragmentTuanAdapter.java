@@ -71,7 +71,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         getHolder(holder).describe.setText(MGStringFormatter.getLimitedString(getItem(position).getBrief(),46));
         getHolder(holder).price.setText(SDFormatUtil.formatNumberString(getItem(position).getTuan_price(),2)+"元");
         getHolder(holder).normalPrice.setText(SDFormatUtil.formatNumberString(getItem(position).getOrigin_price(),2)+"元");
-        getHolder(holder).normalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG );
+
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
 //        getHolder(holder).distance.setText(getItem(position).);
     }
