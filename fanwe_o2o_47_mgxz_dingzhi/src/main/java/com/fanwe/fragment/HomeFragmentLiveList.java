@@ -143,9 +143,13 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
 //        }
         if(bodys != null){
             if(refresh){
-                mainActivityHomeFragmentTuanAdapter.notifyDataSetChanged(bodys);
+                if(mainActivityHomeFragmentTuanAdapter!=null) {
+                    mainActivityHomeFragmentTuanAdapter.notifyDataSetChanged(bodys);
+                }
             }else {
-                mainActivityHomeFragmentTuanAdapter.notifyDataSetChangedLoadmore(bodys);
+                if(mainActivityHomeFragmentTuanAdapter!=null) {
+                    mainActivityHomeFragmentTuanAdapter.notifyDataSetChangedLoadmore(bodys);
+                }
             }
             updateRecyclerView2Height();
         }
