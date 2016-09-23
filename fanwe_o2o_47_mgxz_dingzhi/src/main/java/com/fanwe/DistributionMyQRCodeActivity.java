@@ -155,8 +155,7 @@ public class DistributionMyQRCodeActivity extends BaseActivity implements OnLong
                     if (nameCardQR!=null){
                         bindData(nameCardQR);
                     }else {
-                        MGToast.showToast("请求失败!");
-                        finish();
+                        MGToast.showToast("请求数据失败!");
                     }
                 }
            }

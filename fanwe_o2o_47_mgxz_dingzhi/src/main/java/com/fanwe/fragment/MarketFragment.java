@@ -320,7 +320,12 @@ public class MarketFragment extends BaseFragment implements CallbackView {
                     break;
                 case 1:
                     // 分类
-                    List<List<ModelHomeClassifyList>> listModel = SDCollectionUtil.splitList(itemsHomeClassify, 10);
+                    initSlidingPlayView();
+                    //小红点
+                    if (itemsHomeClassify.size() > 5) {
+                        SDViewUtil.setViewMarginBottom(mCateView.mSpv_content.mVpgContent, SDViewUtil.dp2px(20));
+                    }
+                    List<List<ModelHomeClassifyList>> listModel = SDCollectionUtil.splitList(itemsHomeClassify, 5);
                     if (isEmpty(listModel)) {
                         SDViewUtil.hide(mCateView);
                     } else {
@@ -347,4 +352,11 @@ public class MarketFragment extends BaseFragment implements CallbackView {
         }
 
     };
+
+    private void initSlidingPlayView() {
+
+        mCateView.mSpv_content.setmImageNormalResId(R.drawable.ic_small_dot_normal);
+        mCateView.mSpv_content.setmImageSelectedResId(R.drawable.ic_small_dot_slecet);
+
+    }
 }

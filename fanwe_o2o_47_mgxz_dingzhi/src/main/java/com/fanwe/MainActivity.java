@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
 
-    private MyFragment2 mFragMyAccount;
+    private MyFragment2 mFragMyAccount=new MyFragment2();
 
     private long mExitTime = 0;
     private int preTab = 0;// 上次点击的tab标签页
@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
-                mLoginHelper.doLogin(userid, password, 0, true);
+                mLoginHelper.doLogin(userid, password, 0, true,false);
             } else {
                 showDialogLogin();
             }
@@ -393,9 +393,10 @@ public class MainActivity extends BaseActivity implements CallbackView {
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            mFragMyAccount = (MyFragment2) getSDFragmentManager().toggle(R.id.act_main_fl_content,
-                    null,
-                    MyFragment2.class);
+//            mFragMyAccount = (MyFragment2) getSDFragmentManager().toggle(R.id.act_main_fl_content,
+//                    null,
+//                    MyFragment2.class);
+            getSDFragmentManager().toggle(R.id.act_main_fl_content,null,mFragMyAccount);
         }
     }
 
@@ -429,7 +430,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private void removeMyAccountFragment() {
         getSDFragmentManager().remove(mFragMyAccount);
-        mFragMyAccount = null;
+//        mFragMyAccount = null;
     }
 
     @Override

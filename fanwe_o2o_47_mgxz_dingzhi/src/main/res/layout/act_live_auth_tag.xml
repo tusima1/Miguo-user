@@ -1,85 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp45"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/iv_arrow_left_bar_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:onClick="onClick"
-            android:padding="@dimen/dp13"
-            android:src="@drawable/ic_arrow_action_bar" />
+    <LinearLayout
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp45"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_arrow_left_bar_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:onClick="onClick"
+                android:padding="@dimen/dp13"
+                android:src="@drawable/ic_arrow_action_bar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="标签"
+                android:textColor="@color/rgb_898989"
+                android:textSize="@dimen/dp17"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_line" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="标签"
-            android:textColor="@color/rgb_898989"
-            android:textSize="@dimen/dp17"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:background="@color/c_F2F2F2"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/live_auth_title_tag"
+            android:textColor="@color/text_hongbao_title"
+            android:textSize="@dimen/dp14" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/text_line" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView_auth_tag"
+            android:layout_width="match_parent"
+            android:layout_height="270dp"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp25" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/c_F2F2F2"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/live_auth_title_tag"
-        android:textColor="@color/text_hongbao_title"
-        android:textSize="@dimen/dp14" />
+        <EditText
+            android:id="@+id/et_tags"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp120"
+            android:layout_marginLeft="@dimen/dp12"
+            android:layout_marginRight="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp5"
+            android:background="@drawable/bg_grey_line"
+            android:gravity="top"
+            android:hint="@string/live_auth_tags_hint"
+            android:padding="@dimen/dp5"
+            android:textColor="@color/text_fenxiao"
+            android:textColorHint="@color/c_CCCCCC" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleView_auth_tag"
-        android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:layout_marginLeft="@dimen/dp12"
-        android:layout_marginRight="@dimen/dp12"
-        android:layout_marginTop="@dimen/dp25" />
+        <Button
+            android:id="@+id/btn_submit_live_auth_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp13"
+            android:layout_marginRight="@dimen/dp13"
+            android:layout_marginTop="@dimen/dp30"
+            android:background="@drawable/bg_grey_big"
+            android:clickable="false"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:paddingBottom="@dimen/dp13"
+            android:paddingTop="@dimen/dp13"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="17dp" />
 
-    <EditText
-        android:id="@+id/et_tags"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp120"
-        android:layout_marginLeft="@dimen/dp12"
-        android:layout_marginRight="@dimen/dp12"
-        android:layout_marginTop="@dimen/dp5"
-        android:background="@drawable/bg_grey_line"
-        android:gravity="top"
-        android:hint="@string/live_auth_tags_hint"
-        android:padding="@dimen/dp5"
-        android:textColor="@color/text_fenxiao"
-        android:textColorHint="@color/c_CCCCCC" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_submit_live_auth_tag"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp13"
-        android:layout_marginRight="@dimen/dp13"
-        android:layout_marginTop="@dimen/dp30"
-        android:background="@drawable/bg_grey_big"
-        android:clickable="false"
-        android:gravity="center"
-        android:onClick="onClick"
-        android:paddingBottom="@dimen/dp13"
-        android:paddingTop="@dimen/dp13"
-        android:text="确定"
-        android:textColor="@color/white"
-        android:textSize="17dp" />
-</LinearLayout>
+
+</ScrollView>

@@ -76,6 +76,14 @@ public class Constants {
     public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT+1; //大礼物 非连发
     public static final int AVIMCOM_BIG_GIFT_MULTI = AVIMCOM_BIG_GIFT_SINGLE+1; //大礼物 连发
 
+    public static final int PALYBACK_CUSTOM = AVIMCOM_BIG_GIFT_MULTI+1; //点播普通消息
+    public static final int PALYBACK_ENTERROOM = PALYBACK_CUSTOM+1; //点播进入房间
+    public static final int PALYBACK_EXITROOM = PALYBACK_ENTERROOM+1; //点播退出房间
+    public static final int PALYBACK_DESTROYROOM = PALYBACK_EXITROOM+1; //点播房间解散
+
+
+
+
 
 
 
