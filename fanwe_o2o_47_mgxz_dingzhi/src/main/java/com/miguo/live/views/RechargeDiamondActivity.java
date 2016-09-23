@@ -187,7 +187,11 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
             @Override
             public void onPaymentChange(PaymentTypeInfo model) {
-                currentPayType = model;
+                if(model.isChecked()) {
+                    currentPayType = model;
+                }else{
+                    currentPayType = null;
+                }
             }
         });
 
@@ -264,6 +268,13 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
         if (datas != null && datas.size() > 0) {
+            for(int i = 0 ; i < datas.size() ; i++){
+                PaymentTypeInfo paymentTypeInfo = datas.get(i);
+                if(paymentTypeInfo!=null&&"1".equals(paymentTypeInfo.getDefault_pay())){
+                    paymentTypeInfo.setChecked(true);
+                    currentPayType = paymentTypeInfo;
+                }
+            }
             mFragPayments.setListPayment(datas);
         }
     }
@@ -277,8 +288,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         if (diamondUserOwnEntityList != null) {
             DiamondUserOwnEntity entityOwn = diamondUserOwnEntityList.get(0);
             float value = SDFormatUtil.stringToFloat(entityOwn.getDiamond_android()) + SDFormatUtil.stringToFloat(entityOwn.getCommon_diamond());
-
-            self_diamond.setText(value + "");
+            self_diamond.setText(SDFormatUtil.formatNumberString(String.valueOf(value),2));
 
         }
     }
@@ -548,7 +558,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
             } else {
                 bigDiamondType = diamondTypeEntityList.get(size - 1);
-                money_value.setText("￥ " + bigDiamondType.getPrice() + "元");
+                money_value.setText("￥ " + bigDiamondType.getPrice());
                 diamond_value.setText(bigDiamondType.getDiamond() + "钻石");
                 diamondTypeEntityList.remove(size - 1);
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
