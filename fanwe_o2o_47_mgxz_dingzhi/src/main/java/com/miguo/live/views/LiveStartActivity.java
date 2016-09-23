@@ -10,6 +10,7 @@ import android.view.View;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -53,10 +54,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
      */
     private String usersig;
     private String userid;
-    /**
-     * 是否分享。
-     */
-    private boolean isShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +61,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
         ActLiveStartBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_start);
         dataBindingLiveStart = new DataBindingLiveStart();
-        isShare = false;
         binding.setLive(dataBindingLiveStart);
         mLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(this, this);
         tencentHttpHelper = new TencentHttpHelper(this);
@@ -161,17 +157,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        if (isShare) {
-//            createAvRoom();
-//        }
-    }
-
     private void startLive() {
         if (dataBindingLiveStart.isLiveRight.get()) {
-            isShare = true;
             SHARE_MEDIA platform = SHARE_MEDIA.QQ;
             //已认证的，去直播
             if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
@@ -187,23 +174,18 @@ public class LiveStartActivity extends Activity implements CallbackView {
             }
             UmengShareManager.share(platform,
                     this,
-                    "分享",
-                    "直播开始分享",
-                    "http://api2.w2.mgxz.com/app.html",
+                    "开始直播",
+                    "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....",
+                    ServerUrl.SERVER_H5 + "share/live/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
                     UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"),
                     shareResultCallback);
-//            createAvRoom();
-            if (isShare) {
-//            createAvRoom();
-            }
-            isShare = true;
         } else {
             //未认证的，去认证
             startActivity(new Intent(this, LiveAuthActivity.class));
         }
     }
 
-    private UMShareListener shareResultCallback=new UMShareListener() {
+    private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
             MGToast.showToast(share_media + "分享成功");
@@ -243,16 +225,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
 
     /**
-     * 分享
-     */
-    private void clickShare() {
-        UmengShareManager.share(this, "", "用户直播分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
-    }
-
-    /**
      * 进入直播Activity(创建直播)
      */
-
     public void createAvRoom() {
         boolean isImlogin = App.getInstance().isImLoginSuccess();
         if (!isImlogin) {

@@ -311,6 +311,9 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             MGToast.showToast("请先同意用户注册协议");
             return false;
         }
+        if (!TextUtils.isEmpty(openid)) {
+            return true;
+        }
         String pwd2 = pwd.getText().toString();
         String pwd1 = mEt_pwd_into.getText().toString();
         if (TextUtils.isEmpty(pwd1)) {

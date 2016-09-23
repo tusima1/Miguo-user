@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HoltelDetailFragment;
@@ -172,9 +173,23 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
     private void clickShare() {
         if (share != null) {
             String content = share.getSummary();
+            if (TextUtils.isEmpty(content)) {
+                content = "欢迎来到米果小站";
+            }
             String imageUrl = share.getImageurl();
+            if (TextUtils.isEmpty(imageUrl)) {
+                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            } else if (!imageUrl.startsWith("http")) {
+                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            }
             String clickUrl = share.getClickurl();
+            if (TextUtils.isEmpty(clickUrl)) {
+                clickUrl = ServerUrl.SERVER_H5;
+            }
             String title = share.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                title = "米果小站";
+            }
 
             UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
         } else {

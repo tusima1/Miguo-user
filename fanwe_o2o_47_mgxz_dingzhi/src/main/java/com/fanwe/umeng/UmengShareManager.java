@@ -71,7 +71,7 @@ public class UmengShareManager {
                 .withTitle(title)
                 .withTargetUrl(url)
                 .withMedia(umImage)
-                .setListenerList(shareListener).open();
+                .setCallback(shareListener).open();
     }
 
     public static void share(SHARE_MEDIA platform, Activity mActivity, String title, String content, String url, UMImage umImage, UMShareListener shareListener) {
