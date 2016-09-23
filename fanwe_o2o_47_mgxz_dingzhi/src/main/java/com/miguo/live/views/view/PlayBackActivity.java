@@ -180,7 +180,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         initView();
 
         mCurrentRenderMode = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
-        mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
+        mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
         mPlayConfig = new TXLivePlayConfig();
         if (mLivePlayer == null) {
             mLivePlayer = new TXLivePlayer(this);

@@ -22,7 +22,6 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.BottomDialog;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveAuthBinding;
 import com.fanwe.utils.Bimp;
@@ -35,6 +34,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -134,6 +134,8 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
             MGToast.showToast("请选择城市");
         } else if (TextUtils.isEmpty(phone)) {
             MGToast.showToast("请输入手机号");
+        } else if (phone.length() != 11) {
+            MGToast.showToast("请输入正确的手机号");
         } else if (datas.size() < 3) {
             MGToast.showToast("请上传2-3张生活照");
         } else {

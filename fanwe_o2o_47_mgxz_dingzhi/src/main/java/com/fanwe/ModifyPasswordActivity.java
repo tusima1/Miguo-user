@@ -23,7 +23,6 @@ import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.network.MgCallback;
@@ -36,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.lang.reflect.Type;
@@ -229,12 +229,15 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
             MGToast.showToast("新密码不能为空");
             return false;
         }
-        mStrPwdConfirm = mCet_pwd_confirm.getText().toString();
-        if (TextUtils.isEmpty(mStrPwdConfirm)) {
-            MGToast.showToast("确认新密码不能为空");
+        if (mStrPwd.length() < 6) {
+            MGToast.showToast("密码不能少于6位");
             return false;
         }
-
+        if (mStrPwd.length() > 20) {
+            MGToast.showToast("密码不能大于20位");
+            return false;
+        }
+        mStrPwdConfirm = mCet_pwd_confirm.getText().toString();
         if (!mStrPwd.equals(mStrPwdConfirm)) {
             MGToast.showToast("两次密码不一致");
             return false;
