@@ -9,6 +9,10 @@ public class LiveConstants {
     /**
      * 获取直播列表
      */
+    public static final String COMMAND_GROUP_BUY = "CommandGroupBuy";
+    /**
+     * 获取首页团购列表
+     */
     public static final String LIVE_LIST = "LiveList";
     /**
      * 申请直播房间ID

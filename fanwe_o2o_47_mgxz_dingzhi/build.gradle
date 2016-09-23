@@ -104,6 +104,10 @@ dependencies {
 
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
+    /**
+     * 下拉刷新 2016-9-23
+     */
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
 
 
 }

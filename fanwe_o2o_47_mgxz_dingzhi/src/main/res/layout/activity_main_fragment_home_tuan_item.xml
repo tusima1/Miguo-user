@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:src="@drawable/nopic"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/image"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:layout_marginBottom="2dp"
+        android:layout_marginRight="5dp"
+        android:text="免预约"
+        android:padding="2dp"
+        android:textSize="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_cricle_green"
+        android:layout_alignTop="@+id/image"
+        android:layout_alignRight="@+id/image"
+        android:id="@+id/free_reservation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_toLeftOf="@+id/distance"
+        android:layout_marginRight="2dp"
+        android:id="@+id/title"
+        android:layout_marginLeft="8dp"
+        android:text="当代阳光69浴资"
+        android:textColor="@color/text_base_color"
+        android:textSize="14sp"
+        android:layout_toRightOf="@+id/image"
+        android:layout_alignTop="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/describe"
+        android:text="米果小站独家销售只要69元即可享受价值99元的单人浴资单"
+        android:textColor="@color/text_base_color_2"
+        android:textSize="12sp"
+        android:layout_alignLeft="@+id/title"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignBottom="@+id/image"
+        android:text="69元"
+        android:textSize="16sp"
+        android:id="@+id/price"
+        android:textColor="@color/main_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginBottom="1dp"
+        android:layout_alignBottom="@+id/price"
+        android:layout_toRightOf="@+id/price"
+        android:layout_marginLeft="8dp"
+        android:text="99元"
+        android:textSize="12sp"
+        android:id="@+id/price_normal"
+        android:textColor="@color/text_base_color_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/distance"
+        android:textSize="12sp"
+        android:textColor="@color/text_base_color_2"
+        android:text=">10km"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignTop="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/sell"
+        android:textSize="12sp"
+        android:textColor="@color/text_base_color_2"
+        android:text=">售出1654"
+        android:layout_alignRight="@+id/distance"
+        android:layout_alignBottom="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_below="@+id/image"
+        android:background="@color/gray_d"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+</RelativeLayout>
