@@ -33,6 +33,8 @@ import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
@@ -162,9 +164,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isShare) {
-            createAvRoom();
-        }
+//        if (isShare) {
+//            createAvRoom();
+//        }
     }
 
     private void startLive() {
@@ -183,7 +185,13 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-            UmengShareManager.share(platform, this, "分享", "直播开始分享", "http://api2.w2.mgxz.com/app.html", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+            UmengShareManager.share(platform,
+                    this,
+                    "分享",
+                    "直播开始分享",
+                    "http://api2.w2.mgxz.com/app.html",
+                    UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"),
+                    shareResultCallback);
 //            createAvRoom();
             if (isShare) {
 //            createAvRoom();
@@ -194,6 +202,26 @@ public class LiveStartActivity extends Activity implements CallbackView {
             startActivity(new Intent(this, LiveAuthActivity.class));
         }
     }
+
+    private UMShareListener shareResultCallback=new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            MGToast.showToast(share_media + "分享成功");
+            createAvRoom();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            MGToast.showToast(share_media + "分享失败");
+            createAvRoom();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            MGToast.showToast(share_media + "分享取消");
+            createAvRoom();
+        }
+    };
 
 
     public void goToLoginActivity() {
@@ -206,6 +234,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 8888) {
             dataBindingLiveStart.shopName.set(CurLiveInfo.modelShop.getShop_name());
             return;
