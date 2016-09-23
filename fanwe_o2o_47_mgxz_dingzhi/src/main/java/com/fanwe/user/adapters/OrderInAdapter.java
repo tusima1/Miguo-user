@@ -124,7 +124,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
 //            refund_status    2   已退款 状态
 //            refund_status    3    退款失败状态
             int consume_count = MGStringFormatter.getInt(model.getConsume_count());
-            Log.e("test","count:"+consume_count);
+            Log.e("test", "count:" + consume_count);
             int number = MGStringFormatter.getInt(model.getNumber());
             int refunded = MGStringFormatter.getInt(model.getRefunded());
             int refunding = MGStringFormatter.getInt(model.getRefunding());
@@ -150,15 +150,14 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                 tv_evaluate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO 评价
                         Intent intent = new Intent(mActivity, AddCommentActivity.class);
-                        intent.putExtra(AddCommentActivity.EXTRA_ID, model.getTuan_id());
+                        intent.putExtra(AddCommentActivity.EXTRA_ID, model.getDetail_id());
                         intent.putExtra(AddCommentActivity.EXTRA_NAME, model.getName());
                         intent.putExtra(AddCommentActivity.EXTRA_TYPE, Constant.CommentType.DEAL);
                         mActivity.startActivity(intent);
                     }
                 });
-            }else {
+            } else {
                 tv_evaluate.setVisibility(View.GONE);
             }
 //            int cal_temp = number - refunded - refunding;
@@ -173,7 +172,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                         gotoRefundApplication(tuan_id);
                     }
                 });
-            }else {
+            } else {
                 tv_tuikuan.setVisibility(View.GONE);
             }
             if (dp_id > 0) {
@@ -212,6 +211,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
 
     /**
      * 去退款页面
+     *
      * @param tuan_id
      */
     private void gotoRefundApplication(String tuan_id) {

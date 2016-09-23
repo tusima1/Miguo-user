@@ -9,6 +9,7 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.getAttentionFans.ResultFans;
@@ -65,6 +66,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -519,6 +521,14 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
+                if (!"212".equals(root.getStatusCode())) {
+                    //错误
+                    List<RootShopComment> roots = new ArrayList<>();
+                    roots.add(root);
+                    mView.onSuccess(UserConstants.USER_CHANGE_PWD, roots);
+                    return;
+                }
                 mView.onSuccess(UserConstants.USER_CHANGE_PWD, null);
             }
 

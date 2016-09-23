@@ -10,11 +10,12 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.AddCommentFragment;
 import com.fanwe.fragment.AddCommentFragment.AddCommentFragmentListener;
-import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.dialog.SDDialogProgress;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
@@ -65,12 +66,15 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
     private SellerHttpHelper sellerHttpHelper;
     private UploadManager uploadManager;
 
+    SDDialogProgress mProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_add_comment);
         init();
+        mProgress = progressDialog("请稍等...");
     }
 
     private void init() {
@@ -127,10 +131,17 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
         if (SDCollectionUtil.isEmpty(mFragAddComment.getSelectedImages())) {
-            requestComments();
+            if (requestComments()) {
+                if (mProgress != null) {
+                    mProgress.show();
+                }
+            }
         } else {
             if (validateParam()) {
                 mFragAddComment.compressSelectedImages();
+                if (mProgress != null) {
+                    mProgress.show();
+                }
             }
         }
     }
@@ -156,13 +167,12 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
         return true;
     }
 
-    protected void requestComments() {
-        SDDialogManager.showProgressDialog("请稍等...");
+    protected boolean requestComments() {
         if (!validateParam()) {
-            return;
+            return false;
         }
         if (!pointParam()) {
-            return;
+            return false;
         }
         if (!SDCollectionUtil.isEmpty(mListFile)) {
             //上传文件
@@ -176,6 +186,13 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
                 sellerHttpHelper.postShopComment(mId, mFragAddComment.getCommentContent(), String.valueOf(mPoint), "");
             }
         }
+        return true;
+    }
+
+    private SDDialogProgress progressDialog(final String msg) {
+        mProgress = new SDDialogProgress();
+        mProgress.setTextMsg(msg);
+        return mProgress;
     }
 
     @Override
@@ -185,6 +202,7 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
 
     String uploadToken;
     String urlQiNiu;
+    List<RootShopComment> rootShopCommentList;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -204,14 +222,26 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
                 }
             }
         } else if (SellerConstants.SHOP_COMMENT.equals(method)) {
-            MGToast.showToast("评论成功");
-            SDDialogManager.dismissProgressDialog();
-            SDEventManager.post(EnumEventTag.COMMENT_SUCCESS.ordinal());
-            Intent intent = new Intent(mActivity, CommentListActivity.class);
-            intent.putExtra(CommentListActivity.EXTRA_ID, mId);
-            intent.putExtra(CommentListActivity.EXTRA_TYPE, mStrType);
-            startActivity(intent);
-            finish();
+            if (mProgress != null) {
+                mProgress.dismiss();
+            }
+            rootShopCommentList = datas;
+            if (!SDCollectionUtil.isEmpty(rootShopCommentList)) {
+                RootShopComment root = rootShopCommentList.get(0);
+                if (!"200".equals(root.getStatusCode())) {
+                    {
+                        MGToast.showToast(root.getMessage());
+                        return;
+                    }
+                }
+                MGToast.showToast("评论成功");
+                SDEventManager.post(EnumEventTag.COMMENT_SUCCESS.ordinal());
+                Intent intent = new Intent(mActivity, CommentListActivity.class);
+                intent.putExtra(CommentListActivity.EXTRA_ID, mId);
+                intent.putExtra(CommentListActivity.EXTRA_TYPE, mStrType);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 

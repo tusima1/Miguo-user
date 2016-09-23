@@ -2,6 +2,7 @@ package com.fanwe.adapter.barry;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.MGStringFormatter;
+import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
@@ -61,12 +64,14 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         if(getItem(position).getIcon().contains("http://")){
-            SDViewBinder.setImageView(getItem(position).getIcon(), getHolder(holder).image);
-        }
-        getHolder(holder).title.setText(getItem(position).getName());
-        getHolder(holder).describe.setText(getItem(position).getBrief());
-        getHolder(holder).price.setText(getItem(position).getTuan_price());
-        getHolder(holder).normalPrice.setText(getItem(position).getOrigin_price());
+            SDViewBinder.setImageView(getItem(position).getIcon(), getHolder(holder).image);        }
+
+
+        getHolder(holder).title.setText( MGStringFormatter.getLimitedString(getItem(position).getName(),13));
+        getHolder(holder).describe.setText(MGStringFormatter.getLimitedString(getItem(position).getBrief(),46));
+        getHolder(holder).price.setText(SDFormatUtil.formatNumberString(getItem(position).getTuan_price(),2)+"元");
+        getHolder(holder).normalPrice.setText(SDFormatUtil.formatNumberString(getItem(position).getOrigin_price(),2)+"元");
+
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
 //        getHolder(holder).distance.setText(getItem(position).);
     }
