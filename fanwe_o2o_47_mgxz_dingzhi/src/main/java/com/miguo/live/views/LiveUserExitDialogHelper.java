@@ -7,7 +7,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -46,7 +45,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private String count = "";
     private List<Room> datasList = new ArrayList<>();
     private UserExitAdapter mUserExitAdapter;
-    CallbackView callbackView;
+    CallbackView2 callbackView2;
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
@@ -54,8 +53,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 //        setView();
     }
 
-    public void setView(CallbackView callbackView) {
-        this.callbackView = callbackView;
+    public void setView(CallbackView2 callbackView2) {
+        this.callbackView2 = callbackView2;
         liveHttpHelper = new LiveHttpHelper(mActivity, this, "");
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
         liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
@@ -156,8 +155,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
     @Override
     public void onSuccess(String method, List datas) {
-        if(callbackView != null){
-            callbackView.onSuccess(method, datas);
+        if(callbackView2 != null){
+            callbackView2.onSuccess(method, datas);
         }
         Message message = new Message();
         if (LiveConstants.CHECK_FOCUS.equals(method)) {

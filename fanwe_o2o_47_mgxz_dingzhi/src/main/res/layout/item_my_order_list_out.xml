@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="2dp"
     android:orientation="vertical" >
-    <com.didikee.uilibs.views.customviews.MaxHeightListView
+    <com.didikee.uilibs.views.MaxHeightListView
         android:id="@+id/max_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

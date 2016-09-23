@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ScrollView;
 
+import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -145,11 +146,15 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragPayments = new OrderDetailPaymentsFragment();
 
 
-        mFragPayments.setmListener(new OrderDetailPaymentsFragment.OrderDetailPaymentsFragmentListener() {
+        mFragPayments.setmListener(new PaymentAdapter.PaymentTypeChangeListener() {
 
             @Override
             public void onPaymentChange(PaymentTypeInfo model) {
-                currentPayType = model;
+                if(model.isChecked()) {
+                    currentPayType = model;
+                }else{
+                    currentPayType =null;
+                }
                 changePayType(1, false);
             }
         });
@@ -218,8 +223,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         String thirdPaymentId = mFragPayments.getPaymentId();
         //余额支付是否被 选择
         int yuePay = mFragAccountPayment.getUseAccountMoney();
-
-        totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
         //用户余额。
         yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
 
@@ -227,9 +230,12 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             //未选择第三方支付
             if (yuePay == 0) {
                 //未选择余额支付
+                MGToast.showToast("请选择一种支付方式");
                 return false;
             } else {
+                //选择了余额支付 。
                 if (totalFloat > yueFloat) {
+                    MGToast.showToast("当前余额不够，请再选择一种支付方式");
                     return false;
                 } else {
                     return true;
@@ -318,7 +324,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragParams.setmCheckActModel(mCheckActModel);
 
         // 支付方式列表
-        mFragPayments.setmCheckActModel(mCheckActModel);
+       // mFragPayments.setmCheckActModel(mCheckActModel);
 
         // 余额支付
         mFragAccountPayment.setmCheckActModel(mCheckActModel);
@@ -339,6 +345,12 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
         if (datas != null && datas.size() > 0) {
+            for(int i = 0 ; i < datas.size() ; i++){
+                PaymentTypeInfo paymentTypeInfo = datas.get(i);
+                if(paymentTypeInfo!=null&&"1".equals(paymentTypeInfo.getDefault_pay())){
+                    paymentTypeInfo.setChecked(true);
+                }
+            }
             mFragPayments.setListPayment(datas);
         }
     }
@@ -428,7 +440,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                     return;
                 }
                 if (!ifMoneyEnough()) {
-                    MGToast.showToast("请选择一种支付方式");
                     return;
                 }
                 if (v.isClickable()) {

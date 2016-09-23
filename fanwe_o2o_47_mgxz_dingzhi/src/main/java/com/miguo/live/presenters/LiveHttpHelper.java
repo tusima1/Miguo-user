@@ -649,7 +649,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.USER_FOCUS, null);
+                mView2.onSuccess(LiveConstants.USER_FOCUS, null);
             }
 
             @Override

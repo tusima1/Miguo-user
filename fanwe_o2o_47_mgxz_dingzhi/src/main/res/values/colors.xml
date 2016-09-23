@@ -3,6 +3,7 @@
 
 
     <color name="text_base_color">#595959</color>
+    <color name="text_base_color_2">#999999</color>
 
     <!-- 分类控件项被选中颜色 -->
     <color name="bg_gray_categoryview_item_select">#f4f4f4</color>
@@ -53,6 +54,11 @@
     <color name="c_FF3000">#ff3000</color>
     <!-- hint 灰色字体 rgb 204,204,204 -->
     <color name="c_CCCCCC">#CCCCCC</color>
+
+    <!-- 免预约-->
+    <color name="color0ca431">#0ca431</color>
+    <!-- 首页直播列表团购列表分隔背景色-->
+    <color name="colorf2f2f2">#f2f2f2</color>
 
     <!--color mgxz-->
     <!--说明,color_数字,数字代表color的透明度,例如80代表80%的透明度-->

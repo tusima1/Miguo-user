@@ -419,7 +419,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     private void gotoLogin() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        Intent intent = new Intent(getActivity(),
+                LoginActivity.class);
         getContext().startActivity(intent);
     }
 

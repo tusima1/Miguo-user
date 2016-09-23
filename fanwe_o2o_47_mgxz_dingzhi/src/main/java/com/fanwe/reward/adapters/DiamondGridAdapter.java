@@ -60,7 +60,7 @@ public class DiamondGridAdapter extends BaseAdapter {
             setCheckedColor(viewTag,false);
         }
         // set name
-        viewTag.mDiamond.setText(entity.getDiamond());
+        viewTag.mDiamond.setText(entity.getDiamond()+"钻石");
         // set icon
         viewTag.mMoney.setText("￥ "+entity.getPrice());
 

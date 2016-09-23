@@ -247,6 +247,12 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         userRobRedPacketEndDialogHelper.show();
 
     }
+    /*dismiss*/
+    public void dismissPop(){
+        if (popHelper!=null){
+            popHelper.dismissLiveUserPop();
+        }
+    }
 
     /**
      * 点击了商品(宝贝)

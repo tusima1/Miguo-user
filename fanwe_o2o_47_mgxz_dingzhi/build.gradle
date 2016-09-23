@@ -86,7 +86,7 @@ dependencies {
     //7牛
     compile 'com.qiniu:happy-dns:0.2.9'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-    compile 'com.didikee:UILibrary:0.0.3'
+    compile 'com.didikee:UILibrary:0.0.4'
     compile 'com.android.support:cardview-v7:23.1.1'
     /**
      * okhttp请求计时器
@@ -106,6 +106,13 @@ dependencies {
     //    compile 'com.facebook.fresco:fresco:0.9.0+'
 //    compile 'com.facebook.fresco:fresco:0.9.0+'
 //    compile 'com.facebook.fresco:imagepipeline-okhttp:0.9.0+'
+
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
+    /**
+     * 下拉刷新 2016-9-23
+     */
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
 
 //    compile 'com.nineoldandroids:library:2.4.0'
 //    compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'

@@ -106,6 +106,7 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+
                 mView.onSuccess(UserConstants.USER_INFO_METHOD, null);
             }
 

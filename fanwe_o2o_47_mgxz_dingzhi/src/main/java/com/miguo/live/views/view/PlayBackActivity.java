@@ -92,12 +92,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private ImageView mLoadingView;
     private boolean mHWDecode = false;
     private View root;
-    private Button mBtnLog;
     private ImageView mBtnPlay;
-    private Button mBtnRenderRotation;
-    private Button mBtnRenderMode;
-    private Button mBtnHWDecode;
-    private ScrollView mScrollView;
     private SeekBar mSeekBar;
     private TextView mTextDuration;
     private TextView mTextStart;
@@ -164,8 +159,8 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     String file_size ;
 
     String duration ;
-    String file_id;
-    String vid ;
+
+
     String playset;
 
     private boolean isFirstLogin= true;
@@ -173,8 +168,8 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int roomNum=87654321;
-        CurLiveInfo.setRoomNum(roomNum);
+     //   int roomNum=87654321;
+      //  CurLiveInfo.setRoomNum(roomNum);
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
@@ -225,10 +220,9 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
          chat_room_id = data.getString("chat_room_id", "");
          file_size = data.getString("file_size", "");
          duration = data.getString("duration", "");
-         file_id = data.getString("file_id", "");
-         vid = data.getString("vid", "");
+
          playset = data.getString("playset", "");
-        Log.e("test", chat_room_id +"--"+file_size+"--"+duration+"--"+file_id+"--"+vid+"--"+playset);
+        Log.e("test", chat_room_id +"--"+file_size+"--"+duration+"--"+playset);
     }
 
     public void initView(){
@@ -554,9 +548,12 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                 if(10013==code){
                     Log.e("进来了errorcode:"+code+",",desc);
 
+                    if (mLiveHttphelper != null) {
+                        mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
+                    }
                     mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
                     //发消息通知上线
-                    mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM,"进来了");
+//                    mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM,"进来了");
                 }
                 Log.e("进来了errorcode:"+code+",",desc);
 
@@ -568,7 +565,9 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
                 mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
                     //发消息通知上线
-
+                if (mLiveHttphelper != null) {
+                    mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
+                }
 
             }
         });
@@ -585,9 +584,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                 }
             } else if (Build.VERSION.SDK_INT >= 23) { //目前android6.0以上暂不支持后台播放
                 startPlayRtmp();
-                if (mLiveHttphelper != null) {
-                    mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
-                }
+
             }
         }
 

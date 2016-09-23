@@ -1,6 +1,5 @@
 package com.miguo.live.views;
 
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
@@ -20,11 +19,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -155,8 +152,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private long mSecond = 0;
     private Timer mHearBeatTimer, mVideoTimer, mAudienceTimer, mRedPacketTimer;
     private VideoTimerTask mVideoTimerTask;//计时器
-    private ObjectAnimator mObjAnim;
-    private ImageView mRecordBall;
     private int thumbUp = 0;
 
     private int watchCount = 0;
@@ -392,13 +387,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initView();
     }
 
-//    /**
-//     * IM 登录。
-//     */
-//    public void doImLogin(String userid, String useSign) {
-//        mTLoginHelper.imLogin(userid, useSign);
-//    }
-
     /**
      * 登录
      *
@@ -419,50 +407,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         startActivity(intent);
         finish();
     }
-
-
-    /**
-     * 取签名 。
-     *
-     * @param token
-     */
-//    public void getSign(String token) {
-//        //get usersign
-//        MgCallback mgCallback = new MgCallback() {
-//            @Override
-//            public void onSuccessResponse(String responseBody) {
-//                Gson gson = new Gson();
-//                RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign
-//                        .class);
-//                List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
-//                if (resultGenerateSigns == null || resultGenerateSigns.size() < 1) {
-//
-//                    MGToast.showToast("获取用户签名失败。");
-//                    finish();
-//                    return;
-//                }
-//                ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
-//                List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
-//
-//                if (modelGenerateSign != null && modelGenerateSign.size() > 0 &&
-//                        modelGenerateSign.get(0) != null) {
-//                    String usersig = modelGenerateSign.get(0).getUsersig();
-//                    MySelfInfo.getInstance().setUserSig(usersig);
-//                    App.getInstance().setUserSign(usersig);
-//                    String userid = MySelfInfo.getInstance().getId();
-//                    mTLoginHelper.imLogin(userid, usersig);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onErrorResponse(String message, String errorCode) {
-//                MGToast.showToast("获取用户签名失败。");
-//                finish();
-//            }
-//        };
-//        tencentHttpHelper.getSign(token, mgCallback);
-//    }
 
     /**
      * 初始化AVSDK
@@ -486,7 +430,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     String formatTime = LiveUtil.updateWallTime(mSecond);
                     //        if (Constants.HOST == MySelfInfo.getInstance().getIdStatus() &&
                     // null != mVideoTime) {
-//            SxbLog.i(TAG, " refresh time ");
+//            SxbLog.e(TAG, " refresh time ");
 //            mVideoTime.setText(formatTime);
 //        }
                     break;
@@ -609,6 +553,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
             if (action.equals(Constants.ACTION_HOST_LEAVE)) {//主播结束
                 quiteLivePassively();
+                Log.e("test","主播退出"+"广播色的速度");
             }
         }
     };
@@ -623,14 +568,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 初始化UI
      */
     private View avView;
-    private TextView BtnBeauty, BtnWhite, mBeautyConfirm;
     private TextView BtnCtrlVideo, BtnCtrlMic, BtnHungup;
     private TextView inviteView1, inviteView2, inviteView3;
     private ListView mListViewMsgItems;
     private LinearLayout mVideoMemberCtrlView;
-    private FrameLayout mFullControllerUi, mBackgound;
-    private SeekBar mBeautyBar;
-    private int mBeautyRate, mWhiteRate;
+    private FrameLayout mFullControllerUi;
     /**
      * 主播底部栏目
      */
@@ -819,7 +761,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //
 //                @Override
 //                public void onStopTrackingTouch(SeekBar seekBar) {
-//                    SxbLog.d("SeekBar", "onStopTrackingTouch");
+//                    SxbLog.e("SeekBar", "onStopTrackingTouch");
 //                    if (mProfile == mBeatuy) {
 //                        Toast.makeText(LiveActivity.this, "beauty " + mBeautyRate + "%", Toast
 // .LENGTH_SHORT).show();//美颜度
@@ -831,7 +773,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //
 //                @Override
 //                public void onStartTrackingTouch(SeekBar seekBar) {
-//                    SxbLog.d("SeekBar", "onStartTrackingTouch");
+//                    SxbLog.e("SeekBar", "onStartTrackingTouch");
 //                }
 //
 //                @Override
@@ -952,7 +894,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         @Override
         public void run() {
             String host = CurLiveInfo.getHostID();
-            SxbLog.i(TAG, "HeartBeatTask " + host);
+            SxbLog.e(TAG, "HeartBeatTask " + host);
             mLiveHelper.sendHeartBeat();
 
         }
@@ -973,7 +915,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private class VideoTimerTask extends TimerTask {
         public void run() {
-            SxbLog.i(TAG, "timeTask ");
+            SxbLog.e(TAG, "timeTask ");
             ++mSecond;
             if (LiveUtil.checkIsHost())
                 mHandler.sendEmptyMessage(UPDAT_WALL_TIME_TIMER_TASK);
@@ -1104,6 +1046,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private void quiteLivePassively() {
         Toast.makeText(this, "主播退出了房间", Toast.LENGTH_SHORT);
+        Log.e("tet", "主播退出了房间----广播");
         mLiveHelper.perpareQuitRoom(false);
         mEnterRoomHelper.quiteLive();
     }
@@ -1122,6 +1065,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
+        Log.e("LiveActivity","");
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
 
@@ -1145,6 +1089,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     boolean userClickOut = false;
 
+    private boolean showExit=false;
+
     /**
      * 完全退出房间了
      * 這裡需要判斷是否為主播退出導致的退出事件
@@ -1155,7 +1101,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        Log.d(TAG, "quiteRoomComplete 退出房间...");
+        Log.e("LiveActivity","");
+        Log.e(TAG, "quiteRoomComplete 退出房间...");
         if (LiveUtil.checkIsHost()) {
             MGToast.showToast("主播退出!");
 //            if (backDialog != null) {
@@ -1166,13 +1113,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             /**
              * 如果不是用戶點擊退出導致的調用，則需要彈出主播已退出的窗口
              */
-            if (!userClickOut) {
-                if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
-                        !mUserHeadTopView.isUserClose) {
-                    mUserHeadTopView.showExitDialog();
-                }
-            }
-            Log.d(LiveActivity.TAG, "quite: " + id_status);
+//            if (!userClickOut) {
+//                if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
+//                        !mUserHeadTopView.isUserClose && !showExit) {
+//                    mUserHeadTopView.showExitDialog();
+//                    showExit=true;
+//                }else {
+//                    finish();
+//                }
+//            }
+            Log.e(LiveActivity.TAG, "quite: " + id_status+"userClickOut: "+userClickOut);
 //            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
 // !mUserHeadTopView.isUserClose) {
 //                mUserHeadTopView.showExitDialog();
@@ -1205,11 +1155,35 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
-        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间了", Constants
+        String text=TextUtils.isEmpty(name) ? id : name;
+        refreshTextListView(faceUrl,text , "退出房间了", Constants
                 .MEMBER_EXIT);
         watchCount--;
         int roomId = CurLiveInfo.getRoomNum();
-
+        String hostID = CurLiveInfo.getHostID();
+//        Log.e("test",hostID+"---"+hostName+"----"+hostUserID);
+//        Log.e("test",id+"---"+name+"----"+faceUrl);
+//        09-23 15:29:21.760 14296-14296/com.fanwe.o2o.miguo E/test: 228b3770-72d8-4f61-9fce-a6ae1cb154e4---18667126...----228b3770-72d8-4f61-9fce-a6ae1cb154e4
+//        09-23 15:29:21.760 14296-14296/com.fanwe.o2o.miguo E/test: 228b3770-72d8-4f61-9fce-a6ae1cb154e4---18667126392----
+        if (!TextUtils.isEmpty(id) && id.equals(hostID)){
+            //展示主播退出时,用户弹出来的dialog
+            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
+                    !mUserHeadTopView.isUserClose && !showExit) {
+                if (mUserBottomTool!=null){
+                    mUserBottomTool.dismissPop();
+                    MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUserHeadTopView.showExitDialog();
+                        }
+                    },500);
+                }else {
+                    mUserHeadTopView.showExitDialog();
+                }
+                showExit=true;
+            }
+            return;
+        }
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);
@@ -1290,7 +1264,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         if (list == null) return;
         for (String id : list) {
-            SxbLog.i(TAG, "memberQuiteLive id " + id);
+            SxbLog.e(TAG, "memberQuiteLive id " + id);
             if (CurLiveInfo.getHostID().equals(id)) {
                 if (MySelfInfo.getInstance().getIdStatus() == Constants.MEMBER)
                     quiteLivePassively();
@@ -1310,6 +1284,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void hostQuiteLive(String type, String responseBody) {
+        Log.e("test","主播退出"+"type"+type+"responseBody"+responseBody);
     }
 
 
@@ -1373,7 +1348,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         //渲染本地Camera
         if (isLocal == true) {
-            SxbLog.i(TAG, "showVideoView host :" + MySelfInfo.getInstance().getId());
+            SxbLog.e(TAG, "showVideoView host :" + MySelfInfo.getInstance().getId());
             QavsdkControl.getInstance().setSelfId(MySelfInfo.getInstance().getId());
             QavsdkControl.getInstance().setLocalHasVideo(true, MySelfInfo.getInstance().getId());
             //主播通知用户服务器
@@ -1630,7 +1605,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                        mFullControllerUi.setVisibility(View.VISIBLE);
 //                    }
 //                } else {
-//                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
+//                    SxbLog.e(TAG, "beauty_btn mTopBar  is null ");
 //                }
 //                break;
 
@@ -1648,7 +1623,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                        mFullControllerUi.setVisibility(View.VISIBLE);
 //                    }
 //                } else {
-//                    SxbLog.i(TAG, "beauty_btn mTopBar  is null ");
+//                    SxbLog.e(TAG, "beauty_btn mTopBar  is null ");
 //                }
 //                break;
             case R.id.qav_beauty_setting_finish:
@@ -1780,7 +1755,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
 
         mListViewMsgItems.setVisibility(View.VISIBLE);
-        SxbLog.d(TAG, "refreshTextListView height " + mListViewMsgItems.getHeight());
+        SxbLog.e(TAG, "refreshTextListView height " + mListViewMsgItems.getHeight());
 
         if (mListViewMsgItems.getCount() > 1) {
             if (true)
