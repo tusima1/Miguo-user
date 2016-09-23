@@ -112,7 +112,7 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.mTv_BigNum.setTextColor(grayColor);
             holder.mTv_TitleTag.setTextColor(grayColor);
             holder.mIv_WaterMark.setImageResource(R.drawable.bg_red_disable);
-            holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_red_down,null));
+            holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_red_down));
             holder.mIv_WaterMark.setVisibility(View.VISIBLE);
         }else if ("1".equals(is_used)){
             //已经使用了
@@ -120,14 +120,14 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.mTv_BigNum.setTextColor(grayColor);
             holder.mTv_TitleTag.setTextColor(grayColor);
             holder.mIv_WaterMark.setImageResource(R.drawable.bg_red_has_used);
-            holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_red_down,null));
+            holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_red_down));
             holder.mIv_WaterMark.setVisibility(View.VISIBLE);
         }else {
             //可用的
             holder.packet_type.setTextColor(orangeColor);
             holder.mTv_BigNum.setTextColor(orangeColor);
             holder.mTv_TitleTag.setTextColor(tempYellowColor);
-            holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_orange_down,null));
+            holder.fr_bg_down.setBackground(parent.getResources().getDrawable(R.drawable.shape_live_bg_orange_down));
             holder.mIv_WaterMark.setVisibility(View.GONE);
         }
         holder.mTv_Title.setText(modelUserRedPacket.getRed_packet_name());

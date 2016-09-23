@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.didikee.uilibs.views.customviews.MaxHeightListView;
+import com.didikee.uilibs.views.MaxHeightListView;
 import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.adapter.SDBaseAdapter;

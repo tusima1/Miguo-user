@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.didikee.uilibs.views.ImageTextView;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.utils.StatusBarCompat;
 
@@ -20,7 +21,7 @@ import com.miguo.utils.StatusBarCompat;
 public abstract class MGBaseActivity extends Activity implements View.OnClickListener {
     private int mTitleGravity= Gravity.CENTER;
     private ImageButton ib_left;
-    private ImageButton ib_right;
+    private ImageTextView ib_right;
     private TextView tv_middle;
     private String title;
 
@@ -45,7 +46,7 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
 
     protected void initTitle(LinearLayout container){
         ib_left = (ImageButton) container.findViewById(R.id.ib_left);
-        ib_right = (ImageButton) container.findViewById(R.id.ib_right);
+        ib_right = (ImageTextView) container.findViewById(R.id.ib_right);
         tv_middle = (TextView) container.findViewById(R.id.tv_middle);
 
         //设置标题
@@ -58,16 +59,26 @@ public abstract class MGBaseActivity extends Activity implements View.OnClickLis
             tv_middle.setOnClickListener(this);
         }
 
-        int resId = setRightImageSrcId();
-        if (resId!=0){
-            ib_right.setImageResource(resId);
+        Object resId = setRightImageSrcId();
+        if (resId instanceof Integer){
+            int newResid= (int) resId;
+            if (newResid!=0){
+                ib_right.setImageResource(newResid);
+                ib_right.setOnClickListener(this);
+            }
+        }
+        if (resId instanceof String){
+            String txt= (String) resId;
+            ib_right.setText(txt);
+            ib_right.setTextSize(16);
             ib_right.setOnClickListener(this);
         }
+
 
         ib_left.setOnClickListener(this);
     }
 
-    protected int setRightImageSrcId(){
+    protected Object setRightImageSrcId(){
         return 0;
     }
 

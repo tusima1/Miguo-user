@@ -54,6 +54,10 @@ public class Host {
         }
     }
 
+    public String getRealNickName(){
+        return nickname;
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }

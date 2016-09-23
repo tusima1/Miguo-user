@@ -238,9 +238,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         String mobile = mUser.getUser_mobile();
         if (isEmpty(mobile)) {
             SDViewUtil.hide(mTv_mobile_tip);
-            mTv_bind_mobile.setText("绑定手机");
+            mTv_bind_mobile.setText("未绑定手机");
         } else {
-            SDViewUtil.show(mTv_mobile_tip);
+            SDViewUtil.hide(mTv_mobile_tip);
             mTv_bind_mobile.setText("已绑定手机");
             mTv_mobile.setText(SDOtherUtil.hideMobile(mobile));
         }
