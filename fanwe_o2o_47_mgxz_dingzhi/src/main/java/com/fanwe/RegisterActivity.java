@@ -196,6 +196,10 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             MGToast.showToast("请输入手机号码");
             return;
         }
+        if (userPhone.length() != 11) {
+            MGToast.showToast("请输入正确的手机号码");
+            return;
+        }
         mFragmentHelper.doCheckMobileExist(userPhone, new MgCallback() {
 
             @Override
@@ -294,6 +298,10 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             MGToast.showToast("手机号不能为空");
             return false;
         }
+        if (userPhone.length() != 11) {
+            MGToast.showToast("请输入正确的手机号");
+            return false;
+        }
         mStrPwd = mEtPwd.getText().toString();
         if (TextUtils.isEmpty(mStrPwd)) {
             MGToast.showToast("验证码不能为空");
@@ -303,10 +311,25 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             MGToast.showToast("请先同意用户注册协议");
             return false;
         }
+        if (!TextUtils.isEmpty(openid)) {
+            return true;
+        }
         String pwd2 = pwd.getText().toString();
         String pwd1 = mEt_pwd_into.getText().toString();
-        if (!pwd2.equals(pwd1)) {
-            MGToast.showToast("两次密码输入不一致。");
+        if (TextUtils.isEmpty(pwd1)) {
+            MGToast.showToast("密码不能为空");
+            return false;
+        }
+        if (pwd1.length() < 6) {
+            MGToast.showToast("密码不能小于6位");
+            return false;
+        }
+        if (pwd1.length() > 20) {
+            MGToast.showToast("密码不能大于20位");
+            return false;
+        }
+        if (!pwd1.equals(pwd2)) {
+            MGToast.showToast("两次密码输入不一致");
             return false;
         }
         passwordStr = pwd1;

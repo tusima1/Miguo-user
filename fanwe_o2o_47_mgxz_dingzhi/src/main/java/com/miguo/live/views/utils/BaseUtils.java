@@ -66,7 +66,7 @@ public class BaseUtils {
     }
 
     /**跳转到新到activity*/
-    public static void jumpToNewActivity(AppCompatActivity activity, Intent intent){
+    public static void jumpToNewActivity(Activity activity, Intent intent){
         intent.putExtra("index",0);
 //        activity.startParallaxSwipeBackActivty(activity, intent);
         activity.startActivity(intent);
@@ -74,7 +74,7 @@ public class BaseUtils {
     }
 
     /**跳转到新到activit并且结束当前Activity*/
-    public static void jumpToNewActivityWithFinish(AppCompatActivity activity,Intent intent){
+    public static void jumpToNewActivityWithFinish(Activity activity,Intent intent){
 //        activity.startParallaxSwipeBackActivty(activity, intent);
         activity.startActivity(intent);
         activity.finish();
@@ -82,7 +82,7 @@ public class BaseUtils {
     }
 
     /**跳转到新到activity*/
-    public static void jumpToNewActivityWithBackway(AppCompatActivity activity,Intent intent){
+    public static void jumpToNewActivityWithBackway(Activity activity,Intent intent){
         activity.startActivity(intent);
 //        activity.overridePendingTransition(R.anim.translate_left_out, R.anim.translate_right_out);
     }

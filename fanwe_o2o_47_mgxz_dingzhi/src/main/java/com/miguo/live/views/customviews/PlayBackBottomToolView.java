@@ -127,7 +127,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct,false);
         sharePopHelper.show();
     }
 

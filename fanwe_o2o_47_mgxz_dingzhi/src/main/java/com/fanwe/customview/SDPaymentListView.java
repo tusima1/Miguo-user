@@ -66,7 +66,11 @@ public class SDPaymentListView extends SDViewBase
 			mIv_image.setVisibility(View.VISIBLE);
 			SDViewBinder.setImageView(mIv_image, mModel.getLogo());
 		}
-		mIv_selected.setImageResource(R.drawable.ic_payment_normal);
+		if(mModel.isChecked()){
+			mIv_selected.setImageResource(R.drawable.ic_payment_selected);
+		}else {
+			mIv_selected.setImageResource(R.drawable.ic_payment_normal);
+		}
 	}
 
 	@Override

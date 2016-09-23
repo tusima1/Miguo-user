@@ -177,7 +177,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct,false);
         sharePopHelper.show();
     }
 

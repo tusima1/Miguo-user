@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveEndBinding;
@@ -17,11 +18,14 @@ import com.miguo.live.model.DataBindingLiveEnd;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.TimeUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
@@ -64,15 +68,6 @@ public class LiveEndActivity extends Activity implements CallbackView {
 
         ivIcon = (CircleImageView) findViewById(R.id.iv_portrait_live_end);
         ImageLoader.getInstance().displayImage(App.getApplication().getUserIcon(), ivIcon);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isShare) {
-            isShare = false;
-            finish();
-        }
     }
 
     public void getValue() {
@@ -136,7 +131,34 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
             platform = SHARE_MEDIA.QZONE;
         }
-        UmengShareManager.share(platform, this, "分享", "直播结束分享", "http://www.mgxz.com/", UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+        UmengShareManager.share(platform, this, "直播结束", "我刚刚送出一个亿的钻石，下次来陪我？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "邀请你关注",
+                ServerUrl.SERVER_H5 + "index/winnie/id/" + CurLiveInfo.getHostUserID(), UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), shareResultCallback);
+    }
+
+    private UMShareListener shareResultCallback = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            MGToast.showToast(share_media + "分享成功");
+            finish();
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            MGToast.showToast(share_media + "分享失败");
+            finish();
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            MGToast.showToast(share_media + "分享取消");
+            finish();
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

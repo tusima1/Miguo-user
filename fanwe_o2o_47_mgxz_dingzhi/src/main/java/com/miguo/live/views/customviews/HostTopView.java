@@ -51,12 +51,12 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
 
     public HostTopView(Context context, AttributeSet attrs) {
         super(context, attrs);
-       // init(context);
+        // init(context);
     }
 
     public HostTopView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-       // init(context);
+        // init(context);
     }
 
     public void init(Context context) {
@@ -115,9 +115,9 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
                 mLiveCommonHelper.switchCamera();
             }
         } else if (v == iv_share) {
-            SharePopHelper sharePopHelper = new SharePopHelper(mActivity);
+            SharePopHelper sharePopHelper = new SharePopHelper(mActivity, true);
             sharePopHelper.show();
-        }else if (v==mTv_location){
+        } else if (v == mTv_location) {
             //去商家店铺
             String shop_id = CurLiveInfo.shopID;
             gotoShopDetailActivity(shop_id);
@@ -157,29 +157,32 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     public void updateAudienceCount(String num) {
         if (!TextUtils.isEmpty(num)) {
             mAV_members_num.setText(num + "人");
-        }else{
-            mAV_members_num.setText( "0 人");
+        } else {
+            mAV_members_num.setText("0 人");
         }
     }
 
-    public void gotoShopDetailActivity(String shop_id){
+    public void gotoShopDetailActivity(String shop_id) {
         Intent itemintent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, shop_id);
-        bundle.putInt("type",0);
+        bundle.putInt("type", 0);
         itemintent.putExtras(bundle);
         itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startActivity(itemintent);
         }
     }
+
     /**
      * 更新数据。
+     *
      * @param mData
      */
-    public void refreshData(List<ModelAudienceInfo> mData){
+    public void refreshData(List<ModelAudienceInfo> mData) {
         mAdapter.setmData(mData);
     }
+
     /*设置地址*/
     public void setLocation(String location) {
         mTv_location.setText(location);

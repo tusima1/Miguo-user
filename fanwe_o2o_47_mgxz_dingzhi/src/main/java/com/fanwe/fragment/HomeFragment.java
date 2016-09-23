@@ -6,6 +6,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
@@ -18,6 +19,9 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.dao.barry.CommandGroupBuyDao;
+import com.fanwe.dao.barry.impl.CommandGroupBuyDaoImpl;
+import com.fanwe.dao.barry.view.CommandGroupBuyView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.views.FragmentHomeTimeLimit;
@@ -28,12 +32,14 @@ import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.IndexActAdvsModel;
 import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -48,14 +54,23 @@ import com.sunday.eventbus.SDBaseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+
 /**
  * 首页fragment
  *
  * @author js02
  */
-public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2 {
-    @ViewInject(R.id.frag_home_new_ptrsv_all)
-    private PullToRefreshScrollView mPtrsvAll;
+public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2, PtrHandler,RecyclerScrollView.OnRecyclerScrollViewListener, CommandGroupBuyView {
+//    @ViewInject(R.id.frag_home_new_ptrsv_all)
+//    private PullToRefreshScrollView mPtrsvAll;
+
+    @ViewInject(R.id.ptr_layout)
+    PtrFrameLayout ptrFrameLayout;
+    @ViewInject(R.id.recycler_scrollview)
+    RecyclerScrollView recyclerScrollView;
 
     private HomeTitleBarFragment mFragTitle;
 
@@ -91,6 +106,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     private List<Room> rooms;
     private String typeLiveHome = "";
 
+    CommandGroupBuyDao commandGroupBuyDao;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -101,11 +117,20 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     @Override
     protected void init() {
         super.init();
+        initDao();
         getHomeClassify();
 //		initPageModel();
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
+    }
+
+    private void initDao(){
+        commandGroupBuyDao = new CommandGroupBuyDaoImpl(this);
+    }
+
+    private void getTuanList(int page){
+        commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
     }
 
     private void getHomeClassify() {
@@ -134,7 +159,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 if (pageData_2 != null) {
                     pageData_2.clear();
                 }
-                requestLiveList();
+                onRefreshBegin(ptrFrameLayout);
                 if (location != null) {
                     dealLocationSuccess();
                 }
@@ -195,40 +220,27 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     private void initPullToRefreshListView() {
         liveHelper = new LiveHttpHelper(getActivity(), this, "");
-        mPtrsvAll.setMode(Mode.BOTH);
-        mPtrsvAll.setOnRefreshListener(mOnRefresherListener2);
-        mPtrsvAll.setRefreshing();
-        //防止自动滚动
-        mPtrsvAll.setFocusable(true);
-        mPtrsvAll.setFocusableInTouchMode(true);
-        mPtrsvAll.requestFocus();
+        initPtrLayout(this.ptrFrameLayout);
+    }
+
+    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout){
+        ptrFrameLayout.disableWhenHorizontalMove(true);
+        ptrFrameLayout.setEnabledNextPtrAtOnce(false);
+        MaterialHeader ptrHead = new MaterialHeader(getActivity());
+        ptrHead.setPadding(0, 24, 0, 24);
+        ptrFrameLayout.setHeaderView(ptrHead);
+        ptrFrameLayout.addPtrUIHandler(ptrHead);
+        /**
+         * 设置下拉刷新回调
+         */
+        ptrFrameLayout.setPtrHandler(this);
+        recyclerScrollView.setOnRecyclerScrollViewListener(this);
     }
 
     public void refreshData() {
-        mPtrsvAll.setRefreshing();
+//        mPtrsvAll.setRefreshing();
     }
 
-    private OnRefreshListener2<ScrollView> mOnRefresherListener2 = new OnRefreshListener2<ScrollView>() {
-        @Override
-        public void onPullDownToRefresh(
-                PullToRefreshBase<ScrollView> refreshView) {
-
-            isRefresh = true;
-            pageNum = 1;
-            requestLiveList();
-            mPtrsvAll.setMode(Mode.BOTH);
-        }
-
-        @Override
-        public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-            isRefresh = false;
-            if (!SDCollectionUtil.isEmpty(rooms)) {
-                pageNum++;
-            }
-            requestLiveList();
-            mPtrsvAll.setMode(Mode.BOTH);
-        }
-    };
 
     private void requestLiveList() {
         if (liveHelper != null) {
@@ -276,7 +288,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
             @Override
             public void onFinish() {
-                mPtrsvAll.onRefreshComplete();
+//                mPtrsvAll.onRefreshComplete();
                 SDDialogManager.dismissProgressDialog();
             }
         };
@@ -354,7 +366,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
-                requestLiveList();
+                onRefreshBegin(ptrFrameLayout);
                 break;
             case RETRY_INIT_SUCCESS:
                 dealLocationSuccess();
@@ -366,6 +378,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 }
                 typeLiveHome = bean.getId();
                 requestLiveList();
+//                onRefreshBegin(ptrFrameLayout);
                 break;
             default:
                 break;
@@ -402,10 +415,12 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 case 1:
                     //直播列表
                     mHomeFragmentLiveList.updateView(isRefresh, rooms);
-                    mPtrsvAll.onRefreshComplete();
+//                    mPtrsvAll.onRefreshComplete();
+                    loadComplete();
                     break;
                 case 2:
-                    mPtrsvAll.onRefreshComplete();
+//                    mPtrsvAll.onRefreshComplete();
+                    loadComplete();
                     break;
                 case 3:
                     // 首页分类
@@ -455,5 +470,76 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         Message message = new Message();
         message.what = 2;
         mHandler.sendMessage(message);
+    }
+
+    @Override
+    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+        return recyclerScrollView.canRefresh();
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout frame) {
+        pageNum = 1;
+        requestLiveList();
+        getTuanList(pageNum);
+    }
+
+    /**
+     * 加载更多
+     */
+    @Override
+    public void onScrollToEnd() {
+//        getTuanList(pageNum);
+    }
+
+    @Override
+    public void onScrollChanged(int l, int t, int oldl, int oldt) {
+
+    }
+
+    public void loadComplete(){
+        ptrFrameLayout.refreshComplete();
+        recyclerScrollView.loadComplite();
+    }
+
+    /**
+     * 首页团购列表回调
+     */
+    @Override
+    public void getCommandGroupBuyDaoListSuccess(final CommandGroupBuyBean.Result result) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setPageNum(result.getPage());
+                mHomeFragmentLiveList.onRefreshTuan(true, result.getBody());
+                loadComplete();
+            }
+        });
+    }
+
+    @Override
+    public void getCommandGroupBuyDaoListLoadMore(final CommandGroupBuyBean.Result result) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setPageNum(result.getPage());
+                mHomeFragmentLiveList.onRefreshTuan(false, result.getBody());
+                loadComplete();
+            }
+        });
+    }
+
+    @Override
+    public void getCommandGroupBuyDaoListError(String msg) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadComplete();
+            }
+        });
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
     }
 }
