@@ -372,12 +372,17 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click3() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_3);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
-        if (preTab == 0 || preTab == 2 || preTab == 3) {
-            if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
-                    .mPtrlv_content != null) {
-                ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
-                        .mPtrlv_content.setRefreshing();
+        if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
+        {
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
+            if (preTab == 0 || preTab == 2 || preTab == 3) {
+                if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+                        .mPtrlv_content != null) {
+                    ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+                            .mPtrlv_content.setRefreshing();
+                }
             }
         }
 
