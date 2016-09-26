@@ -70,18 +70,6 @@ public class PlayBackSeekBarView extends LinearLayout implements IViewGroup, Vie
 
         mTextDuration.setTextColor(Color.rgb(255, 255, 255));
         mTextStart.setTextColor(Color.rgb(255, 255, 255));
-//        //缓存策略
-//        mBtnCacheStrategy = (Button)view.findViewById(R.id.btnCacheStrategy);
-//        mLayoutCacheStrategy = (LinearLayout)view.findViewById(R.id.layoutCacheStrategy);
-//        mBtnCacheStrategy.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//        mLayoutCacheStrategy.setVisibility(mLayoutCacheStrategy.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-//            }
-//        });
-
-//        this.setCacheStrategy(CACHE_STRATEGY_AUTO);
-
 
     }
 

@@ -553,7 +553,10 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                     }
                     mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
                     //发消息通知上线
-//                    mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM,"进来了");
+                    if (mLiveHttphelper != null) {
+                        mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "2");
+                        mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
+                    }
                 }
                 Log.e("进来了errorcode:"+code+",",desc);
 
@@ -567,6 +570,8 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                     //发消息通知上线
                 if (mLiveHttphelper != null) {
                     mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
+                    mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM,"进来了");
+
                 }
 
             }
@@ -982,7 +987,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
             } else {
                 //发消息通知上线
-                mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, MySelfInfo.getInstance().getNickName()+"进入房间。");
+              //  mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, MySelfInfo.getInstance().getNickName()+"进入房间。");
 
             }
         }
