@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.GiftId;
@@ -30,6 +31,7 @@ import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper2;
 import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.utils.ToasUtil;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -209,26 +211,31 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
 
     /*打赏*/
     private void clickSend() {
-        if (mTvSend.isEnabled()) {
-            if (preTime==0){
-                selectedItemInfo = mGiftAdapter.getSelectedItemInfo(position);
-            }
-            String id = selectedItemInfo.getId();
+        try{
+            if (mTvSend.isEnabled()) {
+                if (preTime==0){
+                    selectedItemInfo = mGiftAdapter.getSelectedItemInfo(position);
+                }
+                String id = selectedItemInfo.getId();
 //            case GiftId.STAR:
 //            case GiftId.FLOWER:
 //            case GiftId.SWEET:
 //            case GiftId.MIGUO_BABY:
-            if (GiftId.STAR.equals(id) ||GiftId.FLOWER.equals(id) ||GiftId.SWEET.equals(id) ||GiftId.MIGUO_BABY.equals(id)){
-                //发小礼物,要连发
-                preTime = System.currentTimeMillis();
-                mHandler.sendEmptyMessageDelayed(0,2000);
-            }else {
-                //除了小礼物只能单发
-                httpHelper2.putGiftPay(liveType, roomNum+"","1",selectedItemInfo.getId());
+                if (GiftId.STAR.equals(id) ||GiftId.FLOWER.equals(id) ||GiftId.SWEET.equals(id) ||GiftId.MIGUO_BABY.equals(id)){
+                    //发小礼物,要连发
+                    preTime = System.currentTimeMillis();
+                    mHandler.sendEmptyMessageDelayed(0,2000);
+                }else {
+                    //除了小礼物只能单发
+                    httpHelper2.putGiftPay(liveType, roomNum+"","1",selectedItemInfo.getId());
+                }
+            } else {
+                MGToast.showToast("Not Enable!");
             }
-        } else {
-            MGToast.showToast("Not Enable!");
+        }catch (Exception e){
+            MGToast.showToast("操作太频繁，请稍后再试！");
         }
+
     }
 
     private void showDialog() {

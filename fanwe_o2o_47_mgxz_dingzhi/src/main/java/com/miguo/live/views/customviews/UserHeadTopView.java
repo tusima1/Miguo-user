@@ -177,6 +177,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      */
     private void userInfo() {
         Intent intent = new Intent(getContext(), UserHomeActivity.class);
+        intent.putExtra("id",CurLiveInfo.getHostID());
         getContext().startActivity(intent);
     }
 

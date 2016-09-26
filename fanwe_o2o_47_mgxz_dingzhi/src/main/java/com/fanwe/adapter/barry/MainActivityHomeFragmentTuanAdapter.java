@@ -23,7 +23,7 @@ import com.miguo.live.views.utils.BaseUtils;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/9/23.
+ * Created by 狗蛋哥/zlh on 2016/9/23.
  */
 public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapter{
 
@@ -76,7 +76,20 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         getHolder(holder).price.setText(SDFormatUtil.formatNumberString(getItem(position).getTuan_price(),2)+"元");
         getHolder(holder).normalPrice.setText(SDFormatUtil.formatNumberString(getItem(position).getOrigin_price(),2)+"元");
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
-//        getHolder(holder).distance.setText(getItem(position).);
+        getHolder(holder).freeReservation.setText(getItem(position).getTuan_property_name());
+        getHolder(holder).distance.setText(getDistance(position));
+    }
+
+    private String getDistance(int position){
+        float distanceInt = Float.parseFloat(getItem(position).getDistance());
+        if(distanceInt <= 1000){
+            return ">" + distanceInt + "m";
+        }else if(distanceInt < 1000000){
+            float y = distanceInt / 1000;
+            return ">" + y + "km";
+        }
+        float y = distanceInt / 1000;
+        return ">" + y + "km";
     }
 
     public int getHeight(){
@@ -103,6 +116,9 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
 
         @ViewInject(R.id.title)
         TextView title;
+
+        @ViewInject(R.id.free_reservation)
+        TextView freeReservation;
 
         @ViewInject(R.id.describe)
         TextView describe;
