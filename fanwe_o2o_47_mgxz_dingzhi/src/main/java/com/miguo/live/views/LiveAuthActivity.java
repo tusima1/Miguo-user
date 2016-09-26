@@ -75,6 +75,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         tvInterest = (TextView) findViewById(R.id.tv_interest_live_auth);
         dataBindingLiveAuth = new DataBindingLiveAuth();
         binding.setLive(dataBindingLiveAuth);
+        dataBindingLiveAuth.mobile.set(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile());
 
         preData();
         setListener();

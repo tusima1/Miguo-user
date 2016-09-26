@@ -11,8 +11,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
@@ -21,6 +23,7 @@ import com.miguo.live.interf.MyItemClickListener;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
     private Button btnSubmit;
     private String strTags;
     private LiveHttpHelper liveHttpHelper;
+    private LinearLayout layoutTag;
 
 
     @Override
@@ -55,6 +59,10 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
                 finish();
                 break;
             case R.id.btn_submit_live_auth_tag:
+                if (TextUtils.isEmpty(et_tags.getText().toString().trim())) {
+                    MGToast.showToast("请输入标签");
+                    return;
+                }
                 Intent intent = new Intent();
                 intent.putExtra("tags", et_tags.getText().toString().trim());
                 setResult(8888, intent);
@@ -75,9 +83,12 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
     }
 
     private void setWidget() {
+        layoutTag = (LinearLayout) findViewById(R.id.layout_auth_tag);
         btnSubmit = (Button) findViewById(R.id.btn_submit_live_auth_tag);
         et_tags = (EditText) findViewById(R.id.et_tags);
         recyclerView = (RecyclerView) findViewById(R.id.recycleView_auth_tag);
+        btnSubmit.setBackgroundResource(R.drawable.bg_orange);
+        btnSubmit.setClickable(true);
         //GridLayout 3列
         GridLayoutManager mgr = new GridLayoutManager(mContext, 3);
         recyclerView.setLayoutManager(mgr);
@@ -96,6 +107,24 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
                 }
             }
         });
+
+        final int paddingBottom = DisplayUtil.dp2px(this, 5);
+
+        layoutTag.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                layoutTag.getWindowVisibleDisplayFrame(r);
+                //r.top 是状态栏高度
+                int screenHeight = layoutTag.getRootView().getHeight();
+                int softHeight = screenHeight - r.bottom;
+                if (softHeight > 100) {//当输入法高度大于100判定为输入法打开了
+                    layoutTag.scrollTo(0, softHeight + paddingBottom);
+                } else {//否则判断为输入法隐藏了
+                    layoutTag.scrollTo(0, paddingBottom);
+                }
+            }
+        });
     }
 
     @Override
@@ -109,8 +138,6 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
             String name = ModelHostTags.getDic_mean();
             if (TextUtils.isEmpty(strTags)) {
                 et_tags.setText(name);
-                btnSubmit.setBackgroundResource(R.drawable.bg_orange);
-                btnSubmit.setClickable(true);
             } else {
                 if (!strTags.contains(name)) {
                     strTags = strTags + "," + name;

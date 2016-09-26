@@ -7,10 +7,11 @@
 
 
     <LinearLayout
-        android:background="@color/white"
-        android:orientation="vertical"
+        android:id="@+id/layout_auth_tag"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,6 +68,8 @@
             android:layout_marginRight="@dimen/dp12"
             android:layout_marginTop="@dimen/dp5"
             android:background="@drawable/bg_grey_line"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:gravity="top"
             android:hint="@string/live_auth_tags_hint"
             android:padding="@dimen/dp5"
