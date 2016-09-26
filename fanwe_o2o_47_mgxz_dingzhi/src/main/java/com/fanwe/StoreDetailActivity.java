@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
@@ -185,6 +186,8 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
                 clickUrl = ServerUrl.SERVER_H5;
+            } else {
+                clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
             }
             String title = share.getTitle();
             if (TextUtils.isEmpty(title)) {
