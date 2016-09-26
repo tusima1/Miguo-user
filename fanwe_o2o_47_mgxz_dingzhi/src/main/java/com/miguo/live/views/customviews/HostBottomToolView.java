@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.interf.MyItemClickListenerRedNum;
@@ -268,7 +267,6 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击消息
      */
     private void clickMsg() {
-        MGToast.showToast("点击消息");
         inputMsgDialog();
     }
 

@@ -46,6 +46,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.lidroid.xutils.exception.HttpException;
@@ -410,12 +411,17 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
             @Override
             public void onClick(View v) {
-                if ("".equals(mInputName.getText().toString())) {
+                String name = mInputName.getText().toString().trim();
+                if ("".equals(name)) {
                     MGToast.showToast("名字不能为空!");
                     return;
                 }
-                if (mInputName.getText().toString().contains("米果")) {
+                if (name.contains("米果")) {
                     MGToast.showToast("用户已被占用!");
+                    return;
+                }
+                if (StringTool.getLengthChinese(name) > 7) {
+                    MGToast.showToast("昵称不能大于7个中文字符");
                     return;
                 }
                 nickName = mInputName.getText().toString();

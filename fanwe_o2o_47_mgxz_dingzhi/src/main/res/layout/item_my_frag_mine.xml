@@ -21,8 +21,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_user_face"
                 android:layout_width="@dimen/dp57"
-                android:layout_height="@dimen/dp57"
-                android:src="@drawable/app_icon"/>
+                android:layout_height="@dimen/dp57"/>
 
             <LinearLayout
                 android:id="@+id/ll_my_upgrade"
@@ -39,7 +38,7 @@
                     android:paddingBottom="@dimen/dp7"
                     android:drawablePadding="@dimen/dp5"
                     android:drawableRight="@drawable/ic_rank_1"
-                    android:text="已而已而哟"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp17"/>
 

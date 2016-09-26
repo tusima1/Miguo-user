@@ -15,9 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.model.LiveChatEntity;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
@@ -170,21 +169,27 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 //        holder.sendContext.fixViewWidth(mListView.getWidth());
 
       //  holder.civ_user_image.setImageURI();
+        String name=item.getSenderName();
         //先显示电话
-        if (TextUtils.isEmpty(item.getSenderName())||"null".equals(item.getSenderName())){
-            UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
-            String user_name = userInfoNew
-                    .getUser_name();
-            String work_tel = userInfoNew.getWork_tel();
-            if (!TextUtils.isEmpty(user_name)){
-                holder.name.setText(user_name+":");
-            }else if(!TextUtils.isEmpty(work_tel)){
-                holder.name.setText(work_tel+":");
-            }else {
-                holder.name.setText("快说你是谁"+":");
-            }
+//        if (TextUtils.isEmpty(name)||"null".equals(name)){
+//            UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+//            String user_name = userInfoNew
+//                    .getUser_name();
+//            String work_tel = userInfoNew.getWork_tel();
+//            if (!TextUtils.isEmpty(user_name)){
+//                name=user_name;
+//            }else if(!TextUtils.isEmpty(work_tel)){
+//                name=work_tel;
+//            }else {
+//                name="快说你是谁";
+//            }
+//        }
+        if (TextUtils.isEmpty(name)){
+            name="佚名";
+        }else {
+            name=MGStringFormatter.getLimitedString(name, 10);
         }
-        holder.name.setText(item.getSenderName()+":");
+        holder.name.setText(name+":");
         holder.content.setText(item.getContent());
         String faceUrl = item.getFaceUrl();
         if(!TextUtils.isEmpty(faceUrl)){

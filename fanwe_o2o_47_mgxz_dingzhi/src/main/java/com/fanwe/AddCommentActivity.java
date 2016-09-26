@@ -17,6 +17,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.utils.StringTool;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getUpToken.ModelUpToken;
@@ -147,15 +148,21 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
     }
 
     protected boolean validateParam() {
-        if (!TextUtils.isEmpty(mFragAddComment.getCommentContent())) {
-            if (mFragAddComment.getCommentContent().length() >= 15 && mFragAddComment.getCommentContent().length() <= 99) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        String content = mFragAddComment.getCommentContent();
+        if (TextUtils.isEmpty(content)) {
             MGToast.showToast("评论内容不能为空");
             return false;
+        } else {
+            if (StringTool.findEmoji(content)) {
+                MGToast.showToast("暂不支持表情");
+                return false;
+            }
+            if (content.length() >= 15 && content.length() <= 99) {
+                return true;
+            } else {
+                MGToast.showToast("评论内容长度异常");
+                return false;
+            }
         }
     }
 
