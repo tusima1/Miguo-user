@@ -127,7 +127,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
         init();
     }
 
-
     private void init() {
         startUpgradeService();
         initBottom();
@@ -136,6 +135,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
         initOthers();
         initUserInfo();
     }
+
 
     //初始化用户信息。
     private void initUserInfo() {
