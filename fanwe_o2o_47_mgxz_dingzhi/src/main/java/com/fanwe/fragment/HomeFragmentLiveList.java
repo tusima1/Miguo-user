@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/7/25.
+ * Created 狗蛋哥/zlh on 2016/7/25.
  */
 public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     private View view;
@@ -130,9 +130,11 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         }
         if (!SDCollectionUtil.isEmpty(rooms))
             datas.addAll(rooms);
-//        mLiveViewAdapter.notifyDataSetChanged();
-        mainActivityHomeFragmentLiveListAdapter.notifyDataSetChanged(rooms);
-        updateRecyclerViewHeight();
+        if(mainActivityHomeFragmentLiveListAdapter != null){
+            mainActivityHomeFragmentLiveListAdapter.notifyDataSetChanged(rooms);
+            updateRecyclerViewHeight();
+        }
+
     }
 
 
@@ -151,7 +153,9 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
                     mainActivityHomeFragmentTuanAdapter.notifyDataSetChangedLoadmore(bodys);
                 }
             }
-            updateRecyclerView2Height();
+            if(mainActivityHomeFragmentTuanAdapter != null){
+                updateRecyclerView2Height();
+            }
         }
     }
 
