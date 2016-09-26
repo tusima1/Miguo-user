@@ -8,6 +8,34 @@
 
     <include layout="@layout/item_layout_sample_title" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/ll_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="200dp"
+            android:text="暂无关注信息"
+            android:textColor="@color/rgb_898989"
+            android:textSize="@dimen/size_px2sp_28" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom"
+            android:src="@drawable/bg_empty" />
+    </RelativeLayout>
+
+
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/ptrl_act_collect"
         android:layout_width="match_parent"
@@ -18,4 +46,5 @@
         android:listSelector="#00000000"
         ptr:ptrHeaderSubTextColor="@color/gray"
         ptr:ptrHeaderTextColor="@color/gray" />
+    </FrameLayout>
 </LinearLayout>
