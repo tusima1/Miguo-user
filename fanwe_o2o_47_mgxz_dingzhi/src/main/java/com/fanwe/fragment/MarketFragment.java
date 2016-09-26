@@ -23,6 +23,7 @@ import com.fanwe.ShoppingMallActivity;
 import com.fanwe.adapter.DistributionMarketAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
@@ -114,6 +115,16 @@ public class MarketFragment extends BaseFragment implements CallbackView, Callba
         initPullToRefreshListView();
 
         getMarketList();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            if (mPtrlv_content != null) {
+                mPtrlv_content.setRefreshing();
+            }
+        }
     }
 
     private void initView() {

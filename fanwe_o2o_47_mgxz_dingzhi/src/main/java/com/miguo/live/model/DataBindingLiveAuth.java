@@ -15,6 +15,8 @@ public class DataBindingLiveAuth {
     public final ObservableField<String> interest = new ObservableField<String>();
     //常驻城市
     public final ObservableField<String> city = new ObservableField<String>();
+    //手机
+    public final ObservableField<String> mobile = new ObservableField<String>();
 
     public DataBindingLiveAuth() {
         mode.set(BEAUTY);

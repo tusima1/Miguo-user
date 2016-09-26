@@ -292,6 +292,7 @@
                 android:hint="工作人员将与您联系"
                 android:inputType="number"
                 android:maxLength="11"
+                android:text="@{live.mobile}"
                 android:textColor="@color/rgb_898989"
                 android:textColorHint="@color/c_CCCCCC"
                 android:textSize="@dimen/dp13" />

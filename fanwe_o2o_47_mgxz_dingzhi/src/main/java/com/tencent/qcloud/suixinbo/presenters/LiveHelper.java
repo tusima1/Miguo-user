@@ -1158,10 +1158,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 String token = root.getToken();
                 if ("200".equals(statusCode)) {
 
-                } else if ("320".equals(statusCode)) {
+                } else {
                     MGToast.showToast("账户已失效");
                     mLiveView.tokenInvalidateAndQuit();
-
                 }
             }
         });
