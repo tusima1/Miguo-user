@@ -94,6 +94,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     public boolean isShowCode = true;
 
+    public boolean isAlreadyShowCode = false;
+
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
             LocalUserModelDao.insertModel(localUser);
