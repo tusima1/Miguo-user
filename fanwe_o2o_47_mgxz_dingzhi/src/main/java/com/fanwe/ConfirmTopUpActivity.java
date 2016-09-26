@@ -13,6 +13,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPaymentFragmentListener;
 import com.fanwe.fragment.OrderDetailFeeFragment;
@@ -49,6 +50,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.utils.MGUIUtil;
+import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -525,7 +527,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
                 } else if ("8000".equals(status)) // 支付结果确认中
                 {
                     MGToast.showToast("支付结果确认中");
-                    onRefreshOrderBtn();
+                    finish();
                 } else {
                     MGToast.showToast(info);
                     onRefreshOrderBtn();
@@ -547,4 +549,19 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         payer.pay(orderSpec, sign, signType);
     }
 
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case PAY_SUCCESS_WEIXIN:
+                MGToast.showToast("支付成功");
+                finish();
+                break;
+            case PAY_FAILUE_WEIXIN:
+                onRefreshOrderBtn();
+                break;
+            default:
+                break;
+        }
+    }
 }
