@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
@@ -52,7 +54,10 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -143,6 +148,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     private UserFaceModule mUserFaceModule;
     private UserHttpHelper userHttpHelper;
+    private String mKefuNum="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -369,17 +375,58 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         }
     }
 
+
     /**
      * 客服电话
      */
     private void clickKfPhone() {
-        String kfPhone = AppRuntimeWorker.getKf_phone();
-        if (!TextUtils.isEmpty(kfPhone)) {
-            Intent intent = SDIntentUtil.getIntentCallPhone(kfPhone);
-            SDActivityUtil.startActivity(this, intent);
-        } else {
-            MGToast.showToast("未找到客服电话");
+        if (!TextUtils.isEmpty(mKefuNum)){
+            callKeFu(mKefuNum);
+            return;
         }
+        SDDialogManager.showProgressDialog("请稍候...");
+        new LiveHttpHelper(this, new CallbackView() {
+            @Override
+            public void onSuccess(String responseBody) {
+                SDDialogManager.dismissProgressDialog();
+                Log.e("test",responseBody);
+            }
+
+            @Override
+            public void onSuccess(String method, final List datas) {
+                SDDialogManager.dismissProgressDialog();
+                if (datas!=null){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Object data : datas) {
+                                String dic_value = ((ModelBussDictionInfo) data).getDic_value();
+                                if ("support_phone".equals(dic_value)){
+                                    mKefuNum=((ModelBussDictionInfo) data).getDic_mean();
+                                    break;
+                                }
+                            }
+                            if (TextUtils.isEmpty(mKefuNum)){
+                                MGToast.showToast("获取数据失败,请重试");
+                            }else {
+                                callKeFu(mKefuNum);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailue(String responseBody) {
+                SDDialogManager.dismissProgressDialog();
+                MGToast.showToast("获取数据失败,请重试");
+            }
+        }).getBussDictionInfo("Client");
+    }
+
+    private void callKeFu(String tel){
+        Intent intent = SDIntentUtil.getIntentCallPhone(tel);
+        SDActivityUtil.startActivity(this, intent);
     }
 
     private String nickName;

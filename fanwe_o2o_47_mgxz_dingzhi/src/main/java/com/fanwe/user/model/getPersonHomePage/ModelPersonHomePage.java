@@ -16,6 +16,16 @@ public class ModelPersonHomePage {
 
     private String fans;
 
+    private String fx_level;
+
+    public String getFx_level() {
+        return fx_level;
+    }
+
+    public void setFx_level(String fx_level) {
+        this.fx_level = fx_level;
+    }
+
     public void setNick(String nick) {
         this.nick = nick;
     }

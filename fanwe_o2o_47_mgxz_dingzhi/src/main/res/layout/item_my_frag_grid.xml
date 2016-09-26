@@ -2,265 +2,61 @@
 <android.support.v7.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:divider="@drawable/line_gray"
-    app:showDividers="middle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/dp12"
+    app:divider="@drawable/line_gray"
+    app:showDividers="middle"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp97"
         >
-
-        <LinearLayout
-            android:id="@+id/ll_shopping_cart"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_red_shopcart"
-                    android:layout_width="wrap_content"
-                    android:minWidth="@dimen/dp15"
-                    android:layout_height="@dimen/dp13"
-                    android:paddingLeft="@dimen/dp2"
-                    android:paddingRight="@dimen/dp2"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="9sp"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/reddot_13dp"
-                    android:visibility="gone"
-                    android:layout_gravity="right"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp15"
-                    android:layout_marginLeft="@dimen/dp15"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginBottom="@dimen/dp8"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_shopping"/>
-            </FrameLayout>
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="购物车"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
+        <!--购物车-->
+        <include layout="@layout/item_myfrag2_shopcart"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/bg_activity_gray"/>
-
-        <LinearLayout
-            android:id="@+id/ll_shop"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_shop"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="小店"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
+        <!--小店-->
+        <include layout="@layout/item_myfrag2_shop"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/bg_activity_gray"/>
+        <!--二维码-->
+        <include layout="@layout/item_myfrag2_erweima"/>
 
-        <LinearLayout
-            android:id="@+id/ll_wallet"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_wallet"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="钱包"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp97">
 
-        <LinearLayout
-            android:id="@+id/ll_friends"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:orientation="vertical">
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_red_friends"
-                    android:layout_width="wrap_content"
-                    android:minWidth="@dimen/dp15"
-                    android:layout_height="@dimen/dp13"
-                    android:paddingLeft="@dimen/dp2"
-                    android:paddingRight="@dimen/dp2"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="9sp"
-                    android:visibility="gone"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/reddot_13dp"
-                    android:layout_gravity="right"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp15"
-                    android:layout_marginLeft="@dimen/dp15"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginBottom="@dimen/dp8"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_frends"/>
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="分销战队"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
+        <!--钱包-->
+        <include layout="@layout/item_myfrag2_wallet"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/bg_activity_gray"/>
 
-        <LinearLayout
-            android:id="@+id/ll_quan"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_red_quan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp13"
-                    android:minWidth="@dimen/dp15"
-                    android:paddingLeft="@dimen/dp2"
-                    android:paddingRight="@dimen/dp2"
-                    android:gravity="center"
-                    android:text=""
-                    android:textSize="9sp"
-                    android:visibility="gone"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/reddot_13dp"
-                    android:layout_gravity="right"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp15"
-                    android:layout_marginLeft="@dimen/dp15"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginBottom="@dimen/dp8"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_quan"/>
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="消费券"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
+        <!--消费券-->
+        <include layout="@layout/item_myfrag2_quan"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/bg_activity_gray"/>
+        <!--分销-->
+        <include layout="@layout/item_myfrag2_fx"/>
 
-        <LinearLayout
-            android:id="@+id/ll_suggestion"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_suggest"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="我有建议"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
-                android:text="我有建议"
-                android:textColor="@color/main_color"
-                android:textSize="10sp"/>
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -270,35 +66,17 @@
         android:layout_height="@dimen/dp97"
         android:orientation="horizontal"
         android:weightSum="3">
-        <LinearLayout
-            android:id="@+id/ll_erweima"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/md_ripple_white"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_erweima"/>
+        <!--客服-->
+        <include layout="@layout/item_myfrag2_kefu"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp10"
-                android:text="个人名片"
-                android:textColor="@color/gray_text_59"
-                android:textSize="@dimen/sp13"/>
-        </LinearLayout>
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/bg_activity_gray"/>
+        <!--建议-->
+        <include layout="@layout/item_myfrag2_suggestion"/>
     </LinearLayout>
-
 
 
 </android.support.v7.widget.LinearLayoutCompat>

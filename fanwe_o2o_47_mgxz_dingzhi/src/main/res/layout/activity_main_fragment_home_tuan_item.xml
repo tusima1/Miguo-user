@@ -46,12 +46,13 @@
 
     <TextView
         android:id="@+id/describe"
+        android:maxLines="2"
         android:text="米果小站独家销售只要69元即可享受价值99元的单人浴资单"
         android:textColor="@color/text_base_color_2"
         android:textSize="12sp"
         android:layout_alignLeft="@+id/title"
         android:layout_below="@+id/title"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

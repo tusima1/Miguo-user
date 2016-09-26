@@ -124,7 +124,10 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     }
 
     private void getTuanList(int page){
-        commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
+        //BaiduMapManager.getInstance().getBDLocation().getLongitude() +
+        //BaiduMapManager.getInstance().getBDLocation().getLatitude() +
+
+        commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome,"", BaiduMapManager.getInstance().getBDLocation().getLongitude() + "", BaiduMapManager.getInstance().getBDLocation().getLatitude() + "", AppRuntimeWorker.getCity_id());
     }
 
     private void getHomeClassify() {

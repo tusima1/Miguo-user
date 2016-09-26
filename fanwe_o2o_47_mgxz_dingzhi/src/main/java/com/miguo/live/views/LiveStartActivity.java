@@ -10,11 +10,13 @@ import android.view.View;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
+import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -156,32 +158,35 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
 
     private void startLive() {
-        createAvRoom();
-//        if (dataBindingLiveStart.isLiveRight.get()) {
-//            SHARE_MEDIA platform = SHARE_MEDIA.QQ;
-//            //已认证的，去直播
-//            if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
-//                platform = SHARE_MEDIA.QQ;
-//            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.WEIXIN) {
-//                platform = SHARE_MEDIA.WEIXIN;
-//            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.FRIEND) {
-//                platform = SHARE_MEDIA.WEIXIN_CIRCLE;
-//            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.SINA) {
-//                platform = SHARE_MEDIA.SINA;
-//            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
-//                platform = SHARE_MEDIA.QZONE;
-//            }
-//            UmengShareManager.share(platform,
-//                    this,
-//                    "开始直播",
-//                    "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....",
-//                    ServerUrl.SERVER_H5 + "share/live/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-//                    UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"),
-//                    shareResultCallback);
-//        } else {
-//            //未认证的，去认证
-//            startActivity(new Intent(this, LiveAuthActivity.class));
-//        }
+        if (ServerUrl.DEBUG){
+            createAvRoom();
+            return;
+        }
+        if (dataBindingLiveStart.isLiveRight.get()) {
+            SHARE_MEDIA platform = SHARE_MEDIA.QQ;
+            //已认证的，去直播
+            if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
+                platform = SHARE_MEDIA.QQ;
+            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.WEIXIN) {
+                platform = SHARE_MEDIA.WEIXIN;
+            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.FRIEND) {
+                platform = SHARE_MEDIA.WEIXIN_CIRCLE;
+            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.SINA) {
+                platform = SHARE_MEDIA.SINA;
+            } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
+                platform = SHARE_MEDIA.QZONE;
+            }
+            UmengShareManager.share(platform,
+                    this,
+                    "开始直播",
+                    "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....",
+                    ServerUrl.SERVER_H5 + "share/live/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                    UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"),
+                    shareResultCallback);
+        } else {
+            //未认证的，去认证
+            startActivity(new Intent(this, LiveAuthActivity.class));
+        }
     }
 
     private UMShareListener shareResultCallback = new UMShareListener() {
