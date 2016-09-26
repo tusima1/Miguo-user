@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,13 @@ import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.Constant;
+import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDActivityUtil;
+import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -37,7 +43,11 @@ import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
+import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -60,6 +70,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private View mQuan;
     private View mSuggestion;
     private View mErWeiMa;
+    private View mKefu;
     private View mStar;
     private View mCollect;
     private View mFans;
@@ -80,6 +91,8 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private TextView mTvRedShopCart;
     private TextView mTvRedFriends;
     private TextView mTvRedQuan;
+
+    private String mKefuNum="";
 
 
     @Override
@@ -153,6 +166,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mQuan = findViewById(R.id.ll_quan);
         mSuggestion = findViewById(R.id.ll_suggestion);
         mErWeiMa = findViewById(R.id.ll_erweima);
+        mKefu = findViewById(R.id.ll_kefu);
 
         mTvRedShopCart = ((TextView) findViewById(R.id.tv_red_shopcart));
         mTvRedFriends = ((TextView) findViewById(R.id.tv_red_friends));
@@ -165,6 +179,8 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mQuan.setOnClickListener(this);
         mSuggestion.setOnClickListener(this);
         mErWeiMa.setOnClickListener(this);
+        mKefu.setOnClickListener(this);
+
     }
 
     private void initMyOrders() {
@@ -293,6 +309,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         } else if (v == mUserName) {
             //跳转至会员升级
             startActivity(MemberRankActivity.class);
+        }else if (v==mKefu){
+            //客服电话
+            clickKfPhone();
         }
         /*else if (v== mIvMsg){
             //消息
@@ -391,6 +410,58 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         } else {
             tvRed.setVisibility(View.GONE);
         }
+    }
+    /**
+     * 客服电话
+     */
+    private void clickKfPhone() {
+        if (!TextUtils.isEmpty(mKefuNum)){
+            callKeFu(mKefuNum);
+            return;
+        }
+        SDDialogManager.showProgressDialog("请稍候...");
+        new LiveHttpHelper(getActivity(), new CallbackView() {
+            @Override
+            public void onSuccess(String responseBody) {
+                SDDialogManager.dismissProgressDialog();
+                Log.e("test",responseBody);
+            }
+
+            @Override
+            public void onSuccess(String method, final List datas) {
+                SDDialogManager.dismissProgressDialog();
+                if (datas!=null){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Object data : datas) {
+                                String dic_value = ((ModelBussDictionInfo) data).getDic_value();
+                                if ("support_phone".equals(dic_value)){
+                                    mKefuNum=((ModelBussDictionInfo) data).getDic_mean();
+                                    break;
+                                }
+                            }
+                            if (TextUtils.isEmpty(mKefuNum)){
+                                MGToast.showToast("获取数据失败,请重试");
+                            }else {
+                                callKeFu(mKefuNum);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailue(String responseBody) {
+                SDDialogManager.dismissProgressDialog();
+                MGToast.showToast("获取数据失败,请重试");
+            }
+        }).getBussDictionInfo("Client");
+    }
+
+    private void callKeFu(String tel){
+        Intent intent = SDIntentUtil.getIntentCallPhone(tel);
+        SDActivityUtil.startActivity(getActivity(), intent);
     }
 
     //------------http start---------------
