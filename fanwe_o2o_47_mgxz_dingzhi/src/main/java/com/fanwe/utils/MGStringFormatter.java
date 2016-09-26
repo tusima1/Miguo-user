@@ -2,6 +2,8 @@ package com.fanwe.utils;
 
 import android.text.TextUtils;
 
+import com.miguo.utils.UICharacterCount;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -138,10 +140,12 @@ public class MGStringFormatter {
     public static String getLimitedString(String txt,int limitNum,String endStr,String emptyStr){
         String result="";
         if(!TextUtils.isEmpty(txt)){
-            int length = txt.length();
-            if (length>limitNum){
+            float count = UICharacterCount.getCount(txt);
+            if (count>limitNum){
                 result=txt.substring(0,limitNum);
                 result=result+endStr;
+            }else {
+                result=txt;
             }
         }else {
             result=emptyStr;

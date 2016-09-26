@@ -34,7 +34,10 @@
         android:layout_marginLeft="@dimen/dp10"
         android:layout_toRightOf="@id/civ_user_image"
         android:gravity="center_vertical"
-        android:text="观众"
+        android:maxEms="10"
+        android:ellipsize="end"
+        android:text=""
+        android:lines="1"
         android:textColor="@color/white"/>
 
     <TextView
