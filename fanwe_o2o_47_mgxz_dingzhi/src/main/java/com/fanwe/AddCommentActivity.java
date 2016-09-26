@@ -234,6 +234,7 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
                         return;
                     }
                 }
+            } else {
                 MGToast.showToast("评论成功");
                 SDEventManager.post(EnumEventTag.COMMENT_SUCCESS.ordinal());
                 Intent intent = new Intent(mActivity, CommentListActivity.class);

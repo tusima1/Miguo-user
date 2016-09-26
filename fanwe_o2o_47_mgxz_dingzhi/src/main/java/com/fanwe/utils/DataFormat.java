@@ -53,6 +53,10 @@ public class DataFormat {
     static java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
 
     public static String toDoubleTwo(String str) {
-        return df.format(toDouble(str));
+        String res = df.format(toDouble(str));
+        if (res.startsWith(".")) {
+            res = "0" + res;
+        }
+        return res;
     }
 }
