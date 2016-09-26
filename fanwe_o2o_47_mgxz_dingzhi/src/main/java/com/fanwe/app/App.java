@@ -332,7 +332,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
                     nickName = mUserCurrentInfo.getUserInfoNew().getUser_name();
                 }
                 if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
-                    nickName = mUserCurrentInfo.getUserInfoNew().getUser_id();
+                    nickName = mUserCurrentInfo.getUserInfoNew().getMobile();
                 }
             }
         }
