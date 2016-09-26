@@ -5,5 +5,5 @@ package com.fanwe.dao.barry;
  * 获取首页团购列表接口
  */
 public interface CommandGroupBuyDao {
-    void getCommandGroupBuyDaoList(int page, int page_size, String tag, String keyword,  String city);
+    void getCommandGroupBuyDaoList(int page, int page_size, String tag, String keyword,String m_longitude,String m_latitude, String city);
 }

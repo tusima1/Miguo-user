@@ -74,6 +74,20 @@ public class CommandGroupBuyBean {
             this.body = body;
         }
 
+        /**
+         *
+         * "tuan_price":"0.01",    // 团购价格
+         "buy_count":"23",       // 销量
+         "name":"[嵊州]【知味阁】62元A套餐（2~3人）",    // 团购名称
+         "icon":"http://oc16x1ls4.bkt.clouddn.com/2016/08/Fh3-oUUzPIiCtcxcc9ViWuVY_idI",   // 小图
+         "short_name":"知味阁62元A套餐",   // 团购短名称
+         "id":"00088ad1-3b27-45f2-be37-8580692fcd99",    // id
+         "brief": "【知味阁】62元A套餐（2~3人）",        // 团购简介
+         "origin_price": "5.5",                           // 团购原价
+         "tuan_property": "2",                            // 团购属性标签     1.0元抽奖2.免预约3.多套餐4.可订座5.代金券6.过期退7.随时退8.七天退9.免运费10.满立减
+         "tuan_property_name": "免预约"                   // 团购属性标签名
+         "distance": "45616.116"                        //距离
+         */
         public class Body implements Serializable{
 
             String tuan_price;
@@ -84,6 +98,33 @@ public class CommandGroupBuyBean {
             String id;
             String brief;
             String origin_price;
+            String tuan_property;
+            String tuan_property_name;
+            String distance;
+
+            public String getDistance() {
+                return distance;
+            }
+
+            public void setDistance(String distance) {
+                this.distance = distance;
+            }
+
+            public String getTuan_property() {
+                return tuan_property;
+            }
+
+            public void setTuan_property(String tuan_property) {
+                this.tuan_property = tuan_property;
+            }
+
+            public String getTuan_property_name() {
+                return tuan_property_name;
+            }
+
+            public void setTuan_property_name(String tuan_property_name) {
+                this.tuan_property_name = tuan_property_name;
+            }
 
             public String getTuan_price() {
                 return tuan_price;
