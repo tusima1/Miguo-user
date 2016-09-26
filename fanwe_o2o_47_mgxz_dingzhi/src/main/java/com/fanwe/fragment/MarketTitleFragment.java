@@ -66,7 +66,7 @@ public class MarketTitleFragment extends BaseFragment{
 	private void bindTitlebarCityNameData()
 	{
 		// 设置当前默认城市
-		SDViewBinder.setTextView(mTvCurrentCity, AppRuntimeWorker.getCity_name(), "未找到");
+		SDViewBinder.setTextView(mTvCurrentCity, AppRuntimeWorker.getCity_name(), "杭州");
 		JpushHelper.setTag("city_"+AppRuntimeWorker.getCity_id());
 	}
 

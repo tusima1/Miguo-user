@@ -34,17 +34,11 @@
         android:layout_marginLeft="@dimen/dp10"
         android:layout_toRightOf="@id/civ_user_image"
         android:gravity="center_vertical"
-        android:text="观众"
+        android:maxEms="10"
+        android:ellipsize="end"
+        android:text=""
+        android:lines="1"
         android:textColor="@color/white"/>
-
-    <TextView
-        android:id="@+id/tv_follow"
-        android:layout_width="@dimen/dp33"
-        android:layout_height="@dimen/dp19"
-        android:layout_marginLeft="@dimen/dp10"
-        android:layout_toRightOf="@+id/tv_username"
-        android:background="@drawable/bg_follow"
-        />
 
     <LinearLayout
         android:id="@+id/location_ic_location"
@@ -103,6 +97,15 @@
         android:layout_height="@dimen/dp25"
         android:layout_marginTop="@dimen/dp5"
         android:layout_toLeftOf="@id/iv_close"/>
+
+    <TextView
+        android:id="@+id/tv_follow"
+        android:layout_width="@dimen/dp33"
+        android:layout_height="@dimen/dp19"
+        android:layout_marginLeft="@dimen/dp10"
+        android:background="@drawable/bg_follow"
+        android:layout_alignTop="@+id/member_image_list"
+        android:layout_toEndOf="@+id/location_ic_location"/>
 
 
 </RelativeLayout>

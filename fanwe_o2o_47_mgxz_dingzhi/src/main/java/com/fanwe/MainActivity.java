@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
 
-    private MyFragment2 mFragMyAccount=new MyFragment2();
+    private MyFragment2 mFragMyAccount = new MyFragment2();
 
     private long mExitTime = 0;
     private int preTab = 0;// 上次点击的tab标签页
@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
-                mLoginHelper.doLogin(userid, password, 0, true,false);
+                mLoginHelper.doLogin(userid, password, 0, true, false);
             } else {
                 showDialogLogin();
             }
@@ -172,6 +172,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
     private void doCode() {
         if (App.getInstance().isShowCode) {
             if ("miguo".equals(code) || TextUtils.isEmpty(code)) {
+                if (App.getInstance().isAlreadyShowCode) {
+                    return;
+                } else {
+                    App.getInstance().isAlreadyShowCode = true;
+                }
                 final GetDiamondInputDialog dialog = new GetDiamondInputDialog(MainActivity.this);
                 dialog.setSubmitListener(new View.OnClickListener() {
                     @Override
@@ -372,12 +377,17 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click3() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_3);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
-        if (preTab == 0 || preTab == 2 || preTab == 3) {
-            if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
-                    .mPtrlv_content != null) {
-                ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
-                        .mPtrlv_content.setRefreshing();
+        if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
+        {
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
+            if (preTab == 0 || preTab == 2 || preTab == 3) {
+                if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+                        .mPtrlv_content != null) {
+                    ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+                            .mPtrlv_content.setRefreshing();
+                }
             }
         }
 
@@ -396,7 +406,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 //            mFragMyAccount = (MyFragment2) getSDFragmentManager().toggle(R.id.act_main_fl_content,
 //                    null,
 //                    MyFragment2.class);
-            getSDFragmentManager().toggle(R.id.act_main_fl_content,null,mFragMyAccount);
+            getSDFragmentManager().toggle(R.id.act_main_fl_content, null, mFragMyAccount);
         }
     }
 
@@ -662,6 +672,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (App.getInstance().isAlreadyShowCode) {
+                            return;
+                        } else {
+                            App.getInstance().isAlreadyShowCode = true;
+                        }
                         final GetDiamondInputDialog dialog = new GetDiamondInputDialog(MainActivity.this);
                         dialog.setSubmitListener(new View.OnClickListener() {
                             @Override
@@ -698,5 +713,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
     protected void onDestroy() {
         super.onDestroy();
         App.getInstance().isShowCode = true;
+        App.getInstance().isAlreadyShowCode = false;
     }
 }

@@ -116,7 +116,6 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
             switch (msg.what) {
                 case 0:
                     if ("1".equals(modelHostAuthTime.getIs_host())) {
-                        MGToast.showToast("认证已通过");
                         //已经是主播
                         startActivity(new Intent(LiveStartAuthActivity.this, LiveStartActivity.class));
                         finish();

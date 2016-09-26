@@ -8,10 +8,12 @@ import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPaymentFragmentListener;
 import com.fanwe.fragment.OrderDetailFeeFragment;
@@ -21,6 +23,7 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MalipayModel;
@@ -47,6 +50,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.utils.MGUIUtil;
+import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -73,7 +77,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     private static final String UPACPAPP_MODE = "00";
 
     protected OrderDetailPaymentsFragment mFragPayments;
-    protected OrderDetailAccountPaymentFragment mFragAccountPayment;
+
     protected OrderDetailFeeFragment mFragFees;
 
     protected PayResultModel mActModel;
@@ -81,6 +85,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     private String mHasPay;
     private CommonShoppingHelper commonShoppingHelper;
     private UserHttpHelper userHttpHelper;
+    private PaymentTypeInfo currentPayType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +124,14 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         initPullToRefreshScrollView();
     }
 
-    public void sonFragemtMethod() {
-    }
 
     private void initClick() {
         mBtnConfirmOrder.setOnClickListener(this);
     }
-
+    public void onRefreshOrderBtn() {
+        mBtnConfirmOrder.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
+        mBtnConfirmOrder.setClickable(true);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -165,18 +171,18 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
                 mFragPayments);
 
-        // 余额支付
-        mFragAccountPayment = new OrderDetailAccountPaymentFragment();
-        mFragAccountPayment
-                .setmListener(new OrderDetailAccountPaymentFragmentListener() {
-                    @Override
-                    public void onPaymentChange(boolean isSelected) {
-                        // requestCalculate();
-                    }
-                });
-        getSDFragmentManager()
-                .replace(R.id.act_confirm_order_fl_account_payments,
-                        mFragAccountPayment);
+        mFragPayments.setmListener(new PaymentAdapter.PaymentTypeChangeListener() {
+
+            @Override
+            public void onPaymentChange(PaymentTypeInfo model) {
+                if(model.isChecked()) {
+                    currentPayType = model;
+                }else{
+                    currentPayType =null;
+                }
+            }
+        });
+
 
         // 费用信息
         mFragFees = new OrderDetailFeeFragment();
@@ -204,43 +210,14 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         mPtrsvAll.setRefreshing();
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        confirmRankState();
     }
 
-    private void confirmRankState() {
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_home");
-        model.putAct("homepage");
-        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_HomeModel>() {
 
-            @Override
-            public void onStart() {
-                super.onStart();
-                SDDialogManager.showProgressDialog("");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    int rank = actModel.getDist().getRank();
-                    if (rank >= 2) {
-                        MGToast.showToast("升级成功!");
-                        finish();
-                    } else {
-                        //DoNothing
-                    }
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-        });
-    }
 
     /**
      * 绑定 支付方式
@@ -398,7 +375,6 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         if (mPaymentCodeModel == null) {
             return;
         }
-
         UpacpappModel model = mPaymentCodeModel.getUpacpapp();
         if (model == null) {
             MGToast.showToast("获取银联支付参数失败");
@@ -418,12 +394,14 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
      */
     private void payWxapp() {
         if (mPaymentCodeModel == null) {
+            onRefreshOrderBtn();
             return;
         }
 
         WxappModel model = mPaymentCodeModel.getWxapp();
         if (model == null) {
             MGToast.showToast("获取微信支付参数失败");
+            onRefreshOrderBtn();
             return;
         }
 
@@ -436,36 +414,42 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         String partnerId = model.getMch_id();
         if (TextUtils.isEmpty(partnerId)) {
             MGToast.showToast("partnerId为空");
+            onRefreshOrderBtn();
             return;
         }
 
         String prepayId = model.getPrepay_id();
         if (TextUtils.isEmpty(prepayId)) {
             MGToast.showToast("prepayId为空");
+            onRefreshOrderBtn();
             return;
         }
 
         String nonceStr = model.getNonce_str();
         if (TextUtils.isEmpty(nonceStr)) {
             MGToast.showToast("nonceStr为空");
+            onRefreshOrderBtn();
             return;
         }
 
         String timeStamp = model.getTime_stamp();
         if (TextUtils.isEmpty(timeStamp)) {
             MGToast.showToast("timeStamp为空");
+            onRefreshOrderBtn();
             return;
         }
 
         String packageValue = model.getPackage_value();
         if (TextUtils.isEmpty(packageValue)) {
             MGToast.showToast("packageValue为空");
+            onRefreshOrderBtn();
             return;
         }
 
         String sign = model.getSign();
         if (TextUtils.isEmpty(sign)) {
             MGToast.showToast("sign为空");
+            onRefreshOrderBtn();
             return;
         }
 
@@ -488,33 +472,38 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
      */
     private void payMalipay() {
         if (mPaymentCodeModel == null) {
+            onRefreshOrderBtn();
             return;
         }
         MalipayModel model = mPaymentCodeModel.getMalipay();
         if (model == null) {
             MGToast.showToast("获取支付宝支付参数失败");
+            onRefreshOrderBtn();
             return;
         }
 
 
-        String orderSpec = "&partner = " + "\"" + model.getPartner() + "\"" + "&seller_id =" + "\"" + model.getSeller_id() + "\"" + "&out_trade_no=" + "\"" + model.getOut_trade_no() + "\"" + "&subject =" + "\"" + model.getSubject() + "\"" + "&body =" + model.getBody() + "\"" + "&total_fee=" + model.getTotal_fee() + "\"" + "&notify_url=" + model.getNotify_url() + "\"" + "&service=" + "\"" + model.getService() + "\"" + "&payment_type=" + "\"" + model.getPayment_type() + "\"" + "&_input_charset=" + "\"" + model.get_input_charset() + "\"";
-
+        String orderSpec = model.getTextHtml();
 
         String sign = model.getSign();
 
         String signType = model.getSign_type();
 
         if (TextUtils.isEmpty(orderSpec)) {
+            onRefreshOrderBtn();
             MGToast.showToast("order_spec为空");
+            onRefreshOrderBtn();
             return;
         }
 
         if (TextUtils.isEmpty(sign)) {
+            onRefreshOrderBtn();
             MGToast.showToast("sign为空");
             return;
         }
 
         if (TextUtils.isEmpty(signType)) {
+            onRefreshOrderBtn();
             MGToast.showToast("signType为空");
             return;
         }
@@ -534,11 +523,14 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
                 if ("9000".equals(status)) // 支付成功
                 {
                     MGToast.showToast("支付成功");
+                    finish();
                 } else if ("8000".equals(status)) // 支付结果确认中
                 {
                     MGToast.showToast("支付结果确认中");
+                    finish();
                 } else {
                     MGToast.showToast(info);
+                    onRefreshOrderBtn();
                 }
             }
 
@@ -546,6 +538,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
             public void onFailure(Exception e, String msg) {
                 if (e != null) {
                     MGToast.showToast("错误:" + e.toString());
+                    onRefreshOrderBtn();
                 } else {
                     if (!TextUtils.isEmpty(msg)) {
                         MGToast.showToast(msg);
@@ -556,4 +549,19 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         payer.pay(orderSpec, sign, signType);
     }
 
+    @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        super.onEventMainThread(event);
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case PAY_SUCCESS_WEIXIN:
+                MGToast.showToast("支付成功");
+                finish();
+                break;
+            case PAY_FAILUE_WEIXIN:
+                onRefreshOrderBtn();
+                break;
+            default:
+                break;
+        }
+    }
 }

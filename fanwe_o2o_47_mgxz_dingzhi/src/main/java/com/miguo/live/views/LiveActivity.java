@@ -553,7 +553,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
             if (action.equals(Constants.ACTION_HOST_LEAVE)) {//主播结束
                 quiteLivePassively();
-                Log.e("test","主播退出"+"广播色的速度");
+                Log.e("test", "主播退出" + "广播色的速度");
             }
         }
     };
@@ -862,7 +862,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()){
+        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()) {
             //弹出宝宝
             mUserBottomTool.clickBaoBao();
             showBaoBao = true;
@@ -1065,7 +1065,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
-        Log.e("LiveActivity","");
+        Log.e("LiveActivity", "");
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
 
@@ -1089,7 +1089,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     boolean userClickOut = false;
 
-    private boolean showExit=false;
+    private boolean showExit = false;
 
     /**
      * 完全退出房间了
@@ -1101,7 +1101,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        Log.e("LiveActivity","");
+        Log.e("LiveActivity", "");
         Log.e(TAG, "quiteRoomComplete 退出房间...");
         if (LiveUtil.checkIsHost()) {
             MGToast.showToast("主播退出!");
@@ -1122,7 +1122,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                    finish();
 //                }
 //            }
-            Log.e(LiveActivity.TAG, "quite: " + id_status+"userClickOut: "+userClickOut);
+            Log.e(LiveActivity.TAG, "quite: " + id_status + "userClickOut: " + userClickOut);
 //            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
 // !mUserHeadTopView.isUserClose) {
 //                mUserHeadTopView.showExitDialog();
@@ -1155,8 +1155,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
-        String text=TextUtils.isEmpty(name) ? id : name;
-        refreshTextListView(faceUrl,text , "退出房间了", Constants
+        String text = TextUtils.isEmpty(name) ? id : name;
+        refreshTextListView(faceUrl, text, "退出房间了", Constants
                 .MEMBER_EXIT);
         watchCount--;
         int roomId = CurLiveInfo.getRoomNum();
@@ -1165,22 +1165,22 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //        Log.e("test",id+"---"+name+"----"+faceUrl);
 //        09-23 15:29:21.760 14296-14296/com.fanwe.o2o.miguo E/test: 228b3770-72d8-4f61-9fce-a6ae1cb154e4---18667126...----228b3770-72d8-4f61-9fce-a6ae1cb154e4
 //        09-23 15:29:21.760 14296-14296/com.fanwe.o2o.miguo E/test: 228b3770-72d8-4f61-9fce-a6ae1cb154e4---18667126392----
-        if (!TextUtils.isEmpty(id) && id.equals(hostID)){
+        if (!TextUtils.isEmpty(id) && id.equals(hostID)) {
             //展示主播退出时,用户弹出来的dialog
             if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
                     !mUserHeadTopView.isUserClose && !showExit) {
-                if (mUserBottomTool!=null){
+                if (mUserBottomTool != null) {
                     mUserBottomTool.dismissPop();
                     MGUIUtil.runOnUiThreadDelayed(new Runnable() {
                         @Override
                         public void run() {
                             mUserHeadTopView.showExitDialog();
                         }
-                    },500);
-                }else {
+                    }, 500);
+                } else {
                     mUserHeadTopView.showExitDialog();
                 }
-                showExit=true;
+                showExit = true;
             }
             return;
         }
@@ -1284,7 +1284,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void hostQuiteLive(String type, String responseBody) {
-        Log.e("test","主播退出"+"type"+type+"responseBody"+responseBody);
+        Log.e("test", "主播退出" + "type" + type + "responseBody" + responseBody);
     }
 
 
@@ -1315,6 +1315,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void exitActivity() {
         userExit();
+        //如果是主播
+        if (LiveUtil.checkIsHost()) {
+            mLiveHttphelper.stopLive(MySelfInfo.getInstance().getMyRoomNum() + "");
+        }
     }
 
     /**

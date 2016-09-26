@@ -15,7 +15,10 @@
         android:layout_toRightOf="@id/iv_img"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="13dp"
-        android:text="好大的房子啊"
+        android:text=""
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxEms="12"
         android:textSize="14sp"
         />
     <TextView

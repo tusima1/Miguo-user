@@ -260,13 +260,15 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             str.append(entry.getKey() + "--->" + entry.getValue() + "\n");
         }
         Log.d("11", str.toString());
-      //  testViews.setText(str.toString());
+        //  testViews.setText(str.toString());
 
     }
 
-    public void printData(String datas){
-       // ((EditText)findViewById(R.id.testViews2)).setText(datas);
+    public void printData(String datas) {
+        // ((EditText)findViewById(R.id.testViews2)).setText(datas);
     }
+
+    long time;
 
     /**
      * 跳转到相应的授权页。
@@ -278,7 +280,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             @Override
             public void onSuccess(Map<String, String> data) {
                 SDDialogManager.showProgressDialog("正在登录,请稍候...");
-           //     printData(data);
+                //     printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
                     openId = data.get("unionid");
@@ -309,8 +311,13 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                     MGToast.showToast("登录失败");
                     return;
                 }
-              //  printData("icon:"+icon+" nick:"+nick +" openid:"+openId);
-               mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
+                //防止过快请求
+                if ((System.currentTimeMillis() - time) < 100) {
+                    return;
+                } else {
+                    time = System.currentTimeMillis();
+                }
+                mLoginHelper.thirdLogin(openId, platformType, icon, nick, LoginActivity.this);
 
             }
 

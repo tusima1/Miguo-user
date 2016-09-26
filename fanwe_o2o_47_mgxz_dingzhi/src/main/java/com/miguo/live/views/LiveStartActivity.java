@@ -158,6 +158,10 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
 
     private void startLive() {
+        if (ServerUrl.DEBUG){
+            createAvRoom();
+            return;
+        }
         if (dataBindingLiveStart.isLiveRight.get()) {
             SHARE_MEDIA platform = SHARE_MEDIA.QQ;
             //已认证的，去直播
