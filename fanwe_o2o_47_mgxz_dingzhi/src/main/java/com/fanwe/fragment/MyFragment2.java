@@ -319,7 +319,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             return;
         }
         //设置用户信息
-        SDViewBinder.setTextView(mUserName, modelPersonalHome.getNick());
+        SDViewBinder.setTextView(mUserName, MGStringFormatter.getLimitedString(modelPersonalHome.getNick(),10));
         SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(modelPersonalHome.getPersonality(),10));
         mUserFaceString = modelPersonalHome.getIcon();
         SDViewBinder.setImageView(mUserFaceString, mIvUserFace);

@@ -6,10 +6,8 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -41,10 +39,6 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
@@ -511,7 +505,9 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
             @Override
             public void run() {
                 setPageNum(result.getPage());
-                mHomeFragmentLiveList.onRefreshTuan(true, result.getBody());
+                if (mHomeFragmentLiveList!=null){
+                    mHomeFragmentLiveList.onRefreshTuan(true, result.getBody());
+                }
                 loadComplete();
             }
         });
@@ -523,7 +519,9 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
             @Override
             public void run() {
                 setPageNum(result.getPage());
-                mHomeFragmentLiveList.onRefreshTuan(false, result.getBody());
+                if (mHomeFragmentLiveList!=null){
+                    mHomeFragmentLiveList.onRefreshTuan(false, result.getBody());
+                }
                 loadComplete();
             }
         });
