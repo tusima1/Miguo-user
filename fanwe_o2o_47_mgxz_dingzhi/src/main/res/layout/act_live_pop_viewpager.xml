@@ -24,7 +24,6 @@
         android:id="@+id/viewpagertab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_80"
         app:stl_clickable="true"
         app:stl_defaultTabTextAllCaps="true"
         app:stl_dividerColor="#FFDD00"
@@ -48,7 +47,6 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="1dp"
         android:background="@color/dark_80"
         />
 

@@ -95,6 +95,8 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
                     }
                 });
+            }else {
+                tv_pay.setVisibility(View.GONE);
             }
             if (order_status==1){
                 tv_pay_again.setVisibility(View.VISIBLE);
@@ -108,6 +110,8 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                         }
                     }
                 });
+            }else {
+                tv_pay_again.setVisibility(View.GONE);
             }
             if (order_status==0 || order_status==1){
                 tv_cancel_order.setVisibility(View.VISIBLE);
@@ -117,6 +121,8 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                         cancelOrder(model, position);
                     }
                 });
+            }else {
+                tv_cancel_order.setVisibility(View.GONE);
             }
             if (order_status==5 || order_status==6){
                 tv_delect.setVisibility(View.VISIBLE);
@@ -126,6 +132,8 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                         deleteOrder(model, position);
                     }
                 });
+            }else {
+                tv_delect.setVisibility(View.GONE);
             }
         }
 
