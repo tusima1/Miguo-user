@@ -110,6 +110,7 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     private ResultMyDistributionCorps currResultMyDistributionCorps;
 
     public void setResultMyDistributionCorps(ResultMyDistributionCorps bean) {
+        this.
         currResultMyDistributionCorps = bean;
         if (currResultMyDistributionCorps != null) {
             SDViewBinder.setTextView(mTv_vip1Number, "（" + currResultMyDistributionCorps.getLevel1() + "）");

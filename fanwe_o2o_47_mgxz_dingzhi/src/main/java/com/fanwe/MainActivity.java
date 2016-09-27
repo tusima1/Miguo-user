@@ -135,6 +135,16 @@ public class MainActivity extends BaseActivity implements CallbackView {
 //        MessageHelper.updateMessageCount();
         initOthers();
         initUserInfo();
+        initDict();
+    }
+
+    private void initDict() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new LiveHttpHelper(null,null).getBussDictionInfo("Client");
+            }
+        }).start();
     }
 
     //初始化用户信息。

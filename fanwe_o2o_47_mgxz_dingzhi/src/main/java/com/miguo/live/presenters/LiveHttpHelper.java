@@ -9,11 +9,11 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
+import com.fanwe.common.MGDict;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.model.RootLive;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -69,6 +69,7 @@ import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.LogTag;
 import com.miguo.utils.MGLog;
 
@@ -537,17 +538,20 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                Log.e("test",responseBody);
                 RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody,
                         RootBussDictionInfo.class);
                 List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo
                         .getResult();
                 if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
-                    mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
+                    if (mView!=null){mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);}
                     return;
                 }
                 ResultBussDictionInfo resultBussDictionInfo = resultBussDictionInfos.get(0);
                 List<ModelBussDictionInfo> modelBussDictionInfo = resultBussDictionInfo.getBody();
-                mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
+                String dict = gson.toJson(modelBussDictionInfo);
+                MGDict.save2File(dict);
+                if (mView!=null){ mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);}
             }
 
             @Override

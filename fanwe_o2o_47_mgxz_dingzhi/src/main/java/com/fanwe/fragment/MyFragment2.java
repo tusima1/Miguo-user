@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,11 @@ import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.ImageLoaderManager;
+import com.fanwe.common.MGDict;
+import com.fanwe.common.model.MGDict.DictModel;
 import com.fanwe.constant.Constant;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
@@ -43,11 +42,8 @@ import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
-import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -415,48 +411,24 @@ public class MyFragment2 extends BaseFragment implements RedDotView
      * 客服电话
      */
     private void clickKfPhone() {
-        if (!TextUtils.isEmpty(mKefuNum)){
+        if (!TextUtils.isEmpty(mKefuNum)) {
             callKeFu(mKefuNum);
             return;
         }
-        SDDialogManager.showProgressDialog("请稍候...");
-        new LiveHttpHelper(getActivity(), new CallbackView() {
-            @Override
-            public void onSuccess(String responseBody) {
-                SDDialogManager.dismissProgressDialog();
-                Log.e("test",responseBody);
-            }
 
-            @Override
-            public void onSuccess(String method, final List datas) {
-                SDDialogManager.dismissProgressDialog();
-                if (datas!=null){
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Object data : datas) {
-                                String dic_value = ((ModelBussDictionInfo) data).getDic_value();
-                                if ("support_phone".equals(dic_value)){
-                                    mKefuNum=((ModelBussDictionInfo) data).getDic_mean();
-                                    break;
-                                }
-                            }
-                            if (TextUtils.isEmpty(mKefuNum)){
-                                MGToast.showToast("获取数据失败,请重试");
-                            }else {
-                                callKeFu(mKefuNum);
-                            }
-                        }
-                    });
-                }
+        List<DictModel> dict = MGDict.getDict();
+        for (DictModel data : dict) {
+            String dic_value = data.getDic_value();
+            if ("support_phone".equals(dic_value)) {
+                mKefuNum =data.getDic_mean();
+                break;
             }
-
-            @Override
-            public void onFailue(String responseBody) {
-                SDDialogManager.dismissProgressDialog();
-                MGToast.showToast("获取数据失败,请重试");
-            }
-        }).getBussDictionInfo("Client");
+        }
+        if (TextUtils.isEmpty(mKefuNum)) {
+            MGToast.showToast("获取数据失败,请重试");
+        } else {
+            callKeFu(mKefuNum);
+        }
     }
 
     private void callKeFu(String tel){

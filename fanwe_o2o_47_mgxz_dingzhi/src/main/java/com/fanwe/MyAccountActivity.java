@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +19,9 @@ import android.widget.TextView;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.common.MGDict;
+import com.fanwe.common.model.MGDict.DictModel;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.SettingModelDao;
@@ -54,10 +54,7 @@ import com.github.siyamed.shapeimageview.CircularImageView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
-import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.MGUIUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -148,7 +145,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     private UserFaceModule mUserFaceModule;
     private UserHttpHelper userHttpHelper;
-    private String mKefuNum="";
+    private String mKefuNum = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -380,51 +377,27 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
      * 客服电话
      */
     private void clickKfPhone() {
-        if (!TextUtils.isEmpty(mKefuNum)){
+        if (!TextUtils.isEmpty(mKefuNum)) {
             callKeFu(mKefuNum);
             return;
         }
-        SDDialogManager.showProgressDialog("请稍候...");
-        new LiveHttpHelper(this, new CallbackView() {
-            @Override
-            public void onSuccess(String responseBody) {
-                SDDialogManager.dismissProgressDialog();
-                Log.e("test",responseBody);
-            }
 
-            @Override
-            public void onSuccess(String method, final List datas) {
-                SDDialogManager.dismissProgressDialog();
-                if (datas!=null){
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (Object data : datas) {
-                                String dic_value = ((ModelBussDictionInfo) data).getDic_value();
-                                if ("support_phone".equals(dic_value)){
-                                    mKefuNum=((ModelBussDictionInfo) data).getDic_mean();
-                                    break;
-                                }
-                            }
-                            if (TextUtils.isEmpty(mKefuNum)){
-                                MGToast.showToast("获取数据失败,请重试");
-                            }else {
-                                callKeFu(mKefuNum);
-                            }
-                        }
-                    });
-                }
+        List<DictModel> dict = MGDict.getDict();
+        for (DictModel data : dict) {
+            String dic_value = data.getDic_value();
+            if ("support_phone".equals(dic_value)) {
+                mKefuNum =data.getDic_mean();
+                break;
             }
-
-            @Override
-            public void onFailue(String responseBody) {
-                SDDialogManager.dismissProgressDialog();
-                MGToast.showToast("获取数据失败,请重试");
-            }
-        }).getBussDictionInfo("Client");
+        }
+        if (TextUtils.isEmpty(mKefuNum)) {
+            MGToast.showToast("获取数据失败,请重试");
+        } else {
+            callKeFu(mKefuNum);
+        }
     }
 
-    private void callKeFu(String tel){
+    private void callKeFu(String tel) {
         Intent intent = SDIntentUtil.getIntentCallPhone(tel);
         SDActivityUtil.startActivity(this, intent);
     }
