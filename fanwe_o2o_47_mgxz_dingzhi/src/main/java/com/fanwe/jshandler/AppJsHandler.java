@@ -174,7 +174,6 @@ public class AppJsHandler extends BaseJsHandler {
 	 */
 	@JavascriptInterface
 	public void goCart() {
-
 		Intent intent = new Intent(mActivity, ShopCartActivity.class);
 		startActivity(intent);
 	}

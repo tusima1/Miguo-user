@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by zlh on 2016/9/21.
+ * Created by 狗蛋哥/zlh on 2016/9/21.
  */
 public class BigGifView extends BaseRelativeLayout{
 
