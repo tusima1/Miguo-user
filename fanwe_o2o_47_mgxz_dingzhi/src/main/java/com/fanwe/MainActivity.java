@@ -136,6 +136,16 @@ public class MainActivity extends BaseActivity implements CallbackView {
 //        MessageHelper.updateMessageCount();
         initOthers();
         initUserInfo();
+        initDict();
+    }
+
+    private void initDict() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new LiveHttpHelper(null,null).getBussDictionInfo("Client");
+            }
+        }).start();
     }
 
 
@@ -490,6 +500,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
                     intentStore.putExtra("user_id", user_id);
                     intentStore.putExtra("url", result);
+
                     startActivity(intentStore);
                 } else if (getCompleteUrl(result, SHOP_DETAIL)) {
                     //门店详情
