@@ -535,7 +535,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     public void onFailue(String responseBody) {
         if (CommissionConstance.USER_WITHDRAW.equals(responseBody) || CommissionConstance
                 .USER_WITHDRAW_FX.equals(responseBody)) {
-            MGToast.showToast("提现失败!");
+//            MGToast.showToast("提现失败!");
         }
     }
 

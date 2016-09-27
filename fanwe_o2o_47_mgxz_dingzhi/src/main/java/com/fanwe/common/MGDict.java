@@ -60,9 +60,16 @@ public class MGDict {
         catch(Exception e){
             e.printStackTrace();
         }
-
-        Gson gson=new Gson();
-        DictArray dictArray = gson.fromJson(res, DictArray.class);
+        DictArray dictArray=null;
+        try {
+            Gson gson=new Gson();
+            dictArray = gson.fromJson(res, DictArray.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (dictArray==null){
+            return null;
+        }
         List<DictModel> dictList = dictArray.getDict();
         return dictList;
     }

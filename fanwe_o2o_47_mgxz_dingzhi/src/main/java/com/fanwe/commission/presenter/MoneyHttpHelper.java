@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.Root;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
 import com.fanwe.commission.model.getUserAccount.RootUserAccount;
@@ -253,12 +254,32 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mView2.onSuccess(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW,null);
-                    }
-                });
+                Root root = gson.fromJson(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                if ("200".equals(statusCode)){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW,null);
+                        }
+                    });
+                    return;
+                }
+                if ("301".equals(statusCode)){
+                    MGToast.showToast("验证码错误");
+                    doOnFail(isFx);
+                }else if ("303".equals(statusCode)){
+                    MGToast.showToast("验证码次数过多");
+                    doOnFail(isFx);
+                }else if ("305".equals(statusCode)){
+                    MGToast.showToast("验证码过期");
+                    doOnFail(isFx);
+                }else if ("302".equals(statusCode)){
+                    MGToast.showToast("验证码过期");
+                    doOnFail(isFx);
+                }else {
+                    MGToast.showToast("系统异常");
+                }
             }
 
             @Override
@@ -273,6 +294,15 @@ public class MoneyHttpHelper implements IHelper{
         });
 
 
+    }
+
+    private void doOnFail(final boolean isFx){
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mView2.onFailue(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW);
+            }
+        });
     }
 
     @Override
