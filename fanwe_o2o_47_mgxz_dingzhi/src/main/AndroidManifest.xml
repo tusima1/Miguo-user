@@ -171,7 +171,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="miguoxiaozhan" />
+                <data
+                    android:scheme="miguoxiaozhan" />
+
             </intent-filter>
         </activity>
         <!-- 商品管理 -->

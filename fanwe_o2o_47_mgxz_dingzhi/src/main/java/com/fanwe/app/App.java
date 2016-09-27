@@ -49,7 +49,7 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 
 
-public class App extends Application implements SDEventObserver, TANetChangeObserver , ITXLiveBaseListener {
+public class App extends Application implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
 
     private static App mApp = null;
 
@@ -91,10 +91,18 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 直播房间列表。
      */
     public String currentRoomId;
-
+    /**
+     * 是否展示领取码对话框
+     */
     public boolean isShowCode = true;
-
+    /**
+     * 领取码对话框是否已展示
+     */
     public boolean isAlreadyShowCode = false;
+    /**
+     * 领取码
+     */
+    public String code = "";
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {

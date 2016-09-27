@@ -116,12 +116,26 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     public void share() {
         String content = "";
+        String title = "直播中分享";
         if (isHost) {
-            content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
+            if ("1".equals(CurLiveInfo.getLive_type())) {
+                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
+            } else {
+                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "的精彩记录片.....";
+            }
         } else {
-            content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + CurLiveInfo.getHostName() + "正在直播中.....";
+            if ("1".equals(CurLiveInfo.getLive_type())) {
+                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + CurLiveInfo.getHostName() + "正在直播中.....";
+            } else {
+                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + CurLiveInfo.getHostName() + "的精彩记录片.....";
+            }
+
         }
-        UmengShareManager.share(platform, mActivity, "直播中分享", content,
+        if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
+            //朋友圈
+            title = content;
+        }
+        UmengShareManager.share(platform, mActivity, title, content,
                 ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
                 UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
     }

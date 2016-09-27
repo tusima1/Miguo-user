@@ -826,7 +826,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
         if (mLiveHttphelper != null) {
-            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", null);
+            mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "1", App.getInstance().code);
 
         }
         mRedPacketAdapter = new PagerRedPacketAdapter();
@@ -948,7 +948,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mAudienceTimer.cancel();
                 mAudienceTimer = null;
             }
-            if(null!=mVideoTimerTask){
+            if (null != mVideoTimerTask) {
                 mVideoTimerTask.cancel();
                 mVideoTimerTask = null;
             }
