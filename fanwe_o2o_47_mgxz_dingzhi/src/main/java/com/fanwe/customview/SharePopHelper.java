@@ -2,6 +2,7 @@ package com.fanwe.customview;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.MGDictUtil;
 import com.miguo.live.interf.IHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -116,12 +118,18 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     public void share() {
         String content = "";
-        String title = "直播中分享";
+        String title = "送你钻石";
+        String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (isHost) {
             if ("1".equals(CurLiveInfo.getLive_type())) {
                 content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
             } else {
                 content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "的精彩记录片.....";
+            }
+            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
+                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
             }
         } else {
             if ("1".equals(CurLiveInfo.getLive_type())) {
@@ -129,14 +137,19 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
             } else {
                 content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + CurLiveInfo.getHostName() + "的精彩记录片.....";
             }
-
+            if (!TextUtils.isEmpty(CurLiveInfo.getHostAvator())) {
+                imageUrl = CurLiveInfo.getHostAvator();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
+            }
         }
         if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
             //朋友圈
             title = content;
         }
+
         UmengShareManager.share(platform, mActivity, title, content,
                 ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-                UmengShareManager.getUMImage(mActivity, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+                UmengShareManager.getUMImage(mActivity, imageUrl), null);
     }
 }

@@ -45,6 +45,7 @@ import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGDictUtil;
 import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -296,8 +297,14 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             String imageUrl = share.getImageurl();
             if (TextUtils.isEmpty(imageUrl)) {
                 imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                    imageUrl = MGDictUtil.getShareIcon();
+                }
             } else if (!imageUrl.startsWith("http")) {
                 imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                    imageUrl = MGDictUtil.getShareIcon();
+                }
             }
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
@@ -305,7 +312,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             } else {
                 if (!TextUtils.isEmpty(fx_id)) {
                     clickUrl = clickUrl + "/ref_id/" + fx_id;
-                }else{
+                } else {
                     clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
                 }
             }

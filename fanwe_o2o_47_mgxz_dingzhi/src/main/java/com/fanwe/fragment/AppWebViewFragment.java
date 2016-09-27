@@ -20,6 +20,7 @@ import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.MGDictUtil;
 
 public class AppWebViewFragment extends WebViewFragment {
 
@@ -164,21 +165,27 @@ public class AppWebViewFragment extends WebViewFragment {
 
     @Override
     public void onRightClick_SDTitleListener(TitleItemConfig config, int index, View view) {
-
         if (TextUtils.isEmpty(mSummary)) {
-            mSummary = "欢迎来到米果小站";
+            mSummary = "欢迎来到我的小店";
         }
         if (TextUtils.isEmpty(imageUrl)) {
             imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
+                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
+            }
         } else if (!imageUrl.startsWith("http")) {
             imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
+                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
+            }
         }
-        if (TextUtils.isEmpty(url)) {
-            url = ServerUrl.SERVER_H5;
-        } else {
-
-            url = url + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
-        }
+        url = "";
+        url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+                "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
         if (TextUtils.isEmpty(mContent)) {
             mContent = "米果小站";
         }

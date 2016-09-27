@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
@@ -34,7 +35,9 @@ import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.presents.LoginHelper;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGDictUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
@@ -143,7 +146,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                new LiveHttpHelper(null,null).getBussDictionInfo("Client");
+                new LiveHttpHelper(null, null).getBussDictionInfo("Client");
             }
         }).start();
     }
@@ -295,6 +298,8 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
+                        Log.e("upload", MGDictUtil.getUploadToken());
+                        Log.e("share", MGDictUtil.getShareIcon());
                         break;
                     case 2:
                         click2();
@@ -662,19 +667,29 @@ public class MainActivity extends BaseActivity implements CallbackView {
                 Room room = items.get(0);
                 //分点播和直播 直播类型  1 表示直播，2表示点播
                 String live_type = room.getLive_type();
-                if ("1".equals(live_type)){
+                if ("1".equals(live_type)) {
                     //直播
                     gotoLiveActivity(room);
-                }else if ("2".equals(live_type)){
+                } else if ("2".equals(live_type)) {
                     //点播
                     gotoPlayBackActivity(room);
-                }else {
+                } else {
+                    if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
+                        if (room.getHost() != null) {
+                            if (!TextUtils.isEmpty(room.getHost().getUid())) {
+                                Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
+                                intent.putExtra("id", room.getHost().getUid());
+                                startActivity(intent);
+                                return;
+                            }
+                        }
+                    }
                     //异常数据
                     MGToast.showToast("异常数据");
                     return;
                 }
             } else {
-                MGToast.showToast("领取码无效");
+//                MGToast.showToast("领取码无效");
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

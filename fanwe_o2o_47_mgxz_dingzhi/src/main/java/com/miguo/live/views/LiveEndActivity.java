@@ -14,6 +14,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveEndBinding;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.MGDictUtil;
 import com.miguo.live.model.DataBindingLiveEnd;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.stopLive.ModelStopLive;
@@ -57,6 +58,11 @@ public class LiveEndActivity extends Activity implements CallbackView {
         dataBindingLiveEnd = new DataBindingLiveEnd();
         preData();
         binding.setLive(dataBindingLiveEnd);
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
     private void preData() {
@@ -131,8 +137,20 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
             platform = SHARE_MEDIA.QZONE;
         }
-        UmengShareManager.share(platform, this, "直播结束", "我刚刚送出一个亿的钻石，下次来陪我？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "邀请你关注",
-                ServerUrl.SERVER_H5 + "index/winnie/id/" + CurLiveInfo.getHostID(), UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), shareResultCallback);
+        String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+        if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
+            imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+        } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+            imageUrl = MGDictUtil.getShareIcon();
+        }
+        String title = "送你钻石";
+        String content = "我刚刚送出一个亿的钻石，下次来陪我？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "邀请你关注";
+        if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
+            //朋友圈
+            title = content;
+        }
+        UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "index/winnie/id/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
     }
 
     private UMShareListener shareResultCallback = new UMShareListener() {
@@ -175,6 +193,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
                 dataBindingLiveEnd.timeLive.set(TimeUtils.millisecondToHHMMSS(Long.valueOf(modelStopLive.getUsetime())));
                 dataBindingLiveEnd.countMoney.set(modelStopLive.getRed_packets_total());
                 dataBindingLiveEnd.countGood.set(modelStopLive.getSell_total());
+                dataBindingLiveEnd.countMi.set(modelStopLive.getMiguobean());
             }
         }
         MySelfInfo.getInstance().setMyRoomNum(-1);
