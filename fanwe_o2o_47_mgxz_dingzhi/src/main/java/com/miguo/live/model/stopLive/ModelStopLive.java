@@ -13,6 +13,15 @@ public class ModelStopLive implements Serializable {
     private String shop_name;
     private String watch_count;
     private String usetime;
+    private String miguobean;
+
+    public String getMiguobean() {
+        return miguobean;
+    }
+
+    public void setMiguobean(String miguobean) {
+        this.miguobean = miguobean;
+    }
 
     public String getRed_packets_total() {
         return red_packets_total;
