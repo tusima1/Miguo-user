@@ -14,6 +14,7 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.ViewUtils;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Created by 狗蛋哥/zlh on 2016/9/23.
  */
-public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapter{
+public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapter {
 
     public MainActivityHomeFragmentTuanAdapter(Activity activity, List datas) {
         super(activity, datas);
@@ -61,30 +62,31 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         setNormalPriceText(holder, position);
     }
 
-    private void setNormalPriceText(RecyclerView.ViewHolder holder, int position){
+    private void setNormalPriceText(RecyclerView.ViewHolder holder, int position) {
         getHolder(holder).normalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        if(getItem(position).getIcon().contains("http://")){
-            SDViewBinder.setImageView(getItem(position).getIcon(), getHolder(holder).image);        }
+        if (getItem(position).getIcon().contains("http://")) {
+            SDViewBinder.setImageView(getItem(position).getIcon(), getHolder(holder).image);
+        }
 
 
-        getHolder(holder).title.setText( MGStringFormatter.getLimitedString(getItem(position).getName(),13));
-        getHolder(holder).describe.setText(MGStringFormatter.getLimitedString(getItem(position).getBrief(),46));
-        getHolder(holder).price.setText(SDFormatUtil.formatNumberString(getItem(position).getTuan_price(),2)+"元");
-        getHolder(holder).normalPrice.setText(SDFormatUtil.formatNumberString(getItem(position).getOrigin_price(),2)+"元");
+        getHolder(holder).title.setText(MGStringFormatter.getLimitedString(getItem(position).getName(), 13));
+        getHolder(holder).describe.setText(MGStringFormatter.getLimitedString(getItem(position).getBrief(), 46));
+        getHolder(holder).price.setText(SDFormatUtil.formatNumberString(getItem(position).getTuan_price(), 2) + "元");
+        getHolder(holder).normalPrice.setText(SDFormatUtil.formatNumberString(getItem(position).getOrigin_price(), 2) + "元");
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
         getHolder(holder).freeReservation.setText(getItem(position).getTuan_property_name());
         getHolder(holder).distance.setText(getDistance(position));
     }
 
-    private String getDistance(int position){
-        float distanceInt = Float.parseFloat(getItem(position).getDistance());
-        if(distanceInt <= 1000){
+    private String getDistance(int position) {
+        float distanceInt = DataFormat.toFloat(getItem(position).getDistance());
+        if (distanceInt <= 1000) {
             return ">" + distanceInt + "m";
-        }else if(distanceInt < 1000000){
+        } else if (distanceInt < 1000000) {
             float y = distanceInt / 1000;
             return ">" + y + "km";
         }
@@ -92,7 +94,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         return ">" + y + "km";
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return dip2px(100 + 10 * 2) * getItemCount();
     }
 
@@ -103,10 +105,10 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
 
     @Override
     public ViewHolder getHolder(RecyclerView.ViewHolder holder) {
-        return (ViewHolder)super.getHolder(holder);
+        return (ViewHolder) super.getHolder(holder);
     }
 
-    public class ViewHolder extends  RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @ViewInject(R.id.item_layout)
         RelativeLayout item;
@@ -140,7 +142,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         }
     }
 
-    public class MainActivityHomeFragmentTuanAdapterListener extends BarryListener{
+    public class MainActivityHomeFragmentTuanAdapterListener extends BarryListener {
 
         public MainActivityHomeFragmentTuanAdapterListener(BarryBaseRecyclerAdapter adapter, RecyclerView.ViewHolder holder, int position) {
             super(adapter, holder, position);
@@ -148,7 +150,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.item_layout:
                     clickItem();
                     break;
@@ -156,7 +158,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
             super.onClick(v);
         }
 
-        private void clickItem(){
+        private void clickItem() {
             Intent intent = new Intent(getActivity(), TuanDetailActivity.class);
             intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, getAdapter().getItem(position).getId());
             BaseUtils.jumpToNewActivity(getActivity(), intent);
@@ -164,7 +166,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
 
         @Override
         public MainActivityHomeFragmentTuanAdapter getAdapter() {
-            return (MainActivityHomeFragmentTuanAdapter)super.getAdapter();
+            return (MainActivityHomeFragmentTuanAdapter) super.getAdapter();
         }
     }
 

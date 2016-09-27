@@ -1,6 +1,7 @@
 package com.fanwe;
 
 import android.content.Intent;
+import android.databinding.tool.util.StringUtils;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.utils.MGStringFormatter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
@@ -108,7 +110,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
         if (UserConstants.DISTR_INFO.equals(method)){
             if (datas==null){
                 money =0;
-                mTv_money.setText("0");
+                mTv_money.setText("0.00");
             }else {
                 ModelDistrInfo modelDistrInfo= (ModelDistrInfo) datas.get(0);
                 String fx_money = modelDistrInfo.getFx_money();
@@ -118,7 +120,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
                     e.printStackTrace();
                     money=0;
                 }
-                mTv_money.setText(money+"");
+                mTv_money.setText(MGStringFormatter.getFloat2(money));
             }
         }
     }

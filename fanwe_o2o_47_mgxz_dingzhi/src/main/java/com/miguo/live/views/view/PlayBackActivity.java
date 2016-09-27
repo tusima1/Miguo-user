@@ -10,10 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +55,6 @@ import com.tencent.TIMGroupManager;
 import com.tencent.av.TIMAvManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.LoginHelper;
@@ -83,7 +80,7 @@ import java.util.TimerTask;
  * 点播页面。
  * Created by Administrator on 2016/9/20.
  */
-public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListener, View.OnClickListener,LiveView,CallbackView,EnterQuiteRoomView ,ShopAndProductView {
+public class PlayBackActivity extends BaseActivity implements ITXLivePlayListener, View.OnClickListener, LiveView, CallbackView, EnterQuiteRoomView, ShopAndProductView {
 
 
     private TXLivePlayer mLivePlayer = null;
@@ -144,7 +141,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
      * 头部头像adapter.
      */
     private HeadTopAdapter mHeadTopAdapter;
-    private HashMap<Integer,PlaySetInfo> playUrlList;
+    private HashMap<Integer, PlaySetInfo> playUrlList;
 
     PlaySetInfo currentPlayInfo;
     /**
@@ -153,23 +150,23 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     String playUrl = "";
 
     /**
-     *  聊天室ID。
+     * 聊天室ID。
      */
-    String chat_room_id ;
-    String file_size ;
+    String chat_room_id;
+    String file_size;
 
-    String duration ;
+    String duration;
 
 
     String playset;
 
-    private boolean isFirstLogin= true;
+    private boolean isFirstLogin = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   int roomNum=87654321;
-      //  CurLiveInfo.setRoomNum(roomNum);
+        //   int roomNum=87654321;
+        //  CurLiveInfo.setRoomNum(roomNum);
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
@@ -189,19 +186,20 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     /**
      * 解析直播流地址。
      */
-    public void getPlayUrlList(){
-        if(playUrlList ==null){
+    public void getPlayUrlList() {
+        if (playUrlList == null) {
             playUrlList = new HashMap<>();
-          }
-        Type listType = new TypeToken<List<PlaySetInfo>>(){}.getType();
+        }
+        Type listType = new TypeToken<List<PlaySetInfo>>() {
+        }.getType();
         Gson gson = new Gson();
         List<PlaySetInfo> playSetInfoList = gson.fromJson(playset, listType);
-        for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext();) {
+        for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext(); ) {
             PlaySetInfo o = (PlaySetInfo) iterator.next();
-            playUrlList.put(o.getDefinition(),o);
+            playUrlList.put(o.getDefinition(), o);
         }
         PlaySetInfo currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
-        if(currentPlayInfo==null){
+        if (currentPlayInfo == null) {
             showInvalidateToast("网络有问题或者当前点播地址错误。");
             finish();
         }
@@ -211,21 +209,21 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
 
     private void getIntentData() {
-        Bundle data=getIntent().getExtras();
-        if (data==null){
+        Bundle data = getIntent().getExtras();
+        if (data == null) {
             MGToast.showToast("数据传输错误!");
             finish();
             return;
         }
-         chat_room_id = data.getString("chat_room_id", "");
-         file_size = data.getString("file_size", "");
-         duration = data.getString("duration", "");
+        chat_room_id = data.getString("chat_room_id", "");
+        file_size = data.getString("file_size", "");
+        duration = data.getString("duration", "");
 
-         playset = data.getString("playset", "");
-        Log.e("test", chat_room_id +"--"+file_size+"--"+duration+"--"+playset);
+        playset = data.getString("playset", "");
+        Log.e("test", chat_room_id + "--" + file_size + "--" + duration + "--" + playset);
     }
 
-    public void initView(){
+    public void initView() {
         root = findViewById(R.id.root);
         mVideoPlay = false;
         mPlayerView = (TXCloudVideoView) findViewById(R.id.video_view);
@@ -329,6 +327,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
             }
         });
     }
+
     /**
      * 观众 底部操作view需要的参数
      */
@@ -341,6 +340,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
             getShopDetail(CurLiveInfo.shopID);
         }
     }
+
     /**
      * 发起请求商店详情和商品列表的请求。
      *
@@ -517,7 +517,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     }
 
     /**
-     *  根据宽高比设置当前的方向。
+     * 根据宽高比设置当前的方向。
      */
     public void changeOrientation() {
         if (mLivePlayer == null) {
@@ -539,39 +539,45 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     /**
      * 进入chartroom.
      */
-    public void enterImGroup(){
-        TIMGroupManager.getInstance().applyJoinGroup(CurLiveInfo.getRoomNum()+"", "点播用户", new TIMCallBack() {
+    public void enterImGroup() {
+        TIMGroupManager.getInstance().applyJoinGroup(CurLiveInfo.getRoomNum() + "", "点播用户", new TIMCallBack() {
             @java.lang.Override
             public void onError(int code, String desc) {
                 //接口返回了错误码code和错误描述desc，可用于原因
                 //错误码code列表请参见错误码表
-                if(10013==code){
-                    Log.e("进来了errorcode:"+code+",",desc);
+                if (10013 == code) {
+                    Log.e("进来了errorcode:" + code + ",", desc);
 
                     if (mLiveHttphelper != null) {
-                        mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
+                        mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "2", "");
                     }
                     mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
                     //发消息通知上线
-//                    mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM,"进来了");
+                    if (mLiveHttphelper != null) {
+                        mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "2", "");
+                        mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
+                    }
                 }
-                Log.e("进来了errorcode:"+code+",",desc);
+                Log.e("进来了errorcode:" + code + ",", desc);
 
             }
 
             @java.lang.Override
             public void onSuccess() {
-                Log.e("进来了success:","desc");
+                Log.e("进来了success:", "desc");
 
                 mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
-                    //发消息通知上线
+                //发消息通知上线
                 if (mLiveHttphelper != null) {
-                    mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "","2");
+                    mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "2", "");
+                    mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
+
                 }
 
             }
         });
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -591,7 +597,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         if (mPlayerView != null) {
             mPlayerView.onResume();
         }
-        if(isFirstLogin){
+        if (isFirstLogin) {
             isFirstLogin = false;
             startPlayRtmp();
         }
@@ -621,7 +627,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         if (mLivePlayer != null) {
             mLivePlayer.stopPlay(true);
         }
-        if (mPlayerView != null){
+        if (mPlayerView != null) {
             mPlayerView.onDestroy();
         }
 
@@ -667,8 +673,6 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         }
 
 
-
-
     }
 
     @Override
@@ -706,7 +710,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     private class GetAudienceTask extends TimerTask {
         @Override
         public void run() {
-           mLiveHttphelper.getAudienceList(chat_room_id);
+            mLiveHttphelper.getAudienceList(chat_room_id);
         }
     }
 
@@ -846,13 +850,14 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
                 case REFRESH_LISTVIEW:
                     doRefreshListView();
                     break;
-               default:
-                   break;
+                default:
+                    break;
 
             }
             return false;
         }
     });
+
     /**
      * 刷新ListView并重置状态
      */
@@ -945,7 +950,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
     public void userExit() {
 
         if (mLiveHttphelper != null) {
-            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "","2");
+            mLiveHttphelper.exitRoom(CurLiveInfo.getRoomNum() + "", "2");
         }
         //退出群
         TIMGroupManager.getInstance().quitGroup(CurLiveInfo.getRoomNum() + "", new TIMCallBack() {
@@ -953,12 +958,12 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
             public void onError(int code, String desc) {
                 //接口返回了错误码code和错误描述desc，可用于原因
                 //错误码code列表请参见错误码表
-                Log.e("退出了。"+CurLiveInfo.getRoomNum() +"errorcode:"+CurLiveInfo.getRoomNum() +",",desc);
+                Log.e("退出了。" + CurLiveInfo.getRoomNum() + "errorcode:" + CurLiveInfo.getRoomNum() + ",", desc);
             }
 
             @java.lang.Override
             public void onSuccess() {
-                Log.e("退出了。"+CurLiveInfo.getRoomNum() +"success:","desc");
+                Log.e("退出了。" + CurLiveInfo.getRoomNum() + "success:", "desc");
             }
         });
         finish();
@@ -982,7 +987,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
             } else {
                 //发消息通知上线
-                mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, MySelfInfo.getInstance().getNickName()+"进入房间。");
+                //  mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, MySelfInfo.getInstance().getNickName()+"进入房间。");
 
             }
         }
@@ -1131,6 +1136,7 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
 
         }
     }
+
     /*校验数据*/
     public boolean checkDataIsNull(List datas) {
         if (datas != null && datas.size() > 0) {
@@ -1153,9 +1159,9 @@ public class PlayBackActivity  extends BaseActivity implements ITXLivePlayListen
         MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                    if (mUserHeadTopView != null) {
-                        mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
-                    }
+                if (mUserHeadTopView != null) {
+                    mUserHeadTopView.updateAudienceCount(CurLiveInfo.getMembers() + "");
+                }
             }
         });
     }

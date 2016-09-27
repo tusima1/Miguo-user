@@ -132,7 +132,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
             platform = SHARE_MEDIA.QZONE;
         }
         UmengShareManager.share(platform, this, "直播结束", "我刚刚送出一个亿的钻石，下次来陪我？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "邀请你关注",
-                ServerUrl.SERVER_H5 + "index/winnie/id/" + CurLiveInfo.getHostUserID(), UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), shareResultCallback);
+                ServerUrl.SERVER_H5 + "index/winnie/id/" + CurLiveInfo.getHostID(), UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), shareResultCallback);
     }
 
     private UMShareListener shareResultCallback = new UMShareListener() {

@@ -8,6 +8,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
@@ -37,6 +38,7 @@ public class CollectListActivity extends Activity implements CallbackView2 {
     private boolean isRefresh = true;
     private int pageNum = 1;
     private int pageSize = 10;
+    private RelativeLayout ll_empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,17 @@ public class CollectListActivity extends Activity implements CallbackView2 {
         setListener();
         userHttpHelper = new UserHttpHelper(this, this);
         preData();
+        ll_empty = (RelativeLayout)findViewById(R.id.ll_empty);
+
     }
 
+    public void showEmpty(boolean show){
+        if(show) {
+            ll_empty.setVisibility(View.VISIBLE);
+        }else{
+            ll_empty.setVisibility(View.GONE);
+        }
+    }
     private void initTitle() {
         findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +145,11 @@ public class CollectListActivity extends Activity implements CallbackView2 {
                     }
                     if (!SDCollectionUtil.isEmpty(items)) {
                         datas.addAll(items);
+                    }
+                    if(datas==null||datas.size()<1){
+                        showEmpty(true);
+                    }else{
+                        showEmpty(false);
                     }
                     mCollectListAdapter.notifyDataSetChanged();
                     break;

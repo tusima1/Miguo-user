@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.ServerUrl;
@@ -304,6 +305,8 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             } else {
                 if (!TextUtils.isEmpty(fx_id)) {
                     clickUrl = clickUrl + "/ref_id/" + fx_id;
+                }else{
+                    clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
                 }
             }
             String title = share.getTitle();
