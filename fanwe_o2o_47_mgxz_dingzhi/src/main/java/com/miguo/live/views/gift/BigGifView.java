@@ -10,10 +10,14 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.fanwe.constant.GiftId;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.views.base.BaseRelativeLayout;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,11 +27,12 @@ public class BigGifView extends BaseRelativeLayout{
 
     public static final int GIFT_WIDTH = 750;
     public static final int GIFT_HEIGHT = 680;
-    public static final long DURATION = 5000;
+    public static final long DURATION = 800;
     public static final int KISS_WIDTH = 200;
     public static final int KISS_HEIGHT = 200;
 
-
+    HashMap<Integer, Boolean> showing;
+    List<GiftListBean> beans;
 
     public BigGifView(Context context) {
         super(context);
@@ -44,7 +49,8 @@ public class BigGifView extends BaseRelativeLayout{
     @Override
     protected void init() {
         setBackgroundColor(Color.TRANSPARENT);
-
+        showing = new HashMap<>();
+        beans = new ArrayList<>();
     }
 
     /**
@@ -55,7 +61,19 @@ public class BigGifView extends BaseRelativeLayout{
         if(bean == null || bean.getId() == null || bean.getId().equals("")){
             return;
         }
+//        try{
+//            beans.remove(bean);
+//        }catch (Exception e){
+//
+//        }
+        if(noCurrentAnimation(bean)){
+            startKiss(bean);
+        }
 
+    }
+
+    private void startKiss(GiftListBean bean){
+        addKey(bean.hashCode(), bean);
         int width = dip2px(150);
         int height = width;
         ImageView gift = new ImageView(getContext());
@@ -77,6 +95,19 @@ public class BigGifView extends BaseRelativeLayout{
             return;
         }
 
+//        try{
+//            beans.remove(bean);
+//        }catch (Exception e){
+//
+//        }
+        if(noCurrentAnimation(bean)){
+            startPacket(bean);
+        }
+
+    }
+
+    private void startPacket(GiftListBean bean){
+        addKey(bean.hashCode(), bean);
         int width = dip2px(150);
         int height = width;
         ImageView gift = new ImageView(getContext());
@@ -89,7 +120,6 @@ public class BigGifView extends BaseRelativeLayout{
         startLeaveAnimation(gift, bean);
     }
 
-
     /**
      * 大礼物
      * @param bean
@@ -98,17 +128,78 @@ public class BigGifView extends BaseRelativeLayout{
         if(bean == null || bean.getId() == null || bean.getId().equals("")){
             return;
         }
+//        try{
+//            beans.remove(bean);
+//        }catch (Exception e){
+//
+//        }
+        if(noCurrentAnimation(bean)){
+            startBigGift(bean);
+        }
+    }
 
+    private void startBigGift(GiftListBean bean){
+        addKey(bean.hashCode(), bean);
         ImageView gift = new ImageView(getContext());
         RelativeLayout.LayoutParams giftParams = getRelativeLayoutParams(getGiftWidth(), getGiftHeight());
         giftParams.addRule(RelativeLayout.CENTER_VERTICAL);
         gift.setLayoutParams(giftParams);
         addView(gift);
         gift.postDelayed(new BigGiftRunnable(gift, bean), getSpeed(bean.getId()));
-
     }
 
-    private void startLeaveAnimation(final View view,GiftListBean bean){
+    private boolean noCurrentAnimation(GiftListBean bean){
+        beans.add(bean);
+        return showing.size() == 0;
+    }
+
+    private void addKey(int key, GiftListBean bean){
+        showing.put(key, true);
+    }
+
+    private void removeKey(int key, GiftListBean bean){
+        showing.remove(key);
+    }
+
+    private void onCurrentAnimationEnd(){
+        Log.d(tag, "on current animation end: bean size: " + beans.size());
+        if(beans.size() > 0){
+            Log.d(tag, "on current animation end: bean id: " + beans.get(0));
+            switch (beans.get(0).getId()) {
+                /**
+                 * 小礼物 随弹幕出现
+                 */
+                case GiftId.STAR:
+                case GiftId.FLOWER:
+                case GiftId.SWEET:
+                case GiftId.MIGUO_BABY:
+                    break;
+                /**
+                 * 么么哒 屏幕随机出现
+                 * 福气临门 屏幕中心出现，慢慢消失
+                 */
+                case GiftId.KISS:
+                    startKiss(beans.get(0));
+                    break;
+                case GiftId.GOOD_FORTUNE:
+                    startPacket(beans.get(0));
+                    break;
+                /**
+                 * 大礼物，动图序列帧
+                 */
+                case GiftId.BEST_LOVE:
+                case GiftId.FIREWORKS:
+                case GiftId.BASKETS:
+                case GiftId.BOMBARDIER:
+                case GiftId.FERRARI:
+                case GiftId.SOAR:
+                    startBigGift(beans.get(0));
+                    break;
+            }
+        }
+    }
+
+    private void startLeaveAnimation(final View view,final GiftListBean bean){
         AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
         animation.setDuration(300);
         animation.setStartOffset(2000);
@@ -121,6 +212,11 @@ public class BigGifView extends BaseRelativeLayout{
             @Override
             public void onAnimationEnd(Animation animation) {
                 BigGifView.this.removeView(view);
+
+                beans.remove(bean);
+                removeKey(bean.hashCode(), bean);
+                onCurrentAnimationEnd();
+
             }
 
             @Override
@@ -167,6 +263,9 @@ public class BigGifView extends BaseRelativeLayout{
                 gift.postDelayed(this,getSpeed(bean.getId()));
             }else {
                 removeView(gift);
+                beans.remove(bean);
+                removeKey(bean.hashCode(), bean);
+                onCurrentAnimationEnd();
             }
         }
 

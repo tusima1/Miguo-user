@@ -915,7 +915,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     private class VideoTimerTask extends TimerTask {
         public void run() {
-            SxbLog.e(TAG, "timeTask ");
+
             ++mSecond;
             if (LiveUtil.checkIsHost())
                 mHandler.sendEmptyMessage(UPDAT_WALL_TIME_TIMER_TASK);
@@ -947,6 +947,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             if (null != mAudienceTimer) {
                 mAudienceTimer.cancel();
                 mAudienceTimer = null;
+            }
+            if(null!=mVideoTimerTask){
+                mVideoTimerTask.cancel();
+                mVideoTimerTask = null;
             }
             inviteViewCount = 0;
             thumbUp = 0;

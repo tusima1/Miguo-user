@@ -59,6 +59,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
             //进别人的小店。
             user_id = intent.getStringExtra("user_id");
             String url = intent.getStringExtra("url");
+            url=url+"/from/app";
 
             AppWebViewFragment frag = new AppWebViewFragment();
             frag.setShowTitle(true);

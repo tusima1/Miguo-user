@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
@@ -26,7 +27,7 @@ public class FansActivity extends Activity implements CallbackView2 {
     private int mPage=1;//当前页面
     private FansAdapter mAdapter;
     private UserHttpHelper httpHelper;
-
+    private RelativeLayout ll_empty;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,8 @@ public class FansActivity extends Activity implements CallbackView2 {
 
         httpHelper = new UserHttpHelper(null,this);
         httpHelper.getAttentionFans(1,10);
+        ll_empty = (RelativeLayout)findViewById(R.id.ll_empty);
+
     }
     private void initTitle() {
         findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
@@ -45,6 +48,13 @@ public class FansActivity extends Activity implements CallbackView2 {
             }
         });
         ((TextView) findViewById(R.id.tv_middle)).setText("我的粉丝");
+    }
+    public void showEmpty(boolean show){
+        if(show) {
+            ll_empty.setVisibility(View.VISIBLE);
+        }else{
+            ll_empty.setVisibility(View.GONE);
+        }
     }
 
     private void initPullToRefreshListView() {
@@ -81,6 +91,11 @@ public class FansActivity extends Activity implements CallbackView2 {
             mFansList.addAll(datas);
             mAdapter.setData(mFansList);
                 mPage++;
+            if(mFansList==null||mFansList.size()<1){
+                showEmpty(true);
+            }else{
+                showEmpty(false);
+            }
         }
 
     }

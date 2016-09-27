@@ -38,6 +38,7 @@
                     android:layout_marginLeft="@dimen/dp13"
                     android:layout_marginTop="@dimen/dp20"
                     android:layout_toRightOf="@+id/iv_icon_act_user_home"
+                    android:drawablePadding="@dimen/dp5"
                     android:text=""
                     android:textColor="@color/text_fenxiao"
                     android:textSize="@dimen/dp20" />

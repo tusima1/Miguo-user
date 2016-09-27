@@ -1,8 +1,11 @@
 package com.fanwe.dao.barry.impl;
 
+import android.util.Log;
+
 import com.fanwe.app.App;
 import com.fanwe.dao.barry.CommandGroupBuyDao;
 import com.fanwe.dao.barry.view.CommandGroupBuyView;
+import com.fanwe.library.utils.LogUtil;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -24,17 +27,20 @@ public class CommandGroupBuyDaoImpl implements CommandGroupBuyDao{
     }
 
     @Override
-    public void getCommandGroupBuyDaoList(final int page, int page_size, String tag,String keyword, String city) {
+    public void getCommandGroupBuyDaoList(final int page, int page_size, String tag,String keyword,String m_longitude,String m_latitude, String city) {
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("page", String.valueOf(page));
         params.put("page_size", String.valueOf(page_size));
         params.put("tag", tag);
         params.put("keyword", keyword);
+        params.put("m_longitude", m_longitude);
+        params.put("m_latitude", m_latitude);
         params.put("city", city);
         params.put("tag", tag);
         params.put("method", LiveConstants.COMMAND_GROUP_BUY);
-
+        Log.d(tag, "m_longitude: " + m_longitude);
+        Log.d(tag, "m_latitude: " + m_latitude);
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {

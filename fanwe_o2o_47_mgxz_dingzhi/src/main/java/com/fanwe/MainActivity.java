@@ -127,7 +127,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
         init();
     }
 
-
     private void init() {
         startUpgradeService();
         initBottom();
@@ -146,6 +145,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             }
         }).start();
     }
+
 
     //初始化用户信息。
     private void initUserInfo() {
@@ -497,6 +497,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
                     intentStore.putExtra("user_id", user_id);
                     intentStore.putExtra("url", result);
+
                     startActivity(intentStore);
                 } else if (getCompleteUrl(result, SHOP_DETAIL)) {
                     //门店详情

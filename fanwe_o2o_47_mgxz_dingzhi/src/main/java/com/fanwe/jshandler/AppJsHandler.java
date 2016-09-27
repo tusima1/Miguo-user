@@ -34,12 +34,19 @@ import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.common.SDActivityManager;
+import com.fanwe.shoppingcart.RefreshCalbackView;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
+import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Cart_check_cartActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.umeng.UmengShareManager;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * app详情页js回调处理类
@@ -49,6 +56,8 @@ import com.sunday.eventbus.SDEventManager;
  */
 public class AppJsHandler extends BaseJsHandler {
 	private static final String DEFAULT_NAME = "米果小站";
+
+	private boolean ifLogin = false;
 
 	public AppJsHandler(String name, Activity activity) {
 		super(name, activity);
@@ -216,41 +225,52 @@ public class AppJsHandler extends BaseJsHandler {
 	@JavascriptInterface
 	public void addCart(String productId, String userId) {
 		// 保存购物车
-		RequestModel request = new RequestModel();
-		request.putCtl("cart");
-		request.putAct("addcart");
-		request.put("id", productId);
-		request.put("uid", userId);
-		request.put("number", 1);
+		checkLogin();
+		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
+		cartInfo.setNumber("1");
+		cartInfo.setPro_id(productId);
+		cartInfo.setFx_user_id(userId);
 
-		SDRequestCallBack<Cart_check_cartActModel> handler = new SDRequestCallBack<Cart_check_cartActModel>() {
-			@Override
-			public void onStart() {
 
-			}
+		if (ifLogin) {
+			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
+				@Override
+				public void onSuccess(String responseBody) {
 
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					// 跳转购物车页面。
-					goCart();
-				} else {
-					String message = actModel.getInfo();
-					if (TextUtils.isEmpty(message)) {
-						message = "服务器君不在状态了，请稍后再试！";
-					}
-
-					MGToast.showToast(message);
 				}
-			}
 
-			@Override
-			public void onFinish() {
+				@Override
+				public void onSuccess(String method, List datas) {
 
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(request, handler);
+				}
+
+				@Override
+				public void onFailue(String responseBody) {
+
+				}
+
+				@Override
+				public void onFailue(String method, String responseBody) {
+
+				}
+			});
+			List<ShoppingCartInfo> listModel = new ArrayList<>();
+			  listModel.add(cartInfo);
+			outSideShoppingCartHelper.multiAddShopCart(listModel);
+		} else {
+			LocalShoppingcartDao.insertModel(cartInfo);
+		}
+	}
+
+
+	public void checkLogin() {
+		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+			ifLogin = true;
+		} else {
+			ifLogin = false;
+		}
 
 	}
+
 
 }

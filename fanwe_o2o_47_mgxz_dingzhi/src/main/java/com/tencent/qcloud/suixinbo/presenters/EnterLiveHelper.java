@@ -208,10 +208,11 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     isInChatRoom = true;
                     createAVRoom(MySelfInfo.getInstance().getMyRoomNum());
                     return;
+                }else {
+                    // 创建IM房间失败，提示失败原因，并关闭等待对话框
+                    MGToast.showToast("创建房间失败，请重试。");
+                    quiteLive();
                 }
-                // 创建IM房间失败，提示失败原因，并关闭等待对话框
-                MGToast.showToast("创建房间失败，请重试。");
-                quiteLive();
             }
 
             @Override
