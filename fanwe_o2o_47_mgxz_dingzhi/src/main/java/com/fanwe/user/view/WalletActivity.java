@@ -34,14 +34,14 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
     private View mLL_DaiYan;
     private View mLL_Share;
     private View mLL_Live;
+    private UserHttpHelper httpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wallet);
         initView();
-        UserHttpHelper httpHelper = new UserHttpHelper(null, this);
-        httpHelper.getMyWallet();
+        httpHelper = new UserHttpHelper(null, this);
     }
 
     private void initView() {
@@ -74,6 +74,17 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
         mLL_DaiYan.setOnClickListener(this);
         mLL_Share.setOnClickListener(this);
         mLL_Live.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        httpHelper.getMyWallet();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void initTitle() {

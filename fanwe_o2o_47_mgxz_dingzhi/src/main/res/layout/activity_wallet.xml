@@ -192,7 +192,6 @@
                 android:clickable="true"
                 android:layout_width="@dimen/dp36"
                 android:layout_height="@dimen/dp36"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_info"/>
@@ -275,7 +274,6 @@
                 android:layout_width="@dimen/dp36"
                 android:layout_height="@dimen/dp36"
                 android:clickable="true"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_info"/>

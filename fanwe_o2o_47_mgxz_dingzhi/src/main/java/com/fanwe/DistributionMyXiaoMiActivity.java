@@ -49,7 +49,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
 
     private boolean isShow;
 
-    private MyDistFragment mDist;
+    private MyDistFragment mDist=new MyDistFragment();
 
     protected String money;
 
@@ -140,8 +140,6 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
 
     private void clickOne() {
         mTv_number.setText("");
-
-        mDist = new MyDistFragment();
         mDist.setmListener(new OnDialogData() {
             @Override
             public void setData(int vip1, int num1, int num2, int total, String up_name, int up_id) {

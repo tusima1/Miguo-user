@@ -73,7 +73,7 @@ public class SxbLog {
 
         long currentTimeMillis = System.currentTimeMillis();
 
-        Log.v("Test", String.valueOf(currentTimeMillis));
+        Log.v("DictArray", String.valueOf(currentTimeMillis));
 
 
         Calendar calendar = Calendar.getInstance();

@@ -29,7 +29,8 @@ public class LocalShoppingcartDao {
             //判断是否已经存在同一个商品，如果存在的话数量+1
             for(int i =0; i <cartInfos.size() ; i++){
                 ShoppingCartInfo shoppingCartInfo = cartInfos.get(i);
-                if(shoppingCartInfo.getId().equals(model.getId())){
+//                if(shoppingCartInfo.getId() != null && shoppingCartInfo.getId().equals(model.getId())){
+                if(shoppingCartInfo.getPro_id() != null && shoppingCartInfo.getPro_id().equals(model.getPro_id())){
                     int number = SDFormatUtil.stringToInteger(model.getNumber());
                     int number2=SDFormatUtil.stringToInteger(shoppingCartInfo.getNumber());
                     shoppingCartInfo.setNumber((number + number2)+"");

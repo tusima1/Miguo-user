@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
@@ -34,7 +35,9 @@ import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.presents.LoginHelper;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGDictUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
@@ -45,6 +48,8 @@ import com.miguo.live.views.LiveStartAuthActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
+import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -57,7 +62,7 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends BaseActivity implements CallbackView {
-
+    private Context mContext = MainActivity.this;
 
     /**
      * 商家id (int)
@@ -134,11 +139,22 @@ public class MainActivity extends BaseActivity implements CallbackView {
 //        MessageHelper.updateMessageCount();
         initOthers();
         initUserInfo();
+        initDict();
+    }
+
+    private void initDict() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new LiveHttpHelper(null, null).getBussDictionInfo("Client");
+            }
+        }).start();
     }
 
 
     //初始化用户信息。
     private void initUserInfo() {
+        App.getInstance().code = "";
         //取剪切板中的领取码
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
@@ -282,6 +298,8 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
+                        Log.e("upload", MGDictUtil.getUploadToken());
+                        Log.e("share", MGDictUtil.getShareIcon());
                         break;
                     case 2:
                         click2();
@@ -549,6 +567,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        judgeCode(intent);
         // onNewIntent在onRestart 前调用.
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
@@ -575,6 +594,20 @@ public class MainActivity extends BaseActivity implements CallbackView {
             }
         }
     }
+
+    private void judgeCode(Intent intent) {
+        if (intent != null) {
+            String dataString = intent.getDataString();
+            if (!TextUtils.isEmpty(dataString)) {
+                if (dataString.contains("miguoxiaozhan")) {
+                    App.getInstance().isShowCode = true;
+                    App.getInstance().isAlreadyShowCode = false;
+                    initUserInfo();
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -626,50 +659,37 @@ public class MainActivity extends BaseActivity implements CallbackView {
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.USE_RECEIVE_CODE.equals(method)) {
+            App.getInstance().code = code;
             List<Room> items = datas;
             if (!SDCollectionUtil.isEmpty(items)) {
                 if (clipboardManager != null)
                     clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "mgxz"));
                 Room room = items.get(0);
-                MGToast.showToast(room.getInner_message());
-                Host host = room.getHost();
-                Intent intent = new Intent(this, LiveActivity.class);
-                intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
-                MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-                String nickName = App.getInstance().getUserNickName();
-                String avatar = "";
-                if (App.getInstance().getmUserCurrentInfo() != null) {
-                    UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-                    if (currentInfo.getUserInfoNew() != null) {
-                        avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+                //分点播和直播 直播类型  1 表示直播，2表示点播
+                String live_type = room.getLive_type();
+                if ("1".equals(live_type)) {
+                    //直播
+                    gotoLiveActivity(room);
+                } else if ("2".equals(live_type)) {
+                    //点播
+                    gotoPlayBackActivity(room);
+                } else {
+                    if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
+                        if (room.getHost() != null) {
+                            if (!TextUtils.isEmpty(room.getHost().getUid())) {
+                                Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
+                                intent.putExtra("id", room.getHost().getUid());
+                                startActivity(intent);
+                                return;
+                            }
+                        }
                     }
+                    //异常数据
+                    MGToast.showToast("异常数据");
+                    return;
                 }
-                MySelfInfo.getInstance().setAvatar(avatar);
-                MySelfInfo.getInstance().setNickName(nickName);
-                MySelfInfo.getInstance().setJoinRoomWay(false);
-                CurLiveInfo.setHostID(host.getHost_user_id());
-                CurLiveInfo.setHostName(host.getNickname());
-
-                CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-                CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
-                if (room.getLbs() != null) {
-                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
-                    ModelStoreList modelStoreList = new ModelStoreList();
-                    modelStoreList.setShop_name(room.getLbs().getShop_name());
-                    modelStoreList.setId(room.getLbs().getShop_id());
-                    CurLiveInfo.setModelShop(modelStoreList);
-                }
-                CurLiveInfo.setHostUserID(room.getHost().getUid());
-//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-                CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
-                if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-                    CurLiveInfo.setShopID(room.getLbs().getShop_id());
-                }
-                CurLiveInfo.setAdmires(1);
-                startActivity(intent);
             } else {
-                MGToast.showToast("领取码无效");
+//                MGToast.showToast("领取码无效");
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -721,4 +741,77 @@ public class MainActivity extends BaseActivity implements CallbackView {
         super.onDestroy();
 
     }
+
+    private void gotoLiveActivity(Room room) {
+        Intent intent = new Intent(mContext, LiveActivity.class);
+        intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
+        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
+        addCommonData(room);
+        BaseUtils.jumpToNewActivity(MainActivity.this, intent);
+    }
+
+    /**
+     * 进入点播页面
+     *
+     * @param room
+     */
+    private void gotoPlayBackActivity(Room room) {
+        addCommonData(room);
+        String chat_room_id = room.getChat_room_id();//im的id
+        String file_size = room.getFile_size();//文件大小
+        String duration = room.getDuration();//时长
+        String file_id = room.getFile_id();
+        String vid = room.getVid();
+        String playset = room.getPlayset();
+
+        Intent intent = new Intent(mContext, PlayBackActivity.class);
+        Bundle data = new Bundle();
+        data.putString("chat_room_id", chat_room_id);
+        data.putString("file_size", file_size);
+        data.putString("duration", duration);
+        data.putString("file_id", file_id);
+        data.putString("vid", vid);
+        data.putString("playset", playset);
+        intent.putExtras(data);
+        BaseUtils.jumpToNewActivity(MainActivity.this, intent);
+    }
+
+    private void addCommonData(Room room) {
+        Host host = room.getHost();
+        String nickName = App.getInstance().getUserNickName();
+        String avatar = "";
+        if (App.getInstance().getmUserCurrentInfo() != null) {
+            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
+            if (currentInfo.getUserInfoNew() != null) {
+                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            }
+        }
+        MySelfInfo.getInstance().setAvatar(avatar);
+        MySelfInfo.getInstance().setNickName(nickName);
+        MySelfInfo.getInstance().setJoinRoomWay(false);
+        CurLiveInfo.setHostID(host.getHost_user_id());
+        CurLiveInfo.setHostName(host.getNickname());
+
+        CurLiveInfo.setHostAvator(room.getHost().getAvatar());
+        App.getInstance().setCurrentRoomId(room.getId());
+        CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
+        if (room.getLbs() != null) {
+            CurLiveInfo.setShopID(room.getLbs().getShop_id());
+            ModelStoreList modelStoreList = new ModelStoreList();
+            modelStoreList.setShop_name(room.getLbs().getShop_name());
+            modelStoreList.setId(room.getLbs().getShop_id());
+            CurLiveInfo.setModelShop(modelStoreList);
+        }
+        CurLiveInfo.setLive_type(room.getLive_type());
+
+        CurLiveInfo.setHostUserID(room.getHost().getUid());
+//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
+        CurLiveInfo.setMembers(1); // 添加自己
+//                CurLiveInfo.setAddress(item.getLbs().getAddress());
+        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
+            CurLiveInfo.setShopID(room.getLbs().getShop_id());
+        }
+        CurLiveInfo.setAdmires(1);
+    }
+
 }

@@ -20,6 +20,7 @@ import com.fanwe.seller.views.MineShopActivity;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.utils.MGDictUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.DataBindingLiveStart;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
@@ -175,13 +176,20 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
                 platform = SHARE_MEDIA.QZONE;
             }
-            UmengShareManager.share(platform,
-                    this,
-                    "开始直播",
-                    "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....",
-                    ServerUrl.SERVER_H5 + "share/live/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-                    UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"),
-                    shareResultCallback);
+            String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
+                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
+            }
+            String title = "送你钻石";
+            String content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
+            if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
+                //朋友圈
+                title = content;
+            }
+            UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "share/live/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                    UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
         } else {
             //未认证的，去认证
             startActivity(new Intent(this, LiveAuthActivity.class));

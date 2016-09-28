@@ -131,6 +131,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, ModifyPasswordActivity.class);
+                intent.putExtra("pageType", "forget");
                 startActivity(intent);
 
             }

@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.GiftId;
@@ -31,7 +30,6 @@ import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper2;
 import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.utils.ToasUtil;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -61,6 +59,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
     private String liveType; //类型：1直播 2点播	播放类型
     private OnPayGiftSuccessListener mListener;
     private final GiftHttpHelper2 httpHelper2;
+    private final int TIME_OFFSET=300;
 
     public UserSendGiftPopHelper(Activity mActivity,String liveType) {
         this.mActivity = mActivity;
@@ -179,7 +178,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                     endTime = System.currentTimeMillis();
                     long offset = endTime - preTime;
                     totalCount++;
-                    if (offset<2000){
+                    if (offset<TIME_OFFSET){
                         //连击
                         Log.e("test",offset+"");
                     }else {
@@ -193,14 +192,12 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                             int roomNum = CurLiveInfo.getRoomNum();
                             if (roomNum==-1){
                                 MGToast.showToast("异常直播房间");
-                                totalCount=0;
-                                preTime=0;
+                                resetSend();
                                 return;
                             }
                             httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
                             //reset
-                            totalCount=0;
-                            preTime=0;
+                            resetSend();
                         }
 
                     }
@@ -209,6 +206,14 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
         }
     };
 
+    /**
+     * 重置计时
+     */
+    private void resetSend(){
+        totalCount=0;
+        preTime=0;
+    }
+
     /*打赏*/
     private void clickSend() {
         try{
@@ -216,6 +221,20 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 if (preTime==0){
                     selectedItemInfo = mGiftAdapter.getSelectedItemInfo(position);
                 }
+                //判断余额足不足
+                float unitPrice = MGStringFormatter.getFloat(selectedItemInfo.getPrice());
+                if (money<unitPrice){
+                    showDialog();
+                    resetSend();
+                    return;
+                }
+                float leftMoney = money - unitPrice * totalCount;
+                if (leftMoney<0){
+                    showDialog();
+                    resetSend();
+                    return;
+                }
+
                 String id = selectedItemInfo.getId();
 //            case GiftId.STAR:
 //            case GiftId.FLOWER:
@@ -224,7 +243,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 if (GiftId.STAR.equals(id) ||GiftId.FLOWER.equals(id) ||GiftId.SWEET.equals(id) ||GiftId.MIGUO_BABY.equals(id)){
                     //发小礼物,要连发
                     preTime = System.currentTimeMillis();
-                    mHandler.sendEmptyMessageDelayed(0,2000);
+                    mHandler.sendEmptyMessageDelayed(0,TIME_OFFSET);
                 }else {
                     //除了小礼物只能单发
                     httpHelper2.putGiftPay(liveType, roomNum+"","1",selectedItemInfo.getId());
@@ -233,6 +252,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 MGToast.showToast("Not Enable!");
             }
         }catch (Exception e){
+            Log.e("test","userSendGift: "+e.toString());
             MGToast.showToast("操作太频繁，请稍后再试！");
         }
 
@@ -284,6 +304,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                     String userdiamond = root.getResult().get(0).getBody().get(0).getUserdiamond();
                     int gift_num = root.getResult().get(0).getBody().get(0).getGift_num();
                     if (!TextUtils.isEmpty(userdiamond)){
+                        money = MGStringFormatter.getFloat(userdiamond);
                         mTvMoney.setText(userdiamond);
                     }
                     if (mListener!=null){

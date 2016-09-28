@@ -19,6 +19,8 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.shoppingcart.RefreshCalbackView;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.user.UserConstants;
@@ -480,25 +482,46 @@ public class LoginHelper extends Presenter {
      */
     public void putLocalShoppingToServer() {
         List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
-        if (list != null) {
-            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
+        if (list != null && list.size() > 0) {
+//            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
+//                @Override
+//                public void onSuccess(String responseBody) {
+//                    App.getInstance().deleteAllShoppingCartInfo();
+//                }
+//
+//                @Override
+//                public void onSuccess(String method, List datas) {
+//                    App.getInstance().deleteAllShoppingCartInfo();
+//                }
+//
+//                @Override
+//                public void onFailue(String responseBody) {
+//
+//                }
+//
+//                @Override
+//                public void onFinish(String method) {
+//
+//                }
+//            });
+            final OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
+                @Override
+                public void onFailue(String method, String responseBody) {
+
+                }
+
                 @Override
                 public void onSuccess(String responseBody) {
-                    App.getInstance().deleteAllShoppingCartInfo();
+
                 }
 
                 @Override
                 public void onSuccess(String method, List datas) {
-                    App.getInstance().deleteAllShoppingCartInfo();
+                    LocalShoppingcartDao.deleteAllModel();
                 }
 
                 @Override
                 public void onFailue(String responseBody) {
-
-                }
-
-                @Override
-                public void onFinish(String method) {
 
                 }
             });

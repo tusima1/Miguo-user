@@ -9,11 +9,11 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
+import com.fanwe.common.MGDict;
 import com.fanwe.home.model.ResultLive;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.model.RootLive;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -69,6 +69,7 @@ import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.LogTag;
 import com.miguo.utils.MGLog;
 
@@ -202,10 +203,10 @@ public class LiveHttpHelper implements IHelper {
                 RootAudienceCount rootAudienceCount = gson.fromJson(responseBody, RootAudienceCount.class);
                 List<ResultAudienceCount> resultAudienceCounts = rootAudienceCount.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceCounts)) {
-                    if(mView2 != null){
+                    if (mView2 != null) {
                         mView2.onSuccess(LiveConstants.AUDIENCE_COUNT, new ArrayList());
                     }
-                    if(mView != null){
+                    if (mView != null) {
                         mView.onSuccess(LiveConstants.AUDIENCE_COUNT, new ArrayList());
 
                     }
@@ -213,10 +214,10 @@ public class LiveHttpHelper implements IHelper {
                 }
                 ResultAudienceCount resultAudienceCount = resultAudienceCounts.get(0);
                 List<ModelAudienceCount> modelAudienceCounts = resultAudienceCount.getBody();
-                if(mView2 != null){
+                if (mView2 != null) {
                     mView2.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
                 }
-                if(mView != null){
+                if (mView != null) {
                     mView.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
                 }
             }
@@ -294,17 +295,14 @@ public class LiveHttpHelper implements IHelper {
      * 观众进入房间
      *
      * @param room_id
-     * @param  type 1直播 2点播
+     * @param type    1直播 2点播
      */
-    public void enterRoom(String room_id,String type) {
-        if(TextUtils.isEmpty(type)){
-            type = "1";
-        }
-
+    public void enterRoom(String room_id, String type, String receive_code) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("type", type);
+        params.put("receive_code", receive_code);
         params.put("method", LiveConstants.ENTER_ROOM);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -325,10 +323,10 @@ public class LiveHttpHelper implements IHelper {
      * 观众退出房间
      *
      * @param room_id
-     * @param  type
+     * @param type
      */
-    public void exitRoom(String room_id,String type) {
-        if(TextUtils.isEmpty(type)){
+    public void exitRoom(String room_id, String type) {
+        if (TextUtils.isEmpty(type)) {
             type = "1";
         }
         TreeMap<String, String> params = new TreeMap<String, String>();
@@ -541,17 +539,20 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                Log.e("test",responseBody);
                 RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody,
                         RootBussDictionInfo.class);
                 List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo
                         .getResult();
                 if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
-                    mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
+                    if (mView!=null){mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);}
                     return;
                 }
                 ResultBussDictionInfo resultBussDictionInfo = resultBussDictionInfos.get(0);
                 List<ModelBussDictionInfo> modelBussDictionInfo = resultBussDictionInfo.getBody();
-                mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
+                String dict = gson.toJson(modelBussDictionInfo);
+                MGDict.save2File(dict);
+                if (mView!=null){ mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);}
             }
 
             @Override
@@ -609,10 +610,10 @@ public class LiveHttpHelper implements IHelper {
                 List<ResultCheckFocus> resultCheckFocuss = rootCheckFocus.getResult();
                 if (SDCollectionUtil.isEmpty(resultCheckFocuss)) {
 
-                    if(mView2!=null){
+                    if (mView2 != null) {
                         mView2.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
                     }
-                    if(mView != null){
+                    if (mView != null) {
                         mView.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
                     }
 
@@ -624,10 +625,10 @@ public class LiveHttpHelper implements IHelper {
                 modelCheckFocus = resultCheckFocus.getBody();
 //                modelCheckFocus = modelCheckFocus == null ? new ArrayList<ModelCheckFocus>() : modelCheckFocus;
 
-                if(mView2!=null){
+                if (mView2 != null) {
                     mView2.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
                 }
-                if(mView != null){
+                if (mView != null) {
                     mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
                 }
             }

@@ -518,7 +518,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
-    public void onSuccess(String method, List datas) {
+    public void onSuccess(String method,final List datas) {
         switch (method) {
             case ShoppingCartconstants.SHOPPING_CART_LIST:
                 this.listModel = datas;
@@ -526,6 +526,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                     @Override
                     public void run() {
                         if (mAdapter != null) {
+                            listModel = datas;
                             mAdapter.setData(listModel);
                             bindData();
                             mAdapter.notifyDataSetChanged();

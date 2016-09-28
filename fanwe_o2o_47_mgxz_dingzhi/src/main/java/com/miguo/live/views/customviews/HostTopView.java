@@ -189,8 +189,12 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     }
 
     /*设置关键字,格式还未定义*/
-    public void setKeyWords() {
-        //TODO keywords
+    public void setKeyWords(String str) {
+        mTv_keywords.setText(str);
+    }
+
+    public void setArriveNum(String str) {
+        mTv_arrive_num.setText(str);
     }
 
     public HeadTopAdapter getmAdapter() {

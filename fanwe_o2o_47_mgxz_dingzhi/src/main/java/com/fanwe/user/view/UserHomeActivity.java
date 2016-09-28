@@ -37,6 +37,7 @@ import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGDictUtil;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
@@ -138,8 +139,14 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
      * 分享
      */
     private void clickShare() {
+        String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+        if (!TextUtils.isEmpty(strIcon)) {
+            imageUrl = strIcon;
+        } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+            imageUrl = MGDictUtil.getShareIcon();
+        }
         UmengShareManager.share(this, "分享", "网红主页", ServerUrl.SERVER_H5 + "index/winnie/id/" + id,
-                UmengShareManager.getUMImage(this, "http://www.mgxz.com/pcApp/Common/images/logo2.png"), null);
+                UmengShareManager.getUMImage(this, imageUrl), null);
     }
 
     ImageAdapter adapterShop;
@@ -317,6 +324,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
 
     ModelPersonHomePage currModelPersonHomePage = new ModelPersonHomePage();
     ModelUserAttention modelUserAttention;
+    private String strIcon;
 
     Handler mHandler = new Handler() {
         @Override
@@ -332,7 +340,8 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                         SDViewBinder.setTextView(tvFans, currModelPersonHomePage.getFans(), "");
                         SDViewBinder.setTextView(tvSupport, currModelPersonHomePage.getLove_count(), "");
                         SDViewBinder.setTextView(tvSign, currModelPersonHomePage.getPersonality(), "");
-                        ImageLoader.getInstance().displayImage(currModelPersonHomePage.getIcon(), circleImageView);
+                        strIcon = currModelPersonHomePage.getIcon();
+                        ImageLoader.getInstance().displayImage(strIcon, circleImageView);
                         if ("1".equals(currModelPersonHomePage.getFx_level())) {
                             Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_3);
                             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
