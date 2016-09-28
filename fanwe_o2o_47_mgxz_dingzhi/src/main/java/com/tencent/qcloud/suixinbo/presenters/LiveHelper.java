@@ -239,22 +239,27 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 mRequestIdentifierList[viewindex] = id;
                 viewindex++;
             }
-            int ret = AVEndpoint.requestViewList(mRequestIdentifierList, mRequestViewList, viewindex, mRequestViewListCompleteCallback);
-
+            int ret = QavsdkControl.getInstance().getAvRoomMulti().requestViewList(mRequestIdentifierList, mRequestViewList, viewindex, mRequestViewListCompleteCallback);
 
         } else {
-            Toast.makeText(mContext, "Wrong Room!!!! Live maybe close already!", Toast.LENGTH_SHORT).show();
+            if (null != mContext) {
+                Toast.makeText(mContext, "Wrong Room!!!! Live maybe close already!", Toast.LENGTH_SHORT).show();
+            }
         }
 
 
     }
 
 
-    private AVEndpoint.RequestViewListCompleteCallback mRequestViewListCompleteCallback = new AVEndpoint.RequestViewListCompleteCallback() {
-        protected void OnComplete(String identifierList[], AVView viewList[], int count, int result) {
+    private AVRoomMulti.RequestViewListCompleteCallback mRequestViewListCompleteCallback = new AVRoomMulti.RequestViewListCompleteCallback() {
+        public void OnComplete(String identifierList[], AVView viewList[], int count, int result) {
+            String ids = "";
+
             for (String id : identifierList) {
                 mLiveView.showVideoView(REMOTE, id);
+                ids = ids + " " + id;
             }
+            Log.d(TAG, "ids " + ids);
             // TODO
             SxbLog.d(TAG, "RequestViewListCompleteCallback.OnComplete");
         }
@@ -699,7 +704,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     Toast.makeText(mContext, identifier + " refuse !", Toast.LENGTH_SHORT).show();
                     break;
                 case Constants.AVIMCMD_Praise:
-                    mLiveView.refreshThumbUp();
+                    if(mLiveView!=null) {
+                        mLiveView.refreshThumbUp();
+                    }
                     break;
                 case Constants.AVIMCMD_EnterLive:
                     //mLiveView.refreshText("Step in live", sendId);
@@ -1112,11 +1119,10 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      *
      * @param role 角色名
      */
-    public void changeRole(String role, final boolean leverupper) {
-        ((AVRoomMulti) (QavsdkControl.getInstance().getRoom())).changeAVControlRole(role, new AVRoomMulti.ChangeAVControlRoleCompleteCallback() {
+    public void changeRole(final String role, final boolean leverupper) {
+        ((AVRoomMulti) (QavsdkControl.getInstance().getAvRoomMulti())).changeAVControlRole(role, new AVRoomMulti.ChangeAVControlRoleCompleteCallback() {
                     @Override
                     public void OnComplete(int arg0) {
-                        SxbLog.i(TAG, "changeRole code " + arg0);
                         if (arg0 == AVError.AV_OK) {
                             if (leverupper == true) {
                                 openCameraAndMic();//打开摄像头
@@ -1124,16 +1130,20 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                             } else {
                                 closeCameraAndMic();
                             }
-
-                            Toast.makeText(mContext, "change to VideoMember succ !", Toast.LENGTH_SHORT);
+                            if (null != mContext) {
+                                Toast.makeText(mContext, "change to VideoMember succ !", Toast.LENGTH_SHORT);
+                            }
                         } else {
-                            Toast.makeText(mContext, "change to VideoMember failed", Toast.LENGTH_SHORT);
+                            if (null != mContext) {
+                                Toast.makeText(mContext, "change to VideoMember failed", Toast.LENGTH_SHORT);
+                            }
                         }
                     }
                 }
 
         );
     }
+
 
     /**
      * 发送心跳

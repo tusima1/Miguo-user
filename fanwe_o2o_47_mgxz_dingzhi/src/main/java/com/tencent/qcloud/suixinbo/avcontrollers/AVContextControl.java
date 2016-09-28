@@ -2,7 +2,9 @@ package com.tencent.qcloud.suixinbo.avcontrollers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import com.tencent.av.sdk.AVCallback;
 import com.tencent.av.sdk.AVContext;
 import com.tencent.av.sdk.AVError;
 import com.tencent.openqq.IMSdkInt;
@@ -20,15 +22,15 @@ class AVContextControl {
     private AVContext mAVContext = null;
     private String mSelfIdentifier = "";
     private String mPeerIdentifier = "";
-    private AVContext.Config mConfig = null;
+    private AVContext.StartParam mConfig = null;
     private String mUserSig = "";
     private static boolean isStartContext = false;
 
     /**
      * 启动AVSDK系统的回调接口
      */
-    private AVContext.StartCallback mStartContextCompleteCallback = new AVContext.StartCallback() {
-        public void OnComplete(int result) {
+    private AVCallback mStartContextCompleteCallback = new AVCallback() {
+        public void onComplete(int result, String s) {
             mIsInStartContext = false;
 //            Toast.makeText(mContext, "SDKLogin complete : " + result, Toast.LENGTH_SHORT).show();
             SxbLog.i(TAG, "keypath AVSDK startContext  result " + result);
@@ -43,16 +45,6 @@ class AVContextControl {
         }
     };
 
-    /**
-     * 关闭AVSDK系统的回调接口
-     */
-    private AVContext.StopCallback mStopContextCompleteCallback = new AVContext.StopCallback() {
-        public void OnComplete() {
-
-            avDestory(true);
-        }
-    };
-
     AVContextControl(Context context) {
         mContext = context;
     }
@@ -63,6 +55,7 @@ class AVContextControl {
      * @return 0 代表成功
      */
     int startContext() {
+        Log.e("音视频初始化接口类", "startContext");
         int result = AVError.AV_OK;
         if (!hasAVContext()) {
             SxbLog.i(TAG, "AVSDKLogin startContext hasAVContext ");
@@ -74,19 +67,25 @@ class AVContextControl {
     }
 
     /**
-     *  设置AVSDK参数
+     * 设置AVSDK参数
+     *
      * @param appid
      * @param accountype
      * @param identifier
      * @param usersig
      */
     public void setAVConfig(int appid, String accountype, String identifier, String usersig) {
-        mConfig = new AVContext.Config();
+        mConfig = new AVContext.StartParam();
+
+        Log.e("AvContextcontrol", "mConfig.sdkAppId:" + mConfig.sdkAppId + " mConfig.accountType:" + mConfig.accountType + " mConfig.appIdAt3rd:"
+                + mConfig.appIdAt3rd + "  mConfig.identifier:" + mConfig.identifier + "musersing:" + usersig +"  mSelfIdentifier :"+mSelfIdentifier);
+
         mConfig.sdkAppId = appid;
         mConfig.accountType = accountype;
         mConfig.appIdAt3rd = Integer.toString(appid);
         mConfig.identifier = identifier;
         mUserSig = usersig;
+        mSelfIdentifier = identifier;
     }
 
     /**
@@ -95,8 +94,9 @@ class AVContextControl {
     void stopContext() {
         if (hasAVContext()) {
             SxbLog.d(TAG, "WL_DEBUG stopContext");
-            mAVContext.stop(mStopContextCompleteCallback);
+            mAVContext.stop();
             mIsInStopContext = true;
+            avDestory(true);
         }
     }
 
@@ -127,29 +127,29 @@ class AVContextControl {
 
     /**
      * 实际初始化AVSDK
+     *
      * @param result
      * @param tinyId
      * @param errorCode
      */
     private void onAVSDKCreate(boolean result, long tinyId, int errorCode) {
         if (result) {
-            mAVContext = AVContext.createInstance(mContext, mConfig);
-            mSelfIdentifier = mConfig.identifier;
-            if(mSelfIdentifier!=null) {
-                int ret = mAVContext.start(mStartContextCompleteCallback);
+            mAVContext = AVContext.createInstance(mContext, false);
+
+            if(mAVContext!=null) {
+                int ret = mAVContext.start(mConfig, mStartContextCompleteCallback);
                 SxbLog.i(TAG, "onAVSDKCreate ret " + ret);
                 mIsInStartContext = true;
-            }else{
-                mStartContextCompleteCallback.OnComplete(errorCode);
             }
         } else {
-            mStartContextCompleteCallback.OnComplete(errorCode);
+            mStartContextCompleteCallback.onComplete(errorCode, "");
         }
     }
 
 
     /**
      * 销毁AVSDK
+     *
      * @param result
      */
     private void avDestory(boolean result) {
@@ -161,5 +161,11 @@ class AVContextControl {
                 Constants.ACTION_CLOSE_CONTEXT_COMPLETE));
     }
 
+    public static boolean isStartContext() {
+        return isStartContext;
+    }
 
+    public static void setIsStartContext(boolean isStartContext) {
+        AVContextControl.isStartContext = isStartContext;
+    }
 }

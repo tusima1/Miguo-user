@@ -3,6 +3,7 @@ package com.fanwe.jshandler;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
@@ -225,6 +226,7 @@ public class AppJsHandler extends BaseJsHandler {
 	@JavascriptInterface
 	public void addCart(String productId, String userId) {
 		// 保存购物车
+		Log.e("eee","productId:"+productId +"userId:"+userId);
 		checkLogin();
 		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
 		cartInfo.setNumber("1");
@@ -260,6 +262,7 @@ public class AppJsHandler extends BaseJsHandler {
 		} else {
 			LocalShoppingcartDao.insertModel(cartInfo);
 		}
+		goCart();
 	}
 
 

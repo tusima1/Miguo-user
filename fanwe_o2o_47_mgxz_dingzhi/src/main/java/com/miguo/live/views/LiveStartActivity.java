@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.fanwe.LoginActivity;
@@ -30,7 +31,9 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.IntentKey;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
+import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -271,7 +274,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                                 return;
                             } else {
                                 App.getInstance().setAvStart(true);
-                                App.getInstance().setCurrentRoomId(room_id);
+                                App.getInstance().addLiveRoomIdList(roomId+"");
                                 MySelfInfo.getInstance().setMyRoomNum(roomId);
 
                                 MySelfInfo.getInstance().writeToCache(getApplicationContext());
@@ -296,6 +299,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     }
 
+
+
     /**
      * 进入主播页。
      */
@@ -305,6 +310,10 @@ public class LiveStartActivity extends Activity implements CallbackView {
         if (!connected) {
             MGToast.showToast("没有网络,请检测网络环境!");
             return;
+        }
+        if (QavsdkControl.getInstance().getAVContext() == null) {
+           App.getInstance().startAVSDK();
+
         }
         UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
         MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
@@ -345,7 +354,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onSuccess(String responseBody) {
-        goToLive();
+       goToLive();
+
     }
 
     @Override

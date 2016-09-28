@@ -37,19 +37,28 @@ import com.sunday.eventbus.SDEventObserver;
 import com.ta.util.netstate.TANetChangeObserver;
 import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
+import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
+import com.tencent.qcloud.suixinbo.model.LiveRoomEntity;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.rtmp.ITXLiveBaseListener;
 import com.tencent.rtmp.TXLiveBase;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 
 
-public class App extends Application implements SDEventObserver, TANetChangeObserver , ITXLiveBaseListener {
+public class App extends Application implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
 
     private static App mApp = null;
 
@@ -65,6 +74,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 当前用户信息。存在于内存中。定义到2016-7-27 by  zhouhy
      */
     public UserCurrentInfo mUserCurrentInfo;
+    private LinkedList<String> liveRoomIdList;
     protected String imei;
 
     /**
@@ -297,6 +307,20 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         return token;
     }
 
+
+    /**
+     * 初始化AVSDK
+     */
+    public void startAVSDK() {
+        String userid = MySelfInfo.getInstance().getId();
+        String userSign = MySelfInfo.getInstance().getUserSig();
+        int appId = Constants.SDK_APPID;
+
+        int ccType = Constants.ACCOUNT_TYPE;
+        QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
+        QavsdkControl.getInstance().startContext();
+        Log.e("liveActivity", "初始化AVSDK");
+    }
     public String getUserSign() {
 
         String useSign = "";
@@ -423,11 +447,44 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         return currentRoomId;
     }
 
+    public String getLastRoomId() {
+       if(liveRoomIdList==null||liveRoomIdList.size()<1){
+           return "";
+       }else{
+           return liveRoomIdList.getLast();
+       }
+    }
+
+    public void removeLastRoomId(String currentRoomId){
+        liveRoomIdList.remove(currentRoomId);
+    }
+
+    public void addLiveRoomIdList(String currentRoomId) {
+        if(TextUtils.isEmpty(currentRoomId)){
+            return;
+        }
+        if (liveRoomIdList == null) {
+            liveRoomIdList = new LinkedList<>();
+        }
+        boolean needAdd = true;
+        for (int i = 0; i < liveRoomIdList.size(); i++) {
+            String value = liveRoomIdList.get(i);
+            if (value.equals(currentRoomId)) {
+                needAdd = false;
+                break;
+
+            }
+        }
+        if (needAdd) {
+            liveRoomIdList.add(currentRoomId);
+        }
+    }
+
     public void setCurrentRoomId(String newRoomId) {
         Log.e("App setCurrentRoomId", newRoomId + "newRoomId ");
         EnterLiveHelper liveHelper = new EnterLiveHelper(this, null);
         if (!TextUtils.isEmpty(currentRoomId) && !currentRoomId.equals(newRoomId)) {
-            liveHelper.quiteAVRoom();
+//            liveHelper.quiteAVRoom();
             App.getInstance().setAvStart(false);
             Log.e("App setCurrentRoomId", currentRoomId + "oldRoomId quiteAVRoom");
         }
@@ -438,4 +495,6 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     public void OnLog(int i, String s, String s1) {
 
     }
+
+
 }

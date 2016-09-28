@@ -506,4 +506,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }
     }
 
+    @Override
+    public void onDestroy() {
+        httpHelper = null;
+        super.onDestroy();
+    }
 }

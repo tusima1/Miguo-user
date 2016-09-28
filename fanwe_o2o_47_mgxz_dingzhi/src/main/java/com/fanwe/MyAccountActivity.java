@@ -47,6 +47,7 @@ import com.fanwe.module.user.UserFaceModule;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
@@ -149,6 +150,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     private UserFaceModule mUserFaceModule;
     private UserHttpHelper userHttpHelper;
     private String mKefuNum="";
+    private LoginHelper mLoginHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +161,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void init() {
+        mLoginHelper = new LoginHelper(this);
         mUserFaceModule = new UserFaceModule(this);
         mUserFaceModule.initPhotoHandler();
         initViewState();
@@ -534,6 +537,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void clickLogout(View v) {
+        mLoginHelper.imLogout();
         App.getInstance().getmUserCurrentInfo().setUserInfoNew(null);
         App.getInstance().setmUserCurrentInfo(null);
         App.getInstance().setImLoginSuccess(false);

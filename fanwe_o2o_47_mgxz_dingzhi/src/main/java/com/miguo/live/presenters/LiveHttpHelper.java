@@ -509,12 +509,16 @@ public class LiveHttpHelper implements IHelper {
                 RootStopLive rootStopLive = gson.fromJson(responseBody, RootStopLive.class);
                 List<ResultStopLive> resultStopLives = rootStopLive.getResult();
                 if (SDCollectionUtil.isEmpty(resultStopLives)) {
-                    mView.onSuccess(LiveConstants.STOP_LIVE, null);
+                    if(mView!=null) {
+                        mView.onSuccess(LiveConstants.STOP_LIVE, null);
+                    }
                     return;
                 }
                 ResultStopLive resultStopLive = resultStopLives.get(0);
                 List<ModelStopLive> modelStopLive = resultStopLive.getBody();
-                mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
+                if(mView!=null) {
+                    mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
+                }
             }
 
             @Override
