@@ -12,20 +12,15 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.Sms_send_sms_codeActModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
@@ -34,8 +29,6 @@ import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
@@ -87,6 +80,19 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
         registeClick();
         initSDSendValidateButton();
         showBindPhoneDialog();
+        getIntentData();
+    }
+
+    private String pageType;
+
+    private void getIntentData() {
+        if (getIntent() != null) {
+            pageType = getIntent().getStringExtra("pageType");
+            if ("forget".equals(pageType)) {
+                mTitle.setMiddleTextTop("忘记密码");
+                mCet_mobile.setEnabled(true);
+            }
+        }
     }
 
     /**
@@ -154,39 +160,6 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
         });
     }
 
-    private void requestSendCode() {
-        mStrMobile = mCet_mobile.getText().toString();
-        if (TextUtils.isEmpty(mStrMobile)) {
-            MGToast.showToast("请输入手机号码");
-            return;
-        }
-
-        CommonInterface.requestValidateCode(mStrMobile, 2, new SDRequestCallBack<Sms_send_sms_codeActModel>() {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() > 0) {
-                    mSvb_validate.setmDisableTime(actModel.getLesstime());
-                    mSvb_validate.startTickWork();
-                }
-            }
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-            }
-        });
-
-    }
 
     private void initTitle() {
         mTitle.setMiddleTextTop("修改密码");
@@ -210,7 +183,13 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
 
     private void clickSubmit() {
         if (validateParam()) {
-            userHttpHelper.userChangePwd(mStrMobile, MD5Util.MD5(mStrPwd), mStrCode);
+            if ("forget".equals(pageType)) {
+                //忘记密码
+                userHttpHelper.userForget(mStrMobile, MD5Util.MD5(mStrPwd), mStrCode);
+            } else {
+                //修改密码
+                userHttpHelper.userChangePwd(mStrMobile, MD5Util.MD5(mStrPwd), mStrCode);
+            }
         }
     }
 
@@ -253,9 +232,6 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CONFIRM_IMAGE_CODE:
-                if (SDActivityManager.getInstance().isLastActivity(this)) {
-                    requestSendCode();
-                }
                 break;
 
             default:
@@ -287,6 +263,17 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
             localUserModel.setUser_pwd(MD5Util.MD5(mStrPwd));
             LocalUserModelDao.insertModel(localUserModel);
             msg.what = 0;
+        } else if (UserConstants.USER_FORGOT.equals(method)) {
+            roots = datas;
+            if (!SDCollectionUtil.isEmpty(roots)) {
+                RootShopComment root = roots.get(0);
+                if (!"212".equals(root.getStatusCode())) {
+                    //错误
+                    MGToast.showToast(root.getMessage());
+                    return;
+                }
+            }
+            msg.what = 1;
         }
         mHandler.sendMessage(msg);
     }
@@ -297,6 +284,10 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    MGToast.showToast("密码修改成功");
+                    finish();
+                    break;
+                case 1:
                     MGToast.showToast("密码修改成功");
                     finish();
                     break;

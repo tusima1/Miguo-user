@@ -7,9 +7,9 @@ import com.fanwe.app.AppHelper;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.library.fragment.WebViewFragment.EnumProgressMode;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.customviews.MGToast;
 
 
 /**
@@ -47,7 +47,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
         } else {
         }
         //9月23日添加  &from=app
-        url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd+"&from=app";
+        url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app";
         frag.setUrl(url);
         frag.setmProgressMode(EnumProgressMode.NONE);
         getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
@@ -59,12 +59,22 @@ public class DistributionStoreWapActivity extends BaseActivity {
             //进别人的小店。
             user_id = intent.getStringExtra("user_id");
             String url = intent.getStringExtra("url");
-            url=url+"/from/app";
+            url = url + "/from/app";
 
             AppWebViewFragment frag = new AppWebViewFragment();
             frag.setShowTitle(true);
             frag.setUrl(url);
             frag.setUserId(user_id);
+            frag.setmProgressMode(EnumProgressMode.NONE);
+            getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
+        } else if (intent.hasExtra("id")) {
+            //进别人的小店。
+            String id = intent.getStringExtra("id");
+            AppWebViewFragment frag = new AppWebViewFragment();
+            frag.setShowTitle(true);
+            String url;
+            url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id;
+            frag.setUrl(url);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
         } else {
