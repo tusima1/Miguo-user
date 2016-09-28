@@ -70,7 +70,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
         //init view
         dialog.setContentView(R.layout.pop_live_exit);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         View iv_close = dialog.findViewById(R.id.iv_close);//右上角关闭
         //主播头像
         civ_user_image = (CircleImageView) dialog.findViewById(R.id.civ_user_image);
