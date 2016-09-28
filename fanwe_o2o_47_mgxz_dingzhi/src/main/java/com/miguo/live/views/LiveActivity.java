@@ -52,6 +52,7 @@ import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
+import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
 import com.miguo.live.presenters.LiveCommonHelper;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
@@ -655,6 +656,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //获取领取码
         App.getInstance().setReceiveCode("");
         mLiveHttphelper.getReceiveCode(CurLiveInfo.getRoomNum() + "", "1");
+        mLiveHttphelper.getStoresRandomComment(CurLiveInfo.getShopID(), "3");
     }
 
 
@@ -702,6 +704,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop()
                 .getShop_name())) {
             mHostTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
+            if (!TextUtils.isEmpty(CurLiveInfo.getModelShop().getCons_count()))
+                mHostTopView.setArriveNum(CurLiveInfo.getModelShop().getCons_count() + "人到过");
         }
 
         //红包倒计时小view
@@ -2145,7 +2149,31 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                         mUserBottomTool.showRedPacketResult(datas);
                     }
                 });
+                break;
+            case LiveConstants.STORES_RANDOM_COMMENT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isAnchor) {
+                            mHostTopView.setKeyWords(getKeyWord((List<ModelStoresRandomComment>) datas));
+                        } else {
+                            mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
+                        }
+                    }
+                });
+                break;
         }
+    }
+
+    private String getKeyWord(List<ModelStoresRandomComment> datas) {
+        String keyWord = "";
+        if (!SDCollectionUtil.isEmpty(datas)) {
+            for (ModelStoresRandomComment bean : datas) {
+                if (!TextUtils.isEmpty(bean.getContent()))
+                    keyWord = keyWord + " " + bean.getContent();
+            }
+        }
+        return keyWord;
     }
 
     /*校验数据*/

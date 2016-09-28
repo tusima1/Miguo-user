@@ -37,6 +37,7 @@ import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
+import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.presenters.ShopAndProductView;
 import com.miguo.live.presenters.TencentHttpHelper;
@@ -287,7 +288,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
 
-
         mRedPacketAdapter = new PagerRedPacketAdapter();
         playBackBottomToolView.setmRedPacketAdapter(mRedPacketAdapter);
         initViewNeed();
@@ -303,6 +303,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems,
                 mArrayListChatEntity);
         mListViewMsgItems.setAdapter(mChatMsgListAdapter);
+
+        mLiveHttphelper.getStoresRandomComment(CurLiveInfo.getShopID(), "3");
     }
 
     public void initSeekBar() {
@@ -1133,8 +1135,26 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 });
                 break;
 
-
+            case LiveConstants.STORES_RANDOM_COMMENT:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
+                    }
+                });
+                break;
         }
+    }
+
+    private String getKeyWord(List<ModelStoresRandomComment> datas) {
+        String keyWord = "";
+        if (!SDCollectionUtil.isEmpty(datas)) {
+            for (ModelStoresRandomComment bean : datas) {
+                if (!TextUtils.isEmpty(bean.getContent()))
+                    keyWord = keyWord + " " + bean.getContent();
+            }
+        }
+        return keyWord;
     }
 
     /*校验数据*/
