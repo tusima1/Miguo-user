@@ -1,11 +1,14 @@
 package com.miguo.live.views;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -113,6 +116,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         LiveView, View.OnClickListener, ProfileView, CallbackView, UserBottomToolView.OnGiftSendListener {
     public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
+    private final int REQUEST_PHONE_PERMISSIONS = 0;
     /**
      * 取商品和门店相关信息。
      */
@@ -216,11 +220,30 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkPermission();
         setActivityParams();
         getIntentData();
         findViews();
         initHelper();
         checkUserAndPermission();
+    }
+
+    void checkPermission() {
+        final List<String> permissionsList = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if ((checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.CAMERA);
+            if ((checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.RECORD_AUDIO);
+            if ((checkSelfPermission(Manifest.permission.WAKE_LOCK) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.WAKE_LOCK);
+            if ((checkSelfPermission(Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED))
+                permissionsList.add(Manifest.permission.MODIFY_AUDIO_SETTINGS);
+            if (permissionsList.size() != 0) {
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_PHONE_PERMISSIONS);
+            }
+        }
     }
 
     private void getIntentData() {
@@ -420,7 +443,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         int ccType = Constants.ACCOUNT_TYPE;
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
-        Log.e("live", "初始化AVSDK");
+        Log.e("liveActivity", "初始化AVSDK");
     }
 
     private Handler mHandler = new Handler(new Handler.Callback() {
@@ -1112,7 +1135,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         Log.e("LiveActivity", "");
         Log.e(TAG, "quiteRoomComplete 退出房间...");
         if (LiveUtil.checkIsHost()) {
-            MGToast.showToast("主播退出!");
+//            MGToast.showToast("主播退出!");
 //            if (backDialog != null) {
 //                backDialog.dismiss();
 //            }
@@ -1121,23 +1144,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             /**
              * 如果不是用戶點擊退出導致的調用，則需要彈出主播已退出的窗口
              */
-//            if (!userClickOut) {
-//                if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
-//                        !mUserHeadTopView.isUserClose && !showExit) {
-//                    mUserHeadTopView.showExitDialog();
-//                    showExit=true;
-//                }else {
-//                    finish();
-//                }
-//            }
+
             Log.e(LiveActivity.TAG, "quite: " + id_status + "userClickOut: " + userClickOut);
-//            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
-// !mUserHeadTopView.isUserClose) {
-//                mUserHeadTopView.showExitDialog();
-//            }else {
-//                finish();
-//            }
-//            finish();
+
+            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
+                    !mUserHeadTopView.isUserClose) {
+                mUserHeadTopView.showExitDialog();
+            } else {
+                finish();
+            }
         }
         App.getInstance().setAvStart(false);
     }
@@ -1167,31 +1182,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         refreshTextListView(faceUrl, text, "退出房间了", Constants
                 .MEMBER_EXIT);
         watchCount--;
-        int roomId = CurLiveInfo.getRoomNum();
-        String hostID = CurLiveInfo.getHostID();
-//        Log.e("test",hostID+"---"+hostName+"----"+hostUserID);
-//        Log.e("test",id+"---"+name+"----"+faceUrl);
-//        09-23 15:29:21.760 14296-14296/com.fanwe.o2o.miguo E/test: 228b3770-72d8-4f61-9fce-a6ae1cb154e4---18667126...----228b3770-72d8-4f61-9fce-a6ae1cb154e4
-//        09-23 15:29:21.760 14296-14296/com.fanwe.o2o.miguo E/test: 228b3770-72d8-4f61-9fce-a6ae1cb154e4---18667126392----
-        if (!TextUtils.isEmpty(id) && id.equals(hostID)) {
-            //展示主播退出时,用户弹出来的dialog
-            if (mUserHeadTopView != null && !mUserHeadTopView.isExitDialogShowing() &&
-                    !mUserHeadTopView.isUserClose && !showExit) {
-                if (mUserBottomTool != null) {
-                    mUserBottomTool.dismissPop();
-                    MGUIUtil.runOnUiThreadDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mUserHeadTopView.showExitDialog();
-                        }
-                    }, 500);
-                } else {
-                    mUserHeadTopView.showExitDialog();
-                }
-                showExit = true;
-            }
-            return;
-        }
+
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
             CurLiveInfo.setMembers(members);

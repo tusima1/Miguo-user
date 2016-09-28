@@ -302,7 +302,8 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
             CurLiveInfo.setHostName(host.getNickname());
 
             CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-            App.getInstance().setCurrentRoomId(room.getId());
+
+            App.getInstance().addLiveRoomIdList(room.getId());
             CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
             if (room.getLbs() != null) {
                 CurLiveInfo.setShopID(room.getLbs().getShop_id());

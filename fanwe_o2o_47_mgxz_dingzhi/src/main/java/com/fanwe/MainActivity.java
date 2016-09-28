@@ -732,9 +732,14 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        if(mFragMyAccount!=null){
+            mFragMyAccount.onDestroy();
+            mFragMyAccount = null;
+        }
         App.getInstance().isShowCode = true;
         App.getInstance().isAlreadyShowCode = false;
+        super.onDestroy();
+
     }
 
     private void gotoLiveActivity(Room room) {

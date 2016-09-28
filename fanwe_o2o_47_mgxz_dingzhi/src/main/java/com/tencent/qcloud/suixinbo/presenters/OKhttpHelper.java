@@ -84,30 +84,8 @@ public class OKhttpHelper {
         }
     }
 
-    /**
-     * 同步Server 新创建房间信息
-     * TODO:同步服务
-     */
-    public int notifyServerNewLiveInfo(JSONObject reg) {
-        try {
 
-            String res = post(NEW_ROOM_INFO, reg.toString());
-            SxbLog.i(TAG, "notifyServer live start  liveinfo: " + res);
-            JSONTokener jsonParser = new JSONTokener(res);
-            JSONObject response = (JSONObject) jsonParser.nextValue();
-            SxbLog.i(TAG, "notifyServerNewLiveInfo: " + response);
-            int code = response.getInt("errorCode");
-            if (code == 0) {
-                return code;
-            }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
 
 
     /**

@@ -97,6 +97,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     public void onSuccess() {
                         imUserInfoHelper.setMyNickName("");
                         imUserInfoHelper.setMyAvator("");
+                        startAVSDK();
                         App.getInstance().setImLoginSuccess(true);
                     }
                 });
@@ -346,12 +347,10 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                         return;
                     } else {
                         MySelfInfo.getInstance().setMyRoomNum(roomId);
-                        App.getInstance().setCurrentRoomId(room_id);
+                        App.getInstance().addLiveRoomIdList(roomId+"");
                         MySelfInfo.getInstance().writeToCache(mContext.getApplicationContext());
-
                         // goToLive();
                         mView.onSuccess("");
-
                         Log.e("live", "room_id:" + room_id);
                     }
                 }
@@ -362,7 +361,6 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 MGToast.showToast(message);
             }
         };
-
         applyRoom(CurLiveInfo.modelShop.getId(), mgCallback);
     }
 
@@ -415,10 +413,11 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         int appId = Constants.SDK_APPID;
 
         int ccType = Constants.ACCOUNT_TYPE;
+        Log.e("LoginHelper", "初始化AVSDK");
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
 
-        Log.e("live", "初始化AVSDK");
+        Log.e("LoginHelper", "初始化AVSDK");
     }
 
     /**

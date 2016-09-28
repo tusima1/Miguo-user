@@ -69,12 +69,13 @@ public class AVUIControl extends GLViewGroup {
     private SurfaceView mSurfaceView = null;
     private QavsdkControl qavsdk;
     private HashMap<Integer, String> id_view = new HashMap<Integer, String>();
+    private QavsdkControl.onSlideListener mSlideListener;
 
     private SurfaceHolder.Callback mSurfaceHolderListener = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             mCameraSurfaceCreated = true;
-            if (qavsdk.getRoom() != null) {
+            if (qavsdk.getAvRoomMulti() != null) {
                 qavsdk.getAVContext().setRenderMgrAndHolder(mGraphicRenderMgr, holder);
             }
             mContext.sendBroadcast(new Intent(Constants.ACTION_SURFACE_CREATED));
@@ -99,7 +100,7 @@ public class AVUIControl extends GLViewGroup {
     public AVUIControl(Context context, View rootView) {
         mContext = context;
         mRootView = rootView;
-        mGraphicRenderMgr = new GraphicRendererMgr();
+        mGraphicRenderMgr = GraphicRendererMgr.getInstance();
         qavsdk = QavsdkControl.getInstance();
         initQQGlView();
         initCameraPreview();
@@ -159,9 +160,11 @@ public class AVUIControl extends GLViewGroup {
 
         removeAllView();
         for (int i = 0; i < mGlVideoView.length; i++) {
-            mGlVideoView[i].flush();
-            mGlVideoView[i].clearRender();
-            mGlVideoView[i] = null;
+            if (null != mGlVideoView[i]) {
+                mGlVideoView[i].flush();
+                mGlVideoView[i].clearRender();
+                mGlVideoView[i] = null;
+            }
         }
         mGlRootView.setOnTouchListener(null);
         mGlRootView.setContentPane(null);
@@ -177,9 +180,10 @@ public class AVUIControl extends GLViewGroup {
         mGlVideoView = null;
     }
 
-    public void enableDefaultRender() {
-        qavsdk.getAVContext().setRenderFunctionPtr(mGraphicRenderMgr.getRecvDecoderFrameFunctionptr());
-    }
+//    public void enableDefaultRender() {
+//        qavsdk.getAVContext().setRenderFunctionPtr(mGraphicRenderMgr.getRecvDecoderFrameFunctionptr());
+//        qavsdk.getAVContext().setRenderMgrAndHolder(mGraphicRenderMgr.getRecvDecoderFrameFunctionptr(),h);
+//    }
 
     public void setMirror(boolean isMirror, String identifier) {
         GLVideoView view = null;
@@ -300,7 +304,7 @@ public class AVUIControl extends GLViewGroup {
         mCacheRotation = rotation;
 
         // layoutVideoView(true);
-        if (qavsdk != null) {
+        if (qavsdk != null && null != qavsdk.getAVContext()) {
             AVVideoCtrl avVideoCtrl = qavsdk.getAVContext().getVideoCtrl();
             avVideoCtrl.setRotation(rotation);
         }
@@ -308,29 +312,63 @@ public class AVUIControl extends GLViewGroup {
             case 0:
                 for (int i = 0; i < getChildCount(); i++) {
                     GLView view = getChild(i);
-                    if (view != null)
-                        view.setRotation(0);
+                    if (view != null){
+                        if (i == 0){
+                            GLVideoView mView = (GLVideoView) view;
+                            mView.setRotation(0, false);
+                        }else{
+                            view.setRotation(0);
+                        }
+
+                    }
                 }
                 break;
             case 90:
                 for (int i = 0; i < getChildCount(); i++) {
                     GLView view = getChild(i);
-                    if (view != null)
-                        view.setRotation(90);
+                    if (view != null){
+                        if (i == 0){
+                            GLVideoView mView = (GLVideoView) view;
+                            mView.setRotation(90, false);
+                        }else{
+                            view.setRotation(90);
+                        }
+
+                    }
+//                    if (view != null)
+//                        view.setRotation(90);
                 }
                 break;
             case 180:
                 for (int i = 0; i < getChildCount(); i++) {
                     GLView view = getChild(i);
-                    if (view != null)
-                        view.setRotation(180);
+                    if (view != null){
+                        if (i == 0){
+                            GLVideoView mView = (GLVideoView) view;
+                            mView.setRotation(180, false);
+                        }else{
+                            view.setRotation(180);
+                        }
+
+                    }
+//                    if (view != null)
+//                        view.setRotation(180);
                 }
                 break;
             case 270:
                 for (int i = 0; i < getChildCount(); i++) {
                     GLView view = getChild(i);
-                    if (view != null)
-                        view.setRotation(270);
+                    if (view != null){
+                        if (i == 0){
+                            GLVideoView mView = (GLVideoView) view;
+                            mView.setRotation(270, false);
+                        }else{
+                            view.setRotation(270);
+                        }
+
+                    }
+//                    if (view != null)
+//                        view.setRotation(270);
                 }
                 break;
             default:
@@ -338,36 +376,36 @@ public class AVUIControl extends GLViewGroup {
         }
     }
 
-    public String getQualityTips() {
-        String tipsAudio = "";
-        String tipsVideo = "";
-        String tipsRoom = "";
-
-        if (qavsdk != null) {
-            tipsAudio = qavsdk.getAudioQualityTips();
-            tipsVideo = qavsdk.getVideoQualityTips();
-
-            if (qavsdk.getRoom() != null) {
-                tipsRoom = qavsdk.getRoom().getQualityTips();
-            }
-        }
-
-        String tipsAll = "";
-
-        if (tipsRoom != null && tipsRoom.length() > 0) {
-            tipsAll += tipsRoom + "\n";
-        }
-
-        if (tipsAudio != null && tipsAudio.length() > 0) {
-            tipsAll += tipsAudio + "\n";
-        }
-
-        if (tipsVideo != null && tipsVideo.length() > 0) {
-            tipsAll += tipsVideo;
-        }
-
-        return tipsAll;
-    }
+//    public String getQualityTips() {
+//        String tipsAudio = "";
+//        String tipsVideo = "";
+//        String tipsRoom = "";
+//
+//        if (qavsdk != null) {
+//            tipsAudio = qavsdk.getAudioQualityTips();
+//            tipsVideo = qavsdk.getVideoQualityTips();
+//
+//            if (qavsdk.getRoom() != null) {
+//                tipsRoom = qavsdk.getRoom().getQualityTips();
+//            }
+//        }
+//
+//        String tipsAll = "";
+//
+//        if (tipsRoom != null && tipsRoom.length() > 0) {
+//            tipsAll += tipsRoom + "\n";
+//        }
+//
+//        if (tipsAudio != null && tipsAudio.length() > 0) {
+//            tipsAll += tipsAudio + "\n";
+//        }
+//
+//        if (tipsVideo != null && tipsVideo.length() > 0) {
+//            tipsAll += tipsVideo;
+//        }
+//
+//        return tipsAll;
+//    }
 
 
     public void setOffset(int topOffset, int bottomOffset) {
@@ -924,12 +962,12 @@ public class AVUIControl extends GLViewGroup {
 //		if (null != mGlVideoView[1].getOpenId()) {
 //			mGlVideoView[1].clearRender();
 //		}
-//		
-//				
+//
+//
 //		mGlVideoView[1].layout(left, top, right, bottom);
 //		mGlVideoView[1].setRender(remoteOpenid, videoSrcType);
 //		mGlVideoView[1].setIsPC(false);
-//		mGlVideoView[1].enableLoading(false);	
+//		mGlVideoView[1].enableLoading(false);
 //		mGlVideoView[1].setVisibility(View.VISIBLE);
     }
 
@@ -1043,8 +1081,22 @@ public class AVUIControl extends GLViewGroup {
             return true;
         }
 
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if(e1.getY()-e2.getY() > 20 && Math.abs(velocityY) > 10){
+                if (null != mSlideListener){
+                    mSlideListener.onSlideUp();
+                }
+            }else if(e2.getY()-e1.getY() > 20 && Math.abs(velocityY) > 10){
+                if (null != mSlideListener){
+                    mSlideListener.onSlideDown();
+                }
+            }
 
-//        @Override
+            return false;
+        }
+
+        //        @Override
 //        public boolean onDoubleTap(MotionEvent e) {
 //            if (mTargetIndex == 0 && mGlVideoView[0].getVideoSrcType() == AVView.VIDEO_SRC_TYPE_SCREEN) {
 //                mClickTimes++;
@@ -1329,6 +1381,18 @@ public class AVUIControl extends GLViewGroup {
     public void setSelfId(String key) {
         if (mGraphicRenderMgr != null) {
             mGraphicRenderMgr.setSelfId(key + "_" + AVView.VIDEO_SRC_TYPE_CAMERA);
+        }
+    }
+
+    public void setSlideLisenter(QavsdkControl.onSlideListener lisenter){
+        mSlideListener = lisenter;
+    }
+
+    public void clearVideoData(){
+        for (int i = 0; i < mGlVideoView.length; i++) {
+            if (null != mGlVideoView[i]) {
+                mGlVideoView[i].setVisibility(INVISIBLE);
+            }
         }
     }
 
