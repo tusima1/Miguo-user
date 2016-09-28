@@ -1,11 +1,12 @@
 package com.tencent.qcloud.suixinbo.avcontrollers;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import com.tencent.av.sdk.AVAudioCtrl;
 import com.tencent.av.sdk.AVContext;
-import com.tencent.av.sdk.AVRoom;
+import com.tencent.av.sdk.AVRoomMulti;
 import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -23,6 +24,13 @@ public class QavsdkControl {
     /* 持有私有静态实例，防止被引用，此处赋值为null，目的是实现延迟加载 */
     private static QavsdkControl instance = null;
     private static Context mContext;
+    private static AVRoomMulti avRoomMulti;
+
+    public interface onSlideListener {
+        void onSlideUp();
+
+        void onSlideDown();
+    }
 
     public static QavsdkControl getInstance() {
         if (instance == null) {
@@ -68,8 +76,11 @@ public class QavsdkControl {
      * 启动SDK系统
      */
     public int startContext() {
-        if (mAVContextControl == null)
+        Log.e("QavsdkControl", "startContext");
+        if (mAVContextControl == null) {
+            Log.e("QavsdkControl", "mAVContextControl IS NULL");
             return Constants.DEMO_ERROR_NULL_POINTER;
+        }
         return mAVContextControl.startContext();
     }
 
@@ -82,8 +93,10 @@ public class QavsdkControl {
      * @param usersig
      */
     public void setAvConfig(int appid, String accountype, String identifier, String usersig) {
-        if (mAVContextControl == null)
+        if (mAVContextControl == null) {
             return;
+        }
+        Log.e("mAVContextControl", "setAvConfig");
         mAVContextControl.setAVConfig(appid, accountype, identifier, usersig);
     }
 
@@ -155,11 +168,11 @@ public class QavsdkControl {
 //        return mAVRoomControl.getScreenMemberList();
 //    }
 
-    public AVRoom getRoom() {
-        AVContext avContext = getAVContext();
-
-        return avContext != null ? avContext.getRoom() : null;
-    }
+//    public AVRoom getRoom() {
+//        AVContext avContext = getAVContext();
+//
+//        return avContext != null ? avContext.getRoom() : null;
+//    }
 
     public boolean getIsInStartContext() {
         if (mAVContextControl == null)
@@ -213,6 +226,14 @@ public class QavsdkControl {
         return mAVContextControl.getAVContext();
     }
 
+    public void setAvRoomMulti(AVRoomMulti room) {
+        avRoomMulti = room;
+    }
+
+    public AVRoomMulti getAvRoomMulti() {
+        return avRoomMulti;
+    }
+
 
     public void setRemoteHasVideo(String identifier, int videoSrcType, boolean isRemoteHasVideo) {
         if (null != mAVUIControl) {
@@ -232,6 +253,18 @@ public class QavsdkControl {
 //        mAVVideoControl.initAVVideoSettings();
 //        mAVAudioControl.initAVAudioSettings();
 //		mAVEndpointControl.initMembersUI((MultiVideoMembersControlUI) contentView.findViewById(R.id.qav_gaudio_gridlayout));
+    }
+
+    public void setSlideListener(onSlideListener listener) {
+        if (null != mAVUIControl) {
+            mAVUIControl.setSlideLisenter(listener);
+        }
+    }
+
+    public void clearVideoData() {
+        if (null != mAVUIControl) {
+            mAVUIControl.clearVideoData();
+        }
     }
 
     public void onResume() {
@@ -458,9 +491,7 @@ public class QavsdkControl {
 
             videoQos = getVideoQualityTips();
 
-            if (qavsdk.getRoom() != null) {
-                roomQos = qavsdk.getRoom().getQualityTips();
-            }
+            roomQos = getAvRoomMulti().getQualityTips();
         }
 
         if (audioQos != null && videoQos != null && roomQos != null) {

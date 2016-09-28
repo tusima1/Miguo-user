@@ -14,12 +14,12 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 import java.util.Random;
@@ -27,7 +27,7 @@ import java.util.Random;
 /**
  * Created by didik on 2016/8/2.
  */
-public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListener,CallbackView {
+public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListener, CallbackView {
 
     private Activity mActivity;
     private Dialog dialog;
@@ -48,14 +48,13 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
      * 是否能点击。
      */
     private boolean ifClickable = true;
-    private String resultMessage="";
+    private String resultMessage = "";
 
     private CallbackView mcallbackView;
 
-    private boolean isRobFinished=false;//抢的5秒是否已经结束
+    private boolean isRobFinished = false;//抢的5秒是否已经结束
 
     private List<UserRedPacketInfo> robResult;
-
 
 
     /**
@@ -91,7 +90,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
             mTvCountDown.setBackgroundResource(R.drawable.selector_bg_rob_redpacket);
             mTvCountDown.setClickable(true);
 
-            if(resultMessage!=null){
+            if (resultMessage != null) {
                 MGToast.showToast(resultMessage, Toast.LENGTH_LONG);
             }
         }
@@ -100,7 +99,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     /**
      * 总共时间(改为需要的时间)
      */
-    private CountDownTimer totalTimer ;
+    private CountDownTimer totalTimer;
 
 
     private Handler mHandler = new Handler() {
@@ -117,13 +116,15 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
                     mTvCountDown.setText(arg1 + "");
                     break;
                 case 3:
+                    int arg2 = msg.arg1;
+                    mTvTimeLift.setText(arg2 + "s 后结束");
                     break;
 
             }
         }
     };
 
-    public UserRobRedPacketDialogHelper(Activity activity,String red_packet_key,int duration,CallbackView mcallbackView) {
+    public UserRobRedPacketDialogHelper(Activity activity, String red_packet_key, int duration, CallbackView mcallbackView) {
         this.red_packet_key = red_packet_key;
         this.duration = duration;
         this.mActivity = activity;
@@ -145,28 +146,49 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
         dialog.setContentView(contentView);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        mLiveHttpHelper = new LiveHttpHelper(mActivity,this);
+        mLiveHttpHelper = new LiveHttpHelper(mActivity, this);
     }
 
-    public void initCount(int duration){
-        if(duration<10000){
+    public void initCount(int duration) {
+        duration = duration * 1000;
+        if (duration < 10000) {
             duration = 10000;
         }
         totalTimer = new CountDownTimer(duration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
+                Message msg = Message.obtain();
+                msg.what = 3;
+                float v = millisUntilFinished * 1.0f / 1000f;
+                int round = Math.round(v);
+                msg.arg1 = round;
+                Log.e("live", millisUntilFinished + "--" + round + "==" + v);
+                mHandler.sendMessage(msg);
+                if (round == 2) {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = Message.obtain();
+                            msg.what = 3;
+                            msg.arg1 = 1;
+                            mHandler.sendMessage(msg);
+                        }
+                    }, 1000);
+                }
+
             }
+
             @Override
             public void onFinish() {
                 ifClickable = true;
                 dismiss();
 
                 //抢到后30s展示
-                isRobFinished=true;
-                if (robResult!=null){
+                isRobFinished = true;
+                if (robResult != null) {
                     //为null表示没有推送过
-                    mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,robResult);
+                    mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT, robResult);
                 }
             }
         };
@@ -185,10 +207,11 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
             dialog.dismiss();
         }
     }
-    public boolean isShowing(){
-        if(dialog!=null){
+
+    public boolean isShowing() {
+        if (dialog != null) {
             return dialog.isShowing();
-        }else{
+        } else {
             return false;
         }
     }
@@ -212,8 +235,8 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     /**
      * 开启计时器。
      */
-    public void startTimeTask(){
-        isRobFinished=false;
+    public void startTimeTask() {
+        isRobFinished = false;
         robLiftTimer.start();
         totalTimer.start();
     }
@@ -221,10 +244,11 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
     /**
      * 结束计时器。
      */
-    public void endTimeTask(){
+    public void endTimeTask() {
         robLiftTimer.cancel();
         totalTimer.cancel();
     }
+
     /**
      * 关闭
      */
@@ -237,10 +261,10 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
      * 点击倒计时
      */
     private void clickTimeCountDown() {
-          if(mLiveHttpHelper!=null&&ifClickable){
-              mLiveHttpHelper.getRedPackets(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),red_packet_key);
-              ifClickable = false;
-          }
+        if (mLiveHttpHelper != null && ifClickable) {
+            mLiveHttpHelper.getRedPackets(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(), red_packet_key);
+            ifClickable = false;
+        }
     }
 
     @Override
@@ -250,15 +274,15 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
 
     @Override
     public void onSuccess(String method, List datas) {
-        switch (method){
+        switch (method) {
             case LiveConstants.GET_RED_PACKETS:
-                if (isRobFinished){
-                    mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT,datas);
-                }else {
-                    robResult=datas;
+                if (isRobFinished) {
+                    mcallbackView.onSuccess(LiveConstants.GET_PACKET_RESULT, datas);
+                } else {
+                    robResult = datas;
                 }
 
-               break;
+                break;
             default:
                 break;
         }

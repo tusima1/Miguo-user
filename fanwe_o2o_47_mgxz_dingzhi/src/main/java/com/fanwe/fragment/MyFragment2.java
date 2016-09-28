@@ -109,7 +109,12 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     @Override
     public void onResume() {
         super.onResume();
-        httpHelper.getPersonalHome();
+        if (TextUtils.isEmpty(App.getInstance().getToken())){
+            modelPersonalHome=null;
+            bindData();
+        }else {
+            httpHelper.getPersonalHome();
+        }
     }
 
     private void initView() {
@@ -478,4 +483,9 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }
     }
 
+    @Override
+    public void onDestroy() {
+        httpHelper = null;
+        super.onDestroy();
+    }
 }

@@ -3,6 +3,7 @@ package com.tencent.qcloud.suixinbo.avcontrollers;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.tencent.av.opengl.GraphicRendererMgr;
 import com.tencent.av.opengl.glrenderer.GLCanvas;
@@ -68,6 +69,8 @@ public class GLVideoView extends GLView {
 
     private boolean mNeedRenderVideo = true;
     private GraphicRendererMgr mGraphicRenderMgr = null;
+
+    private boolean needRotate = true;
 
     public GLVideoView(Context context, GraphicRendererMgr graphicRenderMgr) {
         mContext = context;
@@ -197,7 +200,17 @@ public class GLVideoView extends GLView {
             int width = uiWidth - p.left - p.right;
             int height = uiHeight - p.top - p.bottom;
             int angle = mYuvTexture.getImgAngle();
-            int rotation = (angle + mRotation + 4) % 4;
+            int rotation;
+            if (needRotate){
+                rotation = (angle + mRotation + 4) % 4;
+            }else{
+                rotation = (angle + mRotation + 4) % 4;
+                if (rotation == 2 || rotation == 0){
+                    rotation = 1;
+                }
+            }
+            Log.d("TestAngle", "angle " + angle + " rotation " + mRotation);
+
 
             float x = p.left;
             float y = p.top;
@@ -381,6 +394,12 @@ public class GLVideoView extends GLView {
             canvas.restore();
         }
     }
+
+    public void setRotation(int rotation, boolean needRotate){
+        setRotation(rotation);
+        this.needRotate = needRotate;
+    }
+
 
     @Override
     public void setRotation(int rotation) {

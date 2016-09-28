@@ -195,6 +195,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                                 resetSend();
                                 return;
                             }
+                            Log.e("test","小礼物连发:"+sendCount);
                             httpHelper2.putGiftPay(liveType, roomNum+"",sendCount+"",selectedItemInfo.getId());
                             //reset
                             resetSend();
@@ -246,13 +247,14 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                     mHandler.sendEmptyMessageDelayed(0,TIME_OFFSET);
                 }else {
                     //除了小礼物只能单发
+                    Log.e("test","大礼物发送");
                     httpHelper2.putGiftPay(liveType, roomNum+"","1",selectedItemInfo.getId());
                 }
-            } else {
-                MGToast.showToast("Not Enable!");
             }
         }catch (Exception e){
+            Log.e("test","userSendGift: "+e.toString());
             MGToast.showToast("操作太频繁，请稍后再试！");
+            resetSend();
         }
 
     }
@@ -308,6 +310,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                     }
                     if (mListener!=null){
                         mListener.onPaySuc(selectedItemInfo, gift_num);
+                        Log.e("test","给狗蛋的--->礼物数量: "+gift_num);
                     }
                 }
             });

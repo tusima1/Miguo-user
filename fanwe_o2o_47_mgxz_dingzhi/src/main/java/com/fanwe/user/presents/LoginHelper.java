@@ -35,7 +35,10 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.tencent.TIMCallBack;
+import com.tencent.TIMManager;
+import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -414,6 +417,34 @@ public class LoginHelper extends Presenter {
                 MGToast.showToast(TextUtils.isEmpty(message) == true ? "登录失败。" : message);
             }
         }
+    }
+    /**
+     * 退出imsdk
+     * <p>
+     * 退出成功会调用退出AVSDK
+     */
+    public void imLogout() {
+        TIMManager.getInstance().logout(new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+                SxbLog.e(TAG, "IMLogout fail ：" + i + " msg " + s);
+            }
+            @Override
+            public void onSuccess() {
+                SxbLog.i(TAG, "IMLogout succ !");
+                //反向初始化avsdk
+                stopAVSDK();
+            }
+        });
+
+    }
+
+    /**
+     * 反初始化AVADK
+     */
+    public void stopAVSDK() {
+        QavsdkControl.getInstance().stopContext();
+
     }
 
 

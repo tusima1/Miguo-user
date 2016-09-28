@@ -401,6 +401,8 @@ public class SmallGifView extends BaseLinearLayout{
     }
     private ScaleAnimation getScaleAnimtion(final RelativeLayout item,final LinearLayout group, final int count){
         final int co = count;
+        int number = Integer.parseInt(group.getTag().toString()) + 1;
+        setNumLayouts(group, number - co);
         ScaleAnimation animation = new ScaleAnimation(1.0f, 1.3f, 1.0f, 1.3f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(100);
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -413,12 +415,12 @@ public class SmallGifView extends BaseLinearLayout{
             public void onAnimationEnd(Animation animation) {
                 if(group != null){
                     int c = co;
-                    int number = Integer.parseInt(group.getTag().toString()) + 1;
+//                    int number = Integer.parseInt(group.getTag().toString()) + 1;
                     c--;
+//                    setNumLayouts(group, number - c);
                     animation.cancel();
-                    setNumLayouts(group, number - c);
-                    Log.d(tag, "count: " + count + " ,co: " + co + " ,c: " + c + " ,number: " + number);
-                    if(c != 1){
+//                    Log.d(tag, "count: " + count + " ,co: " + co + " ,c: " + c + " ,number: " + number);
+                    if(c > 0){
                         group.startAnimation(getScaleAnimtion(item, group, c));
                     }else{
                         startLeaveAnimation(item);

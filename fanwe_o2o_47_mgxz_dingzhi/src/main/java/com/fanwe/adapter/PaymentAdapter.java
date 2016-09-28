@@ -115,7 +115,7 @@ public class PaymentAdapter extends BaseAdapter {
 
     public interface PaymentTypeChangeListener
     {
-        public void onPaymentChange(PaymentTypeInfo model);
+        void onPaymentChange(PaymentTypeInfo model);
     }
 
 

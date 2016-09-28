@@ -1,7 +1,7 @@
 package com.tencent.qcloud.suixinbo.utils;
 
 
-import com.tencent.av.sdk.AVRoom;
+import com.tencent.av.sdk.AVRoomMulti;
 
 /**
  * 静态函数
@@ -226,11 +226,13 @@ public class Constants {
     public static final int AUTO_EXIT_ROOM = 101;
 
 
-    public static final long HOST_AUTH = AVRoom.AUTH_BITS_DEFAULT;//权限位；TODO：默认值是拥有所有权限。
-    public static final long VIDEO_MEMBER_AUTH = AVRoom.AUTH_BITS_DEFAULT;//权限位；TODO：默认值是拥有所有权限。
-    public static final long NORMAL_MEMBER_AUTH = AVRoom.AUTH_BITS_JOIN_ROOM | AVRoom.AUTH_BITS_RECV_AUDIO | AVRoom.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoom.AUTH_BITS_RECV_SCREEN_VIDEO;
 
-   // public static final long NORMAL_MEMBER_AUTH = AVRoom.AUTH_BITS_JOIN_ROOM | AVRoom.AUTH_BITS_RECV_AUDIO;
+    public static final long HOST_AUTH = AVRoomMulti.AUTH_BITS_DEFAULT;//权限位；TODO：默认值是拥有所有权限。
+    public static final long VIDEO_MEMBER_AUTH = AVRoomMulti.AUTH_BITS_DEFAULT;//权限位；TODO：默认值是拥有所有权限。
+    public static final long NORMAL_MEMBER_AUTH = AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO;
+
+
+    // public static final long NORMAL_MEMBER_AUTH = AVRoom.AUTH_BITS_JOIN_ROOM | AVRoom.AUTH_BITS_RECV_AUDIO;
     public static final String HOST_ROLE = "Host";
     public static final String VIDEO_MEMBER_ROLE = "VideoMember";
     public static final String NORMAL_MEMBER_ROLE = "NormalMember";

@@ -260,20 +260,27 @@ public class OrderHttpHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(UserConstants.REFUND_APPLICATION,null);
+                            if (!isDestroy()){
+                                mView2.onSuccess(UserConstants.REFUND_APPLICATION,null);
+                            }
                         }
                     });
                 }else {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onFailue(UserConstants.REFUND_APPLICATION);
+                            if (!isDestroy()){
+                                mView2.onFailue(UserConstants.REFUND_APPLICATION);
+                            }
                         }
                     });
                 }
 
             }
         });
+    }
+    private boolean isDestroy(){
+        return mView2==null || gson ==null || methodName==null;
     }
 
     @Override
