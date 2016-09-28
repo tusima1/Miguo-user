@@ -65,12 +65,13 @@ public abstract class MgCallback<T> implements Callback {
                 }
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
+                    UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                     if (!TextUtils.isEmpty(token) && !"null".equals(token)) {
-                        UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                         userCurrentInfo.setToken(token);
                     }
                     if (code == 320 || code == 321) {
                         MGToast.showToast(message);
+                        userCurrentInfo.setToken("");
                         SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {
                         onSuccessResponse(body);
