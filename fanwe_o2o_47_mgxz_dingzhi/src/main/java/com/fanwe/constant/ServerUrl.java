@@ -9,6 +9,7 @@ public class ServerUrl {
     public static final boolean DEBUG = true;
     public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
 
+    //开发环境。
 //    public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.dev.mgxz.com/";
     //测试环境。
   public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";
@@ -25,7 +26,6 @@ public class ServerUrl {
 
     // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";
 
-//       public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.36:8080/mgxz.BussRPC/";
 //       public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.32:8080/mgxz.BussRPC/";
 
 

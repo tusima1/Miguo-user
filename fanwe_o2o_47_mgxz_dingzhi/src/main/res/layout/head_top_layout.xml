@@ -35,7 +35,7 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:lines="1"
-        android:maxEms="10"
+        android:maxEms="8"
         android:text=""
         android:textColor="@color/white" />
 
@@ -101,9 +101,8 @@
         android:id="@+id/tv_follow"
         android:layout_width="@dimen/dp33"
         android:layout_height="@dimen/dp19"
-        android:layout_alignTop="@+id/member_image_list"
-        android:layout_marginLeft="@dimen/dp10"
-        android:layout_toEndOf="@+id/location_ic_location"
+        android:layout_marginLeft="@dimen/dp5"
+        android:layout_toRightOf="@+id/tv_username"
         android:background="@drawable/bg_follow" />
 
 
