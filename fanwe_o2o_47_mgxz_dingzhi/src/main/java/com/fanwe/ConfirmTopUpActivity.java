@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -13,6 +15,9 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.dao.barry.UserUpdateDao;
+import com.fanwe.dao.barry.impl.UserUpdateInfoDaoImpl;
+import com.fanwe.dao.barry.view.UserUpdateView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment.OrderDetailAccountPaymentFragmentListener;
@@ -23,6 +28,7 @@ import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.model.UserUpdateInfoBean;
 import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
@@ -49,6 +55,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
@@ -65,11 +72,18 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     @ViewInject(R.id.tv_money)
     private TextView mTv_money;
 
+    @ViewInject(R.id.account)
+    private TextView userAccount;
+
     @ViewInject(R.id.act_confirm_order_ptrsv_all)
     private PullToRefreshScrollView mPtrsvAll;
 
     @ViewInject(R.id.act_confirm_order_btn_confirm_order)
     private Button mBtnConfirmOrder;
+
+    @ViewInject(R.id.money)
+    private CheckBox money;
+    public static final String MONEY_PAY_ID = "account";
 
     /**
      * 00:正式，01:测试
@@ -86,6 +100,8 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     private CommonShoppingHelper commonShoppingHelper;
     private UserHttpHelper userHttpHelper;
     private PaymentTypeInfo currentPayType;
+
+    UserUpdateDao userUpdateDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,16 +130,42 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         if (userHttpHelper == null) {
             userHttpHelper = new UserHttpHelper(this, this);
         }
-        userHttpHelper.postUserUpgradeOrder(mFragPayments.getPaymentId(), orderId, is_use_account_money);
+        userHttpHelper.postUserUpgradeOrder(money.isChecked() ? MONEY_PAY_ID : mFragPayments.getPaymentId(), orderId, is_use_account_money);
     }
 
     private void init() {
         initTitle();
         initClick();
         addFragment();
+        initMoneyPay();
         initPullToRefreshScrollView();
+        initUserUpdateInfo();
     }
 
+    private void initUserUpdateInfo(){
+        userUpdateDao = new UserUpdateInfoDaoImpl(new UserUpdateView() {
+            @Override
+            public void getUserUpdateInfoSuccess(final UserUpdateInfoBean.Result.Body info) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setUserUpdateInfo(info);
+                    }
+                });
+            }
+
+            @Override
+            public void getUserUpdateInfoError(String msg) {
+
+            }
+        });
+        userUpdateDao.getUserUpdateInfo(App.getApplication().getToken());
+    }
+
+    private void setUserUpdateInfo(UserUpdateInfoBean.Result.Body info){
+        mTv_money.setText("￥" + info.getTotalPrice());
+        userAccount.setText("账户余额：" + info.getUser_account_money() +"元使用余额支付");
+    }
 
     private void initClick() {
         mBtnConfirmOrder.setOnClickListener(this);
@@ -136,7 +178,7 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.act_confirm_order_btn_confirm_order:
-                if (TextUtils.isEmpty(mFragPayments.getPaymentId())) {
+                if (TextUtils.isEmpty(mFragPayments.getPaymentId()) && !money.isChecked()) {
                     MGToast.showToast("请选择支付方式");
                     return;
                 }
@@ -171,14 +213,20 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments,
                 mFragPayments);
 
+        /**
+         * 点击支付宝或者微信支付
+         */
         mFragPayments.setmListener(new PaymentAdapter.PaymentTypeChangeListener() {
 
             @Override
             public void onPaymentChange(PaymentTypeInfo model) {
-                if(model.isChecked()) {
-                    currentPayType = model;
-                }else{
-                    currentPayType =null;
+                if(model != null){
+                    if(model.isChecked()) {
+                        currentPayType = model;
+                        money.setChecked(false);
+                    }else{
+                        currentPayType =null;
+                    }
                 }
             }
         });
@@ -188,6 +236,22 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
         mFragFees = new OrderDetailFeeFragment();
         getSDFragmentManager().replace(R.id.act_confirm_order_fl_fees,
                 mFragFees);
+    }
+
+    /**
+     * 余额支付
+     */
+    private void initMoneyPay(){
+        money.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed()){
+                    if(isChecked){
+                        mFragPayments.clearSelectedPayment(true);
+                    }
+                }
+            }
+        });
     }
 
     private void initPullToRefreshScrollView() {
@@ -238,7 +302,12 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
 
     @Override
     public void onSuccess(String responseBody) {
-
+        /**
+         * 如果是余额支付成功！
+         */
+        if(money.isChecked()){
+            BaseUtils.finishActivity(this);
+        }
     }
 
     private Payment_codeModel mPaymentCodeModel;
@@ -269,6 +338,15 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
                 });
                 break;
             case UserConstants.USER_UPGRADE_ORDER_POST:
+
+                /**
+                 * 如果是余额支付成功！
+                 */
+                if(money.isChecked()){
+                    BaseUtils.finishActivity(this);
+                    return;
+                }
+
                 if (!SDCollectionUtil.isEmpty(datas)) {
                     ModelPostUserUpgradeOrder bean = (ModelPostUserUpgradeOrder) datas.get(0);
                     mPaymentCodeModel = new Payment_codeModel();

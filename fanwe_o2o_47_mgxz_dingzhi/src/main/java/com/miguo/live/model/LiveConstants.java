@@ -139,5 +139,14 @@ public class LiveConstants {
      */
     public static final String USE_RECEIVE_CODE = "UseReceiveCode";
 
+    /**
+     * 会员升级获取用户余额相关信息
+     */
+    public static final String USER_UPGRADE_ORDER = "UserUpgradeOrder";
+    /**
+     * 获取用户协议信息
+     */
+    public static final String USER_AGREEMENT = "HtmlPage";
+
 
 }

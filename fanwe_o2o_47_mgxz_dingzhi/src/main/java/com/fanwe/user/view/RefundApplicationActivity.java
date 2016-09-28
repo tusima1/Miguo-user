@@ -154,8 +154,12 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		mGoodsTotalNum=Integer.valueOf(info.getNumber()).intValue();
 		mTv_total_num.setText(info.getNumber());
 		mTv_total_price.setText(info.getTotal_price());
-		mTv_used.setText(info.getConsume_count());
-		mTv_has_refund.setText(info.getRefunded());
+		//已使用
+		int consume_count =Integer.valueOf(info.getConsume_count()).intValue();
+		mTv_used.setText(consume_count+"");
+		//已退款
+		int refunded = Integer.valueOf(info.getRefunded()).intValue();
+		mTv_has_refund.setText(refunded);
 
 		String refunding = info.getRefunding();
 		mRefunding = MGStringFormatter.getInt(refunding);
@@ -166,7 +170,11 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		float refundMoney = getCalculateRefundMoney(mUnitPrice, 1);
 		mTv_refund_money.setText(""+refundMoney);
 
-		mGoodsTotalNum-=mRefunding;
+		//可退款商品总数 商品数量- 已使用 - 已退款 - 退款中;
+		mGoodsTotalNum=mGoodsTotalNum -mRefunding -consume_count - refunded;
+		if (mGoodsTotalNum<1){
+			finish();
+		}
 	}
 
 	/**

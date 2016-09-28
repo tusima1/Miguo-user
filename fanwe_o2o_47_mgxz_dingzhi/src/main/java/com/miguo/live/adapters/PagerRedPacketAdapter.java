@@ -56,6 +56,7 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
             }
             holder.packet_type.setText(str);
             holder.mTv_Title.setText(userRedPacketInfo.getRed_packet_name()==null?"":userRedPacketInfo.getRed_packet_name());
+            //时间的单位是秒
              String startTime = userRedPacketInfo.getAvailable_time_start();
              String endTime = userRedPacketInfo.getAvailable_time_end();
             String available="";
