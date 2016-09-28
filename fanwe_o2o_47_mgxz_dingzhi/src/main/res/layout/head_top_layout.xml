@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:paddingTop="@dimen/dp5"
-                 android:paddingBottom="5dp"
-                 android:paddingLeft="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/dark_80">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_80"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingTop="@dimen/dp5">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/civ_user_image"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="@dimen/dp40"
         android:layout_height="@dimen/dp40"
         android:src="@drawable/dafault_head"
         app:civ_border_color="@color/white"
-        app:civ_border_width="2dp"/>
+        app:civ_border_width="2dp" />
 
     <TextView
         android:id="@+id/tv_members"
@@ -25,7 +24,7 @@
         android:gravity="center"
         android:text="人"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp12"/>
+        android:textSize="@dimen/sp12" />
 
     <TextView
         android:id="@+id/tv_username"
@@ -33,12 +32,12 @@
         android:layout_height="@dimen/dp19"
         android:layout_marginLeft="@dimen/dp10"
         android:layout_toRightOf="@id/civ_user_image"
-        android:gravity="center_vertical"
-        android:maxEms="8"
         android:ellipsize="end"
-        android:text=""
+        android:gravity="center_vertical"
         android:lines="1"
-        android:textColor="@color/white"/>
+        android:maxEms="8"
+        android:text=""
+        android:textColor="@color/white" />
 
     <LinearLayout
         android:id="@+id/location_ic_location"
@@ -55,7 +54,7 @@
             android:layout_width="@dimen/dp10"
             android:layout_height="@dimen/dp10"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_location"/>
+            android:src="@drawable/ic_location" />
 
         <TextView
             android:id="@+id/tv_user_location"
@@ -66,7 +65,7 @@
             android:layout_toRightOf="@id/location_ic_location"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="@dimen/sp12"/>
+            android:textSize="@dimen/sp12" />
     </LinearLayout>
 
 
@@ -79,7 +78,7 @@
         android:layout_toRightOf="@id/civ_user_image"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="@dimen/sp12"/>
+        android:textSize="@dimen/sp12" />
 
     <ImageView
         android:id="@+id/iv_close"
@@ -89,23 +88,22 @@
         android:paddingLeft="@dimen/dp12"
         android:paddingRight="@dimen/dp12"
         android:paddingTop="@dimen/dp5"
-        android:src="@drawable/ic_close"/>
+        android:src="@drawable/ic_close" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/member_image_list"
         android:layout_width="@dimen/dp116"
         android:layout_height="@dimen/dp25"
         android:layout_marginTop="@dimen/dp5"
-        android:layout_toLeftOf="@id/iv_close"/>
+        android:layout_toLeftOf="@id/iv_close" />
 
     <TextView
         android:id="@+id/tv_follow"
         android:layout_width="@dimen/dp33"
         android:layout_height="@dimen/dp19"
         android:layout_marginLeft="@dimen/dp5"
-        android:background="@drawable/bg_follow"
         android:layout_toRightOf="@+id/tv_username"
-        />
+        android:background="@drawable/bg_follow" />
 
 
 </RelativeLayout>

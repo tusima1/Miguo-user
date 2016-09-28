@@ -78,7 +78,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
 
     public void init() {
-        liveHttpHelper = new LiveHttpHelper(mActivity, this,"");
+        liveHttpHelper = new LiveHttpHelper(mActivity, this, "");
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
 
         LayoutInflater.from(mContext).inflate(R.layout.head_top_layout, this);
@@ -90,10 +90,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         mKeywords = ((TextView) findViewById(R.id.tv_keywords));
         mClose = ((ImageView) findViewById(R.id.iv_close));
         mMemberList = ((RecyclerView) findViewById(R.id.member_image_list));
-        location_ic_location = (LinearLayout)findViewById(R.id.location_ic_location);
+        location_ic_location = (LinearLayout) findViewById(R.id.location_ic_location);
 
         final String shop_id = CurLiveInfo.shopID;
-        if(!TextUtils.isEmpty(shop_id)){
+        if (!TextUtils.isEmpty(shop_id)) {
             location_ic_location.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -115,7 +115,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
     }
 
-    public void setViews(){
+    public void setViews() {
         userExitDialogHelper.setView(this);
     }
 
@@ -141,7 +141,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 //        }
         if (mLiveView != null) {
             mLiveView.userExit();
-        }else {
+        } else {
             mActivity.finish();
         }
         isUserClose = true;
@@ -177,7 +177,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
      */
     private void userInfo() {
         Intent intent = new Intent(getContext(), UserHomeActivity.class);
-        intent.putExtra("id",CurLiveInfo.getHostID());
+        intent.putExtra("id", CurLiveInfo.getHostID());
         getContext().startActivity(intent);
     }
 
@@ -201,6 +201,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         } else {
             mMembers.setText("0 人");
         }
+    }
+
+    public void setKeyWord(String str) {
+        mKeywords.setText(str);
     }
 
     /*设置头像*/
@@ -237,7 +241,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
 
     public void showExitDialog() {
-        if (userExitDialogHelper != null&&!userExitDialogHelper.isShowing()) {
+        if (userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
             userExitDialogHelper.show();
         }
     }
@@ -258,7 +262,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onSuccess(String method, List datas) {
-        ArrayList d = (ArrayList)datas;
+        ArrayList d = (ArrayList) datas;
         Message message = new Message();
         if (LiveConstants.CHECK_FOCUS.equals(method)) {
             if (!SDCollectionUtil.isEmpty(d)) {
@@ -302,20 +306,20 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         }
     };
 
-    public void gotoShopDetailActivity(String shop_id){
+    public void gotoShopDetailActivity(String shop_id) {
         Intent itemintent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, shop_id);
-        bundle.putInt("type",0);
+        bundle.putInt("type", 0);
         itemintent.putExtras(bundle);
         itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
-        if(mActivity!=null) {
+        if (mActivity != null) {
             mActivity.startActivity(itemintent);
         }
     }
 
-    public void ondestroy(){
-        if(userExitDialogHelper!=null){
+    public void ondestroy() {
+        if (userExitDialogHelper != null) {
             userExitDialogHelper.dismiss();
             userExitDialogHelper = null;
         }
