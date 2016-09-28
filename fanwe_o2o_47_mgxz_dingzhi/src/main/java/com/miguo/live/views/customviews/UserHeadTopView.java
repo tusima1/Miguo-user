@@ -210,7 +210,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     /*设置头像*/
     public void setHostImg(String imgurl) {
         if (TextUtils.isEmpty(imgurl)) {
-            mUserIamge.setImageResource(R.drawable.bg_empty);
+            mUserIamge.setImageResource(R.drawable.list_empty);
         } else {
             SDViewBinder.setImageView(imgurl, mUserIamge);
         }
