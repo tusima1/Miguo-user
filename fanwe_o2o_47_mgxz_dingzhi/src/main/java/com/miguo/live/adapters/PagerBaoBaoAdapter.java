@@ -1,6 +1,5 @@
 package com.miguo.live.adapters;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -78,35 +77,9 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
             holder.ll_two_bt.setVisibility(View.GONE);
         }
 
-        holder.add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.ll_two_bt.getVisibility()==View.GONE){
-                    holder.ll_two_bt.setVisibility(View.VISIBLE);
-                    startAnimation(v,0f,45f);
-                    mData.get(position).setClicked(true);
-//                    holder.add.setImageResource(R.drawable.ic_close_small);
-                    holder.add.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.add.setImageResource(R.drawable.ic_add);
+        //显示按钮
 
-                        }
-                    },500);
-                }else {
-                    startAnimation(v,0f,45f);
-                    holder.ll_two_bt.setVisibility(View.GONE);
-                    mData.get(position).setClicked(false);
-//                    holder.add.setImageResource(R.drawable.ic_add);
-                    holder.add.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.add.setImageResource(R.drawable.ic_close_small);
-                        }
-                    },500);
-                }
-            }
-        });
+
         holder.add2cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,12 +94,6 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
             }
         });
 
-    }
-
-    public void startAnimation(View view,float from,float to){
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "rotation", from, to);
-        animator.setDuration(500);
-        animator.start();
     }
 
     /**

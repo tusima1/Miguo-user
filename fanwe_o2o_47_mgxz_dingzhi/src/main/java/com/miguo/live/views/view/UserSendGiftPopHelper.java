@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.GiftId;
@@ -31,7 +30,6 @@ import com.miguo.live.model.getGiftInfo.ModelGiftInfo;
 import com.miguo.live.presenters.GiftHttpHelper2;
 import com.miguo.live.views.RechargeDiamondActivity;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.utils.ToasUtil;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGDialog;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -179,7 +177,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                     endTime = System.currentTimeMillis();
                     long offset = endTime - preTime;
                     totalCount++;
-                    if (offset<2000){
+                    if (offset<300){
                         //连击
                         Log.e("test",offset+"");
                     }else {

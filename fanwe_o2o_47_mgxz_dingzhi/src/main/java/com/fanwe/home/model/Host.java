@@ -1,7 +1,5 @@
 package com.fanwe.home.model;
 
-import android.text.TextUtils;
-
 import java.util.List;
 
 /**
@@ -41,17 +39,7 @@ public class Host {
     }
 
     public String getNickname() {
-        /*校验nick长度*/
-        if (TextUtils.isEmpty(nickname)){
-            return nickname;
-        }
-        int length = nickname.length();
-        if (length<=10){
-            return nickname;
-        }else {
-            String newNick=nickname.substring(0,8);
-            return newNick+"...";
-        }
+        return nickname;
     }
 
     public String getRealNickName(){
