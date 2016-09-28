@@ -34,9 +34,9 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.RemineContance;
 import com.fanwe.utils.RemineHelper;
+import com.fanwe.utils.SDDateUtil;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
-import com.miguo.live.views.customviews.MGToast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,9 +47,11 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
     private int mType;
     private Date date;
     private SimpleDateFormat simpleDateFormat;
+    private List<Member> listModels;
 
-    public MyXiaoMiAdapter(List<Member> listModel, Activity activity, int type) {
-        super(listModel, activity);
+    public MyXiaoMiAdapter(List<Member> listModels, Activity activity, int type) {
+        super(listModels, activity);
+        this.listModels = listModels;
         this.mType = type;
         simpleDateFormat = new SimpleDateFormat("dd");
         date = new Date();
@@ -62,7 +64,7 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent, final Member model) {
-
+        final Member bean = listModels.get(position);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_dist_lv, null);
         }
@@ -73,25 +75,26 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
         TextView tv_phone = ViewHolder.get(convertView, R.id.tv_item_phone);
         TextView tv_momey = ViewHolder.get(convertView, R.id.tv_item_momey);
         TextView tv_number = ViewHolder.get(convertView, R.id.tv_item_mumber);
-        if (model != null) {
-            SDViewBinder.setImageView(iv_user, model.getAvatar());
-            SDViewBinder.setTextView(tv_username, model.getUser_name());
-            SDViewBinder.setTextView(tv_date, model.getCreate_time());
-            if (!TextUtils.isEmpty(model.getMobile())) {
-                if (model.getMobile().length() > 7) {
-                    String zh = model.getMobile().replace(model.getMobile().substring(3, 7), "****");
-                    SDViewBinder.setTextView(tv_phone,zh);
-                }
+        if (bean != null) {
+            SDViewBinder.setImageView(iv_user, bean.getAvatar());
+            SDViewBinder.setTextView(tv_username, bean.getUser_name());
+            SDViewBinder.setTextView(tv_date, SDDateUtil.milToStringlongPoint(DataFormat.toLong(bean.getCreate_time())));
+            if (!TextUtils.isEmpty(bean.getMobile())) {
+//                if (bean.getMobile().length() > 7) {
+//                    String zh = bean.getMobile().replace(bean.getMobile().substring(3, 7), "****");
+//                    SDViewBinder.setTextView(tv_phone,zh);
+//                }
+                SDViewBinder.setTextView(tv_phone, bean.getMobile());
             } else {
                 SDViewBinder.setTextView(tv_phone, "");
             }
-            if (DataFormat.toInt(model.getSalary()) == 0) {
+            if (DataFormat.toInt(bean.getSalary()) == 0) {
                 SDViewBinder.setTextView(tv_momey, "+0.00");
             } else {
-                SDViewBinder.setTextView(tv_momey, "+" + TextMoney.textFarmat(model.getSalary()), "+0.00");
+                SDViewBinder.setTextView(tv_momey, "+" + TextMoney.textFarmat(bean.getSalary()), "+0.00");
             }
-            SDViewBinder.setTextView(tv_number, model.getUser_num() + "个成员");
-            if (model.getUser_num() == 0 || mType == 2) {
+            SDViewBinder.setTextView(tv_number, bean.getUser_num() + "个成员");
+            if (bean.getUser_num() == 0 || mType == 2) {
                 ll_number.setBackgroundResource(R.drawable.my_xiaomi_second);
             }
             iv_user.setOnClickListener(new OnClickListener() {
@@ -99,7 +102,7 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mActivity, DistributionStoreWapActivity.class);
-                    intent.putExtra("id", model.getUid());
+                    intent.putExtra("id", bean.getId());
                     mActivity.startActivity(intent);
                 }
             });
@@ -109,37 +112,36 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mActivity, DistributionStoreWapActivity.class);
-                    intent.putExtra("id", model.getUid());
+                    intent.putExtra("id", bean.getId());
                     mActivity.startActivity(intent);
                 }
             });
 
-            if (model.getUser_num() > 0 && mType == 1) {
+            if (bean.getUser_num() > 0 && mType == 1) {
                 ll_number.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
                         intent.setClass(mActivity, MyXiaomiDetailActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("id", model.getId());
-                        bundle.putString("user", model.getUser_name());
-                        bundle.putInt("number", model.getUser_num());
+                        bundle.putString("id", bean.getId());
+                        bundle.putString("user", bean.getUser_name());
+                        bundle.putInt("number", bean.getUser_num());
                         intent.putExtras(bundle);
                         mActivity.startActivity(intent);
                     }
                 });
             }
-            if (model.getRank() == 1 && !"".equals(model)) {
+            if (bean.getRank() == 1 && !"".equals(bean)) {
                 tv_phone.setOnClickListener(new OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
-
-                        if (insertHistory(String.valueOf(model.getId()), simpleDateFormat.format(date))) {
-                            clickAlert(model.getId());
-                        } else {
-                            MGToast.showToast("您已经提醒过该成员，明天再试试吧!");
-                        }
+//                        if (insertHistory(String.valueOf(bean.getId()), simpleDateFormat.format(date))) {
+//                            clickAlert(bean.getId());
+//                        } else {
+//                            MGToast.showToast("您已经提醒过该成员，明天再试试吧!");
+//                        }
                     }
                 });
             }
