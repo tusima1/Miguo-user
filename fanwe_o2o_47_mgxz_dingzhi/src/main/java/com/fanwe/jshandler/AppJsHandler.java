@@ -9,6 +9,7 @@ import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.EventDetailActivity;
 import com.fanwe.EventListActivity;
 import com.fanwe.GoodsListActivity;
+import com.fanwe.LoginActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
@@ -135,12 +136,168 @@ public class AppJsHandler extends BaseJsHandler {
 		 * Intent(App.getApplication(), DistributionManageActivity.class);
 		 * break;
 		 */
-            default:
+		default:
 
-                break;
-        }
-        startActivity(intent);
-    }
+			break;
+		}
+		startActivity(intent);
+	}
+
+
+	@JavascriptInterface
+	public void login() {
+		Activity activity = SDActivityManager.getInstance().getLastActivity();
+		AppHelper.isLogin(activity);
+	}
+
+	@JavascriptInterface
+	public void page_title(String title) {
+	}
+
+	@JavascriptInterface
+	public void promote(String location, String title, String summary,
+			String pic) {
+
+	}
+
+	/**
+	 * 去购物车
+	 */
+	@JavascriptInterface
+	public void goCart() {
+		Intent intent = new Intent(mActivity, ShopCartActivity.class);
+		startActivity(intent);
+	}
+
+	public void goLogin(){
+		Intent intent = new Intent(mActivity, LoginActivity.class);
+		startActivity(intent);
+	}
+
+
+	@JavascriptInterface
+	public void goDeal(int id) {
+		Intent intent = new Intent(mActivity, StoreDetailActivity.class);
+		intent.putExtra(StoreDetailActivity.EXTRA_SHOP_ID, id);
+		startActivity(intent);
+	}
+
+	@JavascriptInterface
+	public void goSupplierLocation(int id) {
+		Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+		intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
+		startActivity(intent);
+
+	}
+
+	/**
+	 * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
+	 * 
+	 * @param productId
+	 * @param userId
+	 */
+	@JavascriptInterface
+	public void addCart(String productId, String userId) {
+		// 保存购物车
+		checkLogin();
+		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
+		cartInfo.setNumber("1");
+		cartInfo.setPro_id(productId);
+		cartInfo.setFx_user_id(userId);
+
+
+		if (ifLogin) {
+			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
+				@Override
+				public void onSuccess(String responseBody) {
+
+				}
+
+				@Override
+				public void onSuccess(String method, List datas) {
+					goCart();
+				}
+
+				@Override
+				public void onFailue(String responseBody) {
+
+				}
+
+				@Override
+				public void onFailue(String method, String responseBody) {
+
+				}
+			});
+			outSideShoppingCartHelper.addShopCart(
+					userId,
+					App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+					App.getApplication().getToken(),
+					productId,
+					"1",
+					"1");
+		} else {
+			if(LocalShoppingcartDao.insertModel(cartInfo)){
+				goLogin();
+			}
+		}
+
+	}
+
+//	/**
+//	 * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
+//	 *
+//	 * @param productId
+//	 * @param userId
+//	 */
+//	@JavascriptInterface
+//	public void addCart(String productId, String userId) {
+//		// 保存购物车
+//		checkLogin();
+//		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
+//		cartInfo.setNumber("1");
+//		cartInfo.setPro_id(productId);
+//		cartInfo.setFx_user_id(userId);
+//
+//
+//		if (ifLogin) {
+//			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
+//				@Override
+//				public void onSuccess(String responseBody) {
+//
+//				}
+//
+//				@Override
+//				public void onSuccess(String method, List datas) {
+//
+//				}
+//
+//				@Override
+//				public void onFailue(String responseBody) {
+//
+//				}
+//
+//				@Override
+//				public void onFailue(String method, String responseBody) {
+//
+//				}
+//			});
+//			List<ShoppingCartInfo> listModel = new ArrayList<>();
+//			  listModel.add(cartInfo);
+//			outSideShoppingCartHelper.multiAddShopCart(listModel);
+//		} else {
+//			LocalShoppingcartDao.insertModel(cartInfo);
+//		}
+//		goCart();
+//	}
+
+
+	public void checkLogin() {
+		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+			ifLogin = true;
+		} else {
+			ifLogin = false;
+		}
+	}
 
     @JavascriptInterface
     public void close_page() {
@@ -152,35 +309,10 @@ public class AppJsHandler extends BaseJsHandler {
 
     }
 
-    @JavascriptInterface
-    public void login() {
-        Activity activity = SDActivityManager.getInstance().getLastActivity();
-        AppHelper.isLogin(activity);
-    }
-
-    @JavascriptInterface
-    public void page_title(String title) {
-    }
-
-    @JavascriptInterface
-    public void promote(String location, String title, String summary,
-                        String pic) {
-
-    }
 
     @JavascriptInterface
     public void start_main() {
         Intent intent = new Intent(mActivity, MainActivity.class);
-        startActivity(intent);
-    }
-
-    /**
-     * 去购物车
-     */
-    @JavascriptInterface
-    public void goCart() {
-
-        Intent intent = new Intent(mActivity, ShopCartActivity.class);
         startActivity(intent);
     }
 
@@ -226,76 +358,7 @@ public class AppJsHandler extends BaseJsHandler {
         });
     }
 
-    @JavascriptInterface
-    public void goDeal(int id) {
-        Intent intent = new Intent(mActivity, StoreDetailActivity.class);
-        intent.putExtra(StoreDetailActivity.EXTRA_SHOP_ID, id);
-        startActivity(intent);
-    }
 
-    @JavascriptInterface
-    public void goSupplierLocation(int id) {
-        Intent intent = new Intent(mActivity, TuanDetailActivity.class);
-        intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
-        startActivity(intent);
-
-    }
-
-    /**
-     * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
-     *
-     * @param productId
-     * @param userId
-     */
-    @JavascriptInterface
-    public void addCart(String productId, String userId) {
-        // 保存购物车
-        checkLogin();
-        ShoppingCartInfo cartInfo = new ShoppingCartInfo();
-        cartInfo.setNumber("1");
-        cartInfo.setPro_id(productId);
-        cartInfo.setFx_user_id(userId);
-
-
-        if (ifLogin) {
-            OutSideShoppingCartHelper outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
-                @Override
-                public void onSuccess(String responseBody) {
-
-                }
-
-                @Override
-                public void onSuccess(String method, List datas) {
-
-                }
-
-                @Override
-                public void onFailue(String responseBody) {
-
-                }
-
-                @Override
-                public void onFailue(String method, String responseBody) {
-
-                }
-            });
-            List<ShoppingCartInfo> listModel = new ArrayList<>();
-            listModel.add(cartInfo);
-            outSideShoppingCartHelper.multiAddShopCart(listModel);
-        } else {
-            LocalShoppingcartDao.insertModel(cartInfo);
-        }
-    }
-
-
-    public void checkLogin() {
-        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-            ifLogin = true;
-        } else {
-            ifLogin = false;
-        }
-
-    }
 
 
 }
