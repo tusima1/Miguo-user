@@ -195,7 +195,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
         if(!TextUtils.isEmpty(faceUrl)){
             com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(faceUrl,holder.faceUrl);
         }else{
-            holder.faceUrl.setImageResource(R.drawable.bg_empty);
+            holder.faceUrl.setImageResource(R.drawable.list_empty);
         }
         return convertView;
     }

@@ -24,6 +24,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.miguo.live.views.customviews.MGToast;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -137,6 +138,15 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		if (info==null) {
 			return;
 		}
+//		private String balance_unit_price;// 退款单价
+//		private String total_price;// 订单总价
+//		private String refunding;// 退款中
+//		private String pay_amount;// 已支付
+//		private String maxrefundnumber;// 退款最大件数
+//		private String number;// 商品数量
+//		private String refund_unit_price;// 结算单价
+//		private String consume_count;// 已使用
+//		private String refunded; // 已退款
 		mTv_order_idNum.setText(info.getOrder_sn());
 		mTv_name.setText(info.getName());
 		mTv_time.setText(info.getCreate_time());
@@ -150,7 +160,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		String refunding = info.getRefunding();
 		mRefunding = MGStringFormatter.getInt(refunding);
 		mTv_refunding.setText(refunding);
-		mTv_payed.setText(",  已支付:"+info.getPay_amount());
+		mTv_payed.setText("  ,  已支付:"+info.getPay_amount());
 		
 		mUnitPrice=info.getRefund_unit_price();
 		float refundMoney = getCalculateRefundMoney(mUnitPrice, 1);
@@ -170,7 +180,12 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 			return 0f;
 		}
 		float unitF = Float.valueOf(unit).floatValue();
-		return unitF * num;
+		return getFloat2(unitF * num);
+	}
+
+	private float getFloat2(float num){
+		BigDecimal b   =   new   BigDecimal(num);
+		return b.setScale(2,BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 	private void getIntentData() {
 //		mOrderItemID= getIntent().getExtras().getInt(RefundGoodsActivity.EXTRA_ID,-1);

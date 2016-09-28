@@ -85,6 +85,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 红包结束页。
      */
     private UserRobRedPacketEndDialogHelper userRobRedPacketEndDialogHelper;
+    private UserSendGiftPopHelper giftPopHelper;
 
 
     public UserBottomToolView(Context context) {
@@ -185,7 +186,9 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击礼物
      */
     private void clickGift() {
-        UserSendGiftPopHelper giftPopHelper = new UserSendGiftPopHelper(mAct,"1");
+        if (giftPopHelper==null){
+            giftPopHelper = new UserSendGiftPopHelper(mAct,"1");
+        }
         giftPopHelper.show();
         giftPopHelper.setOnPayGiftSuccessListener(new OnPayGiftSuccessListener() {
             @Override

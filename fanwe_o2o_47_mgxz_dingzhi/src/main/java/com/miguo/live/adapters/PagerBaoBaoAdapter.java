@@ -61,23 +61,29 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
             if(!TextUtils.isEmpty(baoBaoEntity.getImg())){
                 ImageLoader.getInstance().displayImage(baoBaoEntity.getImg(),holder.iv_img);
             }else {
-                holder.iv_img.setImageResource(R.drawable.nopic_lo);
+                holder.iv_img.setImageResource(R.drawable.list_empty);
             }
             holder.tv_title .setText(baoBaoEntity.getName());
             holder.tv_price.setText(baoBaoEntity.getTuan_price());
 
 
         }
-        boolean clicked = baoBaoEntity.isClicked();
+        final boolean clicked = baoBaoEntity.isClicked();
         if (clicked){
-            holder.add.setImageResource(R.drawable.ic_close_small);
+            holder.add.setImageResource(R.drawable.ic_close_transparent);
             holder.ll_two_bt.setVisibility(View.VISIBLE);
         }else {
-            holder.add.setImageResource(R.drawable.ic_add);
+            holder.add.setImageResource(R.drawable.ic_add_transparent);
             holder.ll_two_bt.setVisibility(View.GONE);
         }
-
         //显示按钮
+        holder.add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mData.get(position).setClicked(!clicked);
+                notifyItemChanged(position);
+            }
+        });
 
 
         holder.add2cart.setOnClickListener(new View.OnClickListener() {
