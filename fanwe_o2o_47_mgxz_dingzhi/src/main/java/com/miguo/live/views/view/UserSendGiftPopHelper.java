@@ -252,6 +252,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 MGToast.showToast("Not Enable!");
             }
         }catch (Exception e){
+            Log.e("test","userSendGift: "+e.toString());
             MGToast.showToast("操作太频繁，请稍后再试！");
         }
 
