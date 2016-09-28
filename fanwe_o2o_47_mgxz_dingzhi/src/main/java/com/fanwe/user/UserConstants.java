@@ -199,6 +199,10 @@ public class UserConstants {
      */
     public static final String USER_CHANGE_PWD = "UserChangePwd";
     /**
+     * 忘记密码
+     */
+    public static final String USER_FORGOT = "UserForgot";
+    /**
      * 提交建议
      */
     public static final String ADVICE = "Advice";

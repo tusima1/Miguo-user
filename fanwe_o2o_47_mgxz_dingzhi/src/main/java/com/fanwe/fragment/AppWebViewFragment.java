@@ -183,9 +183,10 @@ public class AppWebViewFragment extends WebViewFragment {
                 imageUrl = MGDictUtil.getShareIcon();
             }
         }
-        url = "";
-        url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
-                "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        if (TextUtils.isEmpty(url)) {
+            url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+                    "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        }
         if (TextUtils.isEmpty(mContent)) {
             mContent = "米果小站";
         }

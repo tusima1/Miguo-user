@@ -541,6 +541,43 @@ public class UserHttpHelper implements IHelper {
     }
 
     /**
+     * 用户忘记密码
+     *
+     * @param mobile
+     * @param pwd
+     * @param captcha
+     */
+    public void userForget(String mobile, String pwd, String captcha) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("mobile", mobile);
+        params.put("pwd", pwd);
+        params.put("captcha", captcha);
+        params.put("method", UserConstants.USER_FORGOT);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
+                if (!"212".equals(root.getStatusCode())) {
+                    //错误
+                    List<RootShopComment> roots = new ArrayList<>();
+                    roots.add(root);
+                    mView.onSuccess(UserConstants.USER_FORGOT, roots);
+                    return;
+                }
+                mView.onSuccess(UserConstants.USER_FORGOT, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+
+    }
+
+
+    /**
      * 添加用户的建议
      *
      * @param advice
