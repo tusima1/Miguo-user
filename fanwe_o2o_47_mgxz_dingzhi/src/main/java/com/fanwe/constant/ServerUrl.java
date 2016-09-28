@@ -26,7 +26,7 @@ public class ServerUrl {
 
     // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";
 
-//       public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.32:8080/mgxz.BussRPC/";
+    // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.32:8080/mgxz.BussRPC/";
 
 
     //	public static final String SERVER_API_TEST_URL="pre.mgxz.com";
