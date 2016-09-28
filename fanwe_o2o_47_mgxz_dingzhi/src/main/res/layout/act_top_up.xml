@@ -69,6 +69,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"></FrameLayout>
 
+
+            <include layout="@layout/aa"/>
+
             <FrameLayout
                 android:id="@+id/act_confirm_order_fl_fees"
                 android:layout_width="fill_parent"

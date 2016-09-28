@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Created by zlh on 2016/9/18.
  */
-public class SmallGifView extends BaseLinearLayout{
+public class SmallGifView2 extends BaseLinearLayout{
 
     List<RelativeLayout> gifts;
     int GIFT_HEIGHT = 45;
@@ -57,17 +57,16 @@ public class SmallGifView extends BaseLinearLayout{
     int[] GIFTS;
     String[] GIFS_ID;
     HashMap<String,Integer> giftsMap;
-    List<GiftListBean> beans;
 
-    public SmallGifView(Context context) {
+    public SmallGifView2(Context context) {
         super(context);
     }
 
-    public SmallGifView(Context context, AttributeSet attrs) {
+    public SmallGifView2(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SmallGifView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SmallGifView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -80,7 +79,6 @@ public class SmallGifView extends BaseLinearLayout{
         setParams();
         gifts = new ArrayList<>();
         giftsMap = new HashMap<>();
-        beans = new ArrayList<>();
         initMap();
     }
 
@@ -108,8 +106,7 @@ public class SmallGifView extends BaseLinearLayout{
         setLayoutParams(params);
     }
 
-    public void addGift(){
-        GiftListBean gift = beans.get(0);
+    public void addGift(GiftListBean gift){
         if(gift == null){
             return;
         }
@@ -237,26 +234,7 @@ public class SmallGifView extends BaseLinearLayout{
         }else {
             startAddAnimation(group, numLayout,group, 0, 0);
         }
-    }
 
-    public void addGift(GiftListBean gift){
-        if(gift == null){
-            return;
-        }
-        if(noCurrentGift(gift)){
-            addGift();
-        }
-    }
-
-    private boolean noCurrentGift(GiftListBean gift){
-        beans.add(gift);
-        return gifts.size() < 2;
-    }
-
-    private void onCurrentAnimationEnd(){
-        if(beans.size() > 0){
-            addGift();
-        }
     }
 
     /**
@@ -291,7 +269,7 @@ public class SmallGifView extends BaseLinearLayout{
 
         for(int i = 0; i<countString.length(); i++){
             ImageView x1 = new ImageView(getContext());
-            LinearLayout.LayoutParams x1Params = getLinearLayoutParams(width, height);
+            LayoutParams x1Params = getLinearLayoutParams(width, height);
             x1.setLayoutParams(x1Params);
             x1.setImageResource(X_IMAGES[1]);
             x1.setVisibility(i == 0 ? View.VISIBLE : View.INVISIBLE);
@@ -348,13 +326,10 @@ public class SmallGifView extends BaseLinearLayout{
                 try{
                     gifts.remove(0);
                     removeViewAt(0);
-                    beans.remove(0);
                 }catch (IndexOutOfBoundsException e){
                     gifts.clear();
-                    beans.clear();
                     removeAllViews();
                 }
-                onCurrentAnimationEnd();
 
 //                if(gifts.size() == 1){
 //                    removeAllViews();
