@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -49,14 +50,14 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
 
     private boolean isShow;
 
-    private MyDistFragment mDist=new MyDistFragment();
+    private MyDistFragment mDist = new MyDistFragment();
 
     protected String money;
 
     private AlertDialog builder;
     private UserHttpHelper userHttpHelper;
 
-    private int up_id;
+    private String up_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
         isShow = getIntent().getBooleanExtra("yes", false);
         money = getIntent().getStringExtra("money");
 //		up_name = getIntent().getStringExtra("up_name");
-        up_id = getIntent().getIntExtra("up_id", -1);
+        up_id = getIntent().getStringExtra("up_id");
 //		if(up_id == -1){
 //			up_name= "无";
 //		}
@@ -126,7 +127,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
             mTv_textTwo.setTextColor(getResources().getColor(R.color.main_color));
             type = 2;
             clickOne();
-        } else if (v == mTv_stationName && up_id != -1) {
+        } else if (v == mTv_stationName && !TextUtils.isEmpty(up_id)) {
             cilckWeb();
         }
     }
@@ -142,7 +143,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
         mTv_number.setText("");
         mDist.setmListener(new OnDialogData() {
             @Override
-            public void setData(int vip1, int num1, int num2, int total, String up_name, int up_id) {
+            public void setData(int vip1, int num1, int num2, int total, String up_name, String up_id) {
                 SDViewBinder.setTextView(mTv_number, String.valueOf(total), "0");
                 SDViewBinder.setTextView(mTv_stationName, up_name);
                 DistributionMyXiaoMiActivity.this.up_id = up_id;
@@ -191,6 +192,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
                 case 0:
                     if (!SDCollectionUtil.isEmpty(results)) {
                         currResult = results.get(0);
+                        up_id = currResult.getUp_id();
                         mTv_number.setText(currResult.getTotal());
                         mTv_stationName.setText(currResult.getUp_name());
                         mDist.setResultMyDistributionCorps(currResult);

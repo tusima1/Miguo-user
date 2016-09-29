@@ -301,7 +301,7 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     }
 
     public interface OnDialogData {
-        public void setData(int vip1, int num1, int num2, int total, String up_name, int up_id);
+        public void setData(int vip1, int num1, int num2, int total, String up_name, String up_id);
     }
 
     @Override
