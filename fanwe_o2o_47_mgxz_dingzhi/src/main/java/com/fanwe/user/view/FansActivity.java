@@ -59,7 +59,7 @@ public class FansActivity extends Activity implements CallbackView2 {
 
     private void initPullToRefreshListView() {
         mPtrlv_content= (PullToRefreshListView) findViewById(R.id.ptrlv_content);
-        mAdapter = new FansAdapter();
+        mAdapter = new FansAdapter(this);
         mPtrlv_content.setAdapter(mAdapter);
         mPtrlv_content.setMode(PullToRefreshBase.Mode.BOTH);
         mPtrlv_content.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {

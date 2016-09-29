@@ -13,7 +13,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
-import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.dao.InitActModelDao;
@@ -179,8 +178,10 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     }
 
     private void startMainActivity() {
-        // Intent intent = new Intent(getApplicationContext(),
-        // GuideActivity.class);
+//         Intent intent = new Intent(getApplicationContext(),
+//         GuideActivity.class);
+//        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+//        startActivity(intent);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
