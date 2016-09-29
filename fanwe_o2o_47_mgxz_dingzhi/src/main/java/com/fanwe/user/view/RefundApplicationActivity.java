@@ -159,7 +159,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		mTv_used.setText(consume_count+"");
 		//已退款
 		int refunded = Integer.valueOf(info.getRefunded()).intValue();
-		mTv_has_refund.setText(refunded);
+		mTv_has_refund.setText(refunded+"");
 
 		String refunding = info.getRefunding();
 		mRefunding = MGStringFormatter.getInt(refunding);

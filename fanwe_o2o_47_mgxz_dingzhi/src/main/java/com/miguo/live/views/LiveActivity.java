@@ -886,15 +886,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private boolean showBaoBao = false;
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()) {
-            //弹出宝宝
-            mUserBottomTool.clickBaoBao();
-            showBaoBao = true;
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()) {
+//            //弹出宝宝
+//            mUserBottomTool.clickBaoBao();
+//            showBaoBao = true;
+//        }
+//    }
 
     @Override
     protected void onPause() {
@@ -1179,8 +1179,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
         String text = TextUtils.isEmpty(name) ? id : name;
-        refreshTextListView(faceUrl, text, "退出房间了", Constants
-                .MEMBER_EXIT);
+//        refreshTextListView(faceUrl, text, "退出房间了", Constants
+//                .MEMBER_EXIT);
         watchCount--;
 
         if (CurLiveInfo.getMembers() > 1) {
