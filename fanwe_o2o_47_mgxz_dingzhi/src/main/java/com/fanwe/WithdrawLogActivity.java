@@ -199,7 +199,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 
 	private void requestData(boolean isLoadMore) {
 		this.isLoadMore=isLoadMore;
-		httpHelper.getCommissionLog(mPage.getPage()+"","10","2");
+		httpHelper.getUserCommissionLog(mPage.getPage()+"","10");
 	}
 
 	private void initTitle() {
@@ -220,7 +220,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 
 	@Override
 	public void onSuccess(String method, List datas) {
-		if (CommissionConstance.COMMISSION_LOG.endsWith(method)){
+		if (CommissionConstance.USER_COMMISSION_LOG.endsWith(method)){
 			resultCommissionLog = (ResultCommissionLog) datas.get(0);
 			PageBean page = resultCommissionLog.getPage();
 			int currentPage = MGStringFormatter.getInt(page.getPage());
@@ -247,7 +247,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 
 	@Override
 	public void onFinish(String method) {
-		if (CommissionConstance.COMMISSION_LOG.equals(method)) {
+		if (CommissionConstance.USER_COMMISSION_LOG.equals(method)) {
 			mPtrlv_content.onRefreshComplete();
 		}
 	}

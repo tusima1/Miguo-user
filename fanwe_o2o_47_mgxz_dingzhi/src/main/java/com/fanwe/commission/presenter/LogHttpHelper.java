@@ -80,6 +80,54 @@ public class LogHttpHelper implements IHelper{
         });
 
     }
+    /**
+     * 佣金日志
+     * @param page 默认1
+     * @param page_size 默认10
+     */
+    public void getUserCommissionLog(String page,String page_size){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", CommissionConstance.USER_COMMISSION_LOG);
+        params.put("page", page);
+        params.put("page_size", page_size);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Log.e("test","responseBody:"+responseBody);
+                final List<ResultCommissionLog> result = gson.fromJson(responseBody, RootCommissionLog
+                        .class).getResult();
+                if (result!=null && result.size()>0){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView2.onSuccess(CommissionConstance.USER_COMMISSION_LOG,result);
+                        }
+                    });
+                }else {
+                    mView2.onFailue(CommissionConstance.USER_COMMISSION_LOG);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView2.onFinish(CommissionConstance.USER_COMMISSION_LOG);
+                    }
+                });
+
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {
