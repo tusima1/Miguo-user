@@ -507,14 +507,14 @@ public class LiveHttpHelper implements IHelper {
                 RootStopLive rootStopLive = gson.fromJson(responseBody, RootStopLive.class);
                 List<ResultStopLive> resultStopLives = rootStopLive.getResult();
                 if (SDCollectionUtil.isEmpty(resultStopLives)) {
-                    if(mView!=null) {
+                    if (mView != null) {
                         mView.onSuccess(LiveConstants.STOP_LIVE, null);
                     }
                     return;
                 }
                 ResultStopLive resultStopLive = resultStopLives.get(0);
                 List<ModelStopLive> modelStopLive = resultStopLive.getBody();
-                if(mView!=null) {
+                if (mView != null) {
                     mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
                 }
             }
@@ -539,20 +539,24 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test",responseBody);
+                Log.e("test", responseBody);
                 RootBussDictionInfo rootBussDictionInfo = gson.fromJson(responseBody,
                         RootBussDictionInfo.class);
                 List<ResultBussDictionInfo> resultBussDictionInfos = rootBussDictionInfo
                         .getResult();
                 if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
-                    if (mView!=null){mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);}
+                    if (mView != null) {
+                        mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
+                    }
                     return;
                 }
                 ResultBussDictionInfo resultBussDictionInfo = resultBussDictionInfos.get(0);
                 List<ModelBussDictionInfo> modelBussDictionInfo = resultBussDictionInfo.getBody();
                 String dict = gson.toJson(modelBussDictionInfo);
                 MGDict.save2File(dict);
-                if (mView!=null){ mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);}
+                if (mView != null) {
+                    mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
+                }
             }
 
             @Override
@@ -1063,6 +1067,9 @@ public class LiveHttpHelper implements IHelper {
     public void getUseReceiveCode(String receive_code) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
+        if (!TextUtils.isEmpty(receive_code)) {
+            receive_code = receive_code.trim();
+        }
         params.put("receive_code", receive_code);
 
         params.put("method", LiveConstants.USE_RECEIVE_CODE);

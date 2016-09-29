@@ -46,6 +46,7 @@ public class WithdrawLogAdapter extends SDBaseAdapter<ModelCommissionLog>
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String typeTitle="";
 			//TODO 说是后台给描述type类型
+			//NOTICE: 2016.09.29 后台直接给类型对应的文案,客户端直接显示type字段.
 //			switch (MGStringFormatter.getInt(model.getMoney_type())) {
 //			//0：获得佣金, 我的佣金
 //			//1：获得会员升级费用,1 //推广服务费
@@ -113,7 +114,7 @@ public class WithdrawLogAdapter extends SDBaseAdapter<ModelCommissionLog>
 //			}
 			
 			//设置不同类型显示的标题
-			SDViewBinder.setTextView(tv_type, typeTitle);
+			SDViewBinder.setTextView(tv_type, model.getMoney_type(),"");
 			
 			//设置金额与显示文字颜色,图片
 			String money = model.getMoney();

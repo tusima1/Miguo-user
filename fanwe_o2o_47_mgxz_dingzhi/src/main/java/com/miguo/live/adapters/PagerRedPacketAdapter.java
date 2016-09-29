@@ -57,8 +57,9 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
             holder.packet_type.setText(str);
             holder.mTv_Title.setText(userRedPacketInfo.getRed_packet_name()==null?"":userRedPacketInfo.getRed_packet_name());
             //时间的单位是秒
-             String startTime = userRedPacketInfo.getAvailable_time_start();
-             String endTime = userRedPacketInfo.getAvailable_time_end();
+
+             String startTime = getFormatDate(userRedPacketInfo.getAvailable_time_start());
+             String endTime = getFormatDate(userRedPacketInfo.getAvailable_time_end());
             String available="";
             if(TextUtils.isEmpty(startTime)||TextUtils.isEmpty(endTime)){
                 available = "永久有效";
@@ -67,6 +68,19 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
             }
             holder.mTv_Time.setText(available);
         }
+    }
+
+    private String  getFormatDate(String date){
+        int first = Integer.valueOf(date).intValue();
+        int day = 24 * 3600;
+        if (first>=day){
+            return "";
+        }
+        int hour = first / 3600;
+
+        int minite = (int) ((first*1.0 /3600 - hour)*60);
+        return hour+":"+minite;
+
     }
 
     @Override

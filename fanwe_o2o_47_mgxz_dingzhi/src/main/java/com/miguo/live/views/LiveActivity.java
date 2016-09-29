@@ -869,6 +869,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //初始化底部
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
+            mUserBottomTool.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mUserBottomTool!=null){
+                        //TODO 在低配置的会来不及初始化,先这样,等有了更好的解决方案再更改
+                        mUserBottomTool.clickBaoBao();
+                    }
+                }
+            },2000);
         }
         if (!TextUtils.isEmpty(CurLiveInfo.shopID) && !LiveUtil.checkIsHost()) {
             getShopDetail(CurLiveInfo.shopID);
@@ -2099,7 +2108,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     public void run() {
                         if (datas == null) {
                             mBaoBaoAdapter.setData(null);
-                        } else {
+                        } else if (mBaoBaoAdapter!=null){
                             mBaoBaoAdapter.setData(datas);
                         }
                         mBaoBaoAdapter.notifyDataSetChanged();

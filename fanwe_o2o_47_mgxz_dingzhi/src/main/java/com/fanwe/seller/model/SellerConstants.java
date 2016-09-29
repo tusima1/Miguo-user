@@ -98,4 +98,8 @@ public class SellerConstants {
      * 我的小店
      */
     public static final String MY_DISTRIBUTION_SHOP = "MyDistributionShop";
+    /**
+     * 评论汇总
+     */
+    public static final String COMMENT_TOTAL = "CommentTotal";
 }

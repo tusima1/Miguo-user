@@ -171,7 +171,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击那个长的像购物车的袋子
      */
     private void clickShopCart() {
-        MGToast.showToast("点击那个长的像购物车的袋子");
+        MGToast.showToast("敬请期待!");
     }
 
     private SendRedPacketDialog dialogSendRedPacket;

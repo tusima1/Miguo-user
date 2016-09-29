@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
+import com.fanwe.WithdrawLogActivity;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -145,15 +146,14 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
             startActivity(RechargeDiamondActivity.class);
         }else if (v==mIvLiveInfo){
             //直播收益说明
-            MGToast.showToast("info");
         }else if (v==mIvShareInfo){
             //分享收益说明
-            MGToast.showToast("info");
         }else if (v==mBtTiXian){
             //提现按钮点击
             clickTiXian();
         }else if (v==mLL_DaiYan){
             //代言
+            startActivity(WithdrawLogActivity.class);
         }else if (v==mLL_Live){
             //直播
             MGToast.showToast("系统升级,敬请期待");

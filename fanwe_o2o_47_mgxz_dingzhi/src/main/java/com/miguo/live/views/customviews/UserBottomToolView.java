@@ -23,7 +23,6 @@ import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
-import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.UserRobRedPacketDialogHelper;
 import com.miguo.live.views.UserRobRedPacketEndDialogHelper;
 import com.miguo.live.views.view.UserSendGiftPopHelper;
@@ -149,8 +148,6 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             clickShare();
         } else if (v == mLike) {
             clickLike2ShowHeart();
-        } else {
-            return;
         }
     }
 
@@ -358,15 +355,15 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     public void setOnGiftSendListener(OnGiftSendListener onGiftSendListener) {
         this.onGiftSendListener = onGiftSendListener;
     }
-    private boolean showBaoBao=false;
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (!showBaoBao && !LiveUtil.checkIsHost()) {
-            //弹出宝宝
-            clickBaoBao();
-            showBaoBao = true;
-        }
-    }
+//    private boolean showBaoBao=false;
+//
+//    @Override
+//    protected void onAttachedToWindow() {
+//        super.onAttachedToWindow();
+//        if (!showBaoBao && !LiveUtil.checkIsHost()) {
+//            //弹出宝宝
+//            clickBaoBao();
+//            showBaoBao = true;
+//        }
+//    }
 }
