@@ -57,15 +57,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             DangerousPermissions.STORAGE
     };
 
-    /**
-     * 广告图片显示时间
-     */
-    private static long ADVS_DISPLAY_TIME = 3 * 1000;
-
-    /**
-     * 正常初始化成功后显示时间
-     */
-    private static long NORMAL_DISPLAY_TIME = 3 * 1000;
 
     private SDTimer mTimer = new SDTimer();
 

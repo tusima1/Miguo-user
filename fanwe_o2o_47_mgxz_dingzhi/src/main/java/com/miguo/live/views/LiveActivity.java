@@ -886,15 +886,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private boolean showBaoBao = false;
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()) {
-            //弹出宝宝
-            mUserBottomTool.clickBaoBao();
-            showBaoBao = true;
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus && !showBaoBao && !LiveUtil.checkIsHost()) {
+//            //弹出宝宝
+//            mUserBottomTool.clickBaoBao();
+//            showBaoBao = true;
+//        }
+//    }
 
     @Override
     protected void onPause() {
