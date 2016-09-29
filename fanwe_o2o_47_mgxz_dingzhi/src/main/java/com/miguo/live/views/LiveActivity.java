@@ -845,24 +845,25 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initInviteDialog();
 
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
+        mUserBottomTool.setVisibility(View.VISIBLE);
+        mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
+
+        mRedPacketAdapter = new PagerRedPacketAdapter();
+        mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
 
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
         mUserHeadTopView.setmLiveView(this);
         mUserHeadTopView.setmAdapter(mHeadTopAdapter);
         mUserHeadTopView.init();
 
-
         mUserHeadTopView.setVisibility(View.VISIBLE);
         mUserHeadTopView.initNeed(this);
 
-        mUserBottomTool.setVisibility(View.VISIBLE);
-        mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
         mHostBottomToolView1.setVisibility(View.GONE);
         mHostBottomMeiView2.setVisibility(View.GONE);
         String hostImg = CurLiveInfo.getHostAvator();
         mUserHeadTopView.setHostImg(hostImg);
         mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
-
         doUpdateMembersCount();
 
 
@@ -874,8 +875,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "1", App.getInstance().code);
 
         }
-        mRedPacketAdapter = new PagerRedPacketAdapter();
-        mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
+
 
         mUserHeadTopView.setViews();
     }
@@ -887,15 +887,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //初始化底部
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
-            mUserBottomTool.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mUserBottomTool!=null){
-                        //TODO 在低配置的会来不及初始化,先这样,等有了更好的解决方案再更改
-                        mUserBottomTool.clickBaoBao();
+            if (!LiveUtil.checkIsHost()){
+                mUserBottomTool.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mUserBottomTool!=null){
+                            //TODO 在低配置的会来不及初始化,先这样,等有了更好的解决方案再更改
+                            mUserBottomTool.clickBaoBao();
+                        }
                     }
-                }
-            },2000);
+                },2000);
+            }
         }
         if (!TextUtils.isEmpty(CurLiveInfo.shopID) && !LiveUtil.checkIsHost()) {
             getShopDetail(CurLiveInfo.shopID);
@@ -2126,9 +2128,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (mBaoBaoAdapter==null){
+                            return;
+                        }
                         if (datas == null) {
                             mBaoBaoAdapter.setData(null);
-                        } else if (mBaoBaoAdapter!=null){
+                        }else{
                             mBaoBaoAdapter.setData(datas);
                         }
                         mBaoBaoAdapter.notifyDataSetChanged();

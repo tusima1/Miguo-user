@@ -16,21 +16,17 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.dao.InitActModelDao;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.library.utils.SDTimer;
-import com.fanwe.model.BaseActModel;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.model.Init_indexActModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.user.view.WelcomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
@@ -116,6 +112,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     }
 
     private void init() {
+        setting = getSharedPreferences("firstApp", Context.MODE_PRIVATE);
         loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
         startStatistics();
@@ -155,13 +152,11 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     }
 
     private void startStatistics() {
-        setting = getSharedPreferences("firstApp", Context.MODE_PRIVATE);
         Boolean user_first = setting.getBoolean("FIRST", true);
         String version = setting.getString("version", -1 + "");
         PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
         String versionCode = String.valueOf(info.versionCode);
         if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
-
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
         }
@@ -178,13 +173,20 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     }
 
     private void startMainActivity() {
+        Boolean user_first = setting.getBoolean("FIRST", true);
+        if (user_first){
+            Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+            startActivity(intent);
+        }else {
+           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+        finish();
 //         Intent intent = new Intent(getApplicationContext(),
 //         GuideActivity.class);
-//        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-//        startActivity(intent);
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        finish();
+
+
+
     }
 
     @Override

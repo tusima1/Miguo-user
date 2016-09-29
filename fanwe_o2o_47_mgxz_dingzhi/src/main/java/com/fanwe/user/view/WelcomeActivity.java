@@ -16,16 +16,12 @@ import com.fanwe.user.view.customviews.WelcomeView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.relex.circleindicator.CircleIndicator;
-
-import static com.fanwe.o2o.miguo.R.id.indicator;
-
 public class WelcomeActivity extends Activity {
 
     List<WelcomeView> mWelList=new ArrayList<>();
 
     private ViewPager mViewpager;
-    private CircleIndicator mCIndictor;
+//    private CircleIndicator mCIndictor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +31,7 @@ public class WelcomeActivity extends Activity {
     }
     private void initFirstWelcomeViewPager() {
         mViewpager = ((ViewPager) findViewById(R.id.viewpager));
-        mCIndictor = ((CircleIndicator) findViewById(indicator));
+//        mCIndictor = ((CircleIndicator) findViewById(indicator));
 
         //add image
         TypedArray typedArray = getResources().obtainTypedArray(R.array.first_welcome);
@@ -49,19 +45,29 @@ public class WelcomeActivity extends Activity {
                 view.setOnNextClickListener(new WelcomeView.OnNextClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        gotoMainActivity();
                     }
                 });
             }
+            view.setOnSkipClickListener(new WelcomeView.OnSkipClickListener() {
+                @Override
+                public void onClick(View v) {
+                    gotoMainActivity();
+                }
+            });
             mWelList.add(view);
         }
         WelcomePagerAdapter welcomePagerAdapter=new WelcomePagerAdapter();
         welcomePagerAdapter.setData(mWelList);
 
         mViewpager.setAdapter(welcomePagerAdapter);
-        mCIndictor.setViewPager(mViewpager);
-        welcomePagerAdapter.registerDataSetObserver(mCIndictor.getDataSetObserver());
+//        mCIndictor.setViewPager(mViewpager);
+//        welcomePagerAdapter.registerDataSetObserver(mCIndictor.getDataSetObserver());
+    }
+
+    private void gotoMainActivity() {
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -30,4 +30,6 @@ public class CommissionConstance {
      * 银行卡列表
      */
     public static final String USER_BANK_CARD_LIST="UserBankCardList";
+    /*用户资金日志*/
+    public static final String USER_COMMISSION_LOG="UserCommissionLog";
 }
