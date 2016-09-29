@@ -1,6 +1,11 @@
 package com.fanwe.user;
 
 public class UserConstants {
+
+    /**
+     *注册 极光别名。
+     */
+    public static final String   JPUSH_ALIAS   ="JPushAlias";
     /**
      * 登录接口。
      */
