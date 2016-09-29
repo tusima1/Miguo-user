@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.app.App;
@@ -37,7 +36,6 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.utils.MGDictUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
@@ -154,11 +152,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     //初始化用户信息。
     private void initUserInfo() {
-        App.getInstance().code = "";
         //取剪切板中的领取码
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
             code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+            App.getInstance().code = code;
         }
         LocalUserModel userModel = AppHelper.getLocalUser();
 
@@ -187,7 +185,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private void doCode() {
         if (App.getInstance().isShowCode) {
-            if ("miguo".equals(code) || TextUtils.isEmpty(code)) {
+            if ("mgxz".equals(code) || TextUtils.isEmpty(code)) {
                 if (App.getInstance().isAlreadyShowCode) {
                     return;
                 } else {
@@ -202,6 +200,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                             App.getInstance().isShowCode = false;
                         } else {
                             liveHttpHelper.getUseReceiveCode(dialog.getCode());
+                            App.getInstance().code = dialog.getCode();
                         }
                         dialog.dismiss();
                     }
@@ -657,7 +656,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.USE_RECEIVE_CODE.equals(method)) {
-            App.getInstance().code = code;
             List<Room> items = datas;
             if (!SDCollectionUtil.isEmpty(items)) {
                 if (clipboardManager != null)
@@ -705,6 +703,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                                     App.getInstance().isShowCode = false;
                                 } else {
                                     liveHttpHelper.getUseReceiveCode(dialog.getCode());
+                                    App.getInstance().code = dialog.getCode();
                                 }
                                 dialog.dismiss();
                             }

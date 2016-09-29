@@ -23,7 +23,6 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
@@ -35,6 +34,7 @@ import com.fanwe.seller.model.ModelComment;
 import com.fanwe.seller.model.ModelDisplayComment;
 import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getCommentTotal.ModelCommentTotal;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -42,6 +42,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -150,6 +151,17 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         bindDefaultData();
         initPullToRefreshListView();
         bindData(modelDisplayComment);
+
+        if (sellerHttpHelper==null){
+            sellerHttpHelper = new SellerHttpHelper(this, this);
+        }
+        if (Constant.CommentType.DEAL.equals(mStrType)) {
+            //团购
+            sellerHttpHelper.getCommentTotal(mId, "");
+        } else if (Constant.CommentType.STORE.equals(mStrType)) {
+            //门店
+            sellerHttpHelper.getCommentTotal("", mId);
+        }
     }
 
     private void bindDefaultData() {
@@ -297,6 +309,13 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
     @Override
     protected void onNeedRefreshOnResume() {
         mPtrlvComment.setRefreshing();
+        if (Constant.CommentType.DEAL.equals(mStrType)) {
+            //团购
+            sellerHttpHelper.getCommentTotal(mId, "");
+        } else if (Constant.CommentType.STORE.equals(mStrType)) {
+            //门店
+            sellerHttpHelper.getCommentTotal("", mId);
+        }
         super.onNeedRefreshOnResume();
     }
 
@@ -323,6 +342,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
     }
 
     List<ModelComment> items;
+    List<ModelCommentTotal> itemsTotal;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -330,6 +350,9 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         if (SellerConstants.COMMENT_LIST.equals(method)) {
             items = datas;
             msg.what = 0;
+        } else if (SellerConstants.COMMENT_TOTAL.equals(method)) {
+            itemsTotal = datas;
+            msg.what = 1;
         }
         mHandler.sendMessage(msg);
     }
@@ -379,6 +402,22 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
                     }
                     mAdapter.notifyDataSetChanged();
                     mPtrlvComment.onRefreshComplete();
+                    break;
+                case 1:
+                    if (!SDCollectionUtil.isEmpty(itemsTotal)) {
+                        ModelCommentTotal bean = itemsTotal.get(0);
+                        modelDisplayComment = new ModelDisplayComment();
+
+                        modelDisplayComment.setAllow_dp(1);
+                        modelDisplayComment.setStar_1(bean.getYi());
+                        modelDisplayComment.setStar_2(bean.getEr());
+                        modelDisplayComment.setStar_3(bean.getSan());
+                        modelDisplayComment.setStar_4(bean.getSi());
+                        modelDisplayComment.setStar_5(bean.getWu());
+                        modelDisplayComment.setBuy_dp_avg(bean.getAvgcmt());
+                        modelDisplayComment.setBuy_dp_sum(bean.getTotal());
+                        bindData(modelDisplayComment);
+                    }
                     break;
             }
         }
