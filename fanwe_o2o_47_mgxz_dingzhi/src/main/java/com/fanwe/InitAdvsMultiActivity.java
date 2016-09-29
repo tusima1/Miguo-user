@@ -13,7 +13,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
-import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.dao.InitActModelDao;
@@ -119,7 +118,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     private void init() {
         loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
-//        initBaiduMap();
         startStatistics();
         initTimer();
         getDeviceId();
@@ -144,10 +142,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         }
         InitActModelDao.insertOrUpdateModel(actModel);
         startMainActivity();
-    }
-
-    private void initBaiduMap() {
-        BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
     }
 
     /**
@@ -218,41 +212,13 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     private void requestInitInterface() {
         //请求城市列表
         sellerHttpHelper.getCityList();
-
-//        CommonInterface.requestInit(new SDRequestCallBack<Init_indexActModel>() {
-//            private boolean nSuccess = false;
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                if (actModel.getStatus() == 1) {
-//                    nSuccess = true;
-//                    startMainActivity();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onStart() {
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                if (!nSuccess) {
-//                    startMainActivity();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//                nSuccess = false;
-//                RetryInitWorker.getInstance().start(); // 如果初始化失败重试
-//            }
-//        });
     }
 
     private void startMainActivity() {
-        // Intent intent = new Intent(getApplicationContext(),
-        // GuideActivity.class);
+//         Intent intent = new Intent(getApplicationContext(),
+//         GuideActivity.class);
+//        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+//        startActivity(intent);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();

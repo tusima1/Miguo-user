@@ -1,5 +1,7 @@
 package com.fanwe.user.adapters;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getAttentionFans.ModelFans;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.UserHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
@@ -24,10 +27,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class FansAdapter extends BaseAdapter {
 
+    private final Activity mActivity;
     private List<ModelFans> mFansList;
 
-    public FansAdapter() {
-
+    public FansAdapter(Activity activity) {
+        this.mActivity=activity;
     }
 
     public void setData(List<ModelFans> fansList){
@@ -60,11 +64,12 @@ public class FansAdapter extends BaseAdapter {
             holder.tv_userName= (TextView) convertView.findViewById(R.id.tv_username);
             holder.tv_subName= (TextView) convertView.findViewById(R.id.tv_subName);
             holder.ll_star= convertView.findViewById(R.id.ll_star);
+            holder.ll_user= convertView.findViewById(R.id.ll_user);
             holder.tv_focus= (TextView) convertView.findViewById(R.id.tv_focus);
             convertView.setTag(holder);
         }
         holder= (ViewHolder) convertView.getTag();
-        ModelFans modelFans = mFansList.get(position);
+        final ModelFans modelFans = mFansList.get(position);
         holder.tv_userName.setText(modelFans.getNick());
         String fx_level = modelFans.getFx_level();
         Drawable rankDrawable=null;
@@ -109,10 +114,14 @@ public class FansAdapter extends BaseAdapter {
             holder.tv_focus.setVisibility(View.VISIBLE);
             holder.tv_focus.setText("相互关注");
         }
-        convertView.setOnClickListener(new View.OnClickListener() {
+
+        holder.ll_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doFocus(position);
+                //去粉丝的主页
+                Intent intent = new Intent(mActivity, UserHomeActivity.class);
+                intent.putExtra("id", modelFans.getFans_user_id());
+                mActivity.startActivity(intent);
             }
         });
         return convertView;
@@ -192,6 +201,7 @@ public class FansAdapter extends BaseAdapter {
         public TextView tv_subName;
 //        public DrawableCenterTextView dctv_star;
         public View ll_star;
+        public View ll_user;
         public TextView tv_focus;
     }
 }
