@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -339,8 +340,18 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
     public void sendGift(GiftListBean bean) {
         sendGift(bean.getId(), bean.getName(), bean.getIcon(), bean.getType(), bean.getNum() + "", bean.getUserAvatar(), bean.getUserName());
+        sendGiftMessage(bean);
     }
 
+    private void sendGiftMessage(GiftListBean bean){
+        TIMMessage Nmsg = new TIMMessage();
+        TIMTextElem elem = new TIMTextElem();
+        elem.setText("送了主播" + bean.getName());
+        if (Nmsg.addElement(elem) != 0) {
+            return;
+        }
+        sendGroupText(Nmsg);
+    }
 
     public void sendGift(String id, String name, String icon, String type, String count, String avatar, String nickname) {
         HashMap<String, String> params = new HashMap<>();
@@ -409,6 +420,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             mLiveView.showDanmuSelf(params);
         }
     }
+
 
     /**
      * 发红包。

@@ -228,15 +228,18 @@ public class SmallGifView extends BaseLinearLayout{
 
         addView(group);
         gifts.add(group);
-        if(gifts.size() == 3){
-            gifts.remove(0);
-            removeViewAt(0);
-//            startRemoveAnimation(getChildAt(0), groupHeight / 2, 0);
-            startMoveAnimation(getChildAt(0), groupHeight / 2 , 0);
-            startAddAnimation(group, numLayout, group, 0, 0);
-        }else {
-            startAddAnimation(group, numLayout,group, 0, 0);
-        }
+//        if(gifts.size() == 3){
+//            gifts.remove(0);
+//            removeViewAt(0);
+////            startRemoveAnimation(getChildAt(0), groupHeight / 2, 0);
+//            startMoveAnimation(getChildAt(0), groupHeight / 2 , 0);
+//            startAddAnimation(group, numLayout, group, 0, 0);
+//        }else {
+//            startAddAnimation(group, numLayout,group, 0, 0);
+//        }
+
+        startAddAnimation(group, numLayout,group, 0, 0);
+
     }
 
     public void addGift(GiftListBean gift){
@@ -348,7 +351,7 @@ public class SmallGifView extends BaseLinearLayout{
                 try{
                     gifts.remove(0);
                     removeViewAt(0);
-                    beans.remove(0);
+//                    beans.remove(0);
                 }catch (IndexOutOfBoundsException e){
                     gifts.clear();
                     beans.clear();
@@ -375,6 +378,7 @@ public class SmallGifView extends BaseLinearLayout{
     }
 
     private void startAddAnimation(final RelativeLayout item,final LinearLayout group, View view, int fromY, int toY){
+        beans.remove(0);
         setVisible(view);
         TranslateAnimation animation = new TranslateAnimation(getWidth() * - 1, 0, fromY, toY);
         animation.setDuration(500);
