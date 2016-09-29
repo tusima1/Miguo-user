@@ -244,6 +244,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		if (!TextUtils.isEmpty(mEt.getText().toString())) {
 			mEtContent=mEt.getText().toString();
 		}
+		mBt_submit.setEnabled(false);
 		httpHelper.postRefundApply(mNum+"",mOrder_id,mTuan_id);
 
 	}
@@ -296,5 +297,6 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 	@Override
 	public void onFinish(String method) {
 		mPtr.onRefreshComplete();
+		mBt_submit.setEnabled(true);
 	}
 }
