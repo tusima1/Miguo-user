@@ -298,8 +298,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         break;
                     case 1:
                         click1();
-                        Log.e("upload", MGDictUtil.getUploadToken());
-                        Log.e("share", MGDictUtil.getShareIcon());
                         break;
                     case 2:
                         click2();
