@@ -148,8 +148,6 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             clickShare();
         } else if (v == mLike) {
             clickLike2ShowHeart();
-        } else {
-            return;
         }
     }
 
