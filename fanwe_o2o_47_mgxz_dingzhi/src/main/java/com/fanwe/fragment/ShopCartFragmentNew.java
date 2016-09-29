@@ -91,6 +91,10 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private int currentGoTo = 1;
     private boolean ifLogin = false;
+    /**
+     * 准备结算 的数量。
+     */
+    private int count = 0;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -174,8 +178,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 boolean isChecked = mCb_xuanze.isChecked();
                 BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
                 mTv_sum.setText(String.valueOf(bd));
-                if (isChecked) {
-                    mBt_account.setText("结算" + "（" + listModel.size() + "）");
+                if (isChecked&&count>0) {
+                    mBt_account.setText("结算" + "（" + count+ "）");
                     mBt_account.setBackgroundColor(getResources().getColor(
                             R.color.main_color));
                     mBt_account.setClickable(true);
@@ -208,15 +212,19 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         int size = 0;
         float sumMoney = 0.00f;
         BigDecimal value = new BigDecimal(0.00);
+        count = 0;
         if (listModel == null || listModel.size() < 1) {
             return value;
         }
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
-            model.setChecked(isChecked);
+            if(!TextUtils.isEmpty(model.getBuyFlg())&&"1".equals(model.getBuyFlg())){
+                model.setChecked(isChecked);
+            }
 
             if (model.isChecked()) {
+                count ++;
                 sumMoney += model.getSumPrice();
             }
         }

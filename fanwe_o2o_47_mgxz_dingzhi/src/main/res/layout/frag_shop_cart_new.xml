@@ -36,7 +36,8 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="3dp"
                     android:background="@drawable/bg_checkbox"
-                    android:button="@null" />
+                    android:button="@null"
+                    android:checked="false" />
 
                 <TextView
                     android:layout_width="wrap_content"

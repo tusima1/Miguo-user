@@ -1185,8 +1185,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
         String text = TextUtils.isEmpty(name) ? id : name;
-        refreshTextListView(faceUrl, text, "退出房间了", Constants
-                .MEMBER_EXIT);
+//        refreshTextListView(faceUrl, text, "退出房间了", Constants
+//                .MEMBER_EXIT);
         watchCount--;
 
         if (CurLiveInfo.getMembers() > 1) {
@@ -2289,6 +2289,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * @param bean
      */
     private void showSmallGift(GiftListBean bean) {
+        Log.d("smallgift" , "there is a small gift...");
         smallGifView.addGift(bean);
     }
 
