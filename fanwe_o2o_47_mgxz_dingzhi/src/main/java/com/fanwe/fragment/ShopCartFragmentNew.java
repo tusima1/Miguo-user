@@ -410,6 +410,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void clickSettleAccounts() {
         currentGoTo = 1;
         if (ifLogin) {
+            //添加购物车调用接口
             outSideShoppingCartHelper.multiAddShopCart(listModel);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
@@ -417,6 +418,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             setmIsNeedRefreshOnResume(true);
         }
     }
+
 
     private void gotoLogin() {
         Intent intent = new Intent(getActivity(),
@@ -430,6 +432,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void startConfirmOrderActivity() {
         if (listModel != null && listModel.size() > 0) {
             String mSeletedGoods = getSumSeletedIds();
+
+
 
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
