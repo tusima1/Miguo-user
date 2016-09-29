@@ -168,6 +168,10 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         gridViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (true) {
+                    return;
+                }
+                //TODO 跳转暂时屏蔽
                 ModelSpokePlay modelSpokePlay = datasLive.get(position);
                 //判断网络环境
                 boolean connected = NetWorkStateUtil.isConnected(mContext);
