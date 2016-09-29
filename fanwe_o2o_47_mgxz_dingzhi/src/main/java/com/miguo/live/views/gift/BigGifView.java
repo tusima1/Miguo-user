@@ -27,7 +27,7 @@ public class BigGifView extends BaseRelativeLayout{
 
     public static final int GIFT_WIDTH = 750;
     public static final int GIFT_HEIGHT = 680;
-    public static final long DURATION = 800;
+    public static final long DURATION = 2000;
     public static final int KISS_WIDTH = 200;
     public static final int KISS_HEIGHT = 200;
 
@@ -248,15 +248,19 @@ public class BigGifView extends BaseRelativeLayout{
         ImageView gift;
         GiftListBean bean;
         int currentIndex;
+        long time;
 
         public BigGiftRunnable(ImageView gift, GiftListBean bean){
             this.gift = gift;
             this.bean = bean;
             setCurrentIndex(0);
+            time = System.currentTimeMillis();
         }
 
         @Override
         public void run() {
+            Log.d(tag, "duration: " + (System.currentTimeMillis() - time) + " ,speed: " + getSpeed(bean.getId()));
+            time = System.currentTimeMillis();
             if(getCurrentIndex() < getCount()){
                 gift.setImageResource(GiftPictures.getItem(bean.getId(), getCurrentIndex()));
                 setCurrentIndex(getCurrentIndex() + 1);

@@ -1,6 +1,9 @@
 package com.fanwe;
 
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.dao.barry.MemberDetailDao;
+import com.fanwe.dao.barry.impl.MemberDetailDaoImpl;
+import com.fanwe.dao.barry.view.MemberDetailView;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.utils.SDViewBinder;
@@ -24,7 +27,9 @@ public class MemberRankDetailActivity extends BaseActivity
 	@ViewInject(R.id.webView_dis)
 	private WebView mWebView;
 	private int mId;
-	
+
+	MemberDetailDao memberDetailDao;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,28 +57,46 @@ public class MemberRankDetailActivity extends BaseActivity
 
 	private void requestData() 
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("page");
-		model.putAct("fx_intro");
-		model.put("vip", mId);
-		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_DistModel>()
-				{
-
+		memberDetailDao = new MemberDetailDaoImpl(new MemberDetailView() {
+			@Override
+			public void getMemberDetailSuccess(final String html) {
+				runOnUiThread(new Runnable() {
 					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo)
-					{
-						if (actModel.getStatus() == 1)
-						{
-							bindResult(actModel);
-						}
-					}
-
-					@Override
-					public void onFinish()
-					{
-						
+					public void run() {
+						mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 					}
 				});
+			}
+
+			@Override
+			public void getMemberDetailError(String msg) {
+
+			}
+		});
+		memberDetailDao.getMerberDetail("1");
+
+//		RequestModel model = new RequestModel();
+//		model.putCtl("page");
+//		model.putAct("fx_intro");
+//		model.put("vip", mId);
+//		InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<Uc_DistModel>()
+//				{
+//
+//					@Override
+//					public void onSuccess(ResponseInfo<String> responseInfo)
+//					{
+//						if (actModel.getStatus() == 1)
+//						{
+//							bindResult(actModel);
+//						}
+//					}
+//
+//					@Override
+//					public void onFinish()
+//					{
+//
+//					}
+//				});
 	}
 
 	protected void bindResult(Uc_DistModel actModel)

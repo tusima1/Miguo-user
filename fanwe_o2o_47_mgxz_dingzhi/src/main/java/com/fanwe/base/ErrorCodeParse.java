@@ -27,14 +27,16 @@ public class ErrorCodeParse {
         errorCodeMap.put("303", "操作频繁，请稍后再试");
         errorCodeMap.put("304", "出错啦");
         errorCodeMap.put("305", "验证码已失效，请刷新");
+        errorCodeMap.put("308", "升级即可代言更多商家");
         errorCodeMap.put("309", "您的积分不足哦");
         errorCodeMap.put("310", "用户名或密码错误");
         errorCodeMap.put("311", "该用户已存在");
         errorCodeMap.put("312", "密码修改失败");
         errorCodeMap.put("313", "您的账号已锁定");
         errorCodeMap.put("314", "您的权限不足");
-        errorCodeMap.put("320", "对不起，授权无效");
-        errorCodeMap.put("321", "对不起，授权失败");
+        errorCodeMap.put("315", "手机事情已被注册");
+        errorCodeMap.put("320", "请登录账号");
+        errorCodeMap.put("321", "请登录账号");
         errorCodeMap.put("322", "认证失败");
         errorCodeMap.put("329", "二维码已失效");
         errorCodeMap.put("330", "恭喜，您已支付成功");

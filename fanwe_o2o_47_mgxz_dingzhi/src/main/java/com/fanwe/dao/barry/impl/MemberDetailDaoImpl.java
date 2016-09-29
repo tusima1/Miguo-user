@@ -1,10 +1,12 @@
 package com.fanwe.dao.barry.impl;
 
 import com.fanwe.app.App;
+import com.fanwe.dao.barry.MemberDetailDao;
 import com.fanwe.dao.barry.UserAgreementDao;
+import com.fanwe.dao.barry.view.MemberDetailView;
 import com.fanwe.dao.barry.view.UserAgreementView;
+import com.fanwe.model.MemberDetailBean;
 import com.fanwe.model.UserAgreementBean;
-import com.fanwe.model.UserUpdateInfoBean;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -15,24 +17,24 @@ import java.util.TreeMap;
 /**
  * Created by Administrator on 2016/9/28.
  */
-public class UserAgreementDaoImpl implements UserAgreementDao{
+public class MemberDetailDaoImpl implements MemberDetailDao{
 
-    UserAgreementView listener;
+    MemberDetailView listener;
 
-    public UserAgreementDaoImpl(UserAgreementView listener){
+    public MemberDetailDaoImpl(MemberDetailView listener){
         this.listener = listener;
     }
 
     @Override
-    public void getUserAgreement(String type) {
+    public void getMerberDetail(String type) {
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("type", type);
-        params.put("method", LiveConstants.USER_AGREEMENT);
+        params.put("method", LiveConstants.MEMBER_DETAIL);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                UserAgreementBean bean = new Gson().fromJson(responseBody, UserAgreementBean.class);
+                MemberDetailBean bean = new Gson().fromJson(responseBody, MemberDetailBean.class);
                 if(bean.getStatusCode() == 200){
                     String html = bean.getResult().get(0).getBody().get(0).getHtml();
                     html = html.replaceAll("<\\/", "</");
@@ -41,9 +43,9 @@ public class UserAgreementDaoImpl implements UserAgreementDao{
                     html = html.replaceAll("\\\\", "");
                     html = html.replaceAll("/r/n", "");
                     html = html.replaceAll("\r\n", "");
-                    listener.getUserAgreementSuccess(html);
+                    listener.getMemberDetailSuccess(html);
                 }else {
-                    listener.getUserAgreementError(bean.getMessage());
+                    listener.getMemberDetailError(bean.getMessage());
                 }
             }
 

@@ -54,7 +54,11 @@ public class ShoppingBody implements Serializable {
      * 使用了多少余额
      */
     private String userUseingAccountMoney;
+    /**
+     * 原来用余额支付 了多少钱。
+     */
 
+    private String accountmoney;
 
 
     public void setDeals(List<Deals> deals){
@@ -124,4 +128,11 @@ public class ShoppingBody implements Serializable {
         return this.userUseingAccountMoney;
     }
 
+    public String getAccountmoney() {
+        return accountmoney;
+    }
+
+    public void setAccountmoney(String accountmoney) {
+        this.accountmoney = accountmoney;
+    }
 }

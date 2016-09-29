@@ -2,6 +2,7 @@ package com.fanwe.base;
 
 import android.content.Context;
 
+import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
@@ -88,6 +89,19 @@ public class CommonHelper extends Presenter {
         OkHttpUtils.getInstance().get(null, params, callback);
     }
 
+    /**
+     * 保存用户在极光的别名.
+     * @param alias
+     * @param callback
+     */
+    public void doRegisterJPushAlias(String alias, MgCallback callback){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("alias", alias);
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.JPUSH_ALIAS);
+        OkHttpUtils.getInstance().get(null, params, callback);
+
+    }
     @Override
     public void onDestory() {
         mView = null;

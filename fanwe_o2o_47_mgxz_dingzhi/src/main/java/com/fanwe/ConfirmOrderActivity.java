@@ -333,6 +333,10 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragMyRed.setmCheckActModel(mCheckActModel);
 
         mFragFees.setmCheckActModel(mCheckActModel);
+        if(!TextUtils.isEmpty(orderId)){
+          mFragFees.setOrderId(orderId);
+        }
+
         if (!TextUtils.isEmpty(orderId)) {
             findViewById(R.id.act_my_red_pay).setVisibility(View.GONE);
         }

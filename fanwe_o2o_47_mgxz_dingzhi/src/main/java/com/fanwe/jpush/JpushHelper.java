@@ -9,9 +9,11 @@ import org.json.JSONObject;
 
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CommonHelper;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
+import com.fanwe.network.MgCallback;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
@@ -22,6 +24,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
 public class JpushHelper {
+	 public String alias ="";
 
 	public static void registerAll() {
 		initJPushConfig();
@@ -30,15 +33,19 @@ public class JpushHelper {
 
 	public static void initJPushConfig() {
 		Set<String> tagSet = getTag();
-		String token = getToken();
-		if (TextUtils.isEmpty(token) || tagSet == null) {
+		LocalUserModel userModel = AppHelper.getLocalUser();
+		if(userModel==null){
+			return ;
+		}
+		String alias =userModel.getUser_id()+"" ;
+		if (TextUtils.isEmpty(alias)||"null".equals(alias) || tagSet == null) {
 			Log.d("Jpush", "initJPushConfig: token为空");
 			return;
 		}
 		/**
 		 * 参数一:alias token 参数二:tag 城市id
 		 */
-		JPushInterface.setAliasAndTags(App.getApplication().getApplicationContext(), token, tagSet,
+		JPushInterface.setAliasAndTags(App.getApplication().getApplicationContext(), alias, tagSet,
 				new TagAliasCallback() {
 
 					@Override
@@ -50,7 +57,7 @@ public class JpushHelper {
 
 	/**
 	 * 设置tag
-	 * 
+	 *
 	 * @param city_ID
 	 *            例如:"city_228";
 	 * @return false表示参数错误 true 表示已经发起网络请求了
@@ -70,106 +77,41 @@ public class JpushHelper {
 		});
 		return true;
 	}
-
-	/**
-	 * userID与RegistrationID的md5值
-	 * 
-	 * 任何时候都不推荐你单独设置唯一识别码alias
-	 * 
-	 * @param token
-	 *            设备的唯一标示
-	 * @return
-	 * 
-	 */
-	public static boolean setAlias_Token(String token) {
-		String token2 = getToken();
-		return false;
-	}
-
 	/**
 	 * 往服务器注册
 	 */
 	public static void initJpushRegister() {
 
-		String token = getToken();
-		if (TextUtils.isEmpty(token)) {
+
+		LocalUserModel userModel = AppHelper.getLocalUser();
+		if(userModel==null){
+			return ;
+		}
+		String alias =userModel.getUser_id()+"" ;
+		if (TextUtils.isEmpty(alias)) {
 			Log.d("Jpush", "initJpushRegister: token为空");
 			return;
 		}
-		RequestModel model = new RequestModel();
-		model.putCtl("user_apns");
-		model.putUser();
-		model.put("dev_type", "android");
-		model.put("device_token", token);
 
-		InterfaceServer.getInstance().requestInterface(model, new RequestCallBack<String>() {
+		CommonHelper commonHelper = new CommonHelper(null,null);
+		commonHelper.doRegisterJPushAlias(alias, new MgCallback(){
 
 			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				int status = -1;
-				try {
-					JSONObject obj;
-					obj = new JSONObject(responseInfo.result);
-					status = obj.getInt("user_login_status");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				if (status == 1) {
-					Log.d("Jpush", "Jpush 注册后台成功!");
-				}
+			public void onErrorResponse(String message, String errorCode) {
+				Log.d("Jpush", "Jpush 注册失败!");
 			}
-
 		});
+
 	}
 
-	private static String getToken() {
-		String device_token = JPushInterface.getRegistrationID(App.getApplication());
-		LocalUserModel user = AppHelper.getLocalUser();
-		if (user == null) {
-			return "";
-		}
-		int user_id = user.getUser_id();
-		String token = MD5(device_token + user_id);
-		return token;
-	}
 
 	private static Set<String> getTag() {
 		Set<String> tagSet = new LinkedHashSet<String>();
-		String sArray[] = { "city_" + AppRuntimeWorker.getCityIdByCityName(AppRuntimeWorker.getCity_name()) };
-		for (String sTagItme : sArray) {
-			if (TextUtils.isEmpty(sTagItme)) {
-				return null;
-			}
-			tagSet.add(sTagItme);
-		}
+		String city_id = AppRuntimeWorker.getCity_id();
+		tagSet.add(city_id);
+
 		return tagSet;
 	}
 
-	public static String MD5(String str) {
-		MessageDigest md5 = null;
-		try {
-			md5 = MessageDigest.getInstance("MD5");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
 
-		char[] charArray = str.toCharArray();
-		byte[] byteArray = new byte[charArray.length];
-
-		for (int i = 0; i < charArray.length; i++) {
-			byteArray[i] = (byte) charArray[i];
-		}
-		byte[] md5Bytes = md5.digest(byteArray);
-
-		StringBuffer hexValue = new StringBuffer();
-		for (int i = 0; i < md5Bytes.length; i++) {
-			int val = ((int) md5Bytes[i]) & 0xff;
-			if (val < 16) {
-				hexValue.append("0");
-			}
-			hexValue.append(Integer.toHexString(val));
-		}
-		return hexValue.toString();
-	}
 }

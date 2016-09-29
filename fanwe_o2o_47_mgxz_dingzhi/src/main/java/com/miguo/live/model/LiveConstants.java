@@ -147,6 +147,10 @@ public class LiveConstants {
      * 获取用户协议信息
      */
     public static final String USER_AGREEMENT = "HtmlPage";
+    /**
+     * 获取会员等级介绍
+     */
+    public static final String MEMBER_DETAIL = "HtmlPage";
 
 
 }
