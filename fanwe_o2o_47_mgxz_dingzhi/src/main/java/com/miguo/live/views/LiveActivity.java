@@ -872,7 +872,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserBottomTool.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mUserBottomTool.clickBaoBao();
+                    if (mUserBottomTool!=null){
+                        //TODO 在低配置的会来不及初始化,先这样,等有了更好的解决方案再更改
+                        mUserBottomTool.clickBaoBao();
+                    }
                 }
             },2000);
         }
