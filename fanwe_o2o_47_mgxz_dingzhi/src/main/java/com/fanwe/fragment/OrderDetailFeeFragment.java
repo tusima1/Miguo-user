@@ -224,7 +224,11 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
                 yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
             }
             if(yueFloat >0){
-                yue_fee.setText(yueFloat+"");
+                if(yueFloat>needFloat2) {
+                    yue_fee.setText(needFloat2 + "");
+                }else{
+                    yue_fee.setText(yueFloat + "");
+                }
                 yue_line.setVisibility(View.VISIBLE);
             }
         }

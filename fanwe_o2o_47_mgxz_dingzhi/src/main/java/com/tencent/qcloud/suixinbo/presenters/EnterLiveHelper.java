@@ -233,6 +233,10 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                         mStepInOutView.exitActivity();
                     }
 
+                }else{
+                    //
+                  String user =   TIMManager.getInstance().getLoginUser();
+                    Toast.makeText(mContext, "create IM room fail " + s + " " + i + "  user:"+user , Toast.LENGTH_SHORT).show();
                 }
                 // 创建IM房间失败，提示失败原因，并关闭等待对话框
                 Toast.makeText(mContext, "create IM room fail " + s + " " + i, Toast.LENGTH_SHORT).show();
