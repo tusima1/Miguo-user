@@ -119,7 +119,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     private void init() {
         loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
-//        initBaiduMap();
         startStatistics();
         initTimer();
         getDeviceId();
@@ -146,10 +145,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         startMainActivity();
     }
 
-    private void initBaiduMap() {
-        BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
-    }
-
     /**
      * 获取设备IMEI
      * 需要权限.6.0申请无效
@@ -167,49 +162,12 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
         String versionCode = String.valueOf(info.versionCode);
         if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
-            submmit();//只需要一次
+
             setting.edit().putBoolean("FIRST", false).commit();
             setting.edit().putString("version", versionCode);
         }
     }
 
-    private void submmit() {
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        String mob_brand = Build.BRAND;
-
-        String mob_model = Build.MODEL;
-
-        String mob_imei = tm.getDeviceId();
-
-        String sys_name = "Android";
-        String sys_version = Build.VERSION.RELEASE;
-
-        PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
-        RequestModel model = new RequestModel();
-        model.putCtl("init");
-        model.putAct("first_run");
-        model.put("mob_brand", mob_brand);
-        model.put("app_name", "mgxz");
-        model.put("mob_model", mob_model);
-        model.put("app_version", info.versionCode);
-        model.put("mob_imei", mob_imei);
-        model.put("sys_name", sys_name);
-        model.put("sys_version", sys_version);
-        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<BaseActModel>
-                (false) {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                }
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
-    }
 
     private void initTimer() {
         start = java.lang.System.currentTimeMillis();
@@ -218,36 +176,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     private void requestInitInterface() {
         //请求城市列表
         sellerHttpHelper.getCityList();
-
-//        CommonInterface.requestInit(new SDRequestCallBack<Init_indexActModel>() {
-//            private boolean nSuccess = false;
-//
-//            @Override
-//            public void onSuccess(ResponseInfo<String> responseInfo) {
-//                if (actModel.getStatus() == 1) {
-//                    nSuccess = true;
-//                    startMainActivity();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onStart() {
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                if (!nSuccess) {
-//                    startMainActivity();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//                nSuccess = false;
-//                RetryInitWorker.getInstance().start(); // 如果初始化失败重试
-//            }
-//        });
     }
 
     private void startMainActivity() {
