@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -18,8 +17,10 @@ import com.fanwe.o2o.miguo.R;
 public class WelcomeView extends FrameLayout {
     private Context mContext;
     private ImageView mIvImage;
-    private TextView mTvNext;
-    private OnNextClickListener mOnNextClickListener;
+    private ImageView mIvNext;
+    private ImageView mIvSkip;
+    private OnNextClickListener mOnNextClickListener;//最后页面的点击进入
+    private OnSkipClickListener mOnSkipClickListener;//每个页面的
 
     public WelcomeView(Context context) {
         this(context, null);
@@ -40,13 +41,23 @@ public class WelcomeView extends FrameLayout {
     private void init() {
         LayoutInflater.from(mContext).inflate(R.layout.item_welcome, this);
         mIvImage = ((ImageView) findViewById(R.id.iv_img));
-        mTvNext = ((TextView) findViewById(R.id.tv_next));
+        mIvNext = ((ImageView) findViewById(R.id.tv_next));
+        mIvSkip = ((ImageView) findViewById(R.id.tv_skip));
 
-        mTvNext.setOnClickListener(new OnClickListener() {
+        mIvNext.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOnNextClickListener!=null){
                     mOnNextClickListener.onClick(v);
+                }
+            }
+        });
+
+        mIvSkip.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnSkipClickListener!=null){
+                    mOnSkipClickListener.onClick(v);
                 }
             }
         });
@@ -63,7 +74,7 @@ public class WelcomeView extends FrameLayout {
     }
 
     public void setNextVisiable(){
-        mTvNext.setVisibility(VISIBLE);
+        mIvNext.setVisibility(VISIBLE);
     }
 
     public interface OnNextClickListener{
@@ -72,6 +83,14 @@ public class WelcomeView extends FrameLayout {
 
     public void setOnNextClickListener(OnNextClickListener onNextClickListener){
         this.mOnNextClickListener=onNextClickListener;
+    }
+
+    public interface OnSkipClickListener{
+        public void onClick(View v);
+    }
+
+    public void setOnSkipClickListener(OnSkipClickListener onSkipClickListener){
+        this.mOnSkipClickListener=onSkipClickListener;
     }
 
 }

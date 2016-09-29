@@ -2106,9 +2106,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (mBaoBaoAdapter==null){
+                            return;
+                        }
                         if (datas == null) {
                             mBaoBaoAdapter.setData(null);
-                        } else if (mBaoBaoAdapter!=null){
+                        }else{
                             mBaoBaoAdapter.setData(datas);
                         }
                         mBaoBaoAdapter.notifyDataSetChanged();

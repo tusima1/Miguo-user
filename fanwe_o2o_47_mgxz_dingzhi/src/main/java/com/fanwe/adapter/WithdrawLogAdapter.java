@@ -2,7 +2,6 @@ package com.fanwe.adapter;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -140,12 +139,7 @@ public class WithdrawLogAdapter extends SDBaseAdapter<ModelCommissionLog>
 			SDViewBinder.setTextView(tv_time, format.format(new Date(Long.valueOf(model.getInsert_time()))));//1472127680687
 			
 			//设置来自推荐人字段,为空时不设置
-			String mobile = model.getMobile();
-			if (TextUtils.isEmpty(mobile)) {
-				SDViewBinder.setTextView(tv_pname, "");
-			}else {
-				SDViewBinder.setTextView(tv_pname, "来自推荐人"+mobile.substring(0, 3)+"****"+mobile.substring(mobile.length()-4, mobile.length()));
-			}
+			SDViewBinder.setTextView(tv_pname,  model.getMobile(),"");
 	}
 		return convertView;
 	}

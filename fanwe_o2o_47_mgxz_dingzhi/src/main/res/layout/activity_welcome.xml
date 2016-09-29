@@ -14,16 +14,16 @@
         android:layout_height="match_parent"
         />
 
-    <me.relex.circleindicator.CircleIndicator
-        android:id="@+id/indicator"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/dp25"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        app:ci_drawable="@drawable/black_radius_square"
-        app:ci_height="8dp"
-        app:ci_margin="5dp"
-        app:ci_width="8dp"/>
+    <!--<me.relex.circleindicator.CircleIndicator-->
+        <!--android:id="@+id/indicator"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_marginBottom="@dimen/dp25"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:gravity="center"-->
+        <!--app:ci_drawable="@drawable/black_radius_square"-->
+        <!--app:ci_height="8dp"-->
+        <!--app:ci_margin="5dp"-->
+        <!--app:ci_width="8dp"/>-->
 
 </FrameLayout>
