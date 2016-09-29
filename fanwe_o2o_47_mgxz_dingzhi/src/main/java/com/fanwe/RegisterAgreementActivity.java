@@ -1,6 +1,9 @@
 package com.fanwe;
 
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.dao.barry.UserAgreementDao;
+import com.fanwe.dao.barry.impl.UserAgreementDaoImpl;
+import com.fanwe.dao.barry.view.UserAgreementView;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.model.RequestModel;
@@ -18,6 +21,9 @@ public class RegisterAgreementActivity extends BaseActivity
 {
 	@ViewInject(R.id.webView_agreement)
 	private WebView mWebView;
+
+	UserAgreementDao userAgreementDao;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -33,6 +39,28 @@ public class RegisterAgreementActivity extends BaseActivity
 		iniTitle();
 		requestData();
 		initWebView();
+		initData();
+	}
+
+
+	private void initData(){
+		userAgreementDao = new UserAgreementDaoImpl(new UserAgreementView() {
+			@Override
+			public void getUserAgreementSuccess(final String html) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+					}
+				});
+			}
+
+			@Override
+			public void getUserAgreementError(String msg) {
+
+			}
+		});
+		userAgreementDao.getUserAgreement("3");
 	}
 
 	private void requestData() 
