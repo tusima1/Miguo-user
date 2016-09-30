@@ -524,7 +524,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
      * 根据宽高比设置当前的方向。
      */
     public void changeOrientation() {
-        if (mLivePlayer == null || currentPlayInfo ==null) {
+        if (mLivePlayer == null || currentPlayInfo==null) {
             return;
         }
         float width = currentPlayInfo.getVwidth();

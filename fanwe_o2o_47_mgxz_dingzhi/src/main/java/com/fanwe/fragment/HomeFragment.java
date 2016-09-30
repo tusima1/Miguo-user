@@ -486,7 +486,8 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
      */
     @Override
     public void onScrollToEnd() {
-//        getTuanList(pageNum);
+        recyclerScrollView.setIsLoading(true);
+        getTuanList(pageNum);
     }
 
     @Override
@@ -510,6 +511,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 setPageNum(result.getPage());
                 if (mHomeFragmentLiveList!=null){
                     mHomeFragmentLiveList.onRefreshTuan(true, result.getBody());
+                    setPageNum(result.getPage() + 1);
                 }
                 loadComplete();
             }
@@ -524,6 +526,9 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 setPageNum(result.getPage());
                 if (mHomeFragmentLiveList!=null){
                     mHomeFragmentLiveList.onRefreshTuan(false, result.getBody());
+                }
+                if(result.getBody()!=null && result.getBody().size()>0){
+                    setPageNum(result.getPage() + 1);
                 }
                 loadComplete();
             }
