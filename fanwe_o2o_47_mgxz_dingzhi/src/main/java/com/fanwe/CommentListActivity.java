@@ -408,7 +408,6 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
                         ModelCommentTotal bean = itemsTotal.get(0);
                         modelDisplayComment = new ModelDisplayComment();
 
-                        modelDisplayComment.setAllow_dp(1);
                         modelDisplayComment.setStar_1(bean.getYi());
                         modelDisplayComment.setStar_2(bean.getEr());
                         modelDisplayComment.setStar_3(bean.getSan());
