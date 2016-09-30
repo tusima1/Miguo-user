@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -159,6 +160,15 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         }
     }
 
+    /**
+     * "firstPriceTotal": "0.00",  首单优惠金额
+     "accountmoney": "30.99",  上次使用的余额金额
+     "userAccountMoney": "0", 用户当前账户余额
+     "goodsTotal": "48.00",  总金额
+     "payPrice": "4.71",  应付金额
+     "Total": "48.00",   总金额
+     "youhuiPrice": "12.30",  优惠金额
+     */
     private void calculateFee() {
         //总金额。
         float totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getPayPrice());
@@ -217,20 +227,39 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         }
 
         if(!TextUtils.isEmpty(orderId)){
-            //用户余额。
-            if(ifYueChecked) {
-                yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney()) + SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
-            }else{
-                yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
-            }
-            if(yueFloat >0){
-                if(yueFloat>needFloat2) {
-                    yue_fee.setText(needFloat2 + "");
-                }else{
-                    yue_fee.setText(yueFloat + "");
-                }
+            //应付金额
+            float payPrice = SDFormatUtil.stringToFloat(mCheckActModel.getPayPrice());
+            //上次用余额支付的金额
+            float accountMoney = SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
+            //当前账户余额。
+            float userAccountMoney = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
+
+            //上次余额支付的金额 大于零 或者  本次选择了余额支付 显示  余额支付。
+            if((accountMoney>0) || ifYueChecked){
                 yue_line.setVisibility(View.VISIBLE);
+            }else{
+                yue_line.setVisibility(View.GONE);
             }
+           //显示 金额 问题
+        //用户本次选择了余额支付 。
+         if(ifYueChecked){
+             if(payPrice>userAccountMoney){
+                 yueFloat = userAccountMoney + accountMoney;
+                 needFloat =payPrice-userAccountMoney;
+             }else{
+                 yueFloat = payPrice+accountMoney;
+                 needFloat =0.00f;
+             }
+         }else{
+             if(accountMoney>0){
+                 yueFloat = accountMoney;
+             }
+             needFloat= payPrice;
+         }
+            yue_fee.setText(SDFormatUtil.formatNumberString(String.valueOf(yueFloat),2));
+            need_pay_fee.setText(SDFormatUtil.formatNumberString(String.valueOf(needFloat),2));
+            need_pay_line.setVisibility(View.VISIBLE);
+
         }
     }
 
