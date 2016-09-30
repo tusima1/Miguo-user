@@ -34,6 +34,7 @@ import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.fragment.TuanListFragment;
 import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.library.common.SDActivityManager;
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
@@ -220,7 +221,7 @@ public class AppJsHandler extends BaseJsHandler {
 
 				@Override
 				public void onFailue(String responseBody) {
-
+                    SDToast.showToast(responseBody);
 				}
 
 				@Override

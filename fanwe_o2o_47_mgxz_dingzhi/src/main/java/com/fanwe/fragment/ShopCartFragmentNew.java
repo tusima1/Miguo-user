@@ -146,19 +146,23 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     protected void resetInitData() {
+        try{
+            listModel = new ArrayList<>();
+            mCb_xuanze.setChecked(false);
+            //重置下巴(结算)
+            mBt_account.setText("结算");
+            mBt_account.setBackgroundColor(getResources().getColor(
+                    R.color.text_fenxiao));
+            mBt_account.setClickable(false);
+            mTv_sum.setText("0.00");
+            // 初始化adapter.
+            mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
+            mLvCartGoods.setAdapter(mAdapter);
+            getmAdapterListener();
+        }catch (Exception e){
 
-        listModel = new ArrayList<>();
-        mCb_xuanze.setChecked(false);
-        //重置下巴(结算)
-        mBt_account.setText("结算");
-        mBt_account.setBackgroundColor(getResources().getColor(
-                R.color.text_fenxiao));
-        mBt_account.setClickable(false);
-        mTv_sum.setText("0.00");
-        // 初始化adapter.
-        mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
-        mLvCartGoods.setAdapter(mAdapter);
-        getmAdapterListener();
+        }
+
     }
 
     private void registeClick() {
@@ -456,7 +460,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void requestData() {
         if (ifLogin) {
-            outSideShoppingCartHelper.getUserShopCartList();
+            try{
+                outSideShoppingCartHelper.getUserShopCartList();
+            }catch (NullPointerException e){
+
+            }
         } else {
             SDDialogManager.dismissProgressDialog();
             List<ShoppingCartInfo> datas = LocalShoppingcartDao.queryModel();
