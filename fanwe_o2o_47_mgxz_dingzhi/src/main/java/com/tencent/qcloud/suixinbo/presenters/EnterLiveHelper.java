@@ -229,21 +229,17 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     createAVRoom(MySelfInfo.getInstance().getMyRoomNum());
                     return;
                 }
-//                else if (i==10010){
-//                    isInAVRoom = false;
-//                    notifyServerLiveEnd();
-//                    quiteLive();
-//                    if(mStepInOutView!=null) {
-//                        mStepInOutView.exitActivity();
-//                    }
-//
-//                }else{
-//                    //
-//                  String user =   TIMManager.getInstance().getLoginUser();
-//                    Toast.makeText(mContext, "create IM room fail " + s + " " + i + "  user:"+user , Toast.LENGTH_SHORT).show();
-//                }
+                else if (i==10010){
+                    isInAVRoom = false;
+                    notifyServerLiveEnd();
+                    quiteLive();
+                    if(mStepInOutView!=null) {
+                        mStepInOutView.exitActivity();
+                    }
+
+                }
                 // 创建IM房间失败，提示失败原因，并关闭等待对话框
-                Toast.makeText(mContext, "create IM room fail " + s + " " + i, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "create IM room fail " + s + " " + i, Toast.LENGTH_SHORT).show();
                 quiteLive();
             }
 
@@ -451,7 +447,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      * @param roomNum
      */
     private void EnterAVRoom(int roomNum) {
-        SxbLog.i(TAG, "createlive joinLiveRoom enterAVRoom " + roomNum);
+//        SxbLog.i(TAG, "createlive joinLiveRoom enterAVRoom " + roomNum);
         AVContext avContext = QavsdkControl.getInstance().getAVContext();
         byte[] authBuffer = null;//权限位加密串；TODO：请业务侧填上自己的加密串
 
@@ -466,7 +462,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         if (avContext != null) {
             // create room
             int ret = avContext.enterRoom(mEventListener, enterRoomParam.build());
-            SxbLog.i(TAG, "EnterAVRoom " + ret);
+//            SxbLog.i(TAG, "EnterAVRoom " + ret);
         }
 
     }

@@ -38,6 +38,7 @@ import com.tencent.TIMCallBack;
 import com.tencent.TIMManager;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
 import java.lang.reflect.Type;
@@ -320,6 +321,7 @@ public class LoginHelper extends Presenter {
 
     }
 
+
     public void doImLogin() {
         String userid = MySelfInfo.getInstance().getId();
         if (TextUtils.isEmpty(userid)) {
@@ -329,13 +331,15 @@ public class LoginHelper extends Presenter {
         mTLoginHelper.imLogin(userid, userSign, new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
-                MGToast.showToast("IM 认证失败。");
+//                MGToast.showToast("IM 认证失败。");
                 App.getInstance().setImLoginSuccess(false);
             }
 
             @Override
             public void onSuccess() {
+
                 App.getInstance().setImLoginSuccess(true);
+
             }
         });
     }
@@ -427,11 +431,11 @@ public class LoginHelper extends Presenter {
         TIMManager.getInstance().logout(new TIMCallBack() {
             @Override
             public void onError(int i, String s) {
-                SxbLog.e(TAG, "IMLogout fail ：" + i + " msg " + s);
+//                SxbLog.e(TAG, "IMLogout fail ：" + i + " msg " + s);
             }
             @Override
             public void onSuccess() {
-                SxbLog.i(TAG, "IMLogout succ !");
+//                SxbLog.i(TAG, "IMLogout succ !");
                 //反向初始化avsdk
                 stopAVSDK();
             }
