@@ -1,5 +1,7 @@
 package com.fanwe.seller.model.getShopInfo;
 
+import java.util.ArrayList;
+
 public class StoreModelShopInfo {
     private String preview;
 
@@ -60,6 +62,16 @@ public class StoreModelShopInfo {
     private String city_id;
 
     private String avg_grade;
+
+    private ArrayList<ModelImageShop> store_images;
+
+    public ArrayList<ModelImageShop> getStore_images() {
+        return store_images;
+    }
+
+    public void setStore_images(ArrayList<ModelImageShop> store_images) {
+        this.store_images = store_images;
+    }
 
     public String getDp_count() {
         return dp_count;
