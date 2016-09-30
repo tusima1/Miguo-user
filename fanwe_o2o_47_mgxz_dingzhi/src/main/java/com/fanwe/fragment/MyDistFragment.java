@@ -94,10 +94,25 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void init() {
         super.init();
-        getIntentData();
         bindData();
         initClick();
         initPullToScrollView();
+    }
+
+    public void setPageType(int pageType) {
+        this.mType = pageType;
+    }
+
+    public void clearBtn() {
+        mRank = "";
+        pageNum = 1;
+        isRefresh = true;
+        mLl_vip1.setEnabled(true);
+        mLl_vip2.setEnabled(true);
+        mLl_vip3.setEnabled(true);
+        mTv_textVip1.setTextColor(getResources().getColor(R.color.text_fenxiao));
+        mTv_textVip2.setTextColor(getResources().getColor(R.color.text_fenxiao));
+        mTv_textVip3.setTextColor(getResources().getColor(R.color.text_fenxiao));
     }
 
     private void getData() {
@@ -110,12 +125,13 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     private ResultMyDistributionCorps currResultMyDistributionCorps;
 
     public void setResultMyDistributionCorps(ResultMyDistributionCorps bean) {
-        this.
-        currResultMyDistributionCorps = bean;
+        this.currResultMyDistributionCorps = bean;
+        clearBtn();
         if (currResultMyDistributionCorps != null) {
             SDViewBinder.setTextView(mTv_vip1Number, "（" + currResultMyDistributionCorps.getLevel1() + "）");
             SDViewBinder.setTextView(mTv_vip2Number, "（" + currResultMyDistributionCorps.getLevel2() + "）");
             SDViewBinder.setTextView(mTv_vip3Number, "（" + currResultMyDistributionCorps.getLevel3() + "）");
+            convertList();
         }
     }
 
@@ -210,10 +226,6 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         getData();
     }
 
-    private void getIntentData() {
-        mType = getArguments().getInt("type");
-    }
-
     private void initPullToScrollView() {
         mPtr_ScrollView.setMode(Mode.BOTH);
         mPtr_ScrollView
@@ -245,7 +257,7 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
                         getData();
                     }
                 });
-        mPtr_ScrollView.setRefreshing();
+//        mPtr_ScrollView.setRefreshing();
     }
 
     private void bindData() {

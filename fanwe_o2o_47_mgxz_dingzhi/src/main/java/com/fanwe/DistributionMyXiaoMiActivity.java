@@ -46,7 +46,6 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
     @ViewInject(R.id.tv_stationName)
     private TextView mTv_stationName;
 
-    private int type = 1;
 
     private boolean isShow;
 
@@ -58,6 +57,9 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
     private UserHttpHelper userHttpHelper;
 
     private String up_id;
+
+    private final int PAGE_ONE = 1;
+    private final int PAGE_TWO = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
         initgetIntent();
         initTitle();
         initClick();
-        clickOne();
+        clickOne(PAGE_ONE);
     }
 
     private void initShowDialog(int mVip1, int mNum1, int mNum2, String money) {
@@ -118,15 +120,13 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
             mTv_textOne.setTextColor(getResources().getColor(R.color.main_color));
             mTv_textTwo.setEnabled(true);
             mTv_textTwo.setTextColor(getResources().getColor(R.color.text_fenxiao));
-            type = 1;
-            clickOne();
+            clickOne(PAGE_ONE);
         } else if (v == mTv_textTwo) {
             mTv_textOne.setEnabled(true);
             mTv_textOne.setTextColor(getResources().getColor(R.color.text_fenxiao));
             mTv_textTwo.setEnabled(false);
             mTv_textTwo.setTextColor(getResources().getColor(R.color.main_color));
-            type = 2;
-            clickOne();
+            clickOne(PAGE_TWO);
         } else if (v == mTv_stationName && !TextUtils.isEmpty(up_id)) {
             cilckWeb();
         }
@@ -139,7 +139,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
         startActivity(intent);
     }
 
-    private void clickOne() {
+    private void clickOne(int pageType) {
         mTv_number.setText("");
         mDist.setmListener(new OnDialogData() {
             @Override
@@ -153,12 +153,9 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
                 }
             }
         });
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        mDist.setArguments(bundle);
+        mDist.setPageType(pageType);
         getSDFragmentManager().toggle(R.id.act_my_xiaomi_fl, null, mDist);
-
-        userHttpHelper.getMyDistributionCorps(type + "", "", 1, 10, "");
+        userHttpHelper.getMyDistributionCorps(pageType + "", "", 1, 10, "");
     }
 
     private void initTitle() {
