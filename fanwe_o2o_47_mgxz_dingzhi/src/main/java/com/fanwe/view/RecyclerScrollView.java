@@ -34,8 +34,7 @@ public class RecyclerScrollView extends ScrollView{
     public RecyclerScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-//        this.halfScreenHeight = BaseUtils.getHeight(getContext()) / 2;
-        this.halfScreenHeight = 0;
+        this.halfScreenHeight = BaseUtils.getHeight(getContext()) / 2;
         this.screenHeight = BaseUtils.getHeight(getContext());
         setVerticalScrollBarEnabled(false);
     }

@@ -43,30 +43,30 @@ public class HomeLiveFragmentRecyclerView extends RecyclerView{
 //        setVerticalScrollBarEnabled(false);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent e) {
-//        switch (e.getAction()){
-//            case MotionEvent.ACTION_DOWN:
-//                downX = (int)e.getRawX();
-//                downY = (int)e.getRawY();
-//                moveY = (int)e.getRawY();
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                moveY = (int)e.getRawY();
-//                if(Math.abs(moveY - downY) > touchSlop){
-//                    getParent().requestDisallowInterceptTouchEvent(false);
-////                    return true;
-//                }
-//                break;
-//            case MotionEvent.ACTION_UP:
-//            case MotionEvent.ACTION_CANCEL:
-//                if(Math.abs(moveY - downY) > touchSlop){
-//                    getParent().requestDisallowInterceptTouchEvent(false);
-////                    return true;
-//                }
-//                break;
-//
-//        }
-//        return true;
-//    }
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        switch (e.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                downX = (int)e.getRawX();
+                downY = (int)e.getRawY();
+                moveY = (int)e.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                moveY = (int)e.getRawY();
+                if(Math.abs(moveY - downY) > touchSlop){
+                    getParent().requestDisallowInterceptTouchEvent(false);
+//                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if(Math.abs(moveY - downY) > touchSlop){
+                    getParent().requestDisallowInterceptTouchEvent(false);
+//                    return true;
+                }
+                break;
+
+        }
+        return true;
+    }
 }

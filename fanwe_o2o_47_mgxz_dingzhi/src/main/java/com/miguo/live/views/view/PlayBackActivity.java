@@ -171,33 +171,19 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
-        initPlayer();
-        getPlayUrlList();
-        initHelper();
-        initView();
-        Log.d("PlayBack0", "oncreate.." );
-
-        /**
-         * backup
-         */
-//        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
-//        mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
-
-//        mCurrentRenderMode = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
-//        mCurrentRenderRotation = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
-
-//        mPlayConfig = new TXLivePlayConfig();
-//        if (mLivePlayer == null) {
-//            mLivePlayer = new TXLivePlayer(this);
-//        }
-
-    }
-
-    private void initPlayer(){
         mPlayConfig = new TXLivePlayConfig();
         if (mLivePlayer == null) {
             mLivePlayer = new TXLivePlayer(this);
         }
+        getPlayUrlList();
+        initHelper();
+        initView();
+
+//        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
+//        mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
+
+
+
     }
 
     /**
@@ -215,8 +201,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             PlaySetInfo o = (PlaySetInfo) iterator.next();
             playUrlList.put(o.getDefinition(), o);
         }
-        PlaySetInfo currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
-        this.currentPlayInfo = currentPlayInfo;
+         currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
         if (currentPlayInfo == null) {
             showInvalidateToast("网络有问题或者当前点播地址错误。");
             finish();
@@ -539,14 +524,13 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
      * 根据宽高比设置当前的方向。
      */
     public void changeOrientation() {
-        if (mLivePlayer == null) {
+        if (mLivePlayer == null || currentPlayInfo ==null) {
             return;
         }
         float width = currentPlayInfo.getVwidth();
         float height = currentPlayInfo.getVheight();
 
         //横屏。
-        Log.d("PlayBack0", "width - height: " + (width - height) );
         if (width - height > 0) {
             mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
         } else {
