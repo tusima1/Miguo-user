@@ -434,7 +434,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         model.setShare_url(modelGroupBuyDetail.getShare_url());
                         model.setCurrent_price(modelGroupBuyDetail.getTuan_price());
                         model.setOrigin_price(modelGroupBuyDetail.getOrigin_price());
-                        model.setIcon(modelGroupBuyDetail.getIcon());
+                        model.setIcon(modelGroupBuyDetail.getImg());
                         model.setMax_num(modelGroupBuyDetail.getMax_num());
                         model.setIs_first(SDFormatUtil.stringToInteger(modelGroupBuyDetail.getIs_first()));
                         model.setIs_first_price(SDFormatUtil.stringToFloat(modelGroupBuyDetail.getIs_first_price()));

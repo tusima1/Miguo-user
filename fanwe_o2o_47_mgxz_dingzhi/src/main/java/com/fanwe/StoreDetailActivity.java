@@ -442,7 +442,15 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
         bean.setName(store_info.getShop_name());
         bean.setAddress(store_info.getAddress());
         bean.setTel(store_info.getTel());
-        bean.setPreview(store_info.getIndex_img());
+        if (!SDCollectionUtil.isEmpty(store_info.getStore_images())){
+            if(!TextUtils.isEmpty(store_info.getStore_images().get(0).getImage_url())){
+                bean.setPreview(store_info.getStore_images().get(0).getImage_url());
+            }else {
+                bean.setPreview(store_info.getIndex_img());
+            }
+        }else {
+            bean.setPreview(store_info.getIndex_img());
+        }
         bean.setAvg_point(store_info.getAvg_grade());
         bean.setShare_url(store_info.getShare());
         bean.setDp_count(store_info.getDp_count());

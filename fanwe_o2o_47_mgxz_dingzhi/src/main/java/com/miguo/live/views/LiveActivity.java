@@ -2293,7 +2293,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /**
      * 小礼物
-     *
+     * //test commit and push branch
      * @param bean
      */
     private void showSmallGift(GiftListBean bean) {

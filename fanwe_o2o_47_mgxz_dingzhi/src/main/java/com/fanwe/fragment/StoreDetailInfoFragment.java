@@ -204,7 +204,9 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
         } else if (mInfoModel.getOffline() == 0) {
             SDViewUtil.hide(mLl_bug);
         }
+
         SDViewBinder.setImageView(mSiv_image, mInfoModel.getPreview());
+
         SDViewBinder.setTextView(mTv_name, mInfoModel.getName());
         float ratingStar = SDTypeParseUtil.getFloat(mInfoModel.getAvg_point());
         SDViewBinder.setRatingBar(mRb_star, ratingStar);
