@@ -96,6 +96,8 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
             SDViewBinder.setTextView(tv_number, bean.getUser_num() + "个成员");
             if (bean.getUser_num() == 0 || mType == 2) {
                 ll_number.setBackgroundResource(R.drawable.my_xiaomi_second);
+            }else{
+                ll_number.setBackgroundResource(R.drawable.bg_xiaomi_press);
             }
             iv_user.setOnClickListener(new OnClickListener() {
 

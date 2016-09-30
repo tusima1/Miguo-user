@@ -19,6 +19,7 @@ import com.fanwe.listener.TextMoney;
 import com.fanwe.model.Member;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDDateUtil;
 
 import java.util.List;
 
@@ -48,12 +49,13 @@ public class MyXiaoMiDetailAdapter extends SDBaseAdapter<Member> {
             SDViewBinder.setImageView(iv_user, model.getAvatar());
 
             SDViewBinder.setTextView(tv_username, model.getUser_name());
-            SDViewBinder.setTextView(tv_date, model.getCreate_time());
+            SDViewBinder.setTextView(tv_date, SDDateUtil.milToStringlongPoint(DataFormat.toLong(model.getCreate_time())));
             if (!TextUtils.isEmpty(model.getMobile())) {
-                if (model.getMobile().length() > 7) {
-                    String zh = model.getMobile().replace(model.getMobile().substring(3, 7), "****");
-                    SDViewBinder.setTextView(tv_phone, zh);
-                }
+//                if (model.getMobile().length() > 7) {
+//                    String zh = model.getMobile().replace(model.getMobile().substring(3, 7), "****");
+//                    SDViewBinder.setTextView(tv_phone, zh);
+//                }
+                SDViewBinder.setTextView(tv_phone, model.getMobile());
             } else {
                 SDViewBinder.setTextView(tv_phone, "");
             }
