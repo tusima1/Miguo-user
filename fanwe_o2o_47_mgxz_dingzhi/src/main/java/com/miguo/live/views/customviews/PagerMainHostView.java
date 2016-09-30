@@ -161,6 +161,7 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
         MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mCollect.setVisibility(VISIBLE);
                 if (!TextUtils.isEmpty(collectState) && "1".equals(collectState)) {
                     mCollect.setText("已收藏");
                 } else {

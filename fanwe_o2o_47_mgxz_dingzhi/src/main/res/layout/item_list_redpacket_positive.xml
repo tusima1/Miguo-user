@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,11 +15,10 @@
 
             <RelativeLayout
                 android:id="@+id/location_left"
-                android:layout_width="50dp"
+                android:layout_width="65dp"
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                >
+                android:layout_marginLeft="16dp">
 
                 <TextView
                     android:id="@+id/tv_tag"
@@ -28,25 +27,22 @@
                     android:layout_alignParentBottom="true"
                     android:text=""
                     android:textColor="#ffd1b2"
-                    android:textSize="12sp"
-                    />
+                    android:textSize="12sp" />
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tv_big_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0"
+                        android:text=""
                         android:textColor="#ff6600"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="18sp" />
                     <!--android:paddingRight="6dp" 用来调节前面数字的间距-->
                     <TextView
                         android:id="@+id/packet_type"
@@ -56,8 +52,7 @@
                         android:paddingRight="6dp"
                         android:text="折"
                         android:textColor="#ff6600"
-                        android:textSize="10sp"
-                        />
+                        android:textSize="10sp" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -68,7 +63,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_toRightOf="@id/location_left"
-                android:background="#CCCCCC"/>
+                android:background="#CCCCCC" />
 
             <TextView
                 android:id="@+id/tv_title"
@@ -82,34 +77,32 @@
                 android:text="专属优惠券"
                 android:textColor="#595959"
                 android:textSize="13sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
+
             <CheckBox
                 android:id="@+id/iv_check"
+                style="@style/RedPacketCheckModeCheckboxTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/RedPacketCheckModeCheckboxTheme"
-                android:gravity="center"
-                android:layout_marginRight="@dimen/dp15"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                />
+                android:layout_marginRight="@dimen/dp15"
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_title"
-                android:layout_toLeftOf="@id/iv_check"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@id/iv_check"
                 android:layout_toRightOf="@id/location_line"
                 android:maxLines="2"
                 android:text=""
                 android:textColor="#999999"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -124,20 +117,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="有效期: 2016.7.20 - 2016.2.28"
+                android:text=""
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
         </FrameLayout>
 
     </LinearLayout>
+
     <ImageView
         android:id="@+id/iv_watermark"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/bg_red_disable"
         android:layout_gravity="right|center_vertical"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/dp5"
         android:layout_marginRight="@dimen/dp25"
-        />
+        android:layout_marginTop="@dimen/dp5"
+        android:src="@drawable/bg_red_disable"
+        android:visibility="gone" />
 </FrameLayout>

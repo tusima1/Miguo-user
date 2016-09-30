@@ -153,7 +153,7 @@ public class RedpacketListAdapter extends BaseAdapter {
             holder.packet_type.setText("折");
             holder.mTv_TitleTag.setText("折扣券");
         }else if ("2".equals(red_packet_type)){
-            holder.mTv_BigNum.setText(MGStringFormatter.getFloat1(red_packet_amount));
+            holder.mTv_BigNum.setText(MGStringFormatter.getFloat2(red_packet_amount));
             holder.packet_type.setText("元");
             holder.mTv_TitleTag.setText("现金券");
         }
