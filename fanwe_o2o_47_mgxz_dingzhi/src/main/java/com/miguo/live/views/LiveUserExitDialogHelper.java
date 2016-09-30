@@ -11,6 +11,7 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.adapters.UserExitAdapter;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
@@ -58,7 +59,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         liveHttpHelper = new LiveHttpHelper(mActivity, this, "");
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
         liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
-        liveHttpHelper.getLiveList(1, 5, "", "", "");
+        liveHttpHelper.getLiveList(1, 5, "", "", AppRuntimeWorker.getCity_id());
         ImageLoader.getInstance().displayImage(CurLiveInfo.getHostAvator(), civ_user_image);
         tv_username.setText(CurLiveInfo.getHostName());
         tv_user_location.setText(CurLiveInfo.modelShop.getShop_name());
