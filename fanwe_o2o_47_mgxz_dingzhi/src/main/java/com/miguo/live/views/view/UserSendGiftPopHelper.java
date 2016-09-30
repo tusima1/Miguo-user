@@ -111,6 +111,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
         mGiftAdapter = new GiftViewPagerAdapter(mActivity, null, mTvSend);
         mGiftViewPager.setAdapter(mGiftAdapter);
         mIndicator.setViewPager(mGiftViewPager);
+        mGiftAdapter.registerDataSetObserver(mIndicator.getDataSetObserver());
 
         mGiftViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

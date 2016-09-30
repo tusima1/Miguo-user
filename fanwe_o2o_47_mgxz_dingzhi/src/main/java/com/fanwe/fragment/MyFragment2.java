@@ -1,10 +1,12 @@
 package com.fanwe.fragment;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -345,18 +347,23 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         SDViewBinder.setImageView(mUserFaceString, mIvUserFace);
 
         String fx_level = modelPersonalHome.getFx_level();
-        Drawable rankDrawable = null;
-        if ("1".equals(fx_level)) {
-            rankDrawable = getResources().getDrawable(R.drawable.ic_rank_3);
-        } else if ("2".equals(fx_level)) {
-            rankDrawable = getResources().getDrawable(R.drawable.ic_rank_2);
-        } else if ("3".equals(fx_level)) {
-            rankDrawable = getResources().getDrawable(R.drawable.ic_rank_1);
-        }
-        if (rankDrawable != null) {
-            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable
-                    .getMinimumHeight());
-            mUserName.setCompoundDrawables(null, null, rankDrawable, null);
+        try {
+            Drawable rankDrawable = null;
+            if ("1".equals(fx_level)) {
+                rankDrawable = getResources().getDrawable(R.drawable.ic_rank_3);
+            } else if ("2".equals(fx_level)) {
+                rankDrawable = getResources().getDrawable(R.drawable.ic_rank_2);
+            } else if ("3".equals(fx_level)) {
+                rankDrawable = getResources().getDrawable(R.drawable.ic_rank_1);
+            }
+            if (rankDrawable != null) {
+                rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable
+                        .getMinimumHeight());
+                mUserName.setCompoundDrawables(null, null, rankDrawable, null);
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("test","MyFrament2: "+e.toString());
+            e.printStackTrace();
         }
         //粉丝
         mTvFansNum.setText(modelPersonalHome.getFans_count());

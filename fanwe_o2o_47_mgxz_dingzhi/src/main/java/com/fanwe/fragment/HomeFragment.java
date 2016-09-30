@@ -533,12 +533,14 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     @Override
     public void getCommandGroupBuyDaoListError(String msg) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                loadComplete();
-            }
-        });
+        if (getActivity()!=null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadComplete();
+                }
+            });
+        }
     }
 
     public void setPageNum(int pageNum) {

@@ -34,4 +34,10 @@
         <item>@drawable/my_distribution_weixin</item>
         <item>@drawable/my_distribution_weibo</item>
         </integer-array>
+
+    <integer-array name="first_welcome">
+        <item>@drawable/wel_1</item>
+        <item>@drawable/wel_2</item>
+        <item>@drawable/wel_3</item>
+    </integer-array>
 </resources>

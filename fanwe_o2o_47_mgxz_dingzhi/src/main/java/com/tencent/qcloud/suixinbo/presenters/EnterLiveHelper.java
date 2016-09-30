@@ -27,6 +27,7 @@ import com.tencent.TIMValueCallBack;
 import com.tencent.av.sdk.AVContext;
 
 import com.tencent.av.sdk.AVRoomMulti;
+import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.LiveInfoJson;
@@ -63,6 +64,8 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private static final int TYPE_MEMBER_CHANGE_HAS_SCREEN_VIDEO = 7;//有发屏幕视频事件。
     private static final int TYPE_MEMBER_CHANGE_NO_SCREEN_VIDEO = 8;//无发屏幕视频事件。
 
+
+    AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer  callback;
 
     public EnterLiveHelper(Context context, EnterQuiteRoomView view) {
         mContext = context;
@@ -225,15 +228,20 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
                     isInChatRoom = true;
                     createAVRoom(MySelfInfo.getInstance().getMyRoomNum());
                     return;
-                }else if (i==10010){
-                    isInAVRoom = false;
-                    notifyServerLiveEnd();
-                    quiteLive();
-                    if(mStepInOutView!=null) {
-                        mStepInOutView.exitActivity();
-                    }
-
                 }
+//                else if (i==10010){
+//                    isInAVRoom = false;
+//                    notifyServerLiveEnd();
+//                    quiteLive();
+//                    if(mStepInOutView!=null) {
+//                        mStepInOutView.exitActivity();
+//                    }
+//
+//                }else{
+//                    //
+//                  String user =   TIMManager.getInstance().getLoginUser();
+//                    Toast.makeText(mContext, "create IM room fail " + s + " " + i + "  user:"+user , Toast.LENGTH_SHORT).show();
+//                }
                 // 创建IM房间失败，提示失败原因，并关闭等待对话框
                 Toast.makeText(mContext, "create IM room fail " + s + " " + i, Toast.LENGTH_SHORT).show();
                 quiteLive();
@@ -265,6 +273,9 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         //初始化AVSurfaceView
         if (QavsdkControl.getInstance().getAVContext() != null) {
             QavsdkControl.getInstance().initAvUILayer(mContext.getApplicationContext(), avView);
+            if(callback!=null) {
+                QavsdkControl.getInstance().getAVContext().getVideoCtrl().setRemoteVideoPreviewCallbackWithByteBuffer(callback);
+            }
         }
 
     }
@@ -378,7 +389,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     /**
      * 退出一个AV房间
      */
-    private void quiteAVRoom() {
+    public void quiteAVRoom() {
 
         if (isInAVRoom == true) {
             AVContext avContext = QavsdkControl.getInstance().getAVContext();
@@ -464,6 +475,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
     private void initAudioService() {
         if ((QavsdkControl.getInstance() != null) && (QavsdkControl.getInstance().getAVContext() != null) && (QavsdkControl.getInstance().getAVContext().getAudioCtrl() != null)) {
             QavsdkControl.getInstance().getAVContext().getAudioCtrl().startTRAEService();
+
         }
     }
 
@@ -473,4 +485,12 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         }
     }
 
+    public AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer getCallback() {
+        return callback;
+    }
+
+    public void setCallback(AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer callback) {
+        this.callback = callback;
+
+    }
 }

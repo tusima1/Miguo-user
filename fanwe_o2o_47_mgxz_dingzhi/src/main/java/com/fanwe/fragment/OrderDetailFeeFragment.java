@@ -89,6 +89,10 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
      * 需要支付金额。
      */
     float needFloat = 0.00f;
+    /**
+     * 订单编号 。
+     */
+    String  orderId ="";
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,7 +111,7 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
             return;
         }
         //总金额。
-        totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
+        totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getPayPrice());
         //用户余额。
         yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
 
@@ -132,11 +136,34 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
 
     }
 
+    public void showYueLine(){
+        boolean result = false;
+
+        if(ifYueChecked){
+            result = true;
+        }else{
+            if(!TextUtils.isEmpty(orderId)){
+                float oldYueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
+                if(oldYueFloat >0){
+                    result =  true;
+                }else{
+                    result = false;
+                }
+            }
+        }
+        if(result){
+            yue_line.setVisibility(View.VISIBLE);
+        }else{
+            yue_line.setVisibility(View.GONE);
+
+        }
+    }
+
     private void calculateFee() {
         //总金额。
-        float totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
+        float totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getPayPrice());
         //用户余额。
-        float yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
+        float yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney())+SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
 
         float youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         float needFloat = totalFloat - yueFloat - youhuiFloat;
@@ -147,7 +174,6 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
                 //使用余额支付
                 yue_fee.setText(needFloat2 + "");
                 yue_line.setVisibility(View.VISIBLE);
-
                 pay_type_line.setVisibility(View.GONE);
                 need_pay_line.setVisibility(View.GONE);
             } else {
@@ -189,6 +215,23 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
                 need_pay_line.setVisibility(View.VISIBLE);
             }
         }
+
+        if(!TextUtils.isEmpty(orderId)){
+            //用户余额。
+            if(ifYueChecked) {
+                yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney()) + SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
+            }else{
+                yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
+            }
+            if(yueFloat >0){
+                if(yueFloat>needFloat2) {
+                    yue_fee.setText(needFloat2 + "");
+                }else{
+                    yue_fee.setText(yueFloat + "");
+                }
+                yue_line.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -210,5 +253,13 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
     public void setIfYueChecked(boolean ifYueChecked) {
         this.ifYueChecked = ifYueChecked;
 
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 }

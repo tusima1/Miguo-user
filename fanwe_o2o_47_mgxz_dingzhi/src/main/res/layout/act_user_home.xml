@@ -38,17 +38,17 @@
                     android:layout_marginLeft="@dimen/dp13"
                     android:layout_marginTop="@dimen/dp20"
                     android:layout_toRightOf="@+id/iv_icon_act_user_home"
-                    android:drawablePadding="@dimen/dp5"
+                    android:drawablePadding="@dimen/dp4"
                     android:text=""
                     android:textColor="@color/text_fenxiao"
-                    android:textSize="@dimen/dp20" />
+                    android:textSize="@dimen/dp18" />
 
                 <TextView
                     android:id="@+id/tv_attention_status_act_user_home"
                     android:layout_width="@dimen/dp74"
                     android:layout_height="@dimen/dp34"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/dp12"
+                    android:layout_marginRight="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp15"
                     android:background="@drawable/bg_orange_line"
                     android:gravity="center"

@@ -15,6 +15,7 @@
         android:src="@drawable/app_icon"/>
 
     <LinearLayout
+        android:id="@+id/ll_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/dp5"
             android:drawableRight="@drawable/ic_rank_1"
-            android:text="已而已而哟"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/sp17"/>
 
@@ -38,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp7"
-            android:text="我是哈哈就是大连开发..."
+            android:text=""
             android:singleLine="true"
             android:textColor="@color/gray_text_99"
             android:textSize="@dimen/sp17"/>

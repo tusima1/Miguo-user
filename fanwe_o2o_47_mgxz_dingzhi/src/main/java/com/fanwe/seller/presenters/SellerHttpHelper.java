@@ -30,6 +30,9 @@ import com.fanwe.seller.model.getClassifyList.ResultClassifyList;
 import com.fanwe.seller.model.getClassifyList.RootClassifyList;
 import com.fanwe.seller.model.getCommentList.ResultCommentList;
 import com.fanwe.seller.model.getCommentList.RootCommentList;
+import com.fanwe.seller.model.getCommentTotal.ModelCommentTotal;
+import com.fanwe.seller.model.getCommentTotal.ResultCommentTotal;
+import com.fanwe.seller.model.getCommentTotal.RootCommentTotal;
 import com.fanwe.seller.model.getCroupBuyByMerchant.ModelCroupBuyByMerchant;
 import com.fanwe.seller.model.getCroupBuyByMerchant.ResultCroupBuyByMerchant;
 import com.fanwe.seller.model.getCroupBuyByMerchant.RootCroupBuyByMerchant;
@@ -908,6 +911,39 @@ public class SellerHttpHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 mView.onSuccess(SellerConstants.MY_DISTRIBUTION_SHOP, null);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 获取评论汇总信息
+     *
+     * @param tuan_id
+     * @param shop_id
+     */
+    public void getCommentTotal(String tuan_id, String shop_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("tuan_id", tuan_id);
+        params.put("shop_id", String.valueOf(shop_id));
+        params.put("method", SellerConstants.COMMENT_TOTAL);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootCommentTotal root = gson.fromJson(responseBody, RootCommentTotal.class);
+                List<ResultCommentTotal> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.COMMENT_TOTAL, null);
+                    return;
+                }
+                List<ModelCommentTotal> items = result.get(0).getBody();
+                mView.onSuccess(SellerConstants.COMMENT_TOTAL, items);
             }
 
             @Override

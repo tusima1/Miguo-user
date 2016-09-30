@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -80,6 +81,7 @@ import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
+import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -166,7 +168,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private boolean mProfile;//默认是美白
     private boolean bFirstRender = true;
-
+    private ImageView withoutAV;
     private String backGroundId;
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
@@ -287,6 +289,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
                 .LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
+        withoutAV = (ImageView)findViewById(R.id.withoutAV);
         registerReceiver();
     }
 
@@ -308,6 +311,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private void initHelper() {
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
+        mEnterRoomHelper.setCallback(frameReceivecallback);
         mSellerHttpHelper = new SellerHttpHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
@@ -402,10 +406,24 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
     }
 
+    AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer  frameReceivecallback = new AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer() {
+        @Override
+        public void onFrameReceive(AVVideoCtrl.VideoFrameWithByteBuffer videoFrameWithByteBuffer) {
+            if(videoFrameWithByteBuffer!=null && videoFrameWithByteBuffer.data!=null){
+                Log.e("liveActivity","get frame ");
+                withoutAV.setVisibility(View.GONE);
+            }
+
+        }
+    };
+
     public void enterRoom() {
         mLiveHelper.setCameraPreviewChangeCallback();
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
+        mEnterRoomHelper.startEnterRoom();
+
+        //判断是否取到第一帧
         mEnterRoomHelper.startEnterRoom();
         //初始化view
         initView();
@@ -827,24 +845,25 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initInviteDialog();
 
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
+        mUserBottomTool.setVisibility(View.VISIBLE);
+        mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
+
+        mRedPacketAdapter = new PagerRedPacketAdapter();
+        mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
 
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
         mUserHeadTopView.setmLiveView(this);
         mUserHeadTopView.setmAdapter(mHeadTopAdapter);
         mUserHeadTopView.init();
 
-
         mUserHeadTopView.setVisibility(View.VISIBLE);
         mUserHeadTopView.initNeed(this);
 
-        mUserBottomTool.setVisibility(View.VISIBLE);
-        mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
         mHostBottomToolView1.setVisibility(View.GONE);
         mHostBottomMeiView2.setVisibility(View.GONE);
         String hostImg = CurLiveInfo.getHostAvator();
         mUserHeadTopView.setHostImg(hostImg);
         mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
-
         doUpdateMembersCount();
 
 
@@ -856,8 +875,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "1", App.getInstance().code);
 
         }
-        mRedPacketAdapter = new PagerRedPacketAdapter();
-        mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
+
 
         mUserHeadTopView.setViews();
     }
@@ -869,6 +887,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //初始化底部
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
+            if (!LiveUtil.checkIsHost()){
+                mUserBottomTool.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mUserBottomTool!=null){
+                            //TODO 在低配置的会来不及初始化,先这样,等有了更好的解决方案再更改
+                            mUserBottomTool.clickBaoBao();
+                        }
+                    }
+                },2000);
+            }
         }
         if (!TextUtils.isEmpty(CurLiveInfo.shopID) && !LiveUtil.checkIsHost()) {
             getShopDetail(CurLiveInfo.shopID);
@@ -1088,6 +1117,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
 
+
     /**
      * 进入房间成功
      *
@@ -1099,6 +1129,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         Log.e("LiveActivity", "");
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
+
 
         //设置预览回调，修正摄像头镜像
         mLiveHelper.setCameraPreviewChangeCallback();
@@ -1361,7 +1392,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     //主播心跳
                     mHearBeatTimer = new Timer(true);
                     mHeartBeatTask = new HeartBeatTask();
-                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 30 * 1000);
+                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 5 * 1000);
 
                     //直播时间
                     mVideoTimer = new Timer(true);
@@ -2097,9 +2128,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if (mBaoBaoAdapter==null){
+                            return;
+                        }
                         if (datas == null) {
                             mBaoBaoAdapter.setData(null);
-                        } else {
+                        }else{
                             mBaoBaoAdapter.setData(datas);
                         }
                         mBaoBaoAdapter.notifyDataSetChanged();

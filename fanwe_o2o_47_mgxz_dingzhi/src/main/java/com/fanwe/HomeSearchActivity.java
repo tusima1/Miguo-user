@@ -1,8 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 
 import com.fanwe.adapter.SearchTypeAdapter;
 import com.fanwe.app.App;
@@ -23,18 +19,18 @@ import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.fragment.TuanListFragment;
 import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.library.customview.ClearEditText;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.SearchTypeModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeSearchActivity extends BaseActivity
 {
 	/** 0:优惠，2:团购，3:商家，4:活动，5:商城 */
 	public static final String EXTRA_SEARCH_TYPE = "extra_search_type";
-
-	@ViewInject(R.id.act_home_search_rl_search_bar)
-	private RelativeLayout mRlSearchBar = null;
 
 	@ViewInject(R.id.act_home_search_et_search_text)
 	private ClearEditText mEtSearchText = null;

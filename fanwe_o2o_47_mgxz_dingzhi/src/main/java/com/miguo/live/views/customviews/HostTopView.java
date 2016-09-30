@@ -134,8 +134,6 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             mRecyclerView.setVisibility(View.VISIBLE);
             mTv_arrive_num.setVisibility(View.VISIBLE);
             mAV_members_num.setVisibility(View.VISIBLE);
-        } else {
-            MGToast.showToast("初始化view错误!");
         }
     }
 
@@ -148,8 +146,6 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             mRecyclerView.setVisibility(View.INVISIBLE);
             mTv_arrive_num.setVisibility(View.INVISIBLE);
             mAV_members_num.setVisibility(View.INVISIBLE);
-        } else {
-            MGToast.showToast("初始化view错误!");
         }
     }
 

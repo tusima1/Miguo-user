@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.fanwe.user.view.WelcomeActivity">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <!--<me.relex.circleindicator.CircleIndicator-->
+        <!--android:id="@+id/indicator"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_marginBottom="@dimen/dp25"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:gravity="center"-->
+        <!--app:ci_drawable="@drawable/black_radius_square"-->
+        <!--app:ci_height="8dp"-->
+        <!--app:ci_margin="5dp"-->
+        <!--app:ci_width="8dp"/>-->
+
+</FrameLayout>

@@ -492,7 +492,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         Log.e("App setCurrentRoomId", newRoomId + "newRoomId ");
         EnterLiveHelper liveHelper = new EnterLiveHelper(this, null);
         if (!TextUtils.isEmpty(currentRoomId) && !currentRoomId.equals(newRoomId)) {
-//            liveHelper.quiteAVRoom();
+           liveHelper.quiteAVRoom();
             App.getInstance().setAvStart(false);
             Log.e("App setCurrentRoomId", currentRoomId + "oldRoomId quiteAVRoom");
         }

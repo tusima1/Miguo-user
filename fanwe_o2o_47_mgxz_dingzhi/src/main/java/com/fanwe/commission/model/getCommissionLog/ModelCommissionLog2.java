@@ -3,7 +3,7 @@ package com.fanwe.commission.model.getCommissionLog;
 /**
  * Created by didik on 2016/8/28.
  */
-public class ModelCommissionLog {
+public class ModelCommissionLog2 {
 //    "money": "45.00",              操作金额，提现为负
 //    "user_id": "292ca354-2637-4546-b19f-21750de0cbd8",          用户id
 //    "description": "会员升级金额增加:二级下线",    日志说明
@@ -16,34 +16,17 @@ public class ModelCommissionLog {
 //    "id": "21974238-5ba0-424a-9e08-2ab74c0952aa"
 
 
-//    "money":"0.15",
-//            "user_id":"21070107-7cba-4fc6-8df6-f54509f13bca",
 //            "before_money":"1000.00",
-//            "mobile":"",
-//            "description":"生成订单时会员升级费用支付",
-//            "insert_time":"1473664112240",
-//            "money_type":"会员升级费用消费",------//money_type
-//            "dist_id_from":"",-----------//来源人：188****5484
-//            "id":"92e796ff-e56d-42e8-a3bd-28de4e0d0f38",
-//            "order_id":"1885173e-da76-4491-9c66-1e287b28d51f"
     private String money;
     private String user_id;
     private String mobile;
+
     private String description;
     private String insert_time;
     private String money_type;
     private String dist_id_from;
     private String id;
     private String order_id;
-    private String before_money;
-
-    public String getBefore_money() {
-        return before_money;
-    }
-
-    public void setBefore_money(String before_money) {
-        this.before_money = before_money;
-    }
 
     public String getMoney() {
         return money;

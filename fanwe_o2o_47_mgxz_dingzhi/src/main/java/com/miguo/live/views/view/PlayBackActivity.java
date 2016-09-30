@@ -813,8 +813,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void memberQuit(String id, String name, String faceUrl) {
-        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间了", Constants
-                .MEMBER_EXIT);
+//        refreshTextListView(faceUrl, TextUtils.isEmpty(name) ? id : name, "退出房间了", Constants
+//                .MEMBER_EXIT);
 
         if (CurLiveInfo.getMembers() > 1) {
             int members = CurLiveInfo.getMembers() - 1;
