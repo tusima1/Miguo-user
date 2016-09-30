@@ -486,6 +486,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
      */
     @Override
     public void onScrollToEnd() {
+        Log.d("Home-Fragment", "on scroll to end..");
 //        getTuanList(pageNum);
     }
 
