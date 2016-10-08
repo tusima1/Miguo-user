@@ -97,7 +97,6 @@ public class AttentionListActivity extends Activity implements CallbackView2 {
                 startActivity(intent);
             }
         });
-        ptrl.setRefreshing();
     }
 
     private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -118,6 +117,12 @@ public class AttentionListActivity extends Activity implements CallbackView2 {
             getData();
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ptrl.setRefreshing();
+    }
 
     @Override
     public void onSuccess(String responseBody) {
