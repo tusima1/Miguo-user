@@ -96,6 +96,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      * 订单编号。
      */
     private String orderId;
+    private PaymentTypeInfo mDefaultPayTypeInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,19 +147,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragPayments = new OrderDetailPaymentsFragment();
 
 
-        mFragPayments.setmListener(new PaymentAdapter.PaymentTypeChangeListener() {
-
-            @Override
-            public void onPaymentChange(PaymentTypeInfo model) {
-                if(model.isChecked()) {
-                    currentPayType = model;
-                }else{
-                    currentPayType =null;
-                }
-                changePayType(1, false);
-            }
-        });
-
+        mFragPayments.setmListener(payTypeListener);
 
         getSDFragmentManager().replace(R.id.act_confirm_order_fl_payments, mFragPayments);
         //红包
@@ -195,6 +184,22 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragFees = new OrderDetailFeeFragment();
         getSDFragmentManager().replace(R.id.act_confirm_order_fl_fees, mFragFees);
     }
+
+    private PaymentAdapter.PaymentTypeChangeListener payTypeListener=new PaymentAdapter.PaymentTypeChangeListener() {
+
+
+        @Override
+        public void onPaymentChange(PaymentTypeInfo model) {
+            if(model.isChecked()) {
+                //微信支付
+                currentPayType = model;
+            }else{
+                //支付宝
+                currentPayType =null;
+            }
+            changePayType(1, false);
+        }
+    };
 
     private void initPullToRefreshScrollView() {
         mPtrsvAll.setMode(Mode.PULL_FROM_START);
@@ -340,7 +345,19 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         if (!TextUtils.isEmpty(orderId)) {
             findViewById(R.id.act_my_red_pay).setVisibility(View.GONE);
         }
+
+        //设置默认的付款方式
+//        PaymentTypeInfo info=new PaymentTypeInfo();
+//        for (PaymentTypeInfo typeInfo : payTypeData) {
+//            if ("1".equals(typeInfo.getDefault_pay())){
+//                info=typeInfo;
+//                info.setChecked(true);
+//                break;
+//            }
+//        }
+        payTypeListener.onPaymentChange(mDefaultPayTypeInfo);
     }
+
 
     /**
      * 绑定 支付方式
@@ -348,14 +365,18 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      * @param datas
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
+//        List<PaymentTypeInfo> finalData=new ArrayList<>();
         if (datas != null && datas.size() > 0) {
             for(int i = 0 ; i < datas.size() ; i++){
                 PaymentTypeInfo paymentTypeInfo = datas.get(i);
                 if(paymentTypeInfo!=null&&"1".equals(paymentTypeInfo.getDefault_pay())){
                     paymentTypeInfo.setChecked(true);
+                    this.mDefaultPayTypeInfo=paymentTypeInfo;
                 }
+//                finalData.add(paymentTypeInfo);
             }
             mFragPayments.setListPayment(datas);
+//            this.payTypeData=datas;
         }
     }
 
@@ -555,8 +576,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                         dealBenifit(datas);
                     }
                 });
-            default:
-                break;
         }
 
     }

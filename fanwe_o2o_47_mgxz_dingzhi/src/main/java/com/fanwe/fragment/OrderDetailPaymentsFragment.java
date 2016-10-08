@@ -4,24 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
-import com.fanwe.ConfirmOrderActivity;
-import com.fanwe.ConfirmTopUpActivity;
 import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.customview.MaxHeightListView;
-import com.fanwe.customview.SDPaymentListView;
-import com.fanwe.library.customview.SDViewBase;
-import com.fanwe.library.customview.SDViewNavigatorManager;
-import com.fanwe.library.customview.SDViewNavigatorManager.Mode;
-import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,6 +72,15 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 		resetParams();
 		// TODO 生成支付方式
 		paymentAdapter.update(listPayment);
+//		if(listPayment!=null && listPayment.size()>=2){
+//			MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+//				@Override
+//				public void run() {
+//					paylistview.performItemClick(paymentAdapter.getView(1,null,paylistview),1,paymentAdapter.getItemId(1));
+//					MGLog.e("gg","执行了");
+//				}
+//			},3000);
+//		}
 
 	}
 

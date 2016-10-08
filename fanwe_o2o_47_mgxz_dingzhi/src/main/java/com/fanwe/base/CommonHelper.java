@@ -1,11 +1,13 @@
 package com.fanwe.base;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
+import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.TreeMap;
@@ -97,6 +99,10 @@ public class CommonHelper extends Presenter {
     public void doRegisterJPushAlias(String alias, MgCallback callback){
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("alias", alias);
+        if (TextUtils.isEmpty(App.getInstance().getToken())){
+            MGLog.e("Jpush","token为null,无法注册Jpush!");
+            return;
+        }
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.JPUSH_ALIAS);
         OkHttpUtils.getInstance().get(null, params, callback);

@@ -19,16 +19,10 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDTypeParseUtil;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CommentModel;
-import com.fanwe.model.Dp_indexActModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.ModelComment;
 import com.fanwe.seller.model.ModelDisplayComment;
@@ -40,7 +34,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
@@ -212,42 +205,12 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
             }
         });
-        mPtrlvComment.setRefreshing();
     }
 
-    protected void requestComments(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.setmIsNeedCheckLoginState(false);
-        model.putCtl("dp");
-        model.put("data_id", mId);
-        model.put("type", mStrType);
-        model.putPage(mPage.getPage());
-        model.putUser();
-        SDRequestCallBack<Dp_indexActModel> handler = new SDRequestCallBack<Dp_indexActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    mPage.update(actModel.getPage());
-                    if (actModel != null) {
-//                        bindData(actModel);
-                    }
-                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore, "未找到评论", "没有更多评论了");
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-                mPtrlvComment.onRefreshComplete();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPtrlvComment.setRefreshing();
     }
 
     /**

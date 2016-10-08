@@ -169,7 +169,11 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
 
     private void requestInitInterface() {
         //请求城市列表
-        sellerHttpHelper.getCityList();
+        if (TextUtils.isEmpty(App.getInstance().getToken())){
+            MGLog.e("token为null,无法请求城市列表");
+        }else {
+            sellerHttpHelper.getCityList();
+        }
     }
 
     private void startMainActivity() {

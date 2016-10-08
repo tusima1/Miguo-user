@@ -191,7 +191,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             return;
         }
         mLoginHelper.doQuickLogin(mNumberPhone, mStrCode);
-//        SDDialogManager.showProgressDialog("请稍候...");
+        SDDialogManager.showProgressDialog("请稍候...");
     }
 
 
