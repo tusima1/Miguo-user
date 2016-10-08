@@ -72,16 +72,6 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 		resetParams();
 		// TODO 生成支付方式
 		paymentAdapter.update(listPayment);
-//		if(listPayment!=null && listPayment.size()>=2){
-//			MGUIUtil.runOnUiThreadDelayed(new Runnable() {
-//				@Override
-//				public void run() {
-//					paylistview.performItemClick(paymentAdapter.getView(1,null,paylistview),1,paymentAdapter.getItemId(1));
-//					MGLog.e("gg","执行了");
-//				}
-//			},3000);
-//		}
-
 	}
 
 	@Override

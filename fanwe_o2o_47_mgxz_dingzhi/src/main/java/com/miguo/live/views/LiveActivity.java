@@ -855,10 +855,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         if (mLiveHttphelper != null) {
             mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "1", App.getInstance().code);
+//            mLiveHttphelper.checkFocus(CurLiveInfo.getHostID());
 
         }
-
-
         mUserHeadTopView.setViews();
     }
 
@@ -2167,6 +2166,22 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     }
                 });
                 break;
+//            case LiveConstants.CHECK_FOCUS:
+//                if (!SDCollectionUtil.isEmpty(datas)) {
+//                    ModelCheckFocus modelCheckFocus = (ModelCheckFocus) datas.get(0);
+//                    if ("1".equals(modelCheckFocus.getFocus())) {
+//                        //已关注
+//                        MGUIUtil.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mUserHeadTopView.setHasFocus();
+//                            }
+//                        });
+//                    } else {
+//                        //TODO 未关注  doNothing
+//                    }
+//                }
+//                break;
         }
     }
 

@@ -347,14 +347,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         }
 
         //设置默认的付款方式
-//        PaymentTypeInfo info=new PaymentTypeInfo();
-//        for (PaymentTypeInfo typeInfo : payTypeData) {
-//            if ("1".equals(typeInfo.getDefault_pay())){
-//                info=typeInfo;
-//                info.setChecked(true);
-//                break;
-//            }
-//        }
         payTypeListener.onPaymentChange(mDefaultPayTypeInfo);
     }
 
@@ -365,7 +357,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      * @param datas
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
-//        List<PaymentTypeInfo> finalData=new ArrayList<>();
         if (datas != null && datas.size() > 0) {
             for(int i = 0 ; i < datas.size() ; i++){
                 PaymentTypeInfo paymentTypeInfo = datas.get(i);
@@ -373,10 +364,8 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                     paymentTypeInfo.setChecked(true);
                     this.mDefaultPayTypeInfo=paymentTypeInfo;
                 }
-//                finalData.add(paymentTypeInfo);
             }
             mFragPayments.setListPayment(datas);
-//            this.payTypeData=datas;
         }
     }
 
