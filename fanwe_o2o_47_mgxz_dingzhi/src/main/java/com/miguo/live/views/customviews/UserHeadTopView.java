@@ -292,6 +292,12 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
             }
         } else if (LiveConstants.USER_FOCUS.equals(method)) {
             //不显示
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mFollow.setVisibility(GONE);
+                }
+            });
         }
     }
 

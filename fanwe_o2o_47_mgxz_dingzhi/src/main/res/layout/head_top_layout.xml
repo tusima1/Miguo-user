@@ -103,7 +103,6 @@
         android:layout_height="@dimen/dp19"
         android:layout_marginLeft="@dimen/dp5"
         android:layout_toRightOf="@+id/tv_username"
-        android:visibility="gone"
         android:background="@drawable/bg_follow" />
 
 
