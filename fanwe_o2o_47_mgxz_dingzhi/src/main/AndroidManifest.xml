@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.o2o.miguo"
     android:installLocation="auto"
-    android:versionCode="2016093006"
-    android:versionName="6.2.1">
+    android:versionCode="2016100101"
+    android:versionName="5.6.0">
 
     <uses-sdk
         android:minSdkVersion="12"
