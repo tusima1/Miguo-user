@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +29,7 @@ import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUserExitDialogHelper;
+import com.miguo.utils.MGUIUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
 
@@ -231,6 +231,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
             mUserLocation.setText(location);
         }
     }
+    /*设置已经关注了主播*/
+    public void setHasFocus(){
+        mFollow.setVisibility(GONE);
+    }
 
     public boolean isExitDialogShowing() {
         if (userExitDialogHelper != null) {
@@ -269,16 +273,32 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
                 ModelCheckFocus modelCheckFocus = (ModelCheckFocus) d.get(0);
                 if ("1".equals(modelCheckFocus.getFocus())) {
                     //已关注
-                    message.what = 1;
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFollow.setVisibility(GONE);
+                        }
+                    });
                 } else {
-                    //去关注
-                    message.what = 0;
+                    //未关注
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFollow.setVisibility(VISIBLE);
+                        }
+                    });
+
                 }
             }
         } else if (LiveConstants.USER_FOCUS.equals(method)) {
-            message.what = 1;
+            //不显示
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mFollow.setVisibility(GONE);
+                }
+            });
         }
-        mHandler.sendMessage(message);
     }
 
     @Override
@@ -290,21 +310,6 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void onFinish(String method) {
 
     }
-
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    //关注主播
-                    mFollow.setVisibility(VISIBLE);
-                    break;
-                case 1:
-                    //已关注
-                    mFollow.setVisibility(GONE);
-                    break;
-            }
-        }
-    };
 
     public void gotoShopDetailActivity(String shop_id) {
         Intent itemintent = new Intent();

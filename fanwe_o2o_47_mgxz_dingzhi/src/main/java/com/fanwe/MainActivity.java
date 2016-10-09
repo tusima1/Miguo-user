@@ -115,7 +115,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
     private String preHomeCityID = "";//记录首页cityid-->0为异常
     private LoginHelper mLoginHelper;
     private LiveHttpHelper liveHttpHelper;
-    private String token;
     private ClipboardManager clipboardManager;
     private String code;
 

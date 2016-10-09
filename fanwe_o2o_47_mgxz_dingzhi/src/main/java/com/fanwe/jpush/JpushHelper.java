@@ -1,25 +1,18 @@
 package com.fanwe.jpush;
 
-import java.security.MessageDigest;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CommonHelper;
-import com.fanwe.http.InterfaceServer;
 import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.work.AppRuntimeWorker;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 
-import android.text.TextUtils;
-import android.util.Log;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
@@ -39,7 +32,7 @@ public class JpushHelper {
 		}
 		String alias =userModel.getUser_id()+"" ;
 		if (TextUtils.isEmpty(alias)||"null".equals(alias) || tagSet == null) {
-			Log.d("Jpush", "initJPushConfig: token为空");
+			Log.e("Jpush", "initJPushConfig: token为空");
 			return;
 		}
 		/**
@@ -50,7 +43,7 @@ public class JpushHelper {
 
 					@Override
 					public void gotResult(int arg0, String arg1, Set<String> arg2) {
-						Log.d("Jpush", "initJPushConfig注册Jpush服务商结果: status:" + arg0 + " alias:" + arg1 + " tags:" + arg2);
+						Log.e("Jpush", "initJPushConfig注册Jpush服务商结果: status:" + arg0 + " alias:" + arg1 + " tags:" + arg2);
 					}
 				});
 	}
@@ -89,7 +82,7 @@ public class JpushHelper {
 		}
 		String alias =userModel.getUser_id()+"" ;
 		if (TextUtils.isEmpty(alias)) {
-			Log.d("Jpush", "initJpushRegister: token为空");
+			Log.e("Jpush", "initJpushRegister: token为空");
 			return;
 		}
 
@@ -98,7 +91,7 @@ public class JpushHelper {
 
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
-				Log.d("Jpush", "Jpush 注册失败!");
+				Log.e("Jpush", "Jpush 注册失败!");
 			}
 		});
 

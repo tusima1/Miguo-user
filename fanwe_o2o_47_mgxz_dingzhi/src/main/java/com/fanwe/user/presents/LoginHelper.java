@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.fragment.LoginFragment;
@@ -54,7 +53,6 @@ public class LoginHelper extends Presenter {
     private Context mContext;
     private static final String TAG = LoginHelper.class.getSimpleName();
     private LoginFragment mLoginView;
-    private int RoomId = -1;
     private Activity mActivity;
     private boolean notClose = false;
     private boolean ifShowToast =true;
