@@ -77,7 +77,7 @@ public class Danmukiller {
         setAvatarHeight(dip2px(40));
         setTextSize(dip2px(12));
         setDanmuBackRadius(dip2px(24));
-        setDanmuLive(3000);
+        setDanmuLive(5000);
         /**
          * 为了使弹幕文字处于头像的下半部分，所以需要将头像画布原点向上移动头像高度一般的距离
          * 这个值刚好的弹幕padding的值，从而弧形背景就可以和头像融合在一起（背景填充的情况）
