@@ -83,7 +83,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                     @Override
                     public void onError(int i, String s) {
                         try {
-//                            Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
                             if (mView != null) {
                                 mView.onFailue("IM 认证失败。");
                             }

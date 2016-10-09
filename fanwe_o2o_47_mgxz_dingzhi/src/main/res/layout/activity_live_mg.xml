@@ -4,11 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-   <ImageView
-       android:id="@+id/withoutAV"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:src="@drawable/bg_empty"/>
+
     <!--直播video-->
     <include
         android:id="@+id/av_video_layer_ui"

@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -81,7 +80,6 @@ import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
-import com.tencent.av.sdk.AVVideoCtrl;
 import com.tencent.av.sdk.AVView;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -168,7 +166,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     private boolean mProfile;//默认是美白
     private boolean bFirstRender = true;
-    private ImageView withoutAV;
+
     private String backGroundId;
 
     private ArrayList<String> mRenderUserList = new ArrayList<>();
@@ -289,7 +287,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager
                 .LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_live_mg);
-        withoutAV = (ImageView)findViewById(R.id.withoutAV);
         registerReceiver();
     }
 
@@ -311,7 +308,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private void initHelper() {
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
-        mEnterRoomHelper.setCallback(frameReceivecallback);
         mSellerHttpHelper = new SellerHttpHelper(this, this);
         //房间内的交互协助类
         mLiveHelper = new LiveHelper(this, this);
@@ -406,24 +402,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
     }
 
-    AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer  frameReceivecallback = new AVVideoCtrl.RemoteVideoPreviewCallbackWithByteBuffer() {
-        @Override
-        public void onFrameReceive(AVVideoCtrl.VideoFrameWithByteBuffer videoFrameWithByteBuffer) {
-            if(videoFrameWithByteBuffer!=null && videoFrameWithByteBuffer.data!=null){
-                Log.e("liveActivity","get frame ");
-                withoutAV.setVisibility(View.GONE);
-            }
-
-        }
-    };
-
     public void enterRoom() {
         mLiveHelper.setCameraPreviewChangeCallback();
         backGroundId = CurLiveInfo.getHostID();
         //进入房间流程
-        mEnterRoomHelper.startEnterRoom();
-
-        //判断是否取到第一帧
         mEnterRoomHelper.startEnterRoom();
         //初始化view
         initView();
@@ -1116,7 +1098,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     }
 
 
-
     /**
      * 进入房间成功
      *
@@ -1128,7 +1109,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         Log.e("LiveActivity", "");
         //必须得进入房间之后才能初始化UI
         mEnterRoomHelper.initAvUILayer(avView);
-
 
         //设置预览回调，修正摄像头镜像
         mLiveHelper.setCameraPreviewChangeCallback();
@@ -1391,7 +1371,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     //主播心跳
                     mHearBeatTimer = new Timer(true);
                     mHeartBeatTask = new HeartBeatTask();
-                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 5 * 1000);
+                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 30 * 1000);
 
                     //直播时间
                     mVideoTimer = new Timer(true);
