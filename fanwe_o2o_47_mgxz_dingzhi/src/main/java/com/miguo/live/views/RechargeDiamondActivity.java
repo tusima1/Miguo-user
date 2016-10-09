@@ -42,6 +42,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
 
 import java.util.HashMap;
@@ -154,7 +155,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                 currentDiamondType = bigDiamondType;
                 for (int i = 0; i < diamondTypeEntityList.size(); i++) {
                     DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
-                        entity0.setChecked(false);
+                    entity0.setChecked(false);
                 }
                 diamondGridAdapter.setDatas(diamondTypeEntityList);
                 diamondGridAdapter.notifyDataSetChanged();
@@ -187,9 +188,9 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
             @Override
             public void onPaymentChange(PaymentTypeInfo model) {
-                if(model.isChecked()) {
+                if (model.isChecked()) {
                     currentPayType = model;
-                }else{
+                } else {
                     currentPayType = null;
                 }
             }
@@ -268,9 +269,9 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
         if (datas != null && datas.size() > 0) {
-            for(int i = 0 ; i < datas.size() ; i++){
+            for (int i = 0; i < datas.size(); i++) {
                 PaymentTypeInfo paymentTypeInfo = datas.get(i);
-                if(paymentTypeInfo!=null&&"1".equals(paymentTypeInfo.getDefault_pay())){
+                if (paymentTypeInfo != null && "1".equals(paymentTypeInfo.getDefault_pay())) {
                     paymentTypeInfo.setChecked(true);
                     currentPayType = paymentTypeInfo;
                 }
@@ -288,7 +289,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         if (diamondUserOwnEntityList != null) {
             DiamondUserOwnEntity entityOwn = diamondUserOwnEntityList.get(0);
             float value = SDFormatUtil.stringToFloat(entityOwn.getDiamond_android()) + SDFormatUtil.stringToFloat(entityOwn.getCommon_diamond());
-            self_diamond.setText(SDFormatUtil.formatNumberString(String.valueOf(value),2));
+            self_diamond.setText(SDFormatUtil.formatNumberString(String.valueOf(value), 2));
 
         }
     }
@@ -323,6 +324,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
     }
 
     private void gotoPayHistoryActivity() {
+        SDEventManager.post(EnumEventTag.RECHARGE_DIAMOND.ordinal());
         Intent intent = new Intent(RechargeDiamondActivity.this, PayHistoryActivity.class);
         startActivity(intent);
         finish();
@@ -361,15 +363,16 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         }
     }
 
-    private void payFailue(){
+    private void payFailue() {
         MGToast.showToast("支付失败。");
     }
+
     @Override
     public void onEventMainThread(SDBaseEvent event) {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case PAY_SUCCESS_WEIXIN:
-               gotoPayHistoryActivity();
+                gotoPayHistoryActivity();
                 break;
             case PAY_FAILUE_WEIXIN:
                 payFailue();
@@ -378,6 +381,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                 break;
         }
     }
+
     private void clickPay() {
         if (mPaymentCodeModel == null) {
             return;
@@ -547,7 +551,6 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
         SDWxappPay.getInstance().pay(req);
     }
-
 
 
     private void bindDiamondType(List<DiamondTypeEntity> diamondTypeEntityList) {

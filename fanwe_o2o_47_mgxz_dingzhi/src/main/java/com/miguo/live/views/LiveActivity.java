@@ -32,6 +32,7 @@ import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.GiftId;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
@@ -78,6 +79,8 @@ import com.miguo.live.views.gift.SmallGifView;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.test.MGTimer;
+import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 import com.tencent.TIMUserProfile;
 import com.tencent.av.TIMAvManager;
 import com.tencent.av.sdk.AVView;
@@ -226,6 +229,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         findViews();
         initHelper();
         checkUserAndPermission();
+        SDEventManager.register(this);
+    }
+
+    public void onEventMainThread(SDBaseEvent event) {
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case RECHARGE_DIAMOND:
+                if (mUserBottomTool != null) {
+                    mUserBottomTool.refreshGift();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     void checkPermission() {
@@ -868,16 +884,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //初始化底部
         if (mUserBottomTool != null) {
             mUserBottomTool.initView(this, mLiveHelper, mHeartLayout, root, this);
-            if (!LiveUtil.checkIsHost()){
+            if (!LiveUtil.checkIsHost()) {
                 mUserBottomTool.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (mUserBottomTool!=null){
+                        if (mUserBottomTool != null) {
                             //TODO 在低配置的会来不及初始化,先这样,等有了更好的解决方案再更改
                             mUserBottomTool.clickBaoBao();
                         }
                     }
-                },2000);
+                }, 2000);
             }
         }
         if (!TextUtils.isEmpty(CurLiveInfo.shopID) && !LiveUtil.checkIsHost()) {
@@ -961,6 +977,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     @Override
     protected void onDestroy() {
+        SDEventManager.unregister(this);
         try {
             /**
              * 一定要退出聊天室
@@ -2107,12 +2124,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (mBaoBaoAdapter==null){
+                        if (mBaoBaoAdapter == null) {
                             return;
                         }
                         if (datas == null) {
                             mBaoBaoAdapter.setData(null);
-                        }else{
+                        } else {
                             mBaoBaoAdapter.setData(datas);
                         }
                         mBaoBaoAdapter.notifyDataSetChanged();
@@ -2309,10 +2326,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     /**
      * 小礼物
      * //test commit and push branch
+     *
      * @param bean
      */
     private void showSmallGift(GiftListBean bean) {
-        Log.d("smallgift" , "there is a small gift...");
+        Log.d("smallgift", "there is a small gift...");
         smallGifView.addGift(bean);
     }
 

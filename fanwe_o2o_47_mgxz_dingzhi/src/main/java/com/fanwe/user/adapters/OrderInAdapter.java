@@ -152,6 +152,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     public void onClick(View v) {
                         Intent intent = new Intent(mActivity, AddCommentActivity.class);
                         intent.putExtra(AddCommentActivity.EXTRA_ID, model.getDetail_id());
+                        intent.putExtra(AddCommentActivity.TUAN_ID, model.getTuan_id());
                         intent.putExtra(AddCommentActivity.EXTRA_NAME, model.getName());
                         intent.putExtra(AddCommentActivity.EXTRA_TYPE, Constant.CommentType.DEAL);
                         mActivity.startActivity(intent);
