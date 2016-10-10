@@ -246,6 +246,7 @@ public class Constants {
     public static final  String  DANMU_USER_ID = "userId";
     public static final  String  DANMU_USER_USER_NAME = "userName";
     public static final  String  DANMU_USER_AVATAR_URL = "avatarUrl";
+    public static final  String  DANMU_MONEY = "userdiamond";
     /**
      *  red_packet_duration  红包间隔时间
      */

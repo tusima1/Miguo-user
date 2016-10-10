@@ -318,8 +318,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccessResponse(String responseBody) {
                 Log.d(TAG, "sendDanmuMessage responbody: " + responseBody);
                 GiftDanmuBean bean = new Gson().fromJson(responseBody, GiftDanmuBean.class);
+                String userdiamond = bean.getResult().get(0).getBody().get(0).getUserdiamond();
                 if (bean.getStatusCode() == 200) {
-                    sendIMDanmuMessage(message, userName, userId, avatarUrl);
+                    sendIMDanmuMessage(message, userName, userId, avatarUrl, userdiamond);
                 } else {
                     if (mLiveView != null) {
                         mLiveView.withoutEnoughMoney(bean.getMessage());
@@ -387,11 +388,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     /**
      * 发送弹幕
      */
-    public void sendIMDanmuMessage(String message, String userName, String userId, String avatarUrl) {
+    public void sendIMDanmuMessage(String message, String userName, String userId, String avatarUrl, String userdiamond) {
         HashMap<String, String> paramsMap = new HashMap<String, String>();
         paramsMap.put(Constants.DANMU_MESSAGE, message);
         paramsMap.put(Constants.DANMU_USER_USER_NAME, userName);
         paramsMap.put(Constants.DANMU_USER_ID, userId);
+        paramsMap.put(Constants.DANMU_USER_AVATAR_URL, avatarUrl);
         paramsMap.put(Constants.DANMU_USER_AVATAR_URL, avatarUrl);
         String jsonParams = HashmapToJson.hashMapToJson(paramsMap);
         sendLoalDanmu(paramsMap);

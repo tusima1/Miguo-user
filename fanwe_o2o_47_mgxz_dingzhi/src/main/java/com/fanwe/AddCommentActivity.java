@@ -46,6 +46,8 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
      */
     public static final String EXTRA_ID = "extra_id";
 
+    public static final String TUAN_ID = "tuan_id";
+
     /**
      * type 评论类型,传进来的值要引用Constant.CommentType的属性 (String)
      */
@@ -59,6 +61,7 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
     private AddCommentFragment mFragAddComment;
 
     private String mId;
+    private String mIdTuan;
     private String mStrType;
     private String mStrName;
     private int mPoint;
@@ -111,6 +114,7 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
 
     private void getIntentData() {
         mId = getIntent().getStringExtra(EXTRA_ID);
+        mIdTuan = getIntent().getStringExtra(TUAN_ID);
         mStrType = getIntent().getStringExtra(EXTRA_TYPE);
         mStrName = getIntent().getStringExtra(EXTRA_NAME);
         if (TextUtils.isEmpty(mId)) {
@@ -245,7 +249,13 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
                 MGToast.showToast("评论成功");
                 SDEventManager.post(EnumEventTag.COMMENT_SUCCESS.ordinal());
                 Intent intent = new Intent(mActivity, CommentListActivity.class);
-                intent.putExtra(CommentListActivity.EXTRA_ID, mId);
+                if (Constant.CommentType.DEAL.equals(mStrType)) {
+                    //团购
+                    intent.putExtra(CommentListActivity.EXTRA_ID, mIdTuan);
+                } else if (Constant.CommentType.STORE.equals(mStrType)) {
+                    //门店
+                    intent.putExtra(CommentListActivity.EXTRA_ID, mId);
+                }
                 intent.putExtra(CommentListActivity.EXTRA_TYPE, mStrType);
                 startActivity(intent);
                 finish();

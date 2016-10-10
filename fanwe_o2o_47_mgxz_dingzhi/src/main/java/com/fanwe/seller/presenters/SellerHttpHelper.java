@@ -526,7 +526,6 @@ public class SellerHttpHelper implements IHelper {
      */
     public void getCityList() {
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", getToken());
         params.put("method", SellerConstants.CITY_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

@@ -147,6 +147,10 @@ public enum EnumEventTag {
      */
     HOME_TYPE_CHANGE,
     /**
+     * 充值果钻
+     */
+    RECHARGE_DIAMOND,
+    /**
      * TOKEN失效 。
      */
     TOKEN_FAILUE;
