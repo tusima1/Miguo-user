@@ -87,25 +87,27 @@ public class AppUpgradeService extends Service implements CallbackView {
             MGLog.e("upgrade","apk url error!");
             stopSelf();
         }
-
-        if (ServerUrl.DEBUG){
-            urlApk=url;
-            showDialogUpgrade();
-            return;
-        }
-
         //TODO  Online Code
         if ("1".equals(modelVersion.getHas_upgrade())){
             if (TextUtils.isEmpty(urlApk)){
                 MGLog.e("未找到下载地址");
+                stopSelf();
             }else {
                 //TODO update
                 showDialogUpgrade();
             }
         }else if(mStartType == 1) {
             MGToast.showToast("当前已是最新版本!");
+            stopSelf();
         }
 
+    }
+    private void doTest(){
+        if (ServerUrl.DEBUG){
+            urlApk=url;
+            showDialogUpgrade();
+            return;
+        }
     }
 
     private void showDialogUpgrade() {
