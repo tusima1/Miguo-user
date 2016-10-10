@@ -121,6 +121,12 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         mLike.setOnClickListener(this);
     }
 
+    public void refreshGift() {
+        if (giftPopHelper != null) {
+            giftPopHelper.refreshGift();
+        }
+    }
+
     @Override
     public void onDestroy() {
 
@@ -154,9 +160,10 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     /**
      * 进入页面后就立刻弹出宝宝
      */
-    public void clickBaoBao(){
+    public void clickBaoBao() {
         mGoods.performClick();
     }
+
     /**
      * 点击出星星
      */
@@ -176,7 +183,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct,false);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false);
         sharePopHelper.show();
     }
 
@@ -184,14 +191,14 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击礼物
      */
     private void clickGift() {
-        if (giftPopHelper==null){
-            giftPopHelper = new UserSendGiftPopHelper(mAct,"1");
+        if (giftPopHelper == null) {
+            giftPopHelper = new UserSendGiftPopHelper(mAct, "1");
         }
         giftPopHelper.show();
         giftPopHelper.setOnPayGiftSuccessListener(new OnPayGiftSuccessListener() {
             @Override
             public void onPaySuc(GiftListBean giftInfo, int num) {
-                if(onGiftSendListener != null){
+                if (onGiftSendListener != null) {
                     onGiftSendListener.requestSendGift(giftInfo, num);
                 }
             }
@@ -239,7 +246,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             }
         }
 
-        userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct,isRobed);
+        userRobRedPacketEndDialogHelper = new UserRobRedPacketEndDialogHelper(mAct, isRobed);
         //显示抢到界面(两种状态)
         if (isRobed) {
             num = MGStringFormatter.getFloat2(num);
@@ -248,9 +255,10 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         userRobRedPacketEndDialogHelper.show();
 
     }
+
     /*dismiss*/
-    public void dismissPop(){
-        if (popHelper!=null){
+    public void dismissPop() {
+        if (popHelper != null) {
             popHelper.dismissLiveUserPop();
         }
     }
@@ -348,7 +356,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         this.mBaobaoAdapter = mBaobaoAdapter;
     }
 
-    public interface OnGiftSendListener{
+    public interface OnGiftSendListener {
         void requestSendGift(GiftListBean giftInfo, int num);
     }
 

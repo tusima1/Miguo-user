@@ -169,26 +169,21 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
 
     private void requestInitInterface() {
         //请求城市列表
-        if (TextUtils.isEmpty(App.getInstance().getToken())){
-            MGLog.e("token为null,无法请求城市列表");
-        }else {
-            sellerHttpHelper.getCityList();
-        }
+        sellerHttpHelper.getCityList();
     }
 
     private void startMainActivity() {
         Boolean user_first = setting.getBoolean("FIRST", true);
-        if (user_first){
+        if (user_first) {
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
-        }else {
-           Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
         finish();
 //         Intent intent = new Intent(getApplicationContext(),
 //         GuideActivity.class);
-
 
 
     }

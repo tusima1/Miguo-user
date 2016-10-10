@@ -9,6 +9,14 @@ import java.util.List;
  */
 public class ShoppingBody implements Serializable {
 
+//    "deals":
+//            "userAccountMoney":"0",//该用户可用多少余额
+//            "goodsTotal":"4752",//商品总价
+//            "payPrice":"4752",//应付价格
+//            "Total":"4752",
+//            "firstPriceTotal":"100",
+//            "id":"25aa3fed-f491-4789-97d1-9009906f7210",//id：下一个请求需求数据
+//            "userAccountMoneyFlg":"0",//判断余额能否使用，0：不可用，1：可用
     /**
      * 商家 商品详情。
      */
@@ -21,11 +29,10 @@ public class ShoppingBody implements Serializable {
      * 该用户可用多少余额
      */
     private String userAccountMoney;
-    /**
-     * 显示购买方式0：未选，1：支付宝，2：微信
-     */
-
-    private String payDisp;
+    //首单优惠总计
+    private String firstPriceTotal;
+    //判断余额能否使用，0：不可用，1：可用
+    private String userAccountMoneyFlg;
     /**
      * 该用户是否存在可使用的红包flg，0：无红包，1有红包
      */
@@ -38,9 +45,7 @@ public class ShoppingBody implements Serializable {
      * 应付价格
      */
     private String payPrice;
-    /**
-     * 总计
-     */
+    //总计
     private String Total;
     /**
      * 优惠了多少价格，这个优惠是指红包优惠了的
@@ -60,6 +65,21 @@ public class ShoppingBody implements Serializable {
 
     private String accountmoney;
 
+    public String getFirstPriceTotal() {
+        return firstPriceTotal;
+    }
+
+    public void setFirstPriceTotal(String firstPriceTotal) {
+        this.firstPriceTotal = firstPriceTotal;
+    }
+
+    public String getUserAccountMoneyFlg() {
+        return userAccountMoneyFlg;
+    }
+
+    public void setUserAccountMoneyFlg(String userAccountMoneyFlg) {
+        this.userAccountMoneyFlg = userAccountMoneyFlg;
+    }
 
     public void setDeals(List<Deals> deals){
         this.deals = deals;
@@ -78,12 +98,6 @@ public class ShoppingBody implements Serializable {
     }
     public String getUserAccountMoney(){
         return this.userAccountMoney;
-    }
-    public void setPayDisp(String payDisp){
-        this.payDisp = payDisp;
-    }
-    public String getPayDisp(){
-        return this.payDisp;
     }
     public void setRed_item_flg(String red_item_flg){
         this.red_item_flg = red_item_flg;
