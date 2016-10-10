@@ -117,20 +117,4 @@ public class DictModel {
         this.dic_type = dic_type;
     }
 
-    @Override
-    public String toString() {
-        return "DictModel{" +
-                "is_enable='" + is_enable + '\'' +
-                ", parent_id='" + parent_id + '\'' +
-                ", dic_mean='" + dic_mean + '\'' +
-                ", dic_value='" + dic_value + '\'' +
-                ", targert_obj='" + targert_obj + '\'' +
-                ", remark='" + remark + '\'' +
-                ", id='" + id + '\'' +
-                ", dic_name='" + dic_name + '\'' +
-                ", order_id='" + order_id + '\'' +
-                ", version='" + version + '\'' +
-                ", dic_type='" + dic_type + '\'' +
-                '}';
-    }
 }
