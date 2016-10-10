@@ -5,5 +5,5 @@ package com.fanwe.common;
  */
 
 public class AppUpdateManager {
-
+//hahha
 }
