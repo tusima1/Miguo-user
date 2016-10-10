@@ -1250,7 +1250,18 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             Integer values = Integer.valueOf(duration) + 10 * 1000;
 //            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
 
+            robLiftTimer = new CountDownTimer(values, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    mHostRedPacketCountDownView.setTime(SDDateUtil.secondesToMMSS(millisUntilFinished));
+                }
 
+                @Override
+                public void onFinish() {
+                    mHostRedPacketCountDownView.setTime("00:00");
+                    mHostBottomToolView1.setClickable(true);
+                }
+            };
             robLiftTimer.start();
             mHostBottomToolView1.setClickable(false);
         }
