@@ -48,6 +48,46 @@ public class OutSideShoppingCartHelper extends Presenter {
         this.callbackView2 = mCallbackView;
     }
 
+
+    /**
+     * 不要红包
+     *
+     * @param order_id 订单id
+     */
+    public void getOrderOperator(String order_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("method", UserConstants.ORDER_OPERATOR);
+        params.put("order_id", order_id);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Root root = JSON.parseObject(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                if ("200".endsWith(statusCode)) {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallbackView.onSuccess(UserConstants.ORDER_OPERATOR_GET, null);
+                        }
+                    });
+                } else {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCallbackView.onFailue(UserConstants.ORDER_OPERATOR_GET);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     /**
      * 添加到购物车。
      *

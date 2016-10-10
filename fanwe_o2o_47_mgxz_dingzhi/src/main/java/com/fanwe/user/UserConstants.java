@@ -3,9 +3,9 @@ package com.fanwe.user;
 public class UserConstants {
 
     /**
-     *注册 极光别名。
+     * 注册 极光别名。
      */
-    public static final String   JPUSH_ALIAS   ="JPushAlias";
+    public static final String JPUSH_ALIAS = "JPushAlias";
     /**
      * 登录接口。
      */
@@ -160,6 +160,11 @@ public class UserConstants {
      * 取消订单
      */
     public static final String ORDER_INFO_CANCEL_ORDER = "OrderOperator";
+    /**
+     * 不要红包
+     */
+    public static final String ORDER_OPERATOR = "OrderOperator";
+    public static final String ORDER_OPERATOR_GET = "OrderOperatorGet";
     /**
      * 退款页面数据
      */

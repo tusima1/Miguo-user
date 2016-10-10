@@ -39,8 +39,6 @@ import com.miguo.live.model.getBussDictionInfo.RootBussDictionInfo;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
 import com.miguo.live.model.getHandOutRedPacket.ResultHandOutRedPacket;
 import com.miguo.live.model.getHandOutRedPacket.RootHandOutRedPacket;
-import com.miguo.live.model.getHostAuthTime.ModelHostAuthTime;
-import com.miguo.live.model.getHostAuthTime.ResultHostAuthTime;
 import com.miguo.live.model.getHostAuthTime.RootHostAuthTime;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
 import com.miguo.live.model.getHostInfo.ResultHostInfo;
@@ -927,14 +925,9 @@ public class LiveHttpHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHostAuthTime rootHostAuthTime = gson.fromJson(responseBody, RootHostAuthTime.class);
-                List<ResultHostAuthTime> resultHostAuthTimes = rootHostAuthTime.getResult();
-                if (SDCollectionUtil.isEmpty(resultHostAuthTimes)) {
-                    mView.onSuccess(LiveConstants.HOST_AUTH_TIME, null);
-                    return;
-                }
-                ResultHostAuthTime resultHostAuthTime = resultHostAuthTimes.get(0);
-                List<ModelHostAuthTime> modelHostAuthTime = resultHostAuthTime.getBody();
-                mView.onSuccess(LiveConstants.HOST_AUTH_TIME, modelHostAuthTime);
+                List<RootHostAuthTime> roots = new ArrayList<>();
+                roots.add(rootHostAuthTime);
+                mView.onSuccess(LiveConstants.HOST_AUTH_TIME, roots);
             }
 
             @Override
