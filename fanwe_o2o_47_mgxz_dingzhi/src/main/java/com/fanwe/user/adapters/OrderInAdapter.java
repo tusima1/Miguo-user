@@ -141,7 +141,8 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             if (TextUtils.isEmpty(str_dp_id)) {
                 dp_id = 0;
             } else {
-                dp_id = MGStringFormatter.getInt(str_dp_id);
+                //表示已经点评
+                dp_id = 1;
             }
 
             if ((mStatus_value == 3 || mStatus_value == 4) && dp_id == 0 && consume_count > 0) {
