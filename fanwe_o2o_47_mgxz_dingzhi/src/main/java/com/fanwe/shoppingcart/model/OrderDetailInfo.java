@@ -11,6 +11,8 @@ public class OrderDetailInfo implements Serializable {
 
     private Order_info order_info;
 
+    private Share_info share_info;
+
     private String class_name;
 
     private HashMap<String, String> config;
@@ -23,6 +25,14 @@ public class OrderDetailInfo implements Serializable {
 
     public Order_info getOrder_info() {
         return this.order_info;
+    }
+
+    public Share_info getShare_info() {
+        return share_info;
+    }
+
+    public void setShare_info(Share_info share_info) {
+        this.share_info = share_info;
     }
 
     public void setClass_name(String class_name) {

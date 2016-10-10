@@ -78,5 +78,5 @@
     <color name="gray_text_89">#989898</color><!--font 灰色-->
     <color name="gray_text_59">#595959</color><!--font (RGB 89,89,89)-->
     <color name="gray_text_99">#999999</color><!--font (RGB 153,153,153)-->
-
+    <color name="c_C32836">#c32836</color>
 </resources>

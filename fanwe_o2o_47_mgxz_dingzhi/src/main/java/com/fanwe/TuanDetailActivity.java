@@ -117,7 +117,9 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
         sellerHttpHelper.getGroupBuyDetail(mId);
-        sellerHttpHelper.checkGroupCollect(mId);
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            sellerHttpHelper.checkGroupCollect(mId);
+        }
     }
 
     private void init() {
@@ -440,6 +442,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         model.setIs_first_price(SDFormatUtil.stringToFloat(modelGroupBuyDetail.getIs_first_price()));
                         model.setTime_status(SDFormatUtil.stringToInteger(modelGroupBuyDetail.getTime_status()));
                         model.setLast_time(DataFormat.toLong(modelGroupBuyDetail.getLast_time()));
+                        model.setBuy_count(DataFormat.toInt(modelGroupBuyDetail.getBuy_count()));
 
                         //点评列表
                         List<CommentModel> commentModels = new ArrayList<>();
