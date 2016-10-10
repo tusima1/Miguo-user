@@ -70,19 +70,9 @@ public class OutSideShoppingCartHelper extends Presenter {
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 if ("200".endsWith(statusCode)) {
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mCallbackView.onSuccess(UserConstants.ORDER_OPERATOR_GET, null);
-                        }
-                    });
+                    mCallbackView.onSuccess(UserConstants.ORDER_OPERATOR_GET, null);
                 } else {
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mCallbackView.onFailue(UserConstants.ORDER_OPERATOR_GET);
-                        }
-                    });
+                    mCallbackView.onFailue(UserConstants.ORDER_OPERATOR_GET);
                 }
             }
         });

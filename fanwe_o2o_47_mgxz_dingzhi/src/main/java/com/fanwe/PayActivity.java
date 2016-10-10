@@ -152,6 +152,12 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dialog = null;
+    }
+
     private void init() {
         getIntentData();
         initfews();
@@ -173,13 +179,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (dialog != null) {
-                        if (!dialog.isShowing()) {
-                            showShareDialog(true);
-                        }
-                    } else {
-                        showShareDialog(true);
-                    }
+                    showShareDialog(true);
                 }
             });
         }
@@ -190,13 +190,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (dialog != null) {
-                        if (!dialog.isShowing()) {
-                            showShareDialog(true);
-                        }
-                    } else {
-                        showShareDialog(true);
-                    }
+                    showShareDialog(true);
                 }
             });
         }
@@ -314,8 +308,16 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
 
     ShareAfterPaytDialog dialog;
 
+    /**
+     * 分享领红包
+     *
+     * @param flag true 展示分享选项
+     */
     private void showShareDialog(boolean flag) {
         if (share_info != null) {
+            if (dialog != null && dialog.isShowing()) {
+                return;
+            }
             dialog = new ShareAfterPaytDialog(PayActivity.this, share_info, shareResultCallback, flag);
 //            dialog.setCancelable(false);
             dialog.setCloseListener(new OnClickListener() {

@@ -48,25 +48,10 @@ public class ShareAfterPaytDialog extends BaseDialog {
     }
 
     private void setListener() {
-//        btnNo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btnNo.setBackgroundResource(R.drawable.ic_btn_yes_share_normal);
-//                btnNo.setTextColor(Color.parseColor("#C32836"));
-//                btnYes.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
-//                btnYes.setTextColor(Color.parseColor("#FFFFFF"));
-//                dismiss();
-//            }
-//        });
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnYes.setBackgroundResource(R.drawable.ic_btn_yes_share_normal);
-                btnYes.setTextColor(Color.parseColor("#C32836"));
-                btnNo.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
-                btnNo.setTextColor(Color.parseColor("#FFFFFF"));
-                layoutDialog.setBackgroundResource(R.drawable.ic_bg_yes_share_normal);
-                layoutShare.setVisibility(View.VISIBLE);
+                selectYes();
             }
         });
         ivQQ.setOnClickListener(new View.OnClickListener() {
@@ -135,14 +120,9 @@ public class ShareAfterPaytDialog extends BaseDialog {
         UmengShareManager.share(platform, (Activity) mContext, title, content, clickUrl, UmengShareManager.getUMImage(mContext, imageUrl), shareResultCallback);
     }
 
-    public void setSubmitListener(View.OnClickListener onClickListenerSubmit) {
-        btnYes.setOnClickListener(onClickListenerSubmit);
-    }
-
     public void setCloseListener(View.OnClickListener onClickListenerClose) {
         btnNo.setOnClickListener(onClickListenerClose);
     }
-
 
     private void preView() {
         layoutDialog = (RelativeLayout) findViewById(R.id.layout_dialog_share_after_pay);
@@ -161,12 +141,7 @@ public class ShareAfterPaytDialog extends BaseDialog {
             SDViewBinder.setTextView(tvMoney, "0元");
         }
         if (flag) {
-            btnYes.setBackgroundResource(R.drawable.ic_btn_yes_share_normal);
-            btnYes.setTextColor(Color.parseColor("#C32836"));
-            btnNo.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
-            btnNo.setTextColor(Color.parseColor("#FFFFFF"));
-            layoutDialog.setBackgroundResource(R.drawable.ic_bg_yes_share_normal);
-            layoutShare.setVisibility(View.VISIBLE);
+            selectYes();
         }
     }
 
@@ -178,6 +153,15 @@ public class ShareAfterPaytDialog extends BaseDialog {
     @Override
     protected int setDialogContentView() {
         return R.layout.dialog_share_after_pay;
+    }
+
+    private void selectYes() {
+        btnYes.setBackgroundResource(R.drawable.ic_btn_yes_share_normal);
+        btnYes.setTextColor(Color.parseColor("#C32836"));
+        btnNo.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
+        btnNo.setTextColor(Color.parseColor("#FFFFFF"));
+        layoutDialog.setBackgroundResource(R.drawable.ic_bg_yes_share_normal);
+        layoutShare.setVisibility(View.VISIBLE);
     }
 
 }
