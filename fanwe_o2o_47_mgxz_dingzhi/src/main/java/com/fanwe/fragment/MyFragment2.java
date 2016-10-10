@@ -310,8 +310,10 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {
+            //个人主页。
+            startActivity(UserHomeActivity.class);
             //跳转至会员升级
-            startActivity(MemberRankActivity.class);
+         //   startActivity(MemberRankActivity.class);
         }else if (v==mKefu){
             //客服电话
             clickKfPhone();

@@ -277,7 +277,7 @@ public class MemberRankActivity extends BaseActivity implements CallbackView2 {
                     if (modelDistrInfo != null) {
                         SDViewBinder.setTextView(mTv_name, modelDistrInfo.getNick(), modelDistrInfo.getPhone());
                         if ("1".equals(modelDistrInfo.getFx_level())) {
-                            SDViewBinder.setTextView(mTv_rank, "青铜", "未找到");
+                            SDViewBinder.setTextView(mTv_rank, "普通", "未找到");
                         } else if ("2".equals(modelDistrInfo.getFx_level())) {
                             SDViewBinder.setTextView(mTv_rank, "白金", "未找到");
                         } else if ("3".equals(modelDistrInfo.getFx_level())) {

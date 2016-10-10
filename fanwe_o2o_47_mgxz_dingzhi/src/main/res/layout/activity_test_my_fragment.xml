@@ -16,41 +16,6 @@
         android:background="@color/bg_activity_gray"
         android:orientation="vertical"
         >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:minHeight="@dimen/dp40">
-
-            <TextView
-                android:id="@+id/tv_middle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:clickable="false"
-                android:background="@drawable/md_ripple_white"
-                android:text="我的主页"
-                android:textColor="@color/text_fenxiao"
-                android:textSize="@dimen/sp18"
-                android:textStyle="bold"/>
-
-            <ImageView
-                android:id="@+id/iv_msg"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right|center_vertical"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_msg_black"
-                android:visibility="gone"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_gravity="bottom"
-                android:background="#CCCCCC"/>
-        </FrameLayout>
         <!--顶部mine相关-->
         <include layout="@layout/item_my_frag_mine"/>
         <!--订单-->
