@@ -2,10 +2,7 @@ package com.fanwe.library.dialog;
 
 import android.app.Activity;
 import android.text.TextUtils;
-
 import android.view.Gravity;
-
-
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,10 +56,7 @@ public class SDDialogConfirm extends SDDialogCustom
 		View view = SDViewUtil.inflate(R.layout.dialog_confirm, null);
 
 		mTvContent = (TextView) view.findViewById(R.id.dialog_confirm_tv_content);
-
-		mTvContent.setGravity(Gravity.CENTER);
-
-
+		mTvContent.setGravity(Gravity.LEFT);
 		LinearLayout.LayoutParams params = SDViewUtil.getLayoutParamsLinearLayoutWW();
 		setCustomView(view, params);
 	}
