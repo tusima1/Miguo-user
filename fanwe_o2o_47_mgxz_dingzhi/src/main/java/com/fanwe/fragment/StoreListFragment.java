@@ -521,6 +521,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                                 storeModel.setDiscount_pay(DataFormat.toInt(bean.getDiscount_pay()));
                                 storeModel.setXpoint(DataFormat.toDouble(bean.getGeo_x()));
                                 storeModel.setYpoint(DataFormat.toDouble(bean.getGeo_y()));
+                                storeModel.setDeal_count(DataFormat.toInt(bean.getTuan_num()));
+                                storeModel.setDeal_name(bean.getTuan_name());
                                 listNewData.add(storeModel);
                             }
                         }
