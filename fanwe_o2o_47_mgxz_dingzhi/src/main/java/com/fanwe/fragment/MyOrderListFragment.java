@@ -51,6 +51,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
     private int mOrderMode;
 //    protected User_Order mActModel;
     private OrderHttpHelper httpHelper;
+    private int page=1;
 
     private boolean isLoadMore=false;
     private boolean hasMore=true;
@@ -126,13 +127,15 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
         mPtrlv_content.setOnRefreshListener(new OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPage.resetPage();
+                page=1;
+                hasMore=true;
                 requestData(false);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 if (hasMore){
+                    page++;
                     requestData(true);
                 }else {
                     MGToast.showToast("没有更多数据了");
@@ -145,7 +148,7 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
 
     protected void requestData(boolean isLoadMore) {
         this.isLoadMore=isLoadMore;
-        httpHelper.getOrderInfo(mPayStatus,mPage.getPage());
+        httpHelper.getOrderInfo(mPayStatus,page);
     }
 
     @Override

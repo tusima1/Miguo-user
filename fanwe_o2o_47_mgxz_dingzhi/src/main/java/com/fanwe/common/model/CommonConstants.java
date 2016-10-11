@@ -8,5 +8,7 @@ public class CommonConstants {
      * 首页分类列表
      */
     public static final String HOME_CLASSIFY_LIST = "HomeClassifyList";
+    /*app版本升级*/
+    public static final String UPGRADE_VERSION = "UpgradeVersion";
 
 }

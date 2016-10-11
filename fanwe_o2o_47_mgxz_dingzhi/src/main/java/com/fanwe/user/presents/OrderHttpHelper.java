@@ -70,9 +70,9 @@ public class OrderHttpHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.ORDER_INFO);
         params.put("type", key);
-//        if (page>0){
-//            params.put("page", page+"");
-//        }
+        if (page>0){
+            params.put("page", page+"");
+        }
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override

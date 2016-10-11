@@ -24,6 +24,7 @@ import com.fanwe.adapter.PayorderCodesAdapter;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.dialog.ShareAfterPaytDialog;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.alipay.easy.PayResult;
@@ -48,6 +49,7 @@ import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
 import com.fanwe.shoppingcart.model.Order_info;
+import com.fanwe.shoppingcart.model.Share_info;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
@@ -57,9 +59,13 @@ import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.unionpay.UPPayAssistEx;
 
 import java.util.ArrayList;
@@ -136,6 +142,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
     protected String content;
     private PopupWindow pop;
     private OutSideShoppingCartHelper outSideShoppingCartHelper;
+    private Share_info share_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +152,12 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dialog = null;
+    }
+
     private void init() {
         getIntentData();
         initfews();
@@ -152,6 +165,43 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         //	requestPayOrder();
         registeClick();
     }
+
+
+    private UMShareListener shareResultCallback = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            MGToast.showToast("分享成功！现金红包将在验券后到账");
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            MGToast.showToast(share_media + "分享失败");
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showShareDialog(true);
+                }
+            });
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            MGToast.showToast(share_media + "分享取消");
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showShareDialog(true);
+                }
+            });
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
 
     private void initfews() {
 
@@ -194,6 +244,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         }
         if (PAY_SUCCESS.equals(payStatus)) {
             //支付成功 处理。
+            showShareDialog(false);
             SDViewUtil.show(mBtnQuan);
             SDEventManager.post(EnumEventTag.PAY_ORDER_SUCCESS.ordinal());
             mHasPay = "all";
@@ -244,6 +295,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             return;
         }
         payStatus = orderDetailInfo.getOrder_info().getOrder_status();
+        share_info = orderDetailInfo.getShare_info();
         if (!PAY_SUCCESS.equals(payStatus)) {
             if (TextUtils.isEmpty(mOrderId)) {
                 MGToast.showToast("id为空");
@@ -252,6 +304,34 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             }
         }
         bindData();
+    }
+
+    ShareAfterPaytDialog dialog;
+
+    /**
+     * 分享领红包
+     *
+     * @param flag true 展示分享选项
+     */
+    private void showShareDialog(boolean flag) {
+        if (share_info != null) {
+            if (dialog != null && dialog.isShowing()) {
+                return;
+            }
+            dialog = new ShareAfterPaytDialog(PayActivity.this, share_info, shareResultCallback, flag);
+//            dialog.setCancelable(false);
+            dialog.setCloseListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (outSideShoppingCartHelper == null) {
+                        outSideShoppingCartHelper = new OutSideShoppingCartHelper(PayActivity.this);
+                    }
+                    outSideShoppingCartHelper.getOrderOperator(mOrderId);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
 
     private void initTitle() {
@@ -448,6 +528,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
     public void payFinish() {
         SDViewUtil.show(mBtnQuan);
         SDViewUtil.hide(mBtnPay);
+        showShareDialog(false);
     }
 
     /**

@@ -27,10 +27,17 @@ import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.view.WelcomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +125,59 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         startStatistics();
         initTimer();
         getDeviceId();
-        requestInitInterface();
+        loadCityFile();
+    }
+
+    /**
+     * 读取本地城市列表
+     */
+    private void loadCityFile() {
+        new Thread(new Runnable() {
+            public void run() {
+                InputStream is = null;
+                try {
+                    is = getAssets().open("city.txt");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String city = readTextFromIS(is);
+                if (!TextUtils.isEmpty(city)) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<ModelCityList>>() {
+                    }.getType();
+                    Object object = gson.fromJson(city, type);
+                    tempDatas = (ArrayList<ModelCityList>) object;
+                }
+                Message message = new Message();
+                message.what = 1;
+                mHandler.sendMessage(message);
+            }
+        }).start();
+    }
+
+    /**
+     * 按行读取txt
+     *
+     * @param is
+     * @return
+     * @throws Exception
+     */
+    private String readTextFromIS(InputStream is) {
+        if (is == null) {
+            return "";
+        }
+        InputStreamReader reader = new InputStreamReader(is);
+        BufferedReader bufferedReader = new BufferedReader(reader);
+        StringBuffer buffer = new StringBuffer("");
+        String str;
+        try {
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buffer.toString();
     }
 
     /**
@@ -229,27 +288,39 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    if (!SDCollectionUtil.isEmpty(tempDatas)) {
-                        generalCityList();
-                        Init_indexActModel actModel = InitActModelDao.queryModel();
-                        if (actModel == null) {
-                            actModel = new Init_indexActModel();
-                        }
-                        actModel.setCitylist(citylist);
-                        actModel.setHot_city(hot_city);
-                        if (TextUtils.isEmpty(actModel.getCity_id())) {
-                            if (defaultCity != null) {
-                                actModel.setCity_id(defaultCity.getId());
-                                actModel.setCity_name(defaultCity.getName());
-                                AppRuntimeWorker.setCity_name(defaultCity.getName());
-                            }
-                        }
-                        InitActModelDao.insertOrUpdateModel(actModel);
-                    }
+                    saveCityList();
+                    break;
+                case 1:
+                    saveCityList();
+                    //请求城市列表
+                    requestInitInterface();
                     break;
             }
         }
     };
+
+    /**
+     * 保存城市列表
+     */
+    private void saveCityList() {
+        if (!SDCollectionUtil.isEmpty(tempDatas)) {
+            generalCityList();
+            Init_indexActModel actModel = InitActModelDao.queryModel();
+            if (actModel == null) {
+                actModel = new Init_indexActModel();
+            }
+            actModel.setCitylist(citylist);
+            actModel.setHot_city(hot_city);
+            if (TextUtils.isEmpty(actModel.getCity_id())) {
+                if (defaultCity != null) {
+                    actModel.setCity_id(defaultCity.getId());
+                    actModel.setCity_name(defaultCity.getName());
+                    AppRuntimeWorker.setCity_name(defaultCity.getName());
+                }
+            }
+            InitActModelDao.insertOrUpdateModel(actModel);
+        }
+    }
 
     ModelCityList defaultCity;
 

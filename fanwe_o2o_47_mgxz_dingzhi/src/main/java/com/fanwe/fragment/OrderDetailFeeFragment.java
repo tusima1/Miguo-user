@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
-import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -174,6 +173,8 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         float totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getPayPrice());
         //用户余额。
         float yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney())+SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
+        //首单优惠 TODO 该怎么显示呢
+        float firstPriceTotal = SDFormatUtil.stringToFloat(mCheckActModel.getFirstPriceTotal());
 
         float youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         float needFloat = totalFloat - yueFloat - youhuiFloat;

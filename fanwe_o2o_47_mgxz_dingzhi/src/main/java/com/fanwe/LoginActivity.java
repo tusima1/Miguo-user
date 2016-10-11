@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -262,11 +263,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         }
         Log.d("11", str.toString());
         //  testViews.setText(str.toString());
-
+        printData(str.toString());
     }
 
     public void printData(String datas) {
-        // ((EditText)findViewById(R.id.testViews2)).setText(datas);
+//       ((EditText)findViewById(R.id.testViews2)).setText(datas);
     }
 
     long time;
@@ -281,7 +282,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             @Override
             public void onSuccess(Map<String, String> data) {
                 SDDialogManager.showProgressDialog("正在登录,请稍候...");
-                //     printData(data);
+//                   printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
                     openId = data.get("unionid");
@@ -296,9 +297,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                     platformType = "3";
                     String returnData = (String) data.get("result");
                     Gson gson = new Gson();
+
                     HashMap<String, Object> maps = gson.fromJson(returnData, HashMap.class);
                     if (maps.get("id") != null) {
-                        openId = maps.get("id").toString();
+
+                        openId= maps.get("idstr").toString();
                     }
                     if (maps.get("profile_image_url") != null) {
                         icon = maps.get("profile_image_url").toString();

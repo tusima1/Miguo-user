@@ -1260,13 +1260,37 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
     };
 
+
+    private void createNewTimer(final Integer duration) {
+
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                robLiftTimer = new CountDownTimer(duration, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        mHostRedPacketCountDownView.setTime(SDDateUtil.secondesToMMSS(millisUntilFinished));
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mHostRedPacketCountDownView.setTime("00:00");
+                        mHostBottomToolView1.setClickable(true);
+                    }
+                };
+            }
+        });
+
+    }
+
     @Override
     public void sendHostRedPacket(String id, String duration) {
         if (!TextUtils.isEmpty(id) && !TextUtils.isEmpty(duration)) {
             //启动红包倒计时。
-            Integer values = Integer.valueOf(duration) + 10 * 1000;
+            Integer values = Integer.valueOf(duration);
 //            final String timeStr = SDDateUtil.milToStringlong(new Long(values));
-
+            createNewTimer(values);
 
             robLiftTimer.start();
             mHostBottomToolView1.setClickable(false);

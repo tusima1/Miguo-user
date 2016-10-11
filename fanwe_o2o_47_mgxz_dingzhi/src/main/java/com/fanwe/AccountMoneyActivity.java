@@ -1,7 +1,6 @@
 package com.fanwe;
 
 import android.content.Intent;
-import android.databinding.tool.util.StringUtils;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
     @ViewInject(R.id.tv_withdraw)
     private TextView mTv_withdraw;
 
-    private float money=0;
+    private double money=0;
     private UserHttpHelper httpHelper;
 
     @Override
@@ -115,7 +114,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
                 ModelDistrInfo modelDistrInfo= (ModelDistrInfo) datas.get(0);
                 String fx_money = modelDistrInfo.getFx_money();
                 try {
-                    money=Float.valueOf(fx_money);
+                    money=Double.valueOf(fx_money);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     money=0;

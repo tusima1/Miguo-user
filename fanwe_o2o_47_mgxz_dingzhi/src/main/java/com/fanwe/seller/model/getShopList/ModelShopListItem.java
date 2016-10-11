@@ -64,6 +64,24 @@ public class ModelShopListItem {
     private String avg_grade;
 
     private String city_id;
+    private String tuan_name;
+    private String tuan_num;
+
+    public String getTuan_name() {
+        return tuan_name;
+    }
+
+    public void setTuan_name(String tuan_name) {
+        this.tuan_name = tuan_name;
+    }
+
+    public String getTuan_num() {
+        return tuan_num;
+    }
+
+    public void setTuan_num(String tuan_num) {
+        this.tuan_num = tuan_num;
+    }
 
     public void setPreview(String preview) {
         this.preview = preview;

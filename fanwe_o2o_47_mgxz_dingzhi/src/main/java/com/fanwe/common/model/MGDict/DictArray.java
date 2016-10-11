@@ -30,11 +30,4 @@ public class DictArray {
     public void setDict(List<DictModel> dict) {
         this.dict = dict;
     }
-
-    @Override
-    public String toString() {
-        return "DictArray{" +
-                "dict=" + dict +
-                '}';
-    }
 }

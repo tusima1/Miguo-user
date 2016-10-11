@@ -11,10 +11,11 @@ import com.miguo.live.views.category.dialog.DialogCategory;
 /**
  * Created by Administrator on 2016/8/26.
  */
-public abstract class BaseDialog extends Dialog{
+public abstract class BaseDialog extends Dialog {
 
     int layoutId;
     DialogCategory category;
+    int gravity = Gravity.CENTER;
 
     public BaseDialog(Context context) {
         this(context, R.style.floag_dialog);
@@ -25,7 +26,13 @@ public abstract class BaseDialog extends Dialog{
         initThis();
     }
 
-    private void initThis(){
+    public BaseDialog(Context context, int themeResId, int gravity) {
+        super(context, themeResId);
+        this.gravity = gravity;
+        initThis();
+    }
+
+    private void initThis() {
         initParams();
         layoutId = setDialogContentView();
         setContentView(layoutId);
@@ -33,9 +40,9 @@ public abstract class BaseDialog extends Dialog{
 
     }
 
-    private void initParams(){
+    private void initParams() {
         Window window = getWindow();
-        window.setGravity(Gravity.CENTER);
+        window.setGravity(gravity);
     }
 
     protected abstract DialogCategory initCategory();
@@ -47,7 +54,7 @@ public abstract class BaseDialog extends Dialog{
         return this;
     }
 
-    public void setCanceledOnTouchOutside(boolean canceledOnTouchOutside){
+    public void setCanceledOnTouchOutside(boolean canceledOnTouchOutside) {
         super.setCanceledOnTouchOutside(canceledOnTouchOutside);
     }
 }

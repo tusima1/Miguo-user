@@ -125,12 +125,12 @@ public class MainActivity extends BaseActivity implements CallbackView {
         setContentView(R.layout.act_main);
         mLoginHelper = new LoginHelper(MainActivity.this);
         liveHttpHelper = new LiveHttpHelper(this, this);
-
         init();
     }
 
     private void init() {
-        startUpgradeService();
+        //检测更新
+        startService(new Intent(MainActivity.this, AppUpgradeService.class));
         initBottom();
         JpushHelper.initJPushConfig();
 //        MessageHelper.updateMessageCount();
@@ -240,10 +240,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
         // 初始化上次的cityID
         preHomeCityID = AppRuntimeWorker.getCity_id();
         umengTag = "首页";
-    }
-
-    private void startUpgradeService() {
-        startService(new Intent(MainActivity.this, AppUpgradeService.class));
     }
 
     private void initBottom() {
@@ -684,7 +680,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     return;
                 }
             } else {
-//                MGToast.showToast("领取码无效");
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
