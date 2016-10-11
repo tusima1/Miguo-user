@@ -34,6 +34,7 @@ import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -133,22 +134,23 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     private void loadCityFile() {
         new Thread(new Runnable() {
             public void run() {
+                InputStream is = null;
                 try {
-                    InputStream is = getAssets().open("city.txt");
-                    String city = readTextFromSDcard(is);
-                    if (!TextUtils.isEmpty(city)) {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<List<ModelCityList>>() {
-                        }.getType();
-                        Object object = gson.fromJson(city, type);
-                        tempDatas = (ArrayList<ModelCityList>) object;
-                    }
-                    Message message = new Message();
-                    message.what = 1;
-                    mHandler.sendMessage(message);
-                } catch (Exception e) {
+                    is = getAssets().open("city.txt");
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                String city = readTextFromIS(is);
+                if (!TextUtils.isEmpty(city)) {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<ModelCityList>>() {
+                    }.getType();
+                    Object object = gson.fromJson(city, type);
+                    tempDatas = (ArrayList<ModelCityList>) object;
+                }
+                Message message = new Message();
+                message.what = 1;
+                mHandler.sendMessage(message);
             }
         }).start();
     }
@@ -160,13 +162,20 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
      * @return
      * @throws Exception
      */
-    private String readTextFromSDcard(InputStream is) throws Exception {
+    private String readTextFromIS(InputStream is) {
+        if (is == null) {
+            return "";
+        }
         InputStreamReader reader = new InputStreamReader(is);
         BufferedReader bufferedReader = new BufferedReader(reader);
         StringBuffer buffer = new StringBuffer("");
         String str;
-        while ((str = bufferedReader.readLine()) != null) {
-            buffer.append(str);
+        try {
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return buffer.toString();
     }
