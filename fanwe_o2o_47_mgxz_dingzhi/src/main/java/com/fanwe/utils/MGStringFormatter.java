@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.miguo.utils.UICharacterCount;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -102,9 +103,10 @@ public class MGStringFormatter {
         }
         return result;
     }
-    public static String getFloat2(float oldFloat){
-        float  newFloat   =  (float)(Math.round(oldFloat*100))/100;//(这里的100就是2位小数点,如果要其它位,如4位,这里两个100改成10000)
-        return getFloat2(newFloat+"");
+    public static String getFloat2(double oldFloat){
+        BigDecimal bd = new BigDecimal(oldFloat);
+        BigDecimal  bd2 = bd.setScale(2,BigDecimal.ROUND_HALF_UP);
+        return getFloat2(bd2.toString());
     }
 
     /**

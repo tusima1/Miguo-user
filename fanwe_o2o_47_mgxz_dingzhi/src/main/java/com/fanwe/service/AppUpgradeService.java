@@ -118,12 +118,15 @@ public class AppUpgradeService extends Service implements CallbackView {
         if ("1".equals(modelVersion.getForced_upgrade())) {
             dialog.setTextCancel(null).setCancelable(false);
         }
-        String upgrade_content = modelVersion.getUpgrade();
-        String defaultTitle="发现新版本";
+        String upgrade_content = modelVersion.getUpgrade().replace("\\n","\n");
         if (TextUtils.isEmpty(upgrade_content)){
             upgrade_content="最新版本 米果小站"+modelVersion.getServer_version();
         }
-        dialog.setTextContent(upgrade_content).setTextTitle(defaultTitle);
+        String title = modelVersion.getTitle();
+        if (TextUtils.isEmpty(title)){
+            title="发现新版本";
+        }
+        dialog.setTextContent(upgrade_content).setTextTitle(title);
         dialog.setmListener(new SDDialogCustomListener() {
 
             @Override

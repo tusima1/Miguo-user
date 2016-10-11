@@ -12,11 +12,19 @@ public class ModelVersion{
 //    "server_version": "6.0.24",   系统版本号
 //    "forced_upgrade": "1"         0:非强制升级;1:强制升级
     private String upgrade;
+    private String title;
     private String has_upgrade;
     private String down_url;
     private String server_version;
     private String forced_upgrade;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
     public String getUpgrade() {
         return upgrade;
     }
