@@ -93,7 +93,7 @@
         android:id="@+id/sell"
         android:textSize="12sp"
         android:textColor="@color/text_base_color_2"
-        android:text=">售出1654"
+        android:text="售出1654"
         android:layout_alignRight="@+id/distance"
         android:layout_alignBottom="@+id/price"
         android:layout_width="wrap_content"

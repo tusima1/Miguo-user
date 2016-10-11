@@ -412,7 +412,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccess(TIMMessage timMessage) {
                 Log.d(TAG, timMessage.msg.customStr());
                 Log.d(TAG, "弹幕发送成功...!");
-//                MGToast.showToast("红包发送成功!");
             }
         });
     }
