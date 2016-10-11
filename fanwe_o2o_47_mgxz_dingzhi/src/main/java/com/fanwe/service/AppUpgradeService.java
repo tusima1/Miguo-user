@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -17,7 +18,6 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getUpgradeVersion.ModelVersion;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.common.update.NoHttpRedirectHandler;
-import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
@@ -72,9 +72,6 @@ public class AppUpgradeService extends Service implements CallbackView {
         }
     }
 
-//    private String url="http://shouji.360tpcdn.com/160923/cbe7b7b8a6e89b61d316edc4cadb122e/tv.acfundanmaku.video_320.apk";
-    private String url="http://oahzrw11n.bkt.clouddn.com//apk/20161010/AV测试tv.acfundanmaku.video_320.apk";
-//    private String url="http://oahzrw11n.bkt.clouddn.com//apk/20161010/AVDNStv.acfundanmaku.video_320";
     private String urlApk="";
 
     protected void dealResult() {
@@ -101,13 +98,6 @@ public class AppUpgradeService extends Service implements CallbackView {
             stopSelf();
         }
 
-    }
-    private void doTest(){
-        if (ServerUrl.DEBUG){
-            urlApk=url;
-            showDialogUpgrade();
-            return;
-        }
     }
 
     private void showDialogUpgrade() {
@@ -177,11 +167,7 @@ public class AppUpgradeService extends Service implements CallbackView {
 
     private void startDownload() {
         final String target = OtherUtils.getDiskCacheDir(getApplicationContext(), "") + localFileName;
-        File isExist=new File(target);
-        if (isExist.exists()){
-            isExist.delete();
-            MGLog.d("有上次的残余文件,删除!");
-        }
+        deleteOldApk();
         //mModel.getFilename()
         HttpManagerX.getHttpUtils().configHttpRedirectHandler(new NoHttpRedirectHandler(urlApk)).download(urlApk, target, true, new
                 RequestCallBack<File>() {
@@ -221,6 +207,23 @@ public class AppUpgradeService extends Service implements CallbackView {
 
                 });
 
+    }
+
+    /*删掉之前的安装包*/
+    private void deleteOldApk() {
+        String target = OtherUtils.getDiskCacheDir(getApplicationContext(), "");
+        File cacheDir=new File(target);
+        if (cacheDir.isDirectory()){
+            Log.e("test","cacheDir: "+cacheDir.getAbsolutePath());
+            File[] files = cacheDir.listFiles();
+            for (File file : files) {
+                String name = file.getName();
+                if (name.contains("米果小站_")){
+                    Log.d("test","deleteFile: "+file.getName());
+                    file.delete();
+                }
+            }
+        }
     }
 
     public void dealDownloadSuccess(String filePath) {

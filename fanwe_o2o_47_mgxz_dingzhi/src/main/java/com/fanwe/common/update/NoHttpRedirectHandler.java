@@ -1,7 +1,6 @@
 package com.fanwe.common.update;
 
 import com.lidroid.xutils.http.callback.HttpRedirectHandler;
-import com.miguo.utils.MGLog;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -22,7 +21,6 @@ public class NoHttpRedirectHandler implements HttpRedirectHandler {
     public HttpRequestBase getDirectRequest(HttpResponse response) {
         if(response.containsHeader("Location")) {
             HttpGet request = new HttpGet(url);
-            MGLog.e("upgrade","可恶,但是已经阻止了重定向!");
             if(response.containsHeader("Set-Cookie")) {
                 String cookie = response.getFirstHeader("Set-Cookie").getValue();
                 request.addHeader("Cookie", cookie);

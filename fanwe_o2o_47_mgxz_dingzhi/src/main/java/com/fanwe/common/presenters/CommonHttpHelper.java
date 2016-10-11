@@ -87,16 +87,18 @@ public class CommonHttpHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootVersion rootVersion=gson.fromJson(responseBody,RootVersion.class);
-                ResultVersion result = rootVersion.getResult().get(0);
-                if (result!=null){
-                    final List<ModelVersion> body = result.getBody();
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mView.onSuccess(CommonConstants.UPGRADE_VERSION,body);
-                        }
-                    });
-                    return;
+                if (rootVersion!=null){
+                    ResultVersion result = rootVersion.getResult().get(0);
+                    if (result!=null){
+                        final List<ModelVersion> body = result.getBody();
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mView.onSuccess(CommonConstants.UPGRADE_VERSION,body);
+                            }
+                        });
+                        return;
+                    }
                 }
                 mView.onFailue(CommonConstants.UPGRADE_VERSION);
             }
