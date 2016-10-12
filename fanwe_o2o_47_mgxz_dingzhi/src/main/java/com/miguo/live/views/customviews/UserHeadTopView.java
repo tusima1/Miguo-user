@@ -27,6 +27,7 @@ import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
+import com.miguo.live.model.userFocus.RootUserFocus;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUserExitDialogHelper;
 import com.miguo.utils.MGUIUtil;
@@ -231,8 +232,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
             mUserLocation.setText(location);
         }
     }
+
     /*设置已经关注了主播*/
-    public void setHasFocus(){
+    public void setHasFocus() {
         mFollow.setVisibility(GONE);
     }
 
@@ -264,6 +266,8 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     }
 
+    ArrayList<RootUserFocus> roots;
+
     @Override
     public void onSuccess(String method, List datas) {
         ArrayList d = (ArrayList) datas;
@@ -291,13 +295,23 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
                 }
             }
         } else if (LiveConstants.USER_FOCUS.equals(method)) {
-            //不显示
-            MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mFollow.setVisibility(GONE);
+            //判断用户关注成功与否
+            roots = (ArrayList<RootUserFocus>) datas;
+            if (!SDCollectionUtil.isEmpty(roots)) {
+                RootUserFocus rootUserFocus = roots.get(0);
+                if ("200".equals(rootUserFocus.getStatusCode())) {
+                    //关注成功
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFollow.setVisibility(GONE);
+                        }
+                    });
+                } else {
+                    if (!TextUtils.isEmpty(roots.get(0).getMessage()))
+                        MGToast.showToast(roots.get(0).getMessage());
                 }
-            });
+            }
         }
     }
 
