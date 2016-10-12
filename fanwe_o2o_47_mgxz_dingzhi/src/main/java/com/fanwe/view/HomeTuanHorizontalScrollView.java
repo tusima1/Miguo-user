@@ -80,7 +80,7 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
             imgParams.setMargins(margionSpace, 0, 0, 0);
             img.setLayoutParams(imgParams);
             SDViewBinder.setImageView(getImagePath(i), img);
-            img.setBackgroundColor(getColor(R.color.coloreeeeee));
+            img.setBackgroundColor(getColor(R.color.gray_ee));
             img.setRectAdius((float)dip2px(5));
             img.setOnClickListener(new HomeTuanHorizontalScrollViewListener());
             content.addView(img);

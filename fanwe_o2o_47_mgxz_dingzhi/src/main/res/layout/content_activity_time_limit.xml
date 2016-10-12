@@ -24,7 +24,7 @@
         <LinearLayout
             android:id="@+id/bottom_layout"
             android:layout_alignParentBottom="true"
-            android:background="@color/color3d3d3d"
+            android:background="@color/gray_3d"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="45dp">

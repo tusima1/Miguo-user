@@ -152,7 +152,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         rightTextParams.setMargins(dip2px(5), 0, 0, 0);
         rightText.setLayoutParams(rightTextParams);
         rightText.setText(getRightString());
-        rightText.setTextColor(getColor(R.color.colorcccccc));
+        rightText.setTextColor(getColor(R.color.gray_cc));
         rightText.setTextSize(12);
         top.addView(rightText);
     }

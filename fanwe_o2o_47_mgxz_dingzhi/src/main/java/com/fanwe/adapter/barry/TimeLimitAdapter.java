@@ -67,8 +67,8 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
         getHolder(holder).normalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         getHolder(holder).buy.setBackgroundResource(isSelling(position) ? R.drawable.shape_cricle_solid_white_stoke_orange : R.drawable.shape_cricle_solid_white_stoke_orange_unuseless);
         getHolder(holder).buyNow.setBackgroundResource(isSelling(position) ? R.drawable.shape_cricle_solid_orange_bottom_radius : R.drawable.shape_cricle_solid_orange_bottom_radius_unuseless);
-        getHolder(holder).price.setTextColor(getColor(isSelling(position) ? R.color.orange : R.color.colorcccccc));
-        getHolder(holder).normalPrice.setTextColor(getColor(isSelling(position) ? R.color.text_base_color_2 : R.color.colorcccccc));
+        getHolder(holder).price.setTextColor(getColor(isSelling(position) ? R.color.orange : R.color.gray_cc));
+        getHolder(holder).normalPrice.setTextColor(getColor(isSelling(position) ? R.color.text_base_color_2 : R.color.gray_cc));
         getHolder(holder).buyNowText.setText(getBuyText(position));
     }
 
