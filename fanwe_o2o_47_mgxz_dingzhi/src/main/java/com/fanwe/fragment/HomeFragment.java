@@ -503,19 +503,16 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
      */
     @Override
     public void onScrollToEnd() {
-        recyclerScrollView.setIsLoading(true);
         getTuanList(pageNum);
     }
 
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
-
     }
 
     public void loadComplete(){
         ptrFrameLayout.refreshComplete();
         recyclerScrollView.loadComplite();
-        recyclerScrollView.scrollTo(0, 2);
     }
 
     /**
