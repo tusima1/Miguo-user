@@ -153,7 +153,10 @@ public enum EnumEventTag {
     /**
      * TOKEN失效 。
      */
-    TOKEN_FAILUE;
+    TOKEN_FAILUE,
+    //关注
+    FOCUS_CHANGE_YES,
+    FOCUS_CHANGE_NO;
 
     public static EnumEventTag valueOf(int index) {
         if (index >= 0 && index < values().length) {
