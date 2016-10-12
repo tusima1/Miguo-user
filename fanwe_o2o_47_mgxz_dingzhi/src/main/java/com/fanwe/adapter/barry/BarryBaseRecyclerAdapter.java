@@ -75,6 +75,18 @@ public abstract class BarryBaseRecyclerAdapter extends RecyclerView.Adapter{
         }
     }
 
+    protected String trim(String str){
+        try{
+            if(str == null){
+                return "";
+            }
+            return str.trim();
+        }catch (Exception e){
+            return "";
+        }
+
+    }
+
     public RecyclerView.ViewHolder getHolder(RecyclerView.ViewHolder holder){
         return holder;
     }

@@ -151,6 +151,10 @@ public class LiveConstants {
      * 获取会员等级介绍
      */
     public static final String MEMBER_DETAIL = "HtmlPage";
+    /**
+     * 首页限时特惠
+     */
+    public static final String SPECIAL_LIST = "GetSpecialList";
 
 
 }

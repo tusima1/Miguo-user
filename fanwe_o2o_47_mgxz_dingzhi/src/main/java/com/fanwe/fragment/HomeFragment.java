@@ -37,6 +37,7 @@ import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -62,7 +63,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 //    private PullToRefreshScrollView mPtrsvAll;
 
     @ViewInject(R.id.ptr_layout)
-    PtrFrameLayout ptrFrameLayout;
+    FixRequestDisallowTouchEventPtrFrameLayout ptrFrameLayout;
     @ViewInject(R.id.recycler_scrollview)
     RecyclerScrollView recyclerScrollView;
 
@@ -79,7 +80,8 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     private HomeRecommendStoreFragment mFragRecommendSupplier;
     //限时优惠
     private FragmentHomeTimeLimit mFragmentHomeTimeLimit;
-    private HomeRecommendTuanFragment mFragRecommendDeals;
+
+//    private HomeRecommendTuanFragment mFragRecommendDeals;
     private HomeRecommendGoodsFragment mFragRecommendGoods;
     private HomeRecommendYouhuiFragment mFragRecommendCoupon;
     //直播列表
@@ -117,6 +119,17 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         locationCity();
         addTitleBarFragment();
         initPullToRefreshListView();
+        addTimeLimitFragment();
+    }
+
+    /**
+     * 添加限时特惠fragment
+     */
+    private void addTimeLimitFragment(){
+        mFragmentHomeTimeLimit = new FragmentHomeTimeLimit();
+        mFragmentHomeTimeLimit.setParent(ptrFrameLayout);
+        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_event,
+                mFragmentHomeTimeLimit);
     }
 
     private void initDao(){
@@ -269,12 +282,15 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                             mListModel.addAll(pageData_1);
 
                             pageModel.update(pageModel);
-                            mFragRecommendDeals = new HomeRecommendTuanFragment();
-                            mFragRecommendDeals.setmIndexModel(mListModel, 1);
+
+//                            mFragRecommendDeals = new HomeRecommendTuanFragment();
+//                            mFragRecommendDeals.setmIndexModel(mListModel, 1);
 //                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
+
                         } else {
-                            mFragRecommendDeals = new HomeRecommendTuanFragment();
-                            mFragRecommendDeals.setmIndexModel(null, 1);
+//                            mFragRecommendDeals = new HomeRecommendTuanFragment();
+//                            mFragRecommendDeals.setmIndexModel(null, 1);
+
 //                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
                         }
                     }
@@ -334,8 +350,8 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         if (pageModel.getPage() == 1) {
             // mListModel = actModel.getDeal_list();
             pageModel.update(pageModel);
-            mFragRecommendDeals = new HomeRecommendTuanFragment();
-            mFragRecommendDeals.setmIndexModel(mListModel, 1);
+//            mFragRecommendDeals = new HomeRecommendTuanFragment();
+//            mFragRecommendDeals.setmIndexModel(mListModel, 1);
 //            getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
         }
         // 推荐商品
@@ -479,6 +495,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         pageNum = 1;
         requestLiveList();
         getTuanList(pageNum);
+        mFragmentHomeTimeLimit.onRefresh();
     }
 
     /**
@@ -498,6 +515,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     public void loadComplete(){
         ptrFrameLayout.refreshComplete();
         recyclerScrollView.loadComplite();
+        recyclerScrollView.scrollTo(0, 2);
     }
 
     /**
