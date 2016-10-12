@@ -175,6 +175,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             MGToast.showToast("请输入验证码!");
             return;
         }
+        mBtnLogin.setEnabled(false);
         count++;
         if (count >= 4) {
             if (!showToast) {
@@ -190,7 +191,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             }
             return;
         }
-        mLoginHelper.doQuickLogin(mNumberPhone, mStrCode);
+        mLoginHelper.doQuickLogin(mNumberPhone, mStrCode,mBtnLogin);
         SDDialogManager.showProgressDialog("请稍候...");
     }
 

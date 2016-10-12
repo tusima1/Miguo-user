@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.fanwe.MainActivity;
 import com.fanwe.app.App;
@@ -33,6 +34,7 @@ import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMManager;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
@@ -98,7 +100,7 @@ public class LoginHelper extends Presenter {
      * @param mobile
      * @param captcha
      */
-    public void doQuickLogin(final String mobile, String captcha) {
+    public void doQuickLogin(final String mobile, String captcha , final View view) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
         params.put("captcha", captcha);
@@ -109,11 +111,18 @@ public class LoginHelper extends Presenter {
             public void onSuccessResponse(String responseBody) {
                 SDDialogManager.dismissProgressDialog();
                 dealLoginInfo(responseBody, mobile, null);
-
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if (view!=null){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.setEnabled(true);
+                        }
+                    });
+                }
                 SDDialogManager.dismissProgressDialog();
                 MGToast.showToast(message);
             }
@@ -200,7 +209,7 @@ public class LoginHelper extends Presenter {
      * @param password
      * @param type     0为手机登录。1为第三方登录
      */
-    public void doLogin(final String userName, final String password, int type) {
+    public void doLogin(final String userName, final String password, int type, final View view) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", userName);
         params.put("pwd", password);
@@ -209,7 +218,6 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
                 SDDialogManager.dismissProgressDialog();
                 dealLoginInfo(responseBody, userName, password);
             }
@@ -218,6 +226,14 @@ public class LoginHelper extends Presenter {
             @Override
 
             public void onErrorResponse(String message, String errorCode) {
+                if (view!=null){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.setEnabled(true);
+                        }
+                    });
+                }
                 SDDialogManager.dismissProgressDialog();
                 if(ifShowToast) {
                     MGToast.showToast(message);
@@ -230,7 +246,7 @@ public class LoginHelper extends Presenter {
     public void doLogin(final String userName, final String password, int type, boolean notClose) {
         this.ifShowToast = true;
         this.notClose = notClose;
-        doLogin(userName, password, type);
+        doLogin(userName, password, type,null);
     }
 
     /**
@@ -244,7 +260,7 @@ public class LoginHelper extends Presenter {
     public void doLogin(final String userName, final String password, int type, boolean notClose,boolean ifShowToast) {
         this.ifShowToast = ifShowToast;
         this.notClose = notClose;
-        doLogin(userName, password, type);
+        doLogin(userName, password, type,null);
     }
 
     /**

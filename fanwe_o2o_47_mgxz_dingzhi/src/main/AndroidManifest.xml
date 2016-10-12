@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.o2o.miguo"
     android:installLocation="auto"
-    android:versionCode="2016093006"
-    android:versionName="6.2.1">
+    android:versionCode="2016101201"
+    android:versionName="6.0.22">
 
     <uses-sdk
         android:minSdkVersion="12"
@@ -1066,11 +1066,26 @@
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
 
-        <activity android:name="com.fanwe.user.view.RedPacketListActivity"/>
-        <activity android:name="com.miguo.live.views.TestMyFragmentActivity"/>
-        <activity android:name="com.fanwe.user.view.FansActivity"/>
-        <activity android:name="com.fanwe.user.view.WalletActivity"/>
-        <activity android:name="com.miguo.utils.test.DTestActivity"/>
+        <activity android:name="com.fanwe.user.view.RedPacketListActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.miguo.live.views.TestMyFragmentActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.fanwe.user.view.FansActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.fanwe.user.view.WalletActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.miguo.utils.test.DTestActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
 
     </application>
 
