@@ -232,8 +232,13 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         }
     }
     /*设置已经关注了主播*/
-    public void setHasFocus(){
-        mFollow.setVisibility(GONE);
+    public void setFocusStatus(boolean isFocus){
+        if (isFocus){
+            mFollow.setVisibility(GONE);
+        }else {
+            mFollow.setVisibility(VISIBLE);
+        }
+
     }
 
     public boolean isExitDialogShowing() {

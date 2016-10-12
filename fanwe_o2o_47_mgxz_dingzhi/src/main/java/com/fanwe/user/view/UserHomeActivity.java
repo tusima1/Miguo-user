@@ -19,6 +19,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -44,6 +45,7 @@ import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.NetWorkStateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.sunday.eventbus.SDEventManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -412,12 +414,16 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                         //操作后与该对象的状态1：未关注 2：已关注 3：互相关注
                         if ("1".equals(modelAttention.getAttention_status())) {
                             tvAttentionStatus.setText("+ 关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_NO.ordinal());
                         } else if ("2".equals(modelAttention.getAttention_status())) {
                             tvAttentionStatus.setText("已关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_YES.ordinal());
                         } else if ("3".equals(modelAttention.getAttention_status())) {
                             tvAttentionStatus.setText("已关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_YES.ordinal());
                         } else {
                             tvAttentionStatus.setText("+ 关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_NO.ordinal());
                         }
                     }
                     break;

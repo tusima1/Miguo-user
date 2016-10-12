@@ -239,6 +239,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     mUserBottomTool.refreshGift();
                 }
                 break;
+            case FOCUS_CHANGE_YES:
+                if (mUserHeadTopView!=null){
+                    mUserHeadTopView.setFocusStatus(true);
+                }
+                break;
+            case FOCUS_CHANGE_NO:
+                if (mUserHeadTopView!=null){
+                    mUserHeadTopView.setFocusStatus(false);
+                }
+                break;
             default:
                 break;
         }

@@ -1,5 +1,6 @@
 package com.fanwe.service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,6 +19,7 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getUpgradeVersion.ModelVersion;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.common.update.NoHttpRedirectHandler;
+import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
@@ -102,6 +104,11 @@ public class AppUpgradeService extends Service implements CallbackView {
 
     private void showDialogUpgrade() {
         if (modelVersion == null) {
+            return;
+        }
+        Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
+        if (lastActivity==null){
+            stopSelf();
             return;
         }
         SDDialogConfirm dialog = new SDDialogConfirm();
