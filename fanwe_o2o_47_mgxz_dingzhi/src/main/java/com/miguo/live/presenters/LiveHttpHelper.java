@@ -67,6 +67,7 @@ import com.miguo.live.model.postHandOutRedPacket.RootHandOutRedPacketPost;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.model.stopLive.ResultStopLive;
 import com.miguo.live.model.stopLive.RootStopLive;
+import com.miguo.live.model.userFocus.RootUserFocus;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.LogTag;
 import com.miguo.utils.MGLog;
@@ -647,7 +648,6 @@ public class LiveHttpHelper implements IHelper {
      * 关注主播
      */
     public void userFocus(String host_id) {
-
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("host_id", host_id);
@@ -656,7 +656,10 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView2.onSuccess(LiveConstants.USER_FOCUS, null);
+                RootUserFocus root = gson.fromJson(responseBody, RootUserFocus.class);
+                ArrayList<RootUserFocus> roots = new ArrayList<>();
+                roots.add(root);
+                mView2.onSuccess(LiveConstants.USER_FOCUS, roots);
             }
 
             @Override
