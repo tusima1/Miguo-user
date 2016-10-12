@@ -85,7 +85,7 @@ public class LoginFragment extends LoginBaseFragment {
                 }
                 return;
             }
-            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
+            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0,mTvLogin);
             SDDialogManager.showProgressDialog("请稍候...");
         }
     }
