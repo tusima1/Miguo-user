@@ -70,6 +70,7 @@ public class LoginFragment extends LoginBaseFragment {
 
     public void doLogin() {
         if (validateParam()) {
+            mTvLogin.setEnabled(false);
             count++;
             if (count >= 4) {
                 if (!showToast) {
