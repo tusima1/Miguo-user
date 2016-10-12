@@ -70,6 +70,7 @@ public class LoginFragment extends LoginBaseFragment {
 
     public void doLogin() {
         if (validateParam()) {
+            mTvLogin.setEnabled(false);
             count++;
             if (count >= 4) {
                 if (!showToast) {
@@ -85,7 +86,7 @@ public class LoginFragment extends LoginBaseFragment {
                 }
                 return;
             }
-            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
+            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0,mTvLogin);
             SDDialogManager.showProgressDialog("请稍候...");
         }
     }

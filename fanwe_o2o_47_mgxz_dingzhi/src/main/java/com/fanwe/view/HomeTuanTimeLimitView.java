@@ -157,6 +157,9 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
 
     public void init(SpecialListModel.Result result){
         removeAllViews();
+        if(result.getBody() == null || result.getBody().size()==0){
+            return;
+        }
         setResult(result);
         initTopContent();
         initSaleDatas();
