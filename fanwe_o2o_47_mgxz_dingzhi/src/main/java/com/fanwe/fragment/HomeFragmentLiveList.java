@@ -1,44 +1,26 @@
 package com.fanwe.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
-import com.fanwe.adapter.HomeLiveListAdapter;
 import com.fanwe.adapter.barry.MainActivityHomeFragmentLiveListAdapter;
 import com.fanwe.adapter.barry.MainActivityHomeFragmentTuanAdapter;
-import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.customview.SDGridViewInScroll;
-import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getStoreList.ModelStoreList;
-import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.utils.DataFormat;
 import com.fanwe.view.HomeLiveFragmentRecyclerView;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.live.views.LiveActivity;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.live.views.view.PlayBackActivity;
-import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.imcore.Context;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

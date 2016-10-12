@@ -58,7 +58,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  *
  * @author js02
  */
-public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2, PtrHandler,RecyclerScrollView.OnRecyclerScrollViewListener, CommandGroupBuyView {
+public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2, PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener, CommandGroupBuyView {
 //    @ViewInject(R.id.frag_home_new_ptrsv_all)
 //    private PullToRefreshScrollView mPtrsvAll;
 
@@ -81,7 +81,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     //限时优惠
     private FragmentHomeTimeLimit mFragmentHomeTimeLimit;
 
-//    private HomeRecommendTuanFragment mFragRecommendDeals;
+    //    private HomeRecommendTuanFragment mFragRecommendDeals;
     private HomeRecommendGoodsFragment mFragRecommendGoods;
     private HomeRecommendYouhuiFragment mFragRecommendCoupon;
     //直播列表
@@ -122,25 +122,32 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         addTimeLimitFragment();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        pageNum = 1;
+        requestLiveList();
+    }
+
     /**
      * 添加限时特惠fragment
      */
-    private void addTimeLimitFragment(){
+    private void addTimeLimitFragment() {
         mFragmentHomeTimeLimit = new FragmentHomeTimeLimit();
         mFragmentHomeTimeLimit.setParent(ptrFrameLayout);
         getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_event,
                 mFragmentHomeTimeLimit);
     }
 
-    private void initDao(){
+    private void initDao() {
         commandGroupBuyDao = new CommandGroupBuyDaoImpl(this);
     }
 
-    private void getTuanList(int page){
+    private void getTuanList(int page) {
         //BaiduMapManager.getInstance().getBDLocation().getLongitude() +
         //BaiduMapManager.getInstance().getBDLocation().getLatitude() +
 
-        commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome,"", BaiduMapManager.getInstance().getBDLocation().getLongitude() + "", BaiduMapManager.getInstance().getBDLocation().getLatitude() + "", AppRuntimeWorker.getCity_id());
+        commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome, "", BaiduMapManager.getInstance().getBDLocation().getLongitude() + "", BaiduMapManager.getInstance().getBDLocation().getLatitude() + "", AppRuntimeWorker.getCity_id());
     }
 
     private void getHomeClassify() {
@@ -233,7 +240,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         initPtrLayout(this.ptrFrameLayout);
     }
 
-    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout){
+    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
         ptrFrameLayout.disableWhenHorizontalMove(true);
         ptrFrameLayout.setEnabledNextPtrAtOnce(false);
         MaterialHeader ptrHead = new MaterialHeader(getActivity());
@@ -390,8 +397,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                     mHomeFragmentLiveList.updateTitle(bean.getName());
                 }
                 typeLiveHome = bean.getId();
-                requestLiveList();
-//                onRefreshBegin(ptrFrameLayout);
+                onRefreshBegin(ptrFrameLayout);
                 break;
             default:
                 break;
@@ -510,7 +516,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
     }
 
-    public void loadComplete(){
+    public void loadComplete() {
         ptrFrameLayout.refreshComplete();
         recyclerScrollView.loadComplite();
     }
@@ -524,7 +530,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
             @Override
             public void run() {
                 setPageNum(result.getPage());
-                if (mHomeFragmentLiveList!=null){
+                if (mHomeFragmentLiveList != null) {
                     mHomeFragmentLiveList.onRefreshTuan(true, result.getBody());
                     setPageNum(result.getPage() + 1);
                 }
@@ -539,10 +545,10 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
             @Override
             public void run() {
                 setPageNum(result.getPage());
-                if (mHomeFragmentLiveList!=null){
+                if (mHomeFragmentLiveList != null) {
                     mHomeFragmentLiveList.onRefreshTuan(false, result.getBody());
                 }
-                if(result.getBody()!=null && result.getBody().size()>0){
+                if (result.getBody() != null && result.getBody().size() > 0) {
                     setPageNum(result.getPage() + 1);
                 }
                 loadComplete();
@@ -552,7 +558,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     @Override
     public void getCommandGroupBuyDaoListError(String msg) {
-        if (getActivity()!=null) {
+        if (getActivity() != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
