@@ -80,6 +80,8 @@
     <color name="gray_text_99">#999999</color><!--font (RGB 153,153,153)-->
     <color name="color333333">#333333</color><!--font (RGB 153,153,153)-->
     <color name="color3d3d3d">#3d3d3d</color><!--font (RGB 153,153,153)-->
+    <color name="colorcccccc">#cccccc</color><!--font (RGB 153,153,153)-->
+    <color name="coloreeeeee">#eeeeee</color><!--font (RGB 153,153,153)-->
 
     <color name="c_C32836">#c32836</color>
 </resources>

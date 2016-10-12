@@ -27,8 +27,7 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SPECIAL_LIST);
-//        params.put("city_id", city_id);
-        params.put("city_id", "e1b2911e-3a23-4630-9213-d317d200d9dc");
+        params.put("city_id", city_id);
         params.put("cur_geo_x", cur_geo_x);
         params.put("cur_geo_y", cur_geo_y);
         params.put("page", page);
@@ -37,13 +36,18 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
             public void onSuccessResponse(String responseBody) {
                 SpecialListModel bean = new Gson().fromJson(responseBody, SpecialListModel.class);
                 if(bean.getStatusCode() == 200){
+                    if(bean.getResult().get(0) != null && bean.getResult().get(0).getBody()!=null){
+                        for(SpecialListModel.Result.Body  body : bean.getResult().get(0).getBody()){
+                            body.setCount_down(bean.getResult().get(0).getCount_down());
+                        }
+                    }
                     if(page.equals("0") || page.equals("1")){
                         listener.getSpecialListSuccess(bean.getResult().get(0));
                     }else {
                         listener.getSpecialListLoadmoreSuccess(bean.getResult().get(0));
                     }
                 }else {
-                    listener.getSpecialListError(bean.getMessage());
+                    listener.getSpecialListNoData(bean.getMessage());
                 }
             }
 

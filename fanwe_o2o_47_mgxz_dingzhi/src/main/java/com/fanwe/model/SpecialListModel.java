@@ -152,6 +152,15 @@ public class SpecialListModel implements Serializable{
             String tuan_id;
             String origin_price;
             String special_name;
+            String count_down;
+
+            public String getCount_down() {
+                return count_down;
+            }
+
+            public void setCount_down(String count_down) {
+                this.count_down = count_down;
+            }
 
             public String getEnt_id() {
                 return ent_id;

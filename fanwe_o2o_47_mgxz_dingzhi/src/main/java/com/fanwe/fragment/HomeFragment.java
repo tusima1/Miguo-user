@@ -428,11 +428,9 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 case 1:
                     //直播列表
                     mHomeFragmentLiveList.updateView(isRefresh, rooms);
-//                    mPtrsvAll.onRefreshComplete();
                     loadComplete();
                     break;
                 case 2:
-//                    mPtrsvAll.onRefreshComplete();
                     loadComplete();
                     break;
                 case 3:

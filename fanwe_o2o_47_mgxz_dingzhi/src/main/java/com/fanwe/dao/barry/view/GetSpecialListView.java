@@ -9,4 +9,5 @@ public interface GetSpecialListView {
     void getSpecialListSuccess(SpecialListModel.Result result);
     void getSpecialListLoadmoreSuccess(SpecialListModel.Result result);
     void getSpecialListError(String msg);
+    void getSpecialListNoData(String msg);
 }
