@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -75,6 +76,7 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
             LinearLayout.LayoutParams imgParams = getLinearLayoutParams(width, height);
             imgParams.setMargins(margionSpace, 0, 0, 0);
             img.setLayoutParams(imgParams);
+            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             SDViewBinder.setImageView(getImagePath(i), img);
             img.setBackgroundColor(getColor(R.color.gray_ee));
             img.setRectAdius((float)dip2px(5));

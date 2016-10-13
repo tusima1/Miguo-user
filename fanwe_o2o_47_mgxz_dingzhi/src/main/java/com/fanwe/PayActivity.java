@@ -55,6 +55,7 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.umeng.UmengShareManager.onSharedListener;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -315,6 +316,9 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
      */
     private void showShareDialog(boolean flag) {
         if (share_info != null) {
+            if (TextUtils.isEmpty(share_info.getSalarySum()) || DataFormat.toDouble(share_info.getSalarySum()) == 0) {
+                return;
+            }
             if (dialog != null && dialog.isShowing()) {
                 return;
             }

@@ -516,7 +516,12 @@ public class SellerHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFailue("");
             }
         });
     }
