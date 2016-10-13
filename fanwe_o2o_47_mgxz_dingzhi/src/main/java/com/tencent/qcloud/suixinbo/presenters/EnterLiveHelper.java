@@ -3,22 +3,11 @@ package com.tencent.qcloud.suixinbo.presenters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.app.App;
-import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
-import com.fanwe.o2o.miguo.R;
-import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.live.views.LiveActivity;
-import com.miguo.live.views.LiveUtil;
-import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.definetion.LiveRoomParams;
-import com.miguo.utils.MGLog;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversationType;
 import com.tencent.TIMGroupManager;
@@ -35,11 +24,7 @@ import com.tencent.qcloud.suixinbo.presenters.viewinface.EnterQuiteRoomView;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 
 /**

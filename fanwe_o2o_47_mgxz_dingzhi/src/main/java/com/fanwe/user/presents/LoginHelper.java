@@ -109,6 +109,21 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<UserInfoNew>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if (!"200".equals(status)){
+                    if (view!=null){
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setEnabled(true);
+                            }
+                        });
+                    }
+                }
                 SDDialogManager.dismissProgressDialog();
                 dealLoginInfo(responseBody, mobile, null);
             }
@@ -218,6 +233,21 @@ public class LoginHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<UserInfoNew>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if (!"200".equals(status)){
+                    if (view!=null){
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.setEnabled(true);
+                            }
+                        });
+                    }
+                }
                 SDDialogManager.dismissProgressDialog();
                 dealLoginInfo(responseBody, userName, password);
             }

@@ -117,7 +117,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     }
 
     public void share() {
-        String content = "";
+        String content;
         String title = "送你钻石";
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (isHost) {

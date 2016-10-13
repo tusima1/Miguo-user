@@ -45,6 +45,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -222,6 +223,10 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                 pageNum = 1;
                 isRefresh = true;
                 getShopList();
+                if (SDCollectionUtil.isEmpty(modelBusinessCircleLists) || SDCollectionUtil.isEmpty(modelClassifyLists) || SDCollectionUtil.isEmpty(navs)) {
+                    //获取类别等信息
+                    initData();
+                }
             }
 
             @Override
@@ -480,7 +485,12 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mPtrlvContent.onRefreshComplete();
+            }
+        });
     }
 
     private Handler mHandler = new Handler() {

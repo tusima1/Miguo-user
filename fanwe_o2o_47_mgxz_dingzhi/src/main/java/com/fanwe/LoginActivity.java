@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -236,7 +235,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
     @Override
     public void onClick(View v) {
-        SHARE_MEDIA platform = null;
+        SHARE_MEDIA platform;
         switch (v.getId()) {
             case R.id.qq_login:
                 platform = SHARE_MEDIA.QQ;

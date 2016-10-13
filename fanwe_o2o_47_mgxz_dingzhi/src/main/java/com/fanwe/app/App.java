@@ -38,9 +38,7 @@ import com.ta.util.netstate.TANetChangeObserver;
 import com.ta.util.netstate.TANetWorkUtil.netType;
 import com.ta.util.netstate.TANetworkStateReceiver;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
-import com.tencent.qcloud.suixinbo.model.LiveRoomEntity;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.presenters.EnterLiveHelper;
 import com.tencent.qcloud.suixinbo.presenters.InitBusinessHelper;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.tencent.rtmp.ITXLiveBaseListener;
@@ -48,12 +46,8 @@ import com.tencent.rtmp.TXLiveBase;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -490,7 +484,6 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     public void setCurrentRoomId(String newRoomId) {
         Log.e("App setCurrentRoomId", newRoomId + "newRoomId ");
-        EnterLiveHelper liveHelper = new EnterLiveHelper(this, null);
         if (!TextUtils.isEmpty(currentRoomId) && !currentRoomId.equals(newRoomId)) {
 //            liveHelper.quiteAVRoom();
             App.getInstance().setAvStart(false);

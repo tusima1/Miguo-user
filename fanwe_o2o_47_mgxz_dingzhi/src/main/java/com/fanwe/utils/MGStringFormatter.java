@@ -115,7 +115,7 @@ public class MGStringFormatter {
      * @return
      */
     public static String getDate(String time){
-        String result="";
+        String result;
         if (TextUtils.isEmpty(time)){
             result="";
         }else {
@@ -140,7 +140,7 @@ public class MGStringFormatter {
      * @return
      */
     public static String getLimitedString(String txt,int limitNum,String endStr,String emptyStr){
-        String result="";
+        String result;
         if(!TextUtils.isEmpty(txt)){
             float count = UICharacterCount.getCount(txt);
             if (count>limitNum){

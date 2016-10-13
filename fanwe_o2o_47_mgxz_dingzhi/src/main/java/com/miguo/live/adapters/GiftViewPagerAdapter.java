@@ -33,7 +33,7 @@ public class GiftViewPagerAdapter extends PagerAdapter {
 
     private void createView(){
         viewList.clear();
-        int count=0;
+        int count;
         if (mData!=null && mData.size()>0){
             int size = mData.size();
             if (size%8!=0){

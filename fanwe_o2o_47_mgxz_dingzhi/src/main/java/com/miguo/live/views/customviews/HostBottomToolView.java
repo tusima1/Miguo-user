@@ -201,7 +201,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
             builder.setSendListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int sendPacketCount = 0;
+                    int sendPacketCount;
                     if (strNum.equals("全部")) {
                         sendPacketCount = Integer.parseInt(currModelHandOutRedPacket.getRed_packets());
                     } else {

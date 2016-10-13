@@ -160,7 +160,7 @@ public class MapSearchFragment extends BaseBaiduMapFragment
 		if (!SDCollectionUtil.isEmpty(listModel))
 		{
 			clearMap();
-			MapSearchBaseModel model = null;
+			MapSearchBaseModel model;
 			for (int i = 0; i < listModel.size(); i++)
 			{
 				model = listModel.get(i);

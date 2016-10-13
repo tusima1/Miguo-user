@@ -213,7 +213,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      * @param isChecked 是否被选择。
      */
     private BigDecimal checkListModelStateAndSumMoney(boolean isChecked) {
-        int size = 0;
+        int size;
         float sumMoney = 0.00f;
         BigDecimal value = new BigDecimal(0.00);
         count = 0;
@@ -270,7 +270,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      * @return
      */
     private BigDecimal getSumMoney() {
-        int size = 0;
+        int size;
         float sumMoney = 0.00f;
         BigDecimal value = new BigDecimal(0.00);
         if (listModel == null || listModel.size() < 1) {
@@ -294,7 +294,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      * @return
      */
     private Integer getSumSeleted() {
-        int size = 0;
+        int size;
         int count = 0;
         if (listModel == null || listModel.size() < 1) {
             return count;
@@ -302,7 +302,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
-            boolean checked = false;
+            boolean checked;
             checked = model.isChecked();
 
             if (checked) {
@@ -313,7 +313,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     private String getSumSeletedIds() {
-        int size = 0;
+        int size;
         if (listModel == null || listModel.size() < 1) {
             return null;
         }
@@ -323,7 +323,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
-            boolean checked = false;
+            boolean checked;
             checked = model.isChecked();
             if (checked) {
                 selectedIds.append(model.getId() + ",");
@@ -340,13 +340,13 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      * 计算每一个各类商品的总小计金额。
      */
     private void initSumPrice() {
-        int size = 0;
+        int size;
         if (listModel == null || listModel.size() < 1) {
             return;
         }
         size = listModel.size();
         for (int i = 0; i < size; i++) {
-            float sumPrice = 0.00f;
+            float sumPrice;
             ShoppingCartInfo model = listModel.get(i);
 
             int firstNum = SDFormatUtil.stringToInteger(model.getIs_first());

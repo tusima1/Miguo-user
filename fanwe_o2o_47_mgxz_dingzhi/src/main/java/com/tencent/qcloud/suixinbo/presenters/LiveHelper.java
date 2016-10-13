@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;

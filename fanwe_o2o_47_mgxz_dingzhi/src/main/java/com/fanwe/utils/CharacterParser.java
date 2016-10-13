@@ -131,8 +131,8 @@ public class CharacterParser
 	 */
 	public static String convertChs2PinYin(String chs)
 	{
-		String chsSingle = null;
-		String value = null;
+		String chsSingle;
+		String value;
 		StringBuilder strBuilder = new StringBuilder();
 		for (int i = 0; i < chs.length(); i++)
 		{

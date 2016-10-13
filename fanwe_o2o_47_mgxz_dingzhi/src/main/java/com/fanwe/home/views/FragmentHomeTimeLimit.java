@@ -87,24 +87,24 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     @Override
     public void getSpecialListSuccess(final SpecialListModel.Result result) {
         getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(result != null){
-                            contentLayout.setVisibility(View.GONE);
-                            homeTuanHorizontalScrollView.removeAllViews();
+            @Override
+            public void run() {
+                if(result != null){
+                    contentLayout.setVisibility(View.GONE);
+                    homeTuanHorizontalScrollView.removeAllViews();
 //                            contentLayout.removeAllViews();
-                            if(result.getCount_down() != null){
+                    if(result.getCount_down() != null){
 
-                            if(result.getCount_down().equals("0")){
-                                return;
-                            }
-                            contentLayout.setVisibility(View.VISIBLE);
-                            homeTuanHorizontalScrollView.init(result);
-                            homeTuanHorizontalScrollView.setParent(parent);
-                            homeTuanHorizontalScrollView.setOnTimeLimitClickListener(FragmentHomeTimeLimit.this);
+                        if(result.getCount_down().equals("0")){
+                            return;
                         }
+                        contentLayout.setVisibility(View.VISIBLE);
+                        homeTuanHorizontalScrollView.init(result);
+                        homeTuanHorizontalScrollView.setParent(parent);
+                        homeTuanHorizontalScrollView.setOnTimeLimitClickListener(FragmentHomeTimeLimit.this);
+                    }
+                }
             }
-        }
         });
 
     }

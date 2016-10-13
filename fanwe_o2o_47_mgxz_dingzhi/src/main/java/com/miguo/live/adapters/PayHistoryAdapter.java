@@ -50,7 +50,7 @@ public class PayHistoryAdapter extends BaseAdapter implements PinnedSectionListV
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Holder mHolder = null;
+        Holder mHolder;
         if (null == convertView) {
             mHolder = new Holder();
             convertView = inflater.inflate(R.layout.item_pay_history, null);

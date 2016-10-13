@@ -31,8 +31,8 @@ public class SDTouchProcesser
 
 	public float[] actionMove(MotionEvent e)
 	{
-		float dx = 0;
-		float dy = 0;
+		float dx;
+		float dy;
 
 		float newX = e.getX();
 		float newY = e.getY();

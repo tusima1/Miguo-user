@@ -23,7 +23,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by 狗蛋哥/zlh on 2016/9/23.

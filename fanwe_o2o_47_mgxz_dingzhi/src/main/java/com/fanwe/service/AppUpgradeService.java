@@ -146,7 +146,7 @@ public class AppUpgradeService extends Service implements CallbackView {
     private void initNotification() {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotification = new Notification();
-        mNotification.icon = R.drawable.icon;
+        mNotification.icon = R.drawable.app_icon;
         mNotification.tickerText = localFileName + "正在下载中";
         mNotification.contentView = new RemoteViews(getApplication().getPackageName(), R.layout
                 .service_download_view);

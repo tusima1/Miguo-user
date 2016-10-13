@@ -63,7 +63,6 @@ public class TimeUtils {
         String strMinute = minute < 10 ? "0" + minute : "" + minute;//分钟
         String strSecond = second < 10 ? "0" + second : "" + second;//秒
         String strMilliSecond = milliSecond < 10 ? "0" + milliSecond : "" + milliSecond;//毫秒
-        strMilliSecond = milliSecond < 100 ? "0" + strMilliSecond : "" + strMilliSecond;
 
         return strHour + ":" + strMinute + ":" + strSecond;
     }

@@ -86,7 +86,7 @@ public class CategoryCityListAdapter extends SDBaseAdapter<Quan_listModel> imple
 		{
 			if (mListModel != null && mListModel.size() > 0)
 			{
-				Quan_listModel model = null;
+				Quan_listModel model;
 				for (int i = 0; i < mListModel.size(); i++)
 				{
 					model = mListModel.get(i);

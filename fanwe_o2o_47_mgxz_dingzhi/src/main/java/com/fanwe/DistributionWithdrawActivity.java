@@ -271,7 +271,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
 
             @Override
             protected void afterTextChanged2(Editable s) {
-                Float et_money = 0.0f;
+                Float et_money;
                 String number = s.toString();
                 if (!number.equals("")) {
                     et_money = Float.parseFloat(number);

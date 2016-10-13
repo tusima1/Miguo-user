@@ -27,7 +27,7 @@ public class StoreOrderAccountPaymentFragment extends StoreConfirmOrderBaseFragm
 
 	public int getUseAccountMoney()
 	{
-		int useAccountMoney = 0;
+		int useAccountMoney;
 		if (mPlv_account_money.ismSelected())
 		{
 			useAccountMoney = 1;

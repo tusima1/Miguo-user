@@ -224,7 +224,7 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
 
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-        Intent intent = null;
+        Intent intent;
         switch (index) {
             case 0:
                 intent = new Intent(getActivity(), MapSearchActivity.class);

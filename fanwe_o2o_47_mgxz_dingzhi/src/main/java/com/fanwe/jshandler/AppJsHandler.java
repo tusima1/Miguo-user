@@ -44,7 +44,6 @@ import com.fanwe.utils.MGDictUtil;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
