@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.fanwe.TimeLimitActivity;
 import com.fanwe.baidumap.BaiduMapManager;
@@ -21,9 +24,11 @@ import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.live.views.utils.ToasUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
@@ -42,6 +47,8 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     String tag = "FragmentHomeTimeLimit";
 
     PtrFrameLayout parent;
+    @ViewInject(R.id.content_layout)
+    LinearLayout contentLayout;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +58,6 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     @Override
     protected void init() {
         super.init();
-//        bindData();
         initData();
     }
 
@@ -64,26 +70,45 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     }
 
     public void onRefresh(){
-        getSpecialListDao.getSpecialList(
-                AppRuntimeWorker.getCity_id(),
-                BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
-                BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
-                "0");
+        try{
+            getSpecialListDao.getSpecialList(
+                    AppRuntimeWorker.getCity_id(),
+                    BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
+                    BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
+                    "0");
+        }catch (Exception e){
+            getSpecialListDao.getSpecialList(
+                    AppRuntimeWorker.getCity_id(),
+                    "",
+                    "",
+                    "0");
+        }
     }
 
 
     @Override
     public void getSpecialListSuccess(final SpecialListModel.Result result) {
-        if(result != null){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    homeTuanHorizontalScrollView.init(result);
-                    homeTuanHorizontalScrollView.setParent(parent);
-                    homeTuanHorizontalScrollView.setOnTimeLimitClickListener(FragmentHomeTimeLimit.this);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(result != null){
+                    contentLayout.setVisibility(View.GONE);
+                    homeTuanHorizontalScrollView.removeAllViews();
+//                            contentLayout.removeAllViews();
+                    if(result.getCount_down() != null){
+
+                        if(result.getCount_down().equals("0")){
+                            return;
+                        }
+                        contentLayout.setVisibility(View.VISIBLE);
+                        homeTuanHorizontalScrollView.init(result);
+                        homeTuanHorizontalScrollView.setParent(parent);
+                        homeTuanHorizontalScrollView.setOnTimeLimitClickListener(FragmentHomeTimeLimit.this);
+                    }
                 }
-            });
-        }
+            }
+        });
+
     }
 
     @Override
@@ -94,6 +119,16 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     @Override
     public void getSpecialListError(String msg) {
         Log.d(tag, msg);
+    }
+
+    @Override
+    public void getSpecialListNoData(String msg) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                contentLayout.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
