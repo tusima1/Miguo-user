@@ -6,23 +6,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.adapter.UserWithdrawLogAdapter;
+import com.fanwe.base.CallbackView2;
+import com.fanwe.commission.model.getWithdrawLog.ModelWithdrawLog;
+import com.fanwe.commission.model.getWithdrawLog.ResultWithdrawLog;
+import com.fanwe.commission.presenter.MoneyHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_money_withdrawActModel;
-import com.fanwe.model.Uc_withdrawActModel;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +29,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class UserWithdrawLogActivity extends BaseActivity {
+public class UserWithdrawLogActivity extends BaseActivity implements CallbackView2 {
 
     @ViewInject(R.id.ptrlv_content)
     private PullToRefreshListView mPtrlv_content;
@@ -41,10 +37,9 @@ public class UserWithdrawLogActivity extends BaseActivity {
     @ViewInject(R.id.ll_empty)
     private LinearLayout ll_empty;
 
-    private List<Uc_money_withdrawActModel> mListModel = new ArrayList<Uc_money_withdrawActModel>();
+    private List<ModelWithdrawLog> mListModel = new ArrayList<>();
     private UserWithdrawLogAdapter mAdapter;
-
-    private PageModel mPage = new PageModel();
+    private MoneyHttpHelper httpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +50,7 @@ public class UserWithdrawLogActivity extends BaseActivity {
     }
 
     private void init() {
+        httpHelper = new MoneyHttpHelper(this);
         initTitle();
         bindDefaultData();
         initPullToRefreshListView();
@@ -75,63 +71,45 @@ public class UserWithdrawLogActivity extends BaseActivity {
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                mPage.resetPage();
-                requestData(false);
+                httpHelper.getUserWithdrawLog("1");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                if (mPage.increment()) {
-                    requestData(true);
-                } else {
-                    MGToast.showToast("未找到更多数据");
-                    mPtrlv_content.onRefreshComplete();
-                }
+                MGToast.showToast("未找到更多数据");
+                mPtrlv_content.onRefreshComplete();
             }
         });
         mPtrlv_content.setRefreshing();
     }
 
-    private void requestData(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("uc_money");
-        model.putAct("withdraw_log");
-        model.putPage(mPage.getPage());
-        InterfaceServer.getInstance().requestInterface(model, new
-                SDRequestCallBack<Uc_withdrawActModel>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    List<Uc_money_withdrawActModel> list = actModel.getData();
+    @Override
+    public void onSuccess(String responseBody) {
 
-                    if (mPage.getPage() == 1) {
-                        if (list == null || list.size() == 0) {
-                            ll_empty.setVisibility(View.VISIBLE);
-                        } else {
-                            ll_empty.setVisibility(View.GONE);
-                        }
-                    } else {
-                        ll_empty.setVisibility(View.GONE);
-                    }
-                    mPage.update(actModel.getPage());
-                    SDViewUtil.updateAdapterByList(mListModel, actModel.getData(), mAdapter, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onFinish() {
-                mPtrlv_content.onRefreshComplete();
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-            }
-        });
     }
 
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (datas!=null && datas.size()>0){
+            ResultWithdrawLog resultWithdrawLog = (ResultWithdrawLog) datas.get(0);
+            List<ModelWithdrawLog> body = resultWithdrawLog.getBody();
+            if (body!=null && body.size()>0){
+                SDViewUtil.updateAdapterByList(mListModel, body, mAdapter, false);
+            }
+            ll_empty.setVisibility(View.GONE);
+        }else {
+            ll_empty.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
+        mPtrlv_content.onRefreshComplete();
+    }
 }
 

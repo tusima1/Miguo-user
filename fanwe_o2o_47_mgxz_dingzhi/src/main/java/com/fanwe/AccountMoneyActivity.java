@@ -92,10 +92,11 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
 
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-        Intent intent = new Intent(getApplicationContext(), DistributionWithdrawLogActivity.class);
-        intent.putExtra("money_type", 1);
-        intent.putExtra("money", money);
-        startActivity(intent);
+//        Intent intent = new Intent(getApplicationContext(), DistributionWithdrawLogActivity.class);
+//        intent.putExtra("money_type", 1);
+//        intent.putExtra("money", money);
+//        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(),UserWithdrawLogActivity.class));
         super.onCLickRight_SDTitleSimple(v, index);
     }
 

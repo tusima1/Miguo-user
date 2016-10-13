@@ -1,8 +1,8 @@
 package com.fanwe.listener;
-import java.util.Calendar;
-
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import java.util.Calendar;
 
 /**
  * 防止二次点击,代替onclick()方法.
@@ -10,7 +10,11 @@ import android.view.View.OnClickListener;
  *
  */
 public abstract class NoDoubleClickListener implements OnClickListener{
-	
+
+	public NoDoubleClickListener(long lastClickTime) {
+		this.lastClickTime = lastClickTime;
+	}
+
 	private final int MIN_CLICK_DELAY_TIME=800;
 	private long lastClickTime=0;
 	@Override

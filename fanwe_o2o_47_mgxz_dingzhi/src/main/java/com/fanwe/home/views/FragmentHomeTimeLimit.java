@@ -97,6 +97,11 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     }
 
     @Override
+    public void getSpecialListNoData(String msg) {
+
+    }
+
+    @Override
     public void onTimeLimitClick() {
         Intent intent = new Intent();
         intent.setClass(getActivity(), TimeLimitActivity.class);
