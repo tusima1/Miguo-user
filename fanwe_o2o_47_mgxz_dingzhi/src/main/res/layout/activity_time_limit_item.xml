@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:id="@+id/item_layout"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -112,6 +113,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/buy_now_layout"
             android:gravity="center"
             android:background="@drawable/shape_cricle_solid_orange_bottom_radius"
             android:layout_weight="1"
@@ -119,6 +121,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/buy_now_text"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:text="立即抢购"

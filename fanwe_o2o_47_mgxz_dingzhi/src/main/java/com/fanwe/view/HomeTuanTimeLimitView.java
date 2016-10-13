@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.miguo.live.views.base.BaseRelativeLayout;
 
 import java.util.ArrayList;
@@ -33,6 +35,10 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     OnTimeLimitClickListener onTimeLimitClickListener;
 
     PtrFrameLayout parent;
+    CountDown timer;
+
+    TextView rightText;
+
 
     public HomeTuanTimeLimitView(Context context) {
         super(context);
@@ -137,20 +143,27 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         countDownTime.setTextColor(Color.WHITE);
         countDownTime.setTextSize(12);
         countDownTime.setText("12:12:05");
-
         top.addView(countDownTime);
+        countDownTime.setVisibility(result.getCount_down().equals("0") ? View.GONE : View.VISIBLE);
 
+
+        rightText = new TextView(getContext());
+        LinearLayout.LayoutParams rightTextParams = getLinearLayoutParams(wrapContent(), wrapContent());
+        rightTextParams.setMargins(dip2px(5), 0, 0, 0);
+        rightText.setLayoutParams(rightTextParams);
+        rightText.setText(getRightString());
+        rightText.setTextColor(getColor(R.color.gray_cc));
+        rightText.setTextSize(12);
+        top.addView(rightText);
+    }
+
+    private String getRightString(){
+        return DataFormat.toLong(result.getCount_down()) < 0  ? "后开始" : (result.getCount_down().equals("0") ? "已结束" : "后结束");
     }
 
     private void initSaleDatas(){
         addView(homeTuanHorizontalScrollView);
         ArrayList arrayList = new ArrayList();
-        arrayList.add(1);
-        arrayList.add(1);
-        arrayList.add(1);
-        arrayList.add(1);
-        arrayList.add(1);
-        arrayList.add(1);
         homeTuanHorizontalScrollView.init(result.getBody());
         homeTuanHorizontalScrollView.setOnTimeLimitClickListener(this);
     }
@@ -162,7 +175,18 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         }
         setResult(result);
         initTopContent();
+        initTimer();
         initSaleDatas();
+    }
+
+    private void initTimer(){
+        if(timer != null){
+            timer.cancel();
+            timer = null;
+        }
+        long time = Math.abs(DataFormat.toLong(result.getCount_down()));
+        timer = new CountDown(time, 1000);
+        timer.start();
     }
 
     public interface OnTimeLimitClickListener{
@@ -191,4 +215,32 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     public void setParent(PtrFrameLayout parent) {
         this.parent = parent;
     }
+
+    class CountDown extends android.os.CountDownTimer{
+
+        public CountDown(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            countDownTime.setText(getTimeText(millisUntilFinished));
+        }
+
+        @Override
+        public void onFinish() {
+            countDownTime.setVisibility(View.GONE);
+            rightText.setText("已结束");
+            cancel();
+        }
+    }
+
+    private String getTimeText(long millisUntilFinished){
+        int hour = (int)(millisUntilFinished / 1000 / 3600);
+        int lastMin = (int)(millisUntilFinished / 1000 % 3600);
+        int min = lastMin / 60;
+        int sec = lastMin % 60;
+        return (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
+    }
+
 }

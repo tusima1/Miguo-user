@@ -1,11 +1,14 @@
 package com.fanwe;
 
+import android.animation.TimeAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.fanwe.adapter.barry.TimeLimitAdapter;
 import com.fanwe.app.App;
@@ -13,13 +16,17 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.barry.GetSpecialListDao;
+import com.fanwe.dao.barry.ShappingCartDao;
 import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
+import com.fanwe.dao.barry.impl.ShappingCartDaoImpl;
 import com.fanwe.dao.barry.view.GetSpecialListView;
+import com.fanwe.dao.barry.view.ShappingCartDaoView;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getShopInfo.Share;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.fanwe.work.AppRuntimeWorker;
@@ -35,7 +42,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
 /**
  * Created by Barry on 2016/10/11.
  */
-public class TimeLimitActivity extends BaseActivity implements GetSpecialListView, PtrHandler, LoadMoreRecyclerView.OnRefreshEndListener{
+public class TimeLimitActivity extends BaseActivity implements GetSpecialListView, PtrHandler, LoadMoreRecyclerView.OnRefreshEndListener ,ShappingCartDaoView, TimeLimitAdapter.OnTimeLimitClickListener{
 
     private Share share;
 
@@ -44,12 +51,21 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     @ViewInject(R.id.ptr_layout)
     PtrFrameLayout ptrFrameLayout;
 
+    @ViewInject(R.id.last_time_text)
+    TextView timeText;
+
+    @ViewInject(R.id.last_time)
+    TextView countDownTime;
+
     @ViewInject(R.id.recyclerview)
     LoadMoreRecyclerView recyclerView;
     TimeLimitAdapter adapter;
 
     GetSpecialListDao getSpecialListDao;
+    ShappingCartDao shappingCartDao;
     String page = "1";
+
+    CountDown timer;
 
     boolean canRefresh = true;
     boolean needLoadmore = false;
@@ -113,6 +129,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     private void initDao(){
         getSpecialListDao = new GetSpecialListDaoImpl(this);
+        shappingCartDao = new ShappingCartDaoImpl(this);
     }
 
     private void initTitle(){
@@ -123,7 +140,6 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     private void initRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         ArrayList list = new ArrayList();
         adapter = new TimeLimitAdapter(this, list);
         recyclerView.setAdapter(adapter);
@@ -178,6 +194,19 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
         }
     }
 
+    private String getRightString(SpecialListModel.Result result){
+        Log.d(tag, "count down: " + result.getCount_down() + " ,is selling: " + isSelling(result) + " , is ending: " + isEnding(result));
+        return isSelling(result)  ? "距离结束时间:" : isEnding(result) ? "已结束" : "距离开始时间:";
+    }
+
+    private boolean isSelling(SpecialListModel.Result result){
+        return DataFormat.toLong(result.getCount_down()) > 0;
+    }
+
+    private boolean isEnding(SpecialListModel.Result result){
+        return DataFormat.toLong(result.getCount_down()) == 0;
+    }
+
     @Override
     public void getSpecialListSuccess(final SpecialListModel.Result result) {
         if(result != null && result.getBody() != null && result.getBody().size() > 0){
@@ -185,7 +214,11 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
                 @Override
                 public void run() {
                     adapter.notifyDataSetChanged(result.getBody());
+                    timeText.setText(getRightString(result));
+                    initTimer(result);
+                    countDownTime.setVisibility(result.getCount_down().equals("0") ? View.GONE : View.VISIBLE);
                     setPage(result.getPage());
+                    adapter.setOnTimeLimitClickListener(TimeLimitActivity.this);
                     loadComplete();
                 }
             });
@@ -199,6 +232,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
                 @Override
                 public void run() {
                     adapter.notifyDataSetChangedLoadmore(result.getBody());
+                    adapter.setOnTimeLimitClickListener(TimeLimitActivity.this);
                     setPage(result.getPage());
                     loadComplete();
                 }
@@ -214,6 +248,50 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
                 loadComplete();
             }
         });
+    }
+
+    @Override
+    public void getSpecialListNoData(String msg) {
+        getSpecialListError(msg);
+    }
+
+
+    private void initTimer(SpecialListModel.Result result){
+        if(timer != null){
+            timer.cancel();
+            timer = null;
+        }
+        long time = Math.abs(DataFormat.toLong(result.getCount_down()));
+        timer = new CountDown(time, 1000);
+        timer.start();
+    }
+
+
+    class CountDown extends android.os.CountDownTimer{
+
+        public CountDown(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            countDownTime.setText(getTimeText(millisUntilFinished));
+        }
+
+        @Override
+        public void onFinish() {
+            countDownTime.setVisibility(View.GONE);
+            timeText.setText("已结束");
+            cancel();
+        }
+    }
+
+    private String getTimeText(long millisUntilFinished){
+        int hour = (int)(millisUntilFinished / 1000 / 3600);
+        int lastMin = (int)(millisUntilFinished / 1000 % 3600);
+        int min = lastMin / 60;
+        int sec = lastMin % 60;
+        return (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
     }
 
     public void loadComplete(){
@@ -273,5 +351,43 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     public void setNeedLoadmore(boolean needLoadmore) {
         this.needLoadmore = needLoadmore;
+    }
+
+    /**
+     * 点击购物车回调
+     */
+    @Override
+    public void addToShoppingCart(String goodsId,String fx_user_id) {
+            String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            String goods_id = goodsId;
+            String cart_type = "1";
+            String add_goods_num = "1";
+            if (shappingCartDao != null) {
+                shappingCartDao.addSaleToShappingCart("", fx_user_id, lgn_user_id, goods_id, cart_type, add_goods_num);
+            }
+    }
+
+    /**
+     * 添加到购物车回调
+     */
+    @Override
+    public void addToShappingCartSuccess() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                goToShopping();
+            }
+        });
+    }
+
+
+    public void goToShopping() {
+        Intent intent = new Intent(this,ShopCartActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void addToShappingCartError(String message) {
+
     }
 }

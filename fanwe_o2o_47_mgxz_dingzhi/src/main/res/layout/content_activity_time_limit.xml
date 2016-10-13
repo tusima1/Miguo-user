@@ -24,7 +24,7 @@
         <LinearLayout
             android:id="@+id/bottom_layout"
             android:layout_alignParentBottom="true"
-            android:background="@color/color3d3d3d"
+            android:background="@color/gray_3d"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="45dp">
@@ -40,6 +40,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/white"
                 android:text="距离结束时间:"
+                android:id="@+id/last_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -47,7 +48,8 @@
                 android:layout_marginLeft="5dp"
                 android:textSize="14sp"
                 android:textColor="@color/white"
-                android:text="01:21:02"
+                android:text="00:00:00"
+                android:id="@+id/last_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         

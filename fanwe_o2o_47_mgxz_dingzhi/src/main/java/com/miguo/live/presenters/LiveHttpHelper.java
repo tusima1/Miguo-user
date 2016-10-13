@@ -599,11 +599,10 @@ public class LiveHttpHelper implements IHelper {
     /**
      * 校验用户是否关注该用户(主播)
      */
-    public void checkFocus(String host_id) {
-
+    public void checkFocus(String focus_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        params.put("host_id", host_id);
+        params.put("focus_id", focus_id);
         params.put("method", LiveConstants.CHECK_FOCUS);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -612,22 +611,17 @@ public class LiveHttpHelper implements IHelper {
                 RootCheckFocus rootCheckFocus = gson.fromJson(responseBody, RootCheckFocus.class);
                 List<ResultCheckFocus> resultCheckFocuss = rootCheckFocus.getResult();
                 if (SDCollectionUtil.isEmpty(resultCheckFocuss)) {
-
                     if (mView2 != null) {
                         mView2.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
                     }
                     if (mView != null) {
                         mView.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
                     }
-
                     return;
                 }
-
                 ResultCheckFocus resultCheckFocus = resultCheckFocuss.get(0);
                 List<ModelCheckFocus> modelCheckFocus;
                 modelCheckFocus = resultCheckFocus.getBody();
-//                modelCheckFocus = modelCheckFocus == null ? new ArrayList<ModelCheckFocus>() : modelCheckFocus;
-
                 if (mView2 != null) {
                     mView2.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
                 }
@@ -641,18 +635,16 @@ public class LiveHttpHelper implements IHelper {
 //                MGToast.showToast(message);
             }
         });
-
     }
 
     /**
      * 关注主播
      */
-    public void userFocus(String host_id) {
+    public void userFocus(String focus_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        params.put("host_id", host_id);
+        params.put("focus_id", focus_id);
         params.put("method", LiveConstants.USER_FOCUS);
-
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -667,7 +659,6 @@ public class LiveHttpHelper implements IHelper {
                 MGToast.showToast(message);
             }
         });
-
     }
 
     /**

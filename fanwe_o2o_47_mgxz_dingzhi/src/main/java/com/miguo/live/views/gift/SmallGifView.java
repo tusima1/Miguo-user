@@ -85,17 +85,21 @@ public class SmallGifView extends BaseLinearLayout{
     }
 
     private void initMap(){
-        GIFTS = new int[4];
+        GIFTS = new int[6];
         GIFTS[0] = R.drawable.star;
         GIFTS[1] = R.drawable.flower;
         GIFTS[2] = R.drawable.sweet;
         GIFTS[3] = R.drawable.miguo_baby;
+        GIFTS[4] = R.drawable.kiss;
+        GIFTS[5] = R.drawable.redpacket;
 
-        GIFS_ID = new String[4];
+        GIFS_ID = new String[6];
         GIFS_ID[0] = GiftId.STAR;
         GIFS_ID[1] = GiftId.FLOWER;
         GIFS_ID[2] = GiftId.SWEET;
         GIFS_ID[3] = GiftId.MIGUO_BABY;
+        GIFS_ID[4] = GiftId.KISS;
+        GIFS_ID[5] = GiftId.GOOD_FORTUNE;
 
         for(int i = 0; i<GIFTS.length; i++){
             giftsMap.put(GIFS_ID[i], GIFTS[i]);
