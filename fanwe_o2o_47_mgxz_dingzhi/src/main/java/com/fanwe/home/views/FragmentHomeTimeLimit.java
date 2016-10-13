@@ -34,11 +34,9 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * 限时特惠
- * Created by Administrator on 2016/8/11.
+ * Created by zlh/狗蛋哥/Barry on 2016/8/11.
  */
 public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener{
-//    @ViewInject(R.id.recyclerView_fragment_time_limit)
-//    private RecyclerView mRecyclerView;
 
     @ViewInject(R.id.home_tuan)
     private HomeTuanTimeLimitView homeTuanHorizontalScrollView;

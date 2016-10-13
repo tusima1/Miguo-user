@@ -7,7 +7,8 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:background="@color/gray"
+        android:scaleType="centerCrop"
+        android:background="@color/gray_ee"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:id="@+id/image"
@@ -21,6 +22,7 @@
         android:layout_toRightOf="@+id/image"
         android:layout_alignTop="@+id/image"
         android:id="@+id/title"
+        android:maxLines="2"
         android:text="鲈鱼"
         android:textColor="@color/text_base_color"
         android:textSize="14sp"
