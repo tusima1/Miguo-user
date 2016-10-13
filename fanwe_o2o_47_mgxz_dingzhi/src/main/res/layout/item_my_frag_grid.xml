@@ -6,11 +6,33 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="@dimen/dp12"
     app:divider="@drawable/line_gray"
     app:showDividers="middle"
     >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp10"
+        android:background="@color/bg_activity_gray"/>
 
+    <!--我的订单-->
+    <FrameLayout
+        android:id="@+id/fl_all_order"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp45"
+        android:clickable="true"
+        android:background="@drawable/md_ripple_white"
+        android:paddingLeft="@dimen/dp12"
+        android:paddingRight="@dimen/dp12"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|left"
+            android:text="常用频道"
+            android:textColor="@color/gray_text_99"
+            android:textSize="@dimen/sp15"/>
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp97"

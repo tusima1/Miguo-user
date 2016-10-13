@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-       >
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
     <FrameLayout
         android:id="@+id/fl_mine"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp87"
+        android:layout_height="@dimen/dp135"
         android:clickable="true"
-        android:background="@drawable/md_ripple_white"
+        android:background="@color/my_main_color"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp12"
+        android:paddingLeft="@dimen/dp21"
         android:paddingRight="@dimen/dp12"
         >
 
@@ -37,9 +36,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/dp7"
                     android:drawablePadding="@dimen/dp5"
-                    android:drawableRight="@drawable/ic_rank_1"
-                    android:text=""
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sp17"/>
 
                 <TextView
@@ -47,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="@color/gray_text_99"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sp17"/>
             </LinearLayout>
         </LinearLayout>
@@ -57,21 +54,21 @@
             android:layout_width="@dimen/dp9"
             android:layout_height="@dimen/dp13"
             android:layout_gravity="center_vertical|right"
-            android:src="@drawable/ic_arrow_right_pretty"/>
+            android:src="@drawable/ic_arrow_right"/>
 
     </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/bg_activity_gray"/>
+        android:background="@color/white_20"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp50"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        >
+        android:layout_marginBottom="@dimen/dp15"
+        android:background="@color/my_main_color"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_star"
@@ -79,7 +76,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
-            android:background="@drawable/md_ripple_white"
             android:orientation="vertical">
 
             <TextView
@@ -88,8 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
-                android:text=""
-                android:textColor="@color/gray_text_99"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp15"/>
 
             <TextView
@@ -98,16 +93,20 @@
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
                 android:text="关注"
-                android:textColor="@color/gray_text_99"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp13"/>
         </LinearLayout>
+        <View
+            android:layout_width="1px"
+            android:layout_height="@dimen/dp27"
+            android:layout_gravity="center_vertical"
+            android:background="@color/white_40"/>
 
         <LinearLayout
             android:id="@+id/ll_fans"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:background="@drawable/md_ripple_white"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -118,7 +117,7 @@
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
                 android:text=""
-                android:textColor="@color/gray_text_99"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp15"/>
 
             <TextView
@@ -127,16 +126,19 @@
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
                 android:text="粉丝"
-                android:textColor="@color/gray_text_99"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp13"/>
         </LinearLayout>
-
+        <View
+            android:layout_width="1px"
+            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/dp27"
+            android:background="@color/white_40"/>
         <LinearLayout
             android:id="@+id/ll_collect"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:background="@drawable/md_ripple_white"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -147,7 +149,7 @@
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
                 android:text=""
-                android:textColor="@color/gray_text_99"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp15"/>
 
             <TextView
@@ -156,7 +158,38 @@
                 android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
                 android:text="收藏"
-                android:textColor="@color/gray_text_99"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp13"/>
+        </LinearLayout>
+        <View
+            android:layout_width="1px"
+            android:layout_height="@dimen/dp27"
+            android:layout_gravity="center_vertical"
+            android:background="@color/white_40"/>
+
+        <LinearLayout
+            android:id="@+id/ll_set"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/tv_set"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:gravity="center"
+                android:src="@drawable/set"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
+                android:gravity="center"
+                android:text="设置"
+                android:textColor="@color/white"
                 android:textSize="@dimen/sp13"/>
         </LinearLayout>
     </LinearLayout>
@@ -164,5 +197,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp10"
-        android:background="@color/bg_activity_gray"/>
+        android:background="@color/white_20"/>
+
 </merge>

@@ -42,6 +42,7 @@ import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.user.view.WalletActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
+import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.miguo.live.views.customviews.MGToast;
@@ -71,6 +72,10 @@ public class MyFragment2 extends BaseFragment implements RedDotView
     private View mKefu;
     private View mStar;
     private View mCollect;
+    /**
+     * 设置。
+     */
+    private View mSet;
     private View mFans;
     private View mMine;
     private CircleImageView mIvUserFace;
@@ -151,8 +156,11 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         mCollect = findViewById(R.id.ll_collect);
         mFans = findViewById(R.id.ll_fans);
 
+        mSet = findViewById(R.id.ll_set);
+
         mStar.setOnClickListener(this);
         mCollect.setOnClickListener(this);
+        mSet.setOnClickListener(this);
         mFans.setOnClickListener(this);
         mMine.setOnClickListener(this);
 //        mIvMsg.setOnClickListener(this);
@@ -269,18 +277,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         } else if (v == mWallet) {
             //TODO 测试部分 佣金提现
             startActivity(WalletActivity.class);
-//            String fx_level = modelPersonalHome.getFx_level();
-//            int level = MGStringFormatter.getInt(fx_level);
-//            if (level < 2) {
-//                Intent intent = new Intent(getActivity(), MemberRankActivity.class);
-//                startActivity(intent);
-//                MGToast.showToast("您还没有提现权限");
-//            } else {
-//                Intent intent = new Intent(getActivity(), DistributionWithdrawActivity.class);
-//                intent.putExtra("money", modelPersonalHome.getWithdrawals());
-//                intent.putExtra("money_type",2);
-//                startActivity(intent);
-//            }
+
         } else if (v == mSuggestion) {
             //建议
             startActivity(AdviceActivity.class);
@@ -294,13 +291,8 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             /*粉丝*/
             startActivity(FansActivity.class);
         } else if (v == mMine) {
-            /*点击了我的区域*/
-            /*设置页面*/
-            Intent intent = new Intent(getActivity(), MyAccountActivity.class);
-            Bundle userData = new Bundle();
-            userData.putString("user_face", mUserFaceString);
-            intent.putExtras(userData);
-            startActivity(intent);
+            startActivity(UserHomeActivity.class);
+
         } else if (v == mAllOrder) {
             /*全部订单*/
             clickMyOrderView("all");
@@ -317,6 +309,15 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         }else if (v==mKefu){
             //客服电话
             clickKfPhone();
+        }else if(v==mSet){
+            //设置页。
+             /*点击了我的区域*/
+            /*设置页面*/
+            Intent intent = new Intent(getActivity(), MyAccountActivity.class);
+            Bundle userData = new Bundle();
+            userData.putString("user_face", mUserFaceString);
+            intent.putExtras(userData);
+            startActivity(intent);
         }
         /*else if (v== mIvMsg){
             //消息
@@ -349,30 +350,14 @@ public class MyFragment2 extends BaseFragment implements RedDotView
         SDViewBinder.setImageView(mUserFaceString, mIvUserFace);
 
         String fx_level = modelPersonalHome.getFx_level();
-        try {
-            Drawable rankDrawable = null;
-            if ("1".equals(fx_level)) {
-                rankDrawable = getResources().getDrawable(R.drawable.ic_rank_3);
-            } else if ("2".equals(fx_level)) {
-                rankDrawable = getResources().getDrawable(R.drawable.ic_rank_2);
-            } else if ("3".equals(fx_level)) {
-                rankDrawable = getResources().getDrawable(R.drawable.ic_rank_1);
-            }
-            if (rankDrawable != null) {
-                rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable
-                        .getMinimumHeight());
-                mUserName.setCompoundDrawables(null, null, rankDrawable, null);
-            }
-        } catch (Resources.NotFoundException e) {
-            Log.e("test","MyFrament2: "+e.toString());
-            e.printStackTrace();
-        }
         //粉丝
-        mTvFansNum.setText(modelPersonalHome.getFans_count());
+        String value = modelPersonalHome.getFans_count();
+
+        mTvFansNum.setText(SDFormatUtil.formatTenThouthand(value));
         //关注
-        mTvStarNum.setText(modelPersonalHome.getFocus_count());
+        mTvStarNum.setText(SDFormatUtil.formatTenThouthand(modelPersonalHome.getFocus_count()));
         //收藏
-        mTvCollectNum.setText(modelPersonalHome.getCollect());
+        mTvCollectNum.setText(SDFormatUtil.formatTenThouthand(modelPersonalHome.getCollect()));
 
         // 待付款订单数量
         setCustomRedText(mRDV_orderNotPay, modelPersonalHome.getPending_pay());
