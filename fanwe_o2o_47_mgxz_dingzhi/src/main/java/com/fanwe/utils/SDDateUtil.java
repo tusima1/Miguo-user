@@ -18,7 +18,7 @@ public class SDDateUtil
 	 * @return
      */
 	public static String secondesToMMSS(long seconds){
-		String hms ="00:00";
+		String hms;
 		long hour = 3600*1000;
 		String formatStr = "mm:ss";
 		if(seconds/hour >0){
@@ -392,8 +392,8 @@ public class SDDateUtil
 	 */
 	public static String getTwoHour(String st1, String st2)
 	{
-		String[] kk = null;
-		String[] jj = null;
+		String[] kk;
+		String[] jj;
 		kk = st1.split(":");
 		jj = st2.split(":");
 		if (Integer.parseInt(kk[0]) < Integer.parseInt(jj[0]))
@@ -415,7 +415,7 @@ public class SDDateUtil
 	public static String getTwoDay(String sj1, String sj2)
 	{
 		SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
-		long day = 0;
+		long day;
 		try
 		{
 			java.util.Date date = myFormatter.parse(sj1);
@@ -455,7 +455,7 @@ public class SDDateUtil
 		try
 		{
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			String mdate = "";
+			String mdate;
 			Date d = strToDate(nowdate);
 			long myTime = (d.getTime() / 1000) + Integer.parseInt(delay) * 24 * 60 * 60;
 			d.setTime(myTime * 1000);
@@ -638,7 +638,7 @@ public class SDDateUtil
 
 	public static String getWeekStr(String sdate)
 	{
-		String str = "";
+		String str;
 		str = SDDateUtil.getWeek(sdate);
 		if ("1".equals(str))
 		{

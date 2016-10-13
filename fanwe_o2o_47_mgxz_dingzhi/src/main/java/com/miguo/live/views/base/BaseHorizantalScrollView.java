@@ -72,6 +72,14 @@ public class BaseHorizantalScrollView extends HorizontalScrollView{
         return new LinearLayout.LayoutParams(width, height);
     }
 
+    public int wrapContent(){
+        return RelativeLayout.LayoutParams.WRAP_CONTENT;
+    }
+
+    public int matchParent(){
+        return RelativeLayout.LayoutParams.MATCH_PARENT;
+    }
+
     public Resources getResources(){
         return getContext().getResources();
     }

@@ -61,7 +61,7 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
             String startTime = getFormatDate(userRedPacketInfo.getAvailable_time_start());
             String endTime = getFormatDate(userRedPacketInfo.getAvailable_time_end());
-            String available = "";
+            String available;
             if (TextUtils.isEmpty(startTime) || TextUtils.isEmpty(endTime)) {
                 available = "永久有效";
             } else {

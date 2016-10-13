@@ -37,7 +37,7 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 
 	public int getUseAccountMoney()
 	{
-		int useAccountMoney = 0;
+		int useAccountMoney;
 		if (account_checkBox.isChecked())
 		{
 			useAccountMoney = 1;

@@ -292,7 +292,7 @@ public class AppRuntimeWorker {
         if (!TextUtils.isEmpty(cityName)) {
             List<CitylistModel> listCity = getCitylist();
             if (listCity != null && listCity.size() > 0) {
-                CitylistModel cityModel = null;
+                CitylistModel cityModel;
                 for (int i = 0; i < listCity.size(); i++) {
                     cityModel = listCity.get(i);
                     if (cityModel != null) {
@@ -316,7 +316,7 @@ public class AppRuntimeWorker {
     }
 
     public static EnumLoginState getLoginState() {
-        EnumLoginState state = null;
+        EnumLoginState state;
 
         LocalUserModel user = AppHelper.getLocalUser();
         if (user != null) {

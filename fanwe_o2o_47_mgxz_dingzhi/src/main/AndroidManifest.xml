@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.o2o.miguo"
     android:installLocation="auto"
-    android:versionCode="2016101001"
-    android:versionName="6.0.21">
+    android:versionCode="2016101301"
+    android:versionName="6.0.23">
 
     <uses-sdk
         android:minSdkVersion="12"
@@ -74,7 +74,7 @@
     <application
         android:name="com.fanwe.app.App"
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
@@ -796,9 +796,22 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 限时特惠 -->
+        <activity
+            android:name="com.fanwe.TimeLimitActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+
+
         <activity android:name="com.miguo.live.views.view.PlayBackActivity"
             android:screenOrientation="portrait"
             />
+
+
+
         <!-- 升级服务 -->
         <service android:name="com.fanwe.service.AppUpgradeService"/>
 
@@ -1053,11 +1066,26 @@
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
 
-        <activity android:name="com.fanwe.user.view.RedPacketListActivity"/>
-        <activity android:name="com.miguo.live.views.TestMyFragmentActivity"/>
-        <activity android:name="com.fanwe.user.view.FansActivity"/>
-        <activity android:name="com.fanwe.user.view.WalletActivity"/>
-        <activity android:name="com.miguo.utils.test.DTestActivity"/>
+        <activity android:name="com.fanwe.user.view.RedPacketListActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.miguo.live.views.TestMyFragmentActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.fanwe.user.view.FansActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.fanwe.user.view.WalletActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.miguo.utils.test.DTestActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:screenOrientation="portrait"
+                  android:windowSoftInputMode="adjustPan"/>
 
     </application>
 

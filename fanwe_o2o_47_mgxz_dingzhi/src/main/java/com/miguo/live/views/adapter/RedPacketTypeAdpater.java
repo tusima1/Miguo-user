@@ -58,7 +58,7 @@ public class RedPacketTypeAdpater extends HijasonBaseRecyclerAdapter{
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         ModelHandOutRedPacket modelHandOutRedPacket = getItem(position);
-        String countTextValue = "";
+        String countTextValue;
         String count = modelHandOutRedPacket.getRed_packets();
         String type = modelHandOutRedPacket.getRed_packet_type();
         String amount = modelHandOutRedPacket.getRed_packet_amount();

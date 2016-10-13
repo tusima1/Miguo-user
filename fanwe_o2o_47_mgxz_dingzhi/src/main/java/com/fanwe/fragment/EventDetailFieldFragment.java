@@ -259,7 +259,7 @@ public class EventDetailFieldFragment extends EventDetailBaseFragment
 			return;
 		}
 
-		Event_fieldsModel model = null;
+		Event_fieldsModel model;
 		for (int i = 0; i < listField.size(); i++)
 		{
 			model = listField.get(i);

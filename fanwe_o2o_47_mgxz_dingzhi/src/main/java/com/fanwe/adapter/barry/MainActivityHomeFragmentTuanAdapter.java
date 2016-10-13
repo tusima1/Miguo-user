@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,7 +61,10 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
     @Override
     protected void doThings(RecyclerView.ViewHolder holder, int position) {
         setNormalPriceText(holder, position);
+        getHolder(holder).freeReservation.setVisibility(TextUtils.isEmpty(trim(getItem(position).getTuan_property_name())) ? View.GONE : View.VISIBLE);
     }
+
+
 
     private void setNormalPriceText(RecyclerView.ViewHolder holder, int position) {
         getHolder(holder).normalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -73,7 +77,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         }
 
 
-        getHolder(holder).title.setText(MGStringFormatter.getLimitedString(getItem(position).getName(), 13));
+        getHolder(holder).title.setText(MGStringFormatter.getLimitedString(getItem(position).getShort_name(), 13));
         getHolder(holder).describe.setText(MGStringFormatter.getLimitedString(getItem(position).getBrief(), 46));
         getHolder(holder).price.setText(SDFormatUtil.formatNumberString(getItem(position).getTuan_price(), 2) + "元");
         getHolder(holder).normalPrice.setText(SDFormatUtil.formatNumberString(getItem(position).getOrigin_price(), 2) + "元");

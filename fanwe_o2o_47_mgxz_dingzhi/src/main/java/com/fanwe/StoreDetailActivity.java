@@ -127,7 +127,9 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
-        sellerHttpHelper.checkShopCollect(MerchantID);
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            sellerHttpHelper.checkShopCollect(MerchantID);
+        }
     }
 
     private void initScrollView() {
@@ -442,13 +444,13 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
         bean.setName(store_info.getShop_name());
         bean.setAddress(store_info.getAddress());
         bean.setTel(store_info.getTel());
-        if (!SDCollectionUtil.isEmpty(store_info.getStore_images())){
-            if(!TextUtils.isEmpty(store_info.getStore_images().get(0).getImage_url())){
+        if (!SDCollectionUtil.isEmpty(store_info.getStore_images())) {
+            if (!TextUtils.isEmpty(store_info.getStore_images().get(0).getImage_url())) {
                 bean.setPreview(store_info.getStore_images().get(0).getImage_url());
-            }else {
+            } else {
                 bean.setPreview(store_info.getIndex_img());
             }
-        }else {
+        } else {
             bean.setPreview(store_info.getIndex_img());
         }
         bean.setAvg_point(store_info.getAvg_grade());

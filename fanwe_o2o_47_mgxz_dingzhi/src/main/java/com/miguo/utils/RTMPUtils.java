@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.miguo.live.model.PlaySetInfo;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 点播视频处理。

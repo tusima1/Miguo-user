@@ -136,7 +136,7 @@ public class EventDetailAdapter extends SDSimpleBaseAdapter<Event_edtailModelLis
 			public void onSuccess(ResponseInfo<String> responseInfo)
 			{
 				SDDialogManager.dismissProgressDialog();
-				Intent intent = null;
+				Intent intent;
 				switch (actModel.getStatus())
 				{
 				case -1:

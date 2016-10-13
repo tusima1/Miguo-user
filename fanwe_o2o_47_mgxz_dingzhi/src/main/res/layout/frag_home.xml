@@ -21,7 +21,7 @@
         <!--ptr:ptrHeaderSubTextColor="@color/gray"-->
         <!--ptr:ptrHeaderTextColor="@color/gray">-->
 
-    <in.srain.cube.views.ptr.PtrFrameLayout
+    <com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout
         android:id="@+id/ptr_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -95,7 +95,7 @@
 
         </com.fanwe.view.RecyclerScrollView>
 
-    </in.srain.cube.views.ptr.PtrFrameLayout>
+    </com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout>
 
 
     <!--</com.handmark.pulltorefresh.library.PullToRefreshScrollView>-->

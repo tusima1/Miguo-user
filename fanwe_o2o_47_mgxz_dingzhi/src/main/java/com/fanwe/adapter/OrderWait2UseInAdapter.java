@@ -127,7 +127,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 			/**
 			 * 状态说明 0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结,6:已取消
 			 */
-			String status = "";
+			String status;
 			switch (mOrderStatus) {
 			case 0:
 				status = "未支付";
@@ -171,7 +171,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 
 						@Override
 						public void onClick(View v) {
-							int id=0;
+							int id;
 							try {
 								id = Integer.valueOf(model.getId()).intValue();
 							} catch (NumberFormatException e) {

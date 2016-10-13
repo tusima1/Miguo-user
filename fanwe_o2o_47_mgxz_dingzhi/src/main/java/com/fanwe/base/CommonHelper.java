@@ -47,7 +47,7 @@ public class CommonHelper extends Presenter {
     }
 
     public void doGetCaptcha(String mobile, int type, MgCallback callback) {
-        MgCallback mgCallback = null;
+        MgCallback mgCallback;
         if (callback != null) {
             mgCallback = callback;
 

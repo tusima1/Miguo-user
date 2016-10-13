@@ -90,7 +90,7 @@ public class Bcate_listModel
 		{
 			if (cate_id > 0 || tid > 0)
 			{
-				Bcate_listModel model = null;
+				Bcate_listModel model;
 				for (int i = 0; i < listModel.size(); i++)
 				{
 					model = listModel.get(i);
@@ -126,7 +126,7 @@ public class Bcate_listModel
 		{
 			if (cate_id > 0)
 			{
-				Bcate_listModel model = null;
+				Bcate_listModel model;
 				for (int i = 0; i < listModel.size(); i++)
 				{
 					model = listModel.get(i);

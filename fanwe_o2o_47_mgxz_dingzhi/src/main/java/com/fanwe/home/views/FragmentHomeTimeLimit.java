@@ -1,32 +1,47 @@
 package com.fanwe.home.views;
 
-import android.graphics.Rect;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fanwe.TimeLimitActivity;
+import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.dao.barry.GetSpecialListDao;
+import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
+import com.fanwe.dao.barry.view.GetSpecialListView;
 import com.fanwe.fragment.BaseFragment;
-import com.fanwe.home.adapters.HomeTimeLimitAdapter;
 import com.fanwe.model.EventModel_List;
 import com.fanwe.model.Index_indexActModel;
+import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.view.HomeTuanTimeLimitView;
+import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.utils.DisplayUtil;
+import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * 限时特惠
  * Created by Administrator on 2016/8/11.
  */
-public class FragmentHomeTimeLimit extends BaseFragment {
-    @ViewInject(R.id.recyclerView_fragment_time_limit)
-    private RecyclerView mRecyclerView;
+public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener{
+//    @ViewInject(R.id.recyclerView_fragment_time_limit)
+//    private RecyclerView mRecyclerView;
+
+    @ViewInject(R.id.home_tuan)
+    private HomeTuanTimeLimitView homeTuanHorizontalScrollView;
     private List<EventModel_List> mListModel = new ArrayList<EventModel_List>();
+    GetSpecialListDao getSpecialListDao;
+    String tag = "FragmentHomeTimeLimit";
+
+    PtrFrameLayout parent;
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,35 +51,64 @@ public class FragmentHomeTimeLimit extends BaseFragment {
     @Override
     protected void init() {
         super.init();
-        bindData();
+//        bindData();
+        initData();
     }
 
     public void setmIndexModel(Index_indexActModel indexModel) {
         this.mListModel = indexModel.getSpecial().getList();
     }
 
-    private void bindData() {
-        if (!toggleFragmentView(mListModel)) {
-            return;
-        }
+    private void initData(){
+        getSpecialListDao = new GetSpecialListDaoImpl(this);
+    }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        // 设置布局管理器
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                       RecyclerView.State state) {
-                outRect.right = DisplayUtil.dp2px(getActivity(), 9);
-            }
-        });
-        HomeTimeLimitAdapter mHomeTimeLimitAdapter = new HomeTimeLimitAdapter(getActivity(), mListModel);
-        mRecyclerView.setAdapter(mHomeTimeLimitAdapter);
+    public void onRefresh(){
+        getSpecialListDao.getSpecialList(
+                AppRuntimeWorker.getCity_id(),
+                BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
+                BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
+                "0");
+    }
+
+
+    @Override
+    public void getSpecialListSuccess(final SpecialListModel.Result result) {
+        if(result != null){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    homeTuanHorizontalScrollView.init(result);
+                    homeTuanHorizontalScrollView.setParent(parent);
+                    homeTuanHorizontalScrollView.setOnTimeLimitClickListener(FragmentHomeTimeLimit.this);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void getSpecialListLoadmoreSuccess(SpecialListModel.Result result) {
+
+    }
+
+    @Override
+    public void getSpecialListError(String msg) {
+        Log.d(tag, msg);
+    }
+
+    @Override
+    public void onTimeLimitClick() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), TimeLimitActivity.class);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     @Override
     protected String setUmengAnalyticsTag() {
         return this.getClass().getName().toString();
+    }
+
+    public void setParent(PtrFrameLayout parent) {
+        this.parent = parent;
     }
 }

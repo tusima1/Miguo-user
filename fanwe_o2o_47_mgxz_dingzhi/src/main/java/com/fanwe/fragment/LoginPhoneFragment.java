@@ -18,7 +18,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.List;
@@ -154,8 +153,6 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
         }
     }
 
-    private int count;
-    private boolean showToast = false;
 
     /**
      * 快捷 登录 接口。
@@ -175,22 +172,8 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             MGToast.showToast("请输入验证码!");
             return;
         }
-        count++;
-        if (count >= 4) {
-            if (!showToast) {
-                showToast = true;
-                MGToast.showToast("操作过于频繁,请稍候再试!");
-                MGUIUtil.runOnUiThreadDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        count = 0;
-                        showToast = false;
-                    }
-                }, 10000);
-            }
-            return;
-        }
-        mLoginHelper.doQuickLogin(mNumberPhone, mStrCode);
+        mBtnLogin.setEnabled(false);
+        mLoginHelper.doQuickLogin(mNumberPhone, mStrCode,mBtnLogin);
         SDDialogManager.showProgressDialog("请稍候...");
     }
 

@@ -161,6 +161,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         mLoginHelper = new LoginHelper(this);
         mUserFaceModule = new UserFaceModule(this);
         mUserFaceModule.initPhotoHandler();
+        getServiceNum();
         initViewState();
         initTitle();
         initBundle();
@@ -168,6 +169,20 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         showCacheSize();
         registerClick();
         setView();
+    }
+
+    /**
+     * 取字典中的客服电话
+     */
+    private void getServiceNum() {
+        List<DictModel> dict = MGDict.getDict();
+        for (DictModel data : dict) {
+            String dic_value = data.getDic_value();
+            if ("support_phone".equals(dic_value)) {
+                mKefuNum = data.getDic_mean();
+                break;
+            }
+        }
     }
 
     private void setView() {
@@ -208,8 +223,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         PackageInfo pi = SDPackageUtil.getCurrentPackageInfo();
         mTv_version.setText(String.valueOf(pi.versionName));
 
-        String kfPhone = AppRuntimeWorker.getKf_phone();
-        SDViewBinder.setTextView(mTv_kf_phone, kfPhone);
+        SDViewBinder.setTextView(mTv_kf_phone, mKefuNum);
         ImageLoader.getInstance().displayImage(App.getInstance().getUserIcon(), mUserFace);
 
     }
@@ -275,7 +289,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 		 * (TextUtils.isEmpty(sinaAppKey)) { SDViewUtil.hide(mLl_bind_sina); }
 		 * else { SDViewUtil.show(mLl_bind_sina);
 		 * SDViewUtil.show(mLl_third_bind); }
-		 * 
+		 *
 		 * String qqAppKey = model.getQq_app_key(); if
 		 * (TextUtils.isEmpty(qqAppKey)) { SDViewUtil.hide(mLl_bind_qq); } else
 		 * { SDViewUtil.show(mLl_bind_qq); SDViewUtil.show(mLl_third_bind); }
@@ -380,21 +394,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
      * 客服电话
      */
     private void clickKfPhone() {
-        if (!TextUtils.isEmpty(mKefuNum)) {
-            callKeFu(mKefuNum);
-            return;
-        }
-
-        List<DictModel> dict = MGDict.getDict();
-        for (DictModel data : dict) {
-            String dic_value = data.getDic_value();
-            if ("support_phone".equals(dic_value)) {
-                mKefuNum =data.getDic_mean();
-                break;
-            }
-        }
         if (TextUtils.isEmpty(mKefuNum)) {
-            MGToast.showToast("获取数据失败,请重试");
+            MGToast.showToast("获取客服电话失败");
         } else {
             callKeFu(mKefuNum);
         }

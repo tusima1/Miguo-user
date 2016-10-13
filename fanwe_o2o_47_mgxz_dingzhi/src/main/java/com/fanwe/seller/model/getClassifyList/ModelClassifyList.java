@@ -84,7 +84,7 @@ public class ModelClassifyList {
         int rightIndex = 0;
         if (!SDCollectionUtil.isEmpty(listModel)) {
             if (!TextUtils.isEmpty(cate_id) || !TextUtils.isEmpty(tid)) {
-                ModelClassifyList model = null;
+                ModelClassifyList model;
                 for (int i = 0; i < listModel.size(); i++) {
                     model = listModel.get(i);
                     if (model.getId().equals(cate_id)) // 找到大分类
@@ -114,7 +114,7 @@ public class ModelClassifyList {
         int rightIndex = 0;
         if (!SDCollectionUtil.isEmpty(listModel)) {
             if (!TextUtils.isEmpty(cate_id)) {
-                ModelClassifyList model = null;
+                ModelClassifyList model;
                 for (int i = 0; i < listModel.size(); i++) {
                     model = listModel.get(i);
                     if (model.getId().equals(cate_id)) {

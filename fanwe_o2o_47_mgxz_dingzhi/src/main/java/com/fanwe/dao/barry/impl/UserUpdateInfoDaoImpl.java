@@ -1,11 +1,8 @@
 package com.fanwe.dao.barry.impl;
 
-import android.util.Log;
-
 import com.fanwe.app.App;
 import com.fanwe.dao.barry.UserUpdateDao;
 import com.fanwe.dao.barry.view.UserUpdateView;
-import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.model.UserUpdateInfoBean;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;

@@ -117,7 +117,7 @@ public class HotelListTuanAdapter extends SDSimpleBaseAdapter<GoodsModel>{
 					public void onSuccess(ResponseInfo<String> responseInfo)
 					{
 						SDDialogManager.dismissProgressDialog();
-						Intent intent = null;
+						Intent intent;
 						switch (actModel.getStatus())
 						{
 						case -1:

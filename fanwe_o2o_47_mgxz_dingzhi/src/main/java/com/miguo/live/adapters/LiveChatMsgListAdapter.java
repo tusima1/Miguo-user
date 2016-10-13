@@ -130,7 +130,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         SpannableString spanString;
 
         if (convertView == null) {

@@ -200,7 +200,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
                 sdcardDataDir = file.getAbsolutePath();
             }
         }
-        return sdcardDataDir += "/" + name;
+        return sdcardDataDir + ("/" + name);
     }
 
     public void takePhoto() {
@@ -280,7 +280,6 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            temp = null;
         }
     }
 

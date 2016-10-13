@@ -26,7 +26,7 @@ public class RoundedImageView extends ImageView {
     private static final int TILE_MODE_MIRROR = 2;
 
     public static final String TAG = "RoundedImageView";
-    public static final float DEFAULT_RADIUS = 0f;
+    public static final float DEFAULT_RADIUS = 6f;
     public static final float DEFAULT_BORDER_WIDTH = 0f;
     public static final Shader.TileMode DEFAULT_TILE_MODE = Shader.TileMode.CLAMP;
     private static final ScaleType[] SCALE_TYPES = {

@@ -289,7 +289,7 @@ public class ShopCartFragment extends BaseFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
-                int size = 0;
+                int size;
                 mBt_delect.setClickable(isChecked);
                 if (listModel == null || listModel.size() < 1) {
                     return;
@@ -322,7 +322,7 @@ public class ShopCartFragment extends BaseFragment {
      * @param isChecked 是否被选择。
      */
     private BigDecimal checkListModelStateAndSumMoney(boolean isChecked) {
-        int size = 0;
+        int size;
         float sumMoney = 0.00f;
         BigDecimal value = new BigDecimal(0.00);
         if (listModel == null || listModel.size() < 1) {
@@ -377,7 +377,7 @@ public class ShopCartFragment extends BaseFragment {
      * @return
      */
     private BigDecimal getSumMoney() {
-        int size = 0;
+        int size;
         float sumMoney = 0.00f;
         BigDecimal value = new BigDecimal(0.00);
         if (listModel == null || listModel.size() < 1) {
@@ -402,7 +402,7 @@ public class ShopCartFragment extends BaseFragment {
      * @return
      */
     private Integer getSumSeleted(int type) {
-        int size = 0;
+        int size;
         int count = 0;
         if (listModel == null || listModel.size() < 1) {
             return count;
@@ -410,7 +410,7 @@ public class ShopCartFragment extends BaseFragment {
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             CartGoodsModel model = listModel.get(i);
-            boolean checked = false;
+            boolean checked;
             if (type == 1) {
                 checked = model.isChecked();
             } else {
@@ -424,7 +424,7 @@ public class ShopCartFragment extends BaseFragment {
     }
 
     private ArrayList<Integer> getSumSeletedIds(int type) {
-        int size = 0;
+        int size;
         if (listModel == null || listModel.size() < 1) {
             return null;
         }
@@ -432,7 +432,7 @@ public class ShopCartFragment extends BaseFragment {
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             CartGoodsModel model = listModel.get(i);
-            boolean checked = false;
+            boolean checked;
             if (type == 1) {
                 checked = model.isChecked();
             } else {
@@ -453,13 +453,13 @@ public class ShopCartFragment extends BaseFragment {
      * 计算每一个各类商品的总小计金额。
      */
     private void initSumPrice() {
-        int size = 0;
+        int size;
         if (listModel == null || listModel.size() < 1) {
             return;
         }
         size = listModel.size();
         for (int i = 0; i < size; i++) {
-            float sumPrice = 0.00f;
+            float sumPrice;
             CartGoodsModel model = listModel.get(i);
             int is_first = model.getIs_first();
             is_first -= model.getCheck_first();
