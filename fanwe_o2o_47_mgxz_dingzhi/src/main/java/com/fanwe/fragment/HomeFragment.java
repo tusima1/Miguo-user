@@ -500,6 +500,10 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         requestLiveList();
         getTuanList(pageNum);
         mFragmentHomeTimeLimit.onRefresh();
+        //判断是否要请求头部
+        if (SDCollectionUtil.isEmpty(itemsHomeClassify)) {
+            getHomeClassify();
+        }
     }
 
     /**
