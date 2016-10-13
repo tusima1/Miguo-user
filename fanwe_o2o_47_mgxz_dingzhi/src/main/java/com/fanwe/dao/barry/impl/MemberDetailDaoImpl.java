@@ -2,11 +2,8 @@ package com.fanwe.dao.barry.impl;
 
 import com.fanwe.app.App;
 import com.fanwe.dao.barry.MemberDetailDao;
-import com.fanwe.dao.barry.UserAgreementDao;
 import com.fanwe.dao.barry.view.MemberDetailView;
-import com.fanwe.dao.barry.view.UserAgreementView;
 import com.fanwe.model.MemberDetailBean;
-import com.fanwe.model.UserAgreementBean;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;

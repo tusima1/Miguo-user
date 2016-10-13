@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.fanwe.TimeLimitActivity;
 import com.fanwe.baidumap.BaiduMapManager;
@@ -23,11 +21,9 @@ import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.live.views.utils.ToasUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 

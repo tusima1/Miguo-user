@@ -46,7 +46,7 @@ public class Brand_listModel
 		int index = 0;
 		if (bid > 0 && !SDCollectionUtil.isEmpty(listModel))
 		{
-			Brand_listModel model = null;
+			Brand_listModel model;
 			for (int i = 0; i < listModel.size(); i++)
 			{
 				model = listModel.get(i);

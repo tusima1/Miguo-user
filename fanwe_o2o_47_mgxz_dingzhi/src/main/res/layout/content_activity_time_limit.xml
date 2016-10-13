@@ -40,7 +40,6 @@
                 android:textSize="14sp"
                 android:textColor="@color/white"
                 android:text="距离结束时间:"
-                android:id="@+id/last_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -49,7 +48,6 @@
                 android:textSize="14sp"
                 android:textColor="@color/white"
                 android:text="01:21:02"
-                android:id="@+id/last_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         

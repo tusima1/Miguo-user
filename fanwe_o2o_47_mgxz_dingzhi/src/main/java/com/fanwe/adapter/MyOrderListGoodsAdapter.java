@@ -120,7 +120,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             /**
              * 状态说明 0 没有申请退款  1:退款中,2:已退款,3,退款失败
              */
-            String goodsStatus = "";
+            String goodsStatus;
             int refundStatus = MGStringFormatter.getInt(model.getRefund_status());
             switch (mOrderMode) {
                 case 1:

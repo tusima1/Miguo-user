@@ -91,7 +91,7 @@ public abstract class SDBaseSpan extends DynamicDrawableSpan
 	@Override
 	public Drawable getDrawable()
 	{
-		Drawable drawable = null;
+		Drawable drawable;
 
 		Bitmap bitmap = onGetBitmap();
 		if (bitmap != null)

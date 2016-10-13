@@ -218,7 +218,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 	}
 
 	protected void dealRequestDataSuccess(Store_ActModel actModel) {
-		Intent intent = null;
+		Intent intent;
 		switch (actModel.getStatus()) {
 		case -1:
 			intent = new Intent(mActivity, LoginActivity.class);
@@ -573,7 +573,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 	}
 
 	protected void dealRequestDoneOrderSuccess(Cart_doneActModel actModel) {
-		Intent intent = null;
+		Intent intent;
 		switch (actModel.getStatus()) {
 		case -1:
 			intent = new Intent(mActivity, LoginActivity.class);

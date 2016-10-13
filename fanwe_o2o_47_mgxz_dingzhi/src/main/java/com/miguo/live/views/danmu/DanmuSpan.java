@@ -75,7 +75,6 @@ public class DanmuSpan extends ImageSpan{
             if(d != null){
                 d.destory();
             }
-            d = null;
             wr.clear();
             wr = null;
         }

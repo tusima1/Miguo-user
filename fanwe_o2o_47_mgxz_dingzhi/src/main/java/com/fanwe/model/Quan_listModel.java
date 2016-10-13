@@ -88,7 +88,7 @@ public class Quan_listModel
 		int rightIndex = 0;
 		if (qid > 0 && !SDCollectionUtil.isEmpty(listModel))
 		{
-			Quan_listModel model = null;
+			Quan_listModel model;
 			for (int i = 0; i < listModel.size(); i++)
 			{
 				model = listModel.get(i);

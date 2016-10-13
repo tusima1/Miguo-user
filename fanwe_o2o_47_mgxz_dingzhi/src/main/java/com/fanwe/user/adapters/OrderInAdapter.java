@@ -136,7 +136,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             /*是否可退款：0：不可退款，1：可退款*/
             String can_refund = model.getCan_refund();
 
-            int dp_id = -1;
+            int dp_id;
             String str_dp_id = model.getDp_id();
             if (TextUtils.isEmpty(str_dp_id)) {
                 dp_id = 0;

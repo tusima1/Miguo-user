@@ -297,7 +297,7 @@ public class BaiduMapManager
 			List listStep = line.getAllStep();
 			if (listStep != null && listStep.size() > 0 && listStep.size() > index)
 			{
-				Object step = null;
+				Object step;
 				if (index < 0)
 				{
 					step = listStep.get(listStep.size() - 1);
@@ -344,7 +344,7 @@ public class BaiduMapManager
 			List listStep = line.getAllStep();
 			if (listStep != null && listStep.size() > 0 && listStep.size() > index)
 			{
-				Object step = null;
+				Object step;
 				if (index < 0)
 				{
 					step = listStep.get(listStep.size() - 1);

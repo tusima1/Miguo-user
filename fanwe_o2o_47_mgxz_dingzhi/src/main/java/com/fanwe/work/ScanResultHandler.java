@@ -3,20 +3,9 @@ package com.fanwe.work;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 
 import com.fanwe.MyCaptureActivity;
-import com.fanwe.common.CommonInterface;
-import com.fanwe.constant.Constant.IndexType;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogConfirm;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.handler.OnActivityResultHandler;
-import com.fanwe.model.AdvsDataModel;
-import com.fanwe.model.Mobile_qrcode_indexActModel;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.miguo.live.views.customviews.MGToast;
 
 public class ScanResultHandler extends OnActivityResultHandler
 {

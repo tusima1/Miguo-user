@@ -1,7 +1,6 @@
 package com.fanwe.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -9,14 +8,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
-import com.miguo.live.views.customviews.RoundedImageView;
-import com.miguo.live.views.utils.ToasUtil;
 
 import java.util.List;
 

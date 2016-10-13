@@ -186,7 +186,7 @@ public class AVUIControl extends GLViewGroup {
 //    }
 
     public void setMirror(boolean isMirror, String identifier) {
-        GLVideoView view = null;
+        GLVideoView view;
         int index = getViewIndexById(identifier, AVView.VIDEO_SRC_TYPE_CAMERA);
         if (index >= 0) {
             view = mGlVideoView[index];
@@ -249,7 +249,6 @@ public class AVUIControl extends GLViewGroup {
         if (mContext == null)
             return;
         if (Utils.getGLVersion(mContext) == 1) {
-            isRemoteHasVideo = false;
             return;
         }
         if (!forceToBigView && !isLocalFront()) {
@@ -540,8 +539,8 @@ public class AVUIControl extends GLViewGroup {
         final int marginWight = mContext.getResources().getDimensionPixelSize(R.dimen.small_area_marginright);
         final int marginbetween = mContext.getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween);
         //
-        int left = 0;
-        int right = 0;
+        int left;
+        int right;
         int top = edgeY;
         int bottom = height - edgeY - mBottomOffset;
 
@@ -855,8 +854,8 @@ public class AVUIControl extends GLViewGroup {
             return;
         }
 
-        int left = 0;
-        int top = 0;
+        int left;
+        int top;
         int right = 0;
         int bottom = 0;
         int width = getWidth();
@@ -872,37 +871,29 @@ public class AVUIControl extends GLViewGroup {
         switch (mPosition) {
             case Position.LEFT_TOP:
                 left = edgeX;
-                right = left + w;
                 // if (mBottomOffset != 0) {
                 // top = height - h - edgeY - mBottomOffset;
                 // bottom = top + h;
                 // } else {
                 top = edgeY + mTopOffset;
-                bottom = top + h;
                 // }
                 break;
             case Position.RIGHT_TOP:
                 left = width - w - edgeX;
-                right = left + w;
                 // if (mBottomOffset != 0) {
                 // top = height - h - edgeY - mBottomOffset;
                 // bottom = top + h;
                 // } else {
                 top = edgeY + mTopOffset;
-                bottom = top + h;
                 // }
                 break;
             case Position.LEFT_BOTTOM:
                 left = edgeX;
-                right = left + w;
                 top = height - h - edgeY - mBottomOffset;
-                bottom = top + h;
                 break;
             case Position.RIGHT_BOTTOM:
                 left = width - w - edgeX;
                 top = height - h - edgeY - mBottomOffset;
-                right = left + w;
-                bottom = top + h;
                 break;
         }
 
@@ -1225,8 +1216,8 @@ public class AVUIControl extends GLViewGroup {
         int xMoveDistanceLevelStandard = thresholdX;
         int yMoveDistanceLevelStandard = thresholdY;
 
-        MoveDistanceLevel eXMoveDistanceLevel = MoveDistanceLevel.e_MoveDistance_Min;
-        MoveDistanceLevel eYMoveDistanceLevel = MoveDistanceLevel.e_MoveDistance_Min;
+        MoveDistanceLevel eXMoveDistanceLevel;
+        MoveDistanceLevel eYMoveDistanceLevel;
 
         if (nEndX - nStartX > xMoveDistanceLevelStandard) {
             eXMoveDistanceLevel = MoveDistanceLevel.e_MoveDistance_Positive;
@@ -1245,7 +1236,7 @@ public class AVUIControl extends GLViewGroup {
         }
 
         int eBeginPosition = startPosition;
-        int eEndPosition = Position.LEFT_TOP;
+        int eEndPosition;
         int eDstPosition = Position.LEFT_TOP;
         eEndPosition = getSmallViewPosition();
 
@@ -1358,19 +1349,15 @@ public class AVUIControl extends GLViewGroup {
 
         switch (position) {
             case Position.LEFT_TOP:
-                toX = edgeX;
-                toY = edgeY;
                 break;
             case Position.RIGHT_TOP:
                 toX = visableRect.width() - edgeX - width;
-                toY = edgeY;
                 break;
             case Position.RIGHT_BOTTOM:
                 toX = visableRect.width() - edgeX - width;
                 toY = visableRect.height() - edgeY - height;
                 break;
             case Position.LEFT_BOTTOM:
-                toX = edgeX;
                 toY = visableRect.height() - edgeY - height;
                 break;
             default:

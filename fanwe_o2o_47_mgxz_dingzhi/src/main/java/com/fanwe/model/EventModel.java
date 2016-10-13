@@ -139,7 +139,7 @@ public class EventModel implements Serializable {
     }
 
     public String getEventCountFormat() {
-        String strTotalCount = "";
+        String strTotalCount;
         if (this.total_count == 0) {
             strTotalCount = "无限制";
         } else {

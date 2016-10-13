@@ -75,11 +75,11 @@ public class SDPattern
 		List<String> listKey = find(strPattern, strContent);
 		if (listKey != null)
 		{
-			Integer position = null;
+			Integer position;
 			Map<String, LinkedBlockingQueue<Integer>> mapKeyPositions = new HashMap<String, LinkedBlockingQueue<Integer>>();
 			for (String key : listKey)
 			{
-				LinkedBlockingQueue<Integer> queuePosition = null;
+				LinkedBlockingQueue<Integer> queuePosition;
 				if (!mapKeyPositions.containsKey(key))
 				{
 					queuePosition = findPositionQueue(strContent, key);

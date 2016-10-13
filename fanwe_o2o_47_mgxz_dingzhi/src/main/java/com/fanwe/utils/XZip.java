@@ -28,7 +28,7 @@ public class XZip
 		java.util.List<java.io.File> fileList = new java.util.ArrayList<java.io.File>();
 		java.util.zip.ZipInputStream inZip = new java.util.zip.ZipInputStream(new java.io.FileInputStream(zipFileString));
 		java.util.zip.ZipEntry zipEntry;
-		String szName = "";
+		String szName;
 
 		while ((zipEntry = inZip.getNextEntry()) != null)
 		{
@@ -94,7 +94,7 @@ public class XZip
 		android.util.Log.v("XZip", "UnZipFolder(String, String)");
 		java.util.zip.ZipInputStream inZip = new java.util.zip.ZipInputStream(new java.io.FileInputStream(zipFileString));
 		java.util.zip.ZipEntry zipEntry;
-		String szName = "";
+		String szName;
 
 		while ((zipEntry = inZip.getNextEntry()) != null)
 		{

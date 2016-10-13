@@ -74,7 +74,6 @@ public class Bimp {
         if (image != null && !image.isRecycled()) {
             // 回收并且置为null
             image.recycle();
-            image = null;
 
         }
         return bitmap;
