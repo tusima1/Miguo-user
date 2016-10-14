@@ -243,7 +243,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 }
 
                 String id = selectedItemInfo.getId();
-                if (GiftId.STAR.equals(id) || GiftId.FLOWER.equals(id) || GiftId.SWEET.equals(id) || GiftId.MIGUO_BABY.equals(id)) {
+                if (GiftId.STAR.equals(id) || GiftId.FLOWER.equals(id) || GiftId.SWEET.equals(id) || GiftId.MIGUO_BABY.equals(id) || GiftId.KISS.equals(id) || GiftId.GOOD_FORTUNE.equals(id)) {
                     //发小礼物,要连发
                     preTime = System.currentTimeMillis();
                     mHandler.sendEmptyMessageDelayed(0, TIME_OFFSET);
