@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -63,6 +64,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;
+    private boolean showToast;
     private RecyclerView recyclerViewShop;
     private MyGridView gridViewLive;
     private CircleImageView circleImageView;
@@ -117,6 +119,10 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         id = getIntent().getStringExtra("id");
         if (TextUtils.isEmpty(id)) {
             id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        }
+        showToast = getIntent().getBooleanExtra("showToast", false);
+        if (showToast) {
+            MGToast.showToast("直播已结束，钻石发放失败");
         }
     }
 

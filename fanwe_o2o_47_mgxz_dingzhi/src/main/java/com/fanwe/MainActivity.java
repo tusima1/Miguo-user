@@ -668,8 +668,10 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
                         if (room.getHost() != null) {
                             if (!TextUtils.isEmpty(room.getHost().getUid())) {
+                                //提示用户直播结束，跳转到网红主页
                                 Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
                                 intent.putExtra("id", room.getHost().getUid());
+                                intent.putExtra("showToast", true);
                                 startActivity(intent);
                                 return;
                             }
