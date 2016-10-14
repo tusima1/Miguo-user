@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/location_1"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/c_F2F2F2"
+              android:orientation="vertical"
+              xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:id="@+id/fl_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="235dp">
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator_circle"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            app:ci_drawable="@drawable/black_radius_square"
+            app:ci_height="5dp"
+            app:ci_margin="5dp"
+            app:ci_width="5dp"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_top_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp17"
+        android:layout_marginRight="@dimen/dp17"
+        android:text="杭州知名人气日料店 航空直运生鲜一品日料精髓"
+        android:textSize="@dimen/sp20"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:maxLines="2"/>
+    <TextView
+        android:id="@+id/tv_top_youhui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp15"
+        android:textColor="@color/main_color"
+        android:textSize="@dimen/sp14"
+        android:text="95元/人/张"
+        android:drawablePadding="@dimen/dp10"
+        android:drawableRight="@drawable/ic_arrow_left_white"
+        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp15"
+        android:layout_marginBottom="@dimen/dp20">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp13"
+                android:textColor="@color/gray_text_59"
+                android:text="人气值"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp5"
+                android:textSize="@dimen/sp13"
+                android:textColor="@color/gray_text_59"
+                android:text="32423"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_collect_no"
+            android:scaleType="centerInside"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dp17"/>
+    </FrameLayout>
+
+</LinearLayout>

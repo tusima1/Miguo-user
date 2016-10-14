@@ -29,6 +29,7 @@ import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
@@ -314,7 +315,8 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             startActivity(MemberRankActivity.class);
         }else if (v==mKefu){
             //客服电话
-            clickKfPhone();
+//            clickKfPhone();
+            startActivity(GoodsDetailActivity.class);
         }
         /*else if (v== mIvMsg){
             //消息

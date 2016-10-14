@@ -523,10 +523,16 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
         if (CommissionConstance.USER_WITHDRAW.equals(method) || CommissionConstance
                 .USER_WITHDRAW_FX.equals(method)) {
             mEt_code.setText("");
-            Intent intent = new Intent(DistributionWithdrawActivity.this,
-                    DistributionWithdrawLogActivity.class);
-            intent.putExtra("money_type", money_type);
-            startActivity(intent);
+            if (money_type==2){
+                //佣金
+                Intent intent = new Intent(DistributionWithdrawActivity.this,
+                        DistributionWithdrawLogActivity.class);
+                intent.putExtra("money_type", money_type);
+                startActivity(intent);
+            }else {
+                //余额
+                startActivity(new Intent(DistributionWithdrawActivity.this,UserWithdrawLogActivity.class));
+            }
             finish();
         }
     }
