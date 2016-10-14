@@ -6,7 +6,7 @@ package com.fanwe.constant;
  * @author Administrator
  */
 public class ServerUrl {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
 
     //开发环境。
