@@ -671,7 +671,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                                 //提示用户直播结束，跳转到网红主页
                                 Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
                                 intent.putExtra("id", room.getHost().getUid());
-                                intent.putExtra("showToast", true);
+                                intent.putExtra("toastContent", "直播已结束，钻石发放失败");
                                 startActivity(intent);
                                 return;
                             }
