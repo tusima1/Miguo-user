@@ -154,7 +154,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             return;
         }
         //获取金额
-        SDViewBinder.setTextView(mTv_circle, "可提现额（元）" + "\n" + money);
+        SDViewBinder.setTextView(mTv_circle, "可提现额（元）" + "\n" + moneyFrom);
         initTitle();
     }
 
@@ -325,7 +325,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
      */
     private void clickWithdrawLog() {
         // TODO 跳到提现日志界面
-        Intent intent = new Intent(this, DistributionWithdrawLogActivity.class);
+        Intent intent = new Intent(this, UserWithdrawLogActivity.class);
         money_type = 2;
         intent.putExtra("money_type", money_type);
         startActivity(intent);
@@ -526,12 +526,15 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             if (money_type==2){
                 //佣金
                 Intent intent = new Intent(DistributionWithdrawActivity.this,
-                        DistributionWithdrawLogActivity.class);
+                        UserWithdrawLogActivity.class);
                 intent.putExtra("money_type", money_type);
                 startActivity(intent);
-            }else {
+            }else if(money_type==1){
                 //余额
-                startActivity(new Intent(DistributionWithdrawActivity.this,UserWithdrawLogActivity.class));
+                Intent intent = new Intent(DistributionWithdrawActivity.this,
+                        UserWithdrawLogActivity.class);
+                intent.putExtra("money_type", money_type);
+                startActivity(intent);
             }
             finish();
         }

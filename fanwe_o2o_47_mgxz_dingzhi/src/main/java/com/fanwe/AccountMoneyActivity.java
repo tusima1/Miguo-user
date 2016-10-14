@@ -37,6 +37,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
 
     private double money=0;
     private UserHttpHelper httpHelper;
+    private String fx_money;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
             public void onClick(View v) {
                     if (money > 0) {
                         Intent intent = new Intent(getApplicationContext(), DistributionWithdrawActivity.class);
-                        intent.putExtra("money",money+"");
+                        intent.putExtra("money",fx_money);
                         intent.putExtra("money_type",1);
                         startActivity(intent);
                     } else {
@@ -92,11 +93,10 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
 
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-//        Intent intent = new Intent(getApplicationContext(), DistributionWithdrawLogActivity.class);
-//        intent.putExtra("money_type", 1);
-//        intent.putExtra("money", money);
-//        startActivity(intent);
-        startActivity(new Intent(getApplicationContext(),UserWithdrawLogActivity.class));
+        Intent intent = new Intent(getApplicationContext(), UserWithdrawLogActivity.class);
+        intent.putExtra("money_type", 1);
+        intent.putExtra("money", money);
+        startActivity(intent);
         super.onCLickRight_SDTitleSimple(v, index);
     }
 
@@ -113,7 +113,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
                 mTv_money.setText("0.00");
             }else {
                 ModelDistrInfo modelDistrInfo= (ModelDistrInfo) datas.get(0);
-                String fx_money = modelDistrInfo.getFx_money();
+                fx_money = modelDistrInfo.getFx_money();
                 try {
                     money=Double.valueOf(fx_money);
                 } catch (NumberFormatException e) {
