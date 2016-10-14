@@ -96,7 +96,7 @@ public class RecyclerScrollView extends ScrollView{
                 }
             }
         }
-        Log.d("HomeScrollView", "l: " + l + " ,t: " + t + " ,oldl: " + oldl + " ,oldt: " + oldt + " ,top: " + getTop() + " ,child measured  height: " + getChildAt(0).getMeasuredHeight() + " show height: " + (getMeasuredHeight() + t));
+//        Log.d("HomeScrollView", "l: " + l + " ,t: " + t + " ,oldl: " + oldl + " ,oldt: " + oldt + " ,top: " + getTop() + " ,child measured  height: " + getChildAt(0).getMeasuredHeight() + " show height: " + (getMeasuredHeight() + t));
         setCurrentTop(t);
         super.onScrollChanged(l, t, oldl, oldt);
     }
