@@ -6,7 +6,7 @@ package com.fanwe.constant;
  * @author Administrator
  */
 public class ServerUrl {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
 
     //开发环境。
@@ -14,9 +14,9 @@ public class ServerUrl {
     //测试环境。
      public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";
     //H5地址 开发
-  //  public static final String SERVER_H5 = "http://m.dev.mgxz.com/";
+  //  public static final String SERVER_H5 = "http://m.dev.mgxz.com/"; m.mgxz.com
     //H5地址 测试
-   public static final String SERVER_H5 = "http://m.test.mgxz.com/";
+   public static final String SERVER_H5 = "http://m.mgxz.com/";
 
 
     /*袁浩*/
