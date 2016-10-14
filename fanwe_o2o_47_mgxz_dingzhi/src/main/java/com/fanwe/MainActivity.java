@@ -121,7 +121,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Log.e("test","Time MainActivity onCreate:"+ System.currentTimeMillis());
         BaiduMapManager.getInstance().init(App.getInstance().getApplicationContext());
         setContentView(R.layout.act_main);
         mLoginHelper = new LoginHelper(MainActivity.this);
@@ -218,7 +217,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
             }
         }
     }
-
     public void showDialogLogin() {
         final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
         dialog.setSubmitListener(new View.OnClickListener() {

@@ -11,7 +11,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -30,6 +29,7 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
@@ -59,6 +59,10 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             DangerousPermissions.STORAGE
     };
 
+    private long mStartTime=0;
+
+    private final int waitTime=800;
+
     private SharedPreferences setting;
     private PermissionsHelper permissionsHelper;
 
@@ -66,13 +70,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_init_advs_multi);
-//        Log.e("test","Time onCreate :"+ System.currentTimeMillis());
-    }
-
-    @Override
-    protected void onResume() {
-        JPushInterface.onResume(this);
-        super.onResume();
+        mStartTime=System.currentTimeMillis();
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
         } else {
@@ -80,6 +78,11 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         }
     }
 
+    @Override
+    protected void onResume() {
+        JPushInterface.onResume(this);
+        super.onResume();
+    }
 
     private void checkPermissions() {
         permissionsHelper = new PermissionsHelper(this, PERMISSIONS);
@@ -234,11 +237,25 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
         } else {
-            Log.e("test","Time startMainActivity :"+ System.currentTimeMillis());
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
+            final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            long currentTime = System.currentTimeMillis();
+            long offset = currentTime - mStartTime <0 ?waitTime :currentTime - mStartTime;
+            if (offset> waitTime){
+                startActivity(intent);
+                finish();
+            }else {
+                MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(intent);
+                        finish();
+                    }
+                },waitTime-offset);
+            }
+
+
         }
-        finish();
+
 //         Intent intent = new Intent(getApplicationContext(),
 //         GuideActivity.class);
 

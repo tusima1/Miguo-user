@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -315,11 +316,24 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.d(TAG, "sendDanmuMessage responbody: " + responseBody);
                 GiftDanmuBean bean = new Gson().fromJson(responseBody, GiftDanmuBean.class);
-                String userdiamond = bean.getResult().get(0).getBody().get(0).getUserdiamond();
+                String userdiamond="";
                 if (bean.getStatusCode() == 200) {
-                    sendIMDanmuMessage(message, userName, userId, avatarUrl, userdiamond);
+                    GiftDanmuBean.ResultBean resultBean = bean.getResult().get(0);
+                    if (resultBean!=null){
+                        List<GiftDanmuBean.ResultBean.BodyBean> body = resultBean.getBody();
+                        if (body!=null && body.size()>0){
+                            GiftDanmuBean.ResultBean.BodyBean bodyBean = body.get(0);
+                            userdiamond = bodyBean.getUserdiamond();
+                        }
+                    }
+                    if (!TextUtils.isEmpty(userdiamond)){
+                        sendIMDanmuMessage(message, userName, userId, avatarUrl, userdiamond);
+                    }else {
+                        if (mLiveView != null) {
+                            mLiveView.withoutEnoughMoney(bean.getMessage());
+                        }
+                    }
                 } else {
                     if (mLiveView != null) {
                         mLiveView.withoutEnoughMoney(bean.getMessage());
@@ -329,7 +343,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                Log.d(TAG, "sendDanmuMessage onErrorResponse: " + message);
                 if (mLiveView != null) {
                     mLiveView.withoutEnoughMoney(message);
                 }
