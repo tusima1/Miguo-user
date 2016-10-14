@@ -80,7 +80,7 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
         getHolder(holder).title.setText(getItem(position).getSpecial_name());
         getHolder(holder).describe.setText(getItem(position).getSpecial_dec());
         getHolder(holder).distance.setText(getDistance(position));
-        getHolder(holder).price.setText(getItem(position).getSpecial_price());
+        getHolder(holder).price.setText(getItem(position).getTuan_price());
         getHolder(holder).normalPrice.setText(getItem(position).getOrigin_price());
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
     }

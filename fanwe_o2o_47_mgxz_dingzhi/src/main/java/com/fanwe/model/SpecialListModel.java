@@ -147,6 +147,7 @@ public class SpecialListModel implements Serializable{
             String special_icon;
             String distance;
             String special_price;
+            String tuan_price;
             String buy_count;
             String special_dec;
             String tuan_id;
@@ -232,6 +233,14 @@ public class SpecialListModel implements Serializable{
 
             public void setSpecial_name(String special_name) {
                 this.special_name = special_name;
+            }
+
+            public String getTuan_price() {
+                return tuan_price;
+            }
+
+            public void setTuan_price(String tuan_price) {
+                this.tuan_price = tuan_price;
             }
         }
 

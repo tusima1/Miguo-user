@@ -82,7 +82,7 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
 
                 CharSequence startDate = DateFormat.format("yyyy-MM-dd", Long.decode(userRedPacketInfo.getEvent_start()));
                 CharSequence endDate = DateFormat.format("yyyy-MM-dd", Long.decode(userRedPacketInfo.getEvent_end()));
-                availableDate = "有效期:"+startDate + "-" + endDate;
+                availableDate = "有效期:"+startDate + "---" + endDate;
             }
             holder.mTv_Time.setText(availableDate);
         }
