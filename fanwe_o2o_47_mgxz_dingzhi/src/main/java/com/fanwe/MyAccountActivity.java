@@ -21,7 +21,7 @@ import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.MGDict;
-import com.fanwe.common.model.MGDict.DictModel;
+import com.fanwe.common.model.getMGDict.DictModel;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.SettingModelDao;
