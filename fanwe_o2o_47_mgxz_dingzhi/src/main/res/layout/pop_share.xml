@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp35"
         android:gravity="center"
-        android:text="送朋友20个钻！"
+        android:text="送朋友20个钻石"
         android:textColor="@color/white"
         android:textSize="@dimen/dp12" />
 
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp5"
         android:gravity="center"
-        android:text="朋友有消费，即共享10%钻石和20%老板红包"
         android:textColor="@color/white"
         android:textSize="@dimen/dp12" />
 

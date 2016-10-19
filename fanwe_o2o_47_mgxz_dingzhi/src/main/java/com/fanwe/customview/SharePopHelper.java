@@ -70,9 +70,9 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         btnCancle = (Button) contentView.findViewById(R.id.btn_cancel_pop_share);
         tvTitle = (TextView) contentView.findViewById(R.id.tv_title_pop_share);
         if (isHost) {
-            tvTitle.setVisibility(View.GONE);
+            tvTitle.setText("请他们来陪你");
         } else {
-            tvTitle.setVisibility(View.VISIBLE);
+            tvTitle.setText("朋友本场有消费，你可共享10%钻石和20%老板红包");
         }
 
         layoutWeixin.setOnClickListener(this);
@@ -126,31 +126,22 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     public void share() {
         String content;
-        String title = "送你钻石";
+        String title = "送你钻石，看直播，拿优惠";
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (isHost) {
-            if ("1".equals(CurLiveInfo.getLive_type())) {
-                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
-            } else {
-                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "的精彩记录片.....";
-            }
             if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
                 imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
         } else {
-            if ("1".equals(CurLiveInfo.getLive_type())) {
-                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + CurLiveInfo.getHostName() + "正在直播中.....";
-            } else {
-                content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + CurLiveInfo.getHostName() + "的精彩记录片.....";
-            }
             if (!TextUtils.isEmpty(CurLiveInfo.getHostAvator())) {
                 imageUrl = CurLiveInfo.getHostAvator();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
         }
+        content = getShareContent();
         if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
             //朋友圈
             title = content;
@@ -159,5 +150,26 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         UmengShareManager.share(platform, mActivity, title, content,
                 ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
                 UmengShareManager.getUMImage(mActivity, imageUrl), null);
+    }
+
+    /**
+     * 获取分享内容
+     *
+     * @return
+     */
+    private String getShareContent() {
+        String res = "";
+        String nick;
+        if (isHost) {
+            nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+        } else {
+            nick = CurLiveInfo.getHostName();
+        }
+        if ("1".equals(CurLiveInfo.getLive_type())) {
+            res = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]正在直播中";
+        } else {
+            res = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]的精彩记录片";
+        }
+        return res;
     }
 }

@@ -180,8 +180,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
-            String title = "送你钻石";
-            String content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
+            String title = "送你钻石，看直播，拿优惠";
+            String nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+            String content = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]正在直播中";
             if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
                 //朋友圈
                 title = content;
@@ -197,19 +198,19 @@ public class LiveStartActivity extends Activity implements CallbackView {
     private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            MGToast.showToast(share_media + "分享成功");
+            MGToast.showToast("分享成功");
             createAvRoom();
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            MGToast.showToast(share_media + "分享失败");
+            MGToast.showToast("分享失败");
             createAvRoom();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            MGToast.showToast(share_media + "分享取消");
+            MGToast.showToast("分享取消");
             createAvRoom();
         }
     };
@@ -280,7 +281,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                                 return;
                             } else {
                                 App.getInstance().setAvStart(true);
-                                App.getInstance().addLiveRoomIdList(roomId+"");
+                                App.getInstance().addLiveRoomIdList(roomId + "");
                                 MySelfInfo.getInstance().setMyRoomNum(roomId);
 
                                 MySelfInfo.getInstance().writeToCache(getApplicationContext());
@@ -306,7 +307,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
 
 
-
     /**
      * 进入主播页。
      */
@@ -318,7 +318,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             return;
         }
         if (QavsdkControl.getInstance().getAVContext() == null) {
-           App.getInstance().startAVSDK();
+            App.getInstance().startAVSDK();
 
         }
         UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
@@ -360,7 +360,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onSuccess(String responseBody) {
-       goToLive();
+        goToLive();
 
     }
 

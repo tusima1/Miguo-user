@@ -143,8 +143,9 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
             imageUrl = MGDictUtil.getShareIcon();
         }
-        String title = "送你钻石";
-        String content = "我刚刚送出一个亿的钻石，下次来陪我？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "邀请你关注";
+        String title = "刚送了一个亿的红包、钻石和优惠券";
+        String nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+        String content = "我刚通过米果直播送出各种钻石、红包和优惠，数不清啊数不清，下次直播再约你，[" + nick + "]邀请你关注";
         if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
             //朋友圈
             title = content;
@@ -156,19 +157,19 @@ public class LiveEndActivity extends Activity implements CallbackView {
     private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            MGToast.showToast(share_media + "分享成功");
+            MGToast.showToast("分享成功");
             finish();
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            MGToast.showToast(share_media + "分享失败");
+            MGToast.showToast("分享失败");
             finish();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            MGToast.showToast(share_media + "分享取消");
+            MGToast.showToast("分享取消");
             finish();
         }
     };
