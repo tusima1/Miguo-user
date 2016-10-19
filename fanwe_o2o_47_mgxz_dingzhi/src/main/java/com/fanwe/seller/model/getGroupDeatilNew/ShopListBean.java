@@ -11,6 +11,15 @@ public class ShopListBean {
     private String tel;
     private String id;
     private String shop_name;
+    private String trade_day;//营业时间
+
+    public String getTrade_day() {
+        return trade_day;
+    }
+
+    public void setTrade_day(String trade_day) {
+        this.trade_day = trade_day;
+    }
 
     public String getGeo_y() {
         return geo_y;

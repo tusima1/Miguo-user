@@ -15,6 +15,7 @@ import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getGroupDeatilNew.ShopListBean;
 import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.utils.SDDistanceUtil;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
@@ -78,8 +79,8 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
             }
             int distanceFromMyLocation = (int) BaiduMapManager.getInstance()
                     .getDistanceFromMyLocation(shopListBean.getGeo_x(), shopListBean.getGeo_y());
-            holder.tv_distance.setText(distanceFromMyLocation+"");
-            holder.tv_time.setText("测试时间 2016-16-16 16:16--19:19");
+            holder.tv_distance.setText(SDDistanceUtil.getKmDistanceString(distanceFromMyLocation));
+            holder.tv_time.setText(shopListBean.getTrade_day());
 
             holder.iv_phone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,7 +103,7 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
             holder.iv_shop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MGToast.showToast("item:"+position);
+                    MGToast.showToast("item:"+position+"去小店");
                 }
             });
         }

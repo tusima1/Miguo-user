@@ -24,7 +24,6 @@ public class Store_infoModel implements Serializable {
     private String dp_count;
     private String brief;
     private int offline;
-//    private List<Store_imagesModel> store_images;
     private List<Store_imagesModel> store_images;
     private String share_url;
     private Float salary_money = 0f;

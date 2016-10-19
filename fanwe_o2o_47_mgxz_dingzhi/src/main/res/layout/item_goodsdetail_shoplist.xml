@@ -12,26 +12,46 @@
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
         android:layout_height="163dp">
-        <ListView
+        <com.fanwe.customview.ListViewForScrollView
             android:id="@+id/list_shoplist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:dividerHeight="0dp"/>
+            android:dividerHeight="0dp"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideInset"
+            android:scrollbarSize="@dimen/dp3"
+            android:scrollbarThumbVertical="@drawable/scrollbar_vertical_thumb"
+            />
     </FrameLayout>
-    <TextView
-        android:id="@+id/tv_launcher"
+    <LinearLayout
+        android:id="@+id/ll_launcher"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
         android:clickable="true"
-        android:text="其他门店"
-        android:textColor="@color/gray_text_59"
-        android:gravity="center"
-        android:textSize="13sp"
-        android:drawableRight="@drawable/ic_arrow_down_dark"
-        android:drawablePadding="7dp"
         android:background="@drawable/md_ripple_unbound_gray"
-        />
+        >
+        <TextView
+            android:id="@+id/tv_launcher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:text="其他门店"
+            android:textColor="@color/gray_text_59"
+            android:gravity="center"
+            android:textSize="13sp"
+            />
+        <ImageView
+            android:id="@+id/iv_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_arrow_down_dark"
+            android:layout_marginLeft="@dimen/dp7"
+            />
+    </LinearLayout>
+
 
 </LinearLayout>
 

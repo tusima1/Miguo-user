@@ -2,6 +2,7 @@ package com.fanwe.seller.views;
 
 import android.animation.Animator;
 import android.animation.IntEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
@@ -20,13 +21,14 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -85,10 +87,12 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
     private TextView mHtmlTipDesc;//温馨提示
     private TextView mHtmlTuiReason;//推荐理由
     private TextView mHtmlDetailDesc;//详情
-    private TextView mTvLauncher;//门店launcher
+    private LinearLayout mLLLauncher;//门店launcher
+    private TextView mTvLauncherName;//门店launcher name
+    private ImageView mIvShopArrow;//门店launcher img
     private FrameLayout mShopListLayout;//门店列表容器
     private boolean isOpen=false;//门店列表是否展开
-    private ListView mShopListView;
+    private ListViewForScrollView mShopListView;
     private GoodsDetailShopListAdapter mShopAdapter;
 
     private int offset;//偏移
@@ -129,6 +133,7 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
         mHttpHelper = new SellerNewHttpHelper(this);
         mSellerHelper = new SellerHttpHelper(null,this,"");
         mShoppingCartHelper = new ShoppingCartHelper(this);
+        mHttpHelper.getGroupBuyDetailNew(GoodsId);
     }
     private void getIntentData() {
         Intent intent = getIntent();
@@ -180,25 +185,31 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
 
         //门店列表layout
         mShopListLayout = ((FrameLayout) findViewById(R.id.fl_container));
-        mShopListView = ((ListView) findViewById(R.id.list_shoplist));
-        mTvLauncher= ((TextView) findViewById(R.id.tv_launcher));
+        mShopListView = ((ListViewForScrollView) findViewById(R.id.list_shoplist));
+        mLLLauncher= ((LinearLayout) findViewById(R.id.ll_launcher));
+        mTvLauncherName= ((TextView) findViewById(R.id.tv_launcher_name));
+        mIvShopArrow= ((ImageView) findViewById(R.id.iv_arrow));
+
         mDefaultHeight = DisplayUtil.dp2px(this, 163);
         offset = DisplayUtil.dp2px(this, 300);
-        mTvLauncher.setOnClickListener(new View.OnClickListener() {
+        mLLLauncher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isOpen){
+                    mShopListView.setInterceptTouchEventEnable(false);
                     animatorAll(mShopListLayout,offset,mDefaultHeight);
+                    rotateView(mIvShopArrow,-180f,0f,false);
                     //在动画结束后刷新数据,让效果更自然
                 }else {
                     //展开
                     if (mShopListCount<2){
                         return;
                     }
+                    mShopListView.setInterceptTouchEventEnable(true);
                     mShopAdapter.setCount(mShopListCount);
                     mShopAdapter.notifyDataSetChanged();
                     animatorAll(mShopListLayout,mDefaultHeight,offset);
-
+                    rotateView(mIvShopArrow,0f,180f,true);
                 }
             }
         });
@@ -225,31 +236,42 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
             @Override
             public void onScrollChanged(int x, int y, int oldX, int oldY) {
                 //状态栏透明度回调
-                double fff = y * 1.0 / mFLViewpagerHeight;
-                if (fff >= 0 && fff <= 1) {
-                    int percent=(int) (fff * 100);
-                    String alphaWhite;
-                    if (fff *100<10){
-                        alphaWhite="00";
-                    }else {
-                        alphaWhite= getAlphaWhite(percent);
-                    }
-                    int alphaWhiteColor = Color.parseColor("#"+alphaWhite + "FFFFFF");
-                    mVGTitle.setBackgroundColor(alphaWhiteColor);
-                    Log.e("test","percent:"+percent);
-
-                    if (mTvTitleMiddle.getVisibility()==View.VISIBLE){
-                        //显示标题
-                        mTvTitleMiddle.setVisibility(View.GONE);
-                    }
-
-                } else {
-                    if (mTvTitleMiddle.getVisibility()==View.GONE){
-                        //显示标题
-                        mTvTitleMiddle.setVisibility(View.VISIBLE);
-                        mTvTitleMiddle.setTextColor(Color.DKGRAY);
-                    }
+                final int height = mFLViewpagerHeight - mTitleHeight;
+                if (y <= 0) {   //设置标题的背景颜色
+                    mVGTitle.setBackgroundColor(Color.argb((int) 0, 255,255,255));
+                } else if (y > 0 && y <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
+                    float scale = (float) y / height;
+                    float alpha = (255 * scale);
+                    mTvTitleMiddle.setTextColor(Color.argb((int) alpha, 46,46,46));
+                    mVGTitle.setBackgroundColor(Color.argb((int) alpha, 255,255,255));
+                } else {    //滑动到banner下面设置普通颜色
+                    mVGTitle.setBackgroundColor(Color.argb((int) 255, 255,255,255));
                 }
+//                double fff = y * 1.0 / mFLViewpagerHeight;
+//                if (fff >= 0 && fff <= 1) {
+//                    int percent=(int) (fff * 100);
+//                    String alphaWhite;
+//                    if (fff *100<10){
+//                        alphaWhite="00";
+//                    }else {
+//                        alphaWhite= getAlphaWhite(percent);
+//                    }
+//                    int alphaWhiteColor = Color.parseColor("#"+alphaWhite + "FFFFFF");
+//                    mVGTitle.setBackgroundColor(alphaWhiteColor);
+//                    Log.e("test","percent:"+percent);
+//
+//                    if (mTvTitleMiddle.getVisibility()==View.VISIBLE){
+//                        //显示标题
+//                        mTvTitleMiddle.setVisibility(View.GONE);
+//                    }
+//
+//                } else {
+//                    if (mTvTitleMiddle.getVisibility()==View.GONE){
+//                        //显示标题
+//                        mTvTitleMiddle.setVisibility(View.VISIBLE);
+//                        mTvTitleMiddle.setTextColor(Color.DKGRAY);
+//                    }
+//                }
 
                 //黑与白
                 boolean ViewPagerVisible = mSScrollView.isChildVisible(mFlViewpager);
@@ -323,6 +345,47 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
         return data;
     }
 
+    private void rotateView(View target, float start, float end, final boolean isOpen){
+        // 第二个参数"rotation"表明要执行旋转
+        // 0f -> 360f，从旋转360度，也可以是负值，负值即为逆时针旋转，正值是顺时针旋转。
+        ObjectAnimator anim = ObjectAnimator.ofFloat(target, "rotation", start, end);
+        // 动画的持续时间，执行多久？
+        anim.setDuration(500);
+        // 回调监听
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (isOpen){
+                    mTvLauncherName.setText("收起门店");
+//                    mIvShopArrow.clearAnimation();
+//                    mIvShopArrow.setImageResource(R.drawable.ic_arrow_up);
+                }else {
+                    mTvLauncherName.setText("其他门店");
+//                    mIvShopArrow.clearAnimation();
+//                    mIvShopArrow.setImageResource(R.drawable.ic_arrow_down_dark);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        // 正式开始启动执行动画
+        anim.start();
+    }
+
     private void animatorAll(final View target, final int start, final int end){
         ValueAnimator valueAnimator = ValueAnimator.ofInt(1, 100);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -378,13 +441,13 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
     @Override
     protected void onResume() {
         super.onResume();
-        if (TextUtils.isEmpty(GoodsId)){
-            return;
-        }
-        if (mHttpHelper==null){
-            mHttpHelper=new SellerNewHttpHelper(this);
-        }
-        mHttpHelper.getGroupBuyDetailNew(GoodsId);
+//        if (TextUtils.isEmpty(GoodsId)){
+//            return;
+//        }
+//        if (mHttpHelper==null){
+//            mHttpHelper=new SellerNewHttpHelper(this);
+//        }
+//        mHttpHelper.getGroupBuyDetailNew(GoodsId);
     }
 
     private void bindData(ModelGoodsDetailNew modelGoodsDetailNew) {
@@ -457,6 +520,7 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
         if (shop_list!=null && shop_list.size()>0){
             mShopListCount=shop_list.size();
             mShopAdapter = new GoodsDetailShopListAdapter(shop_list,this);
+            mShopListView.setScrollView(mSScrollView);
             mShopListView.setAdapter(mShopAdapter);
         }
     }
