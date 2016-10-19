@@ -2,7 +2,7 @@
 <LinearLayout android:id="@+id/location_4"
               xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:background="@color/white"
               android:orientation="vertical">
 
@@ -19,11 +19,18 @@
         android:textSize="15sp"/>
 
     <TextView
+        android:id="@+id/tv_detail_desc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:gravity="center"
-        android:text="33"
+        android:text=""
         android:textColor="@color/dark_text"
         android:textSize="33sp"/>
+    <WebView
+        android:id="@+id/test_webView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </WebView>
 
 </LinearLayout>

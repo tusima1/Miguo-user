@@ -18,6 +18,7 @@ import com.fanwe.app.App;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -176,7 +177,7 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
         }
 
         private void clickItem(){
-            Intent intent = new Intent(getActivity(), TuanDetailActivity.class);
+            Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
             intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, getAdapter().getItem(position).getTuan_id());
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }

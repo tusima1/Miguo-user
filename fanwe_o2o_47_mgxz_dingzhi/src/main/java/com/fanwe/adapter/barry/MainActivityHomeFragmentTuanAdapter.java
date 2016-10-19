@@ -15,6 +15,7 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
@@ -163,7 +164,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
         }
 
         private void clickItem() {
-            Intent intent = new Intent(getActivity(), TuanDetailActivity.class);
+            Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
             intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, getAdapter().getItem(position).getId());
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }

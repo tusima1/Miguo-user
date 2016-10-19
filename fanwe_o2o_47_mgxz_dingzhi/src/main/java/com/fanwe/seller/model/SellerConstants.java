@@ -102,4 +102,9 @@ public class SellerConstants {
      * 评论汇总
      */
     public static final String COMMENT_TOTAL = "CommentTotal";
+
+    //商品详情
+    public static final String GROUP_BUY_DETAIL_NEW = "GroupBuyDetailNew";
+    //专题列表
+    public static final String SPECIAL_TOPIC = "TopicDetail";
 }

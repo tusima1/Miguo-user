@@ -317,6 +317,7 @@ public class MyFragment2 extends BaseFragment implements RedDotView
             //客服电话
 //            clickKfPhone();
             startActivity(GoodsDetailActivity.class);
+//            startActivity(SpecialTopicActivity.class);
         }
         /*else if (v== mIvMsg){
             //消息

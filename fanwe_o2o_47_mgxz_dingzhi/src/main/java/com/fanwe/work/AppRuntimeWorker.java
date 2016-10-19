@@ -1,7 +1,5 @@
 package com.fanwe.work;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.text.TextUtils;
 
@@ -39,7 +37,10 @@ import com.fanwe.model.InitActNewslistModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.QuansModel;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.sunday.eventbus.SDEventManager;
+
+import java.util.List;
 
 public class AppRuntimeWorker {
 
@@ -425,7 +426,7 @@ public class AppRuntimeWorker {
                 break;
             case IndexType.DEAL_DETAIL:
                 if (data != null) {
-                    intent = new Intent(App.getApplication(), TuanDetailActivity.class);
+                    intent = new Intent(App.getApplication(), GoodsDetailActivity.class);
                     intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, data.getData_id());
                 }
                 break;

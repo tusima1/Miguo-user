@@ -243,7 +243,11 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(SellerConstants.SHOP_COLLECT_DELETE, null);
+                if (mView2!=null){
+                    mView2.onSuccess(SellerConstants.SHOP_COLLECT_DELETE, null);
+                }else if (mView!=null){
+                    mView.onSuccess(SellerConstants.SHOP_COLLECT_DELETE, null);
+                }
             }
 
             @Override
@@ -266,7 +270,11 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                if (mView2!=null){
+                    mView2.onSuccess(SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                }else if (mView!=null){
+                    mView.onSuccess(SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                }
             }
 
             @Override
@@ -316,7 +324,11 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
+                if (mView2!=null){
+                    mView2.onSuccess(SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
+                }else if (mView!=null){
+                    mView.onSuccess(SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
+                }
             }
 
             @Override
@@ -404,9 +416,17 @@ public class SellerHttpHelper implements IHelper {
                 List<ResultCheckShopCollect> result = root.getResult();
                 if (!SDCollectionUtil.isEmpty(result) && result.get(0) != null && result.get(0).getBody() != null) {
                     List<ModelCheckShopCollect> items = result.get(0).getBody();
-                    mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
+                    if (mView2!=null){
+                        mView2.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
+                    }else if (mView!=null){
+                        mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
+                    }
                 } else {
-                    mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
+                    if (mView2!=null){
+                        mView2.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
+                    }else if (mView!=null){
+                        mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
+                    }
                 }
             }
 

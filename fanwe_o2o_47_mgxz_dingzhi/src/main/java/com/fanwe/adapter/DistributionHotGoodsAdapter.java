@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -17,6 +15,9 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.DistributionGoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
+
+import java.util.List;
 
 public class DistributionHotGoodsAdapter extends SDBaseAdapter<DistributionGoodsModel>
 {
@@ -54,7 +55,7 @@ public class DistributionHotGoodsAdapter extends SDBaseAdapter<DistributionGoods
 			@Override
 			public void onClick(View v)
 			{
-				Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+				Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
 				intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());
 				mActivity.startActivity(intent);
 			}

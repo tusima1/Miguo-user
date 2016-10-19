@@ -1,6 +1,13 @@
 package com.fanwe.adapter;
 
-import java.util.List;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.common.CommonInterface;
@@ -15,6 +22,7 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.DistributionGoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.umeng.UmengShareManager;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -22,14 +30,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.sunday.eventbus.SDEventManager;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.util.List;
 
 public class MyDistributionAdapter extends SDBaseAdapter<DistributionGoodsModel>
 {
@@ -183,7 +184,7 @@ public class MyDistributionAdapter extends SDBaseAdapter<DistributionGoodsModel>
 				public void onClick(View v)
 				{
 					int id = model.getId();
-					Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+					Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
 					intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
 					mActivity.startActivity(intent);
 				}

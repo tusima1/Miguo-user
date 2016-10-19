@@ -1,24 +1,25 @@
 package com.fanwe.service;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.fanwe.DaiYanStoreWapActivity;
-import com.fanwe.MainActivity;
-import com.fanwe.MyMessageActivity;
-import com.fanwe.StoreDetailActivity;
-import com.fanwe.TuanDetailActivity;
-import com.fanwe.app.AppConfig;
-import com.fanwe.constant.JPushType;
-import com.fanwe.constant.ServerUrl;
-import com.fanwe.jpush.MessageHelper;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.fanwe.DaiYanStoreWapActivity;
+import com.fanwe.MainActivity;
+import com.fanwe.MyMessageActivity;
+import com.fanwe.StoreDetailActivity;
+import com.fanwe.app.AppConfig;
+import com.fanwe.constant.JPushType;
+import com.fanwe.constant.ServerUrl;
+import com.fanwe.jpush.MessageHelper;
+import com.fanwe.seller.views.GoodsDetailActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.jpush.android.api.JPushInterface;
 
 public class HomeEventDetailReceiver extends BroadcastReceiver {
@@ -109,7 +110,7 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 				return;
 			}
 			bundle.putInt("extra_goods_id", object_id);
-			startActivity(context, TuanDetailActivity.class, bundle);
+			startActivity(context, GoodsDetailActivity.class, bundle);
 		} else if (JPushType.SHOP.equals(act)) {
 			// 门店详情
 			if (object_id == -1) {

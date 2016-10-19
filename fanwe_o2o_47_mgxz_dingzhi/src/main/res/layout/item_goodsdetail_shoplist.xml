@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/location_2"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/dp100"
-              android:background="@color/rgb_70184153"
-              android:orientation="vertical">
-
-    <TextView
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp10"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_marginBottom="@dimen/dp10"
+    >
+    <FrameLayout
+        android:id="@+id/fl_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="163dp">
+        <ListView
+            android:id="@+id/list_shoplist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"/>
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tv_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:text="其他门店"
+        android:textColor="@color/gray_text_59"
         android:gravity="center"
-        android:text="2"
-        android:textColor="@color/dark_text"
-        android:textSize="33sp"/>
+        android:textSize="13sp"
+        android:drawableRight="@drawable/ic_arrow_down_dark"
+        android:drawablePadding="7dp"
+        android:background="@drawable/md_ripple_unbound_gray"
+        />
 
 </LinearLayout>
+
+
+

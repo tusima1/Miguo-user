@@ -15,14 +15,15 @@ import com.fanwe.BaseActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.adapters.ShopListAdapter;
 import com.fanwe.user.model.getGroupBuyCoupon.ModelGroupCoupon;
 import com.fanwe.user.model.getGroupBuyCoupon.ModelShopInfo2;
 import com.fanwe.utils.MGStringFormatter;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.QRCodeMaker;
 
 import java.util.List;
@@ -81,7 +82,7 @@ public class MyCouponDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (mModel != null) {
-                    Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+                    Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
                     intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, mModel.getTuan_id());
                     startActivity(intent);
                 }

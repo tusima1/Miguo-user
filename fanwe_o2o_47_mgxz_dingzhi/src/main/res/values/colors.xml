@@ -81,4 +81,5 @@
     <color name="gray_text_99">#999999</color><!--font (RGB 153,153,153)-->
 
     <color name="c_C32836">#c32836</color>
+    <color name="c_F5B830">#f5b830</color>
 </resources>

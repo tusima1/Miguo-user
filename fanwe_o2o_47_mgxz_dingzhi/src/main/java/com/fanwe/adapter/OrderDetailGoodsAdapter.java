@@ -14,6 +14,7 @@ import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.shoppingcart.model.BuyItem;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class OrderDetailGoodsAdapter extends SDBaseAdapter<BuyItem>
 				{
 					if (!TextUtils.isEmpty(model.getGoodsId()))
 					{
-						Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+						Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getGoodsId());
 						mActivity.startActivity(intent);
 					}

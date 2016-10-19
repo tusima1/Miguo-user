@@ -33,6 +33,7 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_orderGoodsModel;
 import com.fanwe.model.Uc_order_check_deliveryActModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.miguo.live.views.customviews.MGToast;
@@ -212,7 +213,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 				@Override
 				public void onClick(View v) {
 					if (model.getDeal_id() > 0) {
-						Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+						Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getDeal_id());
 						mActivity.startActivity(intent);
 					} else if (model.getDeal_id() == 0) {

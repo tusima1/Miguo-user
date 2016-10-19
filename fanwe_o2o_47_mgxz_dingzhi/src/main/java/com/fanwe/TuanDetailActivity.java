@@ -43,6 +43,7 @@ import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
 import com.fanwe.seller.model.getGroupBuyDetail.Share;
 import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
@@ -429,6 +430,18 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         share = modelGroupBuyDetail.getShare();
                         Deal_indexActModel model = new Deal_indexActModel();
                         //基本信息
+//                        ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
+//                        shoppingCartInfo.setId(mDealModel.getId());
+//                        shoppingCartInfo.setFx_user_id(this.fx_user_id);//
+//                        shoppingCartInfo.setNumber("1");
+//                        shoppingCartInfo.setImg(mDealModel.getIcon());
+//                        shoppingCartInfo.setLimit_num(mDealModel.getMax_num());
+//                        shoppingCartInfo.setIs_first(mDealModel.getIs_first() + "");
+//                        shoppingCartInfo.setIs_first_price(mDealModel.getIs_first_price() + "");
+//                        shoppingCartInfo.setOrigin_price(mDealModel.getOrigin_price());
+//                        shoppingCartInfo.setTuan_price(mDealModel.getCurrent_price());
+//                        shoppingCartInfo.setTitle(mDealModel.getSub_name());
+//                        shoppingCartInfo.setBuyFlg(mDealModel.getTime_status()+"");
 
                         model.setId(modelGroupBuyDetail.getId());
                         model.setName(modelGroupBuyDetail.getName());

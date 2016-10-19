@@ -16,7 +16,6 @@ import com.fanwe.MainActivity;
 import com.fanwe.MemberRankActivity;
 import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.StoreDetailActivity;
-import com.fanwe.TuanDetailActivity;
 import com.fanwe.WithdrawLogActivity;
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
@@ -31,6 +30,7 @@ import com.fanwe.model.Message;
 import com.fanwe.model.MessageCount;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 
@@ -193,7 +193,7 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 		if (JPushType.TUAN_DEAL.equals(act)) {
 
 			bundle.putInt("extra_goods_id", object_id);
-			startActivity(mActivity, TuanDetailActivity.class, bundle);
+			startActivity(mActivity, GoodsDetailActivity.class, bundle);
 
 		} else if (JPushType.SHOP.equals(act)) {
 			// 门店详情

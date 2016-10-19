@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp49"
     android:background="@color/white"
-    android:paddingLeft="@dimen/dp17"
-    android:paddingRight="@dimen/dp17"
+    android:paddingLeft="@dimen/dp6"
+    android:paddingRight="@dimen/dp12"
     android:layout_alignParentBottom="true"
     android:orientation="vertical">
 
@@ -30,13 +30,13 @@
             android:gravity="center"
             android:text="95"
             android:textColor="@color/dark_text"
-            android:textSize="28sp"/>
+            android:textSize="25sp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginLeft="@dimen/dp5"
             android:layout_gravity="bottom"
             android:paddingBottom="@dimen/dp3"
             >
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/tv_buy"
-        android:layout_width="@dimen/dp100"
+        android:layout_width="@dimen/dp90"
         android:layout_height="@dimen/dp35"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
@@ -73,9 +73,9 @@
     <TextView
         android:id="@+id/tv_add_shop_cart"
         android:layout_toLeftOf="@+id/tv_buy"
-        android:layout_width="@dimen/dp100"
+        android:layout_width="@dimen/dp90"
         android:layout_height="@dimen/dp35"
-        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp12"
         android:layout_centerVertical="true"
         android:textColor="@color/dark_text"
         android:textSize="15sp"

@@ -30,6 +30,7 @@ import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -509,7 +510,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                 } else if (getCompleteUrl(result, SHOPPING_DETAIL)) {
                     //团购详情
                     String mId = result.split("\\/")[result.split("\\/").length - 1];
-                    Intent intentStore = new Intent(this, TuanDetailActivity.class);
+                    Intent intentStore = new Intent(this, GoodsDetailActivity.class);
                     intentStore.putExtra(EXTRA_GOODS_ID, mId);
                     startActivity(intentStore);
                 } else {

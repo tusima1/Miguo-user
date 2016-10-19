@@ -1,7 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,12 +31,15 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MapSearchBaseModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.http.HttpHandler;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.List;
 
 /**
  * 地图附近
@@ -254,7 +255,7 @@ public class MapSearchFragment extends BaseBaiduMapFragment
 						break;
 					case SearchTypeMap.TUAN:
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());
-						intent.setClass(getActivity(), TuanDetailActivity.class);
+						intent.setClass(getActivity(), GoodsDetailActivity.class);
 						break;
 					case SearchTypeMap.STORE:
 						intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());

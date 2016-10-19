@@ -1,8 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -26,6 +23,10 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.CommentModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyCommentAdapter extends SDBaseAdapter<CommentModel>
 {
@@ -88,7 +89,7 @@ public class MyCommentAdapter extends SDBaseAdapter<CommentModel>
 					String type = model.getType();
 					if (CommentType.DEAL.equals(type))
 					{
-						intent = new Intent(mActivity, TuanDetailActivity.class);
+						intent = new Intent(mActivity, GoodsDetailActivity.class);
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getData_id());
 					} else if (CommentType.YOUHUI.equals(type))
 					{

@@ -1,7 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
@@ -27,9 +25,12 @@ import com.fanwe.model.BaseActModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
+
+import java.util.List;
 
 public class HotelListTuanAdapter extends SDSimpleBaseAdapter<GoodsModel>{
 
@@ -87,7 +88,7 @@ public class HotelListTuanAdapter extends SDSimpleBaseAdapter<GoodsModel>{
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(App.getApplication(), TuanDetailActivity.class);
+				Intent intent = new Intent(App.getApplication(), GoodsDetailActivity.class);
 				intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());
 				intent.putExtra(TuanDetailActivity.EXTRA_HOTEL_NUM, mNumber);
 				mActivity.startActivity(intent);

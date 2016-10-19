@@ -26,7 +26,7 @@
         android:lineSpacingExtra="@dimen/dp10"
         android:textColor="@color/dark_text"
         android:textSize="@dimen/sp13"
-        android:text="日本酒酒类丰富\n保留日式传统的坐席\n食材新鲜, 刺身刀法非常讲究"
+        android:text=""
         android:gravity="center"
         android:layout_marginBottom="@dimen/dp20"/>
 

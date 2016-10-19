@@ -1086,11 +1086,13 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.fanwe.seller.views.GoodsDetailActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation"
-                  android:screenOrientation="portrait"
-                  android:windowSoftInputMode="adjustPan"
-            >
+        <activity
+            android:name="com.fanwe.seller.views.GoodsDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity android:name="com.fanwe.seller.views.SpecialTopicActivity">
         </activity>
     </application>
 

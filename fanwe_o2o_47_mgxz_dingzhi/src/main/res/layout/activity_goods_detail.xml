@@ -12,6 +12,8 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:layout_above="@+id/layout_bottom"
         >
         <LinearLayout
@@ -19,32 +21,39 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!--顶部viewpager 标题-->
             <include layout="@layout/item_goodsdetail_top"/>
-            <include layout="@layout/item_goodsdetail_shoplist"/>
-            <include layout="@layout/item_goodsdetail_description"/>
-            <include layout="@layout/item_goodsdetail_detail"/>
-            <include layout="@layout/item_goodsdetail_tips"/>
-
-
-            <LinearLayout
-                android:id="@+id/location_6"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="1000dp"
-                android:orientation="vertical"
-                android:background="@color/orange"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="bottom"
-                    android:textSize="33sp"
-                    android:textColor="@color/dark_text"
-                    android:gravity="center"/>
-            </LinearLayout>
+                android:layout_height="@dimen/dp10"
+                android:background="@color/bg_activity_gray"/>
+            <!--门店列表-->
+            <include layout="@layout/item_goodsdetail_shoplist"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp10"
+                android:background="@color/bg_activity_gray"/>
+            <!--推荐理由-->
+            <include layout="@layout/item_goodsdetail_description"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp10"
+                android:background="@color/bg_activity_gray"/>
+            <!--详细说明-->
+            <include layout="@layout/item_goodsdetail_detail"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp10"
+                android:background="@color/bg_activity_gray"/>
+            <!--温馨提示-->
+            <include layout="@layout/item_goodsdetail_tips"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp10"
+                android:background="@color/bg_activity_gray"/>
 
         </LinearLayout>
     </com.fanwe.customview.SScrollView>
-
     <FrameLayout
         android:id="@+id/fr_top_title"
         android:layout_width="match_parent"
@@ -89,10 +98,11 @@
             android:layout_gravity="right"
             android:scaleType="centerInside"/>
 
-        <View
+        <!--<View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"/>
+            android:layout_height="1px"
+            android:background="@color/gray_cc"
+            android:layout_gravity="bottom"/>-->
     </FrameLayout>
 
     <include layout="@layout/item_goodsdetail_bottom" android:id="@+id/layout_bottom"/>
