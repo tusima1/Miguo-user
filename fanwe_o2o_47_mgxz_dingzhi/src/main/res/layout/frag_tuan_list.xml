@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/bg_activity_gray"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="44dip"
             android:background="#ffffff"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <com.fanwe.library.customview.SD2LvCategoryView
                 android:id="@+id/lcv_left"
                 android:layout_width="0dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <View
                 android:layout_width="1px"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/stroke" />
@@ -33,12 +33,12 @@
             <com.fanwe.library.customview.SD2LvCategoryView
                 android:id="@+id/lcv_middle"
                 android:layout_width="0dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <View
                 android:layout_width="1px"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/stroke" />
@@ -46,12 +46,26 @@
             <com.fanwe.library.customview.SDLvCategoryView
                 android:id="@+id/lcv_right"
                 android:layout_width="0dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/stroke" />
+
+            <ImageView
+                android:id="@+id/iv_represent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:src="@drawable/ic_represent_normal" />
         </LinearLayout>
 
         <View
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/stroke_deep" />
 
@@ -64,7 +78,7 @@
             android:gravity="center_vertical"
             android:minHeight="40dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +100,7 @@
             <ImageView
                 android:id="@+id/iv_location"
                 android:layout_width="50dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_location_refresh" />
         </LinearLayout>
@@ -99,7 +113,7 @@
             android:gravity="center_vertical"
             android:minHeight="40dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,14 +134,13 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <com.handmark.pulltorefresh.library.PullToRefreshListView
-                xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ptrlv_content"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:cacheColorHint="#00000000"
                 android:divider="@null"
                 android:listSelector="#00000000"
@@ -137,11 +150,11 @@
 
             <LinearLayout
                 android:id="@+id/ll_empty"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="wrap_content"

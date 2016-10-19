@@ -22,6 +22,7 @@
             android:src="@drawable/nopic" />
 
         <View
+            android:id="@+id/view_image_holder"
             android:layout_width="match_parent"
             android:layout_height="18dp" />
     </LinearLayout>
@@ -97,6 +98,15 @@
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_represent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_represent"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <LinearLayout
@@ -115,6 +125,14 @@
                 android:layout_marginTop="1dp"
                 android:isIndicator="true"
                 android:numStars="5" />
+
+            <TextView
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp5"
+                android:textColor="#ff7f3f"
+                android:textSize="@dimen/dp10" />
         </LinearLayout>
 
         <LinearLayout
@@ -144,55 +162,33 @@
             android:layout_height="1px"
             android:background="@color/stroke" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_tuan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/dp5"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="12dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:src="@drawable/bg_tuan" />
 
             <TextView
                 android:id="@+id/tv_tuan_edtail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp20"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:paddingLeft="5dp"
                 android:text=""
                 android:textColor="@color/text_new_home"
-                android:textSize="13sp" />
-        </LinearLayout>
+                android:textSize="@dimen/dp12" />
+        </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_hui"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/bg_youhui" />
-
-            <TextView
-                android:id="@+id/tv_hui_edtail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:paddingLeft="5dp"
-                android:text=""
-                android:textColor="@color/text_new_home"
-                android:textSize="13sp" />
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -25,6 +25,10 @@ public class SellerConstants {
      */
     public static final String SHOP_LIST = "ShopList";
     /**
+     *新版返现-商家列表
+     */
+    public static final String BUSINESS_LIST = "BusinessListings";
+    /**
      * 直播页面获取门店详情。
      */
     public static final String LIVE_BIZ_SHOP = "LiveBizShop";

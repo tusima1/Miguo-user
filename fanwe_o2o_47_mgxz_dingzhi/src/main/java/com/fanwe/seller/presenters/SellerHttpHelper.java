@@ -22,6 +22,9 @@ import com.fanwe.seller.model.getBusinessCircleList.ResultBusinessCircleList;
 import com.fanwe.seller.model.getBusinessCircleList.RootBusinessCircleList;
 import com.fanwe.seller.model.getBusinessDistributionList.ResultBusinessDistributionList;
 import com.fanwe.seller.model.getBusinessDistributionList.RootBusinessDistributionList;
+import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
+import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
+import com.fanwe.seller.model.getBusinessListings.RootBusinessListings;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.model.getCityList.ResultCityList;
 import com.fanwe.seller.model.getCityList.RootCityList;
@@ -512,6 +515,66 @@ public class SellerHttpHelper implements IHelper {
                     return;
                 }
                 mView.onSuccess(SellerConstants.SHOP_LIST, result);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFailue("");
+            }
+        });
+    }
+
+
+    /**
+     * 新版返现-商家列表
+     *
+     * @param tid             二级分类ID
+     * @param cate_id         大分类ID
+     * @param city_id         城市
+     * @param order_type      排序
+     * @param pid             大区id
+     * @param store_type      1优惠商家2全部商家
+     * @param quan_id         商圈id
+     * @param keyword         关键字
+     * @param pageNum
+     * @param pageSize
+     * @param can_endorsement 1可代言 0不加该条件
+     */
+    public void getBusinessListings(String tid, String cate_id, String city_id, String order_type, String pid, String store_type,
+                                    String quan_id, String keyword, int pageNum, int pageSize, String can_endorsement) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("tid", tid);
+        params.put("cate_id", cate_id);
+        params.put("city_id", city_id);
+        params.put("order_type", order_type);
+        params.put("pid", pid);
+        params.put("store_type", store_type);
+        params.put("quan_id", quan_id);
+        params.put("keyword", keyword);
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("can_endorsement", can_endorsement);
+        params.put("m_latitude", "");
+        params.put("m_latitude", "");
+        params.put("method", SellerConstants.BUSINESS_LIST);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootBusinessListings root = gson.fromJson(responseBody, RootBusinessListings.class);
+                List<ResultBusinessListings> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    mView.onSuccess(SellerConstants.BUSINESS_LIST, null);
+                    return;
+                }
+                List<ModelBusinessListings> items = result.get(0).getShop_list();
+                mView.onSuccess(SellerConstants.BUSINESS_LIST, items);
             }
 
             @Override

@@ -29,22 +29,18 @@ import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
+import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
-import com.fanwe.seller.model.getShopList.ModelShopListItem;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
-import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -52,100 +48,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StoreListFragment extends BaseFragment implements CallbackView {
-    /**
-     * 大分类id(int)
-     */
+    //widget
+    private SD2LvCategoryView mCvLeft;
+    private SD2LvCategoryView mCvMiddle;
+    private SDLvCategoryView mCvRight;
+    private LinearLayout mLlEmpty;
+    private LinearLayout mLlCurrentLocation;
+    private LinearLayout mLlCurrentSearch;
+    private TextView mTvAddress;
+    private ImageView mIvLocation;
+    private TextView mTvCurrentKeyword;
+    private PullToRefreshListView mPtrlvContent;
+    private ImageView ivRepresent;
+    // 大分类id(int)
     public static final String EXTRA_CATE_ID = "extra_cate_id";
-
-    /**
-     * 小分类id(int)
-     */
+    //小分类id(int)
     public static final String EXTRA_TID = "extra_tid";
-
-    /**
-     * 商圈id(int)
-     */
+    // 商圈id(int)
     public static final String EXTRA_QID = "extra_qid";
-
-    /**
-     * 关键字(String)
-     */
+    //关键字(String)
     public static final String EXTRA_KEY_WORD = "extra_key_word";
-
-    /**
-     * 门店类型(int) 1:优惠，2:全部
-     */
+    //门店类型(int) 1:优惠，0:全部
     public static final String EXTRA_STORE_TYPE = "extra_store_type";
-
-    @ViewInject(R.id.lcv_left)
-    private SD2LvCategoryView mCvLeft = null;
-
-    @ViewInject(R.id.lcv_middle)
-    private SD2LvCategoryView mCvMiddle = null;
-
-    @ViewInject(R.id.lcv_right)
-    private SDLvCategoryView mCvRight = null;
-
-    @ViewInject(R.id.ll_empty)
-    private LinearLayout mLlEmpty = null;
-
-    @ViewInject(R.id.ll_current_location)
-    private LinearLayout mLlCurrentLocation = null;
-
-    @ViewInject(R.id.tv_current_address)
-    private TextView mTvAddress = null;
-
-    @ViewInject(R.id.iv_location)
-    private ImageView mIvLocation = null;
-
-    @ViewInject(R.id.ll_current_search)
-    private LinearLayout mLlCurrentSearch = null;
-
-    @ViewInject(R.id.tv_current_keyword)
-    private TextView mTvCurrentKeyword = null;
-
-    @ViewInject(R.id.ptrlv_content)
-    private PullToRefreshListView mPtrlvContent = null;
-
-    private MerchantListAdapter mAdapter = null;
-    private List<StoreModel> mListModel = new ArrayList<StoreModel>();
-    private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
-
-    private boolean mIsFirstBindCategoryViewData = true;
-
     // =======================提交到服务器参数
-    /**
-     * 大分类id
-     */
+    //大分类id
     private String cate_id;
-    /**
-     * 小分类id
-     */
+    //小分类id
     private String tid;
-    /**
-     * 关键词
-     */
+    // 关键词
     private String keyword;
-    /**
-     * 商圈id
-     */
+    //商圈id
     private String qid;
-    /**
-     * 排序类型
-     */
+    //排序类型
     private String order_type = "default";
-    /**
-     * 米果定制
-     */
+    // 米果定制
     private String store_type;
-
-    /**
-     * 大区id
-     */
+    // 大区id
     private String pid;
+    private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
+    //可代言flag
+    int iRepresent = 0;
     private int pageNum = 1;
     private int pageSize = 10;
     private SellerHttpHelper sellerHttpHelper;
+    private MerchantListAdapter mAdapter = null;
+    private List<ModelBusinessListings> mListModel = new ArrayList<>();
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -155,19 +102,57 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     @Override
     protected void init() {
         super.init();
+        preWidget();
+        setListener();
         getIntentData();
         bindDefaultLvData();
         bindLocationData();
         initCategoryView();
         initCategoryViewNavigatorManager();
-        registeClick();
         initPullRefreshLv();
-
         initData();
     }
 
+    private void setListener() {
+        mIvLocation.setOnClickListener(this);
+        ivRepresent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (iRepresent == 1) {
+                    iRepresent = 0;
+                } else {
+                    iRepresent = 1;
+                }
+                setRepresent();
+                getShopList();
+            }
+        });
+    }
+
+    private void preWidget() {
+        mCvLeft = (SD2LvCategoryView) findViewById(R.id.lcv_left);
+        mCvMiddle = (SD2LvCategoryView) findViewById(R.id.lcv_middle);
+        mCvRight = (SDLvCategoryView) findViewById(R.id.lcv_right);
+        ivRepresent = (ImageView) findViewById(R.id.iv_represent);
+        mLlEmpty = (LinearLayout) findViewById(R.id.ll_empty);
+        mLlCurrentLocation = (LinearLayout) findViewById(R.id.ll_current_location);
+        mLlCurrentSearch = (LinearLayout) findViewById(R.id.ll_current_search);
+        mTvAddress = (TextView) findViewById(R.id.tv_current_address);
+        mTvCurrentKeyword = (TextView) findViewById(R.id.tv_current_keyword);
+        mIvLocation = (ImageView) findViewById(R.id.iv_location);
+        mPtrlvContent = (PullToRefreshListView) findViewById(R.id.ptrlv_content);
+    }
+
+    private void setRepresent() {
+        if (iRepresent == 1) {
+            ivRepresent.setImageResource(R.drawable.ic_represent_selected);
+        } else {
+            ivRepresent.setImageResource(R.drawable.ic_represent_normal);
+        }
+    }
+
     private void getShopList() {
-        sellerHttpHelper.getShopList(tid, cate_id, AppRuntimeWorker.getCity_id(), order_type, pid, store_type, qid, keyword, pageNum, pageSize);
+        sellerHttpHelper.getBusinessListings(tid, cate_id, AppRuntimeWorker.getCity_id(), order_type, pid, store_type, qid, keyword, pageNum, pageSize, String.valueOf(iRepresent));
     }
 
     private void initData() {
@@ -232,7 +217,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 isRefresh = false;
-                if (!SDCollectionUtil.isEmpty(resultShopLists)) {
+                if (!SDCollectionUtil.isEmpty(itemsModelBusinessListings)) {
                     pageNum++;
                 }
                 getShopList();
@@ -253,8 +238,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     }
 
     private void initCategoryView() {
-        mCvLeft.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_press_down);
-        mCvLeft.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_press_up);
+        mCvLeft.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_down);
+        mCvLeft.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_up);
 
         mCvLeft.getmAttr().setmTextColorNormalResId(R.color.text_item_content);
         mCvLeft.getmAttr().setmTextColorSelectedResId(R.color.main_color);
@@ -285,8 +270,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             }
         });
 
-        mCvMiddle.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_press_down_2);
-        mCvMiddle.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_press_up_2);
+        mCvMiddle.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_down);
+        mCvMiddle.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_up);
 
         mCvMiddle.getmAttr().setmTextColorNormalResId(R.color.text_item_content);
         mCvMiddle.getmAttr().setmTextColorSelectedResId(R.color.main_color);
@@ -315,8 +300,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             }
         });
 
-        mCvRight.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_press_down_3);
-        mCvRight.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_press_up_3);
+        mCvRight.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_down);
+        mCvRight.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_up);
 
         mCvRight.getmAttr().setmTextColorNormalResId(R.color.text_item_content);
         mCvRight.getmAttr().setmTextColorSelectedResId(R.color.main_color);
@@ -381,18 +366,12 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         }
     }
 
-    private void registeClick() {
-        mIvLocation.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.iv_location:
                 clickTv_locaiton();
                 break;
-
             default:
                 break;
         }
@@ -457,8 +436,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
     List<ModelBusinessCircleList> modelBusinessCircleLists;
     List<ModelClassifyList> modelClassifyLists;
-    List<ResultShopList> resultShopLists;
     List<ModelShopListNavs> navs;
+    List<ModelBusinessListings> itemsModelBusinessListings;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -475,9 +454,9 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             //排序
             navs = datas;
             message.what = 2;
-        } else if (SellerConstants.SHOP_LIST.equals(method)) {
+        } else if (SellerConstants.BUSINESS_LIST.equals(method)) {
             //店铺
-            resultShopLists = datas;
+            itemsModelBusinessListings = datas;
             message.what = 3;
         }
         mHandler.sendMessage(message);
@@ -513,30 +492,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                     if (isRefresh) {
                         mListModel.clear();
                     }
-                    if (!SDCollectionUtil.isEmpty(resultShopLists)) {
-                        ResultShopList resultShopList = resultShopLists.get(0);
-                        //店铺数据
-                        List<StoreModel> listNewData = new ArrayList<>();
-                        if (!SDCollectionUtil.isEmpty(resultShopList.getItem())) {
-                            for (ModelShopListItem bean : resultShopList.getItem()) {
-                                StoreModel storeModel = new StoreModel();
-                                //设置数据
-                                storeModel.setId(bean.getId());
-                                storeModel.setName(bean.getShop_name());
-                                storeModel.setPreview(bean.getIndex_img());
-                                storeModel.setAddress(bean.getAddress());
-                                storeModel.setTel(bean.getTel());
-                                storeModel.setAvg_point(DataFormat.toFloat(bean.getAvg_grade()));
-                                storeModel.setOffline(DataFormat.toInt(bean.getOffline()));
-                                storeModel.setDiscount_pay(DataFormat.toInt(bean.getDiscount_pay()));
-                                storeModel.setXpoint(DataFormat.toDouble(bean.getGeo_x()));
-                                storeModel.setYpoint(DataFormat.toDouble(bean.getGeo_y()));
-                                storeModel.setDeal_count(DataFormat.toInt(bean.getTuan_num()));
-                                storeModel.setDeal_name(bean.getTuan_name());
-                                listNewData.add(storeModel);
-                            }
-                        }
-                        mListModel.addAll(listNewData);
+                    if (!SDCollectionUtil.isEmpty(itemsModelBusinessListings)) {
+                        mListModel.addAll(itemsModelBusinessListings);
                     }
                     mAdapter.notifyDataSetChanged();
                     mPtrlvContent.onRefreshComplete();
