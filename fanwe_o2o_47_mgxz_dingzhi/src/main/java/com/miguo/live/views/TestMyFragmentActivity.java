@@ -31,7 +31,7 @@ public class TestMyFragmentActivity extends Activity implements RedDotView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_my_fragment);
+        setContentView(R.layout.frag_mine);
         initView();
 
 

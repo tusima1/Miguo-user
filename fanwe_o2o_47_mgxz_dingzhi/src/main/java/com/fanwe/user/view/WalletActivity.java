@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
-import com.fanwe.WithdrawLogActivity;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.mine.views.RepresentIncomeActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
@@ -153,7 +153,7 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
             clickTiXian();
         }else if (v==mLL_DaiYan){
             //代言
-            startActivity(WithdrawLogActivity.class);
+            startActivity(RepresentIncomeActivity.class);
         }else if (v==mLL_Live){
             //直播
             MGToast.showToast("系统升级,敬请期待");

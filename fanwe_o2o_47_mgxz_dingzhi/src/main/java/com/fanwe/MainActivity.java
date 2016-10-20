@@ -16,7 +16,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
-import com.fanwe.fragment.MyFragment2;
+import com.fanwe.fragment.MyFragment;
 import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
 
-    private MyFragment2 mFragMyAccount = new MyFragment2();
+    private MyFragment mFragMyAccount = new MyFragment();
 
     private long mExitTime = 0;
     private int preTab = 0;// 上次点击的tab标签页
@@ -334,9 +334,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click1() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, StoreListContainerFragment
-                .class);
-
+        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, StoreListContainerFragment.class);
     }
 
     /**
