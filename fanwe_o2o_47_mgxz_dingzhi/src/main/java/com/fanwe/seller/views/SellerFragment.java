@@ -1,5 +1,6 @@
 package com.fanwe.seller.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,8 +10,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fanwe.HomeSearchActivity;
+import com.fanwe.MainActivity;
+import com.fanwe.constant.Constant;
 import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.o2o.miguo.R;
 
@@ -23,6 +28,7 @@ public class SellerFragment extends Fragment {
     private View view;
     private TextView tvAll, tvGroupon;
     private View viewAll, viewGroupon;
+    private ImageView ivSearch, ivBack;
     private StoreListFragment mFragAll;
     private StoreListFragment mFragGroupon;
     private Bundle bundle;
@@ -41,7 +47,17 @@ public class SellerFragment extends Fragment {
         setWidget();
         setListener();
         clickTitle("all");
+        setView();
         return view;
+    }
+
+    private void setView() {
+        //主界面，隐藏返回按钮
+        if (getActivity() instanceof MainActivity) {
+            ivBack.setVisibility(View.GONE);
+        } else {
+            ivBack.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setWidget() {
@@ -49,6 +65,8 @@ public class SellerFragment extends Fragment {
         tvGroupon = (TextView) view.findViewById(R.id.tv_groupon_frag_seller);
         viewAll = (View) view.findViewById(R.id.view_all_frag_seller);
         viewGroupon = (View) view.findViewById(R.id.view_groupon_frag_seller);
+        ivSearch = (ImageView) view.findViewById(R.id.iv_search_frag_seller);
+        ivBack = (ImageView) view.findViewById(R.id.iv_back_frag_seller);
     }
 
     private void setListener() {
@@ -72,6 +90,25 @@ public class SellerFragment extends Fragment {
                 viewAll.setVisibility(View.INVISIBLE);
             }
         });
+        ivSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startHomeSearchActivity();
+            }
+        });
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
+    }
+
+    private void startHomeSearchActivity() {
+        Intent intent = new Intent(getActivity(), HomeSearchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(HomeSearchActivity.EXTRA_SEARCH_TYPE, Constant.SearchTypeNormal.MERCHANT);
+        startActivity(intent);
     }
 
     private void clickTitle(String flag) {

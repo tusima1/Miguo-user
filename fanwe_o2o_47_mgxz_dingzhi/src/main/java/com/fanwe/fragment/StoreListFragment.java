@@ -96,7 +96,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return setContentView(R.layout.frag_tuan_list);
+        return setContentView(R.layout.frag_seller_list);
     }
 
     @Override
