@@ -2,6 +2,7 @@ package com.fanwe.seller.presenters;
 
 import android.text.TextUtils;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -37,6 +38,7 @@ public class SellerNewHttpHelper implements IHelper {
     public void getGroupBuyDetailNew(String id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("id", id);
+        params.put("token", App.getInstance().getToken());
         params.put("method", SellerConstants.GROUP_BUY_DETAIL_NEW);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
