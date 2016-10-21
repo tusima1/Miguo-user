@@ -30,6 +30,7 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -330,9 +331,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click1() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, SellerFragment
-                .class);
-
+        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, SellerFragment.class);
     }
 
     /**
