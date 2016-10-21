@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp49"
     android:background="@color/white"
-    android:paddingLeft="@dimen/dp6"
-    android:paddingRight="@dimen/dp12"
+    android:paddingLeft="@dimen/dp17"
     android:layout_alignParentBottom="true"
     android:orientation="vertical">
 
@@ -22,15 +21,15 @@
             android:gravity="center"
             android:text="￥"
             android:textColor="@color/dark_text"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/tv_new_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="95"
+            android:text=""
             android:textColor="@color/dark_text"
-            android:textSize="25sp"/>
+            android:textSize="28sp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -39,6 +38,7 @@
             android:layout_marginLeft="@dimen/dp5"
             android:layout_gravity="bottom"
             android:paddingBottom="@dimen/dp3"
+            android:visibility="gone"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="105"
+                android:text=""
                 android:textColor="@color/gray_text_99"
                 android:textSize="15sp"/>
         </LinearLayout>
@@ -60,26 +60,25 @@
 
     <TextView
         android:id="@+id/tv_buy"
-        android:layout_width="@dimen/dp90"
-        android:layout_height="@dimen/dp35"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:gravity="center"
         android:text="立即购买"
-        android:background="@drawable/shape_cricle_orange_solid_radius_big"/>
+        android:background="#f5b830"/>
 
     <TextView
         android:id="@+id/tv_add_shop_cart"
         android:layout_toLeftOf="@+id/tv_buy"
-        android:layout_width="@dimen/dp90"
-        android:layout_height="@dimen/dp35"
-        android:layout_marginRight="@dimen/dp12"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:textColor="@color/dark_text"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:gravity="center"
-        android:text="加入购物车"
-        android:background="@drawable/shape_cricle_dark_solid_white_radius_big"/>
+        android:text="加购物车"
+        android:background="#efd394"/>
 </RelativeLayout>

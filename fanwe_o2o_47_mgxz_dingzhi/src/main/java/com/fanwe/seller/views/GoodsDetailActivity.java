@@ -108,6 +108,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private String isCollected="0";//是否已经收藏该商品
     private TextView mTvTopTitle;
     private TextView mTvTopYouHui;
+    private TextView mTvTopYouHuiFlag;//flag 是否是代金券
     private TextView mTvTopQuan;
     private TextView mTvTopHot;
     private ImageButton mIbCollect;//第二个收藏按钮
@@ -311,6 +312,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
         mTvTopTitle = ((TextView) findViewById(R.id.tv_top_title));
         mTvTopYouHui = ((TextView) findViewById(R.id.tv_top_youhui));
+        mTvTopYouHuiFlag = ((TextView) findViewById(R.id.tv_top_youhui_flag));
         mTvTopQuan = ((TextView) findViewById(R.id.tv_top_quan));
         mTvTopHot = ((TextView) findViewById(R.id.tv_hot));
         mIbCollect = ((ImageButton) findViewById(R.id.ib_collect));
@@ -437,6 +439,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         String tuan_price = modelGoodsDetailNew.getTuan_price();//团购价
         String tuan_price_with_unit = modelGoodsDetailNew.getTuan_price_with_unit();//99元/人/张
         String rmb = UIChars.getUIChar(UIChars.RMB);
+        if (!TextUtils.isEmpty(tuan_price_with_unit) && tuan_price_with_unit.contains("张")){
+            mTvTopYouHuiFlag.setVisibility(View.VISIBLE);
+        }
         mTvTopYouHui.setText(rmb+tuan_price_with_unit);
 
         //bind bottom(底部悬浮)
