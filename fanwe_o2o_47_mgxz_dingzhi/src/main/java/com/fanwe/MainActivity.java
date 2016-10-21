@@ -332,7 +332,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
     protected void click1() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
         getSDFragmentManager().toggle(R.id.act_main_fl_content, null, SellerFragment.class);
-
     }
 
     /**
