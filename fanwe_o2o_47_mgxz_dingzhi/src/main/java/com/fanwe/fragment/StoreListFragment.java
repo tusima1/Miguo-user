@@ -178,12 +178,13 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
     }
 
     private void getIntentData() {
-        cate_id = getArguments().getString(EXTRA_CATE_ID);
-        tid = getArguments().getString(EXTRA_TID);
-        qid = getArguments().getString(EXTRA_QID);
-        keyword = getArguments().getString(EXTRA_KEY_WORD);
-        store_type = getArguments().getString(EXTRA_STORE_TYPE);
-
+        if (getArguments() != null) {
+            cate_id = getArguments().getString(EXTRA_CATE_ID);
+            tid = getArguments().getString(EXTRA_TID);
+            qid = getArguments().getString(EXTRA_QID);
+            keyword = getArguments().getString(EXTRA_KEY_WORD);
+            store_type = getArguments().getString(EXTRA_STORE_TYPE);
+        }
         if (TextUtils.isEmpty(keyword)) {
             mLlCurrentLocation.setVisibility(View.VISIBLE);
             mLlCurrentSearch.setVisibility(View.GONE);
