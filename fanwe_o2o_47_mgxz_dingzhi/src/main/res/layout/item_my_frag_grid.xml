@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     app:divider="@drawable/line_gray"
-    app:showDividers="middle">
-
+    app:showDividers="middle"
+    >
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp10"
-        android:background="@color/bg_activity_gray" />
+        android:background="@color/bg_activity_gray"/>
 
     <!--我的订单-->
     <FrameLayout
         android:id="@+id/fl_all_order"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp45"
-        android:background="@drawable/md_ripple_white"
         android:clickable="true"
+        android:background="@drawable/md_ripple_white"
         android:paddingLeft="@dimen/dp12"
-        android:paddingRight="@dimen/dp12">
+        android:paddingRight="@dimen/dp12"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,29 +31,29 @@
             android:layout_gravity="center_vertical|left"
             android:text="常用频道"
             android:textColor="@color/gray_text_99"
-            android:textSize="@dimen/sp15" />
+            android:textSize="@dimen/sp15"/>
     </FrameLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp97">
+        android:layout_height="@dimen/dp97"
+        >
         <!--购物车-->
-        <include layout="@layout/item_myfrag2_shopcart" />
+        <include layout="@layout/item_myfrag2_shopcart"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/bg_activity_gray" />
+            android:background="@color/bg_activity_gray"/>
         <!--小店-->
-        <include layout="@layout/item_myfrag2_shop" />
+        <include layout="@layout/item_myfrag2_shop"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/bg_activity_gray" />
+            android:background="@color/bg_activity_gray"/>
+        <!--二维码-->
+        <include layout="@layout/item_myfrag2_erweima"/>
 
-        <!--钱包-->
-        <include layout="@layout/item_myfrag2_wallet" />
 
     </LinearLayout>
 
@@ -59,23 +61,23 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp97">
 
+        <!--钱包-->
+        <include layout="@layout/item_myfrag2_wallet"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/bg_activity_gray"/>
+
         <!--消费券-->
-        <include layout="@layout/item_myfrag2_quan" />
+        <include layout="@layout/item_myfrag2_quan"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/bg_activity_gray" />
-
+            android:background="@color/bg_activity_gray"/>
         <!--分销-->
-        <include layout="@layout/item_myfrag2_fx" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="@color/bg_activity_gray" />
-        <!--客服-->
-        <include layout="@layout/item_myfrag2_kefu" />
+        <include layout="@layout/item_myfrag2_fx"/>
 
 
     </LinearLayout>
@@ -87,8 +89,15 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
+        <!--客服-->
+        <include layout="@layout/item_myfrag2_kefu"/>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/bg_activity_gray"/>
         <!--建议-->
-        <include layout="@layout/item_myfrag2_suggestion" />
+        <include layout="@layout/item_myfrag2_suggestion"/>
     </LinearLayout>
 
 

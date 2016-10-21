@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MemberRankActivity;
@@ -64,6 +65,7 @@ public class MyFragment extends BaseFragment implements RedDotView
     private View mFriends;
     private View mQuan;
     private View mSuggestion;
+    private View mErWeiMa;
     private View mKefu;
     private View mStar;
     private View mCollect;
@@ -171,6 +173,7 @@ public class MyFragment extends BaseFragment implements RedDotView
         mFriends = findViewById(R.id.ll_friends);
         mQuan = findViewById(R.id.ll_quan);
         mSuggestion = findViewById(R.id.ll_suggestion);
+        mErWeiMa = findViewById(R.id.ll_erweima);
         mKefu = findViewById(R.id.ll_kefu);
 
         mTvRedShopCart = ((TextView) findViewById(R.id.tv_red_shopcart));
@@ -183,6 +186,7 @@ public class MyFragment extends BaseFragment implements RedDotView
         mFriends.setOnClickListener(this);
         mQuan.setOnClickListener(this);
         mSuggestion.setOnClickListener(this);
+        mErWeiMa.setOnClickListener(this);
         mKefu.setOnClickListener(this);
 
     }
@@ -288,13 +292,16 @@ public class MyFragment extends BaseFragment implements RedDotView
         } else if (v == mAllOrder) {
             /*全部订单*/
             clickMyOrderView("all");
+        } else if (v == mErWeiMa) {
+            /*二维码名片*/
+            startActivity(DistributionMyQRCodeActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {
             //个人主页。
 //            startActivity(UserHomeActivity.class);
             //跳转至会员升级
-               startActivity(MemberRankActivity.class);
+            startActivity(MemberRankActivity.class);
         } else if (v == mKefu) {
             //客服电话
             clickKfPhone();
