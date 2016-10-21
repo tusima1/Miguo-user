@@ -23,7 +23,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.miguo.live.views.customviews.MGToast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SpecialTopicActivity extends Activity implements View.OnClickListener, CallbackView2 {
@@ -39,7 +38,8 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
     private boolean isLoadMore=false;
     private List<DetailListBean> detail_list;
     private SpecialTopicAdapter adapter;
-    private String id="c0d21dfd-86d7-48ac-8c8c-085759df1243";//请求id
+//    private String id="c0d21dfd-86d7-48ac-8c8c-085759df1243";//请求id
+    private String id="";//请求id
     private PageBean page;
 
     @Override
@@ -169,24 +169,8 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
                 adapter = new SpecialTopicAdapter();
                 mMaxListView.setAdapter(adapter);
                 mMaxListView.setFocusable(false);
-                List<DetailListBean> finalData=new ArrayList<>();
                 detail_list = modelSpecialTopic.getDetail_list();
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                finalData.addAll(detail_list);
-                adapter.setData(finalData);
+                adapter.setData(detail_list);
 
             }
         }

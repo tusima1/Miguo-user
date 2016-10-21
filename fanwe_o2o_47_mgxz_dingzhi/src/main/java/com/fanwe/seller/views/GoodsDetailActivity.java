@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +31,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.SScrollView;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -122,7 +122,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private String fx_id = "";
     private ShoppingCartInfo mShoppingCartInfo;
     private String mTimeStatus;
-    private WebView mWebDetailDesc;
+    private WebView mWebDetailDesc;//商品详细说明
+    private WebView mWebDetailReason;//推荐理由
+    private WebView mWebDetailTip;//温馨提示
     private View mStatusBar;//虚假状态栏
 
     @Override
@@ -198,6 +200,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mHtmlTuiReason = ((TextView) findViewById(R.id.tv_description_reason));
         mHtmlDetailDesc = ((TextView) findViewById(R.id.tv_detail_desc));
         mWebDetailDesc = ((WebView) findViewById(R.id.test_webView));
+        mWebDetailReason = ((WebView) findViewById(R.id.webView_reason));
+        mWebDetailTip = ((WebView) findViewById(R.id.webView_tip));
 
         //门店列表layout
         mShopListLayout = ((FrameLayout) findViewById(R.id.fl_container));
@@ -317,8 +321,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         List<ImageView> data = new ArrayList<>();
         for (ImagesBean image : images) {
             ImageView imageView = new ImageView(this);
-//            SDViewBinder.setImageView(image.getImage(),imageView);
-            imageView.setImageResource(R.drawable.bg_saber_q);
+            SDViewBinder.setImageView(image.getImage(),imageView);
+//            imageView.setImageResource(R.drawable.bg_saber_q);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             data.add(imageView);
         }
@@ -326,12 +330,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void rotateView(View target, float start, float end, final boolean isOpen){
-        // 第二个参数"rotation"表明要执行旋转
-        // 0f -> 360f，从旋转360度，也可以是负值，负值即为逆时针旋转，正值是顺时针旋转。
         ObjectAnimator anim = ObjectAnimator.ofFloat(target, "rotation", start, end);
-        // 动画的持续时间，执行多久？
         anim.setDuration(500);
-        // 回调监听
         anim.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -357,8 +357,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
             }
         });
-
-        // 正式开始启动执行动画
         anim.start();
     }
 
@@ -367,7 +365,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-            //持有一个IntEvaluator对象，方便下面估值的时候使用
             private IntEvaluator mEvaluator = new IntEvaluator();
 
             @Override
@@ -379,7 +376,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 //计算当前进度占整个动画过程的比例，浮点型，0-1之间
                 float fraction = currentValue / 100f;
 
-                //这里我偷懒了，不过有现成的干吗不用呢
                 //直接调用整型估值器通过比例计算出宽度，然后再设给Button
                 target.getLayoutParams().height = mEvaluator.evaluate(fraction, start, end);
                 target.requestLayout();
@@ -388,7 +384,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         valueAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
             }
 
             @Override
@@ -457,26 +452,17 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
         //温馨提示
         String notes = modelGoodsDetailNew.getNotes();
-        Log.e("test","notes:"+notes);
-        mHtmlTipDesc.setTextSize(16);
-        mHtmlTipDesc.setText(Html.fromHtml(notes));
+//        mHtmlTipDesc.setTextSize(16);
+//        mHtmlTipDesc.setText(Html.fromHtml(notes));
+        loadWebData(mWebDetailTip,notes);
 
         //推荐理由
         String recommend_desc = modelGoodsDetailNew.getRecommend_desc();
-        if (TextUtils.isEmpty(recommend_desc)){
-            //TODO 做啥呢?隐藏?
-        }else {
-            mHtmlTuiReason.setText(Html.fromHtml(recommend_desc));
-        }
+        loadWebData(mWebDetailReason,recommend_desc);
 
         //团购详情(详细说明)
         String tuan_detail = modelGoodsDetailNew.getTuan_detail();
-//        mHtmlDetailDesc.setTextSize(16);
-//        mHtmlDetailDesc.setText(Html.fromHtml(tuan_detail));
-//        Spanned spanned = Html.fromHtml(tuan_detail);
-//        String s = Html.toHtml(spanned);
-//        mWebDetailDesc.loadData(tuan_detail,"text/html","utf-8");
-        mWebDetailDesc.loadDataWithBaseURL(null,tuan_detail,"text/html","utf-8",null);
+        loadWebData(mWebDetailDesc,tuan_detail);
 
         //bind viewpager
         GoodsDetailPagerAdapter goodsDetailPagerAdapter = new GoodsDetailPagerAdapter(getTestData
@@ -485,6 +471,14 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
         mCirIndictor.setViewPager(mViewpager);
         goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
+    }
+
+    private void loadWebData(WebView webView,String data){
+        if (TextUtils.isEmpty(data)){
+            webView.setVisibility(View.GONE);
+            return;
+        }
+        webView.loadDataWithBaseURL(null,data,"text/html","utf-8",null);
     }
 
     private void bindShopList(List<ShopListBean> shop_list) {
