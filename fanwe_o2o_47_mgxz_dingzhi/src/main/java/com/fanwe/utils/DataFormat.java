@@ -59,4 +59,11 @@ public class DataFormat {
         }
         return res;
     }
+    public static String toDoubleTwo(float value){
+        String res = df.format(value);
+        if (res.startsWith(".")) {
+            res = "0" + res;
+        }
+        return res;
+    }
 }

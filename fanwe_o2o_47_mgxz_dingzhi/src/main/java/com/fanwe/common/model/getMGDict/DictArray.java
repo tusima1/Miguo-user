@@ -1,4 +1,4 @@
-package com.fanwe.common.model.MGDict;
+package com.fanwe.common.model.getMGDict;
 
 import java.util.List;
 

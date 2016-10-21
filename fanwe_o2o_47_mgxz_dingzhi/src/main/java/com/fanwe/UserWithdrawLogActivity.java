@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 分销提现日志
+ * 提现(佣金与余额)
  *
  * @author Administrator
  *
@@ -41,6 +41,8 @@ public class UserWithdrawLogActivity extends BaseActivity implements CallbackVie
     private UserWithdrawLogAdapter mAdapter;
     private MoneyHttpHelper httpHelper;
 
+    private int money_type=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,18 +53,28 @@ public class UserWithdrawLogActivity extends BaseActivity implements CallbackVie
 
     private void init() {
         httpHelper = new MoneyHttpHelper(this);
-        initTitle();
+        getIntentData();
         bindDefaultData();
         initPullToRefreshListView();
+    }
+
+    private void getIntentData() {
+        money_type = getIntent().getIntExtra("money_type", 0);
+        if(money_type == 0){
+            MGToast.showToast("类型错误!");
+            finish();
+            return;
+        }
+        if (money_type==1){
+            mTitle.setMiddleTextTop("提现明细");
+        }else if (money_type==2){
+            mTitle.setMiddleTextTop("分销提现日志");
+        }
     }
 
     private void bindDefaultData() {
         mAdapter = new UserWithdrawLogAdapter(mListModel, this);
         mPtrlv_content.setAdapter(mAdapter);
-    }
-
-    private void initTitle() {
-        mTitle.setMiddleTextTop("提现明细");
     }
 
     private void initPullToRefreshListView() {
@@ -71,7 +83,7 @@ public class UserWithdrawLogActivity extends BaseActivity implements CallbackVie
 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                httpHelper.getUserWithdrawLog("1");
+                httpHelper.getUserWithdrawLog(money_type+"");
             }
 
             @Override

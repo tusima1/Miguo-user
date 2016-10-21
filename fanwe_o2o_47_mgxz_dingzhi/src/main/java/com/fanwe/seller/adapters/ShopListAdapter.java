@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,9 +43,7 @@ public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
         RatingBar rb_rating = get(R.id.rb_rating, convertView);
         TextView tv_address = get(R.id.tv_address, convertView);
         ImageView iv_tag_hui = get(R.id.iv_tag_hui, convertView);
-        LinearLayout ll_tuan = get(R.id.ll_tuan, convertView);
-        LinearLayout ll_hui = get(R.id.ll_hui, convertView);
-        TextView tv_hui_edtail = get(R.id.tv_hui_edtail, convertView);
+        RelativeLayout ll_tuan = get(R.id.ll_tuan, convertView);
         TextView tv_tuan_edtail = get(R.id.tv_tuan_edtail, convertView);
         TextView tv_represent = get(R.id.tv_represent, convertView);
         if (isNotMine) {
@@ -54,54 +51,9 @@ public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
         } else {
             tv_represent.setVisibility(View.GONE);
         }
-
-
-//        if (model.getDeal_count() > 0) {
-//            SDViewUtil.show(iv_tag_tuan);
-//            SDViewUtil.show(ll_tuan);
-//        } else {
         SDViewUtil.hide(iv_tag_tuan);
         SDViewUtil.hide(ll_tuan);
-//        }
-
-//        if (model.getYouhui_count() > 0) {
-//            SDViewUtil.show(iv_tag_quan);
-//        } else {
         SDViewUtil.hide(iv_tag_quan);
-//        }
-        if ("0".equals(model.getOffline())) {
-            SDViewUtil.hide(iv_tag_hui);
-            SDViewUtil.hide(ll_hui);
-        } else {
-            SDViewUtil.show(iv_tag_hui);
-            SDViewUtil.show(ll_hui);
-        }
-        /*if(model.getDiscount_pay() >0 && model.getSalary_money() >= 1)
-        {
-			SDViewUtil.show(iv_tag_hui);
-			SDViewUtil.show(ll_hui);
-		}
-		else if(model.getSalary_money() >= 1 && model.getDiscount_pay() <= 0){
-			SDViewUtil.show(iv_tag_hui);
-			SDViewUtil.hide(ll_hui);
-		}
-		else if(model.getDiscount_pay() >0 && model.getSalary_money() <= 1){
-			SDViewUtil.show(iv_tag_hui);
-			SDViewUtil.show(ll_hui);
-		}
-		else if(model.getDiscount_pay() <= 0 && model.getSalary_money() <= 1 ){
-			SDViewUtil.hide(iv_tag_hui);
-			SDViewUtil.hide(ll_hui);
-		}*/
-//        if (model.getDiscount_pay() <= 0) {
-//            SDViewBinder.setTextView(tv_hui_edtail, "买单立减");
-//        } else {
-//            BigDecimal bd1 = new BigDecimal((100 - model.getDiscount_pay()) / 10.0);
-//            bd1 = bd1.setScale(1, BigDecimal.ROUND_HALF_UP);
-//            SDViewBinder.setTextView(tv_hui_edtail, bd1 + "折 （买单立减）");
-//        }
-
-//        SDViewBinder.setTextView(tv_tuan_edtail, model.getDeal_name());
         SDViewBinder.setImageView(model.getPreview(), iv_image);
         SDViewBinder.setTextView(tv_name, model.getShop_name());
         //评分
@@ -111,7 +63,6 @@ public class ShopListAdapter extends SDSimpleBaseAdapter<ModelStoreList> {
             SDViewBinder.setRatingBar(rb_rating, 0);
         }
         SDViewBinder.setTextView(tv_address, model.getAddress());
-//        SDViewBinder.setTextView(tv_distance, model.getDistanceFormat());
         SDViewBinder.setTextView(tv_distance, "");
 
         SDWeightLinearLayout.calculateWidth(ll_name_bar, new CalculateWidthListener() {

@@ -47,7 +47,7 @@
                     android:id="@+id/tv_textVip1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="青铜"
+                    android:text="普通"
                     android:textColor="@color/text_fenxiao"
                     android:textSize="@dimen/text_size_title" />
 

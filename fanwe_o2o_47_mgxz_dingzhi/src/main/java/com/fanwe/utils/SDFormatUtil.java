@@ -38,7 +38,23 @@ public class SDFormatUtil {
         }
     }
 
-
+    /**
+     * 直接数据过万改成 2w这样的形式
+     * @param count
+     * @return
+     */
+    public static String formatTenThouthand(String count) {
+        if (!TextUtils.isEmpty(count)) {
+           float value = stringToFloat(count);
+            if(value>=10000){
+             return  DataFormat.toDoubleTwo(value/10000)+"W";
+            }else{
+                return count;
+            }
+        } else {
+            return "0";
+        }
+    }
     public static int stringToInteger(String number) {
         if (TextUtils.isEmpty(number)) {
             return 0;

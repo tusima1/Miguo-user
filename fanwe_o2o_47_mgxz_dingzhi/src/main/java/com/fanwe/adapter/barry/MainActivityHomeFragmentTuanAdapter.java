@@ -66,7 +66,6 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
     }
 
 
-
     private void setNormalPriceText(RecyclerView.ViewHolder holder, int position) {
         getHolder(holder).normalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }

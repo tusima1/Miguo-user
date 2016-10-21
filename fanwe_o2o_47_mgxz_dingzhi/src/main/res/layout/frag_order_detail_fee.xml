@@ -89,6 +89,36 @@
 
         </LinearLayout>
         <!--  总价。-->
+        <!--  首单优惠。-->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/firstPriceTotalline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp" >
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="首单优惠"
+                android:textColor="@color/gray"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/firstPriceTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="@color/main_color"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+        <!--  首单优惠。-->
         <!--  优惠金额。-->
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/youhui_line"

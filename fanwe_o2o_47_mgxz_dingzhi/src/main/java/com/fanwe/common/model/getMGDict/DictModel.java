@@ -1,4 +1,4 @@
-package com.fanwe.common.model.MGDict;
+package com.fanwe.common.model.getMGDict;
 
 /**
  * Created by didik on 2016/9/27.

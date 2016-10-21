@@ -18,7 +18,6 @@ import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.dao.InitActModelDao;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.fanwe.library.utils.SDTimer;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.o2o.miguo.R;
@@ -30,6 +29,7 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
@@ -59,10 +59,9 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             DangerousPermissions.STORAGE
     };
 
+    private long mStartTime=0;
 
-    private SDTimer mTimer = new SDTimer();
-
-    private long start;
+    private final int waitTime=800;
 
     private SharedPreferences setting;
     private PermissionsHelper permissionsHelper;
@@ -71,11 +70,18 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_init_advs_multi);
+        mStartTime=System.currentTimeMillis();
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
         } else {
             init();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        JPushInterface.onResume(this);
+        super.onResume();
     }
 
     private void checkPermissions() {
@@ -123,7 +129,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
         startStatistics();
-        initTimer();
         getDeviceId();
         loadCityFile();
     }
@@ -221,11 +226,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         }
     }
 
-
-    private void initTimer() {
-        start = java.lang.System.currentTimeMillis();
-    }
-
     private void requestInitInterface() {
         //请求城市列表
         sellerHttpHelper.getCityList();
@@ -237,10 +237,25 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
+            final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            long currentTime = System.currentTimeMillis();
+            long offset = currentTime - mStartTime <0 ?waitTime :currentTime - mStartTime;
+            if (offset> waitTime){
+                startActivity(intent);
+                finish();
+            }else {
+                MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(intent);
+                        finish();
+                    }
+                },waitTime-offset);
+            }
+
+
         }
-        finish();
+
 //         Intent intent = new Intent(getApplicationContext(),
 //         GuideActivity.class);
 
@@ -249,7 +264,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
 
     @Override
     protected void onDestroy() {
-        mTimer.stopWork();
         super.onDestroy();
     }
 
@@ -257,12 +271,6 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     protected void onPause() {
         JPushInterface.onPause(this);
         super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        JPushInterface.onResume(this);
-        super.onResume();
     }
 
     @Override

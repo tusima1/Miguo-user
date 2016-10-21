@@ -3,7 +3,7 @@ package com.fanwe.utils;
 import android.text.TextUtils;
 
 import com.fanwe.common.MGDict;
-import com.fanwe.common.model.MGDict.DictModel;
+import com.fanwe.common.model.getMGDict.DictModel;
 import com.fanwe.library.utils.SDCollectionUtil;
 
 import java.util.List;

@@ -16,6 +16,7 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.shoppingcart.model.BuyItem;
+import com.fanwe.utils.DataFormat;
 
 import java.util.List;
 
@@ -77,9 +78,12 @@ public class OrderDetailGoodsAdapter extends SDBaseAdapter<BuyItem>
 	{
 		if (model != null && tvSinglePrice != null && tvTotalPrice != null)
 		{
-
-				SDViewBinder.setTextView(tvSinglePrice, model.getPrice());
-				SDViewBinder.setTextView(tvTotalPrice, model.getTotal());
+           if(!TextUtils.isEmpty(model.getPrice())) {
+			   SDViewBinder.setTextView(tvSinglePrice, DataFormat.toDoubleTwo(model.getPrice()));
+		   }
+			if(!TextUtils.isEmpty(model.getTotal())) {
+				SDViewBinder.setTextView(tvTotalPrice, DataFormat.toDoubleTwo(model.getTotal()));
+			}
 
 		}
 	}

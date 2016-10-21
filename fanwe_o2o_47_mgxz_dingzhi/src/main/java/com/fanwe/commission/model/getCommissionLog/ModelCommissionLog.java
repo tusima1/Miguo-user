@@ -16,7 +16,7 @@ public class ModelCommissionLog {
 //    "id": "21974238-5ba0-424a-9e08-2ab74c0952aa"
 
 
-//    "money":"0.15",
+    //    "money":"0.15",
 //            "user_id":"21070107-7cba-4fc6-8df6-f54509f13bca",
 //            "before_money":"1000.00",
 //            "mobile":"",
@@ -26,6 +26,8 @@ public class ModelCommissionLog {
 //            "dist_id_from":"",-----------//来源人：188****5484
 //            "id":"92e796ff-e56d-42e8-a3bd-28de4e0d0f38",
 //            "order_id":"1885173e-da76-4491-9c66-1e287b28d51f"
+    //title;item
+    private int type;
     private String money;
     private String user_id;
     private String mobile;
@@ -34,8 +36,25 @@ public class ModelCommissionLog {
     private String money_type;
     private String dist_id_from;
     private String id;
-    private String order_id;
+    private String order_id;;
+    private String order_sn;
     private String before_money;
+
+    public String getOrder_sn() {
+        return order_sn;
+    }
+
+    public void setOrder_sn(String order_sn) {
+        this.order_sn = order_sn;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getBefore_money() {
         return before_money;

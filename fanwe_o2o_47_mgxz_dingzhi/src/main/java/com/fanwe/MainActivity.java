@@ -16,8 +16,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
-import com.fanwe.fragment.MyFragment2;
-import com.fanwe.fragment.StoreListContainerFragment;
+import com.fanwe.fragment.MyFragment;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;
@@ -109,7 +108,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     private SDViewNavigatorManager mViewManager = new SDViewNavigatorManager();
 
-    private MyFragment2 mFragMyAccount = new MyFragment2();
+    private MyFragment mFragMyAccount = new MyFragment();
 
     private long mExitTime = 0;
     private int preTab = 0;// 上次点击的tab标签页
@@ -331,7 +330,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click1() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_2);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, StoreListContainerFragment
+        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, SellerFragment
                 .class);
 
     }
@@ -409,14 +408,10 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click4() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_4);
-
         if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
         {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-//            mFragMyAccount = (MyFragment2) getSDFragmentManager().toggle(R.id.act_main_fl_content,
-//                    null,
-//                    MyFragment2.class);
             getSDFragmentManager().toggle(R.id.act_main_fl_content, null, mFragMyAccount);
         }
     }
@@ -669,8 +664,10 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
                         if (room.getHost() != null) {
                             if (!TextUtils.isEmpty(room.getHost().getUid())) {
+                                //提示用户直播结束，跳转到网红主页
                                 Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
                                 intent.putExtra("id", room.getHost().getUid());
+                                intent.putExtra("toastContent", "直播已结束，钻石发放失败");
                                 startActivity(intent);
                                 return;
                             }

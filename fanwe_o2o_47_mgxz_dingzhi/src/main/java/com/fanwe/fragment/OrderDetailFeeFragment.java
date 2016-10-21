@@ -69,6 +69,14 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
     @ViewInject(R.id.youhui_account)
     TextView youhui_account;
 
+    /**
+     * 首单 优惠。
+     */
+    @ViewInject(R.id.firstPriceTotalline)
+      LinearLayout  firstPriceTotalline;
+    @ViewInject(R.id.firstPriceTotal)
+    TextView  firstPriceTotalText;
+
 
     /**
      * 当前的第三方支付方式。
@@ -89,6 +97,10 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
      * 需要支付金额。
      */
     float needFloat = 0.00f;
+    /**
+     * 首单 支付。
+     */
+    float  firstPriceTotal = 0.00f;
     /**
      * 订单编号 。
      */
@@ -115,6 +127,8 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         //用户余额。
         yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
 
+        firstPriceTotal = SDFormatUtil.stringToFloat(mCheckActModel.getFirstPriceTotal());
+
         youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         needFloat = totalFloat - yueFloat - youhuiFloat;
         total_fee.setText(mCheckActModel.getGoodsTotal());
@@ -131,6 +145,12 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         }
         if(need_pay_fee!=null) {
             need_pay_fee.setText(needFloat + "");
+        }
+        if(firstPriceTotal>0){
+            firstPriceTotalline.setVisibility(View.VISIBLE);
+            firstPriceTotalText.setText(firstPriceTotal+"");
+        }else{
+            firstPriceTotalline.setVisibility(View.GONE);
         }
         calculateFee();
 
@@ -174,7 +194,6 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         //用户余额。
         float yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney())+SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
         //首单优惠 TODO 该怎么显示呢
-        float firstPriceTotal = SDFormatUtil.stringToFloat(mCheckActModel.getFirstPriceTotal());
 
         float youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         float needFloat = totalFloat - yueFloat - youhuiFloat;

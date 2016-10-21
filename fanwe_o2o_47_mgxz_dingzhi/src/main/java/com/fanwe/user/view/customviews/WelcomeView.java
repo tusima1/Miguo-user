@@ -42,7 +42,7 @@ public class WelcomeView extends FrameLayout {
         LayoutInflater.from(mContext).inflate(R.layout.item_welcome, this);
         mIvImage = ((ImageView) findViewById(R.id.iv_img));
         mIvNext = ((ImageView) findViewById(R.id.tv_next));
-        mIvSkip = ((ImageView) findViewById(R.id.tv_skip));
+//        mIvSkip = ((ImageView) findViewById(R.id.tv_skip));
 
         mIvNext.setOnClickListener(new OnClickListener() {
             @Override
@@ -53,14 +53,14 @@ public class WelcomeView extends FrameLayout {
             }
         });
 
-        mIvSkip.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnSkipClickListener!=null){
-                    mOnSkipClickListener.onClick(v);
-                }
-            }
-        });
+//        mIvSkip.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (mOnSkipClickListener!=null){
+//                    mOnSkipClickListener.onClick(v);
+//                }
+//            }
+//        });
     }
 
     public void setImageRes(int imageRes){

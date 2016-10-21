@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
@@ -58,6 +59,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     private LinearLayout layoutWeixin, layoutFriends, layoutQQ, layoutQQZone, layoutSina;
     private Button btnCancle;
+    private TextView tvTitle;
 
     private void initContentView(View contentView) {
         layoutWeixin = ((LinearLayout) contentView.findViewById(R.id.layout_weixin_pop_share));
@@ -66,6 +68,12 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         layoutQQZone = ((LinearLayout) contentView.findViewById(R.id.layout_qqzone_pop_share));
         layoutSina = ((LinearLayout) contentView.findViewById(R.id.layout_sina_pop_share));
         btnCancle = (Button) contentView.findViewById(R.id.btn_cancel_pop_share);
+        tvTitle = (TextView) contentView.findViewById(R.id.tv_title_pop_share);
+        if (isHost) {
+            tvTitle.setVisibility(View.GONE);
+        } else {
+            tvTitle.setVisibility(View.VISIBLE);
+        }
 
         layoutWeixin.setOnClickListener(this);
         layoutFriends.setOnClickListener(this);

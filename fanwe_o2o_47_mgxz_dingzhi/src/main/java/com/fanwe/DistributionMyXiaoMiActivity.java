@@ -86,7 +86,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
         Window window = builder.getWindow();
         TextView tv_content = (TextView) window.findViewById(R.id.tv_content);
         Button bt_confirm = (Button) window.findViewById(R.id.bt_confirm);
-        SDViewBinder.setTextView(tv_content, "当前您的青铜成员人数为" + mVip1 + "人，其中我的大掌柜  " + mNum1 + "人，我的店小二" + mNum2 + "人，全部升级后预计可提现金额为"
+        SDViewBinder.setTextView(tv_content, "当前您的普通成员人数为" + mVip1 + "人，其中我的大掌柜  " + mNum1 + "人，我的店小二" + mNum2 + "人，全部升级后预计可提现金额为"
                 + money + "元，点击成员手机号提醒该成员升级。");
         bt_confirm.setOnClickListener(new OnClickListener() {
             @Override

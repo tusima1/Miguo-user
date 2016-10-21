@@ -337,6 +337,9 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			 */
 			sumPrice = firstNum * SDFormatUtil.stringToFloat(model.getIs_first_price());
 			sumPrice = number* SDFormatUtil.stringToFloat(model.getTuan_price())-sumPrice;
+			if(sumPrice<0){
+				sumPrice = 0;
+			}
 
 				model.setSumPrice(sumPrice);
 				SDViewBinder.setTextView(tvSinglePrice, model.getTuan_price());

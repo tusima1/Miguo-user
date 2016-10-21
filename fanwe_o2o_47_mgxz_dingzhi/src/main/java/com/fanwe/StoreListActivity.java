@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.SellerFragment;
 
 /**
  * 商家列表
@@ -25,7 +26,7 @@ public class StoreListActivity extends BaseActivity
 
 	private void init()
 	{
-		getSDFragmentManager().replace(R.id.act_tuan_list_fl_container, StoreListContainerFragment.class);
+		getSDFragmentManager().replace(R.id.act_tuan_list_fl_container, SellerFragment.class);
 	}
 
 }

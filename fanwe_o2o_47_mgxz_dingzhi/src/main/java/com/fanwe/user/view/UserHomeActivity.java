@@ -63,6 +63,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;
+    private String toastContent;
     private RecyclerView recyclerViewShop;
     private MyGridView gridViewLive;
     private CircleImageView circleImageView;
@@ -71,6 +72,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private List<String> imgsProduct = new ArrayList<>();
     private List<ModelSpokePlay> datasLive = new ArrayList<>();
     private RelativeLayout layoutShopEmpty, layoutLiveEmpty;
+    private String nick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,10 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         if (TextUtils.isEmpty(id)) {
             id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
         }
+        toastContent = getIntent().getStringExtra("toastContent");
+        if (!TextUtils.isEmpty(toastContent)) {
+            MGToast.showToast(toastContent);
+        }
     }
 
     private void initTitle() {
@@ -147,8 +153,11 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
             imageUrl = MGDictUtil.getShareIcon();
         }
-        UmengShareManager.share(this, "分享", "网红主页", ServerUrl.SERVER_H5 + "index/winnie/id/" + id,
-                UmengShareManager.getUMImage(this, imageUrl), null);
+        String title = "精彩推荐";
+        if (!TextUtils.isEmpty(nick)) {
+            title = nick + "的精彩推荐";
+        }
+        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", ServerUrl.SERVER_H5 + "index/winnie/id/" + id, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 
     ImageAdapter adapterShop;
@@ -341,6 +350,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                     //个人信息
                     if (!SDCollectionUtil.isEmpty(itemsPerson)) {
                         currModelPersonHomePage = itemsPerson.get(0);
+                        nick = currModelPersonHomePage.getNick();
                         SDViewBinder.setTextView(tvName, currModelPersonHomePage.getNick(), "");
                         SDViewBinder.setTextView(tvAttention, currModelPersonHomePage.getFocus(), "");
                         SDViewBinder.setTextView(tvFans, currModelPersonHomePage.getFans(), "");

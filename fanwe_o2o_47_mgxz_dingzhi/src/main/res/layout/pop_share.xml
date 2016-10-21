@@ -8,16 +8,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp45"
+        android:layout_marginTop="@dimen/dp35"
         android:gravity="center"
-        android:text="@string/pop_share_live"
+        android:text="送朋友20个钻！"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp12" />
+
+    <TextView
+        android:id="@+id/tv_title_pop_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp5"
+        android:gravity="center"
+        android:text="朋友有消费，即共享10%钻石和20%老板红包"
         android:textColor="@color/white"
         android:textSize="@dimen/dp12" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp50"
+        android:layout_marginTop="@dimen/dp35"
         android:orientation="horizontal">
 
         <LinearLayout
