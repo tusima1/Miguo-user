@@ -1,6 +1,7 @@
 package com.fanwe.seller.adapters;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.fanwe.seller.model.getGroupDeatilNew.ShopListBean;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
+import com.miguo.app.HiShopDetailActivity;
 
 import java.util.List;
 
@@ -123,7 +125,7 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                     }
                 });
             }
-            String shop_id = shopListBean.getId();
+            final String shop_id = shopListBean.getId();
             if (TextUtils.isEmpty(shop_id)){
                 holder.iv_shop.setImageResource(R.drawable.ic_shop_disable);
             }else {
@@ -131,6 +133,11 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                 holder.iv_shop.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intent=new Intent(mGoodsDetailActivity,HiShopDetailActivity.class);
+                        Bundle bundle=new Bundle();
+                        bundle.putInt(HiShopDetailActivity.EXTRA_SHOP_ID,DataFormat.toInt(shop_id));
+                        intent.putExtras(bundle);
+                        mGoodsDetailActivity.startActivity(intent);
                     }
                 });
             }
