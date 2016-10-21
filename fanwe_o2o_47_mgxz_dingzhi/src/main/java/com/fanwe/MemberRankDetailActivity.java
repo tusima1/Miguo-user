@@ -104,7 +104,7 @@ public class MemberRankDetailActivity extends BaseActivity
 	{
 		mId = getIntent().getIntExtra("int", -1);
 		if(mId == 1){
-			SDViewBinder.setTextView(mTv_rank, "青铜", "未找到");
+			SDViewBinder.setTextView(mTv_rank, "普通", "未找到");
 		}else if(mId == 2){
 			SDViewBinder.setTextView(mTv_rank, "白金", "未找到");
 		}else if(mId == 3){

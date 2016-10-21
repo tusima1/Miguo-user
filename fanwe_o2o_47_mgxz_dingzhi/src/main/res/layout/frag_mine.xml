@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.handmark.pulltorefresh.library.PullToRefreshScrollView
+    android:id="@+id/frag_my_account_ptrsv_all"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    ptr:ptrHeaderBackground="@color/white"
+    ptr:ptrHeaderSubTextColor="@color/white"
+    ptr:ptrHeaderTextColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        >
+        <!--顶部mine相关-->
+        <include layout="@layout/item_my_frag_mine"/>
+        <!--订单-->
+        <include layout="@layout/item_my_frag_order"/>
+        <!--网格表-->
+        <include layout="@layout/item_my_frag_grid"/>
+
+    </LinearLayout>
+</com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
+
+
