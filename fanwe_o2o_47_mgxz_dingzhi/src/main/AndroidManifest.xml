@@ -1059,7 +1059,6 @@
         -->
 
         <activity android:name="com.fanwe.user.view.RedPacketListActivity" />
-        <activity android:name="com.miguo.live.views.TestMyFragmentActivity" />
         <activity android:name="com.fanwe.user.view.FansActivity" />
         <activity android:name="com.fanwe.user.view.WalletActivity" />
         <activity android:name="com.miguo.utils.test.DTestActivity" />
