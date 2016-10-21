@@ -19,13 +19,6 @@ public class ModelGoodsDetailNew {
      */
 
     private ShareInfoBean share_info;
-
-
-//    "time_status":"1",              // 团购状态
-//            "max_num":"-1",                 // 团购限购数量
-//            "is_first_price":"0.00",        // 首单优惠价格
-//            "is_first":"1",                 // 是否有首单优惠
-//            "icon":"http://oc16x1ls4.bkt.clouddn.com/2016/08/Fh3-oUUzPIiCtcxcc9ViWuVY_idI"   // 图标
     private String tuan_price;
     private String popularity;
     private String name;
@@ -45,7 +38,6 @@ public class ModelGoodsDetailNew {
      */
 
     private List<ImagesBean> images;
-    private List<String> dp_list;
     /**
      * geo_y : 119
      * geo_x : 113
@@ -192,14 +184,6 @@ public class ModelGoodsDetailNew {
 
     public void setImages(List<ImagesBean> images) {
         this.images = images;
-    }
-
-    public List<String> getDp_list() {
-        return dp_list;
-    }
-
-    public void setDp_list(List<String> dp_list) {
-        this.dp_list = dp_list;
     }
 
     public List<ShopListBean> getShop_list() {

@@ -33,6 +33,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.SScrollView;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
@@ -156,6 +157,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mSellerHelper = new SellerHttpHelper(null,this,"");
         mShoppingCartHelper = new ShoppingCartHelper(this);
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
+        SDDialogManager.showProgressDialog("");
     }
     private void getIntentData() {
         Intent intent = getIntent();
@@ -497,12 +499,18 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         loadWebData(mWebDetailDesc,tuan_detail);
 
         //bind viewpager
-        GoodsDetailPagerAdapter goodsDetailPagerAdapter = new GoodsDetailPagerAdapter(getTestData
-                (modelGoodsDetailNew.getImages()));
+        List<String> imageUrls=new ArrayList<>();
+        for (ImagesBean imagesBean : modelGoodsDetailNew.getImages()) {
+            imageUrls.add(imagesBean.getImage());
+        }
+        GoodsDetailPagerAdapter goodsDetailPagerAdapter = new GoodsDetailPagerAdapter(imageUrls);
         mViewpager.setAdapter(goodsDetailPagerAdapter);
 
         mCirIndictor.setViewPager(mViewpager);
         goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
+
+        //--end bind data
+        SDDialogManager.dismissProgressDialog();
     }
 
     private void loadWebData(WebView webView,String data){

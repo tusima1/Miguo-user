@@ -19,6 +19,7 @@ import com.fanwe.seller.model.getSpecialTopic.ModelSpecialTopic;
 import com.fanwe.seller.model.getSpecialTopic.PageBean;
 import com.fanwe.seller.model.getSpecialTopic.TopicBean;
 import com.fanwe.seller.presenters.SellerNewHttpHelper;
+import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.miguo.live.views.customviews.MGToast;
@@ -88,24 +89,22 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                adapter.updateData(detail_list);
                 isLoadMore=true;
-//                isLoadMore=true;
-//                if (page==null){
-//                    isLoadMore=false;
-//                    httpHelper.getTopicDetail(id,"1","10","","");
-//                }else {
-//                    int currentPage = DataFormat.toInt(page.getPage());
-//                    int totalPage = DataFormat.toInt(page.getPage_total());
-//                    if (currentPage<totalPage){
-//                        httpHelper.getTopicDetail(id,currentPage+1+"","10","","");
-//                    }else if (currentPage==totalPage){
-//                        httpHelper.getTopicDetail(id,currentPage+"","10","","");
-//                    }else {
-//                        MGToast.showToast("没有更多数据");
-//                        mPscrollView.onRefreshComplete();
-//                    }
-//                }
+                if (page==null){
+                    isLoadMore=false;
+                    httpHelper.getTopicDetail(id,"1","10","","");
+                }else {
+                    int currentPage = DataFormat.toInt(page.getPage());
+                    int totalPage = DataFormat.toInt(page.getPage_total());
+                    if (currentPage<totalPage){
+                        httpHelper.getTopicDetail(id,currentPage+1+"","10","","");
+                    }else if (currentPage==totalPage){
+                        httpHelper.getTopicDetail(id,currentPage+"","10","","");
+                    }else {
+                        MGToast.showToast("没有更多数据");
+                        mPscrollView.onRefreshComplete();
+                    }
+                }
             }
         });
     }

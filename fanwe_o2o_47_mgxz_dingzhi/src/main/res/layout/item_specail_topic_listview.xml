@@ -22,7 +22,7 @@
         android:layout_marginTop="@dimen/dp15"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="杭州知名人气日料店 航空直运生鲜一品日料精髓"
+        android:text=""
         android:textColor="@color/dark_text"
         android:textSize="@dimen/dp16" />
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:text="西湖北线/黄龙 | 10.6km | 居酒屋"
+            android:text=""
             android:textColor="@color/text_base_color"
             android:textSize="@dimen/dp12" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp5"
             android:layout_toLeftOf="@+id/tv_type"
-            android:text="95.00元/张"
+            android:text=""
             android:textColor="@color/c_F5B830"
             android:textSize="@dimen/dp14" />
 
@@ -68,48 +68,19 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp5"
             android:layout_toLeftOf="@+id/tv_price_tuan"
-            android:text="104.00元"
+            android:text=""
             android:textColor="@color/text_base_color"
             android:textSize="@dimen/dp12" />
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/layout_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp12"
         android:layout_marginRight="@dimen/dp12"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/layout_tags"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="2.5"
-            android:orientation="horizontal" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_salary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp2"
-                android:background="@color/c_F5B830"
-                android:paddingBottom="@dimen/dp5"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
-                android:paddingTop="@dimen/dp5"
-                android:text="9.98元佣金"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp10" />
-        </LinearLayout>
     </LinearLayout>
     <!--android:background="@drawable/bg_small_c03f3f"-->
 

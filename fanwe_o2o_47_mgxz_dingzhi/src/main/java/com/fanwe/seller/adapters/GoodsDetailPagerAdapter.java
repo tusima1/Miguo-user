@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.fanwe.library.utils.SDViewBinder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +16,9 @@ import java.util.List;
 
 public class GoodsDetailPagerAdapter extends PagerAdapter {
 
-    List<ImageView> mData=new ArrayList<>();
-    public GoodsDetailPagerAdapter(List<ImageView> mData) {
+    List<String> mData=new ArrayList<>();
+//    List<ImageView> mData=new ArrayList<>();
+    public GoodsDetailPagerAdapter(List<String> mData) {
         this.mData=mData;
     }
 
@@ -31,13 +34,14 @@ public class GoodsDetailPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ImageView imageView = mData.get(position);
-        container.removeView(imageView);
+        container.removeView((View) object);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        ImageView imageView = mData.get(position);
+        ImageView imageView = new ImageView(container.getContext());
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        SDViewBinder.setImageView(mData.get(position),imageView);
         container.addView(imageView);
         return imageView;
     }

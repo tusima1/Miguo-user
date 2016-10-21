@@ -20,7 +20,6 @@ import com.fanwe.seller.model.getGroupDeatilNew.ShopListBean;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
-import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
@@ -132,7 +131,6 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                 holder.iv_shop.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MGToast.showToast("item:"+position+"去小店");
                     }
                 });
             }

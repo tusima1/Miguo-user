@@ -3,7 +3,6 @@ package com.fanwe.seller.adapters;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +35,6 @@ public class SpecialTopicAdapter extends BaseAdapter {
         if (newData!=null && newData.size()>0){
             mData.addAll(newData);
             notifyDataSetChanged();
-            Log.e("test",mData.size()+"");
         }
     }
 
@@ -73,7 +71,6 @@ public class SpecialTopicAdapter extends BaseAdapter {
             holder.tv_price_tuan= (TextView) convertView.findViewById(R.id.tv_price_tuan);
             holder.tv_price_original= (TextView) convertView.findViewById(R.id.tv_price_original);
             holder.layout_tags= (LinearLayout) convertView.findViewById(R.id.layout_tags);
-            holder.tv_salary= (TextView) convertView.findViewById(R.id.tv_salary);
             convertView.setTag(holder);
         }
         holder= (STViewHolder) convertView.getTag();
@@ -82,7 +79,7 @@ public class SpecialTopicAdapter extends BaseAdapter {
         final int padding = DisplayUtil.dp2px(parent.getContext(), 1);
         if (detailListBean!=null){
             SDViewBinder.setImageView(detailListBean.getIcon(),holder.iv_img);
-            holder.tv_location.setText(getLocationInfo(detailListBean.getArea_name(),detailListBean.getDistance(),"你好啊小花"));
+            holder.tv_location.setText(getLocationInfo(detailListBean.getArea_name(),detailListBean.getDistance(),""));
             holder.tv_name.setText(detailListBean.getTitle());
             String type = detailListBean.getType();
             //TODO 类型
@@ -91,13 +88,10 @@ public class SpecialTopicAdapter extends BaseAdapter {
             holder.tv_price_original.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
 
             holder.tv_price_tuan.setText(detailListBean.getTuan_price()+"元/张");
-            holder.tv_salary.setText(detailListBean.getSalary()+"元佣金");
 
             //添加tags
             List<DetailListBean.TagListBean> tag_list = detailListBean.getTag_list();
-            Log.e("tag","position: "+position + "size: "+tag_list.size());
             if (tag_list!=null && tag_list.size()>0){
-                Log.e("tag2","position: "+position);
                 int size = tag_list.size();
                 size=size>5? 5:size;
                 for (int i = 0; i < size; i++) {
@@ -152,6 +146,5 @@ public class SpecialTopicAdapter extends BaseAdapter {
         public TextView tv_price_tuan;//团购价
         public TextView tv_price_original;//原价
         public LinearLayout layout_tags;//tags
-        public TextView tv_salary;//佣金
     }
 }
