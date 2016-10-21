@@ -173,11 +173,6 @@ public class HomeSearchActivity extends BaseActivity
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		switch (mSearchType)
 		{
-		case SearchTypeNormal.YOU_HUI: // 优惠
-			intent.setClass(App.getApplication(), YouHuiListActivity.class);
-			intent.putExtra(YouHuiListFragment.EXTRA_KEY_WORD, search_text);
-			startActivity(intent);
-			break;
 		case SearchTypeNormal.TUAN: // 团购
 			intent.setClass(App.getApplication(), TuanListActivity.class);
 			intent.putExtra(TuanListFragment.EXTRA_KEY_WORD, search_text);
@@ -186,16 +181,6 @@ public class HomeSearchActivity extends BaseActivity
 		case SearchTypeNormal.MERCHANT: // 商家
 			intent.setClass(App.getApplication(), StoreListActivity.class);
 			intent.putExtra(StoreListFragment.EXTRA_KEY_WORD, search_text);
-			startActivity(intent);
-			break;
-		case SearchTypeNormal.EVENT: // 活动
-			intent.setClass(App.getApplication(), EventListActivity.class);
-			intent.putExtra(EventListFragment.EXTRA_KEY_WORD, search_text);
-			startActivity(intent);
-			break;
-		case SearchTypeNormal.SHOP: // 商城
-			intent.setClass(App.getApplication(), GoodsListActivity.class);
-			intent.putExtra(GoodsListFragment.EXTRA_KEY_WORD, search_text);
 			startActivity(intent);
 			break;
 		default:

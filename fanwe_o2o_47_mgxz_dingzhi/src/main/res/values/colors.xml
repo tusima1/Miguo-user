@@ -64,11 +64,14 @@
     <color name="orange">#ff6600</color>
     <color name="dark_80">#CC000000</color>
     <color name="dark_20">#33000000</color>
+
     <color name="gray_cc">#CCCCCC</color>
     <color name="gray_3d">#3d3d3d</color>
     <color name="gray_33">#333333</color>
     <color name="gray_ee">#eeeeee</color>
     <color name="dark_30">#1E000000</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
     <color name="white_80">#CCFFFFFF</color>
     <color name="white_f2">#f2f2f2</color>
     <color name="orange_red_packet">#FFCC00</color><!--红包界面的颜色-->
@@ -79,6 +82,9 @@
     <color name="gray_text_89">#989898</color><!--font 灰色-->
     <color name="gray_text_59">#595959</color><!--font (RGB 89,89,89)-->
     <color name="gray_text_99">#999999</color><!--font (RGB 153,153,153)-->
+    <!--淡黄色-->
+    <color name="my_main_color">#f5b830</color>
+    <color name="c_e6e6e6">#e6e6e6</color>
 
     <color name="c_C32836">#c32836</color>
     <color name="c_232323">#232323</color>

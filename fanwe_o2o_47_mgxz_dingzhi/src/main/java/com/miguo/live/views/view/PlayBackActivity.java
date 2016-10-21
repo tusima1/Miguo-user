@@ -707,6 +707,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             mLoadingView.setVisibility(View.VISIBLE);
             ((AnimationDrawable) mLoadingView.getDrawable()).start();
         }
+        mVideoPlay = true;
     }
 
     private void stopLoadingAnimation() {

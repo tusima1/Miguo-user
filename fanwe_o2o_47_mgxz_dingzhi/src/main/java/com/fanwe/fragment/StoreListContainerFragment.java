@@ -42,19 +42,16 @@ public class StoreListContainerFragment extends BaseFragment {
 
     private void addFragments() {
         Bundle bundle = getActivity().getIntent().getExtras();
-
         mFragAll = new StoreListFragment();
         mFragAll.setArguments(bundle);
-        mFragAll.getArguments().putString(StoreListFragment.EXTRA_STORE_TYPE, "2");
+        mFragAll.getArguments().putString(StoreListFragment.EXTRA_STORE_TYPE, "0");
 
         mFragYouhui = new StoreListFragment();
         mFragYouhui.setArguments(bundle);
         mFragYouhui.getArguments().putString(StoreListFragment.EXTRA_STORE_TYPE, "1");
-
     }
 
     private void initTitle() {
-
         if (getActivity() instanceof MainActivity) {
             mTitle.setLeftImageLeft(0);
         } else {
@@ -63,28 +60,28 @@ public class StoreListContainerFragment extends BaseFragment {
 
         mTitle.setCustomViewMiddle(R.layout.view_tab_two);
 
-        SDTabItemCorner tabYouhui = (SDTabItemCorner) mTitle.findViewById(R.id.tab_0);
-        tabYouhui.setTabName("优惠商家");
-        tabYouhui.setmPosition(EnumTabPosition.FIRST);
-        tabYouhui.reverseDefaultConfig();
-
-        SDTabItemCorner tabAll = (SDTabItemCorner) mTitle.findViewById(R.id.tab_1);
+        SDTabItemCorner tabAll = (SDTabItemCorner) mTitle.findViewById(R.id.tab_0);
         tabAll.setTabName("全部商家");
-        tabAll.setmPosition(EnumTabPosition.LAST);
+        tabAll.setmPosition(EnumTabPosition.FIRST);
         tabAll.reverseDefaultConfig();
 
+        SDTabItemCorner tabYouhui = (SDTabItemCorner) mTitle.findViewById(R.id.tab_1);
+        tabYouhui.setTabName("优惠商家");
+        tabYouhui.setmPosition(EnumTabPosition.LAST);
+        tabYouhui.reverseDefaultConfig();
+
         SDViewNavigatorManager navigatorManager = new SDViewNavigatorManager();
-        navigatorManager.setItems(new SDViewBase[]{tabYouhui, tabAll});
+        navigatorManager.setItems(new SDViewBase[]{tabAll, tabYouhui});
         navigatorManager.setmListener(new SDViewNavigatorManagerListener() {
 
             @Override
             public void onItemClick(View v, int index) {
                 switch (index) {
                     case 0:
-                        getSDFragmentManager().toggle(R.id.view_container_fl_content, null, mFragYouhui);
+                        getSDFragmentManager().toggle(R.id.view_container_fl_content, null, mFragAll);
                         break;
                     case 1:
-                        getSDFragmentManager().toggle(R.id.view_container_fl_content, null, mFragAll);
+                        getSDFragmentManager().toggle(R.id.view_container_fl_content, null, mFragYouhui);
                         break;
 
                     default:
@@ -93,21 +90,16 @@ public class StoreListContainerFragment extends BaseFragment {
             }
         });
         navigatorManager.setSelectIndex(0, tabAll, true);
-        mTitle.initRightItem(2);
-        mTitle.getItemRight(0).setImageLeft(R.drawable.ic_location_home_top);
-        mTitle.getItemRight(1).setImageLeft(R.drawable.ic_search_home_top);
+        mTitle.initRightItem(1);
+        mTitle.getItemRight(0).setImageLeft(R.drawable.ic_search_home_top);
     }
 
     @Override
     public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
         switch (index) {
             case 0:
-                startNearbyMapSearchActivity();
-                break;
-            case 1:
                 startHomeSearchActivity();
                 break;
-
             default:
                 break;
         }

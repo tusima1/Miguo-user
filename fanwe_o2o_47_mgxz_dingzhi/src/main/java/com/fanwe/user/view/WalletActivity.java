@@ -154,6 +154,7 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
         }else if (v==mLL_DaiYan){
             //代言
             startActivity(WithdrawLogActivity.class);
+//            startActivity(RepresentIncomeActivity.class);
         }else if (v==mLL_Live){
             //直播
             MGToast.showToast("系统升级,敬请期待");

@@ -90,6 +90,9 @@
         </activity>
 
         <activity
+            android:name="com.fanwe.mine.views.RepresentIncomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.miguo.live.views.LiveStartAuthActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TransTheme" />
@@ -876,13 +879,6 @@
 
         <!-- 友盟分享start -->
         <!-- 分享内容编辑页 -->
-        <activity
-            android:name="com.umeng.socialize.view.ShareActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:noHistory="true"
-            android:theme="@style/Theme.UMDialog"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
 
         <!-- 微信第三方登录回调activity -->
         <activity
@@ -937,9 +933,6 @@
             </intent-filter>
         </activity>
         <!-- Required  SDK核心功能 -->
-        <service
-            android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false" />
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
