@@ -13,7 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -41,6 +43,7 @@ import com.fanwe.seller.model.getGroupDeatilNew.ImagesBean;
 import com.fanwe.seller.model.getGroupDeatilNew.ModelGoodsDetailNew;
 import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.seller.model.getGroupDeatilNew.ShopListBean;
+import com.fanwe.seller.model.getSpecialTopic.TagBean;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.seller.presenters.SellerNewHttpHelper;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
@@ -127,6 +130,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private WebView mWebDetailReason;//推荐理由
     private WebView mWebDetailTip;//温馨提示
     private View mStatusBar;//虚假状态栏
+    private LinearLayout mLLTags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +207,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mWebDetailDesc = ((WebView) findViewById(R.id.test_webView));
         mWebDetailReason = ((WebView) findViewById(R.id.webView_reason));
         mWebDetailTip = ((WebView) findViewById(R.id.webView_tip));
+        mLLTags = ((LinearLayout) findViewById(R.id.ll_tip_tags));
 
         //门店列表layout
         mShopListLayout = ((FrameLayout) findViewById(R.id.fl_container));
@@ -456,6 +461,28 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         bindShopList(shop_list);
 
         //温馨提示
+        List<TagBean> tag_list = modelGoodsDetailNew.getTag_list();
+        final int margin = DisplayUtil.dp2px(this, 5);
+        final int padding = DisplayUtil.dp2px(this, 1);
+        if (tag_list!=null && tag_list.size()>0){
+            for (int i = 0; i < tag_list.size(); i++) {
+                TagBean tagBean = tag_list.get(i);
+                TextView item=new TextView(this);
+                item.setBackgroundResource(R.drawable.shape_solid_f5b830_cricle_small);
+                item.setTextColor(Color.WHITE);
+                item.setTextSize(12);
+                item.setGravity(Gravity.CENTER);
+                item.setText(tagBean.getTitle());
+                item.setPadding(margin,padding,margin,padding);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup
+                        .LayoutParams.WRAP_CONTENT,ViewGroup
+                        .LayoutParams.WRAP_CONTENT);
+                layoutParams.gravity= Gravity.CENTER_VERTICAL;
+                layoutParams.setMargins(0,0,margin,0);
+                item.setLayoutParams(layoutParams);
+                mLLTags.addView(item);
+            }
+        }
         String notes = modelGoodsDetailNew.getNotes();
 //        mHtmlTipDesc.setTextSize(16);
 //        mHtmlTipDesc.setText(Html.fromHtml(notes));
