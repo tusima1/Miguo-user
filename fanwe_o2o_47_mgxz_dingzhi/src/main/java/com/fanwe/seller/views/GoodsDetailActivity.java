@@ -4,18 +4,20 @@ import android.animation.Animator;
 import android.animation.IntEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -30,7 +32,6 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.SScrollView;
-import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -51,13 +52,18 @@ import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.UIChars;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class GoodsDetailActivity extends Activity implements CallbackView2, View.OnClickListener {
+/**
+ * created by didikee
+ * 2016/10/20
+ */
+public class GoodsDetailActivity extends AppCompatActivity implements CallbackView2, View.OnClickListener {
     /**
      * 商品id (int)
      */
@@ -117,13 +123,22 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
     private ShoppingCartInfo mShoppingCartInfo;
     private String mTimeStatus;
     private WebView mWebDetailDesc;
+    private View mStatusBar;//虚假状态栏
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_goods_detail);
+        setBarStyle();
         init();
+
+    }
+    public void setBarStyle() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 设置状态栏透明
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     private void init() {
@@ -152,6 +167,7 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
         mIvTitleShare = ((ImageView) findViewById(R.id.iv_share));
         mIvTitleCollect = ((ImageView) findViewById(R.id.iv_collect));
         mTvTitleMiddle = ((TextView) findViewById(R.id.tv_middle));
+        mStatusBar = findViewById(R.id.status_bar);
 
         mVGTitle = findViewById(R.id.fr_top_title);
         mIvTitleLeft.setOnClickListener(this);
@@ -239,48 +255,27 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
                 final int height = mFLViewpagerHeight - mTitleHeight;
                 if (y <= 0) {   //设置标题的背景颜色
                     mVGTitle.setBackgroundColor(Color.argb((int) 0, 255,255,255));
+                    mTvTitleMiddle.setTextColor(Color.argb((int) 0, 46,46,46));
+                    mStatusBar.setBackgroundColor(Color.argb((int) 0, 204,204,204));
+
+                    mIvTitleLeft.setImageResource(R.drawable.ic_arrow_left_white);
+                    mIvTitleShare.setImageResource(R.drawable.ic_share_pure);
                 } else if (y > 0 && y <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
                     float scale = (float) y / height;
                     float alpha = (255 * scale);
                     mTvTitleMiddle.setTextColor(Color.argb((int) alpha, 46,46,46));
                     mVGTitle.setBackgroundColor(Color.argb((int) alpha, 255,255,255));
-                } else {    //滑动到banner下面设置普通颜色
-                    mVGTitle.setBackgroundColor(Color.argb((int) 255, 255,255,255));
-                }
-//                double fff = y * 1.0 / mFLViewpagerHeight;
-//                if (fff >= 0 && fff <= 1) {
-//                    int percent=(int) (fff * 100);
-//                    String alphaWhite;
-//                    if (fff *100<10){
-//                        alphaWhite="00";
-//                    }else {
-//                        alphaWhite= getAlphaWhite(percent);
-//                    }
-//                    int alphaWhiteColor = Color.parseColor("#"+alphaWhite + "FFFFFF");
-//                    mVGTitle.setBackgroundColor(alphaWhiteColor);
-//                    Log.e("test","percent:"+percent);
-//
-//                    if (mTvTitleMiddle.getVisibility()==View.VISIBLE){
-//                        //显示标题
-//                        mTvTitleMiddle.setVisibility(View.GONE);
-//                    }
-//
-//                } else {
-//                    if (mTvTitleMiddle.getVisibility()==View.GONE){
-//                        //显示标题
-//                        mTvTitleMiddle.setVisibility(View.VISIBLE);
-//                        mTvTitleMiddle.setTextColor(Color.DKGRAY);
-//                    }
-//                }
+                    mStatusBar.setBackgroundColor(Color.argb((int) alpha, 204,204,204));
 
-                //黑与白
-                boolean ViewPagerVisible = mSScrollView.isChildVisible(mFlViewpager);
-                if (ViewPagerVisible){
                     mIvTitleLeft.setImageResource(R.drawable.ic_arrow_left_white);
                     mIvTitleShare.setImageResource(R.drawable.ic_share_pure);
-                }else{
+                } else {    //滑动到banner下面设置普通颜色
+                    mVGTitle.setBackgroundColor(Color.argb((int) 255, 255,255,255));
+                    mTvTitleMiddle.setTextColor(Color.argb((int) 255, 46,46,46));
+                    mStatusBar.setBackgroundColor(Color.argb((int) 255, 204,204,204));
                     mIvTitleLeft.setImageResource(R.drawable.ic_left_arrow_dark);
                     mIvTitleShare.setImageResource(R.drawable.ic_share_dark);
+
                 }
 
                 //------------------------------------------------------------------
@@ -300,22 +295,6 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
 
             }
         });
-    }
-
-    private String getAlphaWhite(int percent) {
-        if (percent >= 100) {
-            percent = 100;
-        }
-        if (percent <= 0) {
-            percent = 0;
-        }
-        float temp = 255 * percent * 1.0f / 100f;
-        int round = Math.round(temp);//四舍五入
-        String hexString = Integer.toHexString(round);
-        if (hexString.length() < 2) {
-            hexString += "0";
-        }
-        return hexString;
     }
 
     private void initTopLayout() {
@@ -338,7 +317,8 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
         List<ImageView> data = new ArrayList<>();
         for (ImagesBean image : images) {
             ImageView imageView = new ImageView(this);
-            SDViewBinder.setImageView(image.getImage(),imageView);
+//            SDViewBinder.setImageView(image.getImage(),imageView);
+            imageView.setImageResource(R.drawable.bg_saber_q);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             data.add(imageView);
         }
@@ -362,12 +342,8 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
             public void onAnimationEnd(Animator animation) {
                 if (isOpen){
                     mTvLauncherName.setText("收起门店");
-//                    mIvShopArrow.clearAnimation();
-//                    mIvShopArrow.setImageResource(R.drawable.ic_arrow_up);
                 }else {
                     mTvLauncherName.setText("其他门店");
-//                    mIvShopArrow.clearAnimation();
-//                    mIvShopArrow.setImageResource(R.drawable.ic_arrow_down_dark);
                 }
             }
 
@@ -441,13 +417,6 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
     @Override
     protected void onResume() {
         super.onResume();
-//        if (TextUtils.isEmpty(GoodsId)){
-//            return;
-//        }
-//        if (mHttpHelper==null){
-//            mHttpHelper=new SellerNewHttpHelper(this);
-//        }
-//        mHttpHelper.getGroupBuyDetailNew(GoodsId);
     }
 
     private void bindData(ModelGoodsDetailNew modelGoodsDetailNew) {
@@ -465,13 +434,15 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
         mIbCollect = ((ImageButton) findViewById(R.id.ib_collect));
 
         mTvTitleMiddle.setText(modelGoodsDetailNew.getShort_name());//短Title
+        mTvTitleMiddle.setTextColor(Color.argb( 255, 46,46,46));
         mTvTopTitle.setText(modelGoodsDetailNew.getName());//Title
         mTvTopHot.setText(modelGoodsDetailNew.getPopularity());//人气值
 
         String origin_price = modelGoodsDetailNew.getOrigin_price();//原价
         String tuan_price = modelGoodsDetailNew.getTuan_price();//团购价
         String tuan_price_with_unit = modelGoodsDetailNew.getTuan_price_with_unit();//99元/人/张
-        mTvTopYouHui.setText(tuan_price_with_unit);
+        String rmb = UIChars.getUIChar(UIChars.RMB);
+        mTvTopYouHui.setText(rmb+tuan_price_with_unit);
 
         //bind bottom(底部悬浮)
         mTvOldMoney.setText(origin_price);
@@ -679,12 +650,12 @@ public class GoodsDetailActivity extends Activity implements CallbackView2, View
     public void addGoodsToShoppingPacket(boolean isGoToShoppingCart) {
         String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
         String cart_type = "1";
-        String add_goods_num = "1";
+        mNumber= mNumber<1 ? 1:mNumber;
         if (mShoppingCartHelper != null) {
             if (isGoToShoppingCart){
-                mShoppingCartHelper.addToShoppingCart("", "", lgn_user_id, GoodsId, cart_type, add_goods_num);
+                mShoppingCartHelper.addToShoppingCart("", fx_id, lgn_user_id, GoodsId, cart_type, mNumber+"");
             }else {
-                mShoppingCartHelper.addToShoppingCart2("", "", lgn_user_id, GoodsId, cart_type, add_goods_num);
+                mShoppingCartHelper.addToShoppingCart2("", fx_id, lgn_user_id, GoodsId, cart_type, mNumber+"");
             }
         }
     }

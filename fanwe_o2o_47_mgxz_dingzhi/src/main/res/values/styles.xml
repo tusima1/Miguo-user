@@ -143,4 +143,11 @@
         <item name="android:button">@drawable/circle_checkbox</item>
     </style>
 
+    <style name="Transparent_title_area" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryDark">@color/dark_text</item>
+        <item name="colorAccent">@color/bg_activity_gray</item>
+    </style>
+
 </resources>

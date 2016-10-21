@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context="com.fanwe.seller.views.GoodsDetailActivity">
 
     <com.fanwe.customview.SScrollView
@@ -54,57 +53,69 @@
 
         </LinearLayout>
     </com.fanwe.customview.SScrollView>
-    <FrameLayout
-        android:id="@+id/fr_top_title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"
-        android:background="@color/transparent"
-        android:layout_alignParentTop="true">
-        <ImageView
-            android:id="@+id/iv_left"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_arrow_left_white"
-            android:layout_gravity="center_vertical"
-            android:scaleType="centerInside"
-            />
-        <TextView
-            android:id="@+id/tv_middle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Title is center"
-            android:textColor="@color/dark_text"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:lines="1"
-            android:textSize="@dimen/sp16"
-            android:visibility="invisible"
-            />
-
-        <ImageView
-            android:id="@+id/iv_collect"
-            android:visibility="invisible"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_collect_no"
-            android:scaleType="centerInside"
-            android:layout_gravity="right"
-            android:layout_marginRight="@dimen/dp48"/>
-
-        <ImageView
-            android:id="@+id/iv_share"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_share_pure"
-            android:layout_gravity="right"
-            android:scaleType="centerInside"/>
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
         <View
+            android:id="@+id/status_bar"
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray_cc"
-            android:layout_gravity="bottom"/>
-    </FrameLayout>
+            android:layout_height="@dimen/dp23"
+            android:background="@color/transparent"
+            />
+        <FrameLayout
+            android:id="@+id/fr_top_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:background="@color/transparent"
+            android:layout_alignParentTop="true">
+            <ImageView
+                android:id="@+id/iv_left"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_arrow_left_white"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                />
+            <TextView
+                android:id="@+id/tv_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Title is center"
+                android:textColor="@color/dark_text"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:lines="1"
+                android:textSize="@dimen/sp16"
+                />
+
+            <ImageView
+                android:id="@+id/iv_collect"
+                android:visibility="invisible"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_collect_no"
+                android:scaleType="centerInside"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/dp48"/>
+
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_share_pure"
+                android:layout_gravity="right"
+                android:scaleType="centerInside"/>
+
+            <!--<View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gray_cc"
+                android:layout_gravity="bottom"/>-->
+        </FrameLayout>
+    </LinearLayout>
+
 
     <include layout="@layout/item_goodsdetail_bottom" android:id="@+id/layout_bottom"/>
 
