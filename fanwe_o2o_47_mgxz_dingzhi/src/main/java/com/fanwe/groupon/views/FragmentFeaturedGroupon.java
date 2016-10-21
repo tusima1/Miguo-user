@@ -18,6 +18,7 @@ import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
 import com.fanwe.groupon.presenters.GrouponHttpHelper;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.AppRuntimeWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,9 @@ public class FragmentFeaturedGroupon extends Fragment implements CallbackView {
     private boolean isRefresh = true;
     private int pageNum = 1;
     private int pageSize = 10;
+    private String keyword;
+    private String m_longitude;
+    private String m_latitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +48,6 @@ public class FragmentFeaturedGroupon extends Fragment implements CallbackView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_featured_groupon, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_frag_featured_groupon);
-        getData();
         setView();
         return view;
     }
@@ -53,22 +56,42 @@ public class FragmentFeaturedGroupon extends Fragment implements CallbackView {
         if (grouponHttpHelper == null) {
             grouponHttpHelper = new GrouponHttpHelper(getActivity(), this);
         }
-        grouponHttpHelper.getFeaturedGroupBuy("", "", "", "", "", "");
+        grouponHttpHelper.getFeaturedGroupBuy(AppRuntimeWorker.getCity_id(), String.valueOf(pageNum), String.valueOf(pageSize), keyword, m_longitude, m_latitude);
     }
 
     private void setView() {
         mGrouponFeaturedAdapter = new GrouponFeaturedAdapter(getActivity(), datas);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mGrouponFeaturedAdapter);
     }
 
-    public void refresh() {
+    public void setData(List<ModelFeaturedGroupBuy> models) {
+        datas.clear();
+        datas.addAll(models);
+        if (mGrouponFeaturedAdapter != null)
+            mGrouponFeaturedAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 刷新数据
+     */
+    public void refresh() {
+        isRefresh = true;
+        pageNum = 1;
+        getData();
+    }
+
+    /**
+     * 加载更多数据
+     */
     public void loadMore() {
+        isRefresh = false;
+        if (!SDCollectionUtil.isEmpty(items)) {
+            pageNum++;
+        }
+        getData();
     }
 
     @Override

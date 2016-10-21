@@ -63,7 +63,7 @@ public class GrouponFeaturedAdapter extends RecyclerView.Adapter<GrouponFeatured
                 MGToast.showToast(currBean.getName());
             }
         });
-        mViewHolder.tvOriginal.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        mViewHolder.tvOriginal.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         ImageLoader.getInstance().displayImage(currBean.getImg(), mViewHolder.image);
         SDViewBinder.setTextView(mViewHolder.tvName, currBean.getName(), "");
         //位置信息
