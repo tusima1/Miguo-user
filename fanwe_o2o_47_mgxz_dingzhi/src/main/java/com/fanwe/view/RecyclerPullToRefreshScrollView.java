@@ -2,7 +2,6 @@ package com.fanwe.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;

@@ -191,9 +191,13 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 点击礼物
      */
     private void clickGift() {
-        if (giftPopHelper == null) {
-            giftPopHelper = new UserSendGiftPopHelper(mAct, "1");
-        }
+        giftPopHelper = new UserSendGiftPopHelper(mAct, "1");
+//        if (giftPopHelper == null) {
+//            giftPopHelper = new UserSendGiftPopHelper(mAct, "1");
+//        }else {
+//            //每次都刷新呗
+//            giftPopHelper.refreshGift();
+//        }
         giftPopHelper.show();
         giftPopHelper.setOnPayGiftSuccessListener(new OnPayGiftSuccessListener() {
             @Override

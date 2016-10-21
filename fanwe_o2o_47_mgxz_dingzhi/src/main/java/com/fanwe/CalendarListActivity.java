@@ -148,7 +148,7 @@ public class CalendarListActivity extends BaseActivity implements OnDaySelectLis
 
 	private String getMon(int nowMon) 
 	{
-		String month="";
+		String month;
 		if(nowMon < 10){
 			month="0"+nowMon;
 		}else{

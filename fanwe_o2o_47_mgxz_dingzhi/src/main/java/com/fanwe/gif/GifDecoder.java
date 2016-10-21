@@ -474,7 +474,7 @@ public class GifDecoder
 		{
 			try
 			{
-				int count = 0;
+				int count;
 				while (n < blockSize)
 				{
 					count = in.read(block, n, blockSize - n);

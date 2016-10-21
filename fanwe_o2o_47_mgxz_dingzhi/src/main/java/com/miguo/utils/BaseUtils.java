@@ -51,7 +51,7 @@ public class BaseUtils {
 
     public static String getNumberWithFriendWay(int count){
         DecimalFormat df = new DecimalFormat("0.0");
-        String number = "";
+        String number;
         if(count < 1000){
             number = count + "";
         }else if (count<10000) {

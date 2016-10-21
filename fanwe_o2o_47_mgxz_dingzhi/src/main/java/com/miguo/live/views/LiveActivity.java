@@ -239,6 +239,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     mUserBottomTool.refreshGift();
                 }
                 break;
+            case FOCUS_CHANGE_YES:
+                if (mUserHeadTopView!=null){
+                    mUserHeadTopView.setFocusStatus(true);
+                }
+                break;
+            case FOCUS_CHANGE_NO:
+                if (mUserHeadTopView!=null){
+                    mUserHeadTopView.setFocusStatus(false);
+                }
+                break;
             default:
                 break;
         }
@@ -2321,18 +2331,21 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             case GiftId.FLOWER:
             case GiftId.SWEET:
             case GiftId.MIGUO_BABY:
+
+            case GiftId.KISS:
+            case GiftId.GOOD_FORTUNE:
                 showSmallGift(bean);
                 break;
             /**
              * 么么哒 屏幕随机出现
              * 福气临门 屏幕中心出现，慢慢消失
              */
-            case GiftId.KISS:
-                showRandomGift(bean);
-                break;
-            case GiftId.GOOD_FORTUNE:
-                showRedPacket(bean);
-                break;
+//            case GiftId.KISS:
+//                showRandomGift(bean);
+//                break;
+//            case GiftId.GOOD_FORTUNE:
+//                showRedPacket(bean);
+//                break;
             /**
              * 大礼物，动图序列帧
              */

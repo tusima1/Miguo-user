@@ -61,9 +61,15 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
     @Override
     protected void doThings(RecyclerView.ViewHolder holder, int position) {
         setNormalPriceText(holder, position);
+<<<<<<< HEAD
         getHolder(holder).freeReservation.setVisibility(TextUtils.isEmpty(getItem(position).getTuan_property_name().trim()) ? View.GONE : View.VISIBLE);
 
+=======
+        getHolder(holder).freeReservation.setVisibility(TextUtils.isEmpty(trim(getItem(position).getTuan_property_name())) ? View.GONE : View.VISIBLE);
+>>>>>>> remotes/origin/master
     }
+
+
 
     private void setNormalPriceText(RecyclerView.ViewHolder holder, int position) {
         getHolder(holder).normalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);

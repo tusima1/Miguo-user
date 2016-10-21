@@ -44,7 +44,6 @@ public class InitBusinessHelper {
     private static TLSLoginHelper mLoginHelper;
     private static TLSAccountHelper mAccountHelper;
     private static String appVer = "1.0";
-    private static QavsdkControl mQavsdkControl = null;
 
 
     /**

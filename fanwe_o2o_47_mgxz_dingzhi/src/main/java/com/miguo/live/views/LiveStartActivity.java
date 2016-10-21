@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.LoginActivity;
@@ -32,7 +31,6 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.IntentKey;
-import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -270,7 +268,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                         List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
                         if (modelApplyRooms != null && modelApplyRooms.size() > 0 && modelApplyRooms.get(0) != null) {
                             String room_id = modelApplyRooms.get(0).getRoom_id();
-                            Integer roomId = -1;
+                            Integer roomId;
                             try {
                                 roomId = Integer.valueOf(room_id);
                             } catch (Exception e) {

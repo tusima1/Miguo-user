@@ -76,7 +76,7 @@ public class InterfaceServer
 			if (model != null)
 			{
 				RequestParams requestParams = getRequestParams(model);
-				RequestCallBack<String> listener = null;
+				RequestCallBack<String> listener;
 				if (isNeedProxy)
 				{
 					listener = getDefaultProxy(responseListener, model);

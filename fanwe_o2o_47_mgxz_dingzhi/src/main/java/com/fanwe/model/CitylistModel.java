@@ -46,7 +46,7 @@ public class CitylistModel implements Serializable {
     }
 
     private void findSortLetters() {
-        String firstLetters = null;
+        String firstLetters;
         if (!TextUtils.isEmpty(py) && py.length() > 1) {
             firstLetters = py.substring(0, 1).toUpperCase();
         } else {

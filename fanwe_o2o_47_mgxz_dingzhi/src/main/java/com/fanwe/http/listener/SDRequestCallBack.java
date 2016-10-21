@@ -33,7 +33,7 @@ public abstract class SDRequestCallBack<E> extends RequestCallBack<String>
 		this.responseInfo = responseInfo;
 
 		// 获得泛型class，并将json解析成实体
-		Class<E> clazz = null;
+		Class<E> clazz;
 		Type type = SDOtherUtil.getType(getClass(), 0);
 		if (type instanceof Class)
 		{

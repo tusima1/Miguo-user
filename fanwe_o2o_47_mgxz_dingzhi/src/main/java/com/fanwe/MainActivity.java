@@ -125,12 +125,12 @@ public class MainActivity extends BaseActivity implements CallbackView {
         setContentView(R.layout.act_main);
         mLoginHelper = new LoginHelper(MainActivity.this);
         liveHttpHelper = new LiveHttpHelper(this, this);
-
         init();
     }
 
     private void init() {
-        startUpgradeService();
+        //检测更新
+        startService(new Intent(MainActivity.this, AppUpgradeService.class));
         initBottom();
         JpushHelper.initJPushConfig();
 //        MessageHelper.updateMessageCount();
@@ -217,7 +217,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
             }
         }
     }
-
     public void showDialogLogin() {
         final GetDiamondLoginDialog dialog = new GetDiamondLoginDialog(MainActivity.this);
         dialog.setSubmitListener(new View.OnClickListener() {
@@ -240,10 +239,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
         // 初始化上次的cityID
         preHomeCityID = AppRuntimeWorker.getCity_id();
         umengTag = "首页";
-    }
-
-    private void startUpgradeService() {
-        startService(new Intent(MainActivity.this, AppUpgradeService.class));
     }
 
     private void initBottom() {
@@ -670,8 +665,10 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
                         if (room.getHost() != null) {
                             if (!TextUtils.isEmpty(room.getHost().getUid())) {
+                                //提示用户直播结束，跳转到网红主页
                                 Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
                                 intent.putExtra("id", room.getHost().getUid());
+                                intent.putExtra("toastContent", "直播已结束，钻石发放失败");
                                 startActivity(intent);
                                 return;
                             }
@@ -682,7 +679,6 @@ public class MainActivity extends BaseActivity implements CallbackView {
                     return;
                 }
             } else {
-//                MGToast.showToast("领取码无效");
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

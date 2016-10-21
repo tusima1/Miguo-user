@@ -10,7 +10,7 @@ public class ModelWithdrawLog {
      * bank_user : 开户人姓名
      * wd_time : 提现时间
      * user_id :  //用户id
-     * wd_status : 1 //提现状态，1未提现，2提现成功，3提现失败',
+     * wd_status : 1 //提现状态 1审核中，2提现成功，3未通过'
      * bank_name : 开户行名称
      * apply_time : 1472117719024 申请时间
      * id : //

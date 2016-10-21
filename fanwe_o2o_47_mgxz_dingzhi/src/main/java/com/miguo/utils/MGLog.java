@@ -211,7 +211,7 @@ public final class MGLog {
         if (Log.DEBUG > DEBUG_LEVEL) {
             String tag = getClassName();
             String method = callMethodAndLine();
-            String content = "";
+            String content;
             if (object != null) {
                 content = object.toString() + "                    ----    "
                         + method;
@@ -234,7 +234,7 @@ public final class MGLog {
         if (Log.ERROR > DEBUG_LEVEL) {
             String tag = getClassName();
             String method = callMethodAndLine();
-            String content = "";
+            String content;
             if (object != null) {
                 content = object.toString() + "                    ----    "
                         + method;
@@ -274,7 +274,7 @@ public final class MGLog {
         if (Log.DEBUG > DEBUG_LEVEL) {
             String tag = "MYLOG";
             String method = callMethodAndLine();
-            String content = "";
+            String content;
             if (object != null) {
                 content = object.toString() + "                    ----    "
                         + method;
@@ -300,7 +300,7 @@ public final class MGLog {
     }
 
     private static String getClassName() {
-        String result = "";
+        String result;
         StackTraceElement thisMethodStack = (new Exception()).getStackTrace()[2];
         result = thisMethodStack.getClassName();
         return result;

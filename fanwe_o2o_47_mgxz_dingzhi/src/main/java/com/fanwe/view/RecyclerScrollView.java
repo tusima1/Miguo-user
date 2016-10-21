@@ -26,6 +26,7 @@ public class RecyclerScrollView extends ScrollView{
     int moveY = 0;
     int halfScreenHeight = 0;
     int screenHeight = 0;
+    String tag = RecyclerScrollView.this.getClass().getSimpleName();
 
     public RecyclerScrollView(Context context) {
         super(context);
@@ -42,7 +43,6 @@ public class RecyclerScrollView extends ScrollView{
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-//        return super.onInterceptTouchEvent(ev);
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
                 downX = (int)ev.getRawX();
@@ -66,6 +66,19 @@ public class RecyclerScrollView extends ScrollView{
         return super.onInterceptTouchEvent(ev);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Log.d(tag, "recycler scroll view action down..");
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                getParent().requestDisallowInterceptTouchEvent(false);
+                break;
+        }
+        return super.onTouchEvent(ev);
+    }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -83,7 +96,7 @@ public class RecyclerScrollView extends ScrollView{
                 }
             }
         }
-        Log.d("HomeScrollView", "l: " + l + " ,t: " + t + " ,oldl: " + oldl + " ,oldt: " + oldt + " ,top: " + getTop() + " ,child measured  height: " + getChildAt(0).getMeasuredHeight() + " show height: " + (getMeasuredHeight() + t));
+//        Log.d("HomeScrollView", "l: " + l + " ,t: " + t + " ,oldl: " + oldl + " ,oldt: " + oldt + " ,top: " + getTop() + " ,child measured  height: " + getChildAt(0).getMeasuredHeight() + " show height: " + (getMeasuredHeight() + t));
         setCurrentTop(t);
         super.onScrollChanged(l, t, oldl, oldt);
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
+import com.miguo.live.model.userFocus.RootUserFocus;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.customviews.MaxHeightGridView;
@@ -153,10 +155,11 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
     }
 
+    ArrayList<RootUserFocus> roots;
 
     @Override
     public void onSuccess(String method, List datas) {
-        if(callbackView2 != null){
+        if (callbackView2 != null) {
             callbackView2.onSuccess(method, datas);
         }
         Message message = new Message();
@@ -172,7 +175,17 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                 }
             }
         } else if (LiveConstants.USER_FOCUS.equals(method)) {
-            message.what = 1;
+            //判断用户关注成功与否
+            roots = (ArrayList<RootUserFocus>) datas;
+            if (!SDCollectionUtil.isEmpty(roots)) {
+                RootUserFocus rootUserFocus = roots.get(0);
+                if ("200".equals(rootUserFocus.getStatusCode())) {
+                    message.what = 1;
+                } else {
+                    if (!TextUtils.isEmpty(roots.get(0).getMessage()))
+                        MGToast.showToast(roots.get(0).getMessage());
+                }
+            }
         } else if (LiveConstants.AUDIENCE_COUNT.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 ModelAudienceCount bean = (ModelAudienceCount) datas.get(0);

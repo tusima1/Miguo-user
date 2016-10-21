@@ -19,6 +19,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -44,6 +45,7 @@ import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.NetWorkStateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.sunday.eventbus.SDEventManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -61,6 +63,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;
+    private String toastContent;
     private RecyclerView recyclerViewShop;
     private MyGridView gridViewLive;
     private CircleImageView circleImageView;
@@ -69,6 +72,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private List<String> imgsProduct = new ArrayList<>();
     private List<ModelSpokePlay> datasLive = new ArrayList<>();
     private RelativeLayout layoutShopEmpty, layoutLiveEmpty;
+    private String nick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +120,10 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         if (TextUtils.isEmpty(id)) {
             id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
         }
+        toastContent = getIntent().getStringExtra("toastContent");
+        if (!TextUtils.isEmpty(toastContent)) {
+            MGToast.showToast(toastContent);
+        }
     }
 
     private void initTitle() {
@@ -145,8 +153,11 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
             imageUrl = MGDictUtil.getShareIcon();
         }
-        UmengShareManager.share(this, "分享", "网红主页", ServerUrl.SERVER_H5 + "index/winnie/id/" + id,
-                UmengShareManager.getUMImage(this, imageUrl), null);
+        String title = "精彩推荐";
+        if (!TextUtils.isEmpty(nick)) {
+            title = nick + "的精彩推荐";
+        }
+        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", ServerUrl.SERVER_H5 + "index/winnie/id/" + id, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 
     ImageAdapter adapterShop;
@@ -339,6 +350,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                     //个人信息
                     if (!SDCollectionUtil.isEmpty(itemsPerson)) {
                         currModelPersonHomePage = itemsPerson.get(0);
+                        nick = currModelPersonHomePage.getNick();
                         SDViewBinder.setTextView(tvName, currModelPersonHomePage.getNick(), "");
                         SDViewBinder.setTextView(tvAttention, currModelPersonHomePage.getFocus(), "");
                         SDViewBinder.setTextView(tvFans, currModelPersonHomePage.getFans(), "");
@@ -412,12 +424,16 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                         //操作后与该对象的状态1：未关注 2：已关注 3：互相关注
                         if ("1".equals(modelAttention.getAttention_status())) {
                             tvAttentionStatus.setText("+ 关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_NO.ordinal());
                         } else if ("2".equals(modelAttention.getAttention_status())) {
                             tvAttentionStatus.setText("已关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_YES.ordinal());
                         } else if ("3".equals(modelAttention.getAttention_status())) {
                             tvAttentionStatus.setText("已关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_YES.ordinal());
                         } else {
                             tvAttentionStatus.setText("+ 关注");
+                            SDEventManager.post(EnumEventTag.FOCUS_CHANGE_NO.ordinal());
                         }
                     }
                     break;

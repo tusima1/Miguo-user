@@ -333,7 +333,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
                 List<ModelApplyRoom> modelApplyRooms = resultApplyRoom.getBody();
                 if (modelApplyRooms != null && modelApplyRooms.size() > 0 && modelApplyRooms.get(0) != null) {
                     String room_id = modelApplyRooms.get(0).getRoom_id();
-                    Integer roomId = -1;
+                    Integer roomId;
                     try {
                         roomId = Integer.valueOf(room_id);
                     } catch (Exception e) {

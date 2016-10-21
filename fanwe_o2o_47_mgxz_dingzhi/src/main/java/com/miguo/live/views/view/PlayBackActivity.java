@@ -197,17 +197,26 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         }.getType();
         Gson gson = new Gson();
         List<PlaySetInfo> playSetInfoList = gson.fromJson(playset, listType);
+        if(playSetInfoList==null||playSetInfoList.size()<1){
+            playError();
+            return;
+        }
         for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext(); ) {
             PlaySetInfo o = (PlaySetInfo) iterator.next();
             playUrlList.put(o.getDefinition(), o);
         }
          currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
         if (currentPlayInfo == null) {
-            showInvalidateToast("网络有问题或者当前点播地址错误。");
-            finish();
+            playError();
+            return;
         }
         playUrl = currentPlayInfo.getUrl();
         changeOrientation();
+    }
+
+    private void playError(){
+        showInvalidateToast("网络有问题或者当前点播地址错误。");
+        finish();
     }
 
 
@@ -405,7 +414,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         if (TextUtils.isEmpty(message)) {
             message = defaultMessage;
         }
-        SDToast.showToast(message, Toast.LENGTH_SHORT);
+        SDToast.showToast(message, Toast.LENGTH_LONG);
 
 
     }

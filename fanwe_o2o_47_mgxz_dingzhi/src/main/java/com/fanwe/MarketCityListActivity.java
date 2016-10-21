@@ -248,7 +248,7 @@ public class MarketCityListActivity extends BaseActivity {
     }
 
     private void initTitle() {
-        String title = null;
+        String title;
         String city = AppRuntimeWorker.getCity_name();
         if (TextUtils.isEmpty(city)) {
             title = "城市列表";

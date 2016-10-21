@@ -18,6 +18,8 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHostAuthTime.ModelHostAuthTime;
+import com.miguo.live.model.getHostAuthTime.ResultHostAuthTime;
+import com.miguo.live.model.getHostAuthTime.RootHostAuthTime;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 
@@ -94,16 +96,34 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.HOST_AUTH_TIME.equals(method)) {
-            if (!SDCollectionUtil.isEmpty(datas)) {
-                long currTime = System.currentTimeMillis();
-                modelHostAuthTime = (ModelHostAuthTime) datas.get(0);
-                tempTime = currTime - Long.valueOf(modelHostAuthTime.getInsert_time());
-                Message msg = new Message();
-                msg.what = 0;
-                mHandler.sendMessage(msg);
+            List<RootHostAuthTime> roots = datas;
+            if (!SDCollectionUtil.isEmpty(roots)) {
+                RootHostAuthTime root = roots.get(0);
+                if ("200".equals(root.getStatusCode())) {
+                    //正常
+                    List<ResultHostAuthTime> resultHostAuthTimes = root.getResult();
+                    if (!SDCollectionUtil.isEmpty(resultHostAuthTimes)) {
+                        ResultHostAuthTime resultHostAuthTime = resultHostAuthTimes.get(0);
+                        List<ModelHostAuthTime> modelHostAuthTimes = resultHostAuthTime.getBody();
+                        if (!SDCollectionUtil.isEmpty(modelHostAuthTimes)) {
+                            long currTime = System.currentTimeMillis();
+                            modelHostAuthTime = modelHostAuthTimes.get(0);
+                            tempTime = currTime - Long.valueOf(modelHostAuthTime.getInsert_time());
+                            Message msg = new Message();
+                            msg.what = 0;
+                            mHandler.sendMessage(msg);
+                        }
+                    }
+                } else if ("365".equals(root.getStatusCode())) {
+                    //申请被拒绝
+                    Message msg = new Message();
+                    msg.what = 1;
+                    mHandler.sendMessage(msg);
+                } else {
+                    //请求失败
+                }
             }
         }
-
     }
 
     @Override
@@ -120,11 +140,16 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
                         startActivity(new Intent(LiveStartAuthActivity.this, LiveStartActivity.class));
                         finish();
                     } else {
-                        // 设置开始讲时时间
+                        // 设置开始时间
                         chronometer.setBase(SystemClock.elapsedRealtime() - tempTime);
                         // 开始记时
                         chronometer.start();
                     }
+                    break;
+                case 1:
+                    MGToast.showToast("申请被拒绝");
+                    startActivity(new Intent(LiveStartAuthActivity.this, LiveAuthActivity.class));
+                    finish();
                     break;
             }
         }
