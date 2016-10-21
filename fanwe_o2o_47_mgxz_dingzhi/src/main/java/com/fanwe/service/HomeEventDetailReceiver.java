@@ -10,11 +10,11 @@ import android.util.Log;
 import com.fanwe.DaiYanStoreWapActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.MyMessageActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.jpush.MessageHelper;
+import com.miguo.app.HiShopDetailActivity;
 import com.fanwe.seller.views.GoodsDetailActivity;
 
 import org.json.JSONException;
@@ -118,7 +118,7 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 				return;
 			}
 			bundle.putInt("extra_merchant_id", object_id);
-			startActivity(context, StoreDetailActivity.class, bundle);
+			startActivity(context, HiShopDetailActivity.class, bundle);
 		} else if (JPushType.LIMIT_SALE.equals(act)) {
 			// 限时特卖
 

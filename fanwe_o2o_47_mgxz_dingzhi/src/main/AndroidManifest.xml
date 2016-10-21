@@ -177,6 +177,18 @@
                 <data android:scheme="miguoxiaozhan" />
             </intent-filter>
         </activity>
+
+
+        <!--android:name="com.miguo.app.HiShopDetailActivity-->
+
+        <!-- 新主界面 -->
+        <activity
+            android:name="com.miguo.app.HiHomeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 商品管理 -->
         <activity
             android:name="com.fanwe.DistributionCommodityManagementActivity"
@@ -811,6 +823,23 @@
         <activity
             android:name="com.miguo.live.views.view.PlayBackActivity"
             android:screenOrientation="portrait"/>
+
+
+
+        <activity android:name="com.miguo.live.views.view.PlayBackActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <!--新商家详情  -->
+        <activity
+            android:theme="@style/AppTheme"
+            android:name="com.miguo.app.HiShopDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+
 
         <!-- 升级服务 -->
         <service android:name="com.fanwe.service.AppUpgradeService" />

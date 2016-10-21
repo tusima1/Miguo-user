@@ -22,7 +22,6 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.fanwe.EventDetailActivity;
 import com.fanwe.RouteInformationActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.baidumap.BaiduMapManager;
@@ -31,6 +30,8 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
+import com.miguo.app.HiShopDetailActivity;
+import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MapSearchBaseModel;
 import com.fanwe.model.RequestModel;
@@ -183,7 +184,7 @@ public class MapSearchFragment extends BaseBaiduMapFragment
 	/**
 	 * 根据type获取类型图标
 	 * 
-	 * @param type
+	 * @param
 	 * @return
 	 */
 	private BitmapDescriptor getMark()
@@ -258,8 +259,8 @@ public class MapSearchFragment extends BaseBaiduMapFragment
 						intent.setClass(getActivity(), GoodsDetailActivity.class);
 						break;
 					case SearchTypeMap.STORE:
-						intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
-						intent.setClass(getActivity(), StoreDetailActivity.class);
+						intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+						intent.setClass(getActivity(), HiShopDetailActivity.class);
 						break;
 
 					default:

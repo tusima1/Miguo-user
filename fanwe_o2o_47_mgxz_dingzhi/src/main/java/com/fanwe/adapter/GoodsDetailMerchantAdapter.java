@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.utils.SDIntentUtil;
@@ -17,6 +16,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
@@ -80,8 +80,8 @@ public class GoodsDetailMerchantAdapter extends SDSimpleBaseAdapter<StoreModel>
 				if (model != null && mActivity != null)
 				{
 					Intent intent = new Intent();
-					intent.setClass(App.getApplication(), StoreDetailActivity.class);
-					intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+					intent.setClass(App.getApplication(), HiShopDetailActivity.class);
+					intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
 					mActivity.startActivity(intent);
 				}
 			}

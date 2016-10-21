@@ -1,23 +1,25 @@
-package com.miguo.live.views.view;
+package com.miguo.app;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.fanwe.app.App;
-import com.miguo.live.views.category.Category;
+import com.fanwe.work.SystemBarTintManager;
+import com.miguo.category.Category;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.utils.ToasUtil;
 
-
 /**
- * Created by 狗蛋哥 on 16/3/7.
+ * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class HiBaseActivity extends AppCompatActivity {
+
+    protected Category category;
 
     /**
      * 是否按两次返回退出程序
@@ -39,18 +41,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected App app;
 
-    /**
-     *
-     *
-     */
-
-    protected Category category;
-
     protected boolean isSavedInstanceStateNull = false;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isSavedInstanceStateNull = savedInstanceState == null ? true : false;
         init();
@@ -68,29 +62,29 @@ public abstract class BaseActivity extends AppCompatActivity {
      * Activity初始化操作
      */
     protected void init(){
-//        SmartBarUtils.hide(this, getWindow(), SmartBarUtils.SMART_BAR_HEIGH);
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//            this.requestWindowFeature(Window.N);
+
         }
 //        setBar(R.color.status_bar);
+        setBar(android.R.color.transparent);
         setActivityParams();
         setContentView();
         initApp();
-        initCategory();
+        category = initCategory();
     }
 
-    public void setContentView(View view){
-        super.setContentView(view);
-    }
+
 
     private void setBar(int resColor){
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            setTranslucentStatus(true);
-//        }
-//
-//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-//        tintManager.setStatusBarTintEnabled(false);
-//        tintManager.setStatusBarTintResource(resColor);//通知栏所需颜色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(false);
+        tintManager.setStatusBarTintResource(resColor);//通知栏所需颜色
     }
 
     private void setTranslucentStatus(boolean on) {
@@ -113,7 +107,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * UI绑定/监听器初始化/UI设置监听
      */
-    protected abstract void initCategory();
+    protected abstract Category initCategory();
 
     /**
      * Activity初始化前的一些基础参数
@@ -157,7 +151,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         System.gc();
-        getCategory().destory();
+        if(getCategory() != null){
+            getCategory().destory();
+        }
         doOnDestory();
     }
 
@@ -184,14 +180,16 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        /**按两次后退出程序*/
-        if(keyDownToCloseActivity){
-            keyDown2CloseApplication();
-            return true;
-        }
-        /**按一次后退出Activity*/
-        if(!keyDownToCloseActivity){
-            finishActivity();
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            /**按两次后退出程序*/
+            if(keyDownToCloseActivity){
+                keyDown2CloseApplication();
+                return true;
+            }
+            /**按一次后退出Activity*/
+            if(!keyDownToCloseActivity){
+                finishActivity();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -230,7 +228,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 获取Category
      */
-    public Category getCategory(){
+    protected Category getCategory(){
         return category;
     }
 
@@ -253,4 +251,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean isSavedInstanceStateNull() {
         return isSavedInstanceStateNull;
     }
+
+
 }

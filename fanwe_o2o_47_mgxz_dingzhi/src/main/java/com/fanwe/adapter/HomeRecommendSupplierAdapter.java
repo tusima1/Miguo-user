@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
@@ -18,6 +17,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.StoreModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
 
 public class HomeRecommendSupplierAdapter extends SDBaseAdapter<StoreModel>
 {
@@ -53,8 +53,8 @@ public class HomeRecommendSupplierAdapter extends SDBaseAdapter<StoreModel>
 				@Override
 				public void onClick(View v)
 				{
-					Intent intent = new Intent(App.getApplication(), StoreDetailActivity.class);
-					intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+					Intent intent = new Intent(App.getApplication(), HiShopDetailActivity.class);
+					intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
 					mActivity.startActivity(intent);
 				}
 			});

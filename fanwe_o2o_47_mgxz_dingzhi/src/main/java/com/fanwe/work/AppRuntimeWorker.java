@@ -13,7 +13,6 @@ import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.ScoresListActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.StoreListActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.TuanListActivity;
@@ -37,8 +36,9 @@ import com.fanwe.model.InitActNewslistModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.QuansModel;
-import com.fanwe.seller.views.GoodsDetailActivity;
+import com.miguo.app.HiShopDetailActivity;
 import com.sunday.eventbus.SDEventManager;
+import com.fanwe.seller.views.GoodsDetailActivity;
 
 import java.util.List;
 
@@ -444,8 +444,8 @@ public class AppRuntimeWorker {
                 break;
             case IndexType.STORE_DETAIL:
                 if (data != null) {
-                    intent = new Intent(App.getApplication(), StoreDetailActivity.class);
-                    intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, data.getData_id());
+                    intent = new Intent(App.getApplication(), HiShopDetailActivity.class);
+                    intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, data.getData_id());
                 }
                 break;
             case IndexType.NOTICE_DETAIL:

@@ -64,8 +64,10 @@
     <color name="orange">#ff6600</color>
     <color name="dark_80">#CC000000</color>
     <color name="dark_20">#33000000</color>
-
+    <color name="black_60">#46000000</color>
     <color name="gray_cc">#CCCCCC</color>
+    <color name="gray_f0">#f0f0f0</color>
+    <color name="gray_f2">#f2f2f2</color>
     <color name="gray_3d">#3d3d3d</color>
     <color name="gray_33">#333333</color>
     <color name="gray_ee">#eeeeee</color>
@@ -82,13 +84,25 @@
     <color name="gray_text_89">#989898</color><!--font 灰色-->
     <color name="gray_text_59">#595959</color><!--font (RGB 89,89,89)-->
     <color name="gray_text_99">#999999</color><!--font (RGB 153,153,153)-->
+    <color name="gray_text_99_trans_46">#46000000</color><!--font (RGB 153,153,153)-->
     <!--淡黄色-->
     <color name="my_main_color">#f5b830</color>
     <color name="c_e6e6e6">#e6e6e6</color>
 
+
+
+    <color name="orange_f5">#f5b830</color><!--font (RGB 153,153,153)-->
+
+
     <color name="c_C32836">#c32836</color>
     <color name="c_232323">#232323</color>
     <color name="c_f5b830">#f5b830</color>
-    <color name="c_F5B830">#f5b830</color>
     <color name="c_c03f3f">#c03f3f</color>
+    <color name="yellow_f5">#f5b830</color>
+    
+
+  
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
 </resources>

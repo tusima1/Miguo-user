@@ -84,17 +84,17 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
             content.addView(img);
         }
 
-        TextView more = new TextView(getContext());
-        LinearLayout.LayoutParams moreParams = getLinearLayoutParams(height, height);
-        moreParams.setMargins(margionSpace, 0, margionSpace, 0);
-        more.setGravity(Gravity.CENTER);
-        more.setLayoutParams(moreParams);
-        more.setText("更多");
-        more.setTextSize(16);
-        more.setTextColor(Color.WHITE);
-        more.setBackgroundResource(R.drawable.shape_cricle_gray_solid_333333);
-        more.setOnClickListener(new HomeTuanHorizontalScrollViewListener());
-        content.addView(more);
+//        TextView more = new TextView(getContext());
+//        LinearLayout.LayoutParams moreParams = getLinearLayoutParams(height, height);
+//        moreParams.setMargins(margionSpace, 0, margionSpace, 0);
+//        more.setGravity(Gravity.CENTER);
+//        more.setLayoutParams(moreParams);
+//        more.setText("更多");
+//        more.setTextSize(16);
+//        more.setTextColor(Color.WHITE);
+//        more.setBackgroundResource(R.drawable.shape_cricle_gray_solid_333333);
+//        more.setOnClickListener(new HomeTuanHorizontalScrollViewListener());
+//        content.addView(more);
     }
 
     private String getImagePath(int position){

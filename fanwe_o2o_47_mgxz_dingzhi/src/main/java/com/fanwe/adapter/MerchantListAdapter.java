@@ -12,7 +12,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.customview.SDWeightLinearLayout;
@@ -20,6 +19,7 @@ import com.fanwe.library.customview.SDWeightLinearLayout.CalculateWidthListener;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
 import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.utils.DataFormat;
 
@@ -93,10 +93,10 @@ public class MerchantListAdapter extends SDSimpleBaseAdapter<ModelBusinessListin
             public void onClick(View v) {
                 Intent itemintent = new Intent();
                 Bundle bundle = new Bundle();
-                bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+                bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
                 bundle.putInt("type", 0);
                 itemintent.putExtras(bundle);
-                itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+                itemintent.setClass(App.getApplication(), HiShopDetailActivity.class);
                 mActivity.startActivity(itemintent);
             }
         });

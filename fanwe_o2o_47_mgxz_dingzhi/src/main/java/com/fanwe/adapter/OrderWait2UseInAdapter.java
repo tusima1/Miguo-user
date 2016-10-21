@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.fanwe.AddCommentActivity;
 import com.fanwe.AppWebViewActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
 import com.fanwe.event.EnumEventTag;
@@ -36,6 +35,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDEventManager;
 
@@ -217,9 +217,9 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getDeal_id());
 						mActivity.startActivity(intent);
 					} else if (model.getDeal_id() == 0) {
-						Intent intent = new Intent(mActivity, StoreDetailActivity.class);
+						Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
 						Bundle bundle = new Bundle();
-						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID,
+						bundle.putInt(HiShopDetailActivity.EXTRA_SHOP_ID,
 								Integer.valueOf(model.getLocation_id()).intValue());
 						bundle.putInt("type", 0);
 						intent.putExtras(bundle);

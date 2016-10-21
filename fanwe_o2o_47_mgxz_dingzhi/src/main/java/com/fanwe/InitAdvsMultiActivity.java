@@ -28,6 +28,7 @@ import com.fanwe.user.view.WelcomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.permission.DangerousPermissions;

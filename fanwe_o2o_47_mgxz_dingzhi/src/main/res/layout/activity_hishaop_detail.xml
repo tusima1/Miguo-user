@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.fanwe.view.RecyclerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.miguo.ui.view.ShopDetailViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+
+            </com.miguo.ui.view.ShopDetailViewPager>
+
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/indicator_circle"
+                android:layout_alignBottom="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                app:ci_drawable="@drawable/black_radius_square"
+                app:ci_height="5dp"
+                app:ci_margin="5dp"
+                app:ci_width="5dp"/>
+
+
+        </RelativeLayout>
+
+        <!--android:text="醉青蟹泰式餐厅"-->
+        <TextView
+            android:layout_marginTop="15dp"
+            android:id="@+id/shop_name"
+            android:textSize="18sp"
+            android:textColor="@color/text_base_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <!-- 标签部分 -->
+        <com.miguo.ui.view.ShopDetailTagView
+            android:id="@+id/tags"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </com.miguo.ui.view.ShopDetailTagView>
+
+        <!-- 100元/人 专属优惠 -->
+        <include layout="@layout/activity_hishaop_detail_item2"/>
+        <!-- 人气值 32654 收藏图标 -->
+        <include layout="@layout/activity_hishaop_detail_item3"/>
+        <!-- 空白留空部分 -->
+        <include layout="@layout/activity_hishaop_detail_item4"/>
+
+        <!-- 地址  西湖区五常大道西溪映像城2楼（靠近西湖访谈溪）-->
+        <!--android:text="西湖区五常大道西溪映像城2楼（靠近西湖访谈溪）"-->
+        <TextView
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/address"
+            android:textSize="14sp"
+            android:textColor="@color/text_base_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- 时间  营业时间：11:00-22:00 -->
+        <!--android:text="营业时间：11:00-22:00"-->
+        <TextView
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/time"
+            android:textSize="14sp"
+            android:textColor="@color/text_base_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- 距离  17km-->
+        <!--android:text="距离 17km"-->
+        <TextView
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/distance"
+            android:textSize="14sp"
+            android:textColor="@color/text_base_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <!-- 电话和定位图标 -->
+        <include layout="@layout/activity_hishaop_detail_item5"/>
+
+
+        <!-- 空白留空部分 -->
+        <include layout="@layout/activity_hishaop_detail_item4"/>
+
+        <!-- 标题精选推荐 -->
+        <TextView
+            android:layout_marginTop="15dp"
+            android:text="精选推荐"
+            android:textSize="16sp"
+            android:textColor="@color/text_base_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    <com.fanwe.view.LoadMoreRecyclerView
+        android:layout_marginTop="15dp"
+        android:id="@+id/recmmend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.fanwe.view.LoadMoreRecyclerView>
+
+
+
+        <!-- 空白留空部分 -->
+        <include layout="@layout/activity_hishaop_detail_item4_2"/>
+
+
+        <!-- 适合人群 -->
+        <include layout="@layout/activity_hishaop_detail_item6"/>
+
+
+        <!-- 空白留空部分 -->
+        <include layout="@layout/activity_hishaop_detail_item4_2"/>
+
+
+        <TextView
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/text_base_color_2"
+            android:text="在现场"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.fanwe.view.LoadMoreRecyclerView
+            android:layout_marginTop="15dp"
+            android:id="@+id/live"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </com.fanwe.view.LoadMoreRecyclerView>
+
+
+    </LinearLayout>
+
+
+</com.fanwe.view.RecyclerScrollView>
