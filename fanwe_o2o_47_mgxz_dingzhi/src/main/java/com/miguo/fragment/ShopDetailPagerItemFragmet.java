@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.category.fragment.HomeBannerFragmentCategory;
 import com.miguo.category.fragment.ShopDetailItemFragmentCategory;
+import com.miguo.entity.HiShopDetailBean;
 import com.miguo.fake.HomeBannerFakeData;
 import com.miguo.fake.ShopDetailPagerItemFakeData;
 
@@ -16,7 +17,7 @@ import com.miguo.fake.ShopDetailPagerItemFakeData;
  */
 public class ShopDetailPagerItemFragmet extends HiBaseFragment{
 
-    ShopDetailPagerItemFakeData.Banner banner;
+    HiShopDetailBean.Result.ShopImage banner;
 
     @Override
     protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,15 +26,15 @@ public class ShopDetailPagerItemFragmet extends HiBaseFragment{
 
     @Override
     protected void initFragmentCategory() {
-        setBanner((ShopDetailPagerItemFakeData.Banner) getArguments().getSerializable("images"));
+        setBanner((HiShopDetailBean.Result.ShopImage) getArguments().getSerializable("images"));
         category = new ShopDetailItemFragmentCategory(cacheView,this);
     }
 
-    public ShopDetailPagerItemFakeData.Banner getBanner() {
+    public HiShopDetailBean.Result.ShopImage getBanner() {
         return banner;
     }
 
-    public void setBanner(ShopDetailPagerItemFakeData.Banner banner) {
+    public void setBanner(HiShopDetailBean.Result.ShopImage banner) {
         this.banner = banner;
     }
 }

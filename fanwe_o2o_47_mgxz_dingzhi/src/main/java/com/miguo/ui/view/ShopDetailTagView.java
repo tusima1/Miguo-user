@@ -51,7 +51,7 @@ public class ShopDetailTagView extends BaseLinearLayout{
             tag.setTextSize(12);
             tag.setTextColor(Color.WHITE);
             tag.setBackgroundResource(R.drawable.shape_cricle_bg_black);
-            tag.setText("东南亚菜");
+            tag.setText(tags[i]);
             tag.setGravity(Gravity.CENTER);
             addView(tag);
         }

@@ -50,7 +50,7 @@ public class ShopDetailItemFragmentCategory extends FragmentCategory{
             int height = width * 420 / 750;
             LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
             image.setLayoutParams(params);
-            SDViewBinder.setImageView(getFragment().getBanner().getUrl(), image);
+            SDViewBinder.setImageView(getFragment().getBanner().getImage_url(), image);
         }catch (Exception e){
 
         }

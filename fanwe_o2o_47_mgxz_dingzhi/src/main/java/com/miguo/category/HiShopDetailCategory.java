@@ -181,7 +181,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
 
     @Override
     protected void init() {
-        initViewPager();
         initShopDetail();
     }
 
@@ -232,11 +231,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
      */
     private void initViewPager(){
         ArrayList<Fragment> fragments = new ArrayList<>();
-        List<ShopDetailPagerItemFakeData.Banner> banners = ShopDetailPagerItemFakeData.getInstance().getBanner();
-        for(int i = 0; i< banners.size(); i++){
+        if(result.getShop_images() == null || result.getShop_images().size() == 0){
+            return;
+        }
+        for(int i = 0; i< result.getShop_images().size(); i++){
             ShopDetailPagerItemFragmet fragmet = new ShopDetailPagerItemFragmet();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("images",banners.get(i));
+            bundle.putSerializable("images",result.getShop_images().get(i));
             fragmet.setArguments(bundle);
             fragments.add(fragmet);
         }
@@ -334,6 +335,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
 
     private void updatePage(final HiShopDetailBean.Result result){
         this.result = result;
+        /**
+         * 轮播图
+         */
+        initViewPager();
         /**
          * 商店名字
          */
