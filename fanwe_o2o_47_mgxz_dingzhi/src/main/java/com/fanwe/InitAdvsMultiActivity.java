@@ -112,7 +112,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     }
 
     private void init() {
-        setting = getSharedPreferences("firstApp", Context.MODE_PRIVATE);
+        setting = getSharedPreferences("miguo", Context.MODE_PRIVATE);
         loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
         startStatistics();

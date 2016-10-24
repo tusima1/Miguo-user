@@ -4,11 +4,15 @@ import android.content.Context;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.Root;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.ResultHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.RootHomeClassifyList;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
+import com.fanwe.user.model.UserInfoNew;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -16,6 +20,9 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -70,6 +77,43 @@ public class CommonHttpHelper implements IHelper {
             }
         });
     }
+
+    public void getInterestingString(String city_id){
+
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("city_id", city_id);
+        params.put("method", CommonConstants.INTERESTING);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
+                    List<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
+                    HashMap<String, String> map = (HashMap<String, String>) validateBody(root);
+                    if (map != null) {
+                        datas.add(map);
+                    }
+                    mView.onSuccess(CommonConstants.INTERESTING, datas);
+                } else {
+                    mView.onFailue(message);
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+
+    }
+
 
     @Override
     public void onDestroy() {

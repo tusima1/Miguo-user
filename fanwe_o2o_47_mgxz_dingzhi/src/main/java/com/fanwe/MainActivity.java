@@ -47,6 +47,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
@@ -325,7 +326,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
      */
     protected void click0() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_1);
-        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, HomeFragment.class);
+        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, FunnyFragment.class);
         refreshHomeFragment();
     }
 
