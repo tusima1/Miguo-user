@@ -83,5 +83,6 @@
     <color name="gray_text_99">#999999</color><!--font (RGB 153,153,153)-->
     <!--淡黄色-->
     <color name="my_main_color">#f5b830</color>
+    <color name="c_e6e6e6">#e6e6e6</color>
 
 </resources>
