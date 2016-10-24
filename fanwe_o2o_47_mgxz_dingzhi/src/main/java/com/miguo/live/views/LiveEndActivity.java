@@ -143,7 +143,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
             imageUrl = MGDictUtil.getShareIcon();
         }
-        String title = "刚送了一个亿的红包、钻石和优惠券";
+        String title = "刚送了一个亿的福袋、钻石和优惠券";
         String nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
         String content = "我刚通过米果直播送出各种钻石、红包和优惠，数不清啊数不清，下次直播再约你，[" + nick + "]邀请你关注";
         if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
