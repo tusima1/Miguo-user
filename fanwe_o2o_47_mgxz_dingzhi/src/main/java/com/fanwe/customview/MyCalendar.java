@@ -139,7 +139,7 @@ public class MyCalendar extends LinearLayout {
     }
     
     private String getMonth(int month) {
-    	String mon="";
+    	String mon;
     	if(month<10){
     		mon="0"+month;
     	}else{

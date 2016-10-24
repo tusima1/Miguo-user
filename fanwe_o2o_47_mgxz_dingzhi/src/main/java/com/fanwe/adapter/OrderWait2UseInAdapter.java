@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.fanwe.AddCommentActivity;
 import com.fanwe.AppWebViewActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
 import com.fanwe.event.EnumEventTag;
@@ -33,8 +32,10 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_orderGoodsModel;
 import com.fanwe.model.Uc_order_check_deliveryActModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDEventManager;
 
@@ -127,7 +128,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 			/**
 			 * 状态说明 0:未支付,1部分支付,2:已支付,3:退款中,4:已退款,5:已完结,6:已取消
 			 */
-			String status = "";
+			String status;
 			switch (mOrderStatus) {
 			case 0:
 				status = "未支付";
@@ -171,7 +172,7 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 
 						@Override
 						public void onClick(View v) {
-							int id=0;
+							int id;
 							try {
 								id = Integer.valueOf(model.getId()).intValue();
 							} catch (NumberFormatException e) {
@@ -212,13 +213,13 @@ public class OrderWait2UseInAdapter extends SDBaseAdapter<OrderInItem> {
 				@Override
 				public void onClick(View v) {
 					if (model.getDeal_id() > 0) {
-						Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+						Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getDeal_id());
 						mActivity.startActivity(intent);
 					} else if (model.getDeal_id() == 0) {
-						Intent intent = new Intent(mActivity, StoreDetailActivity.class);
+						Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
 						Bundle bundle = new Bundle();
-						bundle.putInt(StoreDetailActivity.EXTRA_SHOP_ID,
+						bundle.putInt(HiShopDetailActivity.EXTRA_SHOP_ID,
 								Integer.valueOf(model.getLocation_id()).intValue());
 						bundle.putInt("type", 0);
 						intent.putExtras(bundle);

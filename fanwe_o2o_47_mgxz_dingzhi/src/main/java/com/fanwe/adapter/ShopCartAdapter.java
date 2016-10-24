@@ -322,7 +322,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice,
 			ShoppingCartInfo model) {
 		if (model != null && tvSinglePrice != null && tvTotalPrice != null) {
-			float sumPrice = 0.00f;
+			float sumPrice;
 			int firstNum = SDFormatUtil.stringToInteger(model.getIs_first());
 			int number= SDFormatUtil.stringToInteger(model.getNumber());
 			if (firstNum > 0) {
@@ -337,6 +337,9 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			 */
 			sumPrice = firstNum * SDFormatUtil.stringToFloat(model.getIs_first_price());
 			sumPrice = number* SDFormatUtil.stringToFloat(model.getTuan_price())-sumPrice;
+			if(sumPrice<0){
+				sumPrice = 0;
+			}
 
 				model.setSumPrice(sumPrice);
 				SDViewBinder.setTextView(tvSinglePrice, model.getTuan_price());

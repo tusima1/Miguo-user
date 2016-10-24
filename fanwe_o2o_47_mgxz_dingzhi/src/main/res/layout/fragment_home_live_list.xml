@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <View
-        android:background="@color/colorf2f2f2"
+        android:background="@color/white_f2"
         android:layout_width="match_parent"
         android:layout_height="5dp"/>
 
@@ -42,7 +42,7 @@
     </com.fanwe.view.HomeLiveFragmentRecyclerView>
     
     <View
-        android:background="@color/colorf2f2f2"
+        android:background="@color/white_f2"
         android:layout_width="match_parent"
         android:layout_height="5dp"/>
 

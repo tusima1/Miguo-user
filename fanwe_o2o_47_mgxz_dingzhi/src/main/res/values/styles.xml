@@ -12,6 +12,19 @@
         <!--<item name="android:maxHeight">10.0dip</item>-->
 
     </style>
+
+
+    <style name="AppTheme" parent="AppTheme.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="FanweTheme" parent="@style/Theme.AppCompat">
         <item name="android:windowNoTitle">true</item>
         <item name="android:fitsSystemWindows">true</item>
@@ -141,6 +154,13 @@
     <!--圆形CHECKBOX-->
     <style name="Circle_checkbox">
         <item name="android:button">@drawable/circle_checkbox</item>
+    </style>
+
+    <style name="Transparent_title_area" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorPrimaryDark">@color/dark_text</item>
+        <item name="colorAccent">@color/bg_activity_gray</item>
     </style>
 
 </resources>

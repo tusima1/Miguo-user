@@ -43,6 +43,7 @@ import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
 import com.fanwe.seller.model.getGroupBuyDetail.Share;
 import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
@@ -117,7 +118,9 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
         sellerHttpHelper.getGroupBuyDetail(mId);
-        sellerHttpHelper.checkGroupCollect(mId);
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            sellerHttpHelper.checkGroupCollect(mId);
+        }
     }
 
     private void init() {
@@ -427,6 +430,18 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         share = modelGroupBuyDetail.getShare();
                         Deal_indexActModel model = new Deal_indexActModel();
                         //基本信息
+//                        ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
+//                        shoppingCartInfo.setId(mDealModel.getId());
+//                        shoppingCartInfo.setFx_user_id(this.fx_user_id);//
+//                        shoppingCartInfo.setNumber("1");
+//                        shoppingCartInfo.setImg(mDealModel.getIcon());
+//                        shoppingCartInfo.setLimit_num(mDealModel.getMax_num());
+//                        shoppingCartInfo.setIs_first(mDealModel.getIs_first() + "");
+//                        shoppingCartInfo.setIs_first_price(mDealModel.getIs_first_price() + "");
+//                        shoppingCartInfo.setOrigin_price(mDealModel.getOrigin_price());
+//                        shoppingCartInfo.setTuan_price(mDealModel.getCurrent_price());
+//                        shoppingCartInfo.setTitle(mDealModel.getSub_name());
+//                        shoppingCartInfo.setBuyFlg(mDealModel.getTime_status()+"");
 
                         model.setId(modelGroupBuyDetail.getId());
                         model.setName(modelGroupBuyDetail.getName());
@@ -437,9 +452,12 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
                         model.setIcon(modelGroupBuyDetail.getImg());
                         model.setMax_num(modelGroupBuyDetail.getMax_num());
                         model.setIs_first(SDFormatUtil.stringToInteger(modelGroupBuyDetail.getIs_first()));
+                        model.setCheck_first(DataFormat.toInt(modelGroupBuyDetail.getCheck_first()));
                         model.setIs_first_price(SDFormatUtil.stringToFloat(modelGroupBuyDetail.getIs_first_price()));
                         model.setTime_status(SDFormatUtil.stringToInteger(modelGroupBuyDetail.getTime_status()));
                         model.setLast_time(DataFormat.toLong(modelGroupBuyDetail.getLast_time()));
+                        model.setBuy_count(DataFormat.toInt(modelGroupBuyDetail.getBuy_count()));
+                        model.setBrief(modelGroupBuyDetail.getTuan_introdution());
 
                         //点评列表
                         List<CommentModel> commentModels = new ArrayList<>();

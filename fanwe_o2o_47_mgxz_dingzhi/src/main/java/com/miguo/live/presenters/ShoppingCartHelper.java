@@ -1,15 +1,18 @@
 package com.miguo.live.presenters;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.miguo.live.model.LiveConstants;
-import android.content.Context;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.TreeMap;
 
@@ -21,11 +24,16 @@ public class ShoppingCartHelper extends Presenter {
 
     public Context mContext;
     private CallbackView mView;
+    private CallbackView2 mView2;
 
     public ShoppingCartHelper(Context mContext,CallbackView mView){
         this.mContext = mContext;
 
         this.mView = mView;
+    }
+
+    public ShoppingCartHelper(CallbackView2 mView2){
+        this.mView2 = mView2;
     }
 
     /**添加至购物车
@@ -58,10 +66,56 @@ public class ShoppingCartHelper extends Presenter {
                     MGToast.showToast("添加购物车成功");
                     if(mView!=null){
                         mView.onSuccess(LiveConstants.SHOPPING_CART, null);
+                    }else if (mView2!=null){
+                        mView2.onSuccess(LiveConstants.SHOPPING_CART, null);
                     }
                 }else{
                     if(mView!=null) {
                         mView.onFailue(message);
+                    }else if (mView2!=null){
+                        mView2.onFailue(LiveConstants.SHOPPING_CART);
+                    }
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+                mView.onFailue(message);
+            }
+        });
+    }
+
+    public void addToShoppingCart2(String roomId,String fx_user_id,String lgn_user_id,String goods_id,String cart_type,String add_goods_num){
+
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("roomId", roomId);
+        params.put("fx_user_id", fx_user_id);
+        params.put("lgn_user_id", lgn_user_id);
+        params.put("goods_id", goods_id);
+        params.put("cart_type", cart_type);
+        params.put("add_goods_num", add_goods_num);
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.SHOPPING_CART);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Root root = JSON.parseObject(responseBody, Root.class);
+                String statusCode = root.getStatusCode();
+                String message = root.getMessage();
+                if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
+                    MGToast.showToast("添加购物车成功");
+                    if(mView!=null){
+                        mView.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                    }else if (mView2!=null){
+                        mView2.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                    }
+                }else{
+                    if(mView!=null) {
+                        mView.onFailue(message);
+                    }else if (mView2!=null){
+                        mView2.onFailue(ShoppingCartconstants.SHOPPING_CART_ADD);
                     }
                 }
             }

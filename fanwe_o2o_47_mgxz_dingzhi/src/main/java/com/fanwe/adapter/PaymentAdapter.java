@@ -64,7 +64,7 @@ public class PaymentAdapter extends BaseAdapter {
         if (convertView==null){
             holder=new ViewHolder();
             convertView=LayoutInflater.from(parent.getContext()).inflate(R.layout.item_payment_list,null);
-            holder.iv_image = ((ImageView) convertView.findViewById(R.id.iv_iamge));
+            holder.iv_image = ((ImageView) convertView.findViewById(R.id.iv_image));
             holder.tv_name = ((TextView) convertView.findViewById(R.id.tv_name));
             holder.iv_selected = ((ImageView) convertView.findViewById(R.id.iv_selected));
 

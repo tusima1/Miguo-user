@@ -106,7 +106,7 @@ public class BaseBaiduMapFragment extends BaseFragment implements OnMapStatusCha
 	public View wrapperView(View resView)
 	{
 		initBaseBaiduMap();
-		View viewFinal = null;
+		View viewFinal;
 		FrameLayout flLayout = new FrameLayout(getActivity());
 		flLayout.addView(mMapView);
 		if (resView != null)
@@ -173,7 +173,7 @@ public class BaseBaiduMapFragment extends BaseFragment implements OnMapStatusCha
 	public ZoomControls getZoomControls()
 	{
 		int childCount = mMapView.getChildCount();
-		View zoom = null;
+		View zoom;
 		for (int i = 0; i < childCount; i++)
 		{
 			zoom = mMapView.getChildAt(i);

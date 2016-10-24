@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/layout_item_featured_groupon"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_img_item_featured_groupon"
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_empty" />
+
+    <TextView
+        android:singleLine="true"
+        android:gravity="center_vertical"
+        android:id="@+id/tv_name_item_featured_groupon"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="杭州知名人气日料店 航空直运生鲜一品日料精髓"
+        android:textColor="@color/c_232323"
+        android:textSize="@dimen/dp16" />
+
+    <RelativeLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12">
+
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/tv_price_tuan_item_featured_groupon"
+            android:layout_marginRight="10dp"
+            android:id="@+id/tv_location_item_featured_groupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:singleLine="true"
+            android:text="西湖北线/黄龙 | 10.6km | 居酒屋"
+            android:textColor="@color/text_base_color"
+            android:textSize="@dimen/dp12" />
+
+        <TextView
+            android:id="@+id/tv_type_item_featured_groupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="代金券"
+            android:textColor="@color/c_f5b830"
+            android:textSize="@dimen/dp12" />
+
+        <TextView
+            android:id="@+id/tv_price_tuan_item_featured_groupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp5"
+            android:layout_toLeftOf="@+id/tv_type_item_featured_groupon"
+            android:text="95.00元/张"
+            android:textColor="@color/c_f5b830"
+            android:textSize="@dimen/dp12" />
+
+        <TextView
+            android:id="@+id/tv_price_original_item_featured_groupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp5"
+            android:layout_toLeftOf="@+id/tv_price_tuan_item_featured_groupon"
+            android:text="104.00元"
+            android:textColor="@color/text_base_color"
+            android:textSize="@dimen/dp12" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layout_tags_item_featured_groupon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp12"
+            android:layout_weight="2.5"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_salary_item_featured_groupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_small_c03f3f"
+                android:paddingBottom="@dimen/dp5"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:paddingTop="@dimen/dp5"
+                android:text="9.98元佣金"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp10" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp30" />
+</LinearLayout>

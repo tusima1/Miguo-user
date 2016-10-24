@@ -40,7 +40,7 @@ public class RedTypeAdapter extends RecyclerView.Adapter<ViewHolderRedType> {
     @Override
     public void onBindViewHolder(ViewHolderRedType holder, int position) {
         ModelHandOutRedPacket modelHandOutRedPacket = mData.get(position);
-        String countTextValue = "";
+        String countTextValue;
         String count = modelHandOutRedPacket.getRed_packets();
         String type = modelHandOutRedPacket.getRed_packet_type();
         String amount = modelHandOutRedPacket.getRed_packet_amount();

@@ -1,9 +1,5 @@
 package com.fanwe.adapter;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,9 +27,13 @@ import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Event_edtailModelList;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.sunday.eventbus.SDEventManager;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class EventDetailAdapter extends SDSimpleBaseAdapter<Event_edtailModelList> {
 	
@@ -103,7 +103,7 @@ public class EventDetailAdapter extends SDSimpleBaseAdapter<Event_edtailModelLis
 				
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(App.getApplication(), TuanDetailActivity.class);
+					Intent intent = new Intent(App.getApplication(), GoodsDetailActivity.class);
 					
 					intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getDeal_id());
 					mActivity.startActivity(intent);
@@ -136,7 +136,7 @@ public class EventDetailAdapter extends SDSimpleBaseAdapter<Event_edtailModelLis
 			public void onSuccess(ResponseInfo<String> responseInfo)
 			{
 				SDDialogManager.dismissProgressDialog();
-				Intent intent = null;
+				Intent intent;
 				switch (actModel.getStatus())
 				{
 				case -1:

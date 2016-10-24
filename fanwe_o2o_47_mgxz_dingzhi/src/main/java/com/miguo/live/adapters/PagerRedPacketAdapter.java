@@ -2,6 +2,7 @@ package com.miguo.live.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
         //红包类型 1 折扣券。2 优惠券。"red_packet_type":"1",
         if (userRedPacketInfo != null) {
             String str = "";
+            String strDetail="";
             String amount = userRedPacketInfo.getRed_packet_amount();
             amount = SDFormatUtil.formatNumberString(amount, 2);
 
@@ -48,28 +50,41 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
             switch (userRedPacketInfo.getRed_packet_type()) {
                 case "1":
                     str = "折";
+                    strDetail ="折扣券";
                     break;
                 case "2":
                     str = "元";
+                    strDetail="优惠券";
                     break;
                 default:
                     break;
             }
             holder.packet_type.setText(str);
             holder.mTv_Title.setText(userRedPacketInfo.getRed_packet_name() == null ? "" : userRedPacketInfo.getRed_packet_name());
+            holder.mTv_TitleTag.setText(strDetail);
             //时间的单位是秒
 
             String startTime = getFormatDate(userRedPacketInfo.getAvailable_time_start());
             String endTime = getFormatDate(userRedPacketInfo.getAvailable_time_end());
-            String available = "";
+            String available;
             if (TextUtils.isEmpty(startTime) || TextUtils.isEmpty(endTime)) {
-                available = "永久有效";
+                available = "营业时间内有效";
             } else {
-                available = startTime + "-" + endTime;
+                available = "使用时间："+startTime + "-" + endTime;
             }
-            holder.mTv_Time.setText(available);
 
-            holder.mTv_Content.setText(userRedPacketInfo.getSpecial_note() == null ? "" : userRedPacketInfo.getSpecial_note());
+
+            holder.mTv_Content.setText(userRedPacketInfo.getSpecial_note() == null ? "" : available);
+
+            String availableDate="有效期: 永久有效";
+
+            if (!TextUtils.isEmpty(userRedPacketInfo.getEvent_start()) &&! TextUtils.isEmpty(userRedPacketInfo.getEvent_end())) {
+
+                CharSequence startDate = DateFormat.format("yyyy-MM-dd", Long.decode(userRedPacketInfo.getEvent_start()));
+                CharSequence endDate = DateFormat.format("yyyy-MM-dd", Long.decode(userRedPacketInfo.getEvent_end()));
+                availableDate = "有效期:"+startDate + "---" + endDate;
+            }
+            holder.mTv_Time.setText(availableDate);
         }
     }
 

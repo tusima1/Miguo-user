@@ -62,7 +62,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 
     private static final int MAXANIMATORCOUNT = 8;
     private static final int ANIMATORDURING = 8000;
-    private static final int MAXITEMCOUNT = 50;
+    private static final int MAXITEMCOUNT = 20;
     private LinkedList<AnimatorSet> mAnimatorSetList;
     private LinkedList<AnimatorInfo> mAnimatorInfoList;
     private boolean mScrolling = false;
@@ -130,7 +130,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         SpannableString spanString;
 
         if (convertView == null) {

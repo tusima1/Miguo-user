@@ -55,7 +55,6 @@
                 android:id="@+id/iv_selected"
                 style="@style/Circle_checkbox"
                 android:layout_width="30dp"
-                android:background="@drawable/ic_payment_normal"
                 android:layout_height="wrap_content"
                 android:checked="false" />
 

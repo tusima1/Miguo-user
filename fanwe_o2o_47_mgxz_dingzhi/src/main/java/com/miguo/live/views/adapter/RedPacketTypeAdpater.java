@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.listener.Listener;
 import com.miguo.live.model.getHandOutRedPacket.ModelHandOutRedPacket;
-import com.miguo.live.views.listener.Listener;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class RedPacketTypeAdpater extends HijasonBaseRecyclerAdapter{
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         ModelHandOutRedPacket modelHandOutRedPacket = getItem(position);
-        String countTextValue = "";
+        String countTextValue;
         String count = modelHandOutRedPacket.getRed_packets();
         String type = modelHandOutRedPacket.getRed_packet_type();
         String amount = modelHandOutRedPacket.getRed_packet_amount();

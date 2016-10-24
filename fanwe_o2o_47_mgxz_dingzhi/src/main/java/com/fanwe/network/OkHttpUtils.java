@@ -100,7 +100,7 @@ public class OkHttpUtils {
     }
 
     public void post(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
-        String serverUrl = "";
+        String serverUrl;
         if (!checkNetWorkValidate()) {
             return;
         }
@@ -159,7 +159,7 @@ public class OkHttpUtils {
         if (!checkNetWorkValidate()) {
             return;
         }
-        String serverUrl = "";
+        String serverUrl;
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
         } else {
@@ -215,7 +215,7 @@ public class OkHttpUtils {
         if (!checkNetWorkValidate()) {
             return;
         }
-        String serverUrl = "";
+        String serverUrl;
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
         } else {
@@ -327,7 +327,7 @@ public class OkHttpUtils {
             mCallback.onFailure(null, null);
             return;
         }
-        String serverUrl = "";
+        String serverUrl;
         if (ServerUrl.DEBUG) {
             serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
         } else {
@@ -434,7 +434,7 @@ public class OkHttpUtils {
             }
         }
 //        System.err.println(signString.toLowerCase());
-        String checkSignString = "";
+        String checkSignString;
         switch (ENCRYPT_TYPE) {
             case "MD5":
                 checkSignString = MD5Util.MD5(signString.toLowerCase());

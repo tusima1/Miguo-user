@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +16,6 @@ import com.fanwe.adapter.GoodsListAdapter;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;
@@ -27,12 +23,17 @@ import com.fanwe.model.PageModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_collectActModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 我的商品团购收藏
@@ -112,7 +113,7 @@ public class MyCollectionTuanGoodsFragment extends BaseFragment
 					GoodsModel model = mAdapter.getItem((int) id);
 					if (model != null)
 					{
-						Intent intent = new Intent(getActivity(), TuanDetailActivity.class);
+						Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());
 						startActivity(intent);
 					}

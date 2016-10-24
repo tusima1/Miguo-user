@@ -1,8 +1,8 @@
 package com.fanwe.library.common;
 
-import java.util.Stack;
-
 import android.app.Activity;
+
+import java.util.Stack;
 
 public class SDActivityManager
 {
@@ -50,7 +50,10 @@ public class SDActivityManager
 
 	public Activity getLastActivity()
 	{
-		Activity activity = mStackActivity.lastElement();
+		Activity activity =null;
+		if (mStackActivity!=null && mStackActivity.size()>0){
+			activity = mStackActivity.lastElement();
+		}
 		return activity;
 	}
 

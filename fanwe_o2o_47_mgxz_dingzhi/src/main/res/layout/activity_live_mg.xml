@@ -130,7 +130,7 @@
         <ListView
             android:id="@+id/im_msg_listview"
             android:layout_width="250dp"
-            android:layout_height="220dp"
+            android:layout_height="200dp"
             android:layout_gravity="left|bottom"
             android:layout_marginBottom="60dp"
             android:layout_marginTop="50dp"

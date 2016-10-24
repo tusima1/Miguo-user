@@ -100,6 +100,6 @@
     <string name="red_count_string">选择数量</string>
 
     <string name="red_time_countdown">抢红包倒计时</string>
-    <string name="pop_share_live">送朋友20钻，如果朋友本场有消费，你可以共享直播收益的5%</string>
+    <string name="pop_share_live">送朋友20钻，如果朋友本场有消费，你可以共享直播收益的20%</string>
 
 </resources>

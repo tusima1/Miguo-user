@@ -153,7 +153,7 @@
                 android:layout_width="@dimen/width_set_item_icon"
                 android:layout_height="@dimen/width_set_item_icon"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_my_account_bind_mobile" />
+                android:src="@drawable/ic_kf_phone" />
 
             <TextView
                 android:id="@+id/tv_bind_mobile"

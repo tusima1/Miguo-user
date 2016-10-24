@@ -13,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
+
 import com.fanwe.app.App;
 import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveCommonHelper;
@@ -161,10 +162,10 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     public void gotoShopDetailActivity(String shop_id) {
         Intent itemintent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, shop_id);
+        bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID, shop_id);
         bundle.putInt("type", 0);
         itemintent.putExtras(bundle);
-        itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+        itemintent.setClass(App.getApplication(), HiShopDetailActivity.class);
         if (mActivity != null) {
             mActivity.startActivity(itemintent);
         }

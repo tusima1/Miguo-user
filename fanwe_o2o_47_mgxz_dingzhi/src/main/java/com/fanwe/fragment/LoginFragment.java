@@ -14,7 +14,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.MGUIUtil;
 
 public class LoginFragment extends LoginBaseFragment {
 
@@ -64,28 +63,10 @@ public class LoginFragment extends LoginBaseFragment {
         }
     }
 
-
-    private int count;
-    private boolean showToast = false;
-
     public void doLogin() {
         if (validateParam()) {
-            count++;
-            if (count >= 4) {
-                if (!showToast) {
-                    showToast = true;
-                    MGToast.showToast("操作过于频繁,请稍候再试!");
-                    MGUIUtil.runOnUiThreadDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            count = 0;
-                            showToast = false;
-                        }
-                    }, 10000);
-                }
-                return;
-            }
-            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0);
+            mTvLogin.setEnabled(false);
+            mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0,mTvLogin);
             SDDialogManager.showProgressDialog("请稍候...");
         }
     }

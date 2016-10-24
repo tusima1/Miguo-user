@@ -5,7 +5,6 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.dao.barry.CommandGroupBuyDao;
 import com.fanwe.dao.barry.view.CommandGroupBuyView;
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;

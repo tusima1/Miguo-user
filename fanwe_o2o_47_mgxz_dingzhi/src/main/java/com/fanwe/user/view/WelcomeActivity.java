@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 
 import com.fanwe.MainActivity;
@@ -36,7 +35,7 @@ public class WelcomeActivity extends Activity {
         //add image
         TypedArray typedArray = getResources().obtainTypedArray(R.array.first_welcome);
         int indexCount = typedArray.length();
-//        Log.e("test","Êï∞Èáè: "+indexCount);
+//        Log.e("test"," ˝¡ø: "+indexCount);
         for (int i = 0; i < indexCount; i++) {
             WelcomeView view=new WelcomeView(this);
             view.setImageRes(typedArray.getResourceId(i,0));

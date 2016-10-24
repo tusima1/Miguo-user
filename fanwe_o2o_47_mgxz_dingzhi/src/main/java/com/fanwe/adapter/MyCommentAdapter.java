@@ -1,8 +1,5 @@
 package com.fanwe.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -16,7 +13,6 @@ import android.widget.TextView;
 
 import com.fanwe.AlbumActivity;
 import com.fanwe.EventDetailActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
@@ -26,6 +22,11 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.CommentModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
+import com.fanwe.seller.views.GoodsDetailActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyCommentAdapter extends SDBaseAdapter<CommentModel>
 {
@@ -88,7 +89,7 @@ public class MyCommentAdapter extends SDBaseAdapter<CommentModel>
 					String type = model.getType();
 					if (CommentType.DEAL.equals(type))
 					{
-						intent = new Intent(mActivity, TuanDetailActivity.class);
+						intent = new Intent(mActivity, GoodsDetailActivity.class);
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getData_id());
 					} else if (CommentType.YOUHUI.equals(type))
 					{
@@ -100,8 +101,8 @@ public class MyCommentAdapter extends SDBaseAdapter<CommentModel>
 						intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getData_id());
 					} else if (CommentType.STORE.equals(type))
 					{
-						intent = new Intent(mActivity, StoreDetailActivity.class);
-						intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getData_id());
+						intent = new Intent(mActivity, HiShopDetailActivity.class);
+						intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getData_id());
 					}
 					if (intent != null)
 					{

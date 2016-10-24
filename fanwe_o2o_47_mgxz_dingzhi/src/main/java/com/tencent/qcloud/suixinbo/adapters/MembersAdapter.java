@@ -33,7 +33,7 @@ public class MembersAdapter extends ArrayAdapter<MemberInfo> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.members_item_layout, null);
             holder = new ViewHolder();

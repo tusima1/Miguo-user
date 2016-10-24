@@ -117,7 +117,7 @@ public class TuanListWapFragment extends BaseFragment
 	@Override
 	public void onCLickRight_SDTitleSimple(SDTitleItem v, int index)
 	{
-		Intent intent = null;
+		Intent intent;
 		switch (index)
 		{
 		case 0:

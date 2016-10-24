@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/item_layout"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:background="@color/gray_ee"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:layout_toLeftOf="@+id/distance"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/image"
+        android:layout_alignTop="@+id/image"
+        android:id="@+id/title"
+        android:maxLines="2"
+        android:text="鲈鱼"
+        android:textColor="@color/text_base_color"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:textSize="12sp"
+        android:textColor="@color/text_base_color_2"
+        android:text=">10km"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignTop="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/describe"
+        android:maxLines="2"
+        android:text="米果小站独家销售只要69元即可享受价值99元的单人浴资单"
+        android:textColor="@color/text_base_color_2"
+        android:textSize="12sp"
+        android:layout_alignLeft="@+id/title"
+        android:layout_toLeftOf="@+id/buy_layout"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/sell"
+        android:textSize="12sp"
+        android:textColor="@color/text_base_color_2"
+        android:text="售出1654"
+        android:layout_alignLeft="@+id/title"
+        android:layout_alignBottom="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/image"
+        android:layout_below="@+id/image"
+        android:background="@color/gray"
+        android:layout_alignRight="@+id/distance"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+
+
+    <LinearLayout
+        android:background="@drawable/shape_cricle_solid_white_stoke_orange"
+        android:id="@+id/buy_layout"
+        android:orientation="vertical"
+        android:layout_alignBottom="@+id/image"
+        android:layout_alignRight="@+id/distance"
+        android:layout_width="80dp"
+        android:layout_height="50dp">
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/price"
+            android:text="￥100"
+            android:textSize="12sp"
+            android:textColor="@color/orange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="1dp"
+            android:id="@+id/price_normal"
+            android:text="￥120"
+            android:textSize="8sp"
+            android:textColor="@color/text_base_color_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buy_now_layout"
+            android:gravity="center"
+            android:background="@drawable/shape_cricle_solid_orange_bottom_radius"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/buy_now_text"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="立即抢购"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

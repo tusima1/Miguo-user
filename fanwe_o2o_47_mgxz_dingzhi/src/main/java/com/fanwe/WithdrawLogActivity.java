@@ -131,14 +131,6 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 		BigDecimal bd1 = new BigDecimal(resultCommissionLog.getBlocksalary());
 		bd1 = bd1.setScale(2, BigDecimal.ROUND_HALF_UP);
 		SDViewBinder.setTextView(mTv_moneyYes, "（不可提现金额：￥" + bd1 + "）", "（不可提现金额：￥0.00");
-		// 不可提现金额
-		/*
-		 * mTv_moneyYes.setOnClickListener(new OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) { Intent intent = new
-		 * Intent(getApplicationContext(),NoWithdrawLogActivity.class);
-		 * startActivity(intent); } });
-		 */
 		ll_tixian.setOnClickListener(new OnClickListener() {
 
 			@Override

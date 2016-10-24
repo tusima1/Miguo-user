@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.o2o.miguo"
     android:installLocation="auto"
-    android:versionCode="2016093006"
-    android:versionName="6.2.1">
+    android:versionCode="2016102101"
+    android:versionName="6.0.26">
 
     <uses-sdk
         android:minSdkVersion="12"
@@ -74,7 +74,7 @@
     <application
         android:name="com.fanwe.app.App"
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:theme="@style/FanweTheme"
         tools:replace="icon, label,theme">
@@ -88,6 +88,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.fanwe.mine.views.RepresentIncomeActivity"
             android:screenOrientation="portrait" />
@@ -176,6 +177,18 @@
                 <data android:scheme="miguoxiaozhan" />
             </intent-filter>
         </activity>
+
+
+        <!--android:name="com.miguo.app.HiShopDetailActivity-->
+
+        <!-- 新主界面 -->
+        <activity
+            android:name="com.miguo.app.HiHomeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 商品管理 -->
         <activity
             android:name="com.fanwe.DistributionCommodityManagementActivity"
@@ -788,12 +801,11 @@
         <activity
             android:name="com.fanwe.user.view.RefundApplicationActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="com.fanwe.user.view.WelcomeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 待消费订单new -->
         <activity
@@ -801,9 +813,34 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
+        <!-- 限时特惠 -->
+        <activity
+            android:name="com.fanwe.TimeLimitActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.miguo.live.views.view.PlayBackActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+
+
+
+        <activity android:name="com.miguo.live.views.view.PlayBackActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <!--新商家详情  -->
+        <activity
+            android:theme="@style/AppTheme"
+            android:name="com.miguo.app.HiShopDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+
+
         <!-- 升级服务 -->
         <service android:name="com.fanwe.service.AppUpgradeService" />
 
@@ -867,13 +904,6 @@
 
         <!-- 友盟分享start -->
         <!-- 分享内容编辑页 -->
-        <activity
-            android:name="com.umeng.socialize.view.ShareActivity"
-            android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:noHistory="true"
-            android:theme="@style/Theme.UMDialog"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
 
         <!-- 微信第三方登录回调activity -->
         <activity
@@ -928,9 +958,6 @@
             </intent-filter>
         </activity>
         <!-- Required  SDK核心功能 -->
-        <service
-            android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false" />
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
@@ -1058,11 +1085,40 @@
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
 
-        <activity android:name="com.fanwe.user.view.RedPacketListActivity" />
-        <activity android:name="com.fanwe.user.view.FansActivity" />
-        <activity android:name="com.fanwe.user.view.WalletActivity" />
-        <activity android:name="com.miguo.utils.test.DTestActivity" />
-
+        <activity
+            android:name="com.fanwe.user.view.RedPacketListActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name="com.miguo.live.views.TestMyFragmentActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name="com.fanwe.user.view.FansActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name="com.fanwe.user.view.WalletActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name="com.miguo.utils.test.DTestActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:theme="@style/Transparent_title_area"
+            android:name="com.fanwe.seller.views.GoodsDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity android:name="com.fanwe.seller.views.SpecialTopicActivity">
+        </activity>
     </application>
 
 </manifest>

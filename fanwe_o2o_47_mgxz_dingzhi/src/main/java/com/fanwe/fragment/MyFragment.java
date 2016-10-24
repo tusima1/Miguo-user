@@ -20,7 +20,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.common.MGDict;
-import com.fanwe.common.model.MGDict.DictModel;
+import com.fanwe.common.model.getMGDict.DictModel;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;

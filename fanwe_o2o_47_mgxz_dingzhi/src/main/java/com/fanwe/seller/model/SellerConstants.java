@@ -25,6 +25,10 @@ public class SellerConstants {
      */
     public static final String SHOP_LIST = "ShopList";
     /**
+     *新版返现-商家列表
+     */
+    public static final String BUSINESS_LIST = "BusinessListings";
+    /**
      * 直播页面获取门店详情。
      */
     public static final String LIVE_BIZ_SHOP = "LiveBizShop";
@@ -102,4 +106,9 @@ public class SellerConstants {
      * 评论汇总
      */
     public static final String COMMENT_TOTAL = "CommentTotal";
+
+    //商品详情
+    public static final String GROUP_BUY_DETAIL_NEW = "GroupBuyDetailNew";
+    //专题列表
+    public static final String SPECIAL_TOPIC = "TopicDetail";
 }

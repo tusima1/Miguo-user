@@ -145,7 +145,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         initPullToRefreshListView();
         bindData(modelDisplayComment);
 
-        if (sellerHttpHelper==null){
+        if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(this, this);
         }
         if (Constant.CommentType.DEAL.equals(mStrType)) {
@@ -367,19 +367,25 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
                     mPtrlvComment.onRefreshComplete();
                     break;
                 case 1:
+                    modelDisplayComment = new ModelDisplayComment();
+                    if (Constant.CommentType.DEAL.equals(mStrType)) {
+                        //团购不允许点评
+                        modelDisplayComment.setAllow_dp(0);
+                    } else if (Constant.CommentType.STORE.equals(mStrType)) {
+                        //门店允许点评
+                        modelDisplayComment.setAllow_dp(1);
+                    }
                     if (!SDCollectionUtil.isEmpty(itemsTotal)) {
                         ModelCommentTotal bean = itemsTotal.get(0);
-                        modelDisplayComment = new ModelDisplayComment();
-
                         modelDisplayComment.setStar_1(bean.getYi());
                         modelDisplayComment.setStar_2(bean.getEr());
                         modelDisplayComment.setStar_3(bean.getSan());
                         modelDisplayComment.setStar_4(bean.getSi());
                         modelDisplayComment.setStar_5(bean.getWu());
                         modelDisplayComment.setBuy_dp_avg(bean.getAvgcmt());
-                        modelDisplayComment.setBuy_dp_sum(bean.getTotal());
-                        bindData(modelDisplayComment);
+                        modelDisplayComment.setMessage_count(bean.getTotal());
                     }
+                    bindData(modelDisplayComment);
                     break;
             }
         }

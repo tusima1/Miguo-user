@@ -4,8 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
-import com.fanwe.common.model.MGDict.DictArray;
-import com.fanwe.common.model.MGDict.DictModel;
+import com.fanwe.common.model.getMGDict.DictArray;
+import com.fanwe.common.model.getMGDict.DictModel;
 import com.google.gson.Gson;
 
 import org.apache.http.util.EncodingUtils;

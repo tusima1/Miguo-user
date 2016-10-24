@@ -15,8 +15,6 @@ import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.MainActivity;
 import com.fanwe.MemberRankActivity;
 import com.fanwe.MyRedEnvelopeActivity;
-import com.fanwe.StoreDetailActivity;
-import com.fanwe.TuanDetailActivity;
 import com.fanwe.WithdrawLogActivity;
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
@@ -31,8 +29,10 @@ import com.fanwe.model.Message;
 import com.fanwe.model.MessageCount;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.app.HiShopDetailActivity;
 
 import java.util.List;
 
@@ -193,12 +193,12 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 		if (JPushType.TUAN_DEAL.equals(act)) {
 
 			bundle.putInt("extra_goods_id", object_id);
-			startActivity(mActivity, TuanDetailActivity.class, bundle);
+			startActivity(mActivity, GoodsDetailActivity.class, bundle);
 
 		} else if (JPushType.SHOP.equals(act)) {
 			// 门店详情
 			bundle.putInt("extra_merchant_id", object_id);
-			startActivity(mActivity, StoreDetailActivity.class, bundle);
+			startActivity(mActivity, HiShopDetailActivity.class, bundle);
 
 		} else if (JPushType.LIMIT_SALE.equals(act)) {
 			// 限时特卖

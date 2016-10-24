@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/activity_special_topic"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.fanwe.seller.views.SpecialTopicActivity"
+    >
+
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        android:id="@+id/ps_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:scrollbars="none"
+        ptr:ptrHeaderSubTextColor="@color/gray"
+        ptr:ptrHeaderTextColor="@color/gray"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/fl_test"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp170">
+
+                <ImageView
+                    android:id="@+id/iv_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/dark_20"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_show"
+                    android:layout_width="225dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="55dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp17"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_sub_show"
+                android:layout_width="275dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="45dp"
+                android:layout_marginTop="@dimen/dp45"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/sp17"/>
+
+            <com.didikee.uilibs.views.MaxHeightListView
+                android:id="@+id/max_listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <ImageView
+            android:id="@+id/iv_left"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/md_ripple_unbound_gray"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_left_white"
+            />
+
+    </FrameLayout>
+</FrameLayout>

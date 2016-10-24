@@ -73,7 +73,7 @@ public class ModelBusinessCircleList {
         int leftIndex = 0;
         int rightIndex = 0;
         if (!TextUtils.isEmpty(qid) && !SDCollectionUtil.isEmpty(listModel)) {
-            ModelBusinessCircleList model = null;
+            ModelBusinessCircleList model;
             for (int i = 0; i < listModel.size(); i++) {
                 model = listModel.get(i);
                 if (model.getId().equals(qid)) {

@@ -18,6 +18,7 @@ import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.utils.MGStringFormatter;
@@ -136,7 +137,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             /*是否可退款：0：不可退款，1：可退款*/
             String can_refund = model.getCan_refund();
 
-            int dp_id = -1;
+            int dp_id;
             String str_dp_id = model.getDp_id();
             if (TextUtils.isEmpty(str_dp_id)) {
                 dp_id = 0;
@@ -201,7 +202,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(model.getTuan_id())) {
-                    Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+                    Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
                     intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
                     intent.putExtra(TuanDetailActivity.EXTRA_DETAIL_ID, model.getDetail_id());
                     mActivity.startActivity(intent);

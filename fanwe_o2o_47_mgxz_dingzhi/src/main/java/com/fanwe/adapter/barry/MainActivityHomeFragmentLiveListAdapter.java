@@ -116,7 +116,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
             List<String> tags = host.getTags();
             if (!SDCollectionUtil.isEmpty(tags)) {
                 String totalStr = "";
-                String tempStr = "";
+                String tempStr;
                 for (int i = 0; i < tags.size(); i++) {
                     if (i == 3) {
                         break;

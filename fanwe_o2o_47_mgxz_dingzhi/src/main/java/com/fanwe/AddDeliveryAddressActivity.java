@@ -131,7 +131,7 @@ public class AddDeliveryAddressActivity extends BaseActivity
 
 	private void initTitle()
 	{
-		String title = null;
+		String title;
 		String textRight = null;
 		if (mModel != null)
 		{
@@ -695,7 +695,7 @@ public class AddDeliveryAddressActivity extends BaseActivity
 					mListRegionEarn.addAll(listModelsArea);
 				}
 
-				Region_confModel model = null;
+				Region_confModel model;
 				if (!SDCollectionUtil.isEmpty(mListRegionCountry))
 				{
 					for (int i = 0; i < mListRegionCountry.size(); i++)

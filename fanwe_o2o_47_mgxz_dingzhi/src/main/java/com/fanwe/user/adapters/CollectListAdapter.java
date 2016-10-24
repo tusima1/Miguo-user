@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getShopAndUserCollect.Image;
 import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
+import com.miguo.app.HiShopDetailActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class CollectListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Holder mHolder = null;
+        Holder mHolder;
         if (null == convertView) {
             mHolder = new Holder();
             convertView = inflater.inflate(R.layout.item_collect_list, null);
@@ -82,10 +82,10 @@ public class CollectListAdapter extends BaseAdapter {
                     //门店
                     Intent itemintent = new Intent();
                     Bundle bundle = new Bundle();
-                    bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, temp.getId());
+                    bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID, temp.getId());
                     bundle.putInt("type", 0);
                     itemintent.putExtras(bundle);
-                    itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+                    itemintent.setClass(App.getApplication(), HiShopDetailActivity.class);
                     mContext.startActivity(itemintent);
                 } else {
                     //网红小店
