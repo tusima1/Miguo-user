@@ -35,6 +35,7 @@ public class WelcomeActivity extends Activity {
         //add image
         TypedArray typedArray = getResources().obtainTypedArray(R.array.first_welcome);
         int indexCount = typedArray.length();
+//        Log.e("test","ÊýÁ¿: "+indexCount);
         for (int i = 0; i < indexCount; i++) {
             WelcomeView view=new WelcomeView(this);
             view.setImageRes(typedArray.getResourceId(i,0));

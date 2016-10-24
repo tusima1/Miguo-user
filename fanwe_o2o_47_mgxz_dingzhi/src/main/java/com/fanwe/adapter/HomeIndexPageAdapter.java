@@ -24,4 +24,6 @@ public class HomeIndexPageAdapter extends SDBasePagerAdapter<List<ModelHomeClass
         return ll;
     }
 
+
+
 }

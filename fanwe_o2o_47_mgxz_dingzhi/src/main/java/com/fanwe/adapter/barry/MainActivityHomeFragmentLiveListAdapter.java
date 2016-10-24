@@ -105,6 +105,8 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         SDViewBinder.setImageView(getItem(position).getCover(), getHolder(holder).image);
         getHolder(holder).tvAdd.setText(getAddress(position));
         getHolder(holder).tvType.setText(getLiveType(position));
+//        getHolder(holder).tvType.setBackgroundResource(getLiveType(position));
+
     }
 
     private void setTags(RecyclerView.ViewHolder holder, int position){
@@ -163,6 +165,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
             return "正在直播";
         }
     }
+
 
     /**
      * 地址
