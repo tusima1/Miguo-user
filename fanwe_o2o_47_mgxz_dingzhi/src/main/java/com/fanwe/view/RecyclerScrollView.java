@@ -90,7 +90,7 @@ public class RecyclerScrollView extends ScrollView{
             /**
              * 判断滑动距离是否需要加载更多
              */
-            if((t + halfScreenHeight + getMeasuredHeight()) > getChildAt(0).getMeasuredHeight()){
+            if((t + 0 + getMeasuredHeight()) > getChildAt(0).getMeasuredHeight()){
                 if(onHomeScrollViewListener != null){
                     setIsLoading(true);
                     onHomeScrollViewListener.onScrollToEnd();

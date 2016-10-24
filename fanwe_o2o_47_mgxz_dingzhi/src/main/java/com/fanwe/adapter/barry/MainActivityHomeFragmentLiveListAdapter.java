@@ -105,7 +105,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         SDViewBinder.setImageView(getItem(position).getCover(), getHolder(holder).image);
         getHolder(holder).tvAdd.setText(getAddress(position));
         getHolder(holder).tvType.setText(getLiveType(position));
-//        getHolder(holder).tvType.setBackgroundResource(getLiveType(position));
+        getHolder(holder).tvType.setBackgroundResource(getLiveTypeColor(position));
 
     }
 
@@ -166,6 +166,18 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         }
     }
 
+    /**
+     * 直播类型
+     * @param position
+     * @return
+     */
+    private int  getLiveTypeColor(int position){
+        try{
+            return getItem(position).getLive_type().equals(LIVE) ? R.drawable.bg_orange : R.drawable.bg_grey_big;
+        }catch (NullPointerException e){
+            return  R.drawable.bg_orange ;
+        }
+    }
 
     /**
      * 地址

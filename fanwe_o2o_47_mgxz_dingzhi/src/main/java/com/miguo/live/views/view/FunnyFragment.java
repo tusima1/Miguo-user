@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private List<ModelHomeClassifyList> mList = new ArrayList<>();
     private HomeIndexPageAdapter mAdapter;
 
-    List<ModelHomeClassifyList> itemsHomeClassify;
+
 
     private SDFragmentManager mFragmentManager;
     /**
@@ -153,9 +154,14 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private void initView() {
         interestingStr = settings.getString("Interesting","");
         mFragmentManager = new SDFragmentManager(getChildFragmentManager());
+
         liveHelper = new LiveHttpHelper(getActivity(),  this, "");
         initPtrLayout();
         init();
+        if (mHomeFragmentLiveList == null) {
+            mHomeFragmentLiveList = new HomeFragmentLiveList();
+            mFragmentManager.replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
+        }
     }
 
     /**
@@ -270,8 +276,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private void requestLiveList() {
         if (liveHelper != null) {
         cityId = "1cf07dd4-51e0-48fc-b829-2f0a6de0b536"; //1cf07dd4-51e0-48fc-b829-2f0a6de0b536
-
-            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
+        liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
         }
     }
     /**
@@ -280,13 +285,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      * @param datas
      */
     public void getLiveList(ArrayList<Room> datas) {
-        if (mHomeFragmentLiveList == null) {
-            mHomeFragmentLiveList = new HomeFragmentLiveList();
-            mFragmentManager.replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
-        }
+
         if (SDCollectionUtil.isEmpty(datas)) {
             rooms = null;
+            setPageNum(this.pageNum++);
         }
+
         rooms = datas;
         //直播列表
         mHomeFragmentLiveList.updateView(isRefresh, rooms);
@@ -294,7 +298,9 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         loadComplete();
     }
 
-
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
     @Override
     public void onEvent(SDBaseEvent sdBaseEvent) {
 
@@ -339,9 +345,8 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     @Override
     public void onRefreshBegin(PtrFrameLayout frame) {
         pageNum = 1;
+        isRefresh = true;
         requestLiveList();
-
-
     }
 
     /**
@@ -349,18 +354,16 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
     @Override
     public void onScrollToEnd() {
-        recyclerScrollView.setIsLoading(true);
+        isRefresh = false;
+        requestLiveList();
     }
     public void loadComplete(){
         ptrFrameLayout.refreshComplete();
         recyclerScrollView.loadComplite();
     }
-
-
-
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
-
+        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
     }
 
     @Override
@@ -375,6 +378,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
                     getLiveList((ArrayList<Room>) datas);
                 }
             });
