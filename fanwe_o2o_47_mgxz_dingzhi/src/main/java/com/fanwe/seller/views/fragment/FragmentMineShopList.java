@@ -85,7 +85,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
                 tempBean = mListModel.get(position - 1);
                 if (isNotMine) {
                     //代言
-                    sellerHttpHelper.getRepresentMerchant("", tempBean.getId());
+                    sellerHttpHelper.getRepresentMerchant(tempBean.getEnt_id());
                 } else {
                     CurLiveInfo.modelShop = tempBean;
                     getActivity().setResult(8888);

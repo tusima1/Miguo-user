@@ -37,6 +37,7 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
     private ObjectAnimator object1;
     private ObjectAnimator object2;
     private ObjectAnimator object3;
+    private int preProgress=0;
 
     private float dx=0f;
     private Activity mActivity;
@@ -187,11 +188,14 @@ public class HostMeiToolView extends RelativeLayout implements IViewGroup, View.
         }
         MeiSeekBarDialog meiSeekBarDialog = new MeiSeekBarDialog(mActivity);
         meiSeekBarDialog.setTitle("美颜");
+        meiSeekBarDialog.setProgress(preProgress);
+        QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputBeautyParam(LiveUtil.getBeautyProgress(preProgress));
         meiSeekBarDialog.setOnMeiProgressFinishListener(new OnMeiProgressFinishListener() {
             @Override
             public void finalProgress(int finalProgress) {
                 MGToast.showToast(""+finalProgress);
                 QavsdkControl.getInstance().getAVContext().getVideoCtrl().inputBeautyParam(LiveUtil.getBeautyProgress(finalProgress));//美颜
+                preProgress=finalProgress;
             }
         });
         meiSeekBarDialog.show();

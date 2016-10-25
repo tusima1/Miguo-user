@@ -98,4 +98,10 @@ public class MeiSeekBarDialog{
         this.mListener=listener;
     }
 
+    public void setProgress(int progress){
+        if (mSeekBar!=null){
+            mSeekBar.setProgress(progress);
+        }
+    }
+
 }
