@@ -121,7 +121,7 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
     private Supplier_fx currModel;
 
     private void representMerchant() {
-        sellerHttpHelper.getRepresentMerchant(currModel.getId(), "");
+        sellerHttpHelper.getRepresentMerchant(currModel.getId());
     }
 
     private void showDialog(final String location) {

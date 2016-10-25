@@ -246,9 +246,9 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2!=null){
+                if (mView2 != null) {
                     mView2.onSuccess(SellerConstants.SHOP_COLLECT_DELETE, null);
-                }else if (mView!=null){
+                } else if (mView != null) {
                     mView.onSuccess(SellerConstants.SHOP_COLLECT_DELETE, null);
                 }
             }
@@ -273,9 +273,9 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2!=null){
+                if (mView2 != null) {
                     mView2.onSuccess(SellerConstants.GROUP_BUY_COLLECT_POST, null);
-                }else if (mView!=null){
+                } else if (mView != null) {
                     mView.onSuccess(SellerConstants.GROUP_BUY_COLLECT_POST, null);
                 }
             }
@@ -327,9 +327,9 @@ public class SellerHttpHelper implements IHelper {
         OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2!=null){
+                if (mView2 != null) {
                     mView2.onSuccess(SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
-                }else if (mView!=null){
+                } else if (mView != null) {
                     mView.onSuccess(SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
                 }
             }
@@ -419,15 +419,15 @@ public class SellerHttpHelper implements IHelper {
                 List<ResultCheckShopCollect> result = root.getResult();
                 if (!SDCollectionUtil.isEmpty(result) && result.get(0) != null && result.get(0).getBody() != null) {
                     List<ModelCheckShopCollect> items = result.get(0).getBody();
-                    if (mView2!=null){
+                    if (mView2 != null) {
                         mView2.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
-                    }else if (mView!=null){
+                    } else if (mView != null) {
                         mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
                     }
                 } else {
-                    if (mView2!=null){
+                    if (mView2 != null) {
                         mView2.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
-                    }else if (mView!=null){
+                    } else if (mView != null) {
                         mView.onSuccess(SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
                     }
                 }
@@ -840,23 +840,24 @@ public class SellerHttpHelper implements IHelper {
     /**
      * 我要代言，get代言delete取消代言
      */
-    public void getRepresentMerchant(String ent_id, String shop_id) {
+    public void getRepresentMerchant(String ent_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("ent_id", ent_id);
-        params.put("shop_id", shop_id);
         params.put("method", SellerConstants.REPRESENT_MERCHANT);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootRepresentMerchant root = gson.fromJson(responseBody, RootRepresentMerchant.class);
-                if ("307".equals(root.getStatusCode())) {
+                if ("200".equals(root.getStatusCode())) {
+                    mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
+                } else{
                     List<RootRepresentMerchant> roots = new ArrayList<RootRepresentMerchant>();
                     roots.add(root);
                     mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, roots);
-                } else
-                    mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
+                }
+
             }
 
             @Override
