@@ -29,11 +29,11 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
     /**
      * 正常的文字颜色
      */
-    int normalColor = 0;
+    int normalColor = R.color.main_color;
     /**
      * 按下后的文字颜色
      */
-    int pressColor = 0;
+    int pressColor = R.color.main_color;
     /**
      * tab文字大小
      */
@@ -204,8 +204,8 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
      * tab抖动动画
      * @param view
      */
+    @SuppressWarnings("ResourceType")
     private void startTabAnim(View view){
-//        return;
         Animator animator = AnimatorInflater.loadAnimator(getContext(), R.anim.scaletab);
         animator.setTarget(view);
         animator.setInterpolator(new BounceInterpolator());
