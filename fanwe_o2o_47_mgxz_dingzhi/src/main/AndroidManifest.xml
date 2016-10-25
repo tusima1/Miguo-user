@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.fanwe.o2o.miguo"
     android:installLocation="auto"
-    android:versionCode="2016102101"
-    android:versionName="6.0.26">
+    android:versionCode="2016102501"
+    android:versionName="6.0.28">
 
     <uses-sdk
         android:minSdkVersion="12"
@@ -826,12 +826,6 @@
             android:name="com.miguo.live.views.view.PlayBackActivity"
             android:screenOrientation="portrait" />
 
-
-        <activity
-            android:name="com.miguo.live.views.view.PlayBackActivity"
-            android:screenOrientation="portrait" />
-
-
         <!--新商家详情  -->
         <activity
             android:theme="@style/Transparent_title_area"
@@ -839,7 +833,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
 
 
