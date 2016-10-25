@@ -127,7 +127,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
 
     /**
-     * 取分类和欢迎的话。
+     * 取分类和欢迎的话。cityId-currentData-interesting 城市ID-当前日期-话语。
      */
     private void getTopData() {
         if (commonHttpHelper == null) {
@@ -137,7 +137,8 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         if(!TextUtils.isEmpty(interestingStr)){
             String[] list = interestingStr.split("-");
             if(list.length<3){
-                commonHttpHelper.getHomeClassifyList();
+                settings.edit().putString("Interesting","").commit();
+                commonHttpHelper.getInterestingString(cityId);
             }else{
                 if(cityId.equals(list[0])&&currentData.equals(list[1])){
                     setInterestingStr(list[2]);
@@ -317,6 +318,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                 if (mHomeFragmentLiveList != null) {
                     mHomeFragmentLiveList.updateTitle(bean.getName());
                 }
+                mAdapter.notifyDataSetChanged();
                 typeLiveHome = bean.getId();
                 requestLiveList();
                 break;

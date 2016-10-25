@@ -18,7 +18,8 @@
         android:layout_marginTop="15dp"
         android:text="全部分类"
         android:textColor="#2e2d2d"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:visibility="gone"/>
 
     <!--<com.fanwe.customview.SDGridViewInScroll-->
         <!--android:id="@+id/gridView_home_fragment_list"-->
