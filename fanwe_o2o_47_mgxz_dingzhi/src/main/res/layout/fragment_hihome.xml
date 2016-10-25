@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!--<Space-->
+        <!--android:id="@+id/title_space"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp" />-->
+
+    <!--android:layout_below="@+id/title_space"-->
+    <com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout
+        android:id="@+id/ptr_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_pull_to_fresh="true">
+
+        <com.fanwe.view.RecyclerScrollView
+            android:id="@+id/recycler_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/scroll_content"
+                android:background="@color/white"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+
+                <LinearLayout
+                    android:id="@+id/top_say_hi_layout"
+                    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+
+                    <com.miguo.ui.view.AutofitTextView
+                        android:layout_marginTop="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="40dp"
+                        android:singleLine="true"
+                        android:id="@+id/sayhi"
+                        android:textColor="@color/black"
+                        autofit:minTextSize="8sp"
+                        android:textSize="50sp"
+                        android:text="狗蛋哥，早上好！"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                    <com.miguo.ui.view.HomeBannerViewPager
+                        android:background="@color/gray"
+                        android:id="@+id/home_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+
+                    </com.miguo.ui.view.HomeBannerViewPager>
+
+
+                    <me.relex.circleindicator.CircleIndicator
+                        android:id="@+id/indicator_circle"
+                        android:layout_alignBottom="@+id/home_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="bottom"
+                        android:gravity="center"
+                        app:ci_drawable="@drawable/black_radius_square"
+                        app:ci_height="5dp"
+                        app:ci_margin="5dp"
+                        app:ci_width="5dp"/>
+
+                </RelativeLayout>
+
+
+
+                <com.fanwe.view.HomeTuanTimeLimitView
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/home_tuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </com.fanwe.view.HomeTuanTimeLimitView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#21000000" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/c_F2F2F2" />
+
+
+                <com.miguo.ui.view.HomeTagsView
+                    android:id="@+id/home_tags_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                </com.miguo.ui.view.HomeTagsView>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#21000000" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/c_F2F2F2" />
+
+                <com.miguo.ui.view.HomeADView2
+                    android:background="@color/c_F2F2F2"
+                    android:id="@+id/home_ad_view_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                </com.miguo.ui.view.HomeADView2>
+
+            </LinearLayout>
+
+        </com.fanwe.view.RecyclerScrollView>
+
+    </com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout>
+
+    <include layout="@layout/top_activity_hihome_fragment_hihome"/>
+
+</RelativeLayout>

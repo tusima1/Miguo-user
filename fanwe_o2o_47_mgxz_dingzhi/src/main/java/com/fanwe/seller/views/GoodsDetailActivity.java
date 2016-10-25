@@ -31,6 +31,7 @@ import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
@@ -52,6 +53,8 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.MGDictUtil;
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
@@ -437,10 +440,17 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mTvTopHot = ((TextView) findViewById(R.id.tv_hot));
         mIbCollect = ((ImageButton) findViewById(R.id.ib_collect));
 
-        mTvTitleMiddle.setText(modelGoodsDetailNew.getShort_name());//短Title
-        mTvTitleMiddle.setTextColor(Color.argb( 255, 46,46,46));
+        String short_name = modelGoodsDetailNew.getShort_name();
+        String limitedString = MGStringFormatter.getLimitedString(short_name, 10, "...");
+        mTvTitleMiddle.setText(limitedString);//短Title
+        mTvTitleMiddle.setTextColor(Color.argb( 0, 46,46,46));
         mTvTopTitle.setText(modelGoodsDetailNew.getName());//Title
-        mTvTopHot.setText(modelGoodsDetailNew.getPopularity());//人气值
+
+        String popularity = modelGoodsDetailNew.getPopularity();
+        if (TextUtils.isEmpty(popularity)){
+            popularity="0";
+        }
+        mTvTopHot.setText(popularity);//人气值
 
         String origin_price = modelGoodsDetailNew.getOrigin_price();//原价
         String tuan_price = modelGoodsDetailNew.getTuan_price();//团购价
@@ -650,8 +660,40 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void doShare() {
-        if (mShare_info!=null){
-            UmengShareManager.share(GoodsDetailActivity.this,mShare_info.getTitle(),mShare_info.getSummary(),mShare_info.getClickurl(),UmengShareManager.getUMImage(GoodsDetailActivity.this,mShare_info.getImageurl()),null);
+        if (mShare_info != null) {
+            String content = mShare_info.getSummary();
+            if (TextUtils.isEmpty(content)) {
+                content = "欢迎来到米果小站";
+            }
+            String imageUrl = mShare_info.getImageurl();
+            if (TextUtils.isEmpty(imageUrl)) {
+                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                    imageUrl = MGDictUtil.getShareIcon();
+                }
+            } else if (!imageUrl.startsWith("http")) {
+                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                    imageUrl = MGDictUtil.getShareIcon();
+                }
+            }
+            String clickUrl = mShare_info.getClickurl();
+            if (TextUtils.isEmpty(clickUrl)) {
+                clickUrl = ServerUrl.SERVER_H5;
+            } else {
+                if (!TextUtils.isEmpty(fx_id)) {
+                    clickUrl = clickUrl + "/ref_id/" + fx_id;
+                } else {
+                    clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                }
+            }
+            String title = mShare_info.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                title = "米果小站";
+            }
+            UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+        } else {
+            MGToast.showToast("无分享内容");
         }
     }
       //立即购买

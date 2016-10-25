@@ -130,17 +130,17 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         title.setLayoutParams(titleParams);
         title.setText("限时特惠");
         title.setTextSize(16);
-        title.setTextColor(getColor(R.color.orange_main));
+        title.setTextColor(getColor(R.color.text_base_color));
         top.addView(title);
 
 
         countDownTime = new TextView(getContext());
         LinearLayout.LayoutParams countDownTimeParams = getLinearLayoutParams(wrapContent(), wrapContent());
-        countDownTimeParams.setMargins(dip2px(5), 0, 0, 0);
+        countDownTimeParams.setMargins(dip2px(3), 0, 0, 0);
         countDownTime.setLayoutParams(countDownTimeParams);
-        countDownTime.setBackgroundResource(R.drawable.shape_cricle_gray_solid_cccccc);
-        countDownTime.setPadding(dip2px(5), 2, dip2px(5), 2);
-        countDownTime.setTextColor(Color.WHITE);
+//        countDownTime.setBackgroundResource(R.drawable.shape_cricle_gray_solid_cccccc);
+//        countDownTime.setPadding(dip2px(5), 2, dip2px(5), 2);
+        countDownTime.setTextColor(getColor(R.color.orange_f5));
         countDownTime.setTextSize(12);
         countDownTime.setText("12:12:05");
         top.addView(countDownTime);
@@ -149,7 +149,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
 
         rightText = new TextView(getContext());
         LinearLayout.LayoutParams rightTextParams = getLinearLayoutParams(wrapContent(), wrapContent());
-        rightTextParams.setMargins(dip2px(5), 0, 0, 0);
+        rightTextParams.setMargins(dip2px(3), 0, 0, 0);
         rightText.setLayoutParams(rightTextParams);
         rightText.setText(getRightString());
         rightText.setTextColor(getColor(R.color.gray_cc));
@@ -163,7 +163,6 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
 
     private void initSaleDatas(){
         addView(homeTuanHorizontalScrollView);
-        ArrayList arrayList = new ArrayList();
         homeTuanHorizontalScrollView.init(result.getBody());
         homeTuanHorizontalScrollView.setOnTimeLimitClickListener(this);
     }

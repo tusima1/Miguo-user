@@ -39,6 +39,7 @@ import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
@@ -497,7 +498,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                 } else if (getCompleteUrl(result, SHOP_DETAIL)) {
                     //门店详情
                     String extra_merchant_id = result.split("\\/")[result.split("\\/").length - 1];
-                    Intent intentStore = new Intent(this, StoreDetailActivity.class);
+                    Intent intentStore = new Intent(this, HiShopDetailActivity.class);
                     intentStore.putExtra(EXTRA_MERCHANT_ID, extra_merchant_id);
                     startActivity(intentStore);
 

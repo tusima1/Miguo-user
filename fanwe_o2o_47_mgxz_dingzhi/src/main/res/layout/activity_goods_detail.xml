@@ -77,12 +77,14 @@
                 android:src="@drawable/ic_arrow_left_white"
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerInside"
+                android:background="@drawable/md_ripple_unbound_gray"
+                android:clickable="true"
                 />
             <TextView
                 android:id="@+id/tv_middle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Title is center"
+                android:text=""
                 android:textColor="@color/dark_text"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -98,7 +100,10 @@
                 android:src="@drawable/ic_collect_no"
                 android:scaleType="centerInside"
                 android:layout_gravity="right"
-                android:layout_marginRight="@dimen/dp48"/>
+                android:layout_marginRight="@dimen/dp36"
+                android:background="@drawable/md_ripple_unbound_gray"
+                android:clickable="true"
+                />
 
             <ImageView
                 android:id="@+id/iv_share"
@@ -106,7 +111,10 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_share_pure"
                 android:layout_gravity="right"
-                android:scaleType="centerInside"/>
+                android:scaleType="centerInside"
+                android:background="@drawable/md_ripple_unbound_gray"
+                android:clickable="true"
+                />
 
             <!--<View
                 android:layout_width="match_parent"

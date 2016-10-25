@@ -80,6 +80,7 @@ public class RecyclerScrollView extends ScrollView{
         return super.onTouchEvent(ev);
     }
 
+
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         if(onHomeScrollViewListener != null){

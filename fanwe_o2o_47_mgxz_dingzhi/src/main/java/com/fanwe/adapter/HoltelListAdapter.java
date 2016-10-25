@@ -15,7 +15,6 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.customview.SDWeightLinearLayout;
@@ -25,6 +24,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.HoltelModel_list;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
 
 public class HoltelListAdapter extends SDSimpleBaseAdapter<HoltelModel_list>{
 
@@ -95,9 +95,9 @@ public class HoltelListAdapter extends SDSimpleBaseAdapter<HoltelModel_list>{
 			{
 				
 				Intent itemintent = new Intent();
-				itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+				itemintent.setClass(App.getApplication(), HiShopDetailActivity.class);
 				Bundle bundle = new Bundle();
-				bundle.putInt(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getLocation_id());
+				bundle.putInt(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getLocation_id());
 				bundle.putInt("type", 15);
 				bundle.putString("begin_time",begin);
 				bundle.putString("end_time",end);

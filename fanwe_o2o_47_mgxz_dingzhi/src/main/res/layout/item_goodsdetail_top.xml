@@ -122,7 +122,7 @@
                     android:layout_marginLeft="@dimen/dp5"
                     android:textSize="@dimen/sp13"
                     android:textColor="@color/gray_text_59"
-                    android:text="32423"/>
+                    android:text=""/>
             </LinearLayout>
 
             <ImageButton

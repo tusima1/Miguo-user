@@ -16,7 +16,6 @@ import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.ScoresListActivity;
 import com.fanwe.ShopCartActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.StoreListActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.TuanListActivity;
@@ -42,6 +41,7 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 
@@ -112,8 +112,8 @@ public class AppJsHandler extends BaseJsHandler {
                 intent.putExtra(YouHuiDetailActivity.EXTRA_YOUHUI_ID, id);
                 break;
             case IndexType.STORE_DETAIL:
-                intent = new Intent(App.getApplication(), StoreDetailActivity.class);
-                intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, id);
+                intent = new Intent(App.getApplication(), HiShopDetailActivity.class);
+                intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, id);
                 break;
             case IndexType.NOTICE_DETAIL:
                 intent = new Intent(App.getApplication(),
@@ -178,8 +178,8 @@ public class AppJsHandler extends BaseJsHandler {
 
 	@JavascriptInterface
 	public void goDeal(int id) {
-		Intent intent = new Intent(mActivity, StoreDetailActivity.class);
-		intent.putExtra(StoreDetailActivity.EXTRA_SHOP_ID, id);
+		Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
+		intent.putExtra(HiShopDetailActivity.EXTRA_SHOP_ID, id);
 		startActivity(intent);
 	}
 

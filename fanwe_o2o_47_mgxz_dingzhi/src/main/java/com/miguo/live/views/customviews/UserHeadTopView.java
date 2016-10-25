@@ -16,13 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.view.UserHomeActivity;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
@@ -319,10 +319,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void gotoShopDetailActivity(String shop_id) {
         Intent itemintent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putString(StoreDetailActivity.EXTRA_MERCHANT_ID, shop_id);
+        bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID, shop_id);
         bundle.putInt("type", 0);
         itemintent.putExtras(bundle);
-        itemintent.setClass(App.getApplication(), StoreDetailActivity.class);
+        itemintent.setClass(App.getApplication(), HiShopDetailActivity.class);
         if (mActivity != null) {
             mActivity.startActivity(itemintent);
         }
