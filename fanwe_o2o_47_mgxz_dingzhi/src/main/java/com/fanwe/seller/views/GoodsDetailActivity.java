@@ -208,7 +208,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 mFLViewpagerHeight = mFlViewpager.getHeight();
                 int[] location=new int[2];
                 mIbCollect.getLocationInWindow(location);
-                mCollectTopHeight = location[1] - getSystemStatusBarHeight(GoodsDetailActivity.this) - mTitleHeight;
+                mCollectTopHeight = location[1] - mTitleHeight - getSystemStatusBarHeight(GoodsDetailActivity.this) + mIbCollect.getHeight() ;
                 setTitleAction();
             }
         });
