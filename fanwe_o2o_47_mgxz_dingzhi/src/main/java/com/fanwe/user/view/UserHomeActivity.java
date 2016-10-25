@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.ServerUrl;
@@ -71,7 +72,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
 
     private List<String> imgsProduct = new ArrayList<>();
     private List<ModelSpokePlay> datasLive = new ArrayList<>();
-    private RelativeLayout layoutShopEmpty, layoutLiveEmpty;
+    private RelativeLayout layoutShopEmpty, layoutLiveEmpty, layoutShop;
     private String nick;
 
     @Override
@@ -176,6 +177,14 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     }
 
     private void setListener() {
+        layoutShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserHomeActivity.this, DistributionStoreWapActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
         gridViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -302,6 +311,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         tvAttentionStatus = (TextView) findViewById(R.id.tv_attention_status_act_user_home);
         layoutShopEmpty = (RelativeLayout) findViewById(R.id.layout_shop_empty_act_user_home);
         layoutLiveEmpty = (RelativeLayout) findViewById(R.id.layout_live_empty_act_user_home);
+        layoutShop = (RelativeLayout) findViewById(R.id.layout_shop_act_user_home);
     }
 
     @Override
