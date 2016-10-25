@@ -135,7 +135,8 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         Intent intent=new Intent(mGoodsDetailActivity,HiShopDetailActivity.class);
                         Bundle bundle=new Bundle();
-                        bundle.putInt(HiShopDetailActivity.EXTRA_SHOP_ID,DataFormat.toInt(shop_id));
+                        //TODO shop_id 但是门店详情需要的是商家id
+                        bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID,shop_id);
                         intent.putExtras(bundle);
                         mGoodsDetailActivity.startActivity(intent);
                     }

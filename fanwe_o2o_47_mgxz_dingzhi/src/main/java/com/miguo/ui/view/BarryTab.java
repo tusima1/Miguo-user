@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.base.BaseRelativeLayout;
 
 import java.util.ArrayList;
@@ -206,7 +204,8 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
      */
     private void startTabAnim(View view){
 //        return;
-        Animator animator = AnimatorInflater.loadAnimator(getContext(), R.anim.scaletab);
+//        Animator animator = AnimatorInflater.loadAnimator(getContext(), R.anim.scaletab);
+        Animator animator = AnimatorInflater.loadAnimator(getContext(), 0);
         animator.setTarget(view);
         animator.setInterpolator(new BounceInterpolator());
         animator.start();

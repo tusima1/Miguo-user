@@ -14,7 +14,7 @@
     </style>
 
 
-    <style name="AppTheme" parent="AppTheme.NoActionBar">
+    <style name="AppTheme1" parent="AppTheme.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -137,6 +137,7 @@
 
     <style name="MySeekBar" parent="android:Widget.Material.SeekBar">
         <item name="android:color">@color/orange</item>
+        <item name="android:progressDrawable">@drawable/seekbar_progress</item>
     </style>
 
     <!--popup scale 动画-->
