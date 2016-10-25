@@ -826,13 +826,10 @@
 
 
 
-        <activity android:name="com.miguo.live.views.view.PlayBackActivity"
-            android:screenOrientation="portrait"
-            />
 
         <!--新商家详情  -->
         <activity
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme1"
             android:name="com.miguo.app.HiShopDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
