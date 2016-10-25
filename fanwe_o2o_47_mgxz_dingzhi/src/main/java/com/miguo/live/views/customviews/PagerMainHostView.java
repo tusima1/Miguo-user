@@ -20,6 +20,7 @@ import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.miguo.live.interf.ItemChangeListener;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.UIChars;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.List;
@@ -123,7 +124,7 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
             mTv_phone_num.setText("电话:" + mSellerDetailInfo.getTel());
             String price = mSellerDetailInfo.getRef_avg_price();
             if (!TextUtils.isEmpty(price)) {
-                mTv_price.setText("Y " + price + "元/人");
+                mTv_price.setText(UIChars.getUIChar(UIChars.RMB) + price + "元/人");
             }
         }
     }
