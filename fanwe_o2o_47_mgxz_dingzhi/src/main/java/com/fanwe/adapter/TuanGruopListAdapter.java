@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.fanwe.StoreDetailActivity;
+
 import com.fanwe.library.adapter.SDSimpleBaseAdapter;
 import com.fanwe.library.customview.SDMoreLinearLayout;
 import com.fanwe.library.customview.SDMoreLinearLayout.OnOpenCloseListener;
@@ -18,6 +18,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsGroupModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiShopDetailActivity;
 
 import java.util.List;
 
@@ -69,8 +70,8 @@ public class TuanGruopListAdapter extends SDSimpleBaseAdapter<GoodsGroupModel> {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity, StoreDetailActivity.class);
-                intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+                Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
+                intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
                 mActivity.startActivity(intent);
             }
         });

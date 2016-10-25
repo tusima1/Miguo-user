@@ -29,6 +29,7 @@ import com.fanwe.library.dialog.SDDialogBase;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDResourcesUtil;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
@@ -157,8 +158,8 @@ public class MerchantListOrderActivity extends BaseActivity
 				if (model != null)
 				{
 					Intent itemintent = new Intent();
-					itemintent.putExtra(com.fanwe.StoreDetailActivity.EXTRA_MERCHANT_ID, model.getId());
-					itemintent.setClass(MerchantListOrderActivity.this, com.fanwe.StoreDetailActivity.class);
+					itemintent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+					itemintent.setClass(MerchantListOrderActivity.this, HiShopDetailActivity.class);
 					startActivity(itemintent);
 				}
 			}
@@ -270,8 +271,8 @@ public class MerchantListOrderActivity extends BaseActivity
 							String merchantId = actModel.getId();
 							if (!TextUtils.isEmpty(merchantId))
 							{
-								Intent intent = new Intent(getApplicationContext(), StoreDetailActivity.class);
-								intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, merchantId);
+								Intent intent = new Intent(getApplicationContext(), HiShopDetailActivity.class);
+								intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, merchantId);
 								startActivity(intent);
 							}
 							break;

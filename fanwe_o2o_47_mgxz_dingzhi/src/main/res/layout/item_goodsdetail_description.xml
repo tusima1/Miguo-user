@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/location_3"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp20"
+        android:layout_marginBottom="@dimen/dp15"
+        android:gravity="center"
+        android:lines="1"
+        android:text="推荐理由"
+        android:textColor="@color/dark_text"
+        android:textStyle="bold"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/tv_description_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:lineSpacingExtra="@dimen/dp10"
+        android:textColor="@color/dark_text"
+        android:visibility="gone"
+        android:textSize="@dimen/sp13"
+        android:text=""
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dp20"/>
+    <WebView
+        android:id="@+id/webView_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </WebView>
+
+</LinearLayout>

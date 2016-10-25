@@ -120,11 +120,20 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
 
     private void onRefresh(){
-        getSpecialListDao.getSpecialList(
-                AppRuntimeWorker.getCity_id(),
-                BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
-                BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
-                "1");
+        try{
+            getSpecialListDao.getSpecialList(
+                    AppRuntimeWorker.getCity_id(),
+                    BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
+                    BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
+                    "1");
+        }catch (Exception e){
+            getSpecialListDao.getSpecialList(
+                    "",
+                    "",
+                    "",
+                    "1");
+        }
+
     }
 
     private void initDao(){

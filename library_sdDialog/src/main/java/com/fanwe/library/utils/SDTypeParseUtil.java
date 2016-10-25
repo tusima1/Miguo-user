@@ -23,7 +23,7 @@ public class SDTypeParseUtil
 	{
 		if (value == null)
 		{
-			value = 0l;
+			value = 0L;
 		}
 		return value;
 	}

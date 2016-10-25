@@ -57,6 +57,7 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     protected void init() {
         super.init();
         initData();
+        onRefresh();
     }
 
     public void setmIndexModel(Index_indexActModel indexModel) {
@@ -76,7 +77,7 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
                     "0");
         }catch (Exception e){
             getSpecialListDao.getSpecialList(
-                    AppRuntimeWorker.getCity_id(),
+                    "",
                     "",
                     "",
                     "0");

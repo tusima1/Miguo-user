@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp49"
+    android:background="@color/white"
+    android:paddingLeft="@dimen/dp17"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/location_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="￥"
+            android:textColor="@color/dark_text"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/tv_new_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/dark_text"
+            android:textSize="28sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/dp5"
+            android:layout_gravity="bottom"
+            android:paddingBottom="@dimen/dp3"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="￥"
+                android:textColor="@color/gray_text_99"
+                android:textSize="11sp"/>
+            <TextView
+                android:id="@+id/tv_old_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/gray_text_99"
+                android:textSize="15sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_buy"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="立即购买"
+        android:background="#f5b830"/>
+
+    <TextView
+        android:id="@+id/tv_add_shop_cart"
+        android:layout_toLeftOf="@+id/tv_buy"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="加购物车"
+        android:background="#efd394"/>
+</RelativeLayout>

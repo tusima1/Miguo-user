@@ -18,6 +18,7 @@ import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.utils.MGStringFormatter;
@@ -201,7 +202,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(model.getTuan_id())) {
-                    Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+                    Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
                     intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
                     intent.putExtra(TuanDetailActivity.EXTRA_DETAIL_ID, model.getDetail_id());
                     mActivity.startActivity(intent);

@@ -24,6 +24,7 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.listener.TextMoney;
 import com.fanwe.model.StoreIn_list;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
@@ -93,7 +94,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
         convertView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+                Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
                 intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());
                 intent.putExtra(TuanDetailActivity.EXTRA_FX_ID, fx_id);
                 mActivity.startActivity(intent);

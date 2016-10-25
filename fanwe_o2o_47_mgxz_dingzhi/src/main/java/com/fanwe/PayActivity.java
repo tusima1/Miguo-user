@@ -60,6 +60,7 @@ import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -512,14 +513,18 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             startActivity(intent);
             return;
         } else {
-            if (PaymentType.MALIPAY.equals(className) || PaymentType.ALIAPP.equals(className)) // 支付宝sdk新
-            {
+            if (PaymentType.MALIPAY.equals(className) || PaymentType.ALIAPP.equals(className)) {
+                // 支付宝sdk新
                 payMalipay();
-            } else if (PaymentType.WXAPP.equals(className)) // 微信
-            {
+            } else if (PaymentType.WXAPP.equals(className)) {
+                // 微信
+                if (!BaseUtils.isWeixinAvilible(this)) {
+                    MGToast.showToast("未安装微信");
+                    return;
+                }
                 payWxapp();
-            } else if (PaymentType.UPACPAPP.equals(className)) // 银联支付
-            {
+            } else if (PaymentType.UPACPAPP.equals(className)) {
+                // 银联支付
                 payUpacpapp();
             }
         }

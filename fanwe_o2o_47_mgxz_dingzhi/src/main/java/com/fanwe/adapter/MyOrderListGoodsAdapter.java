@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.AddCommentActivity;
-import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
 import com.fanwe.library.adapter.SDBaseAdapter;
@@ -20,7 +19,9 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
+import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.utils.MGStringFormatter;
 
 import java.util.List;
@@ -181,7 +182,7 @@ public class MyOrderListGoodsAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(model.getTuan_id())) {
-                        Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+                        Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
                         intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
                         intent.putExtra(TuanDetailActivity.EXTRA_DETAIL_ID, model.getDetail_id());
                         mActivity.startActivity(intent);

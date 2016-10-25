@@ -23,24 +23,18 @@ import com.fanwe.dao.barry.view.CommandGroupBuyView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.home.model.Room;
 import com.fanwe.home.views.FragmentHomeTimeLimit;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.model.GoodsModel;
-import com.fanwe.model.IndexActAdvsModel;
 import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
@@ -146,8 +140,11 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     private void getTuanList(int page) {
         //BaiduMapManager.getInstance().getBDLocation().getLongitude() +
         //BaiduMapManager.getInstance().getBDLocation().getLatitude() +
+        try{
+            commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome, "", BaiduMapManager.getInstance().getBDLocation().getLongitude() + "", BaiduMapManager.getInstance().getBDLocation().getLatitude() + "", AppRuntimeWorker.getCity_id());
+        }catch (Exception e){
 
-        commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome, "", BaiduMapManager.getInstance().getBDLocation().getLongitude() + "", BaiduMapManager.getInstance().getBDLocation().getLatitude() + "", AppRuntimeWorker.getCity_id());
+        }
     }
 
     private void getHomeClassify() {
@@ -265,115 +262,115 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         }
     }
 
-    private void requestIndex() {
-        RequestModel model = new RequestModel();
-        final long timecurrentTimeMillis = System.currentTimeMillis() / 1000;
-        model.putCtl("index");
-        model.putAct("index");
-//		model.put("time_local_request", timecurrentTimeMillis);
-        SDRequestCallBack<Index_indexActModel> handler = new SDRequestCallBack<Index_indexActModel>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
+//    private void requestIndex() {
+//        RequestModel model = new RequestModel();
+//        final long timecurrentTimeMillis = System.currentTimeMillis() / 1000;
+//        model.putCtl("index");
+//        model.putAct("index");
+////		model.put("time_local_request", timecurrentTimeMillis);
+//        SDRequestCallBack<Index_indexActModel> handler = new SDRequestCallBack<Index_indexActModel>() {
+//            @Override
+//            public void onSuccess(ResponseInfo<String> responseInfo) {
+//                if (actModel.getStatus() == 1) {
+//
+//                    if (pageData_1 == null) {// 第一次
+//                        if (actModel.getDeal_list() != null && !SDCollectionUtil.isEmpty(actModel.getDeal_list()) && actModel.getDeal_list().size() > 0) {
+//                            //请求的数据为空,该城市没有可用的数据,显示默认图片;
+//                            pageData_1 = actModel.getDeal_list();
+//
+//                            for (int i = 10; i < pageData_1.size(); i++) {
+//                                pageData_2.add(pageData_1.get(i));
+//                            }
+//                            pageData_1.removeAll(pageData_2);
+//                            mListModel.clear();
+//                            mListModel.addAll(pageData_1);
+//
+//                            pageModel.update(pageModel);
+//
+////                            mFragRecommendDeals = new HomeRecommendTuanFragment();
+////                            mFragRecommendDeals.setmIndexModel(mListModel, 1);
+////                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
+//
+//                        } else {
+////                            mFragRecommendDeals = new HomeRecommendTuanFragment();
+////                            mFragRecommendDeals.setmIndexModel(null, 1);
+//
+////                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
+//                        }
+//                    }
+//                    actModel.getSpecial().getInfo().setTime_local_request(String.valueOf(timecurrentTimeMillis));
+//                    addFragmentsByActModel(actModel);
+//                }
+//            }
+//
+//            @Override
+//            public void onFinish() {
+////                mPtrsvAll.onRefreshComplete();
+//                SDDialogManager.dismissProgressDialog();
+//            }
+//        };
+//        InterfaceServer.getInstance().requestInterface(model, handler);
+//    }
 
-                    if (pageData_1 == null) {// 第一次
-                        if (actModel.getDeal_list() != null && !SDCollectionUtil.isEmpty(actModel.getDeal_list()) && actModel.getDeal_list().size() > 0) {
-                            //请求的数据为空,该城市没有可用的数据,显示默认图片;
-                            pageData_1 = actModel.getDeal_list();
-
-                            for (int i = 10; i < pageData_1.size(); i++) {
-                                pageData_2.add(pageData_1.get(i));
-                            }
-                            pageData_1.removeAll(pageData_2);
-                            mListModel.clear();
-                            mListModel.addAll(pageData_1);
-
-                            pageModel.update(pageModel);
-
-//                            mFragRecommendDeals = new HomeRecommendTuanFragment();
-//                            mFragRecommendDeals.setmIndexModel(mListModel, 1);
-//                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-
-                        } else {
-//                            mFragRecommendDeals = new HomeRecommendTuanFragment();
-//                            mFragRecommendDeals.setmIndexModel(null, 1);
-
-//                getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-                        }
-                    }
-                    actModel.getSpecial().getInfo().setTime_local_request(String.valueOf(timecurrentTimeMillis));
-                    addFragmentsByActModel(actModel);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-//                mPtrsvAll.onRefreshComplete();
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
-
-    protected void addFragmentsByActModel(Index_indexActModel actModel) {
-        if (actModel == null) {
-            return;
-        }
-
-        // 首页广告
-        mFragAdvs = new HomeAdvsFragment();
-        List<IndexActAdvsModel> listAdvs = actModel.getAdvs();
-        mFragAdvs.setListIndexActAdvsModel(listAdvs);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_advs, mFragAdvs);
-
-        // 首页分类
-//        mFragIndex = new HomeIndexFragment();
-//        mFragIndex.setmIndexModel(actModel);
-//        getSDFragmentManager().replace(R.id.frag_home_new_fl_index, mFragIndex);
-
-        // 米果优惠预告
-        mFragForenoticeYouhui = new HomeForenoticeYouhui();
-        mFragForenoticeYouhui.setmIndexModel(actModel);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_forenotice_youhui,
-                mFragForenoticeYouhui);
-
-        // 首页专题
-        mFragZt = new HomeZtFragment();
-        mFragZt.setmIndexModel(actModel);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_zt, mFragZt);
-
-        // 推荐商家
-//        mFragRecommendSupplier = new HomeRecommendStoreFragment();
-//        mFragRecommendSupplier.setmIndexModel(actModel);
-//        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_supplier, mFragRecommendSupplier);
-
-        // 限时特惠
-        mFragmentHomeTimeLimit = new FragmentHomeTimeLimit();
-        mFragmentHomeTimeLimit.setmIndexModel(actModel);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_event,
-                mFragmentHomeTimeLimit);
-
-        // 推荐团购
-        if (pageModel.getPage() == 1) {
-            // mListModel = actModel.getDeal_list();
-            pageModel.update(pageModel);
-//            mFragRecommendDeals = new HomeRecommendTuanFragment();
-//            mFragRecommendDeals.setmIndexModel(mListModel, 1);
-//            getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
-        }
-        // 推荐商品
-        mFragRecommendGoods = new HomeRecommendGoodsFragment();
-        mFragRecommendGoods.setmIndexModel(actModel);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_goods,
-                mFragRecommendGoods);
-
-        // 推荐优惠券
-        mFragRecommendCoupon = new HomeRecommendYouhuiFragment();
-        mFragRecommendCoupon.setmIndexModel(actModel);
-        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_coupon,
-                mFragRecommendCoupon);
-
-    }
+//    protected void addFragmentsByActModel(Index_indexActModel actModel) {
+//        if (actModel == null) {
+//            return;
+//        }
+//
+//        // 首页广告
+//        mFragAdvs = new HomeAdvsFragment();
+//        List<IndexActAdvsModel> listAdvs = actModel.getAdvs();
+//        mFragAdvs.setListIndexActAdvsModel(listAdvs);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_advs, mFragAdvs);
+//
+//        // 首页分类
+////        mFragIndex = new HomeIndexFragment();
+////        mFragIndex.setmIndexModel(actModel);
+////        getSDFragmentManager().replace(R.id.frag_home_new_fl_index, mFragIndex);
+//
+//        // 米果优惠预告
+//        mFragForenoticeYouhui = new HomeForenoticeYouhui();
+//        mFragForenoticeYouhui.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_forenotice_youhui,
+//                mFragForenoticeYouhui);
+//
+//        // 首页专题
+//        mFragZt = new HomeZtFragment();
+//        mFragZt.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_zt, mFragZt);
+//
+//        // 推荐商家
+////        mFragRecommendSupplier = new HomeRecommendStoreFragment();
+////        mFragRecommendSupplier.setmIndexModel(actModel);
+////        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_supplier, mFragRecommendSupplier);
+//
+//        // 限时特惠
+//        mFragmentHomeTimeLimit = new FragmentHomeTimeLimit();
+//        mFragmentHomeTimeLimit.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_event,
+//                mFragmentHomeTimeLimit);
+//
+//        // 推荐团购
+//        if (pageModel.getPage() == 1) {
+//            // mListModel = actModel.getDeal_list();
+//            pageModel.update(pageModel);
+////            mFragRecommendDeals = new HomeRecommendTuanFragment();
+////            mFragRecommendDeals.setmIndexModel(mListModel, 1);
+////            getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mFragRecommendDeals);
+//        }
+//        // 推荐商品
+//        mFragRecommendGoods = new HomeRecommendGoodsFragment();
+//        mFragRecommendGoods.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_goods,
+//                mFragRecommendGoods);
+//
+//        // 推荐优惠券
+//        mFragRecommendCoupon = new HomeRecommendYouhuiFragment();
+//        mFragRecommendCoupon.setmIndexModel(actModel);
+//        getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_coupon,
+//                mFragRecommendCoupon);
+//
+//    }
 
     private void addTitleBarFragment() {
         mFragTitle = new HomeTitleBarFragment();

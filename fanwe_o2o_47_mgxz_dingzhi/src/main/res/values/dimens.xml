@@ -205,6 +205,7 @@
     <dimen name="dp126">126dp</dimen>
 
     <dimen name="dp128">128dp</dimen>
+    <dimen name="dp135">135dp</dimen>
 
     <dimen name="dp187">187dp</dimen>
 
@@ -242,5 +243,9 @@
     <dimen name="sp20">20sp</dimen>
 
     <dimen name="sp25">25sp</dimen>
+    <dimen name="dp48">48dp</dimen>
+    <dimen name="dp150">150dp</dimen>
+    <dimen name="dp170">170dp</dimen>
+    <dimen name="dp90">90dp</dimen>
 
 </resources>

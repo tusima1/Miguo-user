@@ -418,7 +418,7 @@ public class MyDistributionFragment extends BaseFragment
 			return;
 		}
 		if(mActModel.getLevel_id() == 1){
-			SDViewBinder.setTextView(mTv_place, "青铜", "未找到");
+			SDViewBinder.setTextView(mTv_place, "普通", "未找到");
 		}else if(mActModel.getLevel_id() == 2){
 			SDViewBinder.setTextView(mTv_place, "白金", "未找到");
 		}else if(mActModel.getLevel_id() == 3){

@@ -139,7 +139,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 					tempHttp.getDistrInfo();
 					MGToast.showToast("网络异常,请重新点击!");
 				} else {
-					if (rank == 1) {// 青铜
+					if (rank == 1) {// 普通会员
 						startActivity(new Intent(WithdrawLogActivity.this, MemberRankActivity.class));
 					} else {
 						Intent intent = new Intent(getApplicationContext(), DistributionWithdrawActivity.class);

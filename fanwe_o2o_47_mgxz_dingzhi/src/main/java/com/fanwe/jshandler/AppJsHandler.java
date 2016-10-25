@@ -16,7 +16,6 @@ import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.ScoresListActivity;
 import com.fanwe.ShopCartActivity;
-import com.fanwe.StoreDetailActivity;
 import com.fanwe.StoreListActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.TuanListActivity;
@@ -35,12 +34,14 @@ import com.fanwe.fragment.TuanListFragment;
 import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.utils.SDToast;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 
@@ -98,7 +99,7 @@ public class AppJsHandler extends BaseJsHandler {
                 intent = new Intent(App.getApplication(), NoticeListActivity.class);
                 break;
             case IndexType.DEAL_DETAIL:
-                intent = new Intent(App.getApplication(), TuanDetailActivity.class);
+                intent = new Intent(App.getApplication(), GoodsDetailActivity.class);
                 intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
                 break;
             case IndexType.EVENT_DETAIL:
@@ -111,8 +112,8 @@ public class AppJsHandler extends BaseJsHandler {
                 intent.putExtra(YouHuiDetailActivity.EXTRA_YOUHUI_ID, id);
                 break;
             case IndexType.STORE_DETAIL:
-                intent = new Intent(App.getApplication(), StoreDetailActivity.class);
-                intent.putExtra(StoreDetailActivity.EXTRA_MERCHANT_ID, id);
+                intent = new Intent(App.getApplication(), HiShopDetailActivity.class);
+                intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, id);
                 break;
             case IndexType.NOTICE_DETAIL:
                 intent = new Intent(App.getApplication(),
@@ -177,14 +178,14 @@ public class AppJsHandler extends BaseJsHandler {
 
 	@JavascriptInterface
 	public void goDeal(int id) {
-		Intent intent = new Intent(mActivity, StoreDetailActivity.class);
-		intent.putExtra(StoreDetailActivity.EXTRA_SHOP_ID, id);
+		Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
+		intent.putExtra(HiShopDetailActivity.EXTRA_SHOP_ID, id);
 		startActivity(intent);
 	}
 
 	@JavascriptInterface
 	public void goSupplierLocation(int id) {
-		Intent intent = new Intent(mActivity, TuanDetailActivity.class);
+		Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
 		intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
 		startActivity(intent);
 

@@ -54,7 +54,9 @@ public abstract class MgCallback<T> implements Callback {
                 Log.e(TAG, body);
             }
             try {
+//                Root root =new Gson().fromJson(body,Root.class);
                 Root root = JSON.parseObject(body, Root.class);
+
                 String statusCode = root.getStatusCode();
                 String token = root.getToken();
                 int code = Integer.valueOf(statusCode);
@@ -81,7 +83,7 @@ public abstract class MgCallback<T> implements Callback {
                 }
 
             } catch (Exception e) {
-                // Log.e(TAG, e.getMessage());
+                 Log.e(TAG, e.getMessage());
                 MGToast.showToast(e.getMessage());
             }
         }
