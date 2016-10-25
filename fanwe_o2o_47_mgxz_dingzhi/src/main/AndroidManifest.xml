@@ -832,7 +832,7 @@
 
         <!--新商家详情  -->
         <activity
-            android:theme="@style/AppTheme"
+            android:theme="@style/Transparent_title_area"
             android:name="com.miguo.app.HiShopDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"

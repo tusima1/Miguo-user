@@ -21,6 +21,8 @@ android {
         // Enabling multidex support.
         multiDexEnabled true
 
+        vectorDrawables.useSupportLibrary = true
+
 
     }
 

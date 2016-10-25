@@ -3,6 +3,7 @@ package com.miguo.entity;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
+import com.fanwe.utils.StringTool;
 
 import java.io.Serializable;
 import java.util.List;
@@ -64,6 +65,10 @@ public class HiShopDetailBean implements Serializable{
         private String geo_y;
         private String tel;
 
+
+        public boolean isEndorsement(){
+            return getIs_endorsement().equals("1");
+        }
 
         public String getTel() {
             return tel;
@@ -396,7 +401,10 @@ public class HiShopDetailBean implements Serializable{
 
 
             public String getLocation(){
-                return getArea_name() + " | " + SDDistanceUtil.getFormatDistance(DataFormat.toDouble(getDistance())) + " | " + getCate_type_name();
+                String area = getArea_name() == null || getArea_name().equals("") ? "" : StringTool.getStringFixed(getArea_name(), 5, "") + " | ";
+                String disntance = SDDistanceUtil.getFormatDistance(DataFormat.toDouble(getDistance())) + "";
+                String place = getCate_type_name() == null || getCate_type_name().equals("") ? "" : " | " + getCate_type_name();
+                return area + disntance + place;
             }
 
             public String getDistance() {

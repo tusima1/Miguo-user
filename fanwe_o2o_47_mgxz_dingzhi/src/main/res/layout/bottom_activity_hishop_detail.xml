@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_alignParentBottom="true"
+    android:layout_height="45dp">
+
+    <TextView
+        android:textSize="14sp"
+        android:id="@+id/represent_message"
+        android:layout_toLeftOf="@+id/represent"
+        android:visibility="visible"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="建议消费过后，再申请代言人资格"
+        android:background="@color/black_80"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <TextView
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/represent"
+        android:text="我要代言这个店"
+        android:background="@color/c_F5B830"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+
 
 </RelativeLayout>

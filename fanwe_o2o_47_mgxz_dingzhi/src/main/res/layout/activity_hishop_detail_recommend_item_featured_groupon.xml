@@ -11,10 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="196dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_empty" />
+        android:src="@drawable/nullpic" />
 
     <TextView
-        android:singleLine="true"
         android:gravity="center_vertical"
         android:id="@+id/tv_name_item_featured_groupon"
         android:layout_width="match_parent"
