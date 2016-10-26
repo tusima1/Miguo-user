@@ -93,12 +93,7 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
                 if(result != null){
                     contentLayout.setVisibility(View.GONE);
                     homeTuanHorizontalScrollView.removeAllViews();
-//                            contentLayout.removeAllViews();
                     if(result.getCount_down() != null){
-
-                        if(result.getCount_down().equals("0")){
-                            return;
-                        }
                         contentLayout.setVisibility(View.VISIBLE);
                         homeTuanHorizontalScrollView.init(result);
                         homeTuanHorizontalScrollView.setParent(parent);
