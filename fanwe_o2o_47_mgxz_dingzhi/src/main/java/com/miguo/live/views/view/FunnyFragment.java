@@ -286,7 +286,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     private void requestLiveList() {
         if (liveHelper != null) {
-        cityId = "1cf07dd4-51e0-48fc-b829-2f0a6de0b536"; //1cf07dd4-51e0-48fc-b829-2f0a6de0b536
+//        cityId = "1cf07dd4-51e0-48fc-b829-2f0a6de0b536"; //1cf07dd4-51e0-48fc-b829-2f0a6de0b536
         liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
         }
     }
@@ -299,7 +299,10 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
         if (SDCollectionUtil.isEmpty(datas)) {
             rooms = null;
-            setPageNum(this.pageNum++);
+        }else{
+            if(datas.size()>=pageSize){
+                setPageNum(this.pageNum++);
+            }
         }
 
         rooms = datas;
@@ -328,7 +331,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                 if (mHomeFragmentLiveList != null) {
                     mHomeFragmentLiveList.updateTitle(bean.getName());
                 }
-//                mAdapter.notifyDataSetChanged();
+
                 typeLiveHome = bean.getId();
                 requestLiveList();
                 break;
@@ -375,7 +378,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
-        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
+//        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
     }
 
     @Override
