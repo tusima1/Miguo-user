@@ -158,6 +158,7 @@
     <dimen name="dp58">58dp</dimen>
 
     <dimen name="dp60">60dp</dimen>
+    <dimen name="dp63">63dp</dimen>
 
     <dimen name="dp64">64dp</dimen>
 
@@ -200,6 +201,7 @@
     <dimen name="dp115">115dp</dimen>
 
     <dimen name="dp116">116dp</dimen>
+
 
     <dimen name="dp120">120dp</dimen>
 
