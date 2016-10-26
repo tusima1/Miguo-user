@@ -21,6 +21,16 @@ public class ModelAudienceInfo {
 
     private String nick;
 
+    //机器人头像
+    private int iconRes;
+
+    public int getIconRes() {
+        return iconRes;
+    }
+
+    public void setIconRes(int iconRes) {
+        this.iconRes = iconRes;
+    }
 
     public String getIcon() {
         return icon;
