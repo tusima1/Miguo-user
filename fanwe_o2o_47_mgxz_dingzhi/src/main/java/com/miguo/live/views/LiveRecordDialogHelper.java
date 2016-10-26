@@ -2,7 +2,7 @@ package com.miguo.live.views;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.LiveRecordListener;
@@ -23,7 +22,7 @@ import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
  * 直播的录制
  */
 public class LiveRecordDialogHelper {
-    private static final String TAG ="LiveRecordDialogHelper" ;
+    private static final String TAG = "LiveRecordDialogHelper";
     private LiveHelper mLiveHelper;
     private Activity mActivity;
     private Dialog recordDialog;
@@ -34,9 +33,9 @@ public class LiveRecordDialogHelper {
     private EditText filenameEditText, tagEditText, classEditText;
     private CheckBox trancodeCheckBox, screenshotCheckBox, watermarkCheckBox;
 
-    public LiveRecordDialogHelper(Activity activity, LiveHelper liveHelper){
-        this.mActivity=activity;
-        this.mLiveHelper=liveHelper;
+    public LiveRecordDialogHelper(Activity activity, LiveHelper liveHelper) {
+        this.mActivity = activity;
+        this.mLiveHelper = liveHelper;
         createDialog();
     }
 
@@ -68,14 +67,11 @@ public class LiveRecordDialogHelper {
         recordOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 filename = filenameEditText.getText().toString();
                 mRecordParam.setFilename(filename);
                 tags = tagEditText.getText().toString();
                 classId = classEditText.getText().toString();
-                Log.d(TAG, "onClick classId " + classId);
-                if (classId.equals("")) {
-                    Toast.makeText(mActivity, "classID can not be empty", Toast.LENGTH_LONG).show();
+                if (TextUtils.isEmpty(classId)) {
                     return;
                 }
                 mRecordParam.setClassId(Integer.parseInt(classId));
@@ -83,7 +79,7 @@ public class LiveRecordDialogHelper {
                 mRecordParam.setSreenShot(screenshotCheckBox.isChecked());
                 mRecordParam.setWaterMark(watermarkCheckBox.isChecked());
                 mLiveHelper.startRecord(mRecordParam);
-                if (mListener!=null){
+                if (mListener != null) {
                     mListener.startRecord();
                 }
                 recordDialog.dismiss();
@@ -93,15 +89,9 @@ public class LiveRecordDialogHelper {
         recordCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mListener!=null){
-                    mListener.startRecord();
-                }
                 recordDialog.dismiss();
             }
         });
-        if (mListener!=null){
-            mListener.stopRecord();
-        }
         Window dialogWindow = recordDialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         dialogWindow.setGravity(Gravity.CENTER);
@@ -110,21 +100,21 @@ public class LiveRecordDialogHelper {
     }
 
 
-
     /**
      * 展示出来
      */
-    public void show(){
-        if (recordDialog.isShowing()){
+    public void show() {
+        if (recordDialog.isShowing()) {
 
-        }else {
+        } else {
             recordDialog.show();
         }
     }
 
     LiveRecordListener mListener;
-    public void setOnLiveRecordListener(LiveRecordListener listener){
-        this.mListener=listener;
+
+    public void setOnLiveRecordListener(LiveRecordListener listener) {
+        this.mListener = listener;
     }
 
 

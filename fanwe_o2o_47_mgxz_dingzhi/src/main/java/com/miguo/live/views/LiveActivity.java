@@ -199,6 +199,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private PagerBaoBaoAdapter mBaoBaoAdapter;
 
     boolean isAnchor = false;
+    boolean isRecording = false;
 
 
     /**
@@ -240,12 +241,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case FOCUS_CHANGE_YES:
-                if (mUserHeadTopView!=null){
+                if (mUserHeadTopView != null) {
                     mUserHeadTopView.setFocusStatus(true);
                 }
                 break;
             case FOCUS_CHANGE_NO:
-                if (mUserHeadTopView!=null){
+                if (mUserHeadTopView != null) {
                     mUserHeadTopView.setFocusStatus(false);
                 }
                 break;
@@ -795,6 +796,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mRecordHelper.setOnLiveRecordListener(new LiveRecordListener() {
             @Override
             public void startRecord() {
+                isRecording = true;
                 mOrientationHelper.startOrientationListener();
             }
 
@@ -803,7 +805,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mOrientationHelper.stopOrientationListener();
             }
         });
-
+        mRecordHelper.show();
 
 //            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
 //            mBeautySettings = (LinearLayout) findViewById(R.id.qav_beauty_setting);
@@ -1023,6 +1025,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             CurLiveInfo.setCurrentRequestCount(0);
             unregisterReceiver();
             if (mLiveHelper != null) {
+                if (isRecording) {
+                    mLiveHelper.stopRecord();
+                }
                 mLiveHelper.closeCameraAndMic();
                 mLiveHelper.onDestory();
             }
