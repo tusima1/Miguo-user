@@ -36,6 +36,7 @@
             android:id="@+id/tv_top_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
             android:layout_marginLeft="@dimen/dp17"
             android:layout_marginRight="@dimen/dp17"
             android:text=""

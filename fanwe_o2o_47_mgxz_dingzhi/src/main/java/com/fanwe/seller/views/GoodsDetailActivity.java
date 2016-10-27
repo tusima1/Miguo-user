@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebView;
+import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -140,6 +141,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private View mLL5_Tips;
     private int mCollectTopHeight;
 
+    private int mListViewHeight ;
+
+    private boolean isTop;
+    private boolean isBottom;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,6 +215,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 int[] location=new int[2];
                 mIbCollect.getLocationInWindow(location);
                 mCollectTopHeight = location[1] - mTitleHeight - getSystemStatusBarHeight(GoodsDetailActivity.this) + mIbCollect.getHeight() ;
+
+                mListViewHeight = mShopListView.getHeight();
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+                    mFlViewpager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    mFlViewpager.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
                 setTitleAction();
             }
         });
@@ -320,6 +333,51 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                     }
                 }
 
+                //-------------- listView 滑动冲突 ---------------
+                //展开
+                if (mShopListCount > 1) {
+                    if (isTop && oldY< y){
+                        isTop=false;
+                        mShopListView.setInterceptTouchEventEnable(true);
+                    }
+                    if (isBottom && oldY > y){
+                        isBottom=false;
+                        mShopListView.setInterceptTouchEventEnable(true);
+                    }
+                }
+
+
+            }
+        });
+
+        mShopListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0) {
+                    View firstVisibleItemView = mShopListView.getChildAt(0);
+                    if (firstVisibleItemView != null && firstVisibleItemView.getTop() == 0) {
+                        mShopListView.setInterceptTouchEventEnable(false);
+                        isTop=true;
+                    }else {
+                        isTop=false;
+                        mShopListView.setInterceptTouchEventEnable(true);
+                    }
+                } else if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
+                    mListViewHeight = mShopListView.getHeight();
+                    View lastVisibleItemView = mShopListView.getChildAt(mShopListView.getChildCount() - 1);
+                    if (lastVisibleItemView != null && lastVisibleItemView.getBottom() == mListViewHeight) {
+                        mShopListView.setInterceptTouchEventEnable(false);
+                        isBottom=true;
+                    }else {
+                        isBottom=false;
+                        mShopListView.setInterceptTouchEventEnable(true);
+                    }
+                }
             }
         });
     }
