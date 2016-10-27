@@ -341,8 +341,12 @@ public class MyFragment extends BaseFragment implements RedDotView
         }
         //设置用户信息
         SDViewBinder.setTextView(mUserName, MGStringFormatter.getLimitedString(modelPersonalHome.getNick(), 10));
-        SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(modelPersonalHome.getPersonality(), 10));
-        if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())){
+        String sign = "一生很难，一辈子很长，所以不能停止探寻有趣的生活。一个爱吃爱玩爱享受的人。";
+        if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())) {
+            sign = modelPersonalHome.getPersonality();
+        }
+        SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(sign, 10));
+        if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())) {
             App.getInstance().getmUserCurrentInfo().getUserInfoNew().setRemark(modelPersonalHome.getPersonality());
         }
         mUserFaceString = modelPersonalHome.getIcon();
