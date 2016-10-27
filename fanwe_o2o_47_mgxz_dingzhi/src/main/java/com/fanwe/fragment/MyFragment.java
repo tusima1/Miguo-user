@@ -342,6 +342,9 @@ public class MyFragment extends BaseFragment implements RedDotView
         //设置用户信息
         SDViewBinder.setTextView(mUserName, MGStringFormatter.getLimitedString(modelPersonalHome.getNick(), 10));
         SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(modelPersonalHome.getPersonality(), 10));
+        if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())){
+            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setRemark(modelPersonalHome.getPersonality());
+        }
         mUserFaceString = modelPersonalHome.getIcon();
         SDViewBinder.setImageView(mUserFaceString, mIvUserFace);
 

@@ -150,6 +150,12 @@
         <activity
             android:name="com.fanwe.user.view.AdviceActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.fanwe.user.view.SignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.fanwe.user.view.SexActivity"
+            android:screenOrientation="portrait" />
         <!-- 关注列表 -->
         <activity
             android:name="com.fanwe.user.view.AttentionListActivity"

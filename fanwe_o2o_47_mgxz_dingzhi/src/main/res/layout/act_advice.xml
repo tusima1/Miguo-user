@@ -11,7 +11,7 @@
         android:layout_height="200dp"
         android:background="@color/white"
         android:gravity="top|left"
-        android:hint="请输入建议"
+        android:hint="请输入"
         android:maxLength="1000"
         android:padding="@dimen/dp5"
         android:textColorHint="@color/c_CCCCCC"
