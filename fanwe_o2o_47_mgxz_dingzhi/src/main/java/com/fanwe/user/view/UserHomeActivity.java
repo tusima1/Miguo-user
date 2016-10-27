@@ -365,7 +365,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                         SDViewBinder.setTextView(tvAttention, currModelPersonHomePage.getFocus(), "");
                         SDViewBinder.setTextView(tvFans, currModelPersonHomePage.getFans(), "");
                         SDViewBinder.setTextView(tvSupport, currModelPersonHomePage.getLove_count(), "");
-                        SDViewBinder.setTextView(tvSign, currModelPersonHomePage.getPersonality(), "");
+                        SDViewBinder.setTextView(tvSign, currModelPersonHomePage.getPersonality(), " 一生很难，一辈子很长，所以不能停止探寻有趣的生活。一个爱吃爱玩爱享受的人。");
                         strIcon = currModelPersonHomePage.getIcon();
                         ImageLoader.getInstance().displayImage(strIcon, circleImageView);
                         if ("1".equals(currModelPersonHomePage.getFx_level())) {
