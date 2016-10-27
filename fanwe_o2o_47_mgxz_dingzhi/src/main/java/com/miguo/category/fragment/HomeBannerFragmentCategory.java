@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
@@ -44,16 +45,11 @@ public class HomeBannerFragmentCategory extends FragmentCategory{
     }
 
     private void setBannerParams(){
-        try{
-            int width = getScreenWidth();
-            int height = width * 420 / 750;
-            LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
-            image.setLayoutParams(params);
-            SDViewBinder.setImageView(getFragment().getBanner().getUrl(), image);
-        }catch (Exception e){
-
-        }
-
+        int width = getScreenWidth();
+        int height = width * 420 / 750;
+        LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
+        image.setLayoutParams(params);
+        SDViewBinder.setImageView(getFragment().getBanner().getIcon(), image, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
     }
 
     public HomeBannerFragmet getFragment(){

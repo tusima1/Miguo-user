@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import com.miguo.app.HiBaseActivity;
 import com.miguo.category.fragment.FragmentCategory;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -82,4 +83,9 @@ public abstract class FragmentListener implements
     public void onRefreshBegin(PtrFrameLayout frame) {
 
     }
+
+    public HiBaseActivity getActivity(){
+        return category.getActivity();
+    }
+
 }

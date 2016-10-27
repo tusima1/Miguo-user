@@ -1,7 +1,12 @@
 package com.miguo.definition;
 
+import android.app.Activity;
+
 /**
- * Created by Administrator on 2016/10/26.
+ * Created by zlh/狗蛋哥/Barry on 2016/10/26.
+ * startActivityForResult中的resultCode
  */
 public class ResultCode {
+    public static final int RESUTN_OK = Activity.RESULT_OK;
+    public static final int RESUTN_CITY_ID = 888;
 }

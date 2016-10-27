@@ -1,15 +1,24 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import com.fanwe.fragment.MyFragment;
+import com.fanwe.jpush.JpushHelper;
+import com.fanwe.model.CitylistModel;
+import com.fanwe.seller.views.SellerFragment;
+import com.fanwe.service.AppUpgradeService;
 import com.miguo.adapter.HomePagerAdapter;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
+import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
 
@@ -21,15 +30,25 @@ import java.util.ArrayList;
 public class HiHomeCategory extends Category{
 
 
+    /**
+     * 低栏tab
+     */
     @ViewInject(R.id.tab)
     BarryTab tab;
 
+    /**
+     * 城市
+     */
+
+    /**
+     * 四大分栏的ViewPager
+     */
     @ViewInject(R.id.home_view_pager)
     HomeViewPager homeViewPager;
-
     HomePagerAdapter homePagerAdapter;
-
     ArrayList<Fragment> fragments;
+
+
 
     public HiHomeCategory(HiBaseActivity activity) {
         super(activity);
@@ -57,12 +76,15 @@ public class HiHomeCategory extends Category{
 
     @Override
     protected void init() {
-        initHomePagers();
+        checkAppVersion();
+        initJpush();
+        initUserInfo();
     }
 
     @Override
     protected void initViews() {
         initTab();
+        initHomePagers();
     }
 
     /**
@@ -79,7 +101,7 @@ public class HiHomeCategory extends Category{
              */
             addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
             addTab(getString(R.string.supplier), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
-            addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C).
+            addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
             addTab(getString(R.string.market), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
             addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
             /**
@@ -96,13 +118,17 @@ public class HiHomeCategory extends Category{
              */
             setIconWidht(20).
             /**
+             * 设置中间图标的宽高
+             */
+            setCenterIconWidth(35).
+            /**
              * 设置tab默认文字颜色
              */
             setNormalColor(R.color.text_home_menu_normal).
             /**
              * 设置tab选中时候的文字颜色
              */
-            setPressColor(R.color.text_home_menu_selected).
+            setPressColor(R.color.c_f5b830).
             /**
              * 绑定ViewPager
              */
@@ -113,14 +139,15 @@ public class HiHomeCategory extends Category{
             builder();
     }
 
+    /**
+     * 初始化首页四大板块
+     */
     private void initHomePagers(){
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
-//        fragments.add(new HomeFragment());
-//        fragments.add(new StoreListContainerFragment());
-//        fragments.add(new StoreListContainerFragment());
-//        fragments.add(new MarketFragment());
-//        fragments.add(new MyFragment2());
+        fragments.add(new FunnyFragment());
+        fragments.add(new SellerFragment());
+        fragments.add(new MyFragment());
 
         homePagerAdapter = new HomePagerAdapter(getActivity().getSupportFragmentManager(), fragments);
 
@@ -128,10 +155,34 @@ public class HiHomeCategory extends Category{
         homeViewPager.setOffscreenPageLimit(5);
     }
 
+    /**
+     * 检查app版本
+     */
+    private void checkAppVersion(){
+        getActivity().startService(new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.APP_UPGRADE_SERVICE)));
+    }
+
+    /**
+     * 推送
+     */
+    private void initJpush(){
+        JpushHelper.initJPushConfig();
+    }
+
+    /**
+     * 初始化用户信息
+     */
+    private void initUserInfo(){
+
+    }
+
     public void clickTab(int position){
         homeViewPager.setCurrentItem(position);
     }
 
+    public void updateFromCityChanged(CitylistModel model){
+        ((HiHomeFragment)fragments.get(0)).updateFromCityChanged(model);
+    }
 
 
 }

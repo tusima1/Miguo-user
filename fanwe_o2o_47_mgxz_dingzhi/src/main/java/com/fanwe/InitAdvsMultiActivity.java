@@ -29,6 +29,8 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.app.HiHomeActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.permission.DangerousPermissions;
@@ -238,7 +240,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
         } else {
-            final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            final Intent intent = new Intent(getApplicationContext(), ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
             long currentTime = System.currentTimeMillis();
             long offset = currentTime - mStartTime <0 ?waitTime :currentTime - mStartTime;
             if (offset> waitTime){

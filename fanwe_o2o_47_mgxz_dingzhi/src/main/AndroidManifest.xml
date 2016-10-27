@@ -183,6 +183,7 @@
 
         <!-- 新主界面 -->
         <activity
+            android:theme="@style/Transparent_title_area"
             android:name="com.miguo.app.HiHomeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
