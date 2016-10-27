@@ -94,6 +94,10 @@
             android:name="com.fanwe.mine.views.RepresentIncomeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.fanwe.mine.views.RepresentIntroduceActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.miguo.live.views.LiveStartAuthActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TransTheme" />
@@ -828,11 +832,11 @@
 
         <!--新商家详情  -->
         <activity
-            android:theme="@style/Transparent_title_area"
             android:name="com.miguo.app.HiShopDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan" />
 
 
