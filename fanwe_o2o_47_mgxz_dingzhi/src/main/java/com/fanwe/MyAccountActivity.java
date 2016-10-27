@@ -206,7 +206,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void bindData() {
-        SDViewBinder.setTextView(tvSign, App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark());
+        SDViewBinder.setTextView(tvSign, App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark(), "个人简介");
         String sex = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex();
         if ("1".equals(sex)) {
             //女
@@ -215,7 +215,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             //男
             tvSex.setText("男");
         } else {
-            tvSex.setText("");
+            tvSex.setText("性别");
         }
         int loadImageInMobileNet = SettingModelDao.getLoadImageType();
         if (loadImageInMobileNet == LoadImageType.ALL) {
