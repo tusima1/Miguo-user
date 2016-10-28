@@ -58,7 +58,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <com.didikee.uilibs.views.WaitFinishTextView
         android:id="@+id/tv_buy"
         android:layout_width="@dimen/dp100"
         android:layout_height="match_parent"

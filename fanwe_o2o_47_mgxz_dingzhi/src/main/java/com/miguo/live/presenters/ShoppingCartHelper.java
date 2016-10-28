@@ -71,7 +71,7 @@ public class ShoppingCartHelper extends Presenter {
                     }
                 }else{
                     if(mView!=null) {
-                        mView.onFailue(message);
+                        mView.onFailue(LiveConstants.SHOPPING_CART);
                     }else if (mView2!=null){
                         mView2.onFailue(LiveConstants.SHOPPING_CART);
                     }

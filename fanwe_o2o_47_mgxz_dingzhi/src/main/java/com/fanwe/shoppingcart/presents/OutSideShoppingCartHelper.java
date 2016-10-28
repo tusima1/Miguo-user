@@ -565,6 +565,6 @@ public class OutSideShoppingCartHelper extends Presenter {
     @Override
     public void onDestory() {
         mCallbackView = null;
-
+        callbackView2 = null;
     }
 }
