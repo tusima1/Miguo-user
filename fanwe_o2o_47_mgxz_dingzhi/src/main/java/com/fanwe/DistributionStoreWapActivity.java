@@ -61,6 +61,13 @@ public class DistributionStoreWapActivity extends BaseActivity {
             String url = intent.getStringExtra("url");
             url = url + "/from/app";
 
+            LocalUserModel userModel = AppHelper.getLocalUser();
+            if (userModel != null) {
+                String name = userModel.getUser_mobile();
+                String pwd = userModel.getUser_pwd();
+                url = url + "/name/" + name + "/pwd/" + pwd;
+            }
+
             AppWebViewFragment frag = new AppWebViewFragment();
             frag.setShowTitle(true);
             frag.setUrl(url);
@@ -73,7 +80,16 @@ public class DistributionStoreWapActivity extends BaseActivity {
             AppWebViewFragment frag = new AppWebViewFragment();
             frag.setShowTitle(true);
             String url;
-            url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id;
+
+            LocalUserModel userModel = AppHelper.getLocalUser();
+            if (userModel != null) {
+                String name = userModel.getUser_mobile();
+                String pwd = userModel.getUser_pwd();
+                url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app&uid=" + id;
+            } else {
+                url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id;
+            }
+
             frag.setUrl(url);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
