@@ -16,7 +16,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
-import com.fanwe.fragment.MyFragment;
+import  com.fanwe.fragment.MyFragment;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;

@@ -190,6 +190,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
         @Override
         public void onPaymentChange(PaymentTypeInfo model) {
+            if(model==null){
+                return;
+            }
             if(model.isChecked()) {
                 //微信支付
                 currentPayType = model;

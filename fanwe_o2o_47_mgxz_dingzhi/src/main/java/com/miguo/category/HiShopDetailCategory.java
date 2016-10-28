@@ -303,7 +303,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
             BaseUtils.jumpToNewActivity(getActivity(), intent);
             return;
         }
-
+        represent.setClickable(false);
         representMerchantDao.getRepresentMerchant(result.getEnt_id(), result.getId());
 
     }
@@ -588,5 +588,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
                 showToast(message);
             }
         });
+    }
+
+    @Override
+    public void onFinish() {
+        represent.setClickable(true);
     }
 }
