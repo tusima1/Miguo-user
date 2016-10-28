@@ -79,6 +79,7 @@ public abstract class MgCallback<T> implements Callback {
                         onSuccessResponse(body);
                     }
                 } else {
+
                     onErrorResponse(message, statusCode);
                 }
 
@@ -118,5 +119,9 @@ public abstract class MgCallback<T> implements Callback {
 
     }
 
-    public abstract void onErrorResponse(String message, String errorCode);
+    public String getErrorMessage(String errorCode){
+        String changeMessage = ErrorCodeParse.getErrorCodeMap().get(errorCode);
+        return  changeMessage;
+    }
+    public  abstract void onErrorResponse(String message, String errorCode) ;
 }

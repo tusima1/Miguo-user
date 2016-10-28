@@ -7,5 +7,6 @@ public interface RepresentMerchantView extends BaseView{
 
     void getRepresentMerchantSuccess();
     void getRepresentMerchantError(String message);
+    void onFinish();
 
 }

@@ -27,6 +27,7 @@ public class ErrorCodeParse {
         errorCodeMap.put("303", "操作频繁，请稍后再试");
         errorCodeMap.put("304", "出错啦");
         errorCodeMap.put("305", "验证码已失效，请刷新");
+        errorCodeMap.put("307", "代言名额已满");
         errorCodeMap.put("308", "升级即可代言更多商家");
         errorCodeMap.put("309", "您的积分不足哦");
         errorCodeMap.put("310", "用户名或密码错误");

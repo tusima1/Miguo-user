@@ -1,5 +1,7 @@
 package com.miguo.dao.impl;
 
+import android.text.TextUtils;
+
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -42,14 +44,23 @@ public class RepresentMerchantDaoImpl extends BaseDaoImpl implements RepresentMe
                     roots.add(root);
                     getListener().getRepresentMerchantSuccess();
                 } else
-                    getListener().getRepresentMerchantError(root.getMessage());
+                {
+                     onErrorResponse(root.getMessage(),root.getStatusCode());
+                };
+                getListener().onFinish();
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+                String value = getErrorMessage(errorCode);
+                if(!TextUtils.isEmpty(value)){
+                    message = value;
+                }
+                MGToast.showToast(value);
+                getListener().onFinish();
             }
         });
+
     }
 
     @Override
