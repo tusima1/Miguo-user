@@ -384,11 +384,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
      * 点击电话
      */
     public void clickCall() {
-        if (result == null) {
-            return;
-        }
-        if (TextUtils.isEmpty(result.getTel())) {
-            showToast("没有电话！");
+        if (result == null || TextUtils.isEmpty(result.getTel())) {
             return;
         }
         Intent intent = SDIntentUtil.getIntentCallPhone(result.getTel());
@@ -453,6 +449,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
      */
     private void updatePage(final HiShopDetailBean.Result result) {
         this.result = result;
+        if (TextUtils.isEmpty(result.getTel())) {
+            call.setImageResource(R.drawable.ic_phone_disable);
+        } else {
+            call.setImageResource(R.drawable.ic_phone_enable);
+        }
         /**
          * 轮播图
          */
@@ -490,7 +491,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         /**
          * 距离
          */
-        distance.setText("距离 " + result.getDistanceFormat());
+        if (TextUtils.isEmpty(result.getDistance()) || "-1".equals(result.getDistance())) {
+            distance.setText("距离");
+        } else {
+            distance.setText("距离 " + result.getDistanceFormat());
+        }
         /**
          * 精选列表
          */

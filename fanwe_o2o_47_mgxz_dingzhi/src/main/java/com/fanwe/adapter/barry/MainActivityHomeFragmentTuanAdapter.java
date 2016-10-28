@@ -87,7 +87,11 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
     }
 
     private String getDistance(int position) {
-        float distanceInt = DataFormat.toFloat(getItem(position).getDistance());
+        String strD = getItem(position).getDistance();
+        if (TextUtils.isEmpty(strD) || "-1".equals(strD)) {
+            return "";
+        }
+        float distanceInt = DataFormat.toFloat(strD);
         if (distanceInt <= 1000) {
             return ">" + distanceInt + "m";
         } else if (distanceInt < 1000000) {

@@ -33,16 +33,16 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
 
     private GoodsDetailActivity mGoodsDetailActivity;
     private List<ShopListBean> mData;
-    private int mCount=1;
+    private int mCount = 1;
 
     public GoodsDetailShopListAdapter(List<ShopListBean> data, GoodsDetailActivity
             goodsDetailActivity) {
         this.mData = data;
-        this.mGoodsDetailActivity=goodsDetailActivity;
+        this.mGoodsDetailActivity = goodsDetailActivity;
     }
 
-    public void setCount(int count){
-        this.mCount=count;
+    public void setCount(int count) {
+        this.mCount = count;
     }
 
     @Override
@@ -63,37 +63,41 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         GDViewHolder holder;
-        if (convertView==null){
-            holder=new GDViewHolder();
-            convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_goods_detail_shop_list,null);
-            holder.tv_name_address= (TextView) convertView.findViewById(R.id.tv_name_or_address);
-            holder.tv_time= (TextView) convertView.findViewById(R.id.tv_time);
-            holder.tv_distance= (TextView) convertView.findViewById(R.id.tv_distance);
-            holder.iv_phone= (ImageView) convertView.findViewById(R.id.iv_phone);
-            holder.iv_map= (ImageView) convertView.findViewById(R.id.iv_map);
-            holder.iv_shop= (ImageView) convertView.findViewById(R.id.iv_shop);
+        if (convertView == null) {
+            holder = new GDViewHolder();
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_goods_detail_shop_list, null);
+            holder.tv_name_address = (TextView) convertView.findViewById(R.id.tv_name_or_address);
+            holder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
+            holder.tv_distance = (TextView) convertView.findViewById(R.id.tv_distance);
+            holder.iv_phone = (ImageView) convertView.findViewById(R.id.iv_phone);
+            holder.iv_map = (ImageView) convertView.findViewById(R.id.iv_map);
+            holder.iv_shop = (ImageView) convertView.findViewById(R.id.iv_shop);
             convertView.setTag(holder);
         }
-        holder= (GDViewHolder) convertView.getTag();
+        holder = (GDViewHolder) convertView.getTag();
         final ShopListBean shopListBean = mData.get(position);
-        if (shopListBean!=null){
-            if (position==0){
-                holder.tv_name_address.setText(shopListBean.getAddress());
-            }else {
+        if (shopListBean != null) {
+            if (position == 0) {
+                if (!TextUtils.isEmpty(shopListBean.getAddress())) {
+                    holder.tv_name_address.setText(shopListBean.getAddress());
+                } else {
+                    holder.tv_name_address.setText(shopListBean.getShop_name());
+                }
+            } else {
                 holder.tv_name_address.setText(shopListBean.getShop_name());
             }
             String distance = shopListBean.getDistance();
-            if (TextUtils.isEmpty(distance)){
+            if (TextUtils.isEmpty(distance) || "-1".equals(distance)) {
                 holder.iv_map.setImageResource(R.drawable.ic_map_disable);
                 holder.tv_distance.setText("--km");
-            }else {
+            } else {
                 holder.iv_map.setImageResource(R.drawable.ic_map_enable);
-                holder.tv_distance.setText(SDDistanceUtil.getKmDistanceString(MGStringFormatter.getFloat(distance)));
+                holder.tv_distance.setText(SDDistanceUtil.getFormatDistance(DataFormat.toDouble(distance)));
                 holder.iv_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(parent.getContext(), StoreLocationActivity.class);
-                        Store_infoModel store_infoModel=new Store_infoModel();
+                        Store_infoModel store_infoModel = new Store_infoModel();
                         store_infoModel.setAddress(shopListBean.getAddress());
                         store_infoModel.setXpoint(DataFormat.toDouble(shopListBean.getGeo_x()));
                         store_infoModel.setYpoint(DataFormat.toDouble(shopListBean.getGeo_y()));
@@ -102,7 +106,7 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                         store_infoModel.setTel(shopListBean.getTel());
 
                         intent.putExtra(StoreLocationFragment.EXTRA_MODEL_MERCHANTITEMACTMODEL, store_infoModel);
-                        SDActivityUtil.startActivity(mGoodsDetailActivity,intent);
+                        SDActivityUtil.startActivity(mGoodsDetailActivity, intent);
                     }
                 });
             }
@@ -110,9 +114,9 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
             holder.tv_time.setText(shopListBean.getTrade_day());
 
             final String tel = shopListBean.getTel();
-            if (TextUtils.isEmpty(tel)){
+            if (TextUtils.isEmpty(tel)) {
                 holder.iv_phone.setImageResource(R.drawable.ic_phone_disable);
-            }else {
+            } else {
                 holder.iv_phone.setImageResource(R.drawable.ic_phone_enable);
                 holder.iv_phone.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -123,17 +127,17 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                 });
             }
             final String shop_id = shopListBean.getId();
-            if (TextUtils.isEmpty(shop_id)){
+            if (TextUtils.isEmpty(shop_id)) {
                 holder.iv_shop.setImageResource(R.drawable.ic_shop_disable);
-            }else {
+            } else {
                 holder.iv_shop.setImageResource(R.drawable.ic_shop_enable);
                 holder.iv_shop.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent=new Intent(mGoodsDetailActivity,HiShopDetailActivity.class);
-                        Bundle bundle=new Bundle();
+                        Intent intent = new Intent(mGoodsDetailActivity, HiShopDetailActivity.class);
+                        Bundle bundle = new Bundle();
                         //TODO shop_id 但是门店详情需要的是商家id
-                        bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID,shop_id);
+                        bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID, shop_id);
                         intent.putExtras(bundle);
                         mGoodsDetailActivity.startActivity(intent);
                     }
@@ -146,7 +150,7 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class GDViewHolder{
+    private class GDViewHolder {
         public TextView tv_name_address;
         public TextView tv_time;
         public TextView tv_distance;
