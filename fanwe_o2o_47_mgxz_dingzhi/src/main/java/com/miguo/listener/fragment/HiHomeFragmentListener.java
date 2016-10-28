@@ -12,13 +12,17 @@ import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiHomeFragmentCategory;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.RequestCode;
+import com.miguo.entity.AdspaceListBean;
+import com.miguo.entity.MenuBean;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.ui.view.HomeADView2;
+import com.miguo.ui.view.HomeTagsView;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/20.
  */
-public class HiHomeFragmentListener extends FragmentListener{
+public class HiHomeFragmentListener extends FragmentListener implements HomeADView2.OnTopicAdsClickListener, HomeTagsView.OnHomeTagsClickListener{
 
     public HiHomeFragmentListener(FragmentCategory category) {
         super(category);
@@ -43,6 +47,9 @@ public class HiHomeFragmentListener extends FragmentListener{
         }
     }
 
+    /**
+     * 问候语上的城市
+     */
     private void clickCity(){
         clickEarn();
     }
@@ -66,6 +73,16 @@ public class HiHomeFragmentListener extends FragmentListener{
     private void clickMessage(){
         Intent intent = new Intent(getActivity(), MyMessageActivity.class);
         BaseUtils.jumpToNewActivity(getActivity(), intent);
+    }
+
+    @Override
+    public void onTopicAdsClick(AdspaceListBean.Result.Body ad) {
+        getCategory().onTopicAdsClick(ad);
+    }
+
+    @Override
+    public void onTagsClick(MenuBean.Result.Body item) {
+        getCategory().onTagsClick(item);
     }
 
     @Override

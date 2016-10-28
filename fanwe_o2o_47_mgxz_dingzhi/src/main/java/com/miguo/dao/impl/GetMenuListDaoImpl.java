@@ -6,47 +6,45 @@ import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
-import com.miguo.dao.GetAdspaceListDao;
+import com.miguo.dao.GetMenuListDao;
 import com.miguo.entity.AdspaceListBean;
-import com.miguo.entity.HomeGreetingBean;
+import com.miguo.entity.MenuBean;
 import com.miguo.view.BaseView;
-import com.miguo.view.GetAdspaceListView;
+import com.miguo.view.GetMenuListView;
 
 import java.util.TreeMap;
 
 /**
- * Created by Administrator on 2016/10/27.
- * 首页广告baner和topic接口实现类
+ * Created by zlh/狗蛋哥/Barry on 2016/10/28.
+ * 首页菜单列表接口实现类
  */
-public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceListDao{
+public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
 
-    public GetAdspaceListDaoImpl(BaseView baseView) {
+    public GetMenuListDaoImpl(BaseView baseView) {
         super(baseView);
     }
 
     @Override
-    public GetAdspaceListView getListener() {
-        return (GetAdspaceListView)baseView;
+    public GetMenuListView getListener() {
+        return (GetMenuListView)baseView;
     }
 
     @Override
-    public void getAdspaceList(String city_id, final String type, String terminal_type) {
+    public void getMenuList(String terminal_type, String menu_type) {
         TreeMap<String, String> map = new TreeMap<>();
-        map.put("method", "GetAdspaceList");
-        map.put("city_id", city_id);
-        map.put("type", type);
+        map.put("method", "GetMenuList");
+        map.put("menu_type", menu_type);
         map.put("terminal_type", terminal_type);
-        map.put("token", App.getApplication().getToken());
         OkHttpUtils.getInstance().get("", map, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                AdspaceListBean bean = new Gson().fromJson(responseBody, AdspaceListBean.class);
+                MenuBean bean = new Gson().fromJson(responseBody, MenuBean.class);
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
-                        getListener().getAdspaceListSuccess(bean.getResult().get(0).getBody(), type);
+                        getListener().getMenuListSuccess(bean.getResult().get(0).getBody());
                     }else {
-                        getListener().getAdspaceListError();
+                        getListener().getMenuListError();
                     }
                 }
             }

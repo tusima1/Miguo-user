@@ -147,6 +147,13 @@
 
                 </com.miguo.ui.view.HomeADView2>
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview_frag_featured_groupon"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:layout_marginTop="@dimen/dp15"
+                    android:scrollbars="none" />
+
             </LinearLayout>
 
         </com.fanwe.view.RecyclerScrollView>

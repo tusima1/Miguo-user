@@ -15,7 +15,8 @@ import com.miguo.view.HomeGreetingView;
 import java.util.TreeMap;
 
 /**
- * Created by Administrator on 2016/10/26.
+ * Created by zlh/狗蛋哥/Barry on 2016/10/26.
+ * 首页问候语接口实现类
  */
 public class HomeGreetingDaoImpl extends BaseDaoImpl implements HomeGreetingDao{
 

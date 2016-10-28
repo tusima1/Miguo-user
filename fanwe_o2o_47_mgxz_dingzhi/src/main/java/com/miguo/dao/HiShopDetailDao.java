@@ -1,7 +1,8 @@
 package com.miguo.dao;
 
 /**
- * Created by Administrator on 2016/10/21.
+ * Created by zlh/狗蛋哥/Barry on 2016/10/21.
+ * 商家详情页接口
  */
 public interface HiShopDetailDao extends BaseDao{
 

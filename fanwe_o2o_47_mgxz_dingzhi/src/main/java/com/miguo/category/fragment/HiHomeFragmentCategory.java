@@ -32,13 +32,16 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
-import com.miguo.app.HiShopDetailActivity;
 import com.miguo.dao.GetAdspaceListDao;
+import com.miguo.dao.GetMenuListDao;
 import com.miguo.dao.HomeGreetingDao;
 import com.miguo.dao.impl.GetAdspaceListDaoImpl;
+import com.miguo.dao.impl.GetMenuListDaoImpl;
 import com.miguo.dao.impl.HomeGreetingDaoImpl;
+import com.miguo.definition.AdspaceParams;
+import com.miguo.definition.MenuParams;
 import com.miguo.entity.AdspaceListBean;
-import com.miguo.fake.HomeBannerFakeData;
+import com.miguo.entity.MenuBean;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
@@ -48,6 +51,7 @@ import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.view.GetAdspaceListView;
+import com.miguo.view.GetMenuListView;
 import com.miguo.view.HomeGreetingView;
 
 import java.util.ArrayList;
@@ -66,7 +70,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         RecyclerScrollView.OnRecyclerScrollViewListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
         HomeGreetingView,
-        GetAdspaceListView{
+        GetAdspaceListView, GetMenuListView{
 
     /**
      * 顶部导航栏的东西
@@ -105,12 +109,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     TextView citySayHi;
 
     /**
-     * 标题栏空间高度
-     */
-//    @ViewInject(R.id.title_space)
-//    Space titleSpace;
-
-    /**
      * 轮播ViewPager
      */
     @ViewInject(R.id.home_view_pager)
@@ -123,7 +121,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /**
      * 限时特惠
      */
-    FragmentHomeTimeLimit timeLimit;
     @ViewInject(R.id.home_tuan)
     HomeTuanTimeLimitView homeTuanTimeLimitView;
     GetSpecialListDao getSpecialListDao;
@@ -145,7 +142,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     HomeGreetingDao homeGreetingDao;
     GetAdspaceListDao getAdspaceListDao;
-
+    GetMenuListDao getMenuListDao;
+    /**
+     * 今日精选
+     */
+    FeaturedGrouponCategory featuredGrouponCategory;
 
     boolean hasTop = true;
     int topHeight = dip2px(150);
@@ -160,6 +161,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         getSpecialListDao = new GetSpecialListDaoImpl(this);
         homeGreetingDao = new HomeGreetingDaoImpl(this);
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
+        getMenuListDao = new GetMenuListDaoImpl(this);
     }
 
     @Override
@@ -178,6 +180,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         areaLayout.setOnClickListener(listener);
         searchLayout.setOnClickListener(listener);
         citySayHi.setOnClickListener(listener);
+        homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener)listener);
+        homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener)listener);
     }
 
     @Override
@@ -186,10 +190,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         setTitleAlpha(titleLayout, 0);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
-        initHomeTagsView();
-        initHomeADView2();
-//        addTimeLimitFragment();
         locationCity();
+        /**
+         * 今日精选
+         */
+        initFeaturedGrouponCategory();
         /**
          * 因为问候语上滑要消失，所以不加入刷新方法
          */
@@ -200,6 +205,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void onRefresh(){
         onRefreshTimeLimit();
         onRefreshAdspaceList();
+        onRefreshFeaturedGroupon();
+        onRefreshMenus();
     }
 
     /**
@@ -228,43 +235,19 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
     }
 
-    /**
-     * 添加限时特惠fragment
-     */
-    private void addTimeLimitFragment() {
-        timeLimit = new FragmentHomeTimeLimit();
-        timeLimit.setParent(ptrFrameLayout);
-//        new SDFragmentManager(fragment.getChildFragmentManager()).replace(R.id.time_limited_layout, timeLimit);
-//        fragment.getChildFragmentManager().beginTransaction().commit();
+    private void initFeaturedGrouponCategory(){
+        featuredGrouponCategory = new FeaturedGrouponCategory(view, fragment);
     }
-
 
     /**
      * 首页标签、菜单栏
      */
-    private void initHomeTagsView(){
-        List list = new ArrayList();
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
+    private void initHomeMenuView(List<MenuBean.Result.Body> list){
         homeTagsView.init(list);
     }
 
-    private void initHomeADView2(){
-        List list = new ArrayList();
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        homeADView2.init(list);
+    private void initHomeADView2(List<AdspaceListBean.Result.Body> body){
+        homeADView2.init(body);
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -297,10 +280,30 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         }
     }
 
-    public void onRefreshAdspaceList(){
-        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id());
+    /**
+     * 刷新今日精选
+     */
+    public void onRefreshFeaturedGroupon(){
+        featuredGrouponCategory.onRefresh();
     }
 
+    public void onRefreshMenus(){
+        getMenuListDao.getMenuList(MenuParams.TERMINAL_TYPE, MenuParams.MENU_TYPE_INDEX);
+    }
+
+    /**
+     * 刷新广告
+     * banners + topics
+     */
+    public void onRefreshAdspaceList(){
+        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_BANNER_INDEX, AdspaceParams.TERMINAL_TYPE);
+        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_TOPIC_INDEX, AdspaceParams.TERMINAL_TYPE);
+    }
+
+
+    /**
+     * 刷新问候语
+     */
     private void onRefreshGreeting(){
         homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
     }
@@ -390,11 +393,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** 定位，城市处理 */
 
 
+    public void loadComplete() {
+        ptrFrameLayout.refreshComplete();
+        scrollView.loadComplite();
+    }
 
     /** scroll view 滚动监听 */
     @Override
     public void onScrollToEnd() {
-
+        featuredGrouponCategory.onLoadMore();
     }
 
     @Override
@@ -456,7 +463,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void onRefreshBegin(PtrFrameLayout frame) {
-
+        onRefresh();
     }
 
     /** click method end ***/
@@ -528,13 +535,25 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @param body
      */
     @Override
-    public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body) {
+    public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                initBanner(body);
+                updateAdspaceViews(body, type);
             }
         });
+    }
+
+    private void updateAdspaceViews(final List<AdspaceListBean.Result.Body> body, String type){
+        switch (type){
+            case AdspaceParams.TYPE_BANNER_INDEX:
+                initBanner(body);
+                break;
+            case AdspaceParams.TYPE_TOPIC_INDEX:
+                initHomeADView2(body);
+                break;
+        }
+
     }
 
     @Override
@@ -563,6 +582,31 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getHomeGreetingError() {
         getHomeGreetingSuccess("神秘人，你好！");
+    }
+
+    /**
+     * 首页菜单
+     */
+    @Override
+    public void getMenuListSuccess(List<MenuBean.Result.Body> list) {
+        initHomeMenuView(list);
+    }
+
+    @Override
+    public void getMenuListError() {
+
+    }
+
+    /**
+     * 专题点击回调
+     * @param ad
+     */
+    public void onTopicAdsClick(AdspaceListBean.Result.Body ad) {
+
+    }
+
+    public void onTagsClick(MenuBean.Result.Body item){
+
     }
 
     public boolean isHasTop() {

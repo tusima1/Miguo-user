@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.entity.MenuBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
 import com.miguo.live.views.customviews.RoundedImageView;
 
@@ -23,6 +24,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
 
     LinearLayout content;
     OnHomeTagsClickListener onHomeTagsClickListener;
+    List<MenuBean.Result.Body> list;
 
     public HomeTagsView(Context context) {
         super(context);
@@ -52,10 +54,12 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         addView(content);
     }
 
-    public void init(List tags){
+    public void init(List<MenuBean.Result.Body> tags){
         if(tags == null || tags.size()==0){
             return ;
         }
+
+        this.list = tags;
 
         content.removeAllViews();
 
@@ -75,7 +79,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             icon.setLayoutParams(iconParams);
             icon.setOval(true);
 
-            SDViewBinder.setImageView("http://img.xiaoneiit.com/avatar/5.jpg", icon);
+            SDViewBinder.setImageView(getItem(i).getIcon(), icon);
             group.addView(icon);
 
             TextView title = new TextView(getContext());
@@ -84,7 +88,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             title.setLayoutParams(titleParams);
             title.setTextColor(getColor(R.color.text_base_color));
             title.setTextSize(12);
-            title.setText("米果小站");
+            title.setText(getItem(i).getTitle());
             group.addView(title);
 
             content.addView(group);
@@ -98,6 +102,10 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         content.addView(line);
     }
 
+    public MenuBean.Result.Body getItem(int position){
+        return list.get(position);
+    }
+
     class HomeTagsViewListener implements View.OnClickListener{
 
         int position;
@@ -109,13 +117,13 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         @Override
         public void onClick(View v) {
             if(onHomeTagsClickListener != null){
-                onHomeTagsClickListener.onTagsClick();
+                onHomeTagsClickListener.onTagsClick(getItem(position));
             }
         }
     }
 
     public interface OnHomeTagsClickListener{
-        void onTagsClick();
+        void onTagsClick(MenuBean.Result.Body item);
     }
 
     public void setOnHomeTagsClickListener(OnHomeTagsClickListener onHomeTagsClickListener) {

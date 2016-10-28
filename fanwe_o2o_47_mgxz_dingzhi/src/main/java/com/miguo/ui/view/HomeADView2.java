@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.entity.AdspaceListBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
 
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Random;
 public class HomeADView2 extends BaseHorizantalScrollView{
 
     RelativeLayout content;
+    List<AdspaceListBean.Result.Body> ads;
+    OnTopicAdsClickListener onTopicAdsClickListener;
     String[] urls = {
       "http://img.xiaoneiit.com/mgxz/ad2_1.jpg",
       "http://img.xiaoneiit.com/mgxz/ad2_2.jpg",
@@ -56,10 +59,12 @@ public class HomeADView2 extends BaseHorizantalScrollView{
         addView(content);
     }
 
-    public void init(List ads){
+    public void init(List<AdspaceListBean.Result.Body> ads){
         if(ads == null || ads.size() == 0){
             return ;
         }
+
+        this.ads = ads;
 
         content.removeAllViews();
 
@@ -119,7 +124,7 @@ public class HomeADView2 extends BaseHorizantalScrollView{
             }
 
             img.setLayoutParams(imgParams);
-            SDViewBinder.setImageView(urls[i], img);
+            SDViewBinder.setImageView(getItem(i).getIcon(), img);
 
 
             title.setLayoutParams(imgParams);
@@ -129,8 +134,38 @@ public class HomeADView2 extends BaseHorizantalScrollView{
             content.addView(img);
             content.addView(view);
             content.addView(title);
+
+            img.setOnClickListener(new TopicAdsListener(i));
+
+        }
+    }
+
+    class TopicAdsListener implements View.OnClickListener{
+
+        int position;
+
+        public TopicAdsListener(int position) {
+            this.position = position;
         }
 
+        @Override
+        public void onClick(View v) {
+            if(onTopicAdsClickListener != null){
+                onTopicAdsClickListener.onTopicAdsClick(getItem(position));
+            }
+        }
+    }
+
+    public void setOnTopicAdsClickListener(OnTopicAdsClickListener onTopicAdsClickListener) {
+        this.onTopicAdsClickListener = onTopicAdsClickListener;
+    }
+
+    public interface OnTopicAdsClickListener{
+        void onTopicAdsClick(AdspaceListBean.Result.Body ad);
+    }
+
+    public AdspaceListBean.Result.Body getItem(int position){
+        return ads.get(position);
     }
 
 }

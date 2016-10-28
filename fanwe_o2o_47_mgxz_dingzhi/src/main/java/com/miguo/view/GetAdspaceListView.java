@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface GetAdspaceListView extends BaseView{
 
-    void getAdspaceListSuccess(List<AdspaceListBean.Result.Body> body);
+    void getAdspaceListSuccess(List<AdspaceListBean.Result.Body> body, String type);
     void getAdspaceListError();
 
 }
