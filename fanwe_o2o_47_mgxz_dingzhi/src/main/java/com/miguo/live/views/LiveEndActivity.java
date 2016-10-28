@@ -20,6 +20,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.stopLive.ModelStopLive;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.TimeUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -39,10 +40,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class LiveEndActivity extends Activity implements CallbackView {
     private DataBindingLiveEnd dataBindingLiveEnd;
-    private boolean isShare;
     private ModelStopLive modelStopLive;
     private LiveHttpHelper mLiveHttphelper;
     private CircleImageView ivIcon;
+    private boolean clickEnable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +118,9 @@ public class LiveEndActivity extends Activity implements CallbackView {
                 dataBindingLiveEnd.mode.set(dataBindingLiveEnd.QQZONE);
                 break;
             case R.id.btn_submit_live_end:
-                isShare = true;
-                endLive();
+                if (clickEnable) {
+                    endLive();
+                }
                 break;
         }
     }
@@ -129,14 +131,25 @@ public class LiveEndActivity extends Activity implements CallbackView {
         if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQ) {
             platform = SHARE_MEDIA.QQ;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.WEIXIN) {
+            if (!BaseUtils.isWeixinAvilible(this)) {
+                MGToast.showToast("未安装微信");
+                return;
+            }
             platform = SHARE_MEDIA.WEIXIN;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.FRIEND) {
+            if (!BaseUtils.isWeixinAvilible(this)) {
+                MGToast.showToast("未安装微信");
+                return;
+            }
             platform = SHARE_MEDIA.WEIXIN_CIRCLE;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.SINA) {
             platform = SHARE_MEDIA.SINA;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
             platform = SHARE_MEDIA.QZONE;
         }
+        //点击按钮后，锁住按钮
+        clickEnable = false;
+
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
             imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
@@ -157,18 +170,21 @@ public class LiveEndActivity extends Activity implements CallbackView {
     private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
+            clickEnable = true;
             MGToast.showToast("分享成功");
             finish();
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            clickEnable = true;
             MGToast.showToast("分享失败");
             finish();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
+            clickEnable = true;
             MGToast.showToast("分享取消");
             finish();
         }
