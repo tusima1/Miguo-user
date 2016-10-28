@@ -12,6 +12,15 @@ public class ShopListBean {
     private String id;
     private String shop_name;
     private String trade_day;//营业时间
+    private String distance;//距离
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
     public String getTrade_day() {
         return trade_day;

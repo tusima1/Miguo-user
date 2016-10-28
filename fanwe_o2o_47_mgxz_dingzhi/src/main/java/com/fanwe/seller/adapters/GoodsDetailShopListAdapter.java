@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fanwe.StoreLocationActivity;
-import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.fragment.StoreLocationFragment;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;
@@ -20,6 +19,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getGroupDeatilNew.ShopListBean;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDDistanceUtil;
 import com.miguo.app.HiShopDetailActivity;
 
@@ -82,16 +82,13 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
             }else {
                 holder.tv_name_address.setText(shopListBean.getShop_name());
             }
-            String geo_x = shopListBean.getGeo_x();
-            String geo_y = shopListBean.getGeo_y();
-            if (TextUtils.isEmpty(geo_x) || TextUtils.isEmpty(geo_y)){
+            String distance = shopListBean.getDistance();
+            if (TextUtils.isEmpty(distance)){
                 holder.iv_map.setImageResource(R.drawable.ic_map_disable);
                 holder.tv_distance.setText("--km");
             }else {
                 holder.iv_map.setImageResource(R.drawable.ic_map_enable);
-                int distanceFromMyLocation = (int) BaiduMapManager.getInstance()
-                        .getDistanceFromMyLocation(geo_x,geo_y);
-                holder.tv_distance.setText(SDDistanceUtil.getKmDistanceString(distanceFromMyLocation));
+                holder.tv_distance.setText(SDDistanceUtil.getKmDistanceString(MGStringFormatter.getFloat(distance)));
                 holder.iv_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

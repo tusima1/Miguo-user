@@ -35,4 +35,18 @@ public class SDDistanceUtil
 		}
 		return "0.0km";
 	}
+
+	public static String getKmDistanceString( double distance)
+	{
+		if (distance > 0)
+		{
+			double doubleDistance =  distance / 1000;
+			String strKmDistance = SDFormatUtil.formatNumberDouble(doubleDistance, 1);
+			if (!TextUtils.isEmpty(strKmDistance))
+			{
+				return strKmDistance + "km";
+			}
+		}
+		return "0.0km";
+	}
 }
