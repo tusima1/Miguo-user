@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
+import com.didikee.uilibs.views.WaitFinishTextView;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -56,6 +56,7 @@ import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
@@ -122,7 +123,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private ImageButton mIbCollect;//第二个收藏按钮
     private TextView mTvOldMoney;
     private TextView mTvNewMoney;
-    private TextView mTvBuy;
+    private WaitFinishTextView mTvBuy;
     private TextView mTvAdd2ShopCart;
     private SellerHttpHelper mSellerHelper;
     private ShoppingCartHelper mShoppingCartHelper;
@@ -275,7 +276,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private void initBottomLayout() {
         mTvOldMoney = ((TextView) findViewById(R.id.tv_old_money));
         mTvNewMoney = ((TextView) findViewById(R.id.tv_new_money));
-        mTvBuy = ((TextView) findViewById(R.id.tv_buy));
+        mTvBuy = ((WaitFinishTextView) findViewById(R.id.tv_buy));
         mTvAdd2ShopCart = ((TextView) findViewById(R.id.tv_add_shop_cart));
         mTvOldMoney.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); //中划线
 
@@ -335,7 +336,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
                 //-------------- listView 滑动冲突 ---------------
                 //展开
-                if (mShopListCount > 1) {
+                if (isOpen) {
                     if (isTop && oldY< y){
                         isTop=false;
                         mShopListView.setInterceptTouchEventEnable(true);
@@ -446,7 +447,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             public void onAnimationUpdate(ValueAnimator animator) {
                 //获得当前动画的进度值，整型，1-100之间
                 int currentValue = (Integer) animator.getAnimatedValue();
-                Log.d("test", "current value: " + currentValue);
 
                 //计算当前进度占整个动画过程的比例，浮点型，0-1之间
                 float fraction = currentValue / 100f;
@@ -686,6 +686,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 setCollectResult();
                 break;
             case ShoppingCartconstants.SHOPPING_CART:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTvBuy.onFinish();
+                    }
+                });
                 goToShopping();
                 break;
             case ShoppingCartconstants.SHOPPING_CART_ADD:
@@ -697,6 +703,14 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     @Override
     public void onFailue(String responseBody) {
+        if (LiveConstants.SHOPPING_CART.equals(responseBody)){
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTvBuy.onFinish();
+                }
+            });
+        }
     }
 
     @Override

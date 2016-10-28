@@ -460,11 +460,10 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void requestData() {
         if (ifLogin) {
-            try{
-                outSideShoppingCartHelper.getUserShopCartList();
-            }catch (NullPointerException e){
-
+            if (outSideShoppingCartHelper ==null){
+                outSideShoppingCartHelper=new OutSideShoppingCartHelper(this);
             }
+            outSideShoppingCartHelper.getUserShopCartList();
         } else {
             SDDialogManager.dismissProgressDialog();
             List<ShoppingCartInfo> datas = LocalShoppingcartDao.queryModel();
@@ -529,7 +528,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     @Override
     public void onDestroy() {
         super.onDestroy();
-        outSideShoppingCartHelper = null;
+        outSideShoppingCartHelper.onDestory();
     }
 
     @Override
