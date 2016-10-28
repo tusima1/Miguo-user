@@ -61,7 +61,6 @@ import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
-import com.miguo.utils.UIChars;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -472,12 +471,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
             }
         });
 
@@ -518,8 +515,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         String origin_price = modelGoodsDetailNew.getOrigin_price();//原价
         String tuan_price = modelGoodsDetailNew.getTuan_price();//团购价
         String tuan_price_with_unit = modelGoodsDetailNew.getTuan_price_with_unit();//99元/人/张
-        String rmb = UIChars.getUIChar(UIChars.RMB);
-        mTvTopYouHui.setText(rmb + tuan_price_with_unit);
+        mTvTopYouHui.setText(tuan_price_with_unit);
 
         //bind bottom(底部悬浮)
         mTvOldMoney.setText(origin_price);
