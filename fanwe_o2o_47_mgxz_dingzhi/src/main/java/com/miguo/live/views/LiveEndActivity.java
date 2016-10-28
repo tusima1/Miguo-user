@@ -129,6 +129,10 @@ public class LiveEndActivity extends Activity implements CallbackView {
         SHARE_MEDIA platform = SHARE_MEDIA.QQ;
         //已认证的，去直播
         if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQ) {
+            if (!BaseUtils.isQQClientAvailable(this)) {
+                MGToast.showToast("未安装QQ");
+                return;
+            }
             platform = SHARE_MEDIA.QQ;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.WEIXIN) {
             if (!BaseUtils.isWeixinAvilible(this)) {
@@ -145,6 +149,10 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.SINA) {
             platform = SHARE_MEDIA.SINA;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
+            if (!BaseUtils.isQQClientAvailable(this)) {
+                MGToast.showToast("未安装QQ");
+                return;
+            }
             platform = SHARE_MEDIA.QZONE;
         }
         //点击按钮后，锁住按钮

@@ -168,6 +168,10 @@ public class LiveStartActivity extends Activity implements CallbackView {
             SHARE_MEDIA platform = SHARE_MEDIA.QQ;
             //已认证的，去直播
             if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
+                if (!BaseUtils.isQQClientAvailable(this)) {
+                    MGToast.showToast("未安装QQ");
+                    return;
+                }
                 platform = SHARE_MEDIA.QQ;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.WEIXIN) {
                 if (!BaseUtils.isWeixinAvilible(this)) {
@@ -184,6 +188,10 @@ public class LiveStartActivity extends Activity implements CallbackView {
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.SINA) {
                 platform = SHARE_MEDIA.SINA;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
+                if (!BaseUtils.isQQClientAvailable(this)) {
+                    MGToast.showToast("未安装QQ");
+                    return;
+                }
                 platform = SHARE_MEDIA.QZONE;
             }
             //点击按钮后，锁住按钮
@@ -213,23 +221,23 @@ public class LiveStartActivity extends Activity implements CallbackView {
     private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            clickEnable = true;
             MGToast.showToast("分享成功");
             createAvRoom();
+            clickEnable = true;
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            clickEnable = true;
             MGToast.showToast("分享失败");
             createAvRoom();
+            clickEnable = true;
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            clickEnable = true;
             MGToast.showToast("分享取消");
             createAvRoom();
+            clickEnable = true;
         }
     };
 
