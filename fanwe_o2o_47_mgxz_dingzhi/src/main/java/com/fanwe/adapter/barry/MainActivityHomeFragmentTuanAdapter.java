@@ -18,6 +18,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGStringFormatter;
+import com.fanwe.utils.SDDistanceUtil;
 import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -92,14 +93,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
             return "";
         }
         float distanceInt = DataFormat.toFloat(strD);
-        if (distanceInt <= 1000) {
-            return ">" + distanceInt + "m";
-        } else if (distanceInt < 1000000) {
-            float y = distanceInt / 1000;
-            return ">" + y + "km";
-        }
-        float y = distanceInt / 1000;
-        return ">" + y + "km";
+        return SDDistanceUtil.getMGDistance(distanceInt);
     }
 
     public int getHeight() {
