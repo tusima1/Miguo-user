@@ -102,6 +102,7 @@ public class OkHttpUtils {
     public void post(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
         String serverUrl;
         if (!checkNetWorkValidate()) {
+            mCallback.onFailure(null,null);
             return;
         }
         if (ServerUrl.DEBUG) {
@@ -157,7 +158,9 @@ public class OkHttpUtils {
      */
     public void put(String url, TreeMap<String, String> params, Callback mCallback) {
         if (!checkNetWorkValidate()) {
-            return;
+            mCallback.onFailure(null,null);
+
+          return;
         }
         String serverUrl;
         if (ServerUrl.DEBUG) {
@@ -213,6 +216,8 @@ public class OkHttpUtils {
      */
     public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
         if (!checkNetWorkValidate()) {
+            mCallback.onFailure(null,null);
+
             return;
         }
         String serverUrl;
@@ -290,7 +295,9 @@ public class OkHttpUtils {
      */
     public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback) {
         if (!checkNetWorkValidate()) {
-            return;
+            mCallback.onFailure(null,null);
+
+           return;
         }
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {

@@ -84,8 +84,8 @@ public abstract class MgCallback<T> implements Callback {
                 }
 
             } catch (Exception e) {
-                 Log.e(TAG, e.getMessage());
-                MGToast.showToast(e.getMessage());
+               //  Log.e(TAG, e.getMessage());
+              //  MGToast.showToast(e.getMessage());
             }
         }
         onFinish();
