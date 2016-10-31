@@ -133,14 +133,20 @@ public class DiamondHelper  extends Presenter {
                 String message = root.getMessage();
                 if(ShoppingCartconstants.RESULT_OK.equals(statusCode)){
                     List<OrderDetailInfo> datas = validateBodyList(root);
-                    mCallbackView.onSuccess(RewardConstants.DIAMOND_ORDER,datas);
+                    if(mCallbackView!=null) {
+                        mCallbackView.onSuccess(RewardConstants.DIAMOND_ORDER, datas);
+                    }
                 }else{
-                    mCallbackView.onFailue(RewardConstants.DIAMOND_ORDER,message);
+                    if(mCallbackView!=null) {
+                        mCallbackView.onFailue(RewardConstants.DIAMOND_ORDER, message);
+                    }
                 }
             }
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mCallbackView.onFailue(RewardConstants.DIAMOND_ORDER,message);
+                if(mCallbackView!=null) {
+                    mCallbackView.onFailue(RewardConstants.DIAMOND_ORDER, message);
+                }
             }
         });
     }
