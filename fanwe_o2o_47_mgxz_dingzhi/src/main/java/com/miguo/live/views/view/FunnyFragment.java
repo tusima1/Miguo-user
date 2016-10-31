@@ -28,6 +28,7 @@ import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.ChineseCharClassifier;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.model.LiveConstants;
@@ -248,18 +249,19 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         } else {
             String titleStr = "";
             String summaryStr = "";
+            char[] chars = interestingStr.toCharArray();
             if (interestingStr.length() <= 6) {
                 titleStr = interestingStr;
                 summaryStr = "";
             } else {
-                if (interestingStr.indexOf(",")==6||interestingStr.indexOf("，") == 6) {
+                if (interestingStr.indexOf(",")==6|| ChineseCharClassifier.isChinesePunctuation(chars[6])) {
                     titleStr = interestingStr.substring(0, 7);
                     summaryStr = interestingStr.substring(7, interestingStr.length());
                 } else {
                     titleStr = interestingStr.substring(0, 6);
                     summaryStr = interestingStr.substring(6, interestingStr.length());
                 }
-                if (summaryStr.endsWith(",") || summaryStr.endsWith("。")) {
+                if (summaryStr.endsWith(",") ||  ChineseCharClassifier.isChinesePunctuation(chars[summaryStr.length()-1])) {
                     summaryStr = summaryStr.substring(0, summaryStr.length() - 1);
                 }
             }
