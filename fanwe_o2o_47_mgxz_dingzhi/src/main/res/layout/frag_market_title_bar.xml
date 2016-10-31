@@ -13,12 +13,11 @@
         android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:text="有趣"
+        android:text="市场"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/title_text_size" />
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/frag_home_title_bar_ll_earn"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -35,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="沈阳"
+            android:text="杭州"
             android:textColor="@color/white" />
 
         <ImageView
