@@ -22,6 +22,7 @@ import com.fanwe.seller.presenters.SellerNewHttpHelper;
 import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.definition.IntentKey;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
     private void getIntentData() {
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
-            id = extras.getString("id", "");
+            id = extras.getString(IntentKey.SPECIAL_TOPIC_ID, "");
         }
         if (TextUtils.isEmpty(id)){
             finish();

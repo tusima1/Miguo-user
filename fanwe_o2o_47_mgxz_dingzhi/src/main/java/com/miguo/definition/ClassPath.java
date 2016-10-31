@@ -18,5 +18,9 @@ public class ClassPath {
      * 城市列表
      */
     public static final String CITY_LIST_ACTIVITY = "com.fanwe.CityListActivity";
+    /**
+     * 专题
+     */
+    public static final String SPECIAL_TOPIC_ACTIVITY = "com.fanwe.seller.views.SpecialTopicActivity";
 
 }

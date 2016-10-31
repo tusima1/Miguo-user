@@ -35,11 +35,11 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
         map.put("method", "GetMenuList");
         map.put("menu_type", menu_type);
         map.put("terminal_type", terminal_type);
-        OkHttpUtils.getInstance().get("", map, new MgCallback() {
+        OkHttpUtils.getInstance().get("", map, new MgCallback(MenuBean.class) {
 
             @Override
-            public void onSuccessResponse(String responseBody) {
-                MenuBean bean = new Gson().fromJson(responseBody, MenuBean.class);
+            public void onSuccessResponseWithBean(Object responseBody) {
+                MenuBean bean = (MenuBean)responseBody;
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
                         getListener().getMenuListSuccess(bean.getResult().get(0).getBody());

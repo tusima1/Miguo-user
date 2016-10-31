@@ -37,11 +37,11 @@ public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceList
         map.put("type", type);
         map.put("terminal_type", terminal_type);
         map.put("token", App.getApplication().getToken());
-        OkHttpUtils.getInstance().get("", map, new MgCallback() {
+        OkHttpUtils.getInstance().get("", map, new MgCallback(AdspaceListBean.class) {
 
             @Override
-            public void onSuccessResponse(String responseBody) {
-                AdspaceListBean bean = new Gson().fromJson(responseBody, AdspaceListBean.class);
+            public void onSuccessResponseWithBean(Object responseBody) {
+                AdspaceListBean bean = (AdspaceListBean)responseBody;
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
                         getListener().getAdspaceListSuccess(bean.getResult().get(0).getBody(), type);

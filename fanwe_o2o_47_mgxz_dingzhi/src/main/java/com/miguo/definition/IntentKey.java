@@ -5,4 +5,7 @@ package com.miguo.definition;
  */
 public class IntentKey {
     public static final String RETURN_CITY_DATA = "return_city_data";
+
+    public static final String SPECIAL_TOPIC_ID = "id";
+
 }

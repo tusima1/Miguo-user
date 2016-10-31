@@ -25,6 +25,7 @@ import com.fanwe.model.GoodsModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.SpecialTopicActivity;
 import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.view.RecyclerScrollView;
@@ -39,9 +40,12 @@ import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetMenuListDaoImpl;
 import com.miguo.dao.impl.HomeGreetingDaoImpl;
 import com.miguo.definition.AdspaceParams;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
 import com.miguo.definition.MenuParams;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
@@ -414,6 +418,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         if(!isHasTop() && t < getTopHeight()){
             float radius = (float)t / getTopHeight();
             setTitleAlpha(titleLayout, radius);
+        }else {
+            if(titleLayout.getAlpha() != 1){
+                setTitleAlpha(titleLayout, 1);
+            }
         }
     }
 
@@ -536,12 +544,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                updateAdspaceViews(body, type);
-            }
-        });
+        updateAdspaceViews(body, type);
+
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                updateAdspaceViews(body, type);
+//            }
+//        });
     }
 
     private void updateAdspaceViews(final List<AdspaceListBean.Result.Body> body, String type){
@@ -588,8 +598,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页菜单
      */
     @Override
-    public void getMenuListSuccess(List<MenuBean.Result.Body> list) {
+    public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
         initHomeMenuView(list);
+
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                initHomeMenuView(list);
+//            }
+//        });
     }
 
     @Override
@@ -602,7 +619,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @param ad
      */
     public void onTopicAdsClick(AdspaceListBean.Result.Body ad) {
-
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
+        Bundle bundle = new Bundle();
+        bundle.putString(IntentKey.SPECIAL_TOPIC_ID, ad.getType_id());
+        intent.putExtras(bundle);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     public void onTagsClick(MenuBean.Result.Body item){

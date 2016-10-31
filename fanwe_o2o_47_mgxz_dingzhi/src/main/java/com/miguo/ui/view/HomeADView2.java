@@ -77,7 +77,7 @@ public class HomeADView2 extends BaseHorizantalScrollView{
              * 标题
              */
             TextView title = new TextView(getContext());
-            title.setText("啊~西湖的水~你的菜 我的饭 他的谁 还差一碗水…");
+            title.setText(getItem(i).getTitle());
             title.setTextSize(16);
             title.setTextColor(Color.WHITE);
             title.setPadding(dip2px(30), dip2px(30), dip2px(30), dip2px(30));

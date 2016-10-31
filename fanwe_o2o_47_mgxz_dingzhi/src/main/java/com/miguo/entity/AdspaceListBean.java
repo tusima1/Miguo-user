@@ -49,17 +49,17 @@ public class AdspaceListBean implements Serializable{
         }
 
         public class Body implements Serializable{
-            int type_id;// 参数
+            String type_id;// 参数
             String icon;// 图标
             String title;// 标题
             String descript;// 说明
             int type;//1:团购 2:门店 3:商家 4:主题 5:限时特买
 
-            public int getType_id() {
+            public String getType_id() {
                 return type_id;
             }
 
-            public void setType_id(int type_id) {
+            public void setType_id(String type_id) {
                 this.type_id = type_id;
             }
 

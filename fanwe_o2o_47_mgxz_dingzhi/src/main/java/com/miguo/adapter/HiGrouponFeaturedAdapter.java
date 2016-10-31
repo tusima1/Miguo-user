@@ -296,7 +296,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         private void clickItem(){
             Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
             intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID, getItem(position).getId());
-            com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(getActivity(), intent);
+            BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 
     }

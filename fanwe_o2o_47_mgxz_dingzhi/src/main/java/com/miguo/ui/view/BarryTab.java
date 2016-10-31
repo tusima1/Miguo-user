@@ -233,6 +233,7 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
      * tab抖动动画
      * @param view
      */
+    @SuppressWarnings("ResourceType")
     private void startTabAnim(View view){
 //        return;
         Animator animator = AnimatorInflater.loadAnimator(getContext(), R.anim.scaletab);
