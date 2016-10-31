@@ -153,6 +153,9 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         diamond_line.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(diamondTypeEntityList==null){
+                    return;
+                }
                 currentDiamondType = bigDiamondType;
                 for (int i = 0; i < diamondTypeEntityList.size(); i++) {
                     DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
