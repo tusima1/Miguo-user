@@ -15,6 +15,7 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.StringTool;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class SignActivity extends BaseActivity implements CallbackView2 {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSubmit.setClickable(false);
                 strSign = etAdvice.getText().toString().trim();
                 if (TextUtils.isEmpty(strSign)) {
                     MGToast.showToast("请输入个人简介");
@@ -93,6 +95,13 @@ public class SignActivity extends BaseActivity implements CallbackView2 {
 
     @Override
     public void onFinish(String method) {
-
+        if (UserConstants.USER_INFO_METHOD.equals(method)) {
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnSubmit.setClickable(true);
+                }
+            });
+        }
     }
 }
