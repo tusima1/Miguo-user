@@ -164,4 +164,10 @@
         <item name="colorAccent">@color/bg_activity_gray</item>
     </style>
 
+    <style name="MGProgressDialog" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorAccent">@color/white</item>
+    </style>
+
 </resources>
