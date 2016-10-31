@@ -123,6 +123,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                 } else {
                     iRepresent = 1;
                 }
+                isRefresh = true;
+                pageNum = 1;
                 setRepresent();
                 getShopList();
             }

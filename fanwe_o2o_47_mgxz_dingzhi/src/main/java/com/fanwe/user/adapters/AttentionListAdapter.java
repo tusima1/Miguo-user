@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
+import com.fanwe.utils.MGStringFormatter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class AttentionListAdapter extends BaseAdapter {
     private void setData(Holder mHolder, final int position) {
         currModle = datas.get(position);
         mHolder.tvName.setText(currModle.getNick());
-        mHolder.tvSign.setText(currModle.getPersonality());
+        mHolder.tvSign.setText(MGStringFormatter.getLimitedString(currModle.getPersonality(), 13));
         if ("1".equals(currModle.getAttention_status())) {
             mHolder.tvStatus.setText("未关注");
         } else if ("2".equals(currModle.getAttention_status())) {
