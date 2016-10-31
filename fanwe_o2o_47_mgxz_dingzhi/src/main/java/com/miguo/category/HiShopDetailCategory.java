@@ -311,6 +311,9 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
             BaseUtils.jumpToNewActivity(getActivity(), intent);
             return;
         }
+        if (result == null) {
+            return;
+        }
         represent.setClickable(false);
         representMerchantDao.getRepresentMerchant(result.getEnt_id(), result.getId());
 
@@ -327,7 +330,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
      * 点击分享
      */
     public void clickShare() {
-        if (result.getShare() != null) {
+        if (result != null && result.getShare() != null) {
             String content = result.getShare().getSummary();
             if (TextUtils.isEmpty(content)) {
                 content = "欢迎来到米果小站";
@@ -400,7 +403,9 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
             BaseUtils.jumpToNewActivity(getActivity(), intent);
             return;
         }
-
+        if (result == null) {
+            return;
+        }
         if (!result.isCollect()) {
             collectShopDao.collectShop(result.getId());
         } else {

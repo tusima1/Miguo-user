@@ -106,13 +106,17 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-
                 mView.onSuccess(UserConstants.USER_INFO_METHOD, null);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFinish(UserConstants.USER_INFO_METHOD);
             }
         });
 
