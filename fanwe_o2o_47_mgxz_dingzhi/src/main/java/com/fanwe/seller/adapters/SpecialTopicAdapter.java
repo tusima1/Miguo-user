@@ -91,6 +91,7 @@ public class SpecialTopicAdapter extends BaseAdapter {
 
             //添加tags
             List<DetailListBean.TagListBean> tag_list = detailListBean.getTag_list();
+            holder.layout_tags.removeAllViews();
             if (tag_list!=null && tag_list.size()>0){
                 int size = tag_list.size();
                 size=size>5? 5:size;
