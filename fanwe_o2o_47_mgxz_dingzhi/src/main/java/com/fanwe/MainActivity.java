@@ -156,8 +156,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
         //取剪切板中的领取码
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
-            code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
-            App.getInstance().code = code;
+            CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+            if (!TextUtils.isEmpty(text)){
+                code = text.toString();
+                App.getInstance().code = code;
+            }
         }
         LocalUserModel userModel = AppHelper.getLocalUser();
 
