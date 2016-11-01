@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_title_bar">
+
+    <TextView
+        android:id="@+id/frag_home_title_bar_tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="46dip"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="10dip"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="有趣"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/title_text_size" />
+</RelativeLayout>

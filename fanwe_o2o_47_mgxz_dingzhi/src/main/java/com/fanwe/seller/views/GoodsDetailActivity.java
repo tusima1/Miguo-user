@@ -35,6 +35,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.o2o.miguo.R;
@@ -61,6 +62,7 @@ import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.NetWorkStateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +147,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     private boolean isTop;
     private boolean isBottom;
+    private MGProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +174,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mSellerHelper = new SellerHttpHelper(null, this, "");
         mShoppingCartHelper = new ShoppingCartHelper(this);
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
-        SDDialogManager.showProgressDialog("");
+        mStatusBar.post(new Runnable() {
+            @Override
+            public void run() {
+//                SDDialogManager.showProgressDialog("请稍候...");
+                dialog = new MGProgressDialog(GoodsDetailActivity.this,R.style.MGProgressDialog);
+                dialog.needFinishActivity(GoodsDetailActivity.this);
+                dialog.show();
+            }
+        });
     }
 
     private void getIntentData() {
@@ -654,6 +665,21 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     @Override
+    public void onBackPressed() {
+        if (dialog!=null && dialog.isShowing()){
+            dialog.dismiss();
+            GoodsDetailActivity.this.finish();
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
+    @Override
     public void onSuccess(String responseBody) {
     }
 
@@ -661,6 +687,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     public void onSuccess(String method, List datas) {
         switch (method) {
             case SellerConstants.GROUP_BUY_DETAIL_NEW:
+                if (dialog!=null){
+                    dialog.dismiss();
+                }
                 parseGoodsDetailNew(datas);
                 break;
             case SellerConstants.CHECK_GROUP_BUY_COLLECT:
@@ -699,6 +728,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     @Override
     public void onFailue(String responseBody) {
+        if (dialog!=null){
+            dialog.dismiss();
+        }
         if (LiveConstants.SHOPPING_CART.equals(responseBody)){
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
@@ -792,7 +824,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     //立即购买
     private void clickBuyGoods(boolean isGoToShoppingCart) {
-        if (TextUtils.isEmpty(GoodsId)) {
+        if (TextUtils.isEmpty(GoodsId) && !NetWorkStateUtil.isConnected(GoodsDetailActivity.this)) {
             return;
         }
         if (!TextUtils.isEmpty(App.getInstance().getToken())) {

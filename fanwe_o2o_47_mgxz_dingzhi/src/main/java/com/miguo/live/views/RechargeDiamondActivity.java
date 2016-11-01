@@ -40,7 +40,9 @@ import com.fanwe.utils.SDFormatUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.NetWorkStateUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
@@ -152,6 +154,9 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         diamond_line.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(diamondTypeEntityList==null){
+                    return;
+                }
                 currentDiamondType = bigDiamondType;
                 for (int i = 0; i < diamondTypeEntityList.size(); i++) {
                     DiamondTypeEntity entity0 = diamondTypeEntityList.get(i);
@@ -226,11 +231,18 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                         // 支付操作。
                         String payment_id = currentPayType.getId();
                         String diamond_id = currentDiamondType.getId();
-                        diamondHelper.createDiamondOrder(payment_id, diamond_id);
+                        if(diamondHelper!=null&& NetWorkStateUtil.isConnected(RechargeDiamondActivity.this)) {
+                            diamondHelper.createDiamondOrder(payment_id, diamond_id);
+                            pay_btn.setClickable(false);
+                        }else{
+                            MGToast.showToast("没有网络,请检测网络环境!");
+
+                        }
                     }
 
                     @Override
                     public void onClickCancel(View v, SDDialogCustom dialog) {
+                        pay_btn.setClickable(true);
                     }
                 }).show();
     }
@@ -400,11 +412,18 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                 payMalipay();
             } else if (Constant.PaymentType.WXAPP.equals(className)) // 微信
             {
-                payWxapp();
+               if(BaseUtils.isWeixinAvilible(RechargeDiamondActivity.this)){
+                   payWxapp();
+               }else{
+                   MGToast.showToast("未安装微信客户端。");
+               }
+
             }
         }
 
     }
+
+
 
     /**
      * 支付宝sdk支付(新)
@@ -587,6 +606,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
     @Override
     public void onFailue(String method, String responseBody) {
+        pay_btn.setClickable(true);
         MGToast.showToast(responseBody);
     }
 
@@ -628,6 +648,7 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        pay_btn.setClickable(true);
                         bindPayDiamondResult(datas);
                     }
                 });
@@ -639,7 +660,11 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
 
     @Override
     public void onFailue(String responseBody) {
+        pay_btn.setClickable(true);
 
+    }
+    public void onFinish(){
+        pay_btn.setClickable(true);
     }
 
     @Override

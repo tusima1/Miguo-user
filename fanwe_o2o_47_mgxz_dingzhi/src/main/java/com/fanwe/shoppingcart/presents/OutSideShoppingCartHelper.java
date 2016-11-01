@@ -67,6 +67,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 if ("200".endsWith(statusCode)) {
@@ -101,7 +104,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                if(mCallbackView == null){
+                    return;
+                }
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
@@ -131,7 +136,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<ShoppingCartInfo>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -151,6 +158,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.SHOPPING_CART_LIST, message);
 
             }
@@ -172,7 +182,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                if(mCallbackView == null) {
+                    return;
+                }
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
@@ -240,7 +252,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                if(mCallbackView == null) {
+                    return;
+                }
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
@@ -279,7 +293,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<ShoppingBody>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -302,6 +318,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET, message);
             }
         });
@@ -321,7 +340,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<ShoppingBody>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -344,6 +365,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET, message);
             }
         });
@@ -373,6 +397,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -391,6 +418,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE, message);
             }
         });
@@ -406,6 +436,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -423,6 +456,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.GET_ORDER_INFO, message);
             }
         });
@@ -446,6 +482,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -467,6 +506,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_POST, message);
             }
         });
@@ -487,6 +529,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if(callbackView2 == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<ModelUserRedPacket>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -503,11 +548,17 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(callbackView2 == null) {
+                    return;
+                }
                 callbackView2.onFailue(message);
             }
 
             @Override
             public void onFinish() {
+                if(callbackView2 == null) {
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -538,6 +589,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
                 }.getType();
                 Gson gson = new Gson();
@@ -556,6 +610,9 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if(mCallbackView == null) {
+                    return;
+                }
                 mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE, message);
             }
         });

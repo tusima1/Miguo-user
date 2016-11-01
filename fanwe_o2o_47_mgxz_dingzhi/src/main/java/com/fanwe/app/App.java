@@ -26,6 +26,9 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
+import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
+import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
@@ -107,6 +110,12 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
      * 领取码
      */
     public String code = "";
+    //商圈
+    public static List<ModelBusinessCircleList> modelBusinessCircleLists;
+    //类别
+    public static List<ModelClassifyList> modelClassifyLists;
+    //排序
+    public static List<ModelShopListNavs> navs;
 
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
@@ -323,6 +332,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         QavsdkControl.getInstance().startContext();
         Log.e("liveActivity", "初始化AVSDK");
     }
+
     public String getUserSign() {
 
         String useSign = "";
@@ -450,19 +460,19 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public String getLastRoomId() {
-       if(liveRoomIdList==null||liveRoomIdList.size()<1){
-           return "";
-       }else{
-           return liveRoomIdList.getLast();
-       }
+        if (liveRoomIdList == null || liveRoomIdList.size() < 1) {
+            return "";
+        } else {
+            return liveRoomIdList.getLast();
+        }
     }
 
-    public void removeLastRoomId(String currentRoomId){
+    public void removeLastRoomId(String currentRoomId) {
         liveRoomIdList.remove(currentRoomId);
     }
 
     public void addLiveRoomIdList(String currentRoomId) {
-        if(TextUtils.isEmpty(currentRoomId)){
+        if (TextUtils.isEmpty(currentRoomId)) {
             return;
         }
         if (liveRoomIdList == null) {

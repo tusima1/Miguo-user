@@ -1,10 +1,5 @@
 package com.fanwe.library.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fanwe.library.utils.SDHandlerUtil;
-
 import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -12,445 +7,376 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-public abstract class SDBaseAdapter<T> extends BaseAdapter
-{
+import com.fanwe.library.utils.SDHandlerUtil;
 
-	protected List<T> mListModel = new ArrayList<T>();
-	protected LayoutInflater mInflater;
-	public Activity mActivity;
-	protected EnumAdapterMode mMode = EnumAdapterMode.SINGLE;
-	protected View mView;
+import java.util.ArrayList;
+import java.util.List;
 
-	private SparseArray<View> mArrViews = new SparseArray<View>();
-	private SparseArray<ViewGroup> mArrParent = new SparseArray<ViewGroup>();
+public abstract class SDBaseAdapter<T> extends BaseAdapter {
 
-	/**
-	 * 单选模式时候被选中的项
-	 */
-	protected int mSelectedPosition = -1;
-	/**
-	 * 多选模式时候被选中的项集合
-	 */
-	protected List<T> mListSelectedModel = new ArrayList<T>();
+    protected List<T> mListModel = new ArrayList<T>();
+    protected LayoutInflater mInflater;
+    public Activity mActivity;
+    protected EnumAdapterMode mMode = EnumAdapterMode.SINGLE;
+    protected View mView;
 
-	/**
-	 * 返回adapter的模式（多选，单选）
-	 * 
-	 * @return
-	 */
-	public EnumAdapterMode getmMode()
-	{
-		return mMode;
-	}
+    private SparseArray<View> mArrViews = new SparseArray<View>();
+    private SparseArray<ViewGroup> mArrParent = new SparseArray<ViewGroup>();
 
-	/**
-	 * 设置adapter的模式（多选，单选）
-	 * 
-	 * @param mode
-	 */
-	public void setmMode(EnumAdapterMode mode)
-	{
-		this.mMode = mode;
-	}
+    /**
+     * 单选模式时候被选中的项
+     */
+    protected int mSelectedPosition = -1;
+    /**
+     * 多选模式时候被选中的项集合
+     */
+    protected List<T> mListSelectedModel = new ArrayList<T>();
 
-	public void setmView(View mView)
-	{
-		this.mView = mView;
-	}
+    /**
+     * 返回adapter的模式（多选，单选）
+     *
+     * @return
+     */
+    public EnumAdapterMode getmMode() {
+        return mMode;
+    }
 
-	/**
-	 * 获得选中的项
-	 * 
-	 * @return
-	 */
-	public int getmSelectedPosition()
-	{
-		return mSelectedPosition;
-	}
+    /**
+     * 设置adapter的模式（多选，单选）
+     *
+     * @param mode
+     */
+    public void setmMode(EnumAdapterMode mode) {
+        this.mMode = mode;
+    }
 
-	public T getmSelectedModel()
-	{
-		return getItem(mSelectedPosition);
-	}
+    public void setmView(View mView) {
+        this.mView = mView;
+    }
 
-	/**
-	 * 获得选中的list实体集合
-	 * 
-	 * @return
-	 */
-	public List<T> getmListSelectedModel()
-	{
-		return mListSelectedModel;
-	}
+    /**
+     * 获得选中的项
+     *
+     * @return
+     */
+    public int getmSelectedPosition() {
+        return mSelectedPosition;
+    }
 
-	/**
-	 * 设置选中的项
-	 * 
-	 * @param position
-	 *            项的位置
-	 * @param selected
-	 *            true选中，false未选中
-	 */
-	public void setmSelectedPosition(int position, boolean selected)
-	{
-		if (isPositionLegal(position))
-		{
-			switch (getmMode())
-			{
-			case SINGLE:
-				if (selected) // 如果设置选中
-				{
-					if (mSelectedPosition >= 0) // 如果存在旧的位置，把旧的位置设置为未选
-					{
-						onSelectedChange(mSelectedPosition, false, false);
-					}
-					onSelectedChange(position, true, true); // 让新的位置选中
-					mSelectedPosition = position;
-				} else
-				{
-					onSelectedChange(position, false, false);
-					if (mSelectedPosition == position)
-					{
-						mSelectedPosition = -1;
-					}
-				}
-				break;
-			case MULTI:
-				T model = mListModel.get(position);
-				if (selected)
-				{
-					if (!mListSelectedModel.contains(model))
-					{
-						mListSelectedModel.add(model);
-						onSelectedChange(position, true, true);
-					} else
-					{
-						mListSelectedModel.remove(model);
-						onSelectedChange(position, false, true);
-					}
-				} else
-				{
-					if (mListSelectedModel.contains(model))
-					{
-						mListSelectedModel.remove(model);
-						onSelectedChange(position, false, true);
-					}
-				}
-				break;
-			default:
-				break;
-			}
+    public T getmSelectedModel() {
+        return getItem(mSelectedPosition);
+    }
 
-		}
-	}
+    /**
+     * 获得选中的list实体集合
+     *
+     * @return
+     */
+    public List<T> getmListSelectedModel() {
+        return mListSelectedModel;
+    }
 
-	/**
-	 * 当调用public void setmSelectedPosition(int position, boolean
-	 * selected)方法后，会回调这个方法，次方法用来重写，改变实体状态
-	 * 
-	 * @param position
-	 *            项位置
-	 * @param selected
-	 *            true选中，false未选中
-	 * @param notify
-	 *            是否需要刷新adapter
-	 */
-	protected void onSelectedChange(int position, boolean selected, boolean notify)
-	{
+    /**
+     * 设置选中的项
+     *
+     * @param position 项的位置
+     * @param selected true选中，false未选中
+     */
+    public void setmSelectedPosition(int position, boolean selected) {
+        if (isPositionLegal(position)) {
+            switch (getmMode()) {
+                case SINGLE:
+                    if (selected) // 如果设置选中
+                    {
+                        if (mSelectedPosition >= 0) // 如果存在旧的位置，把旧的位置设置为未选
+                        {
+                            onSelectedChange(mSelectedPosition, false, false);
+                        }
+                        onSelectedChange(position, true, true); // 让新的位置选中
+                        mSelectedPosition = position;
+                    } else {
+                        onSelectedChange(position, false, false);
+                        if (mSelectedPosition == position) {
+                            mSelectedPosition = -1;
+                        }
+                    }
+                    break;
+                case MULTI:
+                    T model = mListModel.get(position);
+                    if (selected) {
+                        if (!mListSelectedModel.contains(model)) {
+                            mListSelectedModel.add(model);
+                            onSelectedChange(position, true, true);
+                        } else {
+                            mListSelectedModel.remove(model);
+                            onSelectedChange(position, false, true);
+                        }
+                    } else {
+                        if (mListSelectedModel.contains(model)) {
+                            mListSelectedModel.remove(model);
+                            onSelectedChange(position, false, true);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
 
-	}
+        }
+    }
 
-	public void addSelectedModel(T model)
-	{
-		if (!mListSelectedModel.contains(model))
-		{
-			mListSelectedModel.add(model);
-		}
-	}
+    /**
+     * 当调用public void setmSelectedPosition(int position, boolean
+     * selected)方法后，会回调这个方法，次方法用来重写，改变实体状态
+     *
+     * @param position 项位置
+     * @param selected true选中，false未选中
+     * @param notify   是否需要刷新adapter
+     */
+    protected void onSelectedChange(int position, boolean selected, boolean notify) {
 
-	public void removeSelectedModel(T model)
-	{
-		if (mListSelectedModel.contains(model))
-		{
-			mListSelectedModel.remove(model);
-		}
-	}
+    }
 
-	public SDBaseAdapter(List<T> listModel, Activity activity)
-	{
-		setData(listModel);
-		this.mActivity = activity;
-		this.mInflater = mActivity.getLayoutInflater();
-	}
+    public void addSelectedModel(T model) {
+        if (!mListSelectedModel.contains(model)) {
+            mListSelectedModel.add(model);
+        }
+    }
 
-	/**
-	 * 获得adapter的实体集合
-	 * 
-	 * @return
-	 */
-	public List<T> getData()
-	{
-		return mListModel;
-	}
+    public void removeSelectedModel(T model) {
+        if (mListSelectedModel.contains(model)) {
+            mListSelectedModel.remove(model);
+        }
+    }
 
-	/**
-	 * 更新adapter的数据集合，并刷新adapter
-	 * 
-	 * @param listModel
-	 */
-	public void updateData(List<T> listModel)
-	{
-		setData(listModel);
-		notifyDataSetChanged();
-	}
+    public SDBaseAdapter(List<T> listModel, Activity activity) {
+        setData(listModel);
+        this.mActivity = activity;
+        if (mActivity == null) {
+            return;
+        }
+        this.mInflater = mActivity.getLayoutInflater();
+    }
 
-	public void appendData(List<T> listModel)
-	{
-		if (mListModel != null && listModel != null && listModel.size() > 0)
-		{
-			mListModel.addAll(listModel);
-			notifyDataSetChanged();
-		}
-	}
+    /**
+     * 获得adapter的实体集合
+     *
+     * @return
+     */
+    public List<T> getData() {
+        return mListModel;
+    }
 
-	/**
-	 * 给adapter设置数据
-	 * 
-	 * @param listModel
-	 */
-	public void setData(List<T> listModel)
-	{
-		if (listModel != null)
-		{
-			this.mListModel = listModel;
-		} else
-		{
-			this.mListModel = new ArrayList<T>();
-		}
-		resetSelection();
-	}
+    /**
+     * 更新adapter的数据集合，并刷新adapter
+     *
+     * @param listModel
+     */
+    public void updateData(List<T> listModel) {
+        setData(listModel);
+        notifyDataSetChanged();
+    }
 
-	private void resetSelection()
-	{
-		mListSelectedModel.clear();
-		mSelectedPosition = -1;
-	}
+    public void appendData(List<T> listModel) {
+        if (mListModel != null && listModel != null && listModel.size() > 0) {
+            mListModel.addAll(listModel);
+            notifyDataSetChanged();
+        }
+    }
 
-	public void clearSelection()
-	{
-		// 清除单选模式选中实体
-		if (mSelectedPosition >= 0)
-		{
-			setmSelectedPosition(mSelectedPosition, false);
-		}
+    /**
+     * 给adapter设置数据
+     *
+     * @param listModel
+     */
+    public void setData(List<T> listModel) {
+        if (listModel != null) {
+            this.mListModel = listModel;
+        } else {
+            this.mListModel = new ArrayList<T>();
+        }
+        resetSelection();
+    }
 
-		// 清除多选模式选中实体
-		for (T model : mListSelectedModel)
-		{
-			int position = indexOf(model);
-			setmSelectedPosition(position, false);
-		}
-		resetSelection();
-	}
+    private void resetSelection() {
+        mListSelectedModel.clear();
+        mSelectedPosition = -1;
+    }
 
-	public boolean isPositionLegal(int position)
-	{
-		if (mListModel != null && !mListModel.isEmpty() && position >= 0 && position < mListModel.size())
-		{
-			return true;
-		} else
-		{
-			return false;
-		}
-	}
+    public void clearSelection() {
+        // 清除单选模式选中实体
+        if (mSelectedPosition >= 0) {
+            setmSelectedPosition(mSelectedPosition, false);
+        }
 
-	@Override
-	public int getCount()
-	{
-		if (mListModel != null)
-		{
-			return mListModel.size();
-		} else
-		{
-			return 0;
-		}
-	}
+        // 清除多选模式选中实体
+        for (T model : mListSelectedModel) {
+            int position = indexOf(model);
+            setmSelectedPosition(position, false);
+        }
+        resetSelection();
+    }
 
-	@Override
-	public T getItem(int position)
-	{
-		if (isPositionLegal(position))
-		{
-			return mListModel.get(position);
-		} else
-		{
-			return null;
-		}
-	}
+    public boolean isPositionLegal(int position) {
+        if (mListModel != null && !mListModel.isEmpty() && position >= 0 && position < mListModel.size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	@Override
-	public long getItemId(int position)
-	{
-		return position;
-	}
+    @Override
+    public int getCount() {
+        if (mListModel != null) {
+            return mListModel.size();
+        } else {
+            return 0;
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public static <V extends View> V get(int id, View convertView)
-	{
-		SparseArray<View> viewHolder = (SparseArray<View>) convertView.getTag();
-		if (viewHolder == null)
-		{
-			viewHolder = new SparseArray<View>();
-			convertView.setTag(viewHolder);
-		}
-		View childView = viewHolder.get(id);
-		if (childView == null)
-		{
-			childView = convertView.findViewById(id);
-			viewHolder.put(id, childView);
-		}
-		return (V) childView;
-	}
+    @Override
+    public T getItem(int position) {
+        if (isPositionLegal(position)) {
+            return mListModel.get(position);
+        } else {
+            return null;
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public static <V extends View> V find(int id, View convertView)
-	{
-		return (V) convertView.findViewById(id);
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	protected void beforeOnGetView(int position, View convertView, ViewGroup parent)
-	{
-		mArrParent.put(position, parent);
-	}
+    @SuppressWarnings("unchecked")
+    public static <V extends View> V get(int id, View convertView) {
+        SparseArray<View> viewHolder = (SparseArray<View>) convertView.getTag();
+        if (viewHolder == null) {
+            viewHolder = new SparseArray<View>();
+            convertView.setTag(viewHolder);
+        }
+        View childView = viewHolder.get(id);
+        if (childView == null) {
+            childView = convertView.findViewById(id);
+            viewHolder.put(id, childView);
+        }
+        return (V) childView;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
-	{
-		beforeOnGetView(position, convertView, parent);
-		convertView = onGetView(position, convertView, parent);
-		afterOnGetView(position, convertView, parent);
-		return convertView;
-	}
+    @SuppressWarnings("unchecked")
+    public static <V extends View> V find(int id, View convertView) {
+        return (V) convertView.findViewById(id);
+    }
 
-	@Deprecated
-	public View getView(int position, View convertView, ViewGroup parent, T model)
-	{
-		return convertView;
-	}
+    protected void beforeOnGetView(int position, View convertView, ViewGroup parent) {
+        mArrParent.put(position, parent);
+    }
 
-	protected View onGetView(int position, View convertView, ViewGroup parent)
-	{
-		return getView(position, convertView, parent, getItem(position));
-	}
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        beforeOnGetView(position, convertView, parent);
+        convertView = onGetView(position, convertView, parent);
+        afterOnGetView(position, convertView, parent);
+        return convertView;
+    }
 
-	protected void afterOnGetView(int position, View convertView, ViewGroup parent)
-	{
-		mArrViews.put(position, convertView);
-	}
+    @Deprecated
+    public View getView(int position, View convertView, ViewGroup parent, T model) {
+        return convertView;
+    }
 
-	@Deprecated
-	public void getViewUpdate(int position, View convertView, ViewGroup parent)
-	{
-		afterOnGetView(position, convertView, parent);
-	}
+    protected View onGetView(int position, View convertView, ViewGroup parent) {
+        return getView(position, convertView, parent, getItem(position));
+    }
 
-	public void updateItem(int position)
-	{
-		View itemView = getItemView(position);
-		if (itemView != null)
-		{
-			updateItemView(position, itemView, getItemParent(position), getItem(position));
-		}
-	}
+    protected void afterOnGetView(int position, View convertView, ViewGroup parent) {
+        mArrViews.put(position, convertView);
+    }
 
-	public void updateItem(int position, T model)
-	{
-		if (mListModel != null && isPositionLegal(position))
-		{
-			mListModel.set(position, model);
-			updateItem(position);
-		}
-	}
+    @Deprecated
+    public void getViewUpdate(int position, View convertView, ViewGroup parent) {
+        afterOnGetView(position, convertView, parent);
+    }
 
-	public void updateItem(T model)
-	{
-		updateItem(indexOf(model));
-	}
+    public void updateItem(int position) {
+        View itemView = getItemView(position);
+        if (itemView != null) {
+            updateItemView(position, itemView, getItemParent(position), getItem(position));
+        }
+    }
 
-	public View getItemView(int position)
-	{
-		return mArrViews.get(position);
-	}
+    public void updateItem(int position, T model) {
+        if (mListModel != null && isPositionLegal(position)) {
+            mListModel.set(position, model);
+            updateItem(position);
+        }
+    }
 
-	public ViewGroup getItemParent(int position)
-	{
-		return mArrParent.get(position);
-	}
+    public void updateItem(T model) {
+        updateItem(indexOf(model));
+    }
 
-	/**
-	 * 此方法可用于被重写，调用updateItem方法时候触发，
-	 * 
-	 * @param position
-	 * @param convertView
-	 * @param parent
-	 * @param model
-	 */
-	protected void updateItemView(int position, View convertView, ViewGroup parent, T model)
-	{
-		getView(position, convertView, getItemParent(position));
-	}
+    public View getItemView(int position) {
+        return mArrViews.get(position);
+    }
 
-	public void removeItem(int position)
-	{
-		if (isPositionLegal(position))
-		{
-			mListModel.remove(position);
-			notifyDataSetChanged();
-		}
-	}
+    public ViewGroup getItemParent(int position) {
+        return mArrParent.get(position);
+    }
 
-	public void removeItem(T t)
-	{
-		removeItem(indexOf(t));
-	}
+    /**
+     * 此方法可用于被重写，调用updateItem方法时候触发，
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @param model
+     */
+    protected void updateItemView(int position, View convertView, ViewGroup parent, T model) {
+        getView(position, convertView, getItemParent(position));
+    }
 
-	public void notifyDataSetChanged(long delay)
-	{
-		if (delay < 0)
-		{
-			delay = 0;
-		}
-		SDHandlerUtil.runOnUiThreadDelayed(new Runnable()
-		{
+    public void removeItem(int position) {
+        if (isPositionLegal(position)) {
+            mListModel.remove(position);
+            notifyDataSetChanged();
+        }
+    }
 
-			@Override
-			public void run()
-			{
-				notifyDataSetChanged();
-			}
-		}, delay);
-	}
+    public void removeItem(T t) {
+        removeItem(indexOf(t));
+    }
 
-	public int indexOf(T t)
-	{
-		int index = -1;
-		if (t != null && mListModel != null)
-		{
-			index = mListModel.indexOf(t);
-		}
-		return index;
-	}
+    public void notifyDataSetChanged(long delay) {
+        if (delay < 0) {
+            delay = 0;
+        }
+        SDHandlerUtil.runOnUiThreadDelayed(new Runnable() {
 
-	public enum EnumAdapterMode
-	{
-		/**
-		 * 单选模式
-		 */
-		SINGLE,
-		/**
-		 * 多选模式
-		 */
-		MULTI;
-	}
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        }, delay);
+    }
+
+    public int indexOf(T t) {
+        int index = -1;
+        if (t != null && mListModel != null) {
+            index = mListModel.indexOf(t);
+        }
+        return index;
+    }
+
+    public enum EnumAdapterMode {
+        /**
+         * 单选模式
+         */
+        SINGLE,
+        /**
+         * 多选模式
+         */
+        MULTI;
+    }
 
 }
