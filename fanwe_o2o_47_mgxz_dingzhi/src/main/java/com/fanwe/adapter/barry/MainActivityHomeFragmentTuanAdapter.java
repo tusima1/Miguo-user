@@ -88,12 +88,7 @@ public class MainActivityHomeFragmentTuanAdapter extends BarryBaseRecyclerAdapte
     }
 
     private String getDistance(int position) {
-        String strD = getItem(position).getDistance();
-        if (TextUtils.isEmpty(strD) || "-1".equals(strD)) {
-            return "";
-        }
-        float distanceInt = DataFormat.toFloat(strD);
-        return SDDistanceUtil.getMGDistance(distanceInt);
+        return SDDistanceUtil.getMGDistance(DataFormat.toFloat(getItem(position).getDistance()));
     }
 
     public int getHeight() {

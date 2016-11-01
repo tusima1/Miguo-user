@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
@@ -580,8 +581,16 @@ public class SellerHttpHelper implements IHelper {
         params.put("page_size", String.valueOf(pageSize));
         params.put("page", String.valueOf(pageNum));
         params.put("can_endorsement", can_endorsement);
-        params.put("m_latitude", "");
-        params.put("m_latitude", "");
+        double latitude = BaiduMapManager.getInstance().getLatitude();
+        double longitude = BaiduMapManager.getInstance().getLongitude();
+        if (latitude ==0 || longitude==0 ){
+            params.put("m_latitude", "");
+            params.put("m_longitude", "");
+        }else {
+            params.put("m_latitude", latitude+"");
+            params.put("m_longitude", longitude+"");
+        }
+
         params.put("method", SellerConstants.BUSINESS_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

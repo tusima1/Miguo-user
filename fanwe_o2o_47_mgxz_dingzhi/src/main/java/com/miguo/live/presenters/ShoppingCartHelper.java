@@ -81,7 +81,11 @@ public class ShoppingCartHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
-                mView.onFailue(message);
+                if(mView!=null) {
+                    mView.onFailue(LiveConstants.SHOPPING_CART);
+                }else if (mView2!=null){
+                    mView2.onFailue(LiveConstants.SHOPPING_CART);
+                }
             }
         });
     }

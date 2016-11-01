@@ -19,9 +19,10 @@ import com.fanwe.library.customview.SDWeightLinearLayout.CalculateWidthListener;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.app.HiShopDetailActivity;
 import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDDistanceUtil;
+import com.miguo.app.HiShopDetailActivity;
 
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class MerchantListAdapter extends SDSimpleBaseAdapter<ModelBusinessListin
 
     @Override
     public void bindData(int position, View convertView, ViewGroup parent, final ModelBusinessListings model) {
+        if (model==null){
+            return;
+        }
         ImageView iv_image = get(R.id.iv_image, convertView);
         View viewHolderImage = get(R.id.view_image_holder, convertView);
         RelativeLayout ll_name_bar = get(R.id.ll_name_bar, convertView);
@@ -76,7 +80,7 @@ public class MerchantListAdapter extends SDSimpleBaseAdapter<ModelBusinessListin
         }
 
         SDViewBinder.setTextView(tv_address, model.getAddress());
-        SDViewBinder.setTextView(tv_distance, model.calculateDistance());
+        SDViewBinder.setTextView(tv_distance, SDDistanceUtil.getMGDistance(DataFormat.toDouble(model.getDistance())));
 
         SDWeightLinearLayout.calculateWidth(ll_name_bar, new CalculateWidthListener() {
 
