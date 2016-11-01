@@ -358,7 +358,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
                 title = "米果小站";
             }
 
-            UmengShareManager.share(getActivity(), title, content, clickUrl, UmengShareManager.getUMImage(getActivity(), imageUrl), null);
+            UmengShareManager.share(getActivity(), title, content.trim(), clickUrl, UmengShareManager.getUMImage(getActivity(), imageUrl), null);
         } else {
             MGToast.showToast("无分享内容");
         }
@@ -476,7 +476,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         /**
          * 价格
          */
-        price.setText(result.getRef_avg_price() + "元/每人");
+        price.setText(result.getRef_avg_price() + "元/人");
         /**
          * 人气值
          */

@@ -815,7 +815,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             if (TextUtils.isEmpty(title)) {
                 title = "米果小站";
             }
-            UmengShareManager.share(this, title, content, clickUrl, UmengShareManager.getUMImage
+            UmengShareManager.share(this, title, content.trim(), clickUrl, UmengShareManager.getUMImage
                     (this, imageUrl), null);
         } else {
             MGToast.showToast("无分享内容");
