@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.TuanDetailActivity;
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.entity.HiShopDetailBean;
@@ -71,6 +70,11 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
     protected void doThings(RecyclerView.ViewHolder holder, int position) {
         handlerTextViewLines(holder, position);
         setOrginPrice(holder, position);
+        handlerSalary(holder, position);
+    }
+
+    private void handlerSalary(RecyclerView.ViewHolder holder, int position){
+        getHolder(holder).salary.setVisibility(DataFormat.toDouble(getItem(position).getSalary()) == 0 ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void setOrginPrice(RecyclerView.ViewHolder holder, int position){
@@ -99,7 +103,7 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
         }
 
-        getHolder(holder).title.setText(getItem(position).getShort_name());
+        getHolder(holder).title.setText(getItem(position).getName());
         getHolder(holder).location.setText(getItem(position).getLocation());
         getHolder(holder).oringePrice.setText(getItem(position).getOrigin_price() + "元");
         getHolder(holder).tuanPrice.setText(getItem(position).getTuan_price() + getItem(position).getUnit());

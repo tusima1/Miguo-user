@@ -476,7 +476,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         /**
          * 价格
          */
-        price.setText(result.getRef_avg_price() + "元/每人");
+        price.setText(result.getRef_avg_price() + "元/人");
         /**
          * 人气值
          */
