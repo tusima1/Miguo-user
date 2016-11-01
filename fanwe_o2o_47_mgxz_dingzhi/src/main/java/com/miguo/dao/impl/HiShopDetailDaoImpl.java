@@ -1,5 +1,6 @@
 package com.miguo.dao.impl;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -28,6 +29,10 @@ public class HiShopDetailDaoImpl extends BaseDaoImpl implements HiShopDetailDao{
 
     @Override
     public void getShopDetail(String shop_id, String m_longitude, String m_latitude) {
+        if(TextUtils.isEmpty(shop_id)){
+            getListener().getShopDetailError();
+            return;
+        }
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "ShopDetails");
         map.put("shop_id", shop_id);
@@ -38,12 +43,20 @@ public class HiShopDetailDaoImpl extends BaseDaoImpl implements HiShopDetailDao{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.d(tag, "onSuccessResponse : " + responseBody);
+               // Log.d(tag, "onSuccessResponse : " + responseBody);
                 HiShopDetailBean bean = new Gson().fromJson(responseBody, HiShopDetailBean.class);
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
-                        getListener().getShopDetailSuccess(bean.getResult().get(0));
+                        if(getListener()!=null) {
+                            getListener().getShopDetailSuccess(bean.getResult().get(0));
+                        }
                     }else {
+                        if(getListener()!=null) {
+                            getListener().getShopDetailError();
+                        }
+                    }
+                }else{
+                    if(getListener()!=null) {
                         getListener().getShopDetailError();
                     }
                 }
