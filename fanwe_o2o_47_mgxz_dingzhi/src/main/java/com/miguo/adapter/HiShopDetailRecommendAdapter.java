@@ -103,11 +103,22 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
         }
 
-        getHolder(holder).title.setText(getItem(position).getName());
-        getHolder(holder).location.setText(getItem(position).getLocation());
-        getHolder(holder).oringePrice.setText(getItem(position).getOrigin_price() + "元");
-        getHolder(holder).tuanPrice.setText(getItem(position).getTuan_price() + getItem(position).getUnit());
-        getHolder(holder).salary.setText(getItem(position).getSalary() + "元佣金");
+        HiShopDetailBean.Result.Tuan model = getItem(position);
+
+        getHolder(holder).title.setText(model.getName());
+        getHolder(holder).location.setText(model.getLocation());
+        getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":model.getOrigin_price() + "元");
+        String tuanStr= "";
+        if(!TextUtils.isEmpty(model.getTuan_price())){
+            tuanStr +=model.getTuan_price();
+        }
+        if(!TextUtils.isEmpty(model.getUnit())){
+            tuanStr +="/"+model.getUnit();
+        }else{
+            tuanStr +="元";
+        }
+        getHolder(holder).tuanPrice.setText(tuanStr);
+        getHolder(holder).salary.setText(model.getSalary() + "元佣金");
 
         setTags(holder,position);
     }

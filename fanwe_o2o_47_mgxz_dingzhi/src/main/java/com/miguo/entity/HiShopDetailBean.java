@@ -397,6 +397,7 @@ public class HiShopDetailBean implements Serializable{
 
             private String area_name;
 
+
             private List<TuanTag> tag_list;
 
 
@@ -539,6 +540,8 @@ public class HiShopDetailBean implements Serializable{
             public void setCate_type_name(String cate_type_name) {
                 this.cate_type_name = cate_type_name;
             }
+
+
 
             public String getName() {
                 return name;
