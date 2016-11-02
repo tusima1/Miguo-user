@@ -390,6 +390,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             @Override
             public void onDelSelectedListener(CartGoodsModel model,
                                               boolean isChecked) {
+                if(model==null){
+                    return;
+                }
                 // 非编辑状态
                 int count = getSumSeleted();
                 if (count == listModel.size()) {

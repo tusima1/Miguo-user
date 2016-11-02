@@ -1180,8 +1180,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        Log.e("LiveActivity", "");
-        Log.e(TAG, "quiteRoomComplete 退出房间...");
+//        Log.e("LiveActivity", "");
+//        Log.e(TAG, "quiteRoomComplete 退出房间...");
         if (LiveUtil.checkIsHost()) {
 //            MGToast.showToast("主播退出!");
 //            if (backDialog != null) {

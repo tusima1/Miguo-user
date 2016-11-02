@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
@@ -300,8 +299,8 @@ public class MyFragment extends BaseFragment implements RedDotView
         } else if (v == mUserName) {
             //个人主页。
 //            startActivity(UserHomeActivity.class);
-            //跳转至会员升级
-            startActivity(MemberRankActivity.class);
+            //跳转至网红主页
+            startActivity(UserHomeActivity.class);
         } else if (v == mKefu) {
             //客服电话
             clickKfPhone();

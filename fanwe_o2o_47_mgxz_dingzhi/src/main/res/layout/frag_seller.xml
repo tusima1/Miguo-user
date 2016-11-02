@@ -17,7 +17,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp2"
             android:padding="@dimen/dp10"
-            android:src="@drawable/ic_left_arrow_dark"
+            android:src="@drawable/ic_left_orange_arrow"
             android:visibility="gone" />
 
         <LinearLayout

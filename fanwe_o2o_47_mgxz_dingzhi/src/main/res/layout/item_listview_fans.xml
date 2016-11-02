@@ -29,8 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/dp5"
-            android:drawableRight="@drawable/ic_rank_1"
-            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/sp17"/>
 

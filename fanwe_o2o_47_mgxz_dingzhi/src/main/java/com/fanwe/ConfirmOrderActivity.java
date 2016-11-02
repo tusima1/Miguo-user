@@ -264,12 +264,16 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      * @param isChecked 是否选择余额支付。
      */
     public void changePayType(int type, boolean isChecked) {
+        if(mCheckActModel==null){
+            return;
+        }
         //总金额。
         totalFloat = SDFormatUtil.stringToFloat(mCheckActModel.getTotal());
         //用户余额。
         yueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getUserAccountMoney());
         //当前 选择余额支付
         if (type == 0) {
+
             if (isChecked) {
                 if (totalFloat <= yueFloat) {
                     mFragPayments.clearSelectedPayment(false);
@@ -500,6 +504,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             @Override
             public void run() {
                 mPtrsvAll.onRefreshComplete();
+                finish();
             }
         });
     }
