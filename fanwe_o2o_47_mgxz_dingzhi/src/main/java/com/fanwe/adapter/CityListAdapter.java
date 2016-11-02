@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.CityListActivity;
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.miguo.live.views.customviews.MGToast;
@@ -65,14 +66,16 @@ public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
                         if (AppRuntimeWorker.setCity_name(model.getName())) {
                             //缓存数据
                             CurrCityModelDao.insertModel(model);
-                            mActivity.setResult(8888);
-                            mActivity.finish();
+//                            mActivity.setResult(8888);
+//                            mActivity.finish();
+                            getActivity().setActivityResult(model);
                         } else {
                             MGToast.showToast("设置城市失败");
                         }
                     } else if (mTag == 2) {
-                        mActivity.setResult(8888);
-                        mActivity.finish();
+//                        mActivity.setResult(8888);
+//                        mActivity.finish();
+                        getActivity().setActivityResult(model);
                     }
                 }
             });
@@ -81,6 +84,10 @@ public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
         }
 
         return convertView;
+    }
+
+    public CityListActivity getActivity(){
+        return (CityListActivity)mActivity;
     }
 
     public int getModelFirstLettersAscii(CitylistModel model) {

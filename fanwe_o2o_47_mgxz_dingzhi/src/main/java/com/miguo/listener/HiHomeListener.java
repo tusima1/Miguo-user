@@ -1,8 +1,12 @@
 package com.miguo.listener;
 
+import android.content.Intent;
+
 import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
 import com.miguo.live.definition.TabId;
+import com.miguo.live.views.LiveStartActivity;
+import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.BarryTab;
 
 /**
@@ -23,16 +27,24 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
             case TabId.TAB_B:
                 clickTab(1);
                 break;
+            /**
+             * 直播不加入
+             */
             case TabId.TAB_C:
-                clickTab(2);
+                clickLive();
                 break;
             case TabId.TAB_D:
-                clickTab(3);
+                clickTab(2);
                 break;
             case TabId.TAB_E:
-                clickTab(4);
+                clickTab(3);
                 break;
         }
+    }
+
+    private void clickLive(){
+        Intent intent = new Intent(getActivity(), LiveStartActivity.class);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     private void clickTab(int position){

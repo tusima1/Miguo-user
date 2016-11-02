@@ -59,6 +59,18 @@ public abstract class Category implements BaseView {
         init();
     }
 
+    public Category(Category category, View view) {
+        this.view = view;
+        this.activity = category.getActivity();
+        this.app = activity.getApp();
+        initFirst();
+        findViews();
+        initListener();
+        setListener();
+        initViews();
+        init();
+    }
+
     public Category(HiBaseActivity activity){
         this.activity = activity;
         this.app = activity.getApp();

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.definition.TabId;
 import com.miguo.live.views.base.BaseRelativeLayout;
 
 import java.util.ArrayList;
@@ -75,9 +76,19 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
      * 图标高度
      */
     int iconHeight;
+    /**
+     * 中间图标高度
+     */
+    int centerIconWidth;
+    /**
+     * 中间图标宽度
+     */
+    int centerIconHeight;
 
     int defaultNormalColor = 0;
     int defaultpressColor = 0;
+
+    Tab center;
 
     public BarryTab(Context context) {
         super(context);
@@ -102,6 +113,12 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
     public BarryTab addTab(String name, int icon, int pressIcon, int id){
         tabs.add(new Tab(name, icon, pressIcon, id));
+        return this;
+    }
+
+    public BarryTab addTab(String name, int icon, int pressIcon, int id, boolean center){
+        Tab tab = new Tab(name, icon, pressIcon, id);
+        setCenter(tab);
         return this;
     }
 
@@ -134,14 +151,16 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         addView(topLine);
 
         int screenWidth = getScreenWidth();
-        int groupWidth = screenWidth / tabs.size();
+        int groupWidth = screenWidth / (hasCenterIcon() ? tabs.size() + 1 : tabs.size());
 
         int iconWidth = dip2px(getType() == Type.NORMAL ? getIconWidht() : 35);
+        int centerWidth = dip2px(getCenterIconWidth());
 
         for(int i=0; i<tabs.size(); i++){
             LinearLayout group = new LinearLayout(getContext());
             RelativeLayout.LayoutParams groupParams = getRelativeLayoutParams(groupWidth, matchParent());
-            groupParams.setMargins(i * groupWidth, 0, 0, 0);
+            int marginLeft = hasCenterIcon() ? i >= 2 ? (i + 1 ) * groupWidth : i * groupWidth : i * groupWidth;
+            groupParams.setMargins(marginLeft, 0, 0, 0);
             groupParams.addRule(BELOW, topLine.getId());
             group.setLayoutParams(groupParams);
             group.setOrientation(LinearLayout.VERTICAL);
@@ -167,8 +186,18 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
             }
             allTabs.add(group);
             addView(group);
-
         }
+
+        if(hasCenterIcon()){
+            ImageView icon = new ImageView(getContext());
+            RelativeLayout.LayoutParams iconParams = getRelativeLayoutParams(centerWidth, centerWidth);
+            iconParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            icon.setLayoutParams(iconParams);
+            icon.setImageResource(center.getIcon());
+            icon.setOnClickListener(new TabListener(4, TabId.TAB_C));
+            addView(icon);
+        }
+
         if(viewPager != null){
             viewPager.setOnPageChangeListener(this);
         }
@@ -204,6 +233,7 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
      * tab抖动动画
      * @param view
      */
+    @SuppressWarnings("ResourceType")
     private void startTabAnim(View view){
 //        return;
         Animator animator = AnimatorInflater.loadAnimator(getContext(), R.anim.scaletab);
@@ -271,6 +301,12 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
         @Override
         public void onClick(View v) {
+            if(id == TabId.TAB_C){
+                if(onTabClickListener != null){
+                    onTabClickListener.onTabClick(id);
+                }
+                return;
+            }
             if(viewPager != null){
                 viewPager.setCurrentItem(position);
             }
@@ -303,6 +339,10 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
     public enum Type{
         NORMAL,
         NO_TAB_NAME
+    }
+
+    public boolean hasCenterIcon(){
+        return center != null;
     }
 
     public Type getType() {
@@ -371,12 +411,38 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         return this;
     }
 
+    public Tab getCenter() {
+        return center;
+    }
+
+    public void setCenter(Tab center) {
+        this.center = center;
+    }
+
     public int getIconHeight() {
         return iconHeight;
     }
 
     public BarryTab setIconHeight(int iconHeight) {
         this.iconHeight = iconHeight;
+        return this;
+    }
+
+    public int getCenterIconWidth() {
+        return centerIconWidth;
+    }
+
+    public BarryTab setCenterIconWidth(int centerIconWidth) {
+        this.centerIconWidth = centerIconWidth;
+        return this;
+    }
+
+    public int getCenterIconHeight() {
+        return centerIconHeight;
+    }
+
+    public BarryTab setCenterIconHeight(int centerIconHeight) {
+        this.centerIconHeight = centerIconHeight;
         return this;
     }
 }

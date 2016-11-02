@@ -7,10 +7,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.TimeLimitActivity;
+import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.dao.barry.GetSpecialListDao;
 import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
@@ -18,10 +20,12 @@ import com.fanwe.dao.barry.view.GetSpecialListView;
 import com.fanwe.home.views.FragmentHomeTimeLimit;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
+import com.fanwe.model.CitylistModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.SpecialTopicActivity;
 import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.view.RecyclerScrollView;
@@ -29,15 +33,30 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
-import com.miguo.app.HiShopDetailActivity;
-import com.miguo.fake.HomeBannerFakeData;
+import com.miguo.dao.GetAdspaceListDao;
+import com.miguo.dao.GetMenuListDao;
+import com.miguo.dao.HomeGreetingDao;
+import com.miguo.dao.impl.GetAdspaceListDaoImpl;
+import com.miguo.dao.impl.GetMenuListDaoImpl;
+import com.miguo.dao.impl.HomeGreetingDaoImpl;
+import com.miguo.definition.AdspaceParams;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.MenuParams;
+import com.miguo.entity.AdspaceListBean;
+import com.miguo.entity.MenuBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.ui.view.AutofitTextView;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeTagsView;
+import com.miguo.view.GetAdspaceListView;
+import com.miguo.view.GetMenuListView;
+import com.miguo.view.HomeGreetingView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +72,9 @@ import me.relex.circleindicator.CircleIndicator;
 public class HiHomeFragmentCategory extends FragmentCategory implements
         PtrHandler,
         RecyclerScrollView.OnRecyclerScrollViewListener,
-        GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener{
+        GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
+        HomeGreetingView,
+        GetAdspaceListView, GetMenuListView{
 
     /**
      * 顶部导航栏的东西
@@ -61,9 +82,17 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
 
+    @ViewInject(R.id.frag_home_title_bar_tv_earn)
+    TextView city;
+
+    @ViewInject(R.id.frag_home_title_bar_ll_search)
+    RelativeLayout searchLayout;
+
     @ViewInject(R.id.frag_home_title_bar_ll_msg)
     LinearLayout messageLayout;
 
+    @ViewInject(R.id.frag_home_title_bar_ll_earn)
+    LinearLayout areaLayout;
 
     @ViewInject(R.id.ptr_layout)
     FixRequestDisallowTouchEventPtrFrameLayout ptrFrameLayout;
@@ -76,14 +105,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @ViewInject(R.id.top_say_hi_layout)
     LinearLayout topSayHi;
+    @ViewInject(R.id.sayhi)
+    AutofitTextView sayhi;
     @ViewInject(R.id.scroll_content)
     LinearLayout scrollContent;
-
-    /**
-     * 标题栏空间高度
-     */
-//    @ViewInject(R.id.title_space)
-//    Space titleSpace;
+    @ViewInject(R.id.city_sayhi)
+    TextView citySayHi;
 
     /**
      * 轮播ViewPager
@@ -98,7 +125,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /**
      * 限时特惠
      */
-    FragmentHomeTimeLimit timeLimit;
     @ViewInject(R.id.home_tuan)
     HomeTuanTimeLimitView homeTuanTimeLimitView;
     GetSpecialListDao getSpecialListDao;
@@ -115,7 +141,16 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.home_ad_view_2)
     HomeADView2 homeADView2;
 
-
+    /**
+     * 接口类
+     */
+    HomeGreetingDao homeGreetingDao;
+    GetAdspaceListDao getAdspaceListDao;
+    GetMenuListDao getMenuListDao;
+    /**
+     * 今日精选
+     */
+    FeaturedGrouponCategory featuredGrouponCategory;
 
     boolean hasTop = true;
     int topHeight = dip2px(150);
@@ -128,7 +163,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     protected void initFirst() {
         getSpecialListDao = new GetSpecialListDaoImpl(this);
-
+        homeGreetingDao = new HomeGreetingDaoImpl(this);
+        getAdspaceListDao = new GetAdspaceListDaoImpl(this);
+        getMenuListDao = new GetMenuListDaoImpl(this);
     }
 
     @Override
@@ -144,6 +181,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     protected void setFragmentListener() {
         messageLayout.setOnClickListener(listener);
+        areaLayout.setOnClickListener(listener);
+        searchLayout.setOnClickListener(listener);
+        citySayHi.setOnClickListener(listener);
+        homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener)listener);
+        homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener)listener);
     }
 
     @Override
@@ -152,28 +194,47 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         setTitleAlpha(titleLayout, 0);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
-        initBanner();
-        initHomeTagsView();
-        initHomeADView2();
-//        addTimeLimitFragment();
-        locationCity();
+        initDefaultCity();
+        /**
+         * 今日精选
+         */
+        initFeaturedGrouponCategory();
+        /**
+         * 因为问候语上滑要消失，所以不加入刷新方法
+         */
+        onRefreshGreeting();
         onRefresh();
+    }
+
+    private void initDefaultCity(){
+        citySayHi.setText(AppRuntimeWorker.getCity_name());
+        city.setText(AppRuntimeWorker.getCity_name());
     }
 
     public void onRefresh(){
         onRefreshTimeLimit();
+        onRefreshAdspaceList();
+        onRefreshFeaturedGroupon();
+        onRefreshMenus();
     }
 
     /**
      * 首页banner数据
      */
-    private void initBanner(){
+    private void initBanner(List<AdspaceListBean.Result.Body> bodys){
         ArrayList<Fragment> fragmets = new ArrayList<>();
-        List<HomeBannerFakeData.Banner> baners = HomeBannerFakeData.getInstance().getBanner();
-        for(int i = 0; i< baners.size(); i++){
+
+        if(bodys == null || bodys.size() == 0){
+            bodys = new ArrayList<>();
+            AdspaceListBean.Result.Body body = new AdspaceListBean().new Result().new Body();
+            body.setIcon("");
+            bodys.add(body);
+        }
+
+        for(int i = 0; i< bodys.size(); i++){
             HomeBannerFragmet fragmet = new HomeBannerFragmet();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("image", baners.get(i));
+            bundle.putSerializable("image", bodys.get(i));
             fragmet.setArguments(bundle);
             fragmets.add(fragmet);
         }
@@ -181,45 +242,22 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeViewPager.setAdapter(homeBannerAdapter);
         circleIndicator.setViewPager(homeViewPager);
         homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+        homeBannerAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * 添加限时特惠fragment
-     */
-    private void addTimeLimitFragment() {
-        timeLimit = new FragmentHomeTimeLimit();
-        timeLimit.setParent(ptrFrameLayout);
-//        new SDFragmentManager(fragment.getChildFragmentManager()).replace(R.id.time_limited_layout, timeLimit);
-//        fragment.getChildFragmentManager().beginTransaction().commit();
+    private void initFeaturedGrouponCategory(){
+        featuredGrouponCategory = new FeaturedGrouponCategory(view, fragment);
     }
-
 
     /**
      * 首页标签、菜单栏
      */
-    private void initHomeTagsView(){
-        List list = new ArrayList();
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
+    private void initHomeMenuView(List<MenuBean.Result.Body> list){
         homeTagsView.init(list);
     }
 
-    private void initHomeADView2(){
-        List list = new ArrayList();
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        homeADView2.init(list);
+    private void initHomeADView2(List<AdspaceListBean.Result.Body> body){
+        homeADView2.init(body);
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -240,8 +278,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         try{
             getSpecialListDao.getSpecialList(
                     AppRuntimeWorker.getCity_id(),
-                    BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
-                    BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
+                    BaiduMapManager.getInstance().getLongitude() + "",
+                    BaiduMapManager.getInstance().getLatitude() + "",
                     "0");
         }catch (Exception e){
             getSpecialListDao.getSpecialList(
@@ -253,111 +291,73 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     /**
-     * 定位，城市处理
+     * 刷新今日精选
      */
-    private List<GoodsModel> mListModel = new ArrayList<GoodsModel>();
-    private List<GoodsModel> pageData_2 = new ArrayList<GoodsModel>();
-    private List<GoodsModel> pageData_1 = null;
-
-    PageModel pageModel = new PageModel();
-
-    private void locationCity() {
-        BaiduMapManager.getInstance().startLocation(new BDLocationListener() {
-
-            @Override
-            public void onReceiveLocation(BDLocation location) {
-                if (mListModel != null) {
-                    mListModel.clear();
-                }
-                if (pageModel != null) {
-                    pageModel.resetPage();
-                }
-                pageData_1 = null;
-                if (pageData_2 != null) {
-                    pageData_2.clear();
-                }
-                onRefreshBegin(ptrFrameLayout);
-                if (location != null) {
-                    dealLocationSuccess();
-                }
-                BaiduMapManager.getInstance().stopLocation();
-            }
-        });
+    public void onRefreshFeaturedGroupon(){
+        featuredGrouponCategory.onRefresh();
     }
 
-    private void dealLocationSuccess() {
-        String defaultCity = AppRuntimeWorker.getCity_name();
-        if (TextUtils.isEmpty(defaultCity)) {
-            return;
-        }
-        if (!BaiduMapManager.getInstance().hasLocationSuccess()) {
-            return;
-        }
-        String dist = BaiduMapManager.getInstance().getDistrictShort();
-        String cityId = AppRuntimeWorker.getCityIdByCityName(dist);
-        if (!TextUtils.isEmpty(cityId)) // 区域存在于城市列表中
-        {
-            if (!dist.equals(defaultCity)) // 区域不是默认的
-            {
-                showChangeLocationDialog(dist);
-            }
-        } else {
-            String city = BaiduMapManager.getInstance().getCityShort();
-            cityId = AppRuntimeWorker.getCityIdByCityName(city);
-            if (!TextUtils.isEmpty(cityId)) // 城市存在于城市列表中
-            {
-                if (!city.equals(defaultCity)) // 城市不是默认的
-                {
-                    showChangeLocationDialog(city);
-                }
-            }
-        }
+    public void onRefreshMenus(){
+        getMenuListDao.getMenuList(MenuParams.TERMINAL_TYPE, MenuParams.MENU_TYPE_INDEX);
     }
 
-    private void showChangeLocationDialog(final String location) {
-        new SDDialogConfirm()
-                .setTextContent(
-                        "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
-                .setmListener(new SDDialogCustom.SDDialogCustomListener() {
-                    @Override
-                    public void onDismiss(SDDialogCustom dialog) {
-
-                    }
-
-                    @Override
-                    public void onClickConfirm(View v, SDDialogCustom dialog) {
-                        AppRuntimeWorker.setCity_name(location);
-                    }
-
-                    @Override
-                    public void onClickCancel(View v, SDDialogCustom dialog) {
-                    }
-                }).show();
+    /**
+     * 刷新广告
+     * banners + topics
+     */
+    public void onRefreshAdspaceList(){
+        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_INDEX, AdspaceParams.TERMINAL_TYPE);
+//        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_TOPIC_INDEX, AdspaceParams.TERMINAL_TYPE);
     }
-    /** 定位，城市处理 */
 
 
+    /**
+     * 刷新问候语
+     */
+    private void onRefreshGreeting(){
+        homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
+    }
+
+
+
+
+    public void loadComplete() {
+        ptrFrameLayout.refreshComplete();
+        scrollView.loadComplite();
+    }
 
     /** scroll view 滚动监听 */
     @Override
     public void onScrollToEnd() {
-
+        featuredGrouponCategory.onLoadMore();
     }
 
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
         checkTop(l, t, oldl, oldt);
         checkTitle(l, t , oldl, oldt);
+        checkTopPadding(l, t , oldl, oldt);
+
     }
 
     private void checkTitle(int l, int t, int oldl, int oldt){
         if(!isHasTop() && t < getTopHeight()){
             float radius = (float)t / getTopHeight();
             setTitleAlpha(titleLayout, radius);
+        }else {
+//            if(!isHasTop() && titleLayout.getAlpha() != 1){
+//                setTitleAlpha(titleLayout, 1);
+//            }
         }
     }
 
-    /** scroll view 滚动监听 emd */
+    private void checkTopPadding(int l, int t, int oldl, int oldt){
+        if(t == 0){
+            scrollView.scrollTo(2, 0);
+        }
+    }
+
+    /** scroll view 滚动监听 end */
 
 
     /**
@@ -378,26 +378,32 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         }
     }
 
+    public void updateFromCityChanged(CitylistModel model){
+        updateCityName(model.getName());
+        onRefresh();
+    }
+
+    public void updateCityName(String cityName){
+        city.setText(cityName);
+        /**
+         * View有可能已经被移除了
+         */
+        try{
+            citySayHi.setText(cityName);
+        }catch (Exception e){
+
+        }
+    }
 
     /** ptr framelayout 下拉刷新监听 */
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return scrollView.canRefresh();
+        return scrollView.canRefresh() && false;
     }
 
     @Override
     public void onRefreshBegin(PtrFrameLayout frame) {
-
-    }
-
-
-    /**
-     * click method
-     */
-    public void clickMessage(){
-        Intent intent = new Intent(getActivity(), HiShopDetailActivity.class);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
-
+        onRefresh();
     }
 
     /** click method end ***/
@@ -413,19 +419,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             @Override
             public void run() {
                 if(result != null){
-//                    homeTuanTimeLimitView.setVisibility(View.GONE);
-//                    homeTuanTimeLimitView.removeAllViews();
-//                            contentLayout.removeAllViews();
-                    if(result.getCount_down() != null){
-
-                        if(result.getCount_down().equals("0")){
-                            return;
-                        }
                         homeTuanTimeLimitView.setVisibility(View.VISIBLE);
                         homeTuanTimeLimitView.init(result);
                         homeTuanTimeLimitView.setParent(ptrFrameLayout);
                         homeTuanTimeLimitView.setOnTimeLimitClickListener(HiHomeFragmentCategory.this);
-                    }
                 }
             }
         });
@@ -473,7 +470,76 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** 限时特惠点击回调 end*/
 
 
+    /**
+     * 首页广告内容
+     * @param body
+     */
+    @Override
+    public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
+        updateAdspaceViews(body, type);
+    }
 
+    private void updateAdspaceViews(final List<AdspaceListBean.Result.Body> body, String type){
+        List<AdspaceListBean.Result.Body> banner = new ArrayList<>();
+        List<AdspaceListBean.Result.Body> topic = new ArrayList<>();
+        for(AdspaceListBean.Result.Body bd : body ){
+            if(bd.getAdspace_id().equals(AdspaceParams.TYPE_BANNER_INDEX)){
+                banner.add(bd);
+            }else {
+                topic.add(bd);
+            }
+        }
+        initBanner(banner);
+        initHomeADView2(topic);
+    }
+
+    @Override
+    public void getAdspaceListError() {
+
+    }
+
+    /**
+     * 首页问候语回调
+     * @param greeting
+     */
+    @Override
+    public void getHomeGreetingSuccess(final String greeting) {
+        sayhi.setText(greeting);
+    }
+
+    @Override
+    public void getHomeGreetingError() {
+        getHomeGreetingSuccess("神秘人，你好！");
+    }
+
+    /**
+     * 首页菜单
+     */
+    @Override
+    public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
+        initHomeMenuView(list);
+    }
+
+    @Override
+    public void getMenuListError() {
+
+    }
+
+    /**
+     * 专题点击回调
+     * @param ad
+     */
+    public void onTopicAdsClick(AdspaceListBean.Result.Body ad) {
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
+        Bundle bundle = new Bundle();
+        bundle.putString(IntentKey.SPECIAL_TOPIC_ID, ad.getType_id());
+        intent.putExtras(bundle);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
+    }
+
+    public void onTagsClick(MenuBean.Result.Body item){
+
+    }
 
     public boolean isHasTop() {
         return hasTop;

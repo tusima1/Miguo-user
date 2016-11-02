@@ -3,16 +3,19 @@ package com.miguo.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.github.siyamed.shapeimageview.RoundedImageView;
+import com.miguo.entity.MenuBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
-import com.miguo.live.views.customviews.RoundedImageView;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
 
     LinearLayout content;
     OnHomeTagsClickListener onHomeTagsClickListener;
+    List<MenuBean.Result.Body> list;
 
     public HomeTagsView(Context context) {
         super(context);
@@ -52,10 +56,12 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         addView(content);
     }
 
-    public void init(List tags){
+    public void init(List<MenuBean.Result.Body> tags){
         if(tags == null || tags.size()==0){
             return ;
         }
+
+        this.list = tags;
 
         content.removeAllViews();
 
@@ -70,12 +76,13 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             group.setOrientation(LinearLayout.VERTICAL);
             group.setOnClickListener(new HomeTagsViewListener(i));
 
-            RoundedImageView icon = new RoundedImageView(getContext());
+            CircleImageView icon = new CircleImageView(getContext());
             LinearLayout.LayoutParams iconParams = getLinearLayoutParams(iconWidth, iconHeight);
             icon.setLayoutParams(iconParams);
-            icon.setOval(true);
 
-            SDViewBinder.setImageView("http://img.xiaoneiit.com/avatar/5.jpg", icon);
+
+            SDViewBinder.setImageView(getItem(i).getIcon(), icon, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+//            SDViewBinder.setImageView("http://img.xiaoneiit.com/mgxz/food1.jpg", icon, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
             group.addView(icon);
 
             TextView title = new TextView(getContext());
@@ -84,7 +91,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             title.setLayoutParams(titleParams);
             title.setTextColor(getColor(R.color.text_base_color));
             title.setTextSize(12);
-            title.setText("米果小站");
+            title.setText(getItem(i).getTitle());
             group.addView(title);
 
             content.addView(group);
@@ -98,6 +105,16 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         content.addView(line);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+
+        return true;
+    }
+
+    public MenuBean.Result.Body getItem(int position){
+        return list.get(position);
+    }
+
     class HomeTagsViewListener implements View.OnClickListener{
 
         int position;
@@ -109,13 +126,13 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         @Override
         public void onClick(View v) {
             if(onHomeTagsClickListener != null){
-                onHomeTagsClickListener.onTagsClick();
+                onHomeTagsClickListener.onTagsClick(getItem(position));
             }
         }
     }
 
     public interface OnHomeTagsClickListener{
-        void onTagsClick();
+        void onTagsClick(MenuBean.Result.Body item);
     }
 
     public void setOnHomeTagsClickListener(OnHomeTagsClickListener onHomeTagsClickListener) {

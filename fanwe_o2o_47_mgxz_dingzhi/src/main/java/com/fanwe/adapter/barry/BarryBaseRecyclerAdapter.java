@@ -46,8 +46,8 @@ public abstract class BarryBaseRecyclerAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         BarryListener listener = initHolderListener(holder, position);
         setHolderListener(holder, position, listener);
-        doThings(holder, position);
         setHolderViews(holder, position);
+        doThings(holder, position);
     }
 
     protected abstract RecyclerView.ViewHolder initHolder(View view, int viewTyp);

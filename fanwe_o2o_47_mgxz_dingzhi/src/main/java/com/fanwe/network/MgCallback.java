@@ -1,5 +1,8 @@
 package com.fanwe.network;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.MainThread;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -11,6 +14,7 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.google.gson.Gson;
 import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDEventManager;
 
@@ -27,6 +31,15 @@ import okhttp3.Response;
 public abstract class MgCallback<T> implements Callback {
     private static String TAG = MgCallback.class.getSimpleName();
 
+    private Class clz;
+
+    public MgCallback(Class clz) {
+        this.clz = clz;
+    }
+
+    public MgCallback() {
+        this.clz = Root.class;
+    }
 
     public void onStart() {
         SDDialogManager.showProgressDialog("请稍候...");
@@ -54,7 +67,6 @@ public abstract class MgCallback<T> implements Callback {
                 Log.e(TAG, body);
             }
             try {
-//                Root root =new Gson().fromJson(body,Root.class);
                 Root root = JSON.parseObject(body, Root.class);
 
                 String statusCode = root.getStatusCode();
@@ -76,10 +88,15 @@ public abstract class MgCallback<T> implements Callback {
                         userCurrentInfo.setToken("");
                         SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {
-                        onSuccessResponse(body);
+                        if(clz != Root.class){
+                            Object bean = new Gson().fromJson(body, clz);
+                            onSuccessResponseOnMainThreadWithBean(bean);
+                        }else {
+                            onSuccessResponseOnMainThread(body);
+                        }
                     }
                 } else {
-                    onErrorResponse(message, statusCode);
+                    onErrorResponseOnMainThread(message, statusCode);
                 }
 
             } catch (Exception e) {
@@ -90,9 +107,39 @@ public abstract class MgCallback<T> implements Callback {
         onFinish();
     }
 
+    private void onSuccessResponseOnMainThread(final String responseBody){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                onSuccessResponse(responseBody);
+            }
+        });
+    }
+    private void onSuccessResponseOnMainThreadWithBean(final Object responseBody){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                onSuccessResponseWithBean(responseBody);
+            }
+        });
+    }
+
+    private void onErrorResponseOnMainThread(final String message,final String errorCode){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                onErrorResponse(message, errorCode);
+            }
+        });
+    }
 
     public void onSuccessResponse(String responseBody) {
     }
+
+    public void onSuccessResponseWithBean(Object responseBody) {
+    }
+
+
 
     /**
      * 判断BODY对象是否存在。

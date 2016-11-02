@@ -57,6 +57,8 @@
 
     <!-- 主界面底部菜单 -->
     <string name="home">首页</string>
+    <string name="funny">有趣</string>
+    <string name="find">发现</string>
     <string name="supplier">商家</string>
     <string name="mine">我的</string>
 

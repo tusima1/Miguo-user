@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.HomeSearchActivity;
@@ -18,6 +19,7 @@ import com.fanwe.MainActivity;
 import com.fanwe.constant.Constant;
 import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.utils.BaseUtils;
 
 /**
  * Created by Administrator on 2016/10/19.
@@ -32,6 +34,7 @@ public class SellerFragment extends Fragment {
     private StoreListFragment mFragAll;
     private StoreListFragment mFragGroupon;
     private Bundle bundle;
+    private LinearLayout titleLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class SellerFragment extends Fragment {
         view = inflater.inflate(R.layout.frag_seller, container, false);
         setWidget();
         setListener();
+        setTitlePadding(titleLayout);
         clickTitle("all");
         setView();
         return view;
@@ -61,6 +65,7 @@ public class SellerFragment extends Fragment {
     }
 
     private void setWidget() {
+        titleLayout = (LinearLayout) view.findViewById(R.id.title_layout);
         tvAll = (TextView) view.findViewById(R.id.tv_all_frag_seller);
         tvGroupon = (TextView) view.findViewById(R.id.tv_groupon_frag_seller);
         viewAll = (View) view.findViewById(R.id.view_all_frag_seller);
@@ -140,5 +145,15 @@ public class SellerFragment extends Fragment {
         }
         ft.commit();
     }
+
+    /**
+     * 沉浸式标题栏效果需要设置padding
+     */
+    protected void setTitlePadding(View view) {
+        if (view != null) {
+            view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
+        }
+    }
+
 
 }

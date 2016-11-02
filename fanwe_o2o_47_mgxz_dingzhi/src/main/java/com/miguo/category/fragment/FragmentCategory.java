@@ -92,10 +92,6 @@ public abstract class FragmentCategory {
         }
     }
 
-
-    /**
-     * utils
-     */
     /**
      * 获取Drawable对象
      * @param drawbleId

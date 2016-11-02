@@ -183,6 +183,7 @@
 
         <!-- 新主界面 -->
         <activity
+            android:theme="@style/Transparent_title_area"
             android:name="com.miguo.app.HiHomeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
@@ -193,7 +194,7 @@
         <activity
             android:name="com.fanwe.DistributionCommodityManagementActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- Map上的附近搜索(新) -->
@@ -207,7 +208,7 @@
         <activity
             android:name="com.fanwe.RegisterActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 注册协议界面 -->
@@ -244,7 +245,7 @@
         <activity
             android:name="com.fanwe.GoodsListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
@@ -263,7 +264,7 @@
         <activity
             android:name="com.fanwe.LoginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 活动 -->
@@ -283,7 +284,7 @@
         <activity
             android:name="com.fanwe.EventDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 商家 -->
@@ -308,7 +309,7 @@
         <activity
             android:name="com.fanwe.TuanListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 日期选择界面 -->
@@ -344,21 +345,21 @@
             android:name="com.fanwe.AppWebViewActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:hardwareAccelerated="false"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 评论列表 -->
         <activity
             android:name="com.fanwe.CommentListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 购物车界面 -->
         <activity
             android:name="com.fanwe.ShopCartActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 确认订单新界面 -->
@@ -506,7 +507,7 @@
         <activity
             android:name="com.fanwe.StoreDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 首页搜索界面 -->
@@ -519,7 +520,7 @@
         <activity
             android:name="com.fanwe.YouHuiDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 公告内容 -->
@@ -631,21 +632,21 @@
         <activity
             android:name="com.fanwe.CheckDistributionRecommendActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 分销小店 -->
         <activity
             android:name="com.fanwe.DistributionStoreWapActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 分销小店 -->
         <activity
             android:name="com.fanwe.DistributionStoreActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 分销店铺 -->
@@ -765,7 +766,7 @@
         <activity
             android:name="com.fanwe.test.InputSiteActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 设置密码 -->
@@ -824,18 +825,12 @@
             android:name="com.miguo.live.views.view.PlayBackActivity"
             android:screenOrientation="portrait"/>
 
-
-
-        <activity android:name="com.miguo.live.views.view.PlayBackActivity"
-            android:screenOrientation="portrait"
-            />
-
         <!--新商家详情  -->
         <activity
-            android:theme="@style/AppTheme"
+            android:theme="@style/Transparent_title_area"
             android:name="com.miguo.app.HiShopDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
 
@@ -1087,11 +1082,6 @@
 
         <activity
             android:name="com.fanwe.user.view.RedPacketListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name="com.miguo.live.views.TestMyFragmentActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>

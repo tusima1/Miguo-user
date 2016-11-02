@@ -1,5 +1,6 @@
 package com.fanwe;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -25,6 +26,10 @@ import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.ResultCode;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.CitylistModel;
@@ -32,6 +37,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.CharacterParser;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.utils.BaseUtils;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -140,7 +146,7 @@ public class CityListActivity extends BaseActivity {
                     if (AppRuntimeWorker.setCity_name(model.getName())) {
                         //缓存数据
                         CurrCityModelDao.insertModel(model);
-                        setActivityResult();
+                        setActivityResult(model);
                     } else {
                         MGToast.showToast("设置失败");
                     }
@@ -301,7 +307,7 @@ public class CityListActivity extends BaseActivity {
                         tempBean.setId(cityId);
                         tempBean.setName(locationCity);
                         CurrCityModelDao.insertModel(tempBean);
-                        setActivityResult();
+                        setActivityResult(tempBean);
                     }
                 } else {
                     locationCity();
@@ -315,9 +321,11 @@ public class CityListActivity extends BaseActivity {
 
     }
 
-    private void setActivityResult() {
-        setResult(8888);
-        finish();
+    public void setActivityResult(CitylistModel tempBean) {
+        Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
+        intent.putExtra(IntentKey.RETURN_CITY_DATA, tempBean);
+        setResult(ResultCode.RESUTN_OK, intent);
+        BaseUtils.finishActivity(this);
     }
 
     class CityListActivity_OnTouchingLetterChangedListener implements OnTouchingLetterChangedListener {

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.category.fragment.HomeBannerFragmentCategory;
+import com.miguo.entity.AdspaceListBean;
 import com.miguo.fake.HomeBannerFakeData;
 
 /**
@@ -14,7 +15,7 @@ import com.miguo.fake.HomeBannerFakeData;
  */
 public class HomeBannerFragmet extends HiBaseFragment{
 
-    HomeBannerFakeData.Banner banner;
+    AdspaceListBean.Result.Body banner;
 
     @Override
     protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,15 +24,15 @@ public class HomeBannerFragmet extends HiBaseFragment{
 
     @Override
     protected void initFragmentCategory() {
-        setBanner((HomeBannerFakeData.Banner) getArguments().getSerializable("image"));
+        setBanner((AdspaceListBean.Result.Body) getArguments().getSerializable("image"));
         category = new HomeBannerFragmentCategory(cacheView,this);
     }
 
-    public HomeBannerFakeData.Banner getBanner() {
+    public AdspaceListBean.Result.Body getBanner() {
         return banner;
     }
 
-    public void setBanner(HomeBannerFakeData.Banner banner) {
+    public void setBanner(AdspaceListBean.Result.Body banner) {
         this.banner = banner;
     }
 }

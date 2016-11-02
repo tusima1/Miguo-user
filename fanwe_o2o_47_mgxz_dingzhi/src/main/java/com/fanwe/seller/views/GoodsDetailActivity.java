@@ -160,7 +160,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mSellerHelper = new SellerHttpHelper(null,this,"");
         mShoppingCartHelper = new ShoppingCartHelper(this);
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
-        SDDialogManager.showProgressDialog("");
+//        SDDialogManager.showProgressDialog("");
     }
     private void getIntentData() {
         Intent intent = getIntent();

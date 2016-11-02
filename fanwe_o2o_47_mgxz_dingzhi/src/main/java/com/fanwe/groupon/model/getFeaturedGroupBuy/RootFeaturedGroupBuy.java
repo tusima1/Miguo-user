@@ -1,12 +1,13 @@
 package com.fanwe.groupon.model.getFeaturedGroupBuy;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/28.
  */
-public class RootFeaturedGroupBuy {
+public class RootFeaturedGroupBuy implements Serializable{
     private List<ResultFeaturedGroupBuy> result;
 
     private String message;
