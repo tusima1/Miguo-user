@@ -41,6 +41,7 @@
             android:maxLines="1"
             android:paddingTop="@dimen/dp5"
             android:textColor="@color/text_base_color"
+            android:ellipsize="end"
             android:textSize="@dimen/dp13" />
 
         <TextView
