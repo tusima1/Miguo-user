@@ -21,6 +21,7 @@ import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.HorizontalSlideDeleteListView;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDViewUtil;
@@ -96,6 +97,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private int count = 0;
 
+    MGProgressDialog dialog;
+
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
                                        ViewGroup container, Bundle savedInstanceState) {
@@ -167,11 +170,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void registeClick() {
         mBt_account.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View v) {
-                                               clickSettleAccounts();
-                                           }
-                                       }
+                   @Override
+                   public void onClick(View v) {
+                       clickSettleAccounts();
+                   }
+               }
         );
 
         // 编辑状态下
@@ -422,6 +425,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void clickSettleAccounts() {
         currentGoTo = 1;
         if (ifLogin) {
+            dialog = new MGProgressDialog(getActivity(),R.style.MGProgressDialog).needFinishActivity(getActivity());
+            dialog.show();
             //添加购物车调用接口
             outSideShoppingCartHelper.multiAddShopCart(listModel);
         } else {
@@ -431,6 +436,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         }
     }
 
+    private void dismiss(){
+        if(dialog != null){
+            dialog.dismiss();
+        }
+    }
 
     private void gotoLogin() {
         Intent intent = new Intent(getActivity(),
@@ -532,6 +542,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
+    public void onStop() {
+        dismiss();
+        super.onStop();
+    }
+
+    @Override
     public void onSuccess(String responseBody) {
 
     }
@@ -570,6 +586,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
                 if (currentGoTo == 1) {
+                    dismiss();
                     startConfirmOrderActivity();
                 }
                 break;
@@ -581,7 +598,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     @Override
     public void onFailue(String responseBody) {
-
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        });
     }
 
 
@@ -618,5 +640,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             default:
                 break;
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        });
     }
 }
