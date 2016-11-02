@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/root"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <!--直播video-->
     <include
@@ -34,22 +33,20 @@
     <FrameLayout
         android:id="@+id/controll_ui"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <!--观众的顶部view-->
         <com.miguo.live.views.customviews.UserHeadTopView
             android:id="@+id/user_top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
         <!--主播的顶部view-->
         <com.miguo.live.views.customviews.HostTopView
             android:id="@+id/host_top_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
         <!--左上角用户头像-->
         <!--<include
             android:id="@+id/head_up_layout"
@@ -86,10 +83,9 @@
             android:layout_height="30dp"
             android:layout_gravity="top|left"
             android:layout_marginLeft="240dp"
-            android:visibility="gone"
             android:layout_marginTop="300dp"
             android:background="@drawable/icon_push_stream"
-            />
+            android:visibility="gone" />
 
 
         <!--录制图标(右上)-->
@@ -98,11 +94,11 @@
             android:layout_height="20dp"
             android:layout_gravity="top|left"
             android:layout_marginLeft="290dp"
-            android:visibility="gone"
             android:layout_marginTop="300dp"
             android:background="@drawable/icon_record"
             android:gravity="center"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
 
         <!--互动连线图标-->
@@ -112,8 +108,8 @@
             android:layout_gravity="left|top"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="300dp"
-            android:visibility="gone"
-            android:background="@drawable/icon_video_interact" />
+            android:background="@drawable/icon_video_interact"
+            android:visibility="gone" />
 
         <!--右上角关闭按钮-->
         <!--<TextView
@@ -146,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            />
+            android:visibility="invisible" />
 
         <!--主播邀请的成员显示的底部工具栏-->
         <include
@@ -170,32 +166,27 @@
             android:id="@+id/host_bottom_layout"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp34"
-            android:layout_marginLeft="@dimen/dp12"
-            android:layout_marginBottom="@dimen/dp7"
             android:layout_gravity="bottom"
-            />
+            android:layout_marginBottom="@dimen/dp7"
+            android:layout_marginLeft="@dimen/dp12"
+            android:visibility="invisible" />
         <!--主播的底部工具栏1 ( 右下的美颜等功能)-->
         <com.miguo.live.views.customviews.HostMeiToolView
             android:id="@+id/host_mei_layout"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="@dimen/dp7"
             android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp200"/>
-
-
+            android:layout_height="@dimen/dp200"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="@dimen/dp7" />
 
 
         <com.miguo.live.views.customviews.HostRedPacketTimeView
             android:id="@+id/host_red_countdown"
-            android:visibility="gone"
-            android:layout_gravity="left|top"
             android:layout_width="@dimen/dp64"
             android:layout_height="@dimen/dp34"
+            android:layout_gravity="left|top"
             android:layout_marginLeft="@dimen/dp12"
-            android:layout_marginTop="160dp"/>
-
-
-
+            android:layout_marginTop="160dp"
+            android:visibility="gone" />
 
 
         <!--飘心-->
@@ -217,7 +208,6 @@
     </FrameLayout>
 
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -231,12 +221,12 @@
         </com.miguo.live.views.gift.SmallGifView>
 
         <master.flame.danmaku.ui.widget.DanmakuView
-            android:layout_marginBottom="150dp"
-            android:layout_alignParentBottom="true"
             android:id="@+id/danmuku"
-            android:layout_marginTop="130dp"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="150dp"
+            android:layout_marginTop="130dp" />
 
 
         <com.miguo.live.views.gift.BigGifView
@@ -268,35 +258,37 @@
 
 
     <!--取消 或者 显示 界面信息-->
-  <!--  <TextView
-        android:id="@+id/normal_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/icon_nomal"
-        android:onClick="onClick"
-        android:visibility="gone" />-->
+    <!--  <TextView
+          android:id="@+id/normal_btn"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom|right"
+          android:layout_marginBottom="10dp"
+          android:layout_marginRight="10dp"
+          android:background="@drawable/icon_nomal"
+          android:onClick="onClick"
+          android:visibility="gone" />-->
 
     <!--主播离开或者异常中断界面-->
     <LinearLayout
         android:id="@+id/ll_host_leave"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:visibility="gone">
+
         <ImageView
-            android:src="@drawable/host_leave"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/host_leave" />
+
         <TextView
-            android:text="@string/live_host_leave"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorGray3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/live_host_leave"
+            android:textColor="@color/colorGray3" />
     </LinearLayout>
 </FrameLayout>
