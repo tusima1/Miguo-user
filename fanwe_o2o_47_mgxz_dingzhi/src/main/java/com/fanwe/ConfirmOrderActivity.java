@@ -504,6 +504,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             @Override
             public void run() {
                 mPtrsvAll.onRefreshComplete();
+                finish();
             }
         });
     }
