@@ -1025,9 +1025,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             CurLiveInfo.setCurrentRequestCount(0);
             unregisterReceiver();
             if (mLiveHelper != null) {
-                if (isRecording) {
-                    mLiveHelper.stopRecord();
-                }
                 mLiveHelper.closeCameraAndMic();
                 mLiveHelper.onDestory();
             }
@@ -1051,6 +1048,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             QavsdkControl.getInstance().clearVideoMembers();
             QavsdkControl.getInstance().onDestroy();
             MySelfInfo.getInstance().setMyRoomNum(-1);
+
         } catch (Exception e) {
 
         }
@@ -1093,7 +1091,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             @Override
             public void clickSure() {
                 //如果是直播，发消息
-                if (null != mLiveHelper) {
+                if (mLiveHelper != null) {
+                    if (isRecording) {
+                        mLiveHelper.stopRecord();
+                    }
                     //向后台发送主播退出
                     mLiveHelper.perpareQuitRoom(true);
                     App.getInstance().setAvStart(false);
@@ -1156,7 +1157,20 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
                 MGLog.e("观众:enterRoomComplete");
             }
+            //旁路直播
+            startPush();
         }
+    }
+
+    /**
+     * 旁路直播
+     */
+    private void startPush() {
+        TIMAvManager.StreamParam mStreamParam = TIMAvManager.getInstance().new StreamParam();
+        mStreamParam.setChannelName("ChanelName");
+        //适应H5观看直播，指定HLS格式
+        mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
+        mLiveHelper.pushAction(mStreamParam);
     }
 
 
@@ -1912,8 +1926,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     public void pushStream() {
         if (!isPushed) {
-            if (mPushDialog != null)
-                mPushDialog.show();
+            initPushDialog();
+            mPushDialog.show();
         } else {
             mLiveHelper.stopPushAction();
         }
@@ -1975,8 +1989,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void pushStreamSucc(TIMAvManager.StreamRes streamRes) {
-        List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
         isPushed = true;
+        List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
         int length = liveUrls.size();
         String url = null;
         String url2 = null;
@@ -1989,7 +2003,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             TIMAvManager.LiveUrl avUrl2 = liveUrls.get(1);
             url2 = avUrl2.getUrl();
         }
-        ClipToBoard(url, url2);
+//        ClipToBoard(url, url2);
     }
 
     /**

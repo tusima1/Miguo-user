@@ -24,8 +24,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fanwe.utils.DataFormat;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -36,6 +35,7 @@ import com.miguo.live.model.PlaySetInfo;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.model.getHostInfo.ModelHostInfo;
+import com.miguo.live.model.getLiveListNew.ModelRecordFile;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.model.getStoresRandomComment.ModelStoresRandomComment;
 import com.miguo.live.presenters.LiveHttpHelper;
@@ -69,7 +69,6 @@ import com.tencent.rtmp.TXLivePlayConfig;
 import com.tencent.rtmp.TXLivePlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -82,8 +81,6 @@ import java.util.TimerTask;
  * Created by Administrator on 2016/9/20.
  */
 public class PlayBackActivity extends BaseActivity implements ITXLivePlayListener, View.OnClickListener, LiveView, CallbackView, EnterQuiteRoomView, ShopAndProductView {
-
-
     private TXLivePlayer mLivePlayer = null;
     private boolean mVideoPlay;
     private TXCloudVideoView mPlayerView;
@@ -109,10 +106,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private LiveHttpHelper mLiveHttphelper;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
-
     private static final int MINFRESHINTERVAL = 500;
-
-
     private boolean mBoolRefreshLock = false;
     private boolean mBoolNeedRefresh = true;
     private final Timer mTimer = new Timer();
@@ -126,48 +120,44 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private ArrayList<String> mRenderUserList = new ArrayList<>();
     private ListView mListViewMsgItems;
     private static final int REFRESH_LISTVIEW = 5;
-
-
     private UserHeadTopView mUserHeadTopView;
-
     private PlayBackSeekBarView playBackSeekBarView;
     private PlayBackBottomToolView playBackBottomToolView;
 
     private PagerBaoBaoAdapter mBaoBaoAdapter;
     private PagerRedPacketAdapter mRedPacketAdapter;
-
     private Timer mVideoTimer, mAudienceTimer;
-
     /**
      * 头部头像adapter.
      */
     private HeadTopAdapter mHeadTopAdapter;
     private HashMap<Integer, PlaySetInfo> playUrlList;
-
-    PlaySetInfo currentPlayInfo;
+    private PlaySetInfo currentPlayInfo;
     /**
      * 拉流地址。
      */
     String playUrl = "";
-
     /**
      * 聊天室ID。
      */
     String chat_room_id;
     String file_size;
-
     String duration;
-
-
-    String playset;
-
     private boolean isFirstLogin = true;
+    //点播文件列表
+    private ArrayList<ModelRecordFile> fileSet = new ArrayList<>();
+    //当前播放的文件序号
+    private int indexPlay = 0;
+    //总的文件数
+    private int totalFile = 0;
+    //总播放时长
+    private int totalDuration = 0;
+    //已播放的文件的时长
+    private int timePlayed = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //   int roomNum=87654321;
-        //  CurLiveInfo.setRoomNum(roomNum);
         setActivityParams();
         setContentView(R.layout.act_play_back);
         getIntentData();
@@ -178,12 +168,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         getPlayUrlList();
         initHelper();
         initView();
-
-//        mCurrentRenderMode = TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN;
-//        mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT;
-
-
-
     }
 
     /**
@@ -192,35 +176,47 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     public void getPlayUrlList() {
         if (playUrlList == null) {
             playUrlList = new HashMap<>();
+        } else {
+            playUrlList.clear();
         }
-        Type listType = new TypeToken<List<PlaySetInfo>>() {
-        }.getType();
-        Gson gson = new Gson();
-        List<PlaySetInfo> playSetInfoList = gson.fromJson(playset, listType);
-        if(playSetInfoList==null||playSetInfoList.size()<1){
+        if (!SDCollectionUtil.isEmpty(fileSet)) {
+            ModelRecordFile modelRecordFile = fileSet.get(indexPlay);
+            ArrayList<PlaySetInfo> playSetInfoList = modelRecordFile.getPlaySet();
+            //        Type listType = new TypeToken<List<PlaySetInfo>>() {
+//        }.getType();
+//        Gson gson = new Gson();
+//        List<PlaySetInfo> playSetInfoList = gson.fromJson(playset, listType);
+            if (SDCollectionUtil.isEmpty(playSetInfoList)) {
+                playError();
+                return;
+            }
+            for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext(); ) {
+                PlaySetInfo o = (PlaySetInfo) iterator.next();
+                playUrlList.put(o.getDefinition(), o);
+            }
+            currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
+            if (currentPlayInfo == null) {
+                playError();
+                return;
+            }
+            playUrl = currentPlayInfo.getUrl();
+            changeOrientation();
+        } else {
             playError();
             return;
         }
-        for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext(); ) {
-            PlaySetInfo o = (PlaySetInfo) iterator.next();
-            playUrlList.put(o.getDefinition(), o);
-        }
-         currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
-        if (currentPlayInfo == null) {
-            playError();
-            return;
-        }
-        playUrl = currentPlayInfo.getUrl();
-        changeOrientation();
     }
 
-    private void playError(){
+    private void playError() {
         showInvalidateToast("网络有问题或者当前点播地址错误。");
         finish();
     }
 
-
     private void getIntentData() {
+        preData();
+        getTotalSize();
+        getTotalDuration();
+        ////////////////////////////////////////////////////
         Bundle data = getIntent().getExtras();
         if (data == null) {
             MGToast.showToast("数据传输错误!");
@@ -230,11 +226,54 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         chat_room_id = data.getString("chat_room_id", "");
         file_size = data.getString("file_size", "");
         duration = data.getString("duration", "");
-
-        playset = data.getString("playset", "");
-        Log.e("test", chat_room_id + "--" + file_size + "--" + duration + "--" + playset);
     }
 
+    /**
+     * 点播文件总个数
+     */
+    private void getTotalSize() {
+        if (!SDCollectionUtil.isEmpty(fileSet)) {
+            totalFile = fileSet.size();
+        }
+    }
+
+    /**
+     * 点播文件总时长
+     */
+    private void getTotalDuration() {
+        if (!SDCollectionUtil.isEmpty(fileSet)) {
+            for (ModelRecordFile bean : fileSet) {
+                totalDuration = totalDuration + DataFormat.toInt(bean.getDuration());
+            }
+        }
+    }
+
+    /**
+     * 假数据
+     */
+    private void preData() {
+        ModelRecordFile modelRecordFile1 = new ModelRecordFile();
+        modelRecordFile1.setDuration("5396");
+        ArrayList<PlaySetInfo> playSet1 = new ArrayList<>();
+        PlaySetInfo modelPlaySet1 = new PlaySetInfo();
+        modelPlaySet1.setUrl("http://200023194.vod.myqcloud.com/200023194_76cb4e51d43d4d0ba5d908089f35e115.f0.mp4");
+        playSet1.add(modelPlaySet1);
+        modelRecordFile1.setPlaySet(playSet1);
+        fileSet.add(modelRecordFile1);
+
+        ModelRecordFile modelRecordFile2 = new ModelRecordFile();
+        modelRecordFile2.setDuration("1231");
+        ArrayList<PlaySetInfo> playSet2 = new ArrayList<>();
+        PlaySetInfo modelPlaySet2 = new PlaySetInfo();
+        modelPlaySet2.setUrl("http://200023194.vod.myqcloud.com/200023194_b114ee44296149b1bd1d1fdc07967929.f0.mp4");
+        playSet2.add(modelPlaySet2);
+        modelRecordFile2.setPlaySet(playSet2);
+        fileSet.add(modelRecordFile2);
+    }
+
+    /**
+     * 控件初始化
+     */
     public void initView() {
         root = findViewById(R.id.root);
         mVideoPlay = false;
@@ -258,12 +297,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                             mBtnPlay.setBackgroundResource(R.drawable.play_start);
                         }
                         mVideoPause = !mVideoPause;
-
                     } else {
                         stopPlayRtmp();
                         mVideoPlay = !mVideoPlay;
                     }
-
                 } else {
                     if (startPlayRtmp()) {
                         mVideoPlay = !mVideoPlay;
@@ -318,6 +355,9 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mLiveHttphelper.getStoresRandomComment(CurLiveInfo.getShopID(), "3");
     }
 
+    boolean flagSwitch = false;
+    int progressSwitch = 0;
+
     public void initSeekBar() {
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -332,13 +372,70 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                //判断本次拖动，是否需要切换点播文件
+                int indexTemp = judgeIndex(seekBar.getProgress());
+                if (indexPlay != indexTemp) {
+                    //需要切换文件，记录拖动的状态，等视频加载后，自动跳转到相应的时间轴
+                    flagSwitch = true;
+                    indexPlay = indexTemp;
+                    getPlayUrlList();
+                    playWithSwitch();
+                    return;
+                }
+                if (flagSwitch){
+                    progressSwitch = seekBar.getProgress();
+                }
+                //不需要切换文件，走原先的逻辑
                 if (mLivePlayer != null) {
-                    mLivePlayer.seek(seekBar.getProgress());
+                    mLivePlayer.seek(seekBar.getProgress() - timePlayed);
                 }
                 mTrackingTouchTS = System.currentTimeMillis();
                 mStartSeek = false;
             }
         });
+    }
+
+    /**
+     * 切换视频，不重新配置播放器
+     */
+    private void playWithSwitch() {
+        if (!checkPlayUrl(playUrl)) {
+            return;
+        }
+        mBtnPlay.setBackgroundResource(R.drawable.play_pause);
+        int result = mLivePlayer.startPlay(playUrl, mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
+        if (result == -2) {
+            showInvalidateToast("非腾讯云链接地址。");
+        }
+        if (result != 0) {
+            mBtnPlay.setBackgroundResource(R.drawable.play_start);
+            return;
+        }
+        mLivePlayer.setLogLevel(TXLiveConstants.LOG_LEVEL_DEBUG);
+        startLoadingAnimation();
+        return;
+    }
+
+    /**
+     * 判断当前应该播放哪个文件
+     *
+     * @param progress
+     */
+    private int judgeIndex(int progress) {
+        if (!SDCollectionUtil.isEmpty(fileSet)) {
+            int tempTime = 0;
+            timePlayed = 0;
+            for (int i = 0; i < totalFile; i++) {
+                ModelRecordFile bean = fileSet.get(i);
+                tempTime = tempTime + DataFormat.toInt(bean.getDuration());
+                if (tempTime >= progress) {
+                    return i;
+                }
+                //记录需要跳过的时间长度
+                timePlayed = tempTime;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -376,7 +473,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     }
 
     private void registerReceiver() {
-
         //注册网络连接监听
         registerReceiver(mNetWorkReceiver, NetWorkStateReceiver.NETWORK_FILTER);
     }
@@ -415,8 +511,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             message = defaultMessage;
         }
         SDToast.showToast(message, Toast.LENGTH_LONG);
-
-
     }
 
     private boolean checkPlayUrl(final String playUrl) {
@@ -446,6 +540,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     }
 
     private boolean startPlayRtmp() {
+        Log.e("playBack", "startPlayRtmp");
         if (!checkPlayUrl(playUrl)) {
             return false;
         }
@@ -463,7 +558,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         //固定缓存时间。如果您什么都不调用，播放器将采用默认的策略（默认策略为自动调整，调整范围为1到4s）
         //mLivePlayer.setCacheTime(5);
         mLivePlayer.setConfig(mPlayConfig);
-
         int result = mLivePlayer.startPlay(playUrl, mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
         if (result == -2) {
             showInvalidateToast("非腾讯云链接地址。");
@@ -473,7 +567,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             return false;
         }
         mLivePlayer.setLogLevel(TXLiveConstants.LOG_LEVEL_DEBUG);
-
         startLoadingAnimation();
         return true;
     }
@@ -482,34 +575,51 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     public void onPlayEvent(int event, Bundle param) {
         if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
             stopLoadingAnimation();
+            //判断是否切换了文件，如果切换了就调整时间轴
+            if (flagSwitch) {
+                flagSwitch = false;
+                if (mLivePlayer != null) {
+                    //调整的时候，需要把已经播放过的时间减去
+                    mLivePlayer.seek(progressSwitch - timePlayed);
+                }
+                mTrackingTouchTS = System.currentTimeMillis();
+                mStartSeek = false;
+            }
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_PROGRESS) {
+            //播放过程中的回调
             if (mStartSeek) {
                 return;
             }
             int progress = param.getInt(TXLiveConstants.EVT_PLAY_PROGRESS);
             int duration = param.getInt(TXLiveConstants.EVT_PLAY_DURATION);
             long curTS = System.currentTimeMillis();
-
             // 避免滑动进度条松开的瞬间可能出现滑动条瞬间跳到上一个位置
             if (Math.abs(curTS - mTrackingTouchTS) < 500) {
                 return;
             }
             mTrackingTouchTS = curTS;
-
             if (mSeekBar != null) {
-                mSeekBar.setProgress(progress);
+                //腾讯回来的progress，是当前文件的progress，需要加上已经播放的时间
+                mSeekBar.setProgress(progress + timePlayed);
             }
+            //设置播放时间，需要把已经播放完成的文件的时间加上来
             if (mTextStart != null) {
-                mTextStart.setText(String.format("%02d:%02d", progress / 60, progress % 60));
+                mTextStart.setText(String.format("%02d:%02d", (progress + timePlayed) / 60, (progress + timePlayed) % 60));
             }
+            //设置总时长，totalDuration
             if (mTextDuration != null) {
-                mTextDuration.setText(String.format("%02d:%02d", duration / 60, duration % 60));
+                mTextDuration.setText(String.format("%02d:%02d", totalDuration / 60, totalDuration % 60));
             }
+            //设置最大时长，totalDuration
             if (mSeekBar != null) {
-                mSeekBar.setMax(duration);
+                mSeekBar.setMax(totalDuration);
             }
             return;
-        } else if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT || event == TXLiveConstants.PLAY_EVT_PLAY_END) {
+        } else if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT) {
+            //连接中断
+            indexPlay = 0;
+            timePlayed = 0;
+            getPlayUrlList();
             stopPlayRtmp();
             mVideoPlay = false;
             mVideoPause = false;
@@ -518,6 +628,32 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             }
             if (mSeekBar != null) {
                 mSeekBar.setProgress(0);
+            }
+        } else if (event == TXLiveConstants.PLAY_EVT_PLAY_END) {
+            if (indexPlay == (totalFile - 1)) {
+                //播放完毕
+                indexPlay = 0;
+                timePlayed = 0;
+                getPlayUrlList();
+                stopPlayRtmp();
+                mVideoPlay = false;
+                mVideoPause = false;
+                if (mTextStart != null) {
+                    mTextStart.setText("00:00");
+                }
+                if (mSeekBar != null) {
+                    mSeekBar.setProgress(0);
+                }
+            } else {
+                //当前文件播放完毕，需要播放下一个文件；已播放时长先做累加
+                timePlayed = timePlayed + DataFormat.toInt(fileSet.get(indexPlay).getDuration());
+                indexPlay++;
+                //设置播放时间，需要把已经播放完成的文件的时间加上来
+                if (mTextStart != null) {
+                    mTextStart.setText(String.format("%02d:%02d", (timePlayed) / 60, (timePlayed) % 60));
+                }
+                getPlayUrlList();
+                playWithSwitch();
             }
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_LOADING) {
             startLoadingAnimation();
@@ -533,12 +669,11 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
      * 根据宽高比设置当前的方向。
      */
     public void changeOrientation() {
-        if (mLivePlayer == null || currentPlayInfo==null) {
+        if (mLivePlayer == null || currentPlayInfo == null) {
             return;
         }
         float width = currentPlayInfo.getVwidth();
         float height = currentPlayInfo.getVheight();
-
         //横屏。
         if (width - height > 0) {
             mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
@@ -547,7 +682,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         }
         mLivePlayer.setRenderRotation(mCurrentRenderRotation);
     }
-
 
     /**
      * 进入chartroom.
@@ -560,7 +694,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 //错误码code列表请参见错误码表
                 if (10013 == code) {
                     Log.e("进来了errorcode:" + code + ",", desc);
-
                     if (mLiveHttphelper != null) {
                         mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "2", "");
                     }
@@ -572,21 +705,17 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                     }
                 }
                 Log.e("进来了errorcode:" + code + ",", desc);
-
             }
 
             @java.lang.Override
             public void onSuccess() {
                 Log.e("进来了success:", "desc");
-
                 mLiveHelper.initTIMListener("" + CurLiveInfo.getRoomNum());
                 //发消息通知上线
                 if (mLiveHttphelper != null) {
                     mLiveHttphelper.enterRoom(CurLiveInfo.getRoomNum() + "", "2", "");
                     mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
-
                 }
-
             }
         });
     }
@@ -594,8 +723,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     @Override
     public void onResume() {
         super.onResume();
-
-
         if (mVideoPlay && !mVideoPause) {
             if (mPlayType == TXLivePlayer.PLAY_TYPE_VOD_FLV || mPlayType == TXLivePlayer.PLAY_TYPE_VOD_HLS || mPlayType == TXLivePlayer.PLAY_TYPE_VOD_MP4) {
                 if (mLivePlayer != null) {
@@ -603,10 +730,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 }
             } else if (Build.VERSION.SDK_INT >= 23) { //目前android6.0以上暂不支持后台播放
                 startPlayRtmp();
-
             }
         }
-
         if (mPlayerView != null) {
             mPlayerView.onResume();
         }
@@ -619,7 +744,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     @Override
     public void onStop() {
         super.onStop();
-
         if (mPlayType == TXLivePlayer.PLAY_TYPE_VOD_FLV || mPlayType == TXLivePlayer.PLAY_TYPE_VOD_HLS || mPlayType == TXLivePlayer.PLAY_TYPE_VOD_MP4) {
             if (mLivePlayer != null) {
                 mLivePlayer.pause();
@@ -627,7 +751,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         } else if (Build.VERSION.SDK_INT >= 23) { //目前android6.0以上暂不支持后台播放
             stopPlayRtmp();
         }
-
         if (mPlayerView != null) {
             mPlayerView.onPause();
         }
@@ -643,8 +766,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         if (mPlayerView != null) {
             mPlayerView.onDestroy();
         }
-
-
         if (null != mVideoTimer) {
             mVideoTimer.cancel();
             mVideoTimer = null;
@@ -653,13 +774,11 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             mAudienceTimer.cancel();
             mAudienceTimer = null;
         }
-
         CurLiveInfo.setMembers(0);
         CurLiveInfo.setAdmires(0);
         CurLiveInfo.setCurrentRequestCount(0);
         unregisterReceiver();
         if (mLiveHelper != null) {
-
             mLiveHelper.onDestory();
         }
         if (mEnterRoomHelper != null) {
@@ -684,8 +803,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             playBackBottomToolView.onDestroy();
             playBackBottomToolView = null;
         }
-
-
     }
 
     @Override
@@ -717,9 +834,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         }
     }
 
-
     /**
-     * 取观众 列表
+     * 取观众列表
      */
     private class GetAudienceTask extends TimerTask {
         @Override
@@ -729,10 +845,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     }
 
     private void unregisterReceiver() {
-
         unregisterReceiver(mNetWorkReceiver);
     }
-
 
     @Override
     public void onNetStatus(Bundle bundle) {
@@ -799,7 +913,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 .MEMBER_ENTER);
         int members = CurLiveInfo.getMembers() + 1;
         CurLiveInfo.setMembers(members);
-
         //人数加1,可以设置到界面上
         doUpdateMembersCount();
 

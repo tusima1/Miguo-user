@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -55,6 +56,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1015,12 +1017,16 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
                 @Override
                 public void onSuccess(TIMAvManager.StreamRes streamRes) {
+                    //这里的streamRes.getChnlId()直接打印的时候会是一个负数，所以如果需要打印查看的时候需要转换一下。结束推流的时候直接使用即可，不需要转换的。
+                    Long num = streamRes.getChnlId();
+                    BigInteger unsignedNum = BigInteger.valueOf(num);
+                    if (num < 0) unsignedNum = unsignedNum.add(BigInteger.ZERO.flipBit(64));
+                    Log.d(TAG, "create channel succ. channelid: " + unsignedNum
+                            + ", addr size " + streamRes.getUrls().size());
+
                     List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
                     streamChannelID = streamRes.getChnlId();
                     mLiveView.pushStreamSucc(streamRes);
-
-//                ClipToBoard(url, url2);
-
                 }
             });
         }
@@ -1034,14 +1040,11 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             @Override
             public void onError(int i, String s) {
                 SxbLog.e(TAG, "url stop error " + i + " : " + s);
-                Toast.makeText(mContext, "stop stream error,try again " + i + " : " + s, Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void onSuccess() {
                 mLiveView.stopStreamSucc();
-
             }
         });
     }
@@ -1078,7 +1081,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccess(List<String> files) {
-
+                if (!SDCollectionUtil.isEmpty(files)) {
+                    Log.e(TAG, "files:" + files.toString());
+                }
             }
         });
         Log.d(TAG, "success");
