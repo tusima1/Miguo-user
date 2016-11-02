@@ -368,19 +368,20 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                         SDViewBinder.setTextView(tvSign, currModelPersonHomePage.getPersonality(), " 一生很难，一辈子很长，所以不能停止探寻有趣的生活。一个爱吃爱玩爱享受的人。");
                         strIcon = currModelPersonHomePage.getIcon();
                         ImageLoader.getInstance().displayImage(strIcon, circleImageView);
-                        if ("1".equals(currModelPersonHomePage.getFx_level())) {
-                            Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_3);
-                            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                            tvName.setCompoundDrawables(null, null, drawable, null);
-                        } else if ("2".equals(currModelPersonHomePage.getFx_level())) {
-                            Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_2);
-                            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                            tvName.setCompoundDrawables(null, null, drawable, null);
-                        } else if ("3".equals(currModelPersonHomePage.getFx_level())) {
-                            Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_1);
-                            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                            tvName.setCompoundDrawables(null, null, drawable, null);
-                        }
+                        //取消用户等级图标的显示。
+//                        if ("1".equals(currModelPersonHomePage.getFx_level())) {
+//                            Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_3);
+//                            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                            tvName.setCompoundDrawables(null, null, drawable, null);
+//                        } else if ("2".equals(currModelPersonHomePage.getFx_level())) {
+//                            Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_2);
+//                            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                            tvName.setCompoundDrawables(null, null, drawable, null);
+//                        } else if ("3".equals(currModelPersonHomePage.getFx_level())) {
+//                            Drawable drawable = getResources().getDrawable(R.drawable.ic_rank_1);
+//                            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+//                            tvName.setCompoundDrawables(null, null, drawable, null);
+//                        }
                     }
                     break;
                 case 1:

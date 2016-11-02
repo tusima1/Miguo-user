@@ -113,7 +113,14 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             tuanStr +=model.getTuan_price();
         }
         if(!TextUtils.isEmpty(model.getUnit())){
-            tuanStr +="/"+model.getUnit();
+            String unit = model.getUnit().trim();
+            if("张".equals(unit)){
+                tuanStr +="/"+model.getUnit() +"  "+"代金券";
+            }else if("人".equals(unit)){
+                tuanStr +="/"+model.getUnit() +"  "+"专属优惠";
+            }else{
+                tuanStr +="元";
+            }
         }else{
             tuanStr +="元";
         }
