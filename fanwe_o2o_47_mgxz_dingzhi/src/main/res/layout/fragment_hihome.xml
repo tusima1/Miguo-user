@@ -147,11 +147,24 @@
 
                 </com.miguo.ui.view.HomeADView2>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:background="@color/c_F2F2F2" />
+
+                <TextView
+                    android:paddingTop="15dp"
+                    android:gravity="center"
+                    android:text="今日精选"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_base_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview_frag_featured_groupon"
                     android:layout_width="match_parent"
                     android:layout_height="500dp"
-                    android:layout_marginTop="@dimen/dp15"
                     android:scrollbars="none" />
 
             </LinearLayout>

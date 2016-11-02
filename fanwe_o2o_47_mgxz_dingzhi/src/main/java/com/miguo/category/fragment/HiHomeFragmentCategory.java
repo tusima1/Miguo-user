@@ -194,7 +194,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         setTitleAlpha(titleLayout, 0);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
-        locationCity();
+        initDefaultCity();
         /**
          * 今日精选
          */
@@ -204,6 +204,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
          */
         onRefreshGreeting();
         onRefresh();
+    }
+
+    private void initDefaultCity(){
+        citySayHi.setText(AppRuntimeWorker.getCity_name());
+        city.setText(AppRuntimeWorker.getCity_name());
     }
 
     public void onRefresh(){
@@ -237,6 +242,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeViewPager.setAdapter(homeBannerAdapter);
         circleIndicator.setViewPager(homeViewPager);
         homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+        homeBannerAdapter.notifyDataSetChanged();
     }
 
     private void initFeaturedGrouponCategory(){
@@ -300,8 +306,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * banners + topics
      */
     public void onRefreshAdspaceList(){
-        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_BANNER_INDEX, AdspaceParams.TERMINAL_TYPE);
-        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_TOPIC_INDEX, AdspaceParams.TERMINAL_TYPE);
+        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_INDEX, AdspaceParams.TERMINAL_TYPE);
+//        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_TOPIC_INDEX, AdspaceParams.TERMINAL_TYPE);
     }
 
 
@@ -312,89 +318,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
     }
 
-    /**
-     * 定位，城市处理
-     */
-    private List<GoodsModel> mListModel = new ArrayList<GoodsModel>();
-    private List<GoodsModel> pageData_2 = new ArrayList<GoodsModel>();
-    private List<GoodsModel> pageData_1 = null;
 
-    PageModel pageModel = new PageModel();
-
-    private void locationCity() {
-        BaiduMapManager.getInstance().startLocation(new BDLocationListener() {
-
-            @Override
-            public void onReceiveLocation(BDLocation location) {
-                if (mListModel != null) {
-                    mListModel.clear();
-                }
-                if (pageModel != null) {
-                    pageModel.resetPage();
-                }
-                pageData_1 = null;
-                if (pageData_2 != null) {
-                    pageData_2.clear();
-                }
-                onRefreshBegin(ptrFrameLayout);
-                if (location != null) {
-                    dealLocationSuccess();
-                }
-                BaiduMapManager.getInstance().stopLocation();
-            }
-        });
-    }
-
-    private void dealLocationSuccess() {
-        String defaultCity = AppRuntimeWorker.getCity_name();
-        if (TextUtils.isEmpty(defaultCity)) {
-            return;
-        }
-        if (!BaiduMapManager.getInstance().hasLocationSuccess()) {
-            return;
-        }
-        String dist = BaiduMapManager.getInstance().getDistrictShort();
-        String cityId = AppRuntimeWorker.getCityIdByCityName(dist);
-        if (!TextUtils.isEmpty(cityId)) // 区域存在于城市列表中
-        {
-            if (!dist.equals(defaultCity)) // 区域不是默认的
-            {
-                showChangeLocationDialog(dist);
-            }
-        } else {
-            String city = BaiduMapManager.getInstance().getCityShort();
-            cityId = AppRuntimeWorker.getCityIdByCityName(city);
-            if (!TextUtils.isEmpty(cityId)) // 城市存在于城市列表中
-            {
-                if (!city.equals(defaultCity)) // 城市不是默认的
-                {
-                    showChangeLocationDialog(city);
-                }
-            }
-        }
-    }
-
-    private void showChangeLocationDialog(final String location) {
-        new SDDialogConfirm()
-                .setTextContent(
-                        "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
-                .setmListener(new SDDialogCustom.SDDialogCustomListener() {
-                    @Override
-                    public void onDismiss(SDDialogCustom dialog) {
-
-                    }
-
-                    @Override
-                    public void onClickConfirm(View v, SDDialogCustom dialog) {
-                        AppRuntimeWorker.setCity_name(location);
-                    }
-
-                    @Override
-                    public void onClickCancel(View v, SDDialogCustom dialog) {
-                    }
-                }).show();
-    }
-    /** 定位，城市处理 */
 
 
     public void loadComplete() {
@@ -412,6 +336,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
         checkTop(l, t, oldl, oldt);
         checkTitle(l, t , oldl, oldt);
+        checkTopPadding(l, t , oldl, oldt);
+
     }
 
     private void checkTitle(int l, int t, int oldl, int oldt){
@@ -419,9 +345,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             float radius = (float)t / getTopHeight();
             setTitleAlpha(titleLayout, radius);
         }else {
-            if(titleLayout.getAlpha() != 1){
-                setTitleAlpha(titleLayout, 1);
-            }
+//            if(!isHasTop() && titleLayout.getAlpha() != 1){
+//                setTitleAlpha(titleLayout, 1);
+//            }
+        }
+    }
+
+    private void checkTopPadding(int l, int t, int oldl, int oldt){
+        if(t == 0){
+            scrollView.scrollTo(2, 0);
         }
     }
 
@@ -466,7 +398,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** ptr framelayout 下拉刷新监听 */
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return scrollView.canRefresh();
+        return scrollView.canRefresh() && false;
     }
 
     @Override
@@ -545,25 +477,20 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
         updateAdspaceViews(body, type);
-
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                updateAdspaceViews(body, type);
-//            }
-//        });
     }
 
     private void updateAdspaceViews(final List<AdspaceListBean.Result.Body> body, String type){
-        switch (type){
-            case AdspaceParams.TYPE_BANNER_INDEX:
-                initBanner(body);
-                break;
-            case AdspaceParams.TYPE_TOPIC_INDEX:
-                initHomeADView2(body);
-                break;
+        List<AdspaceListBean.Result.Body> banner = new ArrayList<>();
+        List<AdspaceListBean.Result.Body> topic = new ArrayList<>();
+        for(AdspaceListBean.Result.Body bd : body ){
+            if(bd.getAdspace_id().equals(AdspaceParams.TYPE_BANNER_INDEX)){
+                banner.add(bd);
+            }else {
+                topic.add(bd);
+            }
         }
-
+        initBanner(banner);
+        initHomeADView2(topic);
     }
 
     @Override
@@ -577,16 +504,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getHomeGreetingSuccess(final String greeting) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    sayhi.setText(greeting);
-                }catch (Exception e){
-
-                }
-            }
-        });
+        sayhi.setText(greeting);
     }
 
     @Override
@@ -600,13 +518,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
         initHomeMenuView(list);
-
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                initHomeMenuView(list);
-//            }
-//        });
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.miguo.factory;
 
+import android.util.Log;
+
 import com.miguo.app.HiHomeActivity;
 
 /**
@@ -17,6 +19,7 @@ public class ClassNameFactory {
         try{
             return Class.forName(clz);
         }catch (ClassNotFoundException e){
+            Log.e("ClassNameFactory", clz + " not found!");
             return HiHomeActivity.class;
         }
     }

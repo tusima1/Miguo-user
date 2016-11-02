@@ -3,17 +3,19 @@ package com.miguo.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.github.siyamed.shapeimageview.CircularImageView;
+import com.github.siyamed.shapeimageview.RoundedImageView;
 import com.miguo.entity.MenuBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
-import com.miguo.live.views.customviews.RoundedImageView;
 
 import java.util.List;
 
@@ -74,12 +76,13 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             group.setOrientation(LinearLayout.VERTICAL);
             group.setOnClickListener(new HomeTagsViewListener(i));
 
-            RoundedImageView icon = new RoundedImageView(getContext());
+            CircleImageView icon = new CircleImageView(getContext());
             LinearLayout.LayoutParams iconParams = getLinearLayoutParams(iconWidth, iconHeight);
             icon.setLayoutParams(iconParams);
-            icon.setOval(true);
 
-            SDViewBinder.setImageView(getItem(i).getIcon(), icon);
+
+            SDViewBinder.setImageView(getItem(i).getIcon(), icon, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+//            SDViewBinder.setImageView("http://img.xiaoneiit.com/mgxz/food1.jpg", icon, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
             group.addView(icon);
 
             TextView title = new TextView(getContext());
@@ -100,6 +103,12 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         line.setLayoutParams(lineParams);
         line.setBackgroundColor(getColor(R.color.text_base_color_2));
         content.addView(line);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+
+        return true;
     }
 
     public MenuBean.Result.Body getItem(int position){
