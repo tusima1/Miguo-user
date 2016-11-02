@@ -601,7 +601,6 @@ public class OutSideShoppingCartHelper extends Presenter {
                 String message = root.getMessage();
                 if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
                     List<OrderDetailInfo> datas = validateBodyList(root);
-
                     mCallbackView.onSuccess(ShoppingCartconstants.ORDER_INFO_CREATE, datas);
                 } else {
                     mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE, message);

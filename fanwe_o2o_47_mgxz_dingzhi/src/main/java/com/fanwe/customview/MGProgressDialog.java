@@ -16,7 +16,7 @@ public class MGProgressDialog extends ProgressDialog {
 
     private Activity mAttachActivity;
     public MGProgressDialog(Context context) {
-        super(context);
+        this(context,R.style.MGProgressDialog);
     }
 
     public MGProgressDialog(Context context, int theme) {

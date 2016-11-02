@@ -11,6 +11,7 @@ import android.widget.ScrollView;
 import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.MyRedPayMentsFragment;
 import com.fanwe.fragment.MyRedPayMentsFragment.MyredPaymentsFragmentListener;
@@ -97,6 +98,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      */
     private String orderId;
     private PaymentTypeInfo mDefaultPayTypeInfo;
+    private MGProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -418,10 +420,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         }
     }
 
-    public void onFinish() {
-        mBtnConfirmOrder.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
-        mBtnConfirmOrder.setClickable(true);
-    }
 
     /**
      * 生成订单并 进入支付页。
@@ -459,15 +457,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                 if (!ifMoneyEnough()) {
                     return;
                 }
-                if (v.isClickable()) {
-                    v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
-                    v.setClickable(false);
-                    //60s可点
-
-                } else {
-                    v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
-                    v.setClickable(true);
-                }
+                dialog = new MGProgressDialog(ConfirmOrderActivity.this);
+                dialog.needFinishActivity(ConfirmOrderActivity.this);
+                dialog.show();
                 requestDoneOrder();
             }
         });
@@ -488,6 +480,14 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (outSideShoppingCartHelper!=null){
+            outSideShoppingCartHelper.onDestory();
+        }
+    }
+
+    @Override
     protected void onNeedRefreshOnResume() {
         requestData();
         super.onNeedRefreshOnResume();
@@ -500,19 +500,27 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             @Override
             public void run() {
                 mPtrsvAll.onRefreshComplete();
-                onFinish();
             }
         });
     }
 
     @Override
-    public void onFailue(String method, String message) {
+    public void onFailue(String method, final String message) {
         switch (method) {
             case ShoppingCartconstants.SP_CART_TOORDER_GET:
                 onError(message);
                 break;
             case ShoppingCartconstants.ORDER_INFO_CREATE:
-                onError(message);
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialog!=null){
+                            dialog.dismiss();
+                        }
+                        onError(message);
+                    }
+                });
+
                 break;
             default:
                 break;
@@ -528,7 +536,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     public void onSuccess(String method, final List datas) {
         switch (method) {
             case ShoppingCartconstants.SP_CART_TOORDER_GET:
-                //onFinish();
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -547,7 +554,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (dialog!=null){
+                            dialog.dismiss();
+                        }
                         dealRequestDoneOrderSuccess(datas);
                     }
                 });
