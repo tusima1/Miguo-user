@@ -533,8 +533,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     private void clickLogout(View v) {
         mLoginHelper.imLogout();
-        App.getInstance().getmUserCurrentInfo().setUserInfoNew(null);
-        App.getInstance().setmUserCurrentInfo(null);
+        App.getInstance().getmUserCurrentInfo().clearData();
         App.getInstance().setImLoginSuccess(false);
         LocalUserModel userModel = new LocalUserModel();
         App.getInstance().setmLocalUser(userModel);

@@ -2,6 +2,7 @@ package com.fanwe.customview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -54,7 +55,8 @@ public class ListViewForScrollView extends ListView{
      */
     private void setParentScrollAble(boolean flag) {
         if (mParentScrollView==null){
-            throw new NullPointerException("NullPointerException - ScrollView is null");
+            Log.e("ListViewForScrollView","mParentScrollView is null,is scrollView inflate?");
+            return;
         }
         mParentScrollView.requestDisallowInterceptTouchEvent(!flag);//这里的parentScrollView就是listView外面的那个scrollview
     }

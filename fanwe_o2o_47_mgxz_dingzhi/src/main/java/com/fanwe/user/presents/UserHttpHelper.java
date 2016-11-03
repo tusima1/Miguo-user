@@ -369,6 +369,9 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                if (mView==null){
+                    return;
+                }
                 RootDistrInfo root = gson.fromJson(responseBody, RootDistrInfo.class);
                 List<ResultDistrInfo> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
@@ -391,7 +394,18 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                if (mView!=null){
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.onFinish(UserConstants.DISTR_INFO);
+                        }
+                    });
+                }
             }
         });
     }
