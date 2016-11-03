@@ -720,7 +720,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //房间创建成功,向后台注册信息
         int i = new Random().nextInt();
         int roomId = MySelfInfo.getInstance().getMyRoomNum();
-        MGToast.showToast(roomId + "");
         LogUtil.d("roomId: " + roomId);
         String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
         String title = "米果小站";
@@ -1045,11 +1044,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mUserHeadTopView.ondestroy();
                 mUserHeadTopView = null;
             }
+            if(mUserBottomTool!=null){
+                mUserBottomTool.onDestroy();
+                mUserBottomTool = null;
+            }
             if (mHostTopView != null) {
                 mHostTopView = null;
             }
             if (mPeopleTimer!=null){
                 mPeopleTimer.cancel();
+            }
+            if(mHostBottomToolView1!=null){
+                mHostBottomToolView1.onDestroy();
+                mHostBottomToolView1 = null;
             }
             QavsdkControl.getInstance().clearVideoMembers();
             QavsdkControl.getInstance().onDestroy();
