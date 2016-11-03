@@ -168,7 +168,6 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
                         mListModel.addAll(temps);
                     } else {
                         if (!isNotMine) {
-                            MGToast.showToast("代言店铺列表为空");
                         }
                     }
                     mAdapter.notifyDataSetChanged();
