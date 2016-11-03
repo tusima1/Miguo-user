@@ -125,9 +125,9 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     }
 
     private void getTuanList(int page) {
-        try{
+        try {
             commandGroupBuyDao.getCommandGroupBuyDaoList(pageNum, pageSize, typeLiveHome, "", BaiduMapManager.getInstance().getBDLocation().getLongitude() + "", BaiduMapManager.getInstance().getBDLocation().getLatitude() + "", AppRuntimeWorker.getCity_id());
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -191,13 +191,15 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         }
     }
 
+    SDDialogConfirm dialog;
+
     private void showChangeLocationDialog(final String location) {
-        if(getContext() == null){
+        if (dialog != null && dialog.isShowing()) {
             return;
         }
-        new SDDialogConfirm()
-                .setTextContent(
-                        "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
+        dialog = new SDDialogConfirm();
+        dialog.setTextContent(
+                "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
                 .setmListener(new SDDialogCustomListener() {
                     @Override
                     public void onDismiss(SDDialogCustom dialog) {
@@ -317,8 +319,8 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         }
     };
 
-    private void handlerMessage(int what){
-        if(getContext() == null){
+    private void handlerMessage(int what) {
+        if (getContext() == null) {
             return;
         }
         mHandler.sendEmptyMessage(what);
@@ -443,5 +445,13 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 }

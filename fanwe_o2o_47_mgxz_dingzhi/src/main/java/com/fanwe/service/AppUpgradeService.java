@@ -101,9 +101,12 @@ public class AppUpgradeService extends Service implements CallbackView {
         }
 
     }
-
+    SDDialogConfirm dialog;
     private void showDialogUpgrade() {
         if (modelVersion == null) {
+            return;
+        }
+        if (dialog != null && dialog.isShowing()) {
             return;
         }
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
@@ -111,7 +114,7 @@ public class AppUpgradeService extends Service implements CallbackView {
             stopSelf();
             return;
         }
-        SDDialogConfirm dialog = new SDDialogConfirm();
+         dialog = new SDDialogConfirm();
         if ("1".equals(modelVersion.getForced_upgrade())) {
             dialog.setTextCancel(null).setCancelable(false);
         }
@@ -276,5 +279,13 @@ public class AppUpgradeService extends Service implements CallbackView {
     @Override
     public void onFailue(String responseBody) {
         stopSelf();
+    }
+
+    @Override
+    public void onDestroy() {
+        if(dialog!=null&&dialog.isShowing()){
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 }

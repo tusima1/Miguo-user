@@ -117,6 +117,10 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     //排序
     public static List<ModelShopListNavs> navs;
 
+    //自动登录中
+    public static boolean isLoging = false;
+
+
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
             LocalUserModelDao.insertModel(localUser);
