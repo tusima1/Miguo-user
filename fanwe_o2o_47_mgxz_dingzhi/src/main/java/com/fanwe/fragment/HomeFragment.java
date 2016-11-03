@@ -211,9 +211,13 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         }
     }
 
+    SDDialogConfirm dialog;
     private void showChangeLocationDialog(final String location) {
-        new SDDialogConfirm()
-                .setTextContent(
+        if(dialog!=null&&dialog.isShowing()){
+            return;
+        }
+      dialog =new SDDialogConfirm();
+       dialog.setTextContent(
                         "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
                 .setmListener(new SDDialogCustomListener() {
                     @Override
@@ -229,7 +233,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                     @Override
                     public void onClickCancel(View v, SDDialogCustom dialog) {
                     }
-                }).show();
+        }).show();
     }
 
     private void initPullToRefreshListView() {
@@ -569,5 +573,13 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    @Override
+    public void onDestroy() {
+       if(dialog!=null&&dialog.isShowing()){
+           dialog.dismiss();
+           dialog = null;
+       }
     }
 }
