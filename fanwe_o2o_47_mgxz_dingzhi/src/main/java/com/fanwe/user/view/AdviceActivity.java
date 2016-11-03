@@ -13,6 +13,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class AdviceActivity extends BaseActivity implements CallbackView2 {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSubmit.setClickable(false);
                 strAdvice = etAdvice.getText().toString().trim();
                 if (TextUtils.isEmpty(strAdvice)) {
                     MGToast.showToast("请输入建议");
@@ -75,6 +77,11 @@ public class AdviceActivity extends BaseActivity implements CallbackView2 {
 
     @Override
     public void onFinish(String method) {
-
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                btnSubmit.setClickable(true);
+            }
+        });
     }
 }
