@@ -129,7 +129,9 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     @Override
     public void onDestroy() {
-
+        if(redPacketDialogHelper!=null){
+        redPacketDialogHelper.dismiss();
+        }
     }
 
     public void initView(Activity mAct, LiveHelper liveHelper, HeartLayout heartLayout, View rootView, CallbackView mCallbackView) {

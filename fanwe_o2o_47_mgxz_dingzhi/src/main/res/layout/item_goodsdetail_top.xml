@@ -40,6 +40,7 @@
             android:layout_marginLeft="@dimen/dp17"
             android:layout_marginRight="@dimen/dp17"
             android:text=""
+            android:ellipsize="end"
             android:textSize="@dimen/sp20"
             android:textColor="@color/black"
             android:gravity="center"

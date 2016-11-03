@@ -1045,11 +1045,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mUserHeadTopView.ondestroy();
                 mUserHeadTopView = null;
             }
+            if(mUserBottomTool!=null){
+                mUserBottomTool.onDestroy();
+                mUserBottomTool = null;
+            }
             if (mHostTopView != null) {
                 mHostTopView = null;
             }
             if (mPeopleTimer!=null){
                 mPeopleTimer.cancel();
+            }
+            if(mHostBottomToolView1!=null){
+                mHostBottomToolView1.onDestroy();
+                mHostBottomToolView1 = null;
             }
             QavsdkControl.getInstance().clearVideoMembers();
             QavsdkControl.getInstance().onDestroy();
