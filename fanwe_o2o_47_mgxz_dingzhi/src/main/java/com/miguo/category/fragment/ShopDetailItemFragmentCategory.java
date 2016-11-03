@@ -10,7 +10,6 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.fragment.HiBaseFragment;
-import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.fragment.ShopDetailPagerItemFragmet;
 
 /**

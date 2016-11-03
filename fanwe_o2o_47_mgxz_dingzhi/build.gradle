@@ -72,7 +72,6 @@ dependencies {
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/beacon_android_v1.9.9.jar')
     compile files('libs/bugly_1.3.0_imsdk_release.jar')
-    compile files('libs/fastjson-1.1.45.android.jar')
     compile files('libs/imsdk.jar')
     compile files('libs/jpush-android-2.1.5.jar')
     compile files('libs/mobilepb.jar')
@@ -85,7 +84,6 @@ dependencies {
     compile files('libs/wup-1.0.0-SNAPSHOT.jar')
     compile files('libs/x-2.6.14-src-1.4-modify.jar')
     compile files('libs/txrtmpsdk.jar')
-
     compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     //Optional: see how to use the utility.
     compile 'com.ogaclejapan.smarttablayout:utils-v13:1.6.1@aar'
@@ -103,27 +101,32 @@ dependencies {
      * 弹幕
      */
     compile 'com.github.ctiao:DanmakuFlameMaster:0.4.9'
-
     //导入腾讯云直播SDK jar
+
     /**
      * facebook freso
      *
      */
-    //    compile 'com.facebook.fresco:fresco:0.9.0+'
-//    compile 'com.facebook.fresco:fresco:0.9.0+'
-//    compile 'com.facebook.fresco:imagepipeline-okhttp:0.9.0+'
 
+    //    compile 'com.facebook.fresco:fresco:0.9.0+'
+
+    //    compile 'com.facebook.fresco:fresco:0.9.0+'
+
+    //    compile 'com.facebook.fresco:imagepipeline-okhttp:0.9.0+'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
     /**
      * 下拉刷新 2016-9-23
      */
     compile 'in.srain.cube:ultra-ptr:1.0.11'
-//    compile 'com.didikee:permissionsHelper:0.1.0'
+    //    compile 'com.didikee:permissionsHelper:0.1.0'
 
-//    compile 'com.nineoldandroids:library:2.4.0'
-//    compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
-//
-//    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
+    //    compile 'com.nineoldandroids:library:2.4.0'
 
+    //    compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
+
+    //
+
+    //    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
+    compile files('libs/fastjson-1.2.20.jar')
 }

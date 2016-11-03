@@ -1120,7 +1120,8 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"></activity>
         <activity android:name="com.fanwe.seller.views.SpecialTopicActivity"></activity>
     </application>
 

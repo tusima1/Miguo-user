@@ -2,6 +2,7 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,7 +150,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     protected void resetInitData() {
-        try{
+        try {
             listModel = new ArrayList<>();
             mCb_xuanze.setChecked(false);
             //重置下巴(结算)
@@ -162,7 +163,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
             mLvCartGoods.setAdapter(mAdapter);
             getmAdapterListener();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -170,11 +171,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void registeClick() {
         mBt_account.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       clickSettleAccounts();
-                   }
-               }
+                                           @Override
+                                           public void onClick(View v) {
+                                               clickSettleAccounts();
+                                           }
+                                       }
         );
 
         // 编辑状态下
@@ -185,8 +186,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 boolean isChecked = mCb_xuanze.isChecked();
                 BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
                 mTv_sum.setText(String.valueOf(bd));
-                if (isChecked&&count>0) {
-                    mBt_account.setText("结算" + "（" + count+ "）");
+                if (isChecked && count > 0) {
+                    mBt_account.setText("结算" + "（" + count + "）");
                     mBt_account.setBackgroundColor(getResources().getColor(
                             R.color.main_color));
                     mBt_account.setClickable(true);
@@ -226,12 +227,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
-            if(!TextUtils.isEmpty(model.getBuyFlg())&&"1".equals(model.getBuyFlg())){
+            if (!TextUtils.isEmpty(model.getBuyFlg()) && "1".equals(model.getBuyFlg())) {
                 model.setChecked(isChecked);
             }
 
             if (model.isChecked()) {
-                count ++;
+                count++;
                 sumMoney += model.getSumPrice();
             }
         }
@@ -428,7 +429,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void clickSettleAccounts() {
         currentGoTo = 1;
         if (ifLogin) {
-            dialog = new MGProgressDialog(getActivity(),R.style.MGProgressDialog).needFinishActivity(getActivity());
+            if (dialog == null) {
+                dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
+            }
             dialog.show();
             //添加购物车调用接口
             outSideShoppingCartHelper.multiAddShopCart(listModel);
@@ -439,8 +442,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         }
     }
 
-    private void dismiss(){
-        if(dialog != null){
+    private void dismiss() {
+        if (dialog != null) {
             dialog.dismiss();
         }
     }
@@ -459,7 +462,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             String mSeletedGoods = getSumSeletedIds();
 
 
-
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
             Bundle bundle = new Bundle();
@@ -473,9 +475,14 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void requestData() {
         if (ifLogin) {
-            if (outSideShoppingCartHelper ==null){
-                outSideShoppingCartHelper=new OutSideShoppingCartHelper(this);
+            if (outSideShoppingCartHelper == null) {
+                outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
             }
+            if (dialog == null) {
+                dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
+            }
+            dialog.show();
+            mCb_xuanze.setClickable(false);
             outSideShoppingCartHelper.getUserShopCartList();
         } else {
             SDDialogManager.dismissProgressDialog();
@@ -533,12 +540,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
-    public void onEventMainThread(SDBaseEvent event) {
-        super.onEventMainThread(event);
-
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         outSideShoppingCartHelper.onDestory();
@@ -556,7 +557,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
-    public void onSuccess(String method,final List datas) {
+    public void onSuccess(String method, final List datas) {
         switch (method) {
             case ShoppingCartconstants.SHOPPING_CART_LIST:
                 this.listModel = datas;
@@ -570,6 +571,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                             mAdapter.notifyDataSetChanged();
                         }
                         mContentPtr.onRefreshComplete();
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                dismiss();
+                                mCb_xuanze.setClickable(true);
+                            }
+                        }, 2000);
                     }
                 });
 

@@ -31,7 +31,6 @@ import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.miguo.app.HiShopDetailActivity;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.MapSearchBaseModel;
 import com.fanwe.model.RequestModel;

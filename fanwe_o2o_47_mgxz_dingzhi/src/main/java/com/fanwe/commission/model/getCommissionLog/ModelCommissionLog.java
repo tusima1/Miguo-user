@@ -19,11 +19,11 @@ public class ModelCommissionLog {
     //    "money":"0.15",
 //            "user_id":"21070107-7cba-4fc6-8df6-f54509f13bca",
 //            "before_money":"1000.00",
-//            "mobile":"",
+//            "mobile":"",-----------//来源人：188****5484
 //            "description":"生成订单时会员升级费用支付",
 //            "insert_time":"1473664112240",
 //            "money_type":"会员升级费用消费",------//money_type
-//            "dist_id_from":"",-----------//来源人：188****5484
+//            "dist_id_from":"",
 //            "id":"92e796ff-e56d-42e8-a3bd-28de4e0d0f38",
 //            "order_id":"1885173e-da76-4491-9c66-1e287b28d51f"
     //title;item

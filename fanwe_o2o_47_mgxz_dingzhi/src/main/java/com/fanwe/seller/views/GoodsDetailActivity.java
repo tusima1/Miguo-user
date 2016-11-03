@@ -167,17 +167,19 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void init() {
-        getIntentData();
+        getIntentData(getIntent());
         initTitleLayout();
         initSScrollView();
         mHttpHelper = new SellerNewHttpHelper(this);
         mSellerHelper = new SellerHttpHelper(null, this, "");
         mShoppingCartHelper = new ShoppingCartHelper(this);
+        requestData();
+    }
+    private void requestData(){
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
         mStatusBar.post(new Runnable() {
             @Override
             public void run() {
-//                SDDialogManager.showProgressDialog("请稍候...");
                 dialog = new MGProgressDialog(GoodsDetailActivity.this,R.style.MGProgressDialog);
                 dialog.needFinishActivity(GoodsDetailActivity.this);
                 dialog.show();
@@ -185,8 +187,18 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         });
     }
 
-    private void getIntentData() {
-        Intent intent = getIntent();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getIntentData(intent);
+        requestData();
+    }
+
+    private void getIntentData(Intent intent) {
+        if (intent==null){
+            finish();
+            return;
+        }
         GoodsId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
         fx_id = intent.getStringExtra(EXTRA_FX_ID);
