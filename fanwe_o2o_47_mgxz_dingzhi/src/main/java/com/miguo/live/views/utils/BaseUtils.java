@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 
+import com.fanwe.app.App;
+
 import java.text.DecimalFormat;
 
 /**
@@ -117,7 +119,7 @@ public class BaseUtils {
     }
 
     public static int dip2px(Context context,float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+        final float scale = App.getApplication().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 

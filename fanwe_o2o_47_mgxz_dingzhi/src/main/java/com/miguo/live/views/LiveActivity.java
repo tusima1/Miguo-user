@@ -2228,8 +2228,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     @Override
                     public void run() {
                         if (isAnchor) {
+                            if (mHostTopView==null){
+                                return;
+                            }
                             mHostTopView.setKeyWords(getKeyWord((List<ModelStoresRandomComment>) datas));
                         } else {
+                            if (mUserHeadTopView==null){
+                                return;
+                            }
                             mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
                         }
                     }
