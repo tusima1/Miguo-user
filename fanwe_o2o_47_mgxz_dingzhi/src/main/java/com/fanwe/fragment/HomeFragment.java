@@ -449,6 +449,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
             dialog = null;
