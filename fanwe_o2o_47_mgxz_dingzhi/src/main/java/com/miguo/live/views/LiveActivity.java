@@ -720,7 +720,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //房间创建成功,向后台注册信息
         int i = new Random().nextInt();
         int roomId = MySelfInfo.getInstance().getMyRoomNum();
-        MGToast.showToast(roomId + "");
         LogUtil.d("roomId: " + roomId);
         String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
         String title = "米果小站";
