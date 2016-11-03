@@ -20,6 +20,7 @@ import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDDistanceUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
@@ -88,7 +89,7 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
     }
 
     private String getBuyText(int position){
-        return isSelling(position) ? "立即抢购" : isEnding(position) ? "已结束" : "即将开抢";
+        return isSelling(position) ? "立即抢购" : isEnding(position) ? "已抢完" : "即将开抢";
     }
 
     private boolean isSelling(int position){
@@ -101,19 +102,7 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
 
     private String getDistance(int position) {
         float distanceInt = DataFormat.toFloat(getItem(position).getDistance());
-        if(distanceInt<=0){
-            return "";
-        }else  if (distanceInt <= 1000) {
-            return  distanceInt + "m";
-        } else if (distanceInt < 100000) {
-            float y = distanceInt / 1000;
-            return y+"km";
-        }else if(distanceInt >=100000){
-            return ">100km";
-        }else{
-            return "";
-        }
-
+        return SDDistanceUtil.getMGDistance(distanceInt);
     }
 
     public ViewHolder getHolder(RecyclerView.ViewHolder holder){

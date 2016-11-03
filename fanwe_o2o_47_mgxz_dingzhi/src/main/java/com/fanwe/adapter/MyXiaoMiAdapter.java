@@ -88,10 +88,10 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
             } else {
                 SDViewBinder.setTextView(tv_phone, "");
             }
-            if (DataFormat.toInt(bean.getSalary()) == 0) {
+            if (DataFormat.toDoubleTwo(bean.getSalary()).equals("0.00")) {
                 SDViewBinder.setTextView(tv_momey, "+0.00");
             } else {
-                SDViewBinder.setTextView(tv_momey, "+" + TextMoney.textFarmat(bean.getSalary()), "+0.00");
+                SDViewBinder.setTextView(tv_momey, "+" + DataFormat.toDoubleTwo(bean.getSalary()), "+0.00");
             }
             SDViewBinder.setTextView(tv_number, bean.getUser_num() + "个成员");
             if (bean.getUser_num() == 0 || mType == 2) {
