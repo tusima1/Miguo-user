@@ -78,10 +78,11 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
         if (getItem(position).getSpecial_icon().contains("http://")) {
             SDViewBinder.setImageView(getItem(position).getSpecial_icon(), getHolder(holder).image);
         }
+
         getHolder(holder).title.setText(getItem(position).getSpecial_name());
         getHolder(holder).describe.setText(getItem(position).getSpecial_dec());
         getHolder(holder).distance.setText(getDistance(position));
-        getHolder(holder).price.setText(getItem(position).getSpecial_price());
+        getHolder(holder).price.setText("￥"+getItem(position).getSpecial_price());
         getHolder(holder).normalPrice.setText(getItem(position).getOrigin_price());
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
     }
@@ -100,14 +101,19 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
 
     private String getDistance(int position) {
         float distanceInt = DataFormat.toFloat(getItem(position).getDistance());
-        if (distanceInt <= 1000) {
-            return ">" + distanceInt + "m";
-        } else if (distanceInt < 1000000) {
+        if(distanceInt<=0){
+            return "";
+        }else  if (distanceInt <= 1000) {
+            return  distanceInt + "m";
+        } else if (distanceInt < 100000) {
             float y = distanceInt / 1000;
-            return ">" + y + "km";
+            return y+"km";
+        }else if(distanceInt >=100000){
+            return ">100km";
+        }else{
+            return "";
         }
-        float y = distanceInt / 1000;
-        return ">" + y + "km";
+
     }
 
     public ViewHolder getHolder(RecyclerView.ViewHolder holder){
