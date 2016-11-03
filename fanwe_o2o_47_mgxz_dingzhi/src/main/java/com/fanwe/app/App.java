@@ -158,8 +158,6 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         LogUtil.isDebug = ServerUrl.DEBUG;
 
         mUserCurrentInfo = UserCurrentInfo.getInstance();
-        initFreso();
-
     }
 
 
@@ -220,10 +218,6 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         } else {
             System.exit(0);
         }
-    }
-
-    private void initFreso() {
-//        Fresco.initialize(this, ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(this));
     }
 
     public static String getStringById(int resId) {

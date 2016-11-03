@@ -13,7 +13,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 

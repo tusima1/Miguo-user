@@ -530,12 +530,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
-    public void onEventMainThread(SDBaseEvent event) {
-        super.onEventMainThread(event);
-
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         outSideShoppingCartHelper.onDestory();

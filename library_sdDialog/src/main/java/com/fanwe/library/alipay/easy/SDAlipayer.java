@@ -2,7 +2,6 @@ package com.fanwe.library.alipay.easy;
 
 import android.app.Activity;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
 import com.fanwe.library.utils.SDHandlerUtil;

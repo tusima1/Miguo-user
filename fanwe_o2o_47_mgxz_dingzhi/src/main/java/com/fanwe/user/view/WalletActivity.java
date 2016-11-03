@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
-import com.fanwe.WithdrawLogActivity;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.mine.views.RepresentIncomeActivity;
 import com.fanwe.o2o.miguo.R;
