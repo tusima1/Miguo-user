@@ -171,6 +171,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
+                App.isLoging = true;
                 mLoginHelper.doLogin(userid, password, 0, true, false);
             } else {
                 showDialogLogin();
@@ -300,13 +301,22 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         click1();
                         break;
                     case 2:
+                        if (App.isLoging) {
+                            MGToast.showToast("请登录");
+                            return;
+                        }
                         click2();
                         break;
                     case 3:
                         click3();
                         break;
                     case 4:
+                        if (App.isLoging) {
+                            MGToast.showToast("请登录");
+                            return;
+                        }
                         click4();
+
                 }
                 if (index != 2)
                     preTab = index;
