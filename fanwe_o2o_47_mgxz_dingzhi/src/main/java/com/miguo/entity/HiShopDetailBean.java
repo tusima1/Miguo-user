@@ -1,6 +1,5 @@
 package com.miguo.entity;
 
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
 import com.fanwe.utils.StringTool;

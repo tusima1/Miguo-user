@@ -43,7 +43,6 @@ import com.fanwe.seller.model.getGroupBuyDetail.ModelGroupBuyDetail;
 import com.fanwe.seller.model.getGroupBuyDetail.Share;
 import com.fanwe.seller.model.getGroupBuyDetail.Supplier_location_list;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;

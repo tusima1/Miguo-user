@@ -19,7 +19,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getGroupDeatilNew.ShopListBean;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDDistanceUtil;
 import com.miguo.app.HiShopDetailActivity;
 

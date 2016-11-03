@@ -3,16 +3,12 @@ package com.miguo.dao.impl;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
-import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.dao.HiShopDetailDao;
 import com.miguo.entity.HiShopDetailBean;
-import com.miguo.live.model.LiveConstants;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.view.BaseView;
 import com.miguo.view.HiShopDetailView;
 
