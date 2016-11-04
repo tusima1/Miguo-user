@@ -2100,15 +2100,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
                 //TODO 刷新机器人
-                final List<ModelAudienceInfo> audienceList = datas;
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         final boolean isHost = LiveUtil.checkIsHost();
-//                        final int size = datas.size();
-//                        if (audienceList != null && audienceList.size() >= 0) {
-//                            CurLiveInfo.setMembers(size);
-//                        }
                         datas.addAll(mRobotFace);
                         if (isHost) {
                             if (mHostTopView != null) {
