@@ -88,11 +88,14 @@ public class MyXiaoMiAdapter extends SDBaseAdapter<Member> {
             } else {
                 SDViewBinder.setTextView(tv_phone, "");
             }
-            if (DataFormat.toDoubleTwo(bean.getSalary()).equals("0.00")) {
+            String salary = "";
+            if(!TextUtils.isEmpty(bean.getSalary())){
+                salary= bean.getSalary();
+                SDViewBinder.setTextView(tv_momey, DataFormat.toDoubleTwo(salary));
+            }else{
                 SDViewBinder.setTextView(tv_momey, "+0.00");
-            } else {
-                SDViewBinder.setTextView(tv_momey, "+" + DataFormat.toDoubleTwo(bean.getSalary()), "+0.00");
             }
+
             SDViewBinder.setTextView(tv_number, bean.getUser_num() + "个成员");
             if (bean.getUser_num() == 0 || mType == 2) {
                 ll_number.setBackgroundResource(R.drawable.my_xiaomi_second);
