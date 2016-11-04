@@ -1,5 +1,7 @@
 package com.fanwe.model;
 
+import com.fanwe.utils.DataFormat;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -188,7 +190,11 @@ public class SpecialListModel implements Serializable{
             }
 
             public String getSpecial_price() {
-                return special_price;
+                String value = DataFormat.toDoubleTwo(special_price);
+                if("0.00".equals(value)){
+                    value = "0";
+                }
+                return value;
             }
 
             public void setSpecial_price(String special_price) {
@@ -220,7 +226,11 @@ public class SpecialListModel implements Serializable{
             }
 
             public String getOrigin_price() {
-                return origin_price;
+                String value = DataFormat.toDoubleTwo(origin_price);
+                if("0.00".equals(value)){
+                    value = "0";
+                }
+                return value;
             }
 
             public void setOrigin_price(String origin_price) {

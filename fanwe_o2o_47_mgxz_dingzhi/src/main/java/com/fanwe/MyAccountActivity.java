@@ -206,8 +206,13 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void bindData() {
-        SDViewBinder.setTextView(tvSign, App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark(), "个人简介");
-        String sex = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex();
+        String remark="";
+        String sex="性别";
+        if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null){
+            remark =  App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark();
+            sex = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex();
+        }
+        SDViewBinder.setTextView(tvSign, remark, "个人简介");
         if ("1".equals(sex)) {
             //女
             tvSex.setText("女");

@@ -28,23 +28,24 @@ import java.util.TreeMap;
  * Created by didik on 2016/8/28.
  * 提现(关于钱的部分)
  */
-public class MoneyHttpHelper implements IHelper{
+public class MoneyHttpHelper implements IHelper {
 
     private Gson gson;
     private CallbackView2 mView2;
 
     public MoneyHttpHelper(CallbackView2 mView2) {
-        this.mView2=mView2;
-        this.gson=new Gson();
+        this.mView2 = mView2;
+        this.gson = new Gson();
     }
 
 
     /**
      * 资金日志
-     * @param page 默认1
+     *
+     * @param page      默认1
      * @param page_size 默认10
      */
-    public void getGetBalance(String page,String page_size,String select_type){
+    public void getGetBalance(String page, String page_size, String select_type) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.COMMISSION_LOG);
@@ -60,7 +61,7 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test",responseBody);
+                Log.e("test", responseBody);
             }
         });
 
@@ -71,7 +72,7 @@ public class MoneyHttpHelper implements IHelper{
      * 包括 手机号
      * 银行卡信息 等等
      */
-    public void getUserAccount(){
+    public void getUserAccount() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.USER_ACCOUNT);
@@ -85,14 +86,14 @@ public class MoneyHttpHelper implements IHelper{
             public void onSuccessResponse(String responseBody) {
                 final List<ResultUserAccount> result = gson.fromJson(responseBody, RootUserAccount
                         .class).getResult();
-                if (result!=null && result.size()>0){
+                if (result != null && result.size() > 0) {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(CommissionConstance.USER_ACCOUNT,result);
+                            mView2.onSuccess(CommissionConstance.USER_ACCOUNT, result);
                         }
                     });
-                }else {
+                } else {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -117,7 +118,7 @@ public class MoneyHttpHelper implements IHelper{
     /**
      * 获取银行卡列表
      */
-    public void getUserBankCardList(){
+    public void getUserBankCardList() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.USER_BANK_CARD_LIST);
@@ -129,25 +130,28 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if (mView2 == null) {
+                    return;
+                }
                 List<ResultUserBankCard> result = gson.fromJson(responseBody, RootUserBankCard
                         .class).getResult();
-                if (result!=null && result.size()>0){
+                if (result != null && result.size() > 0) {
                     ResultUserBankCard resultUserBankCard = result.get(0);
-                    if (resultUserBankCard!=null){
+                    if (resultUserBankCard != null) {
                         final List<ModelUserBankCard> body = resultUserBankCard.getBody();
-                        if (body!=null && body.size()>0){
+                        if (body != null && body.size() > 0) {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST,body);
+                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST, body);
                                 }
                             });
                             return;
-                        }else {
+                        } else {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST,null);
+                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST, null);
                                 }
                             });
                             return;
@@ -159,6 +163,9 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onFinish() {
+                if (mView2 == null) {
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -171,9 +178,10 @@ public class MoneyHttpHelper implements IHelper{
 
     /**
      * 提现日志 Error 这是商家版
+     *
      * @param money_type 1:余额提现，2:佣金提现
      */
-    public void getUserWithdrawLog(String money_type){
+    public void getUserWithdrawLog(String money_type) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.USER_WITHDRAW_LOG);
@@ -188,14 +196,14 @@ public class MoneyHttpHelper implements IHelper{
             public void onSuccessResponse(String responseBody) {
                 final List<ResultWithdrawLog> result = gson.fromJson(responseBody, RootWithdrawLog
                         .class).getResult();
-                if (result!=null && result.size()>0){
+                if (result != null && result.size() > 0) {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(CommissionConstance.USER_WITHDRAW_LOG,result);
+                            mView2.onSuccess(CommissionConstance.USER_WITHDRAW_LOG, result);
                         }
                     });
-                }else {
+                } else {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -219,32 +227,33 @@ public class MoneyHttpHelper implements IHelper{
 
     /**
      * 佣金提现
-     * @param isFx 必选 余额提现为 false
-     *                  佣金提现为 true
-     * @param mobile 必须     手机号
-     * @param captcha 必须			验证码
+     *
+     * @param isFx        必选 余额提现为 false
+     *                    佣金提现为 true
+     * @param mobile      必须     手机号
+     * @param captcha     必须			验证码
      * @param wd_to_where 必须		0表示 提现至银行卡，1 表示 到余额	提现到哪里
-     * @param dw_money 必须			提现的金额
-     * @param bank_name 可选		提现到银行卡时必传该参数	开户行名称
-     * @param bank_card 可选		提现到银行卡时必传该参数	银行卡号
-     * @param bank_user 可选		提现到银行卡时必传该参数	银行卡户主姓名
+     * @param dw_money    必须			提现的金额
+     * @param bank_name   可选		提现到银行卡时必传该参数	开户行名称
+     * @param bank_card   可选		提现到银行卡时必传该参数	银行卡号
+     * @param bank_user   可选		提现到银行卡时必传该参数	银行卡户主姓名
      */
-    public void getUserCommissionWithdraw(final boolean isFx, String mobile, String captcha, String wd_to_where, String dw_money, String bank_name, String bank_card, String bank_user){
+    public void getUserCommissionWithdraw(final boolean isFx, String mobile, String captcha, String wd_to_where, String dw_money, String bank_name, String bank_card, String bank_user) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        params.put("method", isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW);
-        params.put("mobile",mobile);
-        params.put("captcha",captcha);
-        params.put("wd_to_where",wd_to_where);
-        if (!TextUtils.isEmpty(bank_name)){
-            params.put("bank_name",bank_name);
+        params.put("method", isFx ? CommissionConstance.USER_WITHDRAW_FX : CommissionConstance.USER_WITHDRAW);
+        params.put("mobile", mobile);
+        params.put("captcha", captcha);
+        params.put("wd_to_where", wd_to_where);
+        if (!TextUtils.isEmpty(bank_name)) {
+            params.put("bank_name", bank_name);
         }
-        params.put("dw_money",dw_money);
-        if (!TextUtils.isEmpty(bank_card)){
-            params.put("bank_card",bank_card);
+        params.put("dw_money", dw_money);
+        if (!TextUtils.isEmpty(bank_card)) {
+            params.put("bank_card", bank_card);
         }
-        if (!TextUtils.isEmpty(bank_user)){
-            params.put("bank_user",bank_user);
+        if (!TextUtils.isEmpty(bank_user)) {
+            params.put("bank_user", bank_user);
         }
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
@@ -254,40 +263,46 @@ public class MoneyHttpHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
+                if (mView2 == null) {
+                    return;
+                }
                 Root root = gson.fromJson(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
-                if ("200".equals(statusCode)){
+                if ("200".equals(statusCode)) {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW,null);
+                            mView2.onSuccess(isFx ? CommissionConstance.USER_WITHDRAW_FX : CommissionConstance.USER_WITHDRAW, null);
                         }
                     });
                     return;
                 }
-                if ("301".equals(statusCode)){
+                if ("301".equals(statusCode)) {
                     MGToast.showToast("验证码错误");
                     doOnFail(isFx);
-                }else if ("303".equals(statusCode)){
+                } else if ("303".equals(statusCode)) {
                     MGToast.showToast("验证码次数过多");
                     doOnFail(isFx);
-                }else if ("305".equals(statusCode)){
+                } else if ("305".equals(statusCode)) {
                     MGToast.showToast("验证码过期");
                     doOnFail(isFx);
-                }else if ("302".equals(statusCode)){
+                } else if ("302".equals(statusCode)) {
                     MGToast.showToast("验证码过期");
                     doOnFail(isFx);
-                }else {
+                } else {
                     MGToast.showToast("系统异常");
                 }
             }
 
             @Override
             public void onFinish() {
+                if (mView2 == null) {
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView2.onFinish(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW);
+                        mView2.onFinish(isFx ? CommissionConstance.USER_WITHDRAW_FX : CommissionConstance.USER_WITHDRAW);
                     }
                 });
             }
@@ -296,18 +311,18 @@ public class MoneyHttpHelper implements IHelper{
 
     }
 
-    private void doOnFail(final boolean isFx){
+    private void doOnFail(final boolean isFx) {
         MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mView2.onFailue(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW);
+                mView2.onFailue(isFx ? CommissionConstance.USER_WITHDRAW_FX : CommissionConstance.USER_WITHDRAW);
             }
         });
     }
 
     @Override
     public void onDestroy() {
-        mView2=null;
-        gson=null;
+        mView2 = null;
+        gson = null;
     }
 }

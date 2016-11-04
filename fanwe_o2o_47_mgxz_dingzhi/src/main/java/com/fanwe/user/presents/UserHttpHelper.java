@@ -295,7 +295,9 @@ public class UserHttpHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        if(mView!=null) {
+                            mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        }
                     }
                 });
             }
@@ -369,7 +371,7 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView==null){
+                if (mView == null) {
                     return;
                 }
                 RootDistrInfo root = gson.fromJson(responseBody, RootDistrInfo.class);
@@ -398,7 +400,7 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onFinish() {
-                if (mView!=null){
+                if (mView != null) {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -609,12 +611,23 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                if (mView == null) {
+                    return;
+                }
                 mView.onSuccess(UserConstants.ADVICE, null);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                if (mView == null) {
+                    return;
+                }
+                mView.onFinish(UserConstants.ADVICE);
             }
         });
 

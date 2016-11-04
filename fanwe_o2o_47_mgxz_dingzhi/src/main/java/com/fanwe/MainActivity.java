@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
@@ -158,7 +159,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
             CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
-            if (!TextUtils.isEmpty(text)){
+            if (!TextUtils.isEmpty(text)) {
                 code = text.toString();
                 App.getInstance().code = code;
             }
@@ -173,6 +174,12 @@ public class MainActivity extends BaseActivity implements CallbackView {
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
                 App.isLoging = true;
                 mLoginHelper.doLogin(userid, password, 0, true, false);
+                //防止网络没有返回，10s后自动重置标志位
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        App.isLoging = false;
+                    }
+                }, 10000);
             } else {
                 showDialogLogin();
             }
