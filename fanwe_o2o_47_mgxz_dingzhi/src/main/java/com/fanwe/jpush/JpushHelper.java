@@ -90,6 +90,11 @@ public class JpushHelper {
 		commonHelper.doRegisterJPushAlias(alias, new MgCallback(){
 
 			@Override
+			public void onSuccessResponse(String responseBody) {
+
+			}
+
+			@Override
 			public void onErrorResponse(String message, String errorCode) {
 				Log.e("Jpush", "Jpush 注册失败!");
 			}

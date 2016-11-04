@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.SellerConstants;
@@ -25,7 +26,7 @@ import java.util.TreeMap;
  * Created by didik on 2016/10/17.
  */
 
-public class SellerNewHttpHelper implements IHelper {
+public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
     private CallbackView2 mView2;
     private Gson gson;
 
@@ -113,7 +114,7 @@ public class SellerNewHttpHelper implements IHelper {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mView2.onSuccess(method,data);
+                    onSuccess(mView2,method,data);
                 }
             });
         }
