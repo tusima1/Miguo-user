@@ -1037,11 +1037,6 @@ public class LiveHttpHelper implements IHelper {
 
                 MGLog.e(responseBody);
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
 
     }

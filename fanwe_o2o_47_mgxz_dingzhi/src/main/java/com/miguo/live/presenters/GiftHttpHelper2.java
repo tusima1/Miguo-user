@@ -98,11 +98,6 @@ public class GiftHttpHelper2 implements IHelper {
                 });
 
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
     }
 

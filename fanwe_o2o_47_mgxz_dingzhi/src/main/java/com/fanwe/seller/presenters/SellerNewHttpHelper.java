@@ -60,6 +60,7 @@ public class SellerNewHttpHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(errorCode,message);
+
             }
 
             @Override
