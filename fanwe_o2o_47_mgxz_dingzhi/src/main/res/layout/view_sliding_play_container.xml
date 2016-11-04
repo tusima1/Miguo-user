@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text="全部分类"
+            android:text="全部"
             android:textSize="14sp"
             android:textColor="@color/rgb_898989"
             />

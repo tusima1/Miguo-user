@@ -295,7 +295,9 @@ public class UserHttpHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        if(mView!=null) {
+                            mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        }
                     }
                 });
             }

@@ -20,6 +20,7 @@ import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDDistanceUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
@@ -78,16 +79,17 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
         if (getItem(position).getSpecial_icon().contains("http://")) {
             SDViewBinder.setImageView(getItem(position).getSpecial_icon(), getHolder(holder).image);
         }
+
         getHolder(holder).title.setText(getItem(position).getSpecial_name());
         getHolder(holder).describe.setText(getItem(position).getSpecial_dec());
         getHolder(holder).distance.setText(getDistance(position));
-        getHolder(holder).price.setText(getItem(position).getSpecial_price());
+        getHolder(holder).price.setText("￥"+getItem(position).getSpecial_price());
         getHolder(holder).normalPrice.setText(getItem(position).getOrigin_price());
         getHolder(holder).sell.setText("售出" + getItem(position).getBuy_count());
     }
 
     private String getBuyText(int position){
-        return isSelling(position) ? "立即抢购" : isEnding(position) ? "已结束" : "即将开抢";
+        return isSelling(position) ? "立即抢购" : isEnding(position) ? "已抢完" : "即将开抢";
     }
 
     private boolean isSelling(int position){
@@ -100,14 +102,7 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
 
     private String getDistance(int position) {
         float distanceInt = DataFormat.toFloat(getItem(position).getDistance());
-        if (distanceInt <= 1000) {
-            return ">" + distanceInt + "m";
-        } else if (distanceInt < 1000000) {
-            float y = distanceInt / 1000;
-            return ">" + y + "km";
-        }
-        float y = distanceInt / 1000;
-        return ">" + y + "km";
+        return SDDistanceUtil.getMGDistance(distanceInt);
     }
 
     public ViewHolder getHolder(RecyclerView.ViewHolder holder){

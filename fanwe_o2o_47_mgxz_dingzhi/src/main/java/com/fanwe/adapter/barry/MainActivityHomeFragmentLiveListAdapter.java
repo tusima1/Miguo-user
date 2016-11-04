@@ -103,7 +103,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         SDViewBinder.setImageView(getItem(position).getCover(), getHolder(holder).image);
-        getHolder(holder).tvAdd.setText(getAddress(position));
+        getHolder(holder).tvAdd.setText(getShopName(position));
         getHolder(holder).tvType.setText(getLiveType(position));
     }
 
@@ -158,7 +158,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
      */
     private String getLiveType(int position){
         try{
-            return getItem(position).getLive_type().equals(LIVE) ? "正在直播" : "点播回放";
+            return getItem(position).getLive_type().equals(LIVE) ? "正在直播" : "精彩视频";
         }catch (NullPointerException e){
             return "正在直播";
         }
@@ -177,7 +177,22 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         }
     }
 
+    /**
+     *  店名称。
+     * @param position
+     * @return
+     */
 
+    private String getShopName(int position){
+        if(getItem(position).getLbs()==null){
+            return "";
+        }
+        try{
+            return null == getItem(position).getLbs().getShop_name() ? "" : getItem(position).getLbs().getShop_name();
+        }catch (NullPointerException e){
+            return "";
+        }
+    }
     @Override
     public Room getItem(int position) {
         return (Room)super.getItem(position);
