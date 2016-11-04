@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.groupon.model.GrouponConstants;
 import com.fanwe.groupon.model.getFeaturedGroupBuy.BodyFeaturedGroupBuy;
 import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
@@ -24,7 +25,7 @@ import java.util.TreeMap;
 /**
  * Created by Administrator on 2016/8/4.
  */
-public class GrouponHttpHelper implements IHelper {
+public class GrouponHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = GrouponHttpHelper.class.getSimpleName();
     private Gson gson;
@@ -75,16 +76,16 @@ public class GrouponHttpHelper implements IHelper {
                 }
                 List<ResultFeaturedGroupBuy> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(GrouponConstants.FEATURED_GROUP_BUG, null);
+                    onSuccess(mView,GrouponConstants.FEATURED_GROUP_BUG, null);
                     return;
                 }
                 List<BodyFeaturedGroupBuy> body = result.get(0).getBody();
                 if (SDCollectionUtil.isEmpty(body)) {
-                    mView.onSuccess(GrouponConstants.FEATURED_GROUP_BUG, null);
+                    onSuccess(mView,GrouponConstants.FEATURED_GROUP_BUG, null);
                     return;
                 }
                 List<ModelFeaturedGroupBuy> items = body.get(0).getTuan_list();
-                mView.onSuccess(GrouponConstants.FEATURED_GROUP_BUG, items);
+                onSuccess(mView,GrouponConstants.FEATURED_GROUP_BUG, items);
             }
 
             @Override

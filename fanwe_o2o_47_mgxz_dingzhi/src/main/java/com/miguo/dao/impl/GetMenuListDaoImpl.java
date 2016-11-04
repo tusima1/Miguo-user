@@ -2,12 +2,9 @@ package com.miguo.dao.impl;
 
 import android.util.Log;
 
-import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.google.gson.Gson;
 import com.miguo.dao.GetMenuListDao;
-import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetMenuListView;
@@ -36,6 +33,11 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
         map.put("menu_type", menu_type);
         map.put("terminal_type", terminal_type);
         OkHttpUtils.getInstance().get("", map, new MgCallback(MenuBean.class) {
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+            }
 
             @Override
             public void onSuccessResponseWithBean(Object responseBody) {

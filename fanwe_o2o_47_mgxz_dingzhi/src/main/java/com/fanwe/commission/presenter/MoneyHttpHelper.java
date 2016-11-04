@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getUserAccount.ResultUserAccount;
@@ -28,7 +29,7 @@ import java.util.TreeMap;
  * Created by didik on 2016/8/28.
  * 提现(关于钱的部分)
  */
-public class MoneyHttpHelper implements IHelper{
+public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
 
     private Gson gson;
     private CallbackView2 mView2;
@@ -89,7 +90,7 @@ public class MoneyHttpHelper implements IHelper{
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(CommissionConstance.USER_ACCOUNT,result);
+                            onSuccess(mView2,CommissionConstance.USER_ACCOUNT,result);
                         }
                     });
                 }else {
@@ -139,7 +140,7 @@ public class MoneyHttpHelper implements IHelper{
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST,body);
+                                    onSuccess(mView2,CommissionConstance.USER_BANK_CARD_LIST,body);
                                 }
                             });
                             return;
@@ -147,7 +148,7 @@ public class MoneyHttpHelper implements IHelper{
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView2.onSuccess(CommissionConstance.USER_BANK_CARD_LIST,null);
+                                    onSuccess(mView2,CommissionConstance.USER_BANK_CARD_LIST,null);
                                 }
                             });
                             return;
@@ -192,7 +193,7 @@ public class MoneyHttpHelper implements IHelper{
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(CommissionConstance.USER_WITHDRAW_LOG,result);
+                            onSuccess(mView2,CommissionConstance.USER_WITHDRAW_LOG,result);
                         }
                     });
                 }else {
@@ -260,7 +261,7 @@ public class MoneyHttpHelper implements IHelper{
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW,null);
+                            onSuccess(mView2,isFx?CommissionConstance.USER_WITHDRAW_FX:CommissionConstance.USER_WITHDRAW,null);
                         }
                     });
                     return;

@@ -1186,7 +1186,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                super.onSuccessResponse(responseBody);
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
                 String token = root.getToken();

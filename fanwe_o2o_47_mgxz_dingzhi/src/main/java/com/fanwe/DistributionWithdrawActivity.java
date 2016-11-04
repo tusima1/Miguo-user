@@ -478,7 +478,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     public void onDestroy() {
         mBtn_send_code.stopTickWork();
         super.onDestroy();
-        commonHelper.onDestory();
+        commonHelper.onDestroy();
         moneyHttpHelper.onDestroy();
     }
 

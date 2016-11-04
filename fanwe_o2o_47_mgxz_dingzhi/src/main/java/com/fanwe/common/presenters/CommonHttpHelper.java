@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
@@ -14,14 +15,12 @@ import com.fanwe.common.model.getUpgradeVersion.ResultVersion;
 import com.fanwe.common.model.getUpgradeVersion.RootVersion;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.fanwe.shoppingcart.ShoppingCartconstants;
-import com.fanwe.user.model.UserInfoNew;
-import com.google.gson.reflect.TypeToken;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
@@ -36,7 +35,7 @@ import java.util.TreeMap;
 /**
  * Created by Administrator on 2016/8/4.
  */
-public class CommonHttpHelper implements IHelper {
+public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = CommonHttpHelper.class.getSimpleName();
     private Gson gson;
@@ -71,11 +70,11 @@ public class CommonHttpHelper implements IHelper {
                 RootHomeClassifyList root = gson.fromJson(responseBody, RootHomeClassifyList.class);
                 List<ResultHomeClassifyList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(CommonConstants.HOME_CLASSIFY_LIST, null);
+                    onSuccess(mView,CommonConstants.HOME_CLASSIFY_LIST, null);
                     return;
                 }
                 List<ModelHomeClassifyList> items = result.get(0).getBody();
-                mView.onSuccess(CommonConstants.HOME_CLASSIFY_LIST, items);
+                onSuccess(mView,CommonConstants.HOME_CLASSIFY_LIST, items);
             }
 
             @Override
@@ -106,7 +105,7 @@ public class CommonHttpHelper implements IHelper {
                     if (map != null) {
                         datas.add(map);
                     }
-                    mView.onSuccess(CommonConstants.INTERESTING, datas);
+                    onSuccess(mView,CommonConstants.INTERESTING, datas);
                 } else {
                     mView.onFailue(message);
                 }
@@ -139,7 +138,7 @@ public class CommonHttpHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(CommonConstants.UPGRADE_VERSION,body);
+                                onSuccess(mView,CommonConstants.UPGRADE_VERSION,body);
                             }
                         });
                         return;

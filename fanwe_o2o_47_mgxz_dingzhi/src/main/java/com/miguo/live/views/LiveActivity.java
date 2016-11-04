@@ -368,7 +368,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         @Override
         public void onSuccessResponse(String responseBody) {
-            super.onSuccessResponse(responseBody);
             if (QavsdkControl.getInstance().getAVContext() == null) {
                 startAVSDK();
             }

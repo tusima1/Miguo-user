@@ -7,6 +7,7 @@ import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
+import com.miguo.live.interf.IHelper;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 
@@ -16,7 +17,7 @@ import java.util.TreeMap;
  * 公共的请求接口
  * Created by Administrator on 2016/7/26.
  */
-public class CommonHelper extends Presenter {
+public class CommonHelper extends OldCallbackHelper implements IHelper{
 
     private Context mContext;
     private static final String TAG = CommonHelper.class.getSimpleName();
@@ -59,7 +60,7 @@ public class CommonHelper extends Presenter {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView.onSuccess(body);
+                            onSuccess(mView,body);
                         }
                     });
                 }
@@ -108,8 +109,9 @@ public class CommonHelper extends Presenter {
         OkHttpUtils.getInstance().get(null, params, callback);
 
     }
+
     @Override
-    public void onDestory() {
+    public void onDestroy() {
         mView = null;
     }
 }

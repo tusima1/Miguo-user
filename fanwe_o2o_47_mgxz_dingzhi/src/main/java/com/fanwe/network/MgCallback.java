@@ -1,8 +1,5 @@
 package com.fanwe.network;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.MainThread;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -12,10 +9,10 @@ import com.fanwe.base.ErrorCodeParse;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 
 import java.io.IOException;
@@ -30,24 +27,25 @@ import okhttp3.Response;
  */
 public abstract class MgCallback<T> implements Callback {
     private static String TAG = MgCallback.class.getSimpleName();
-
     private Class clz;
+    private Object tag;
 
     public MgCallback(Class clz) {
         this.clz = clz;
     }
-
     public MgCallback() {
         this.clz = Root.class;
     }
 
-    public void onStart() {
-        SDDialogManager.showProgressDialog("请稍候...");
+    public void setTag(Object tag) {
+        this.tag = tag;
     }
 
+    public void onStart() {
+    }
 
     public void onFinish() {
-        SDDialogManager.dismissProgressDialog();
+        //TODO finish 回调一定会走,没有网络也会.
     }
 
     @Override
@@ -57,7 +55,7 @@ public abstract class MgCallback<T> implements Callback {
 
     @Override
     public void onResponse(Call call, Response response) throws IOException {
-
+        onStart();
         if (response == null || response.body() == null) {
             onFailure(call, new IOException());
         } else {
@@ -68,7 +66,6 @@ public abstract class MgCallback<T> implements Callback {
             }
             try {
                 Root root = JSON.parseObject(body, Root.class);
-
                 String statusCode = root.getStatusCode();
                 String token = root.getToken();
                 int code = Integer.valueOf(statusCode);
@@ -98,17 +95,15 @@ public abstract class MgCallback<T> implements Callback {
                 } else {
                     onErrorResponseOnMainThread(message, statusCode);
                 }
-
             } catch (Exception e) {
-                 Log.e(TAG, e.getMessage());
-                MGToast.showToast(e.getMessage());
+                onFailure(call,null);
             }
         }
         onFinish();
     }
 
     private void onSuccessResponseOnMainThread(final String responseBody){
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 onSuccessResponse(responseBody);
@@ -116,7 +111,7 @@ public abstract class MgCallback<T> implements Callback {
         });
     }
     private void onSuccessResponseOnMainThreadWithBean(final Object responseBody){
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 onSuccessResponseWithBean(responseBody);
@@ -125,7 +120,7 @@ public abstract class MgCallback<T> implements Callback {
     }
 
     private void onErrorResponseOnMainThread(final String message,final String errorCode){
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 onErrorResponse(message, errorCode);
@@ -133,8 +128,7 @@ public abstract class MgCallback<T> implements Callback {
         });
     }
 
-    public void onSuccessResponse(String responseBody) {
-    }
+    public abstract void onSuccessResponse(String responseBody);
 
     public void onSuccessResponseWithBean(Object responseBody) {
     }
@@ -147,7 +141,7 @@ public abstract class MgCallback<T> implements Callback {
      * @param root
      * @return
      */
-    public T validateBody(Root<T> root) {
+    protected T validateBody(Root<T> root) {
 
         if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
             return root.getResult().get(0).getBody().get(0);
@@ -156,7 +150,7 @@ public abstract class MgCallback<T> implements Callback {
 
     }
 
-    public List<T> validateBodyList(Root<T> root) {
+    protected List<T> validateBodyList(Root<T> root) {
 
         if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
             return root.getResult().get(0).getBody();
@@ -165,5 +159,5 @@ public abstract class MgCallback<T> implements Callback {
 
     }
 
-    public abstract void onErrorResponse(String message, String errorCode);
+    public void onErrorResponse(String message, String errorCode){}
 }

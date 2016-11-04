@@ -247,7 +247,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
                 @Override
                 public void onSuccessResponse(String responseBody) {
-                    super.onSuccessResponse(responseBody);
 
                 }
             });

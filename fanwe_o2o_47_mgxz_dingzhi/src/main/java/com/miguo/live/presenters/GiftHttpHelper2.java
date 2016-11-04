@@ -2,6 +2,7 @@ package com.miguo.live.presenters;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -19,7 +20,7 @@ import java.util.TreeMap;
 /**
  * Created by didik on 2016/9/19.
  */
-public class GiftHttpHelper2 implements IHelper {
+public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
     private Gson gson;
     private CallbackView2 mView2;
 
@@ -48,7 +49,7 @@ public class GiftHttpHelper2 implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView2.onSuccess(LiveConstants.GET_GIFT_INFO,body);
+                                onSuccess(mView2,LiveConstants.GET_GIFT_INFO,body);
                             }
                         });
                         return;
@@ -93,15 +94,10 @@ public class GiftHttpHelper2 implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView2.onSuccess(responseBody);
+                        onSuccess(mView2,responseBody);
                     }
                 });
 
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
             }
         });
     }
