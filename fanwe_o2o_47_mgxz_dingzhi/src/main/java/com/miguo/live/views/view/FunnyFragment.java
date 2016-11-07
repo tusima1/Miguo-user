@@ -8,13 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fanwe.adapter.HomeIndexPageAdapter;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
@@ -24,9 +22,7 @@ import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.common.SDFragmentManager;
-import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.ChineseCharClassifier;
 import com.fanwe.view.RecyclerScrollView;
@@ -288,7 +284,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     private void requestLiveList() {
         if (liveHelper != null) {
-//        cityId = "1cf07dd4-51e0-48fc-b829-2f0a6de0b536"; //1cf07dd4-51e0-48fc-b829-2f0a6de0b536
         liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
         }
     }
@@ -310,7 +305,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         rooms = datas;
         //直播列表
         mHomeFragmentLiveList.updateView(isRefresh, rooms);
-//                    mPtrsvAll.onRefreshComplete();
         loadComplete();
     }
 
