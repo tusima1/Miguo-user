@@ -1044,7 +1044,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccess() {
-                mLiveView.stopStreamSucc();
             }
         });
     }
