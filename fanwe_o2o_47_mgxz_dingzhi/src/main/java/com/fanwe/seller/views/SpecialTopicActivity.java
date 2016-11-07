@@ -1,9 +1,11 @@
 package com.fanwe.seller.views;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,12 +24,14 @@ import com.fanwe.seller.presenters.SellerNewHttpHelper;
 import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.definition.IntentKey;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGLog;
 
 import java.util.List;
 
-public class SpecialTopicActivity extends Activity implements View.OnClickListener, CallbackView2 {
+public class SpecialTopicActivity extends Activity implements View.OnClickListener, CallbackView2, AdapterView.OnItemClickListener {
 
     private PullToRefreshScrollView mPscrollView;
     private TextView mTv_show;
@@ -75,6 +79,7 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
 
         mIv_left = ((ImageView) findViewById(R.id.iv_left));
         mMaxListView = ((MaxHeightListView) findViewById(R.id.max_listView));
+        mMaxListView.setOnItemClickListener(this);
 
 
         mIv_left.setOnClickListener(this);
@@ -108,14 +113,6 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
                 }
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (httpHelper==null){
-            httpHelper=new SellerNewHttpHelper(this);
-        }
         mPscrollView.setRefreshing();
     }
 
@@ -183,11 +180,40 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
 
     @Override
     public void onFailue(String responseBody) {
-
+        mPscrollView.onRefreshComplete();
     }
 
     @Override
     public void onFinish(String method) {
         mPscrollView.onRefreshComplete();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        List<DetailListBean> data = adapter.getData();
+        if (data!=null){
+            DetailListBean detailListBean = data.get(position);
+            String type_id = detailListBean.getType_id();
+            String type = detailListBean.getType();
+            if (TextUtils.isEmpty(type_id)){
+                MGLog.e("专题跳转id为null!");
+                return;
+            }
+            if ("1".equals(type)){
+                //TODO 跳转商品详情
+                Intent intent=new Intent(this,GoodsDetailActivity.class);
+                intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID,type_id);
+                startActivity(intent);
+            }else if ("2".equals(type)){
+                //TODO 跳转门店列表
+                Intent intent=new Intent(this,HiShopDetailActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID,type_id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }else {
+                MGLog.e("专题跳转异常!");
+            }
+        }
     }
 }

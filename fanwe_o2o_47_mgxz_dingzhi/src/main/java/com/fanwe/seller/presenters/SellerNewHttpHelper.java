@@ -109,6 +109,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(errorCode,message);
+                callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
             }
         });
     }
