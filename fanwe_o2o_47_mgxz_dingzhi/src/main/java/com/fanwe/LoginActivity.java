@@ -36,6 +36,7 @@ import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
@@ -401,11 +402,13 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     protected void dealLoginSuccess(User_infoModel actModel) {
         LocalUserModel.dealLoginSuccess(actModel, true);
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
-        if (lastActivity instanceof MainActivity) {
+        if (lastActivity instanceof HiHomeActivity) {
             finish();
         } else {
             startActivity(new Intent(LoginActivity.this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
+            return;
         }
+        startActivity(new Intent(LoginActivity.this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
     }
 
     @Override
