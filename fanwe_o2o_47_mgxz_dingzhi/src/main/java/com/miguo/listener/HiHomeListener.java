@@ -45,15 +45,39 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
         }
     }
 
+    @Override
+    public boolean onInterceptScrollEvent(int tabId) {
+        switch (tabId){
+            case TabId.TAB_A:
+                return false;
+            case TabId.TAB_B:
+                return false;
+
+            /**
+             * 直播不加入
+             */
+            case TabId.TAB_C:
+                return false;
+            case TabId.TAB_D:
+                return false;
+
+            case TabId.TAB_E:
+                return App.getInstance().getToken().equals("");
+        }
+        return false;
+    }
+
     private void clickLive(){
         Intent intent = new Intent(getActivity(), LiveStartActivity.class);
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     private void clickTab(int position){
-        if(TextUtils.isEmpty(App.getInstance().getToken())){
-            clickLogin();
-            return;
+        if(position == 3){
+            if(TextUtils.isEmpty(App.getInstance().getToken())){
+                clickLogin();
+                return;
+            }
         }
         getCategory().clickTab(position);
     }

@@ -29,6 +29,9 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.app.HiHomeActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
@@ -499,10 +502,10 @@ public class LoginHelper extends Presenter {
             return;
         }
 
-        if (lastActivity instanceof MainActivity) {
+        if (lastActivity instanceof HiHomeActivity) {
             mActivity.finish();
         } else {
-            mActivity.startActivity(new Intent(mActivity, MainActivity.class));
+            mActivity.startActivity(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
         }
 
 
