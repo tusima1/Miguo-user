@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_activity_gray"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <!-- 头像 -->
 
@@ -17,10 +17,9 @@
             android:layout_height="75dp"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp" >
+            android:layout_marginTop="10dp">
 
-            <com.github.siyamed.shapeimageview.CircularImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.github.siyamed.shapeimageview.CircularImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/iv_user_face"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,7 +37,6 @@
         </RelativeLayout>
 
         <!-- 昵称 -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +46,7 @@
             android:minHeight="55dp"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -58,12 +56,91 @@
 
             <TextView
                 android:id="@+id/et_username"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="@dimen/width_set_item_icon"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrow_right" />
+        </LinearLayout>
+        <!-- 性别 -->
+        <LinearLayout
+            android:id="@+id/layout_sex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layer_white_stroke_top_deep"
+            android:gravity="center_vertical"
+            android:minHeight="55dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <ImageView
+                android:layout_width="@dimen/width_set_item_icon"
+                android:layout_height="@dimen/width_set_item_icon"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_sex_setting" />
+
+            <TextView
+                android:id="@+id/tv_sex"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="@dimen/width_set_item_icon"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrow_right" />
+        </LinearLayout>
+        <!-- 个人简介 -->
+        <LinearLayout
+            android:id="@+id/layout_sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layer_white_stroke_top_deep"
+            android:gravity="center_vertical"
+            android:minHeight="55dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <ImageView
+                android:layout_width="@dimen/width_set_item_icon"
+                android:layout_height="@dimen/width_set_item_icon"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_sign_setting" />
+
+            <TextView
+                android:id="@+id/tv_sign"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lines="1"
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="@dimen/width_set_item_icon"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrow_right" />
         </LinearLayout>
         <!-- email -->
 
@@ -75,7 +152,7 @@
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -107,7 +184,7 @@
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -147,7 +224,7 @@
             android:minHeight="55dp"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -188,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/arrow_right"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
         </LinearLayout>
         <!-- 修改密码 -->
 
@@ -201,7 +278,7 @@
             android:minHeight="55dp"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -236,7 +313,7 @@
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -272,7 +349,7 @@
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="@dimen/width_set_item_icon"
@@ -309,7 +386,7 @@
             android:background="@drawable/selector_white_gray_stroke_top_left_right"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:id="@+id/iv_load_image_in_mobile_net"
@@ -345,7 +422,7 @@
             android:layout_width="fill_parent"
             android:layout_height="55dip"
             android:background="@drawable/selector_white_gray_stroke_top_left_right"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/iv_jpush"
@@ -385,7 +462,7 @@
             android:background="@drawable/selector_white_gray_stroke_all"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:id="@+id/iv_clear_cache"
@@ -423,7 +500,7 @@
             android:background="@drawable/selector_white_gray_stroke_top_left_right"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:id="@+id/iv_upgrade"
@@ -466,7 +543,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_notice_list"
@@ -496,7 +573,7 @@
             android:background="@drawable/selector_white_gray_stroke_top_left_right"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:id="@+id/iv_kf_phone"
@@ -538,7 +615,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_kf_email"
@@ -579,7 +656,7 @@
             android:background="@drawable/selector_white_gray_stroke_all"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" >
+            android:paddingRight="15dp">
 
             <ImageView
                 android:id="@+id/iv_about_us"
@@ -608,7 +685,7 @@
             android:background="@drawable/layer_white_stroke_top_deep"
             android:orientation="vertical"
             android:paddingTop="1px"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <!-- 腾讯QQ绑定 -->
 
@@ -622,7 +699,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/width_set_item_icon"
@@ -657,7 +734,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="@dimen/width_set_item_icon"

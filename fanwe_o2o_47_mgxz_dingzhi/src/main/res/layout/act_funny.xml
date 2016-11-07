@@ -48,23 +48,11 @@
             </LinearLayout>
 
             <!-- 直播分类数据 -->
-            <LinearLayout 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sort_type_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/c_F2F2F2"
-                android:orientation="vertical">
-
-                <com.fanwe.library.customview.SDSlidingPlayView
-                    android:id="@+id/spv_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="12dp"
-                    android:padding="1dp" />
-
-            </LinearLayout>
+                android:layout_height="@dimen/dp93"
+                android:layout_marginTop="@dimen/dp5"/>
 
             <!-- 直播点播列表。 -->
             <FrameLayout

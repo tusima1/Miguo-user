@@ -72,18 +72,19 @@ public class FansAdapter extends BaseAdapter {
         final ModelFans modelFans = mFansList.get(position);
         holder.tv_userName.setText(modelFans.getNick());
         String fx_level = modelFans.getFx_level();
-        Drawable rankDrawable=null;
-        if ("1".equals(fx_level)) {
-            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_3);
-        } else if ("2".equals(fx_level)) {
-            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_2);
-        } else if ("3".equals(fx_level)) {
-            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_1);
-        }
-        if (rankDrawable!=null){
-            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable.getMinimumHeight());
-            holder.tv_userName.setCompoundDrawables(null,null,rankDrawable,null);
-        }
+        //去除用户等级的显示图标。
+//        Drawable rankDrawable=null;
+//        if ("1".equals(fx_level)) {
+//            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_3);
+//        } else if ("2".equals(fx_level)) {
+//            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_2);
+//        } else if ("3".equals(fx_level)) {
+//            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_1);
+//        }
+//        if (rankDrawable!=null){
+//            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable.getMinimumHeight());
+//            holder.tv_userName.setCompoundDrawables(null,null,rankDrawable,null);
+//        }
         holder.tv_subName.setText(modelFans.getPersonality());
         SDViewBinder.setImageView(modelFans.getIcon(),holder.civ_face);
 

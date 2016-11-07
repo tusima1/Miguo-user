@@ -2,7 +2,6 @@ package com.fanwe;
 
 import android.os.Bundle;
 
-import com.fanwe.fragment.StoreListContainerFragment;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.SellerFragment;
 

@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fanwe.adapter.HomeIndexPageAdapter;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
@@ -22,14 +22,15 @@ import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.common.SDFragmentManager;
-import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.ChineseCharClassifier;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.adapter.LiveSortTypeAdapter;
+import com.miguo.live.views.customviews.SpaceItemDecoration;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -54,7 +55,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     RecyclerScrollView recyclerScrollView;
    //直播分类
-    private SDSlidingPlayView mSpvAd;
+    private RecyclerView mSpvAd;
     /**
      * 大字体。
      */
@@ -65,7 +66,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private TextView summaryText;
 
     private List<ModelHomeClassifyList> mList = new ArrayList<>();
-    private HomeIndexPageAdapter mAdapter;
+    private LiveSortTypeAdapter mAdapter;
 
 
 
@@ -171,7 +172,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     protected void initPtrLayout() {
         ptrFrameLayout = (PtrFrameLayout)rootView.findViewById(R.id.ptr_layout);
         recyclerScrollView = (RecyclerScrollView)rootView.findViewById(R.id.recycler_scrollview);
-        mSpvAd =(SDSlidingPlayView)rootView.findViewById(R.id.spv_content);
+        mSpvAd =(RecyclerView) rootView.findViewById(R.id.sort_type_list);
         titleText =(TextView)rootView.findViewById(R.id.title_text);
         summaryText = (TextView)rootView.findViewById(R.id.summary_text);
 
@@ -198,8 +199,19 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
 
     private void initSlidingPlayView() {
-        mSpvAd.setmImageNormalResId(R.drawable.ic_small_dot_normal);
-        mSpvAd.setmImageSelectedResId(R.drawable.ic_small_dot_slecet);
+
+        mSpvAd.setHasFixedSize(true);
+
+        LinearLayoutManager llmanager = new LinearLayoutManager(getContext());
+        llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mSpvAd.setLayoutManager(llmanager);
+
+        //设置间距
+        mSpvAd.addItemDecoration(new SpaceItemDecoration(5));
+        mSpvAd.setHasFixedSize(true);
+        mSpvAd.setAdapter(mAdapter);
+
+
     }
 
     /**
@@ -207,12 +219,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
     private void bindData() {
         getTopData();
-        //小红点
-        if (mList.size() > 5) {
-            SDViewUtil.setViewMarginBottom(mSpvAd.mVpgContent, SDViewUtil.dp2px(20));
-        }
-        //一排几个
-        mAdapter = new HomeIndexPageAdapter(SDCollectionUtil.splitList(mList, 5), getActivity());
+        mAdapter = new LiveSortTypeAdapter(mList, getActivity());
         mSpvAd.setAdapter(mAdapter);
     }
 
@@ -238,18 +245,19 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         } else {
             String titleStr = "";
             String summaryStr = "";
+            char[] chars = interestingStr.toCharArray();
             if (interestingStr.length() <= 6) {
                 titleStr = interestingStr;
                 summaryStr = "";
             } else {
-                if (interestingStr.indexOf(",") == 6) {
+                if (interestingStr.indexOf(",")==6|| ChineseCharClassifier.isChinesePunctuation(chars[6])) {
                     titleStr = interestingStr.substring(0, 7);
                     summaryStr = interestingStr.substring(7, interestingStr.length());
                 } else {
                     titleStr = interestingStr.substring(0, 6);
                     summaryStr = interestingStr.substring(6, interestingStr.length());
                 }
-                if (summaryStr.endsWith(",") || summaryStr.endsWith("。")) {
+                if (summaryStr.endsWith(",") ||  ChineseCharClassifier.isChinesePunctuation(chars[summaryStr.length()-1])) {
                     summaryStr = summaryStr.substring(0, summaryStr.length() - 1);
                 }
             }
@@ -269,14 +277,13 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         }
 
         if (mAdapter != null) {
-            mAdapter.setData(SDCollectionUtil.splitList(mList, 5));
+            mAdapter.setmData(mList);
             mAdapter.notifyDataSetChanged();
         }
     }
 
     private void requestLiveList() {
         if (liveHelper != null) {
-        cityId = "1cf07dd4-51e0-48fc-b829-2f0a6de0b536"; //1cf07dd4-51e0-48fc-b829-2f0a6de0b536
         liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
         }
     }
@@ -289,13 +296,15 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
         if (SDCollectionUtil.isEmpty(datas)) {
             rooms = null;
-            setPageNum(this.pageNum++);
+        }else{
+            if(datas.size()>=pageSize){
+                setPageNum(this.pageNum++);
+            }
         }
 
         rooms = datas;
         //直播列表
         mHomeFragmentLiveList.updateView(isRefresh, rooms);
-//                    mPtrsvAll.onRefreshComplete();
         loadComplete();
     }
 
@@ -318,7 +327,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                 if (mHomeFragmentLiveList != null) {
                     mHomeFragmentLiveList.updateTitle(bean.getName());
                 }
-                mAdapter.notifyDataSetChanged();
+
                 typeLiveHome = bean.getId();
                 requestLiveList();
                 break;
@@ -365,7 +374,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
-        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
+//        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
     }
 
     @Override

@@ -247,6 +247,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
      * @param v
      */
     private void clickShopCart(View v) {
+        v.setClickable(false);
         startAnimation(v);
     }
     public void startAnimation(final View v){
@@ -264,6 +265,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
             @Override
             public void run() {
                 mActivity.startActivity(new Intent(mActivity, ShopCartActivity.class));
+                v.setClickable(true);
             }
         },500);
 

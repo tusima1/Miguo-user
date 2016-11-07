@@ -2,6 +2,7 @@ package com.fanwe.mine.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -70,6 +71,12 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
             }
         });
         mPTR.setRefreshing();
+        ivRank.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, RepresentIntroduceActivity.class));
+            }
+        });
     }
 
     private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {

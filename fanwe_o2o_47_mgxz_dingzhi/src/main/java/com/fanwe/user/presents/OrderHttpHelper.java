@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -24,7 +25,7 @@ import java.util.TreeMap;
 /**
  * Created by didik on 2016/8/23.
  */
-public class OrderHttpHelper implements IHelper {
+public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
 
     private String methodName="";
     private Gson gson;
@@ -82,14 +83,13 @@ public class OrderHttpHelper implements IHelper {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test","订单列表: "+responseBody);
                 RootOrderInfo rootOrderInfo = gson.fromJson(responseBody, RootOrderInfo.class);
                 final List<ResultOrderInfo> result = rootOrderInfo.getResult();
                 if (result!=null){
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(methodName,result);
+                            onSuccess(mView2,methodName,result);
                         }
                     });
                 }
@@ -130,7 +130,7 @@ public class OrderHttpHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(UserConstants.ORDER_INFO_CANCEL_ORDER,null);
+                            onSuccess(mView2,UserConstants.ORDER_INFO_CANCEL_ORDER,null);
                         }
                     });
                 }else {
@@ -168,7 +168,7 @@ public class OrderHttpHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(UserConstants.ORDER_INFO,null);
+                            onSuccess(mView2,UserConstants.ORDER_INFO,null);
                         }
                     });
                 }else {
@@ -209,7 +209,7 @@ public class OrderHttpHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(UserConstants.REFUND_APPLICATION_PAGE,result);
+                            onSuccess(mView2,UserConstants.REFUND_APPLICATION_PAGE,result);
                         }
                     });
                 }else {
@@ -261,7 +261,7 @@ public class OrderHttpHelper implements IHelper {
                         @Override
                         public void run() {
                             if (!isDestroy()){
-                                mView2.onSuccess(UserConstants.REFUND_APPLICATION,null);
+                                onSuccess(mView2,UserConstants.REFUND_APPLICATION,null);
                             }
                         }
                     });

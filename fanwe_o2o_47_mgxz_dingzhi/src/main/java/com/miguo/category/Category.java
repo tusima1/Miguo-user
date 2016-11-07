@@ -155,7 +155,7 @@ public abstract class Category implements BaseView {
             return;
         }
         if (view != null) {
-            view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()) * 3, 0, 0);
+            view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
         }
     }
 

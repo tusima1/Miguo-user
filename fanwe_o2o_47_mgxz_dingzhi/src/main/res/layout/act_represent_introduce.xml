@@ -1,0 +1,75 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/c_F2F2F2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/item_layout_sample_title" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingBottom="@dimen/dp25"
+            android:paddingTop="@dimen/dp25"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_represent_intro_rank" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/text_line" />
+
+        <WebView
+            android:id="@+id/webView_introduce"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp25"
+            android:background="@color/bg_activity_white"
+            android:scrollbars="none" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp15"
+            android:layout_marginRight="@dimen/dp15"
+            android:layout_marginTop="@dimen/dp10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="注："
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/dp14" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dp1"
+                android:text="黄金代言人，会员费18元，从佣金自动扣除，佣金不足时也可以在线充值。"
+                android:textColor="@color/gray_text_99"
+                android:textSize="@dimen/dp11" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_update_introduce"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp20"
+            android:background="@drawable/bg_yellow"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp10"
+            android:paddingTop="@dimen/dp10"
+            android:text="升级"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp17" />
+
+    </LinearLayout>
+</ScrollView>

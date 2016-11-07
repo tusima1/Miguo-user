@@ -36,9 +36,11 @@
             android:id="@+id/tv_top_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
             android:layout_marginLeft="@dimen/dp17"
             android:layout_marginRight="@dimen/dp17"
             android:text=""
+            android:ellipsize="end"
             android:textSize="@dimen/sp20"
             android:textColor="@color/black"
             android:gravity="center"
@@ -61,7 +63,7 @@
                 android:textSize="@dimen/sp14"
                 android:text=""
                 />
-            <TextView
+            <!--<TextView
                 android:id="@+id/tv_top_youhui_flag"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -72,7 +74,7 @@
                 android:textSize="@dimen/sp14"
                 android:text="代金券"
                 android:visibility="gone"
-                />
+                />-->
 
             <TextView
                 android:id="@+id/tv_top_quan"

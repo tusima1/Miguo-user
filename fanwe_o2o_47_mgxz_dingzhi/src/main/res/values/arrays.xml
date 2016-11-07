@@ -40,4 +40,37 @@
         <item>@drawable/wel_2</item>
         <item>@drawable/wel_3</item>
     </integer-array>
+
+    <integer-array name="live_robot">
+        <item>@drawable/ic_r1</item>
+        <item>@drawable/ic_r2</item>
+        <item>@drawable/ic_r3</item>
+        <item>@drawable/ic_r4</item>
+        <item>@drawable/ic_r5</item>
+        <item>@drawable/ic_r6</item>
+        <item>@drawable/ic_r7</item>
+        <item>@drawable/ic_r8</item>
+        <item>@drawable/ic_r9</item>
+        <item>@drawable/ic_r10</item>
+        <item>@drawable/ic_r11</item>
+        <item>@drawable/ic_r12</item>
+        <item>@drawable/ic_r13</item>
+        <item>@drawable/ic_r14</item>
+        <item>@drawable/ic_r15</item>
+        <item>@drawable/ic_r16</item>
+        <item>@drawable/ic_r17</item>
+        <item>@drawable/ic_r18</item>
+        <item>@drawable/ic_r19</item>
+        <item>@drawable/ic_r20</item>
+        <item>@drawable/ic_r21</item>
+        <item>@drawable/ic_r22</item>
+        <item>@drawable/ic_r23</item>
+        <item>@drawable/ic_r24</item>
+        <item>@drawable/ic_r25</item>
+        <item>@drawable/ic_r26</item>
+        <item>@drawable/ic_r27</item>
+        <item>@drawable/ic_r28</item>
+        <item>@drawable/ic_r29</item>
+        <item>@drawable/ic_r30</item>
+    </integer-array>
 </resources>

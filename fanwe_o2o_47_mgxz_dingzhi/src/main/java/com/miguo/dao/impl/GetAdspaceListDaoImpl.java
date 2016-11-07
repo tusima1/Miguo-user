@@ -5,10 +5,8 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.google.gson.Gson;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.entity.AdspaceListBean;
-import com.miguo.entity.HomeGreetingBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetAdspaceListView;
 
@@ -38,6 +36,11 @@ public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceList
         map.put("terminal_type", terminal_type);
         map.put("token", App.getApplication().getToken());
         OkHttpUtils.getInstance().get("", map, new MgCallback(AdspaceListBean.class) {
+
+            @Override
+            public void onSuccessResponse(String responseBody) {
+
+            }
 
             @Override
             public void onSuccessResponseWithBean(Object responseBody) {

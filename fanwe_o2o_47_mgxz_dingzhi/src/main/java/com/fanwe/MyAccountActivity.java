@@ -49,6 +49,8 @@ import com.fanwe.service.AppUpgradeService;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.user.presents.UserHttpHelper;
+import com.fanwe.user.view.SexActivity;
+import com.fanwe.user.view.SignActivity;
 import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
 import com.github.siyamed.shapeimageview.CircularImageView;
@@ -69,18 +71,28 @@ import java.util.List;
  * @author Administrator
  */
 public class MyAccountActivity extends BaseActivity implements CallbackView2 {
-
+    // 用户名
     @ViewInject(R.id.et_username)
-    private TextView mEt_username; // 用户名
-
+    private TextView mEt_username;
+    // 个人简介
+    @ViewInject(R.id.tv_sign)
+    private TextView tvSign;
+    @ViewInject(R.id.layout_sign)
+    private LinearLayout layoutSign;
+    // 性别
+    @ViewInject(R.id.tv_sex)
+    private TextView tvSex;
+    @ViewInject(R.id.layout_sex)
+    private LinearLayout layoutSex;
+    // 邮箱
     @ViewInject(R.id.et_email)
-    private EditText mEt_email; // 邮箱
-
+    private EditText mEt_email;
+    // 提现
     @ViewInject(R.id.ll_withdraw)
-    private LinearLayout mLl_withdraw; // 提现
-
+    private LinearLayout mLl_withdraw;
+    // 绑定手机
     @ViewInject(R.id.ll_bind_mobile)
-    private LinearLayout mLl_bind_mobile; // 绑定手机
+    private LinearLayout mLl_bind_mobile;
 
     @ViewInject(R.id.tv_bind_mobile)
     private TextView mTv_bind_mobile;
@@ -194,6 +206,22 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void bindData() {
+        String remark="";
+        String sex="性别";
+        if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null){
+            remark =  App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark();
+            sex = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex();
+        }
+        SDViewBinder.setTextView(tvSign, remark, "个人简介");
+        if ("1".equals(sex)) {
+            //女
+            tvSex.setText("女");
+        } else if ("2".equals(sex)) {
+            //男
+            tvSex.setText("男");
+        } else {
+            tvSex.setText("性别");
+        }
         int loadImageInMobileNet = SettingModelDao.getLoadImageType();
         if (loadImageInMobileNet == LoadImageType.ALL) {
             mCb_load_image_in_mobile_net.setChecked(true);
@@ -237,16 +265,11 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void initViewState() {
-
         mUser = AppHelper.getLocalUser();
         if (mUser == null) {
             return;
         }
-
-        // 使用appconfig里的数据
-//		mEt_username.setText(mUser.getUser_name());
         mEt_email.setText(mUser.getUser_email());
-
         int isTemp = mUser.getIs_tmp();
         if (isTemp == 1) {
             mEt_email.setEnabled(true);
@@ -283,17 +306,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             SDViewUtil.hide(mLl_withdraw);
         }
 
-        // SDViewUtil.hide(mLl_third_bind);
-        /*
-         * String sinaAppKey = model.getSina_app_key(); if
-		 * (TextUtils.isEmpty(sinaAppKey)) { SDViewUtil.hide(mLl_bind_sina); }
-		 * else { SDViewUtil.show(mLl_bind_sina);
-		 * SDViewUtil.show(mLl_third_bind); }
-		 *
-		 * String qqAppKey = model.getQq_app_key(); if
-		 * (TextUtils.isEmpty(qqAppKey)) { SDViewUtil.hide(mLl_bind_qq); } else
-		 * { SDViewUtil.show(mLl_bind_qq); SDViewUtil.show(mLl_third_bind); }
-		 */
     }
 
     private void registerClick() {
@@ -311,6 +323,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         mRl_about_us.setOnClickListener(this);
         mRlUpgrade.setOnClickListener(this);
         mUserFace.setOnClickListener(this);
+        layoutSign.setOnClickListener(this);
+        layoutSex.setOnClickListener(this);
     }
 
     private void clickTestUpgrade() {
@@ -322,17 +336,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     private void initTitle() {
         mTitle.setMiddleTextTop("设置");
-        /*
-         * mTitle.initRightItem(0); if (mUser != null) { if (mUser.getIs_tmp()
-		 * == 1) { mTitle.initRightItem(1);
-		 * mTitle.getItemRight(0).setTextBot("保存"); } }
-		 */
     }
-
-	/*
-     * @Override public void onCLickRight_SDTitleSimple(SDTitleItem v, int
-	 * index) { clickSubmit(); }
-	 */
 
     @Override
     public void onClick(View v) {
@@ -365,7 +369,29 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             clickTestUpgrade();
         } else if (v == mUserFace) {
             clickUserFace();
+        } else if (v == layoutSign) {
+            clickSign();
+        } else if (v == layoutSex) {
+            clickSex();
         }
+    }
+
+    /**
+     * 性别
+     */
+    private void clickSex() {
+        Intent intent = new Intent(MyAccountActivity.this, SexActivity.class);
+        intent.putExtra("sex", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex());
+        startActivity(intent);
+    }
+
+    /**
+     * 个人简介
+     */
+    private void clickSign() {
+        Intent intent = new Intent(MyAccountActivity.this, SignActivity.class);
+        intent.putExtra("sign", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark());
+        startActivity(intent);
     }
 
     /**
@@ -512,8 +538,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
 
     private void clickLogout(View v) {
         mLoginHelper.imLogout();
-        App.getInstance().getmUserCurrentInfo().setUserInfoNew(null);
-        App.getInstance().setmUserCurrentInfo(null);
+        App.getInstance().getmUserCurrentInfo().clearData();
         App.getInstance().setImLoginSuccess(false);
         LocalUserModel userModel = new LocalUserModel();
         App.getInstance().setmLocalUser(userModel);

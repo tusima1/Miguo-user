@@ -3,7 +3,9 @@ package com.fanwe.seller.presenters;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.SellerConstants;
@@ -25,7 +27,7 @@ import java.util.TreeMap;
  * Created by didik on 2016/10/17.
  */
 
-public class SellerNewHttpHelper implements IHelper {
+public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
     private CallbackView2 mView2;
     private Gson gson;
 
@@ -39,6 +41,13 @@ public class SellerNewHttpHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("id", id);
         params.put("token", App.getInstance().getToken());
+        //TODO 如果坐标获取到了就传给后台
+        double x = BaiduMapManager.getInstance().getLongitude();
+        double y = BaiduMapManager.getInstance().getLatitude();
+        if (x!=0 && y!=0){
+            params.put("m_longitude", x+"");
+            params.put("m_latitude", y+"");
+        }
         params.put("method", SellerConstants.GROUP_BUY_DETAIL_NEW);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -60,6 +69,7 @@ public class SellerNewHttpHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(errorCode,message);
+
             }
 
             @Override
@@ -112,7 +122,7 @@ public class SellerNewHttpHelper implements IHelper {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mView2.onSuccess(method,data);
+                    onSuccess(mView2,method,data);
                 }
             });
         }

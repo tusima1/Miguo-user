@@ -65,6 +65,7 @@
     <color name="dark_80">#CC000000</color>
     <color name="dark_20">#33000000</color>
     <color name="black_60">#46000000</color>
+    <color name="black_80">#80000000</color>
     <color name="gray_cc">#CCCCCC</color>
     <color name="gray_f0">#f0f0f0</color>
     <color name="gray_f2">#f2f2f2</color>

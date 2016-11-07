@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -38,6 +39,7 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
     private double money=0;
     private UserHttpHelper httpHelper;
     private String fx_money;
+    private MGProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,11 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
 
     private void requestData() {
         httpHelper.getDistrInfo();
+        if (dialog==null){
+            dialog = new MGProgressDialog(this);
+            dialog.needFinishActivity(this);
+        }
+        dialog.show();
     }
 
     private void registerClick() {
@@ -133,6 +140,9 @@ public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity im
 
     @Override
     public void onFinish(String method) {
-        mPtrsv_all.onRefreshComplete();
+        onRefreshComplete();
+        if (dialog!=null){
+            dialog.dismiss();
+        }
     }
 }

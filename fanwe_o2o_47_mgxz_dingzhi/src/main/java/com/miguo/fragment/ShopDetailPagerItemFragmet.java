@@ -6,11 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.category.fragment.HomeBannerFragmentCategory;
 import com.miguo.category.fragment.ShopDetailItemFragmentCategory;
 import com.miguo.entity.HiShopDetailBean;
-import com.miguo.fake.HomeBannerFakeData;
-import com.miguo.fake.ShopDetailPagerItemFakeData;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/10/17.

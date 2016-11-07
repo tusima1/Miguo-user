@@ -67,19 +67,19 @@ public class PagerRedPacketAdapter extends RecyclerView.Adapter<PagerRedPacketAd
             String startTime = getFormatDate(userRedPacketInfo.getAvailable_time_start());
             String endTime = getFormatDate(userRedPacketInfo.getAvailable_time_end());
             String available;
+
             if (TextUtils.isEmpty(startTime) || TextUtils.isEmpty(endTime)) {
                 available = "营业时间内有效";
-            } else {
+            } else if(startTime.equals(endTime)) {
+                available = "使用时间："+"00:00" + "-" + "24:00";
+            }else {
                 available = "使用时间："+startTime + "-" + endTime;
             }
-
-
-            holder.mTv_Content.setText(userRedPacketInfo.getSpecial_note() == null ? "" : available);
+            holder.mTv_Content.setText(TextUtils.isEmpty(userRedPacketInfo.getSpecial_note()) ? available : userRedPacketInfo.getSpecial_note());
 
             String availableDate="有效期: 永久有效";
 
             if (!TextUtils.isEmpty(userRedPacketInfo.getEvent_start()) &&! TextUtils.isEmpty(userRedPacketInfo.getEvent_end())) {
-
                 CharSequence startDate = DateFormat.format("yyyy-MM-dd", Long.decode(userRedPacketInfo.getEvent_start()));
                 CharSequence endDate = DateFormat.format("yyyy-MM-dd", Long.decode(userRedPacketInfo.getEvent_end()));
                 availableDate = "有效期:"+startDate + "---" + endDate;

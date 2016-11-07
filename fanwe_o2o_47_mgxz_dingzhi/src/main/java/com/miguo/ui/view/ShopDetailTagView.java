@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.base.BaseLinearLayout;
 
-import java.util.List;
-
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/21.
  */
