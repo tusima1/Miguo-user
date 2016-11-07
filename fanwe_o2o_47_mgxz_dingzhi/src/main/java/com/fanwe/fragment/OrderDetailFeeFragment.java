@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDFormatUtil;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -131,24 +132,24 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
 
         youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         needFloat = totalFloat - yueFloat - youhuiFloat;
-        total_fee.setText(mCheckActModel.getGoodsTotal());
-        total.setText(mCheckActModel.getTotal());
+        total_fee.setText(DataFormat.toDoubleTwo(mCheckActModel.getGoodsTotal()));
+        total.setText(DataFormat.toDoubleTwo(mCheckActModel.getTotal()));
 
         if(TextUtils.isEmpty(mCheckActModel.getYouhuiPrice())||"0".equals(mCheckActModel.getYouhuiPrice())){
             youhui_account.setText(0+"");
         }else {
-            youhui_account.setText(mCheckActModel.getYouhuiPrice());
+            youhui_account.setText(DataFormat.toDoubleTwo(mCheckActModel.getYouhuiPrice()));
         }
-        yue_fee.setText(mCheckActModel.getUserAccountMoney());
+        yue_fee.setText(DataFormat.toDoubleTwo(mCheckActModel.getUserAccountMoney()));
         if(need_pay_line!=null) {
             need_pay_line.setVisibility(View.VISIBLE);
         }
         if(need_pay_fee!=null) {
-            need_pay_fee.setText(needFloat + "");
+            need_pay_fee.setText(DataFormat.toDoubleTwo(needFloat));
         }
         if(firstPriceTotal>0){
             firstPriceTotalline.setVisibility(View.VISIBLE);
-            firstPriceTotalText.setText(firstPriceTotal+"");
+            firstPriceTotalText.setText(DataFormat.toDoubleTwo(firstPriceTotal));
         }else{
             firstPriceTotalline.setVisibility(View.GONE);
         }
@@ -202,13 +203,13 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         if (yueFloat >= totalFloat) {
             if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(needFloat2 + "");
+                yue_fee.setText(DataFormat.toDoubleTwo(needFloat2));
                 yue_line.setVisibility(View.VISIBLE);
                 pay_type_line.setVisibility(View.GONE);
                 need_pay_line.setVisibility(View.GONE);
             } else {
                 //不使用余额支付
-                need_pay_fee.setText(needFloat2 + "");
+                need_pay_fee.setText(DataFormat.toDoubleTwo(needFloat2));
                 yue_line.setVisibility(View.GONE);
                 if (currentFeeInfoModel != null) {
                     pay_type.setText(currentFeeInfoModel.getName());
@@ -219,10 +220,10 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         } else {
             if (ifYueChecked) {
                 //使用余额支付
-                yue_fee.setText(yueFloat + "");
+                yue_fee.setText(DataFormat.toDoubleTwo(yueFloat));
                 yue_line.setVisibility(View.VISIBLE);
 
-                need_pay_fee.setText(needFloat + "");
+                need_pay_fee.setText(DataFormat.toDoubleTwo(needFloat));
                 if (currentFeeInfoModel != null) {
                     pay_type.setText(currentFeeInfoModel.getName());
 
@@ -233,7 +234,7 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
                 need_pay_line.setVisibility(View.VISIBLE);
             } else {
                 //不使用余额支付
-                need_pay_fee.setText(needFloat2 + "");
+                need_pay_fee.setText(DataFormat.toDoubleTwo(needFloat2));
                 if (currentFeeInfoModel != null) {
                     yue_line.setVisibility(View.GONE);
                     pay_type.setText(currentFeeInfoModel.getName());
@@ -276,8 +277,8 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
              }
              needFloat= payPrice;
          }
-            yue_fee.setText(SDFormatUtil.formatNumberString(String.valueOf(yueFloat),2));
-            need_pay_fee.setText(SDFormatUtil.formatNumberString(String.valueOf(needFloat),2));
+            yue_fee.setText(DataFormat.toDoubleTwo(yueFloat));
+            need_pay_fee.setText(DataFormat.toDoubleTwo(needFloat));
             need_pay_line.setVisibility(View.VISIBLE);
 
         }

@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.event.EnumEventTag;
+import com.fanwe.fragment.FunnytFragment;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
 import com.fanwe.fragment.MyFragment;
@@ -157,8 +159,11 @@ public class MainActivity extends BaseActivity implements CallbackView {
         //取剪切板中的领取码
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
-            code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
-            App.getInstance().code = code;
+            CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+            if (!TextUtils.isEmpty(text)) {
+                code = text.toString();
+                App.getInstance().code = code;
+            }
         }
         LocalUserModel userModel = AppHelper.getLocalUser();
 
@@ -168,7 +173,14 @@ public class MainActivity extends BaseActivity implements CallbackView {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
+                App.isLoging = true;
                 mLoginHelper.doLogin(userid, password, 0, true, false);
+                //防止网络没有返回，10s后自动重置标志位
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        App.isLoging = false;
+                    }
+                }, 10000);
             } else {
                 showDialogLogin();
             }
@@ -255,7 +267,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
         mTab0.setTextTitle(SDResourcesUtil.getString(R.string.home));
         mTab1.setTextTitle(SDResourcesUtil.getString(R.string.supplier));
         mTab2.setTextTitle("我要直播");
-        mTab3.setTextTitle(SDResourcesUtil.getString(R.string.market));
+        mTab3.setTextTitle(SDResourcesUtil.getString(R.string.funny));
         mTab4.setTextTitle(SDResourcesUtil.getString(R.string.mine));
 
         mTab0.getmAttr().setmImageNormalResId(R.drawable.tab_home_normal);
@@ -297,13 +309,22 @@ public class MainActivity extends BaseActivity implements CallbackView {
                         click1();
                         break;
                     case 2:
+                        if (App.isLoging) {
+                            MGToast.showToast("请登录");
+                            return;
+                        }
                         click2();
                         break;
                     case 3:
                         click3();
                         break;
                     case 4:
+                        if (App.isLoging) {
+                            MGToast.showToast("请登录");
+                            return;
+                        }
                         click4();
+
                 }
                 if (index != 2)
                     preTab = index;
@@ -384,24 +405,24 @@ public class MainActivity extends BaseActivity implements CallbackView {
     }
 
     /**
-     * 市场
+     * 有趣
      */
     protected void click3() {
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.MAIN_3);
-        if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
-        {
-            startActivity(new Intent(this, LoginActivity.class));
-        } else {
-            getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
-            if (preTab == 0 || preTab == 2 || preTab == 3) {
-                if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
-                        .mPtrlv_content != null) {
-                    ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
-                            .mPtrlv_content.setRefreshing();
-                }
-            }
-        }
-
+//        if (TextUtils.isEmpty(App.getInstance().getToken()))  // 未登录
+//        {
+//            startActivity(new Intent(this, LoginActivity.class));
+//        } else {
+//            getSDFragmentManager().toggle(R.id.act_main_fl_content, null, MarketFragment.class);
+//            if (preTab == 0 || preTab == 2 || preTab == 3) {
+//                if (((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+//                        .mPtrlv_content != null) {
+//                    ((MarketFragment) getSDFragmentManager().getmFragmentLastToggle())
+//                            .mPtrlv_content.setRefreshing();
+//                }
+//            }
+//        }
+        getSDFragmentManager().toggle(R.id.act_main_fl_content, null, FunnytFragment.class);
     }
 
     /**
@@ -668,7 +689,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
                                 //提示用户直播结束，跳转到网红主页
                                 Intent intent = new Intent(MainActivity.this, UserHomeActivity.class);
                                 intent.putExtra("id", room.getHost().getUid());
-                                intent.putExtra("toastContent", "直播已结束，钻石发放失败");
+                                intent.putExtra("toastContent", "本场直播已结束，领取码失效");
                                 startActivity(intent);
                                 return;
                             }

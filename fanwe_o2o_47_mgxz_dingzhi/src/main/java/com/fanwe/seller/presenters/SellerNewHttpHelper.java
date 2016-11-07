@@ -3,6 +3,7 @@ package com.fanwe.seller.presenters;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
@@ -40,6 +41,13 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("id", id);
         params.put("token", App.getInstance().getToken());
+        //TODO 如果坐标获取到了就传给后台
+        double x = BaiduMapManager.getInstance().getLongitude();
+        double y = BaiduMapManager.getInstance().getLatitude();
+        if (x!=0 && y!=0){
+            params.put("m_longitude", x+"");
+            params.put("m_latitude", y+"");
+        }
         params.put("method", SellerConstants.GROUP_BUY_DETAIL_NEW);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

@@ -1,7 +1,6 @@
 package com.fanwe.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -14,8 +13,6 @@ import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
 import com.miguo.live.views.base.BaseRelativeLayout;
-
-import java.util.ArrayList;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 

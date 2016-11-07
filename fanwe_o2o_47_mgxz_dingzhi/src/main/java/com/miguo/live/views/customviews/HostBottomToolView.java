@@ -154,6 +154,11 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
     @Override
     public void onDestroy() {
         //释放资源
+        if(mLiveCommonHelper!=null){
+            mLiveCommonHelper.onDestroy();
+            mLiveCommonHelper = null;
+        }
+
     }
 
     @Override

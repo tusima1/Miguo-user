@@ -1,5 +1,7 @@
 package com.fanwe.seller.model.getBusinessListings;
 
+import android.text.TextUtils;
+
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
@@ -38,6 +40,9 @@ public class ModelBusinessListings {
 
     public String calculateDistance() {
         double dis = 0;
+        if(TextUtils.isEmpty(geo_x)||TextUtils.isEmpty(geo_y)){
+            return dis+"";
+        }
         if (DataFormat.toDouble(geo_x) != 0 && DataFormat.toDouble(geo_y) != 0) {
             dis = BaiduMapManager.getInstance().getDistanceFromMyLocation(DataFormat.toDouble(geo_y), DataFormat.toDouble(geo_x));
         }

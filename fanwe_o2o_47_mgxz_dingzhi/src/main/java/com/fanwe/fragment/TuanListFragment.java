@@ -24,6 +24,7 @@ import com.fanwe.adapter.CategoryOrderAdapter;
 import com.fanwe.adapter.CategoryQuanLeftAdapter;
 import com.fanwe.adapter.CategoryQuanRightAdapter;
 import com.fanwe.adapter.TuanGruopListAdapter;
+import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.SearchTypeMap;
@@ -187,9 +188,27 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
-        sellerHttpHelper.getClassifyList();
-        sellerHttpHelper.getOrderByList();
+        //商圈
+        if (SDCollectionUtil.isEmpty(App.getInstance().modelBusinessCircleLists)) {
+            sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
+        } else {
+            modelBusinessCircleLists = App.getInstance().modelBusinessCircleLists;
+            bindMiddleCategoryViewData(modelBusinessCircleLists);
+        }
+        //类别
+        if (SDCollectionUtil.isEmpty(App.getInstance().modelClassifyLists)) {
+            sellerHttpHelper.getClassifyList();
+        } else {
+            modelClassifyLists = App.getInstance().modelClassifyLists;
+            bindLeftCategoryViewData(modelClassifyLists);
+        }
+        //排序
+        if (SDCollectionUtil.isEmpty(App.getInstance().navs)) {
+            sellerHttpHelper.getOrderByList();
+        } else {
+            navs = App.getInstance().navs;
+            bindRightCategoryViewData(navs);
+        }
     }
 
     private void getGroupList() {
@@ -525,14 +544,17 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
             //商圈
             modelBusinessCircleLists = datas;
             message.what = 0;
+            App.getInstance().modelBusinessCircleLists = datas;
         } else if (SellerConstants.CLASSIFY_LIST.equals(method)) {
             //类别
             modelClassifyLists = datas;
             message.what = 1;
+            App.getInstance().modelClassifyLists = datas;
         } else if (SellerConstants.ORDER_BY_LIST.equals(method)) {
             //排序
             navs = datas;
             message.what = 2;
+            App.getInstance().navs = datas;
         } else if (SellerConstants.GROUP_BUY.equals(method)) {
             //团购
             groupItems = datas;

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -102,6 +103,7 @@ import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -139,6 +141,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private ArrayList<LiveChatEntity> mTmpChatList = new ArrayList<LiveChatEntity>();//缓冲队列
     private TimerTask mTimerTask = null;
     private static final int REFRESH_LISTVIEW = 5;
+
+    private final int REFRESH_AUDIENCE = 15;//刷新观众列表的时间(s)
 
     /**
      * 更新红包上面的时间 。
@@ -715,7 +719,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //房间创建成功,向后台注册信息
         int i = new Random().nextInt();
         int roomId = MySelfInfo.getInstance().getMyRoomNum();
-        MGToast.showToast(roomId + "");
         LogUtil.d("roomId: " + roomId);
         String url = "http://pic1.mofang.com.tw/2014/0516/20140516051344912.jpg";
         String title = "米果小站";
@@ -969,6 +972,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         @Override
         public void run() {
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "");
+            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
         }
     }
 
@@ -1039,8 +1043,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mUserHeadTopView.ondestroy();
                 mUserHeadTopView = null;
             }
+            if(mUserBottomTool!=null){
+                mUserBottomTool.onDestroy();
+                mUserBottomTool = null;
+            }
             if (mHostTopView != null) {
                 mHostTopView = null;
+            }
+            if (mPeopleTimer!=null){
+                mPeopleTimer.cancel();
+            }
+            if(mHostBottomToolView1!=null){
+                mHostBottomToolView1.onDestroy();
+                mHostBottomToolView1 = null;
             }
             QavsdkControl.getInstance().clearVideoMembers();
             QavsdkControl.getInstance().onDestroy();
@@ -1151,6 +1166,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 MGLog.e("观众:enterRoomComplete");
             }
         }
+        //TODO 完全进入房间了开始加载数据(Fake)
+        mPeopleTimer=new Timer();
+        mPeopleTimer.schedule(mPeopleTimerTask,1000,2500);
     }
 
 
@@ -1168,8 +1186,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void quiteRoomComplete(int id_status, boolean succ, LiveInfoJson liveinfo) {
-        Log.e("LiveActivity", "");
-        Log.e(TAG, "quiteRoomComplete 退出房间...");
+//        Log.e("LiveActivity", "");
+//        Log.e(TAG, "quiteRoomComplete 退出房间...");
         if (LiveUtil.checkIsHost()) {
 //            MGToast.showToast("主播退出!");
 //            if (backDialog != null) {
@@ -1438,7 +1456,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         }
         mAudienceTimer = new Timer(true);
         mGetAudienceTask = new GetAudienceTask();
-        mAudienceTimer.schedule(mGetAudienceTask, 1000, 30 * 1000);
+        mAudienceTimer.schedule(mGetAudienceTask, 1000, REFRESH_AUDIENCE * 1000);
 
     }
 
@@ -2080,18 +2098,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 break;
             case LiveConstants.AUDIENCE_LIST:
                 //观众列表
-                final List<ModelAudienceInfo> audienceList = datas;
-
-
+                //TODO 刷新机器人
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         final boolean isHost = LiveUtil.checkIsHost();
-                        final int size = datas.size();
-                        if (audienceList != null && audienceList.size() >= 0) {
-
-                            CurLiveInfo.setMembers(size);
-                        }
+                        datas.addAll(mRobotFace);
                         if (isHost) {
                             if (mHostTopView != null) {
                                 mHostTopView.refreshData(datas);
@@ -2101,7 +2113,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                                 mUserHeadTopView.refreshData(datas);
                             }
                         }
-                        doUpdateMembersCount();
+//                        doUpdateMembersCount();
                         mHeadTopAdapter.notifyDataSetChanged();
                     }
                 });
@@ -2146,10 +2158,11 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                         ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
                         //更新观众人数
                         if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
-
+                            Log.e("test","人数: "+audienceCount.getCount());
                             CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
                             doUpdateMembersCount();
                         }
+
                     }
                 });
                 break;
@@ -2209,8 +2222,14 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     @Override
                     public void run() {
                         if (isAnchor) {
+                            if (mHostTopView==null){
+                                return;
+                            }
                             mHostTopView.setKeyWords(getKeyWord((List<ModelStoresRandomComment>) datas));
                         } else {
+                            if (mUserHeadTopView==null){
+                                return;
+                            }
                             mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
                         }
                     }
@@ -2390,4 +2409,33 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         bigGifView.addBigGift(bean);
     }
 
+    //----------------- Robot People start ---------------
+    private Timer mPeopleTimer;
+    private TimerTask mPeopleTimerTask =new TimerTask() {
+        @Override
+        public void run() {
+            mRobotFace=getRandomPeopleFace();
+        }
+    } ;
+    private List<ModelAudienceInfo> mRobotFace=new ArrayList<>();
+
+
+    private List<ModelAudienceInfo> getRandomPeopleFace(){
+        TypedArray baseArray = getResources().obtainTypedArray(R.array.live_robot);
+        int indexCount = baseArray.length();
+        List<Integer> finalArray=new ArrayList<>();
+        for (int i = 0; i < indexCount; i++) {
+            finalArray.add(baseArray.getResourceId(i,0));
+        }
+        Collections.shuffle(finalArray);
+        ArrayList<ModelAudienceInfo> temp=new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            ModelAudienceInfo info=new ModelAudienceInfo();
+            info.setIconRes(finalArray.get(i));
+            temp.add(info);
+        }
+        baseArray.recycle();
+        return temp;
+    }
+    //----------------- Robot People end ---------------
 }

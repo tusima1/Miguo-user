@@ -83,6 +83,9 @@ public class OrderDetailPaymentsFragment extends OrderDetailBaseFragment
 
 	public void clearSelectedPayment(boolean notify)
 	{
+		if(listPayment ==null||listPayment.size()<1||paymentAdapter==null){
+			return;
+		}
 		for(int i = 0 ; i < listPayment.size() ;i ++) {
 			PaymentTypeInfo paymentTypeInfo = listPayment.get(i);
 			paymentTypeInfo.setChecked(false);

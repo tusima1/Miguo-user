@@ -38,7 +38,7 @@ public class ImageLoaderManager
 
 	private static DisplayImageOptions.Builder getBuilderDefault()
 	{
-		DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.nopic)
+		DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.nullpic)
 				.showImageOnFail(R.drawable.nopic).resetViewBeforeLoading(true).cacheOnDisk(true).cacheInMemory(false)
 				.bitmapConfig(Bitmap.Config.RGB_565).considerExifParams(true);
 		return builder;

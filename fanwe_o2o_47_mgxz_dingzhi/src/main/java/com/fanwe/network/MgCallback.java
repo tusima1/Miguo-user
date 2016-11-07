@@ -159,5 +159,9 @@ public abstract class MgCallback<T> implements Callback {
 
     }
 
-    public void onErrorResponse(String message, String errorCode){}
+    public String getErrorMessage(String errorCode){
+        String changeMessage = ErrorCodeParse.getErrorCodeMap().get(errorCode);
+        return  changeMessage;
+    }
+public void onErrorResponse(String message, String errorCode){}
 }

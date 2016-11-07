@@ -396,11 +396,16 @@ public class BaseBaiduMapFragment extends BaseFragment implements OnMapStatusCha
 	public void onDestroy()
 	{
 		super.onDestroy();
-		stopLocation();
-		// 关闭定位图层
-		closeMyLocationOverlay();
-		mMapView.onDestroy();
-		mMapView = null;
+		try{
+			stopLocation();
+			// 关闭定位图层
+			closeMyLocationOverlay();
+			mMapView.onDestroy();
+			mMapView = null;
+		}catch (Exception e){
+
+		}
+
 	}
 
 	public void updateScreenLatLng()

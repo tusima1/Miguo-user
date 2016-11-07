@@ -2,24 +2,28 @@ package com.miguo.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.TuanDetailActivity;
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.entity.HiShopDetailBean;
 import com.miguo.live.views.utils.BaseUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +32,13 @@ import java.util.List;
  */
 public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
+    List<Boolean> lines;
+    public static final int SINGLE_LINE_HEIGHT = 35;
+    public static final int DOUBBLE_LINE_HEIGHT = 60;
+
     public HiShopDetailRecommendAdapter(Activity activity, List datas) {
         super(activity, datas);
+        lines = new ArrayList<>();
     }
 
     @Override
@@ -59,7 +68,33 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
     @Override
     protected void doThings(RecyclerView.ViewHolder holder, int position) {
+        handlerTextViewLines(holder, position);
+        setOrginPrice(holder, position);
+        handlerSalary(holder, position);
+    }
 
+    private void handlerSalary(RecyclerView.ViewHolder holder, int position){
+        getHolder(holder).salary.setVisibility(DataFormat.toDouble(getItem(position).getSalary()) == 0 ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void setOrginPrice(RecyclerView.ViewHolder holder, int position){
+        getHolder(holder).oringePrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+    }
+
+    private void handlerTextViewLines(final RecyclerView.ViewHolder holder, final int position){
+        getHolder(holder).title.post(new Runnable() {
+            @Override
+            public void run() {
+                if(getHolder(holder).title.getLineCount() > 1){
+                    lines.set(position, true);
+                    getHolder(holder).title.setMaxLines(2);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(matchParent(), dip2px(DOUBBLE_LINE_HEIGHT));
+                    params.setMargins(dip2px(12), 0, dip2px(12), 0);
+                    getHolder(holder).title.setLayoutParams(params);
+                    getHolder(holder).title.setGravity(Gravity.CENTER_VERTICAL);
+                }
+            }
+        });
     }
 
     @Override
@@ -68,11 +103,29 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
         }
 
-        getHolder(holder).title.setText(getItem(position).getShort_name());
-        getHolder(holder).location.setText(getItem(position).getLocation());
-        getHolder(holder).oringePrice.setText(getItem(position).getOrigin_price() + "元");
-        getHolder(holder).tuanPrice.setText(getItem(position).getTuan_price() + getItem(position).getUnit());
-        getHolder(holder).salary.setText(getItem(position).getSalary() + "元佣金");
+        HiShopDetailBean.Result.Tuan model = getItem(position);
+
+        getHolder(holder).title.setText(model.getName());
+        getHolder(holder).location.setText(model.getLocation());
+        getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":model.getOrigin_price() + "元");
+        String tuanStr= "";
+        if(!TextUtils.isEmpty(model.getTuan_price())){
+            tuanStr +=model.getTuan_price();
+        }
+        if(!TextUtils.isEmpty(model.getUnit())){
+            String unit = model.getUnit().trim();
+            if("张".equals(unit)){
+                tuanStr +="/"+model.getUnit() +"  "+"代金券";
+            }else if("人".equals(unit)){
+                tuanStr +="/"+model.getUnit() +"  "+"专属优惠";
+            }else{
+                tuanStr +="元";
+            }
+        }else{
+            tuanStr +="元";
+        }
+        getHolder(holder).tuanPrice.setText(tuanStr);
+        getHolder(holder).salary.setText(model.getSalary() + "元佣金");
 
         setTags(holder,position);
     }
@@ -124,13 +177,34 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
     }
 
     public int getItemHeight(){
-        int imageHeight = dip2px(196);
-        int titleHeight = dip2px(35);
-        int addressHeight = dip2px(25);
-        int tagHeight = dip2px(35);
-        int spaceHeight = dip2px(30);
-        int itemHeight = imageHeight + titleHeight + addressHeight + tagHeight + spaceHeight;
-        return getItemCount() * itemHeight;
+        int allHeight = 0;
+        for(int i = 0; i<getItemCount(); i++){
+            int imageHeight = dip2px(196);
+            int titleHeight = dip2px(35);
+            int addressHeight = dip2px(25);
+            int tagHeight = lines.get(i) ? dip2px(DOUBBLE_LINE_HEIGHT) : dip2px(SINGLE_LINE_HEIGHT);
+            int spaceHeight = dip2px(30);
+            int itemHeight = imageHeight + titleHeight + addressHeight + tagHeight + spaceHeight;
+            allHeight += itemHeight;
+        }
+        return allHeight;
+    }
+
+    @Override
+    public void notifyDataSetChanged(List datas) {
+        this.lines.clear();
+        for(int i = 0; i<datas.size(); i++){
+            lines.add(false);
+        }
+        super.notifyDataSetChanged(datas);
+    }
+
+    @Override
+    public void notifyDataSetChangedLoadmore(List datas) {
+        for(int i = getItemCount() - 1; i < getItemCount() - 1 + datas.size(); i++){
+            lines.add(false);
+        }
+        super.notifyDataSetChangedLoadmore(datas);
     }
 
     @Override
@@ -203,8 +277,8 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
         }
 
         private void clickImage(){
-            Intent intent = new Intent(getActivity(), TuanDetailActivity.class);
-            intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, getItem(position).getId());
+            Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+            intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID, getItem(position).getId());
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 

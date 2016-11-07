@@ -85,7 +85,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
                 tempBean = mListModel.get(position - 1);
                 if (isNotMine) {
                     //代言
-                    sellerHttpHelper.getRepresentMerchant("", tempBean.getId());
+                    sellerHttpHelper.getRepresentMerchant(tempBean.getEnt_id());
                 } else {
                     CurLiveInfo.modelShop = tempBean;
                     getActivity().setResult(8888);
@@ -168,7 +168,6 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
                         mListModel.addAll(temps);
                     } else {
                         if (!isNotMine) {
-                            MGToast.showToast("代言店铺列表为空");
                         }
                     }
                     mAdapter.notifyDataSetChanged();

@@ -1,6 +1,5 @@
 package com.fanwe;
 
-import android.animation.TimeAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +14,7 @@ import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.dao.barry.GetSpecialListDao;
 import com.fanwe.dao.barry.ShappingCartDao;
 import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
@@ -69,6 +69,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     boolean canRefresh = true;
     boolean needLoadmore = false;
+    MGProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -367,6 +368,8 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
      */
     @Override
     public void addToShoppingCart(String goodsId,String fx_user_id) {
+        dialog = new MGProgressDialog(this,R.style.MGProgressDialog).needFinishActivity(this);
+        dialog.show();
             String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
             String goods_id = goodsId;
             String cart_type = "1";
@@ -384,11 +387,23 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                dismiss();
                 goToShopping();
             }
         });
     }
 
+    private void dismiss(){
+        if(dialog != null){
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        dismiss();
+        super.onStop();
+    }
 
     public void goToShopping() {
         Intent intent = new Intent(this,ShopCartActivity.class);
@@ -397,6 +412,11 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     @Override
     public void addToShappingCartError(String message) {
-
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        });
     }
 }

@@ -2,6 +2,7 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.HorizontalSlideDeleteListView;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDViewUtil;
@@ -96,6 +98,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private int count = 0;
 
+    MGProgressDialog dialog;
+
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
                                        ViewGroup container, Bundle savedInstanceState) {
@@ -146,7 +150,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     protected void resetInitData() {
-        try{
+        try {
             listModel = new ArrayList<>();
             mCb_xuanze.setChecked(false);
             //重置下巴(结算)
@@ -159,7 +163,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
             mLvCartGoods.setAdapter(mAdapter);
             getmAdapterListener();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -182,8 +186,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 boolean isChecked = mCb_xuanze.isChecked();
                 BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
                 mTv_sum.setText(String.valueOf(bd));
-                if (isChecked&&count>0) {
-                    mBt_account.setText("结算" + "（" + count+ "）");
+                if (isChecked && count > 0) {
+                    mBt_account.setText("结算" + "（" + count + "）");
                     mBt_account.setBackgroundColor(getResources().getColor(
                             R.color.main_color));
                     mBt_account.setClickable(true);
@@ -223,12 +227,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         size = listModel.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo model = listModel.get(i);
-            if(!TextUtils.isEmpty(model.getBuyFlg())&&"1".equals(model.getBuyFlg())){
+            if (!TextUtils.isEmpty(model.getBuyFlg()) && "1".equals(model.getBuyFlg())) {
                 model.setChecked(isChecked);
             }
 
             if (model.isChecked()) {
-                count ++;
+                count++;
                 sumMoney += model.getSumPrice();
             }
         }
@@ -386,6 +390,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             @Override
             public void onDelSelectedListener(CartGoodsModel model,
                                               boolean isChecked) {
+                if(model==null){
+                    return;
+                }
                 // 非编辑状态
                 int count = getSumSeleted();
                 if (count == listModel.size()) {
@@ -422,6 +429,10 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void clickSettleAccounts() {
         currentGoTo = 1;
         if (ifLogin) {
+            if (dialog == null) {
+                dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
+            }
+            dialog.show();
             //添加购物车调用接口
             outSideShoppingCartHelper.multiAddShopCart(listModel);
         } else {
@@ -431,6 +442,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         }
     }
 
+    private void dismiss() {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
 
     private void gotoLogin() {
         Intent intent = new Intent(getActivity(),
@@ -446,7 +462,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             String mSeletedGoods = getSumSeletedIds();
 
 
-
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
             Bundle bundle = new Bundle();
@@ -460,11 +475,15 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void requestData() {
         if (ifLogin) {
-            try{
-                outSideShoppingCartHelper.getUserShopCartList();
-            }catch (NullPointerException e){
-
+            if (outSideShoppingCartHelper == null) {
+                outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
             }
+            if (dialog == null) {
+                dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
+            }
+            dialog.show();
+            mCb_xuanze.setClickable(false);
+            outSideShoppingCartHelper.getUserShopCartList();
         } else {
             SDDialogManager.dismissProgressDialog();
             List<ShoppingCartInfo> datas = LocalShoppingcartDao.queryModel();
@@ -521,15 +540,15 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
-    public void onEventMainThread(SDBaseEvent event) {
-        super.onEventMainThread(event);
-
+    public void onDestroy() {
+        super.onDestroy();
+        outSideShoppingCartHelper.onDestory();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        outSideShoppingCartHelper = null;
+    public void onStop() {
+        dismiss();
+        super.onStop();
     }
 
     @Override
@@ -538,7 +557,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     @Override
-    public void onSuccess(String method,final List datas) {
+    public void onSuccess(String method, final List datas) {
         switch (method) {
             case ShoppingCartconstants.SHOPPING_CART_LIST:
                 this.listModel = datas;
@@ -552,6 +571,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                             mAdapter.notifyDataSetChanged();
                         }
                         mContentPtr.onRefreshComplete();
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                dismiss();
+                                mCb_xuanze.setClickable(true);
+                            }
+                        }, 2000);
                     }
                 });
 
@@ -571,6 +596,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 break;
             case ShoppingCartconstants.BATCH_SHOPPING_CART:
                 if (currentGoTo == 1) {
+                    dismiss();
                     startConfirmOrderActivity();
                 }
                 break;
@@ -582,7 +608,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     @Override
     public void onFailue(String responseBody) {
-
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        });
     }
 
 
@@ -619,5 +650,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             default:
                 break;
         }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        });
     }
 }

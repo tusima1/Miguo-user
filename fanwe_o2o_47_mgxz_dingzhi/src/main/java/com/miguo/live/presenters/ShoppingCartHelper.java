@@ -71,7 +71,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
                     }
                 }else{
                     if(mView!=null) {
-                        mView.onFailue(message);
+                        mView.onFailue(LiveConstants.SHOPPING_CART);
                     }else if (mView2!=null){
                         mView2.onFailue(LiveConstants.SHOPPING_CART);
                     }
@@ -81,7 +81,11 @@ public class ShoppingCartHelper extends OldCallbackHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
-                mView.onFailue(message);
+                if(mView!=null) {
+                    mView.onFailue(LiveConstants.SHOPPING_CART);
+                }else if (mView2!=null){
+                    mView2.onFailue(LiveConstants.SHOPPING_CART);
+                }
             }
         });
     }

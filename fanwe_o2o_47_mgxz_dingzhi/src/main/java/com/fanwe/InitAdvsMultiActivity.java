@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -28,7 +29,6 @@ import com.fanwe.user.view.WelcomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.MGLog;
@@ -49,7 +49,7 @@ import cn.jpush.android.api.JPushInterface;
 /**
  * 初始化Activity
  */
-public class InitAdvsMultiActivity extends BaseActivity implements CallbackView {
+public class InitAdvsMultiActivity extends FragmentActivity implements CallbackView {
     private SellerHttpHelper sellerHttpHelper;
 
     // app所需要的全部危险权限
@@ -62,9 +62,9 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             DangerousPermissions.STORAGE
     };
 
-    private long mStartTime=0;
+    private long mStartTime = 0;
 
-    private final int waitTime=800;
+    private final int waitTime = 800;
 
     private SharedPreferences setting;
     private PermissionsHelper permissionsHelper;
@@ -73,7 +73,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_init_advs_multi);
-        mStartTime=System.currentTimeMillis();
+        mStartTime = System.currentTimeMillis();
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
         } else {
@@ -93,6 +93,7 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
             permissionsHelper.onDestroy();
             //do nomarl
             init();
+
         } else {
             //申请权限
             permissionsHelper.startRequestNeedPermissions();
@@ -239,21 +240,22 @@ public class InitAdvsMultiActivity extends BaseActivity implements CallbackView 
         if (user_first) {
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
+            finish();
         } else {
             final Intent intent = new Intent(getApplicationContext(), ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
             long currentTime = System.currentTimeMillis();
-            long offset = currentTime - mStartTime <0 ?waitTime :currentTime - mStartTime;
-            if (offset> waitTime){
+            long offset = currentTime - mStartTime < 0 ? waitTime : currentTime - mStartTime;
+            if (offset > waitTime) {
                 startActivity(intent);
                 finish();
-            }else {
+            } else {
                 MGUIUtil.runOnUiThreadDelayed(new Runnable() {
                     @Override
                     public void run() {
                         startActivity(intent);
                         finish();
                     }
-                },waitTime-offset);
+                }, waitTime - offset);
             }
 
 

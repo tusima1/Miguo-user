@@ -3,6 +3,7 @@ package com.miguo.live.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +45,14 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
         /**
          * 更新用户头像
          */
-        if(modelAudienceInfo!=null&&!TextUtils.isEmpty(modelAudienceInfo.getIcon())){
-            ImageLoader.getInstance().displayImage(modelAudienceInfo.getIcon(),holder.mCIV);
+        int iconRes = modelAudienceInfo.getIconRes();
+        if(modelAudienceInfo!=null){
+            if (!TextUtils.isEmpty(modelAudienceInfo.getIcon())){
+                ImageLoader.getInstance().displayImage(modelAudienceInfo.getIcon(),holder.mCIV);
+            }else if (iconRes!=0){
+                Log.e("test","final_res: "+iconRes);
+                holder.mCIV.setImageResource(iconRes);
+            }
         }else {
             holder.mCIV.setImageResource(R.drawable.app_icon);
         }

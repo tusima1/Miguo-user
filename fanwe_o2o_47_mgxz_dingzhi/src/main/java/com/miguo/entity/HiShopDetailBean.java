@@ -1,8 +1,8 @@
 package com.miguo.entity;
 
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
+import com.fanwe.utils.StringTool;
 
 import java.io.Serializable;
 import java.util.List;
@@ -64,6 +64,10 @@ public class HiShopDetailBean implements Serializable{
         private String geo_y;
         private String tel;
 
+
+        public boolean isEndorsement(){
+            return getIs_endorsement().equals("1");
+        }
 
         public String getTel() {
             return tel;
@@ -392,11 +396,15 @@ public class HiShopDetailBean implements Serializable{
 
             private String area_name;
 
+
             private List<TuanTag> tag_list;
 
 
             public String getLocation(){
-                return getArea_name() + " | " + SDDistanceUtil.getFormatDistance(DataFormat.toDouble(getDistance())) + " | " + getCate_type_name();
+                String area = getArea_name() == null || getArea_name().equals("") ? "" : StringTool.getStringFixed(getArea_name(), 5, "") + " | ";
+                String disntance = SDDistanceUtil.getFormatDistance(DataFormat.toDouble(getDistance())) + "";
+                String place = getCate_type_name() == null || getCate_type_name().equals("") ? "" : " | " + getCate_type_name();
+                return area + disntance + place;
             }
 
             public String getDistance() {
@@ -531,6 +539,8 @@ public class HiShopDetailBean implements Serializable{
             public void setCate_type_name(String cate_type_name) {
                 this.cate_type_name = cate_type_name;
             }
+
+
 
             public String getName() {
                 return name;

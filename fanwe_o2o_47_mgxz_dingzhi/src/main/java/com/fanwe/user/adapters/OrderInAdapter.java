@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -125,7 +124,6 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
 //            refund_status    2   已退款 状态
 //            refund_status    3    退款失败状态
             int consume_count = MGStringFormatter.getInt(model.getConsume_count());
-            Log.e("test", "count:" + consume_count);
             int number = MGStringFormatter.getInt(model.getNumber());
             int refunded = MGStringFormatter.getInt(model.getRefunded());
             int refunding = MGStringFormatter.getInt(model.getRefunding());
@@ -145,8 +143,8 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                 //表示已经点评
                 dp_id = 1;
             }
-
-            if ((mStatus_value == 3 || mStatus_value == 4) && dp_id == 0 && consume_count > 0) {
+            // 10/28 mStatus_value =5 表示已经"结单",此时没有评价的还可以评价,不能执行其他的操作.
+            if ((mStatus_value == 3 || mStatus_value == 4 ||mStatus_value == 5) && dp_id == 0 && consume_count > 0) {
                 tv_evaluate.setVisibility(View.VISIBLE);
                 tv_order.setText("已消费");
                 tv_evaluate.setOnClickListener(new View.OnClickListener() {

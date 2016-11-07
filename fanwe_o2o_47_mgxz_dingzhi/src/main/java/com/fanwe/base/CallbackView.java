@@ -15,4 +15,6 @@ public interface CallbackView {
     void onSuccess(String method,List datas);
 
     void onFailue(String responseBody);
+
+
 }

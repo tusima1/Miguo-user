@@ -31,6 +31,7 @@ import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.definetion.IntentKey;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.NetWorkStateUtil;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -56,6 +57,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
      */
     private String usersig;
     private String userid;
+    private boolean clickEnable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,14 +147,16 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 dataBindingLiveStart.mode.set(dataBindingLiveStart.QQZONE);
                 break;
             case R.id.btn_start_live_start:
-                if (CurLiveInfo.modelShop == null || TextUtils.isEmpty(CurLiveInfo.modelShop.getId())) {
-                    MGToast.showToast("请选择你的消费场所");
-                    return;
-                } else {
-                    if (!TextUtils.isEmpty(usersig)) {
-                        startLive();
+                if (clickEnable) {
+                    if (CurLiveInfo.modelShop == null || TextUtils.isEmpty(CurLiveInfo.modelShop.getId())) {
+                        MGToast.showToast("请选择你的消费场所");
+                        return;
                     } else {
-                        goToLoginActivity();
+                        if (!TextUtils.isEmpty(usersig)) {
+                            startLive();
+                        } else {
+                            goToLoginActivity();
+                        }
                     }
                 }
                 break;
@@ -164,24 +168,44 @@ public class LiveStartActivity extends Activity implements CallbackView {
             SHARE_MEDIA platform = SHARE_MEDIA.QQ;
             //已认证的，去直播
             if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
+                if (!BaseUtils.isQQClientAvailable(this)) {
+                    MGToast.showToast("未安装QQ");
+                    return;
+                }
                 platform = SHARE_MEDIA.QQ;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.WEIXIN) {
+                if (!BaseUtils.isWeixinAvilible(this)) {
+                    MGToast.showToast("未安装微信");
+                    return;
+                }
                 platform = SHARE_MEDIA.WEIXIN;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.FRIEND) {
+                if (!BaseUtils.isWeixinAvilible(this)) {
+                    MGToast.showToast("未安装微信");
+                    return;
+                }
                 platform = SHARE_MEDIA.WEIXIN_CIRCLE;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.SINA) {
                 platform = SHARE_MEDIA.SINA;
             } else if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQZONE) {
+                if (!BaseUtils.isQQClientAvailable(this)) {
+                    MGToast.showToast("未安装QQ");
+                    return;
+                }
                 platform = SHARE_MEDIA.QZONE;
             }
+            //点击按钮后，锁住按钮
+            clickEnable = false;
+
             String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
             if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
                 imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
-            String title = "送你钻石";
-            String content = "直接领钻石，打赏有底气！我送你钻石，来陪我吧？" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick() + "正在直播中.....";
+            String title = "送你钻石，看直播，拿优惠";
+            String nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+            String content = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]正在直播中";
             if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
                 //朋友圈
                 title = content;
@@ -197,20 +221,23 @@ public class LiveStartActivity extends Activity implements CallbackView {
     private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-            MGToast.showToast(share_media + "分享成功");
+            MGToast.showToast("分享成功");
             createAvRoom();
+            clickEnable = true;
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            MGToast.showToast(share_media + "分享失败");
+            MGToast.showToast("分享失败");
             createAvRoom();
+            clickEnable = true;
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            MGToast.showToast(share_media + "分享取消");
+            MGToast.showToast("分享取消");
             createAvRoom();
+            clickEnable = true;
         }
     };
 
@@ -279,7 +306,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                                 return;
                             } else {
                                 App.getInstance().setAvStart(true);
-                                App.getInstance().addLiveRoomIdList(roomId+"");
+                                App.getInstance().addLiveRoomIdList(roomId + "");
                                 MySelfInfo.getInstance().setMyRoomNum(roomId);
 
                                 MySelfInfo.getInstance().writeToCache(getApplicationContext());
@@ -305,7 +332,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
     }
 
 
-
     /**
      * 进入主播页。
      */
@@ -317,7 +343,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             return;
         }
         if (QavsdkControl.getInstance().getAVContext() == null) {
-           App.getInstance().startAVSDK();
+            App.getInstance().startAVSDK();
 
         }
         UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
@@ -359,7 +385,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onSuccess(String responseBody) {
-       goToLive();
+        goToLive();
 
     }
 

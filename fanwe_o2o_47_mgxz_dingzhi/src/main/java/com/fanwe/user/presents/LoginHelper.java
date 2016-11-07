@@ -252,6 +252,10 @@ public class LoginHelper extends Presenter {
                 dealLoginInfo(responseBody, userName, password);
             }
 
+            @Override
+            public void onFinish() {
+                App.isLoging = false;
+            }
 
             @Override
 

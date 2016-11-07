@@ -83,7 +83,6 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test","订单列表: "+responseBody);
                 RootOrderInfo rootOrderInfo = gson.fromJson(responseBody, RootOrderInfo.class);
                 final List<ResultOrderInfo> result = rootOrderInfo.getResult();
                 if (result!=null){

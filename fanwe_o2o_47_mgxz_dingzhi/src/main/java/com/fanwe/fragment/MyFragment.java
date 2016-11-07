@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.MemberRankActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
@@ -300,8 +299,8 @@ public class MyFragment extends BaseFragment implements RedDotView
         } else if (v == mUserName) {
             //个人主页。
 //            startActivity(UserHomeActivity.class);
-            //跳转至会员升级
-            startActivity(MemberRankActivity.class);
+            //跳转至网红主页
+            startActivity(UserHomeActivity.class);
         } else if (v == mKefu) {
             //客服电话
             clickKfPhone();
@@ -341,7 +340,14 @@ public class MyFragment extends BaseFragment implements RedDotView
         }
         //设置用户信息
         SDViewBinder.setTextView(mUserName, MGStringFormatter.getLimitedString(modelPersonalHome.getNick(), 10));
-        SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(modelPersonalHome.getPersonality(), 10));
+        String sign = "一生很难，一辈子很长，所以不能停止探寻有趣的生活。一个爱吃爱玩爱享受的人。";
+        if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())) {
+            sign = modelPersonalHome.getPersonality();
+        }
+        SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(sign, 10));
+        if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())) {
+            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setRemark(modelPersonalHome.getPersonality());
+        }
         mUserFaceString = modelPersonalHome.getIcon();
         SDViewBinder.setImageView(mUserFaceString, mIvUserFace);
 

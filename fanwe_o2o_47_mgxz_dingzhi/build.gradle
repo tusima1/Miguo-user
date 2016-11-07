@@ -5,18 +5,120 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 19
+        applicationId "com.fanwe.o2o.miguo"
+        minSdkVersion 19
+        targetSdkVersion 23
+
+        versionCode 2016110302
+        versionName "6.0.32"
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+        // Enabling multidex support.
+        multiDexEnabled true
+
+        vectorDrawables.useSupportLibrary = true
+
+
     }
 
     buildTypes {
         release {
+            // 混淆
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            // Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile files('libs/umeng-analytics-v6.0.1.jar')
+
+    //    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':library_PhotoViewmaster')
+    compile project(':library_PullToRefresh')
+    compile project(':library_androidshapeimageview')
+    compile project(':library_sdDialog')
+    compile project(':library_umeng_share_project')
+    compile project(':library_xml_drawable_o2o')
+    compile project(':library_ZxingDemo')
+    compile project(':libcommon')
+    //    compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile 'com.squareup.okio:okio:1.8.0'
+    /* vedio module*/
+
+    /*圆角ImageView*/
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    /*Android 方法数65k上限bug需要的库*/
+    compile 'com.android.support:multidex:1.0.0'
+    /*888*/
+    compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/beacon_android_v1.9.9.jar')
+    compile files('libs/bugly_1.3.0_imsdk_release.jar')
+    compile files('libs/imsdk.jar')
+    compile files('libs/jpush-android-2.1.5.jar')
+    compile files('libs/mobilepb.jar')
+    //compile files('libs/open_sdk.jar')
+    compile files('libs/qalsdk.jar')
+    compile files('libs/qavsdk.jar')
+    compile files('libs/tls_sdk.jar')
+    compile files('libs/UPPayAssistEx.jar')
+    compile files('libs/UPPayPluginEx.jar')
+    compile files('libs/wup-1.0.0-SNAPSHOT.jar')
+    compile files('libs/x-2.6.14-src-1.4-modify.jar')
+    compile files('libs/txrtmpsdk.jar')
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    //Optional: see how to use the utility.
+    compile 'com.ogaclejapan.smarttablayout:utils-v13:1.6.1@aar'
+    //7牛
+    compile 'com.qiniu:happy-dns:0.2.9'
+    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
+    compile 'com.didikee:UILibrary:0.8.5'
+    compile 'com.android.support:cardview-v7:23.1.1'
+    /**
+     * okhttp请求计时器
+     */
+    compile 'com.jakewharton.timber:timber:3.1.0'
+    compile 'me.relex:circleindicator:1.2.1@aar'
+    /**
+     * 弹幕
+     */
+    compile 'com.github.ctiao:DanmakuFlameMaster:0.4.9'
+    //导入腾讯云直播SDK jar
+
+    /**
+     * facebook freso
+     *
+     */
+
+    //    compile 'com.facebook.fresco:fresco:0.9.0+'
+
+    //    compile 'com.facebook.fresco:fresco:0.9.0+'
+
+    //    compile 'com.facebook.fresco:imagepipeline-okhttp:0.9.0+'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
+    /**
+     * 下拉刷新 2016-9-23
+     */
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+    //    compile 'com.didikee:permissionsHelper:0.1.0'
+
+    //    compile 'com.nineoldandroids:library:2.4.0'
+
+    //    compile 'com.flyco.pageindicator:FlycoPageIndicator_Lib:1.0.0@aar'
+
+    //
+
+    //    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
+    compile files('libs/fastjson-1.2.20.jar')
 }

@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="￥"
+            android:text="¥"
             android:textColor="@color/dark_text"
             android:textSize="18sp"/>
         <TextView
@@ -58,7 +58,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <com.didikee.uilibs.views.WaitFinishTextView
         android:id="@+id/tv_buy"
         android:layout_width="@dimen/dp100"
         android:layout_height="match_parent"

@@ -89,6 +89,7 @@
             android:horizontalSpacing="@dimen/dp10"
             android:numColumns="2"
             android:scrollbars="none"
+            android:clickable="false"
             android:verticalSpacing="@dimen/dp10" />
 
         <TextView

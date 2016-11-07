@@ -107,13 +107,17 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-
                 onSuccess(mView,UserConstants.USER_INFO_METHOD, null);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFinish(UserConstants.USER_INFO_METHOD);
             }
         });
 
@@ -292,7 +296,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        if(mView!=null) {
+                            mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        }
                     }
                 });
             }
@@ -366,6 +372,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
+                if (mView == null) {
+                    return;
+                }
                 RootDistrInfo root = gson.fromJson(responseBody, RootDistrInfo.class);
                 List<ResultDistrInfo> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
@@ -388,7 +397,18 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                if (mView != null) {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mView.onFinish(UserConstants.DISTR_INFO);
+                        }
+                    });
+                }
             }
         });
     }
@@ -598,6 +618,14 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+
+            @Override
+            public void onFinish() {
+                if (mView == null) {
+                    return;
+                }
+                mView.onFinish(UserConstants.ADVICE);
             }
         });
 
