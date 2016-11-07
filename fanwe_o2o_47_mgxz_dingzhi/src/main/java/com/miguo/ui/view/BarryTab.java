@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
@@ -306,6 +307,15 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
                 }
                 return;
             }
+            if(onTabClickListener != null){
+                if(onTabClickListener.onInterceptScrollEvent(id)){
+                    if(onTabClickListener != null){
+                        onTabClickListener.onTabClick(id);
+                    }
+                    return;
+                }
+
+            }
             if(viewPager != null){
                 viewPager.setCurrentItem(position);
             }
@@ -329,6 +339,13 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
     public interface OnTabClickListener{
         void onTabClick(int tabId);
+
+        /**
+         * 是否拦截
+         * @param tabId
+         * @return
+         */
+        boolean onInterceptScrollEvent(int tabId);
     }
 
     /**
