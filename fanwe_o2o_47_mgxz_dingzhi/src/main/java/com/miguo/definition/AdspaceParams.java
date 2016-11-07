@@ -16,5 +16,30 @@ public class AdspaceParams {
      */
     public static final String TERMINAL_TYPE = "2";
 
+    /**
+     * 商品详情
+     */
+    public static final String BANNER_TYPE_SALE_DETAIL = "1";
+    /**
+     * 门店详情
+     */
+    public static final String BANNER_TYPE_SHOP_DETAIL = "2";
+    /**
+     * 专题详情
+     */
+    public static final String BANNER_TYPE_TOPIC_DETAIL = "3";
+    /**
+     * URL
+     */
+    public static final String BANNER_TYPE_URL = "50";
+    /**
+     * 商家列表
+     */
+    public static final String BANNER_SHOP_LIST = "52";
+    /**
+     * 直播列表
+     */
+    public static final String BANNER_LIVE_LIST = "54";
+
 
 }

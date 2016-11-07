@@ -3,6 +3,7 @@ package com.fanwe.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +24,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by Barry/狗蛋哥 on 2016/10/10.
  * 首页六个推荐列表
  */
-public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTuanHorizontalScrollView.OnTimeLimitClickListener{
+public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTuanHorizontalScrollView.OnTimeLimitClickListener, HomeTuanHorizontalScrollView.HomeTuanHorizontalScrollViewOnTouchListener{
 
     HomeTuanHorizontalScrollView homeTuanHorizontalScrollView;
     LinearLayout top;
@@ -33,6 +34,8 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     SpecialListModel.Result result;
 
     OnTimeLimitClickListener onTimeLimitClickListener;
+
+    TimeLimitedOnTouchListener timeLimitedOnTouchListener;
 
     PtrFrameLayout parent;
     CountDown timer;
@@ -82,19 +85,54 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
+//                Log.d(tag, "action down ");
+                if(parent != null){
+                    parent.requestDisallowInterceptTouchEvent(true);
+                }
+                break;
             case MotionEvent.ACTION_MOVE:
+//                Log.d(tag, "action move ");
                 if(parent != null){
                     parent.requestDisallowInterceptTouchEvent(true);
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+//                Log.d(tag, "action cancel ");
+                onActionCancel(ev);
                 if(parent != null){
                     parent.requestDisallowInterceptTouchEvent(false);
                 }
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onActionDown(MotionEvent ev) {
+        if(getTimeLimitedOnTouchListener() != null){
+            getTimeLimitedOnTouchListener().onActionDown(ev);
+        }
+    }
+
+    @Override
+    public void onActionMove(MotionEvent ev) {
+        if(getTimeLimitedOnTouchListener() != null){
+            getTimeLimitedOnTouchListener().onActionMove(ev);
+        }
+    }
+
+    @Override
+    public void onActionCancel(MotionEvent ev) {
+        if(getTimeLimitedOnTouchListener() != null){
+            getTimeLimitedOnTouchListener().onActionCancel(ev);
+        }
+    }
+
+    public interface TimeLimitedOnTouchListener{
+        void onActionDown(MotionEvent ev);
+        void onActionMove(MotionEvent ev);
+        void onActionCancel(MotionEvent ev);
     }
 
     protected void init(){
@@ -104,6 +142,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         params.addRule(RelativeLayout.BELOW, TOP_ID);
         homeTuanHorizontalScrollView.setLayoutParams(params);
         homeTuanHorizontalScrollView.setHomeTuanTimeLimitView(this);
+        homeTuanHorizontalScrollView.setHomeTuanHorizontalScrollViewOnTouchListener(this);
     }
 
     /**
@@ -232,6 +271,14 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
             rightText.setText("已结束");
             cancel();
         }
+    }
+
+    public TimeLimitedOnTouchListener getTimeLimitedOnTouchListener() {
+        return timeLimitedOnTouchListener;
+    }
+
+    public void setTimeLimitedOnTouchListener(TimeLimitedOnTouchListener timeLimitedOnTouchListener) {
+        this.timeLimitedOnTouchListener = timeLimitedOnTouchListener;
     }
 
     private String getTimeText(long millisUntilFinished){

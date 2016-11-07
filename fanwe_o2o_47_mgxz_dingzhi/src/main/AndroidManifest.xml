@@ -833,6 +833,14 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
+        <!--新商家详情  -->
+        <activity
+            android:theme="@style/Transparent_title_area"
+            android:name="com.miguo.app.HiWebPageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
 
 
 

@@ -36,6 +36,8 @@ import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
@@ -123,7 +125,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         initTitle();
         changeViewUnLogin();
         registerClick();
-
     }
 
     private void registerClick() {
@@ -133,7 +134,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                 Intent intent = new Intent(LoginActivity.this, ModifyPasswordActivity.class);
                 intent.putExtra("pageType", "forget");
                 startActivity(intent);
-
             }
         });
 
@@ -404,7 +404,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         if (lastActivity instanceof MainActivity) {
             finish();
         } else {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
         }
     }
 

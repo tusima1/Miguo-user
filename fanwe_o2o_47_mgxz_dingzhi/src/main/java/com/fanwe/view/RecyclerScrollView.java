@@ -16,6 +16,8 @@ import com.miguo.live.views.utils.BaseUtils;
  */
 public class RecyclerScrollView extends ScrollView{
 
+    RecyclerScrollViewOnTouchListener recyclerScrollViewOnTouchListener;
+
     OnRecyclerScrollViewListener onHomeScrollViewListener;
     boolean isLoading = false;
 
@@ -70,16 +72,31 @@ public class RecyclerScrollView extends ScrollView{
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
-                Log.d(tag, "recycler scroll view action down..");
+//                Log.d(tag, "recycler scroll view action down..");
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if(getRecyclerScrollViewOnTouchListener() != null){
+                    getParent().requestDisallowInterceptTouchEvent(false);
+                    getRecyclerScrollViewOnTouchListener().onActionMove(ev);
+                }
+//                Log.d(tag, "recycler scroll view action move..");
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if(getRecyclerScrollViewOnTouchListener() != null){
+                    getParent().requestDisallowInterceptTouchEvent(false);
+                    getRecyclerScrollViewOnTouchListener().onActionCancel(ev);
+                }
                 getParent().requestDisallowInterceptTouchEvent(false);
                 break;
         }
         return super.onTouchEvent(ev);
     }
 
+    public interface RecyclerScrollViewOnTouchListener{
+        void onActionMove(MotionEvent ev);
+        void onActionCancel(MotionEvent ev);
+    }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -144,5 +161,13 @@ public class RecyclerScrollView extends ScrollView{
 
     public void setIsLoading(boolean isLoading) {
         this.isLoading = isLoading;
+    }
+
+    public RecyclerScrollViewOnTouchListener getRecyclerScrollViewOnTouchListener() {
+        return recyclerScrollViewOnTouchListener;
+    }
+
+    public void setRecyclerScrollViewOnTouchListener(RecyclerScrollViewOnTouchListener recyclerScrollViewOnTouchListener) {
+        this.recyclerScrollViewOnTouchListener = recyclerScrollViewOnTouchListener;
     }
 }

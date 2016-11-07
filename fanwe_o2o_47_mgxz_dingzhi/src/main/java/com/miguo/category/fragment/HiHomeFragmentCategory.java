@@ -3,29 +3,25 @@ package com.miguo.category.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.fanwe.TimeLimitActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.dao.barry.GetSpecialListDao;
 import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
 import com.fanwe.dao.barry.view.GetSpecialListView;
-import com.fanwe.home.views.FragmentHomeTimeLimit;
-import com.fanwe.library.dialog.SDDialogConfirm;
-import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.model.CitylistModel;
-import com.fanwe.model.GoodsModel;
-import com.fanwe.model.PageModel;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.views.SpecialTopicActivity;
+import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.view.RecyclerScrollView;
@@ -33,9 +29,11 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
+import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;
 import com.miguo.dao.HomeGreetingDao;
+import com.miguo.dao.LoginByMobileDao;
 import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetMenuListDaoImpl;
 import com.miguo.dao.impl.HomeGreetingDaoImpl;
@@ -45,18 +43,22 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.MenuParams;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
+import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.AutofitTextView;
+import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeTagsView;
+import com.miguo.ui.view.HomeViewPager;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
 import com.miguo.view.HomeGreetingView;
+import com.miguo.view.LoginByMobileView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,9 @@ import me.relex.circleindicator.CircleIndicator;
 public class HiHomeFragmentCategory extends FragmentCategory implements
         PtrHandler,
         RecyclerScrollView.OnRecyclerScrollViewListener,
+        RecyclerScrollView.RecyclerScrollViewOnTouchListener,
+        HomeBannerViewPager.HomeBannerViewPagerOnTouchListener,
+        HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
         HomeGreetingView,
         GetAdspaceListView, GetMenuListView{
@@ -155,6 +160,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     boolean hasTop = true;
     int topHeight = dip2px(150);
 
+    boolean touchDisableMove = false;
 
     public HiHomeFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -186,6 +192,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         citySayHi.setOnClickListener(listener);
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener)listener);
         homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener)listener);
+        scrollView.setRecyclerScrollViewOnTouchListener(this);
+        homeViewPager.setHomeBannerViewPagerOnTouchListener(this);
+        homeTuanTimeLimitView.setTimeLimitedOnTouchListener(this);
     }
 
     @Override
@@ -194,6 +203,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         setTitleAlpha(titleLayout, 0);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
+        initChirldViewsParent();
         initDefaultCity();
         /**
          * 今日精选
@@ -206,6 +216,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefresh();
     }
 
+    private void initChirldViewsParent(){
+        homeTagsView.setHiHomeFragmentCategory(this);
+    }
+
     private void initDefaultCity(){
         citySayHi.setText(AppRuntimeWorker.getCity_name());
         city.setText(AppRuntimeWorker.getCity_name());
@@ -216,12 +230,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
         onRefreshMenus();
+        startTabShowAnimation();
     }
 
     /**
      * 首页banner数据
      */
     private void initBanner(List<AdspaceListBean.Result.Body> bodys){
+
         ArrayList<Fragment> fragmets = new ArrayList<>();
 
         if(bodys == null || bodys.size() == 0){
@@ -234,9 +250,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         for(int i = 0; i< bodys.size(); i++){
             HomeBannerFragmet fragmet = new HomeBannerFragmet();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("image", bodys.get(i));
+            bundle.putSerializable(IntentKey.HOME_BANNER_IMAGE, bodys.get(i));
             fragmet.setArguments(bundle);
             fragmets.add(fragmet);
+        }
+        if(homeBannerAdapter != null){
+            homeBannerAdapter.notifyDataSetChanged(fragmets);
         }
         homeBannerAdapter = new HomeBannerAdapter(fragment.getChildFragmentManager(), fragmets);
         homeViewPager.setAdapter(homeBannerAdapter);
@@ -307,7 +326,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     public void onRefreshAdspaceList(){
         getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_INDEX, AdspaceParams.TERMINAL_TYPE);
-//        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_TOPIC_INDEX, AdspaceParams.TERMINAL_TYPE);
     }
 
 
@@ -340,16 +358,169 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     }
 
+
+    int moveDistance = dip2px(30);
+    int currentT = 0;
+    boolean animRunning = false;
+    long animDuration = 200;
     private void checkTitle(int l, int t, int oldl, int oldt){
-        if(!isHasTop() && t < getTopHeight()){
-            float radius = (float)t / getTopHeight();
-            setTitleAlpha(titleLayout, radius);
-        }else {
-//            if(!isHasTop() && titleLayout.getAlpha() != 1){
-//                setTitleAlpha(titleLayout, 1);
-//            }
+
+        if(!isHasTop() && !isAnimRunning() && t > getTopHeight()){
+            if(currentT == 0){
+                currentT = t;
+            }
+            /**
+             * 下滑时要隐藏标题栏和底部栏
+             */
+            Log.d(tag + "a" , "t: " + t + " ,t - moveDistance : " + (t - moveDistance) + " ,current: " + currentT);
+            Log.d(tag + "b" , "t: " + t + " ,t + moveDistance : " + (t + moveDistance) + " ,current: " + currentT);
+            if(t - moveDistance > currentT){
+                if(titleLayout.getAlpha() > 1 || getTab().getAlpha() == 1){
+                    startTitleLeaveAnimation();
+                    startTabLeaveAnimation();
+                }
+                currentT = 0;
+            }
+
+            if(t + moveDistance < currentT){
+                if(titleLayout.getAlpha() == 0){
+                    startTitleShowAnimation();
+                    startTabShowAnimation();
+                }
+                currentT = 0;
+            }
         }
+
+        if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning() && titleLayout.getAlpha() == 1){
+            currentT = 0;
+            startTitleLeaveAnimation();
+            startTabShowAnimation();
+        }
+
     }
+
+    private void startTitleLeaveAnimation(){
+        TranslateAnimation titleAnimation = new TranslateAnimation(0, 0, 0, -titleLayout.getMeasuredHeight());
+        titleAnimation.setDuration(animDuration);
+        titleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                setAnimRunning(true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setAnimRunning(false);
+                setTitleAlpha(titleLayout, 0);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        titleLayout.startAnimation(titleAnimation);
+    }
+
+    private void startTabLeaveAnimation(){
+        TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, 0, getTab().getMeasuredHeight());
+        tabAnimation.setDuration(animDuration);
+        tabAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                setAnimRunning(true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setAnimRunning(false);
+                setTitleAlpha(getTab(), 0);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        getTab().startAnimation(tabAnimation);
+
+    }
+
+
+    private void startTitleShowAnimation(){
+        if(titleLayout.getAlpha() == 1){
+            return;
+        }
+        setTitleAlpha(titleLayout, 1);
+        TranslateAnimation titleAnimation = new TranslateAnimation(0, 0, -titleLayout.getMeasuredHeight(), 0);
+        titleAnimation.setDuration(animDuration);
+        titleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                setAnimRunning(true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setAnimRunning(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        titleLayout.startAnimation(titleAnimation);
+
+        TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, getTab().getMeasuredHeight(), 0);
+        tabAnimation.setDuration(animDuration);
+        tabAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                setAnimRunning(true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setAnimRunning(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        getTab().startAnimation(titleAnimation);
+
+    }
+
+    private void startTabShowAnimation(){
+        if(getTab().getAlpha() == 1){
+            return;
+        }
+        setTitleAlpha(getTab(), 1);
+        TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, getTab().getMeasuredHeight(), 0);
+        tabAnimation.setDuration(animDuration);
+        tabAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                setAnimRunning(true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setAnimRunning(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        getTab().startAnimation(tabAnimation);
+
+    }
+
 
     private void checkTopPadding(int l, int t, int oldl, int oldt){
         if(t == 0){
@@ -372,7 +543,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             if(t >= getTopHeight()){
                 setHasTop(false);
                 scrollContent.removeView(topSayHi);
-//                titleSpace.setVisibility(View.VISIBLE);
                 scrollView.scrollTo(0,0);
             }
         }
@@ -395,10 +565,53 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         }
     }
 
+    @Override
+    public void onActionDown(MotionEvent ev) {
+        setTouchDisableMove(true);
+    }
+
+    @Override
+    public void onActionMove(MotionEvent ev) {
+    }
+
+    @Override
+    public void onActionCancel(MotionEvent ev) {
+        setTouchDisableMove(false);
+    }
+
+    /**
+     * 跳转到直播列表
+     */
+    @Override
+    public void onActionLiveList() {
+        getHomeViewPager().setCurrentItem(1);
+        /**
+         * 如果当前的低栏隐藏了
+         */
+        if(getTab().getAlpha() == 0){
+            startTabShowAnimation();
+        }
+    }
+
+    /**
+     * 跳转到门店列表
+     */
+    @Override
+    public void onActionShopList(String cate_id) {
+        getHomeViewPager().setCurrentItem(2);
+        ((SellerFragment)((HomePagerAdapter)getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id);
+        /**
+         * 如果当前的低栏隐藏了
+         */
+        if(getTab().getAlpha() == 0){
+            startTabShowAnimation();
+        }
+    }
+
     /** ptr framelayout 下拉刷新监听 */
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return scrollView.canRefresh() && false;
+        return scrollView.canRefresh() && !isTouchDisableMove();
     }
 
     @Override
@@ -415,6 +628,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** 获取限时特惠数据回调*/
     @Override
     public void getSpecialListSuccess(final SpecialListModel.Result result) {
+        if(getActivity() == null){
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -430,32 +646,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getSpecialListLoadmoreSuccess(SpecialListModel.Result result) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                homeTuanTimeLimitView.setVisibility(View.GONE);
-            }
-        });
     }
 
     @Override
     public void getSpecialListError(String msg) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                homeTuanTimeLimitView.setVisibility(View.GONE);
-            }
-        });
     }
 
     @Override
     public void getSpecialListNoData(String msg) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                homeTuanTimeLimitView.setVisibility(View.GONE);
-            }
-        });
     }
     /** 获取限时特惠数据回调 end*/
 
@@ -538,7 +736,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void onTagsClick(MenuBean.Result.Body item){
-
+        if(item.getType().equals(AdspaceParams.BANNER_LIVE_LIST)){
+            onActionLiveList();
+            return;
+        }
+        if(item.getType().equals(AdspaceParams.BANNER_SHOP_LIST)){
+            onActionShopList(item.getType_id());
+            return;
+        }
+        AdspaceTypeFactory.clickWidthType(item.getType(), getActivity(), item.getType_id());
     }
 
     public boolean isHasTop() {
@@ -555,10 +761,33 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     public int getTopHeight() {
         return topHeight;
-//        return topHeight - dip2px(50);
+    }
+
+    public BarryTab getTab(){
+        return (BarryTab)getActivity().findViewById(R.id.tab);
+    }
+
+    public boolean isAnimRunning() {
+        return animRunning;
+    }
+
+    public void setAnimRunning(boolean animRunning) {
+        this.animRunning = animRunning;
+    }
+
+    public HomeViewPager getHomeViewPager(){
+        return (HomeViewPager)view.getParent();
     }
 
     public void setTopHeight(int topHeight) {
         this.topHeight = topHeight;
+    }
+
+    public boolean isTouchDisableMove() {
+        return touchDisableMove;
+    }
+
+    public void setTouchDisableMove(boolean touchDisableMove) {
+        this.touchDisableMove = touchDisableMove;
     }
 }

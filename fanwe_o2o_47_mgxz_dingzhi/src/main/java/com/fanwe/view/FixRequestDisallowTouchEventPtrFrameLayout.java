@@ -2,6 +2,7 @@ package com.fanwe.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -12,6 +13,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 public class FixRequestDisallowTouchEventPtrFrameLayout extends PtrFrameLayout{
 
     private boolean disallowInterceptTouchEvent = false;
+    String tag = FixRequestDisallowTouchEventPtrFrameLayout.class.getSimpleName();
 
     public FixRequestDisallowTouchEventPtrFrameLayout(Context context) {
         super(context);
@@ -31,8 +33,21 @@ public class FixRequestDisallowTouchEventPtrFrameLayout extends PtrFrameLayout{
        super.requestDisallowInterceptTouchEvent(disallowIntercept);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                handlerActionDown();
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
 
-       @Override
+    private void handlerActionDown(){
+        Log.d(tag, "handler action down..");
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent e) {
         if (disallowInterceptTouchEvent) {
             return dispatchTouchEventSupper(e);

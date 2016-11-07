@@ -11,6 +11,10 @@ public class ClassPath {
      */
     public static final String HOME_ACTIVITY = "com.miguo.app.HiHomeActivity";
     /**
+     * 新版商家详情
+     */
+    public static final String SHOP_DETAIL_ACTIVITY = "com.miguo.app.HiShopDetailActivity";
+    /**
      * App升级服务
      */
     public static final String APP_UPGRADE_SERVICE = "com.fanwe.service.AppUpgradeService";
@@ -22,5 +26,9 @@ public class ClassPath {
      * 专题
      */
     public static final String SPECIAL_TOPIC_ACTIVITY = "com.fanwe.seller.views.SpecialTopicActivity";
+    /**
+     * 商品详情
+     */
+    public static final String GOODS_DETAIL_ACTIVITY = "com.fanwe.seller.views.GoodsDetailActivity";
 
 }

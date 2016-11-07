@@ -146,6 +146,12 @@ public class SellerFragment extends Fragment {
         ft.commit();
     }
 
+    public void handlerCateIdChanged(String cate_id){
+        if(mFragAll != null){
+            mFragAll.handlerCateIdChanged(cate_id);
+        }
+    }
+
     /**
      * 沉浸式标题栏效果需要设置padding
      */

@@ -1,7 +1,10 @@
 package com.miguo.listener;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
+import com.fanwe.LoginActivity;
+import com.fanwe.app.App;
 import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
 import com.miguo.live.definition.TabId;
@@ -48,7 +51,16 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
     }
 
     private void clickTab(int position){
+        if(TextUtils.isEmpty(App.getInstance().getToken())){
+            clickLogin();
+            return;
+        }
         getCategory().clickTab(position);
+    }
+
+    private void clickLogin(){
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     @Override

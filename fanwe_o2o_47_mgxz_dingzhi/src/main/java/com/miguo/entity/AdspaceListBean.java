@@ -53,7 +53,7 @@ public class AdspaceListBean implements Serializable{
             String icon;// 图标
             String title;// 标题
             String descript;// 说明
-            int type;//1:团购 2:门店 3:商家 4:主题 5:限时特买
+            String type;//1:团购 2:门店 3:商家 4:主题 5:限时特买
             String adspace_id;
 
             public String getAdspace_id() {
@@ -96,11 +96,11 @@ public class AdspaceListBean implements Serializable{
                 this.descript = descript;
             }
 
-            public int getType() {
+            public String getType() {
                 return type;
             }
 
-            public void setType(int type) {
+            public void setType(String type) {
                 this.type = type;
             }
         }

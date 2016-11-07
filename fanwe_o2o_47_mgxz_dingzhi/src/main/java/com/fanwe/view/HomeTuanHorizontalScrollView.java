@@ -3,6 +3,7 @@ package com.fanwe.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,12 +21,14 @@ import java.util.List;
 /**
  * Created by Barry/狗蛋哥 on 2016/10/10.
  */
-public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
+public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView implements RoundImageView.RoundImageViewOnTouchListener{
 
     LinearLayout content;
     List<SpecialListModel.Result.Body> datas;
     OnTimeLimitClickListener onTimeLimitClickListener;
     HomeTuanTimeLimitView homeTuanTimeLimitView;
+
+    HomeTuanHorizontalScrollViewOnTouchListener homeTuanHorizontalScrollViewOnTouchListener;
 
     public HomeTuanHorizontalScrollView(Context context) {
         super(context);
@@ -45,6 +48,14 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:
+//                Log.d(tag, " action down");
+                handlerActionDown(ev);
+                break;
+            case MotionEvent.ACTION_MOVE:
+//                Log.d(tag, " action move");
+                handlerActionMove(ev);
+                break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 if(homeTuanTimeLimitView != null){
@@ -74,27 +85,68 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
         for(int i = 0; i< datas.size(); i++){
             RoundImageView img = new RoundImageView(getContext());
             LinearLayout.LayoutParams imgParams = getLinearLayoutParams(width, height);
-            imgParams.setMargins(margionSpace, 0, 0, 0);
+            imgParams.setMargins(margionSpace, 0, i == datas.size() - 1 ? margionSpace : 0, 0);
             img.setLayoutParams(imgParams);
             img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             SDViewBinder.setImageView(getImagePath(i), img);
             img.setBackgroundColor(getColor(R.color.gray_ee));
             img.setRectAdius((float)dip2px(5));
             img.setOnClickListener(new HomeTuanHorizontalScrollViewListener());
+            img.setRoundImageViewOnTouchListener(this);
             content.addView(img);
         }
+    }
 
-//        TextView more = new TextView(getContext());
-//        LinearLayout.LayoutParams moreParams = getLinearLayoutParams(height, height);
-//        moreParams.setMargins(margionSpace, 0, margionSpace, 0);
-//        more.setGravity(Gravity.CENTER);
-//        more.setLayoutParams(moreParams);
-//        more.setText("更多");
-//        more.setTextSize(16);
-//        more.setTextColor(Color.WHITE);
-//        more.setBackgroundResource(R.drawable.shape_cricle_gray_solid_333333);
-//        more.setOnClickListener(new HomeTuanHorizontalScrollViewListener());
-//        content.addView(more);
+    private void handlerActionDown(MotionEvent event){
+        if(getHomeTuanHorizontalScrollViewOnTouchListener() != null){
+            getHomeTuanHorizontalScrollViewOnTouchListener().onActionDown(event);
+        }
+    }
+
+    private void handlerActionMove(MotionEvent event){
+        if(getHomeTuanHorizontalScrollViewOnTouchListener() != null){
+            getHomeTuanHorizontalScrollViewOnTouchListener().onActionMove(event);
+
+        }
+    }
+
+    private void handlerActionCancel(MotionEvent event){
+        if(getHomeTuanHorizontalScrollViewOnTouchListener() != null){
+            getHomeTuanHorizontalScrollViewOnTouchListener().onActionCancel(event);
+        }
+    }
+
+    public interface HomeTuanHorizontalScrollViewOnTouchListener{
+        void onActionDown(MotionEvent ev);
+        void onActionMove(MotionEvent ev);
+        void onActionCancel(MotionEvent ev);
+    }
+
+    /**
+     * RoundImageView onTouchEvent回调
+     * @param ev
+     */
+    @Override
+    public void onActionDown(MotionEvent ev) {
+        handlerActionDown(ev);
+    }
+
+    /**
+     * RoundImageView onTouchEvent回调
+     * @param ev
+     */
+    @Override
+    public void onActionMove(MotionEvent ev) {
+        handlerActionMove(ev);
+    }
+
+    /**
+     * RoundImageView onTouchEvent回调
+     * @param ev
+     */
+    @Override
+    public void onActionCancel(MotionEvent ev) {
+        handlerActionCancel(ev);
     }
 
     private String getImagePath(int position){
@@ -129,5 +181,13 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView{
 
     public void setOnTimeLimitClickListener(OnTimeLimitClickListener onTimeLimitClickListener) {
         this.onTimeLimitClickListener = onTimeLimitClickListener;
+    }
+
+    public HomeTuanHorizontalScrollViewOnTouchListener getHomeTuanHorizontalScrollViewOnTouchListener() {
+        return homeTuanHorizontalScrollViewOnTouchListener;
+    }
+
+    public void setHomeTuanHorizontalScrollViewOnTouchListener(HomeTuanHorizontalScrollViewOnTouchListener homeTuanHorizontalScrollViewOnTouchListener) {
+        this.homeTuanHorizontalScrollViewOnTouchListener = homeTuanHorizontalScrollViewOnTouchListener;
     }
 }

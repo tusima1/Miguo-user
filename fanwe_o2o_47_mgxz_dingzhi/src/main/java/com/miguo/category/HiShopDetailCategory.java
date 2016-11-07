@@ -190,30 +190,15 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         initLiveRecyclerView();
     }
 
-
-    private int mShopId = -1;
-
-    private int mType;
-
-    private String MerchantID = "";
-
-    private String begin;
-
-    private String end;
+    private String merchantID = "";
 
     private void getIntentData() {
-        mShopId = getActivity().getIntent().getExtras().getInt(HiShopDetailActivity.EXTRA_SHOP_ID, -1);
-        mType = getActivity().getIntent().getExtras().getInt("type");
-        MerchantID = getActivity().getIntent().getExtras().getString(HiShopDetailActivity.EXTRA_MERCHANT_ID);
-        if (mType == 15) {
-            begin = getActivity().getIntent().getExtras().getString("begin_time");
-            end = getActivity().getIntent().getExtras().getString("end_time");
-        }
+        merchantID = getActivity().getIntent().getExtras().getString(HiShopDetailActivity.EXTRA_MERCHANT_ID);
     }
 
     private void initShopDetail(){
         try{
-            shopDetailDao.getShopDetail(MerchantID,
+            shopDetailDao.getShopDetail(merchantID,
                     BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
                     BaiduMapManager.getInstance().getBDLocation().getLatitude() + ""
                     );

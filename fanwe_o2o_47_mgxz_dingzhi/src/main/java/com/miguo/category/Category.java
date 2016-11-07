@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -132,11 +133,9 @@ public abstract class Category implements BaseView {
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding() {
-//        if (top != null) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                top.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
-//            }
-//        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
     }
 
     /**
@@ -152,6 +151,9 @@ public abstract class Category implements BaseView {
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
         if (view != null) {
             view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()) * 3, 0, 0);
         }

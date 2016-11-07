@@ -27,14 +27,6 @@ public class HomeADView2 extends BaseHorizantalScrollView{
     RelativeLayout content;
     List<AdspaceListBean.Result.Body> ads;
     OnTopicAdsClickListener onTopicAdsClickListener;
-    String[] urls = {
-      "http://img.xiaoneiit.com/mgxz/ad2_1.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_2.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_3.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_4.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_5.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_6.jpg"
-    };
 
     public HomeADView2(Context context) {
         super(context);
@@ -60,13 +52,13 @@ public class HomeADView2 extends BaseHorizantalScrollView{
     }
 
     public void init(List<AdspaceListBean.Result.Body> ads){
+        content.removeAllViews();
         if(ads == null || ads.size() == 0){
             return ;
         }
 
         this.ads = ads;
 
-        content.removeAllViews();
 
         int width = getScreenWidth() * 3 / 4;
         int height = width / 2;

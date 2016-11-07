@@ -238,6 +238,34 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         mViewManager.setmMode(SDViewNavigatorManager.Mode.CAN_NONE_SELECT);
     }
 
+
+    /**
+     * 首页广告调用商家列表传参变化
+     * @param cate_id
+     */
+    public void handlerCateIdChanged(String cate_id){
+        this.cate_id = cate_id;
+        tid = "";
+        mPtrlvContent.setRefreshing();
+        mCvLeft.setTitle(getTitleNameByCateId(cate_id));
+    }
+
+    private String getTitleNameByCateId(String cate_id){
+        if(adapterLeft == null){
+            return "全部分类";
+        }
+        for(int i = 0; i<adapterLeft.getCount(); i++){
+            ModelClassifyList modelClassifyList = (ModelClassifyList)adapterLeft.getSelectModelFromPosition(i);
+            if(modelClassifyList == null){
+                break;
+            }
+            if(modelClassifyList.getId().equals(cate_id)){
+                return modelClassifyList.getName();
+            }
+        }
+        return "全部分类";
+    }
+
     private void initCategoryView() {
         mCvLeft.getmAttr().setmBackgroundDrawableNormalResId(R.drawable.bg_choosebar_down);
         mCvLeft.getmAttr().setmBackgroundDrawableSelectedResId(R.drawable.bg_choosebar_up);
@@ -318,6 +346,8 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         });
     }
 
+
+    CategoryCateLeftAdapter adapterLeft;
     private void bindLeftCategoryViewData(List<ModelClassifyList> listModel) {
         if (!SDCollectionUtil.isEmpty(listModel)) {
             int[] arrIndex = ModelClassifyList.findIndex(cate_id, tid, listModel);
@@ -327,7 +357,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             ModelClassifyList leftModel = listModel.get(leftIndex);
             List<ModelClassifyList> listRight = leftModel.getBcate_type();
 
-            CategoryCateLeftAdapter adapterLeft = new CategoryCateLeftAdapter(listModel, getActivity());
+            adapterLeft = new CategoryCateLeftAdapter(listModel, getActivity());
             adapterLeft.setmDefaultIndex(leftIndex);
 
             CategoryCateRightAdapter adapterRight = new CategoryCateRightAdapter(listRight, getActivity());

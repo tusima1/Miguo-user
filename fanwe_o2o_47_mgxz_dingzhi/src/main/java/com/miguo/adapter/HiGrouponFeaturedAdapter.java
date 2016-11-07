@@ -23,6 +23,8 @@ import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -294,7 +296,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         }
 
         private void clickItem(){
-            Intent intent = new Intent(getActivity(), GoodsDetailActivity.class);
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.GOODS_DETAIL_ACTIVITY));
             intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID, getItem(position).getId());
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }

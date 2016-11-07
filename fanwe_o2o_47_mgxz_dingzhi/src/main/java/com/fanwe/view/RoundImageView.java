@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 
 /**
@@ -21,6 +22,8 @@ public class RoundImageView extends ImageView {
     private float rectAdius = 6;
     private final Paint maskPaint = new Paint();
     private final Paint zonePaint = new Paint();
+
+    RoundImageViewOnTouchListener roundImageViewOnTouchListener;
  
     public RoundImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -66,5 +69,54 @@ public class RoundImageView extends ImageView {
         super.draw(canvas);
         canvas.restore();
     }
- 
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                handlerActionDown(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                handlerActionMove(event);
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                handlerActionCancel(event);
+                    break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    private void handlerActionDown(MotionEvent event){
+        if(getRoundImageViewOnTouchListener() != null){
+            getRoundImageViewOnTouchListener().onActionDown(event);
+        }
+    }
+
+    private void handlerActionMove(MotionEvent event){
+        if(getRoundImageViewOnTouchListener() != null){
+            getRoundImageViewOnTouchListener().onActionMove(event);
+
+        }
+    }
+
+    private void handlerActionCancel(MotionEvent event){
+        if(getRoundImageViewOnTouchListener() != null){
+            getRoundImageViewOnTouchListener().onActionCancel(event);
+        }
+    }
+
+    public interface RoundImageViewOnTouchListener{
+        void onActionDown(MotionEvent ev);
+        void onActionMove(MotionEvent ev);
+        void onActionCancel(MotionEvent ev);
+    }
+
+    public RoundImageViewOnTouchListener getRoundImageViewOnTouchListener() {
+        return roundImageViewOnTouchListener;
+    }
+
+    public void setRoundImageViewOnTouchListener(RoundImageViewOnTouchListener roundImageViewOnTouchListener) {
+        this.roundImageViewOnTouchListener = roundImageViewOnTouchListener;
+    }
 }
