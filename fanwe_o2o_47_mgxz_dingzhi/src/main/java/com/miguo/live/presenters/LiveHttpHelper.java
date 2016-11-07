@@ -10,9 +10,6 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.Root;
 import com.fanwe.common.MGDict;
-import com.fanwe.home.model.ResultLive;
-import com.fanwe.home.model.Room;
-import com.fanwe.home.model.RootLive;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -46,6 +43,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getLiveListNew.ModelResultLive;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
+import com.miguo.live.model.getLiveListNew.ModelRootLive;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.model.getReceiveCode.ResultReceiveCode;
 import com.miguo.live.model.getReceiveCode.RootReceiveCode;
@@ -122,11 +122,53 @@ public class LiveHttpHelper implements IHelper {
         gson = new Gson();
     }
 
+//    /**
+//     * 请求直播列表
+//     * 首页fragment
+//     */
+//    public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
+//        TreeMap<String, String> params = new TreeMap<String, String>();
+//        params.put("token", App.getInstance().getToken());
+//        params.put("page", String.valueOf(pageNum));
+//        params.put("page_size", String.valueOf(pageSize));
+//        params.put("tag", tag);
+//        params.put("keyword", keyword);
+//        params.put("city", city);
+//        params.put("tag", tag);
+//        params.put("method", LiveConstants.LIVE_LIST);
+//
+//        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+//            @Override
+//            public void onSuccessResponse(String responseBody) {
+//                RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
+//                List<ResultLive> resultLives = rootLive.getResult();
+//                if (SDCollectionUtil.isEmpty(resultLives) || resultLives.size() < 1) {
+//                    mView2.onSuccess(LiveConstants.LIVE_LIST, null);
+//                    return;
+//                }
+//                ResultLive resultLive = resultLives.get(0);
+//                List<Room> rooms = resultLive.getBody();
+//                mView2.onSuccess(LiveConstants.LIVE_LIST, rooms);
+//            }
+//
+//            @Override
+//            public void onErrorResponse(String message, String errorCode) {
+//                mView2.onFailue(message);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                mView2.onFinish(LiveConstants.LIVE_LIST);
+//            }
+//        });
+//
+//    }
+
     /**
-     * 请求直播列表
+     * 请求直播列表新版
      * 首页fragment
      */
-    public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
+    public void getLiveListNew(int pageNum, int pageSize, String tag, String keyword, String city) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("page", String.valueOf(pageNum));
@@ -135,30 +177,39 @@ public class LiveHttpHelper implements IHelper {
         params.put("keyword", keyword);
         params.put("city", city);
         params.put("tag", tag);
-        params.put("method", LiveConstants.LIVE_LIST);
+        params.put("method", LiveConstants.LIVE_LIST_NEW);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
-                List<ResultLive> resultLives = rootLive.getResult();
-                if (SDCollectionUtil.isEmpty(resultLives) || resultLives.size() < 1) {
-                    mView2.onSuccess(LiveConstants.LIVE_LIST, null);
+                if (mView2 == null) {
                     return;
                 }
-                ResultLive resultLive = resultLives.get(0);
-                List<Room> rooms = resultLive.getBody();
-                mView2.onSuccess(LiveConstants.LIVE_LIST, rooms);
+                ModelRootLive root = gson.fromJson(responseBody, ModelRootLive.class);
+                List<ModelResultLive> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, null);
+                    return;
+                }
+                ModelResultLive resultLive = results.get(0);
+                List<ModelRoom> rooms = resultLive.getBody();
+                mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, rooms);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if (mView2 == null) {
+                    return;
+                }
                 mView2.onFailue(message);
             }
 
             @Override
             public void onFinish() {
-                mView2.onFinish(LiveConstants.LIVE_LIST);
+                if (mView2 == null) {
+                    return;
+                }
+                mView2.onFinish(LiveConstants.LIVE_LIST_NEW);
             }
         });
 
@@ -1070,7 +1121,7 @@ public class LiveHttpHelper implements IHelper {
                     mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, null);
                     return;
                 }
-                List<Room> items = results.get(0).getBody();
+                List<ModelRoom> items = results.get(0).getBody();
                 mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, items);
             }
 
@@ -1082,6 +1133,33 @@ public class LiveHttpHelper implements IHelper {
         });
 
     }
+
+    /**
+     * 添加旁路直播
+     *
+     * @param play_url
+     * @param channel_id
+     * @param room_id
+     */
+    public void getByPassLive(String play_url, String channel_id, String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("play_url", play_url);
+        params.put("channel_id", channel_id);
+        params.put("room_id", room_id);
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.BY_PASS_LIVE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+            }
+        });
+    }
+
 
     @Override
     public void onDestroy() {

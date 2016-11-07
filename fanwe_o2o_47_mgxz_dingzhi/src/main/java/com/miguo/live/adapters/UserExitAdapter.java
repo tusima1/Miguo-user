@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.fanwe.home.model.Room;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.List;
 public class UserExitAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater inflater;
-    private List<Room> datas;
+    private List<ModelRoom> datas;
 
-    public UserExitAdapter(Context mContext, LayoutInflater layoutInflater, List<Room> datas) {
+    public UserExitAdapter(Context mContext, LayoutInflater layoutInflater, List<ModelRoom> datas) {
         this.mContext = mContext;
         this.inflater = layoutInflater;
         this.datas = datas;
@@ -60,7 +60,7 @@ public class UserExitAdapter extends BaseAdapter {
     }
 
     private void setData(Holder mHolder, final int position) {
-        Room room = datas.get(position);
+        ModelRoom room = datas.get(position);
         ImageLoader.getInstance().displayImage(room.getCover(), mHolder.ivImg);
     }
 

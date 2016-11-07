@@ -101,6 +101,7 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1921,18 +1922,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     //旁路直播
     private static boolean isPushed = false;
 
-    /**
-     * 旁路直播 退出房间时必须退出推流。否则会占用后台channel。
-     */
-    public void pushStream() {
-        if (!isPushed) {
-            initPushDialog();
-            mPushDialog.show();
-        } else {
-            mLiveHelper.stopPushAction();
-        }
-    }
-
     private Dialog mPushDialog;
 
     private void initPushDialog() {
@@ -2003,7 +1992,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             TIMAvManager.LiveUrl avUrl2 = liveUrls.get(1);
             url2 = avUrl2.getUrl();
         }
-//        ClipToBoard(url, url2);
+        //这里的streamRes.getChnlId()直接打印的时候会是一个负数，所以如果需要打印查看的时候需要转换一下。结束推流的时候直接使用即可，不需要转换的。
+        Long num = streamRes.getChnlId();
+        BigInteger unsignedNum = BigInteger.valueOf(num);
+        if (num < 0) unsignedNum = unsignedNum.add(BigInteger.ZERO.flipBit(64));
+
+        mLiveHttphelper.getByPassLive(url, String.valueOf(unsignedNum), String.valueOf(CurLiveInfo.getRoomNum()));
     }
 
     /**

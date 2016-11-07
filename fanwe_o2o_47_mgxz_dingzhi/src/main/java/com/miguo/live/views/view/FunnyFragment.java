@@ -20,7 +20,6 @@ import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -29,6 +28,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
@@ -79,7 +79,7 @@ public class FunnyFragment extends Fragment implements PtrHandler, RecyclerScrol
     /**
      * 直播点播 数据列表。
      */
-    private List<Room> rooms;
+    private List<ModelRoom> rooms;
 
     private boolean isRefresh = true;
     private int pageNum = 1;
@@ -279,7 +279,8 @@ public class FunnyFragment extends Fragment implements PtrHandler, RecyclerScrol
 
     private void requestLiveList() {
         if (liveHelper != null) {
-            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
+//            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
+            liveHelper.getLiveListNew(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
         }
     }
 
@@ -288,7 +289,7 @@ public class FunnyFragment extends Fragment implements PtrHandler, RecyclerScrol
      *
      * @param datas
      */
-    public void getLiveList(ArrayList<Room> datas) {
+    public void getLiveList(ArrayList<ModelRoom> datas) {
 
         if (SDCollectionUtil.isEmpty(datas)) {
             rooms = null;
@@ -381,13 +382,12 @@ public class FunnyFragment extends Fragment implements PtrHandler, RecyclerScrol
 
     @Override
     public void onSuccess(String method, final List datas) {
-        if (LiveConstants.LIVE_LIST.equals(method)) {
+        if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             //直播列表
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    getLiveList((ArrayList<Room>) datas);
+                    getLiveList((ArrayList<ModelRoom>) datas);
                 }
             });
         } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
@@ -414,7 +414,12 @@ public class FunnyFragment extends Fragment implements PtrHandler, RecyclerScrol
 
     @Override
     public void onFinish(String method) {
-
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadComplete();
+            }
+        });
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.fanwe.home.model;
+package com.miguo.live.model.getLiveListNew;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * 主播
  * Created by Administrator on 2016/7/27.
  */
-public class Host {
+public class ModelHost {
 //        "host": {
 //            "uid": "9d861276-8ddd-4d47-83f0-512dcc5efdcb",                              主播id
 //            "host_user_id": "9d861276-8ddd-4d47-83f0-512dcc5efdcb",

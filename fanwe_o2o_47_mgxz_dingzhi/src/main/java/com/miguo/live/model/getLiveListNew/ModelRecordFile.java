@@ -1,17 +1,14 @@
 package com.miguo.live.model.getLiveListNew;
 
-import com.miguo.live.model.PlaySetInfo;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2016/11/2.
  */
 public class ModelRecordFile implements Serializable {
     private String duration;
-    private String fileId;
-    private ArrayList<PlaySetInfo> playSet;
+    private String file_id;
+    private String playset;
 
     public String getDuration() {
         return duration;
@@ -21,19 +18,19 @@ public class ModelRecordFile implements Serializable {
         this.duration = duration;
     }
 
-    public String getFileId() {
-        return fileId;
+    public String getFile_id() {
+        return file_id;
     }
 
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
+    public void setFile_id(String file_id) {
+        this.file_id = file_id;
     }
 
-    public ArrayList<PlaySetInfo> getPlaySet() {
-        return playSet;
+    public String getPlayset() {
+        return playset;
     }
 
-    public void setPlaySet(ArrayList<PlaySetInfo> playSet) {
-        this.playSet = playSet;
+    public void setPlayset(String playset) {
+        this.playset = playset;
     }
 }
