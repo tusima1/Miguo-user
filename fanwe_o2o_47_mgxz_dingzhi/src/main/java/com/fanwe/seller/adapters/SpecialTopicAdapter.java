@@ -31,16 +31,23 @@ public class SpecialTopicAdapter extends BaseAdapter {
 
     private List<DetailListBean> mData=new ArrayList<>();
 
-    public void updateData(List<DetailListBean> newData){
+    public void addData(List<DetailListBean> newData){
         if (newData!=null && newData.size()>0){
             mData.addAll(newData);
             notifyDataSetChanged();
         }
     }
 
+    public void removeData(List<DetailListBean> sameData){
+        if (sameData!=null && sameData.size()>0){
+            mData.removeAll(sameData);
+//            notifyDataSetChanged();
+        }
+    }
+
     public void setData(List<DetailListBean> data){
         mData.clear();
-        updateData(data);
+        addData(data);
     }
 
     @Override
@@ -122,7 +129,16 @@ public class SpecialTopicAdapter extends BaseAdapter {
     }
 
     private String getLocationInfo(String mapLocation,String distance,String location){
-        return getLimitedString(mapLocation,6)+" | "+ SDDistanceUtil.getFormatDistance(DataFormat.toDouble(distance)) +" | "+getLimitedString(location,4);
+        String tempMapLocation = getLimitedString(mapLocation, 6);
+        String tempDistance = SDDistanceUtil.getFormatDistance(DataFormat.toDouble(distance));
+        String tempLocation = getLimitedString(location, 4);
+        if (!TextUtils.isEmpty(tempMapLocation)){
+            tempMapLocation+=" | ";
+        }
+        if (!TextUtils.isEmpty(tempLocation)&&!TextUtils.isEmpty(tempDistance)){
+            tempDistance+=" | ";
+        }
+        return tempMapLocation+ tempDistance +tempLocation;
     }
 
     private String getLimitedString(String text,int limitNum){

@@ -38,11 +38,11 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
     private SellerNewHttpHelper httpHelper;
 
     private boolean isLoadMore=false;
-    private List<DetailListBean> detail_list;
     private SpecialTopicAdapter adapter;
 //    private String id="c0d21dfd-86d7-48ac-8c8c-085759df1243";//请求id
     private String id="";//请求id
     private PageBean page;
+    private List<DetailListBean> temp_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,9 +153,14 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
 
             if (isLoadMore){
                 //TODO update data
-                List<DetailListBean> detail_list = modelSpecialTopic.getDetail_list();
+                int currentPage = DataFormat.toInt(page.getPage());
+                int totalPage = DataFormat.toInt(page.getPage_total());
+                if (currentPage == totalPage){
+                    adapter.removeData(temp_list);
+                }
+                temp_list = modelSpecialTopic.getDetail_list();
                 if (adapter!=null){
-                    adapter.updateData(detail_list);
+                    adapter.addData(temp_list);
                 }
             }else {
                 page = modelSpecialTopic.getPage();
@@ -169,8 +174,8 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
                 adapter = new SpecialTopicAdapter();
                 mMaxListView.setAdapter(adapter);
                 mMaxListView.setFocusable(false);
-                detail_list = modelSpecialTopic.getDetail_list();
-                adapter.setData(detail_list);
+                temp_list = modelSpecialTopic.getDetail_list();
+                adapter.setData(temp_list);
 
             }
         }
