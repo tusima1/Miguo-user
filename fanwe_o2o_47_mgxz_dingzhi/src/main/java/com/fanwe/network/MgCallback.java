@@ -128,7 +128,9 @@ public abstract class MgCallback<T> implements Callback {
         });
     }
 
-    public abstract void onSuccessResponse(String responseBody);
+    public void onSuccessResponse(String responseBody){
+
+    }
 
     public void onSuccessResponseWithBean(Object responseBody) {
     }
