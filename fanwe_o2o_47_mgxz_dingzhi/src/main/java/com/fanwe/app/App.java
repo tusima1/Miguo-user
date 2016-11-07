@@ -162,6 +162,8 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         LogUtil.isDebug = ServerUrl.DEBUG;
 
         mUserCurrentInfo = UserCurrentInfo.getInstance();
+
+        ActivityLifeManager.getInstance().init(this);
     }
 
 

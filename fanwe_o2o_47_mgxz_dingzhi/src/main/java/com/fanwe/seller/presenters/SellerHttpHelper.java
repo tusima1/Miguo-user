@@ -842,11 +842,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
     /**
      * 我要代言，get代言delete取消代言
      */
-    public void getRepresentMerchant(String ent_id, String shop_id) {
+    public void getRepresentMerchant(String ent_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("ent_id", ent_id);
-        params.put("shop_id", shop_id);
         params.put("method", SellerConstants.REPRESENT_MERCHANT);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

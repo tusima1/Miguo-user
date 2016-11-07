@@ -1,8 +1,12 @@
 package com.fanwe.network;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.fanwe.LoginActivity;
+import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
@@ -147,6 +151,10 @@ public class OkHttpUtils {
                 String token = App.getInstance().getToken();
                 if (TextUtils.isEmpty(token)){
                     //TODO login
+                    Activity lastActivity = ActivityLifeManager.getInstance().getLastActivity();
+                    if (lastActivity!=null){
+                        lastActivity.startActivity(new Intent(App.getApplication(), LoginActivity.class));
+                    }
                 }
             }
             String serverUrl = doCommonURL(url);

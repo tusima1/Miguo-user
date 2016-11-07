@@ -1,13 +1,17 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.fanwe.o2o.miguo"
         minSdkVersion 19
         targetSdkVersion 23
+        useLibrary 'org.apache.http.legacy'
+        dataBinding {
+            enabled = true
+        }
 
         versionCode 2016110302
         versionName "6.0.32"

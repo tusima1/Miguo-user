@@ -171,7 +171,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                     }
                 });
             }
-        });
+        },true);
     }
 
     /**

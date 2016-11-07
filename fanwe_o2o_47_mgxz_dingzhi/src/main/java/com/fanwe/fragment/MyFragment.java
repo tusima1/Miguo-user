@@ -51,7 +51,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by didik on 2016/9/13.
  */
-public class MyFragment extends BaseFragment implements RedDotView
+public class
+MyFragment extends BaseFragment implements RedDotView
         .OnRedDotViewClickListener, View.OnClickListener, CallbackView2 {
 
     private RedDotView mRDV_orderNotPay;//待付款订单
