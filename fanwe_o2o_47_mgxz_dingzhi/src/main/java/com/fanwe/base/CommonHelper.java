@@ -106,7 +106,7 @@ public class CommonHelper extends OldCallbackHelper implements IHelper{
         }
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.JPUSH_ALIAS);
-        OkHttpUtils.getInstance().get(null, params, callback);
+        OkHttpUtils.getInstance().put(null, params, callback);
 
     }
 

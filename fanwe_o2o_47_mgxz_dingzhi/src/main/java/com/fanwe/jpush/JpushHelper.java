@@ -4,9 +4,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.app.App;
-import com.fanwe.app.AppHelper;
 import com.fanwe.base.CommonHelper;
-import com.fanwe.model.LocalUserModel;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.network.MgCallback;
 import com.fanwe.work.AppRuntimeWorker;
 
@@ -17,7 +16,6 @@ import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
 public class JpushHelper {
-	 public String alias ="";
 
 	public static void registerAll() {
 		initJPushConfig();
@@ -26,11 +24,7 @@ public class JpushHelper {
 
 	public static void initJPushConfig() {
 		Set<String> tagSet = getTag();
-		LocalUserModel userModel = AppHelper.getLocalUser();
-		if(userModel==null){
-			return ;
-		}
-		String alias =userModel.getUser_id()+"" ;
+		String alias =getAlias();
 		if (TextUtils.isEmpty(alias)||"null".equals(alias) || tagSet == null) {
 			Log.e("Jpush", "initJPushConfig: token为空");
 			return;
@@ -43,7 +37,18 @@ public class JpushHelper {
 
 					@Override
 					public void gotResult(int arg0, String arg1, Set<String> arg2) {
-						Log.e("Jpush", "initJPushConfig注册Jpush服务商结果: status:" + arg0 + " alias:" + arg1 + " tags:" + arg2);
+						/*Code	描述	详细解释
+						6001	无效的设置，tag/alias 不应参数都为 null
+						6002	设置超时	建议重试
+						6003	alias 字符串不合法	有效的别名、标签组成：字母（区分大小写）、数字、下划线、汉字、特殊字符(v2.1.6支持)@!#$&*+=.|￥
+						6004	alias超长。最多 40个字节	中文 UTF-8 是 3 个字节
+						6005	某一个 tag 字符串不合法	有效的别名、标签组成：字母（区分大小写）、数字、下划线、汉字、特殊字符(v2.1.6支持)@!#$&*+=.|￥
+						6006	某一个 tag 超长。一个 tag 最多 40个字节	中文 UTF-8 是 3 个字节
+						6007	tags 数量超出限制。最多 1000个	这是一台设备的限制。一个应用全局的标签数量无限制。
+						6008	tag 超出总长度限制	总长度最多 7K 字节
+						6009	未知错误	由于权限问题，导致的PushService启动异常。
+						6011	10s内设置tag或alias大于10次	短时间内操作过于频繁*/
+						Log.e("Jpush", "Jpush服务器,0是成功[method:initJPushConfig()]: status:" + arg0 + " alias:" + arg1 + " tags:" + arg2);
 					}
 				});
 	}
@@ -51,43 +56,40 @@ public class JpushHelper {
 	/**
 	 * 设置tag
 	 *
-	 * @param city_ID
-	 *            例如:"city_228";
+	 * @param originalCityId
+	 *            例如:"228";
 	 * @return false表示参数错误 true 表示已经发起网络请求了
 	 */
-	public static boolean setTag(String city_ID) {
-		if ("".equals(city_ID) || !city_ID.contains("_")) {
+	public static boolean setTag(String originalCityId) {
+		if (TextUtils.isEmpty(originalCityId)) {
 			return false;
 		}
 		Set<String> tagSet = new LinkedHashSet<String>();
-		tagSet.add(city_ID);
+		tagSet.add(doCityId(originalCityId));
 		JPushInterface.setTags(App.getApplication(), tagSet, new TagAliasCallback() {
 
 			@Override
 			public void gotResult(int arg0, String arg1, Set<String> arg2) {
-				// TODO
+				Log.e("Jpush", "Jpush服务器,0是成功[method:setTag()]: status:" + arg0 + " alias:" + arg1 + " tags:" + arg2);
 			}
 		});
 		return true;
+	}
+
+	private static String doCityId(String originalCity){
+		return "city_"+MD5Util.MD5(originalCity);
 	}
 	/**
 	 * 往服务器注册
 	 */
 	public static void initJpushRegister() {
-
-
-		LocalUserModel userModel = AppHelper.getLocalUser();
-		if(userModel==null){
-			return ;
-		}
-		String alias =userModel.getUser_id()+"" ;
-		if (TextUtils.isEmpty(alias)) {
+		String user_id =getAlias();
+		if (TextUtils.isEmpty(user_id)) {
 			Log.e("Jpush", "initJpushRegister: token为空");
 			return;
 		}
-
 		CommonHelper commonHelper = new CommonHelper(null,null);
-		commonHelper.doRegisterJPushAlias(alias, new MgCallback(){
+		commonHelper.doRegisterJPushAlias(user_id, new MgCallback(){
 
 			@Override
 			public void onSuccessResponse(String responseBody) {
@@ -96,19 +98,34 @@ public class JpushHelper {
 
 			@Override
 			public void onErrorResponse(String message, String errorCode) {
-				Log.e("Jpush", "Jpush 注册失败!");
+				Log.e("Jpush", "JpushMG 后台 注册失败!"+"\n"+message+errorCode);
 			}
 		});
 
 	}
 
-
 	private static Set<String> getTag() {
 		Set<String> tagSet = new LinkedHashSet<String>();
 		String city_id = AppRuntimeWorker.getCity_id();
-		tagSet.add(city_id);
-
+		tagSet.add(doCityId(city_id));
 		return tagSet;
+	}
+
+	private static String getAlias(){
+		String alias="";
+		String imei="";
+		try {
+			alias = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			imei = App.getInstance().getImei();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return MD5Util.MD5(alias + imei);
 	}
 
 
