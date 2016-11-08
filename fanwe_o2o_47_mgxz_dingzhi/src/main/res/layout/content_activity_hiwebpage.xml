@@ -2,6 +2,7 @@
 <WebView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/webView"
+    android:layout_below="@+id/title_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

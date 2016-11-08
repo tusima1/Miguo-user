@@ -30,5 +30,9 @@ public class ClassPath {
      * 商品详情
      */
     public static final String GOODS_DETAIL_ACTIVITY = "com.fanwe.seller.views.GoodsDetailActivity";
+    /**
+     * 活动页
+     */
+    public static final String WEB_PAGE_ACTIVITY = "com.miguo.app.HiWebPageActivity";
 
 }

@@ -26,6 +26,9 @@ public class AdspaceTypeFactory {
             case AdspaceParams.BANNER_TYPE_TOPIC_DETAIL:
                 goTopicDetail(context, type_id);
                 break;
+            case AdspaceParams.BANNER_TYPE_URL:
+                goWebAction(context, type_id);
+                break;
         }
     }
 
@@ -60,6 +63,19 @@ public class AdspaceTypeFactory {
         Intent intent = new Intent(context, ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
         Bundle bundle = new Bundle();
         bundle.putString(IntentKey.SPECIAL_TOPIC_ID, type_id);
+        intent.putExtras(bundle);
+        com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(context, intent);
+    }
+
+    /**
+     * 活动页详情
+     * @param context
+     * @param type_id
+     */
+    private static void goWebAction(Activity context, String type_id){
+        Intent intent = new Intent(context, ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
+        Bundle bundle = new Bundle();
+        bundle.putString(IntentKey.HOME_BANNER_WEB_PAGE, type_id);
         intent.putExtras(bundle);
         com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(context, intent);
     }

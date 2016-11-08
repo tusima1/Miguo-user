@@ -3,6 +3,7 @@ package com.miguo.category;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
@@ -10,6 +11,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiWebPageActivity;
+import com.miguo.framework.WebActionJSHandler;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/3.
@@ -22,13 +24,18 @@ public class HiWebPageCategory extends Category{
     @ViewInject(R.id.title)
     TextView title;
 
+    WebActionJSHandler handler;
+
+    @ViewInject(R.id.title_layout)
+    RelativeLayout titleLayout;
+
     public HiWebPageCategory(HiBaseActivity activity) {
         super(activity);
     }
 
     @Override
     protected void initFirst() {
-
+        handler = new WebActionJSHandler(getActivity());
     }
 
     @Override
@@ -53,7 +60,7 @@ public class HiWebPageCategory extends Category{
 
     @Override
     protected void initViews() {
-
+        setTitlePadding(titleLayout);
     }
 
     private void updateTitle(){
@@ -80,6 +87,7 @@ public class HiWebPageCategory extends Category{
             }
         });
         webView.loadUrl(getActivity().getUrl());
+        webView.addJavascriptInterface(handler, "mgxz");
     }
 
     @Override
