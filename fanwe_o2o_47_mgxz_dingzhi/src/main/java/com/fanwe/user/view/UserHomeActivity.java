@@ -158,7 +158,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         recyclerViewShop.setAdapter(adapterShop);
 
         //GridLayout 3列
-        adapterLive = new UserHomeLiveImgAdapter(mContext, getLayoutInflater(), datasLive);
+        adapterLive = new UserHomeLiveImgAdapter(this, getLayoutInflater(), datasLive);
         gridViewLive.setAdapter(adapterLive);
     }
 

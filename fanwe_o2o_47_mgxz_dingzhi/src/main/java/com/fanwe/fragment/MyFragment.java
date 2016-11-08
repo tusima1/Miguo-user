@@ -51,10 +51,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by didik on 2016/9/13.
  */
-public class
-MyFragment extends BaseFragment implements RedDotView
-        .OnRedDotViewClickListener, View.OnClickListener, CallbackView2 {
-
+public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewClickListener,
+        View.OnClickListener, CallbackView2 {
     private RedDotView mRDV_orderNotPay;//待付款订单
     private RedDotView mRDV_orderNotUse;//待使用
     private RedDotView mRDV_orderNotComment;//待评价
@@ -234,7 +232,9 @@ MyFragment extends BaseFragment implements RedDotView
      * 请求我的账户接口
      */
     public void requestMyAccount() {
-        httpHelper.getPersonalHome();
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            httpHelper.getPersonalHome();
+        }
     }
 
     @Override

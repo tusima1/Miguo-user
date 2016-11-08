@@ -3,6 +3,7 @@ package com.miguo.entity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
 import com.fanwe.utils.StringTool;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,7 +60,7 @@ public class HiShopDetailBean implements Serializable{
         private ShopTags shop_tags;
         private CrowdTags crowd_tags; //门店适合人群id
         private List<Tuan> tuan_list; //团购列表
-        private List<Live> live_list;
+        private List<ModelRoom> live_list;
         private String geo_x;
         private String geo_y;
         private String tel;
@@ -245,11 +246,11 @@ public class HiShopDetailBean implements Serializable{
             this.tuan_list = tuan_list;
         }
 
-        public List<Live> getLive_list() {
+        public List<ModelRoom> getLive_list() {
             return live_list;
         }
 
-        public void setLive_list(List<Live> live_list) {
+        public void setLive_list(List<ModelRoom> live_list) {
             this.live_list = live_list;
         }
 
@@ -580,204 +581,6 @@ public class HiShopDetailBean implements Serializable{
 
             public void setIs_expire_refund(String is_expire_refund) {
                 this.is_expire_refund = is_expire_refund;
-            }
-        }
-
-        public class Live implements Serializable{
-            private String create_time;
-
-            private String live_type;
-
-            private String title;
-
-            private String file_size;
-
-            private String cover;
-
-            private String duration;
-
-            private String vid;
-
-            private String start_time;
-
-            private String file_id;
-
-            private String chat_room_id;
-
-            private Host host;
-
-            private String playset;
-
-            private String id;
-
-            private String av_room_id;
-
-            private String address;
-
-            public String getAddress() {
-                return address;
-            }
-
-            public void setAddress(String address) {
-                this.address = address;
-            }
-
-            public boolean isLive(){
-                return getLive_type().equals("1");
-            }
-
-            public String getCreate_time() {
-                return create_time;
-            }
-
-            public void setCreate_time(String create_time) {
-                this.create_time = create_time;
-            }
-
-            public String getLive_type() {
-                return live_type;
-            }
-
-            public void setLive_type(String live_type) {
-                this.live_type = live_type;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getFile_size() {
-                return file_size;
-            }
-
-            public void setFile_size(String file_size) {
-                this.file_size = file_size;
-            }
-
-            public String getCover() {
-                return cover;
-            }
-
-            public void setCover(String cover) {
-                this.cover = cover;
-            }
-
-            public String getDuration() {
-                return duration;
-            }
-
-            public void setDuration(String duration) {
-                this.duration = duration;
-            }
-
-            public String getVid() {
-                return vid;
-            }
-
-            public void setVid(String vid) {
-                this.vid = vid;
-            }
-
-            public String getStart_time() {
-                return start_time;
-            }
-
-            public void setStart_time(String start_time) {
-                this.start_time = start_time;
-            }
-
-            public String getFile_id() {
-                return file_id;
-            }
-
-            public void setFile_id(String file_id) {
-                this.file_id = file_id;
-            }
-
-            public String getChat_room_id() {
-                return chat_room_id;
-            }
-
-            public void setChat_room_id(String chat_room_id) {
-                this.chat_room_id = chat_room_id;
-            }
-
-            public Host getHost() {
-                return host;
-            }
-
-            public void setHost(Host host) {
-                this.host = host;
-            }
-
-            public String getPlayset() {
-                return playset;
-            }
-
-            public void setPlayset(String playset) {
-                this.playset = playset;
-            }
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getAv_room_id() {
-                return av_room_id;
-            }
-
-            public void setAv_room_id(String av_room_id) {
-                this.av_room_id = av_room_id;
-            }
-        }
-
-        public class Host implements Serializable{
-            private String uid;
-
-            private String host_user_id;
-
-            private String nickname;
-
-            private String avatar;
-
-            public String getUid() {
-                return uid;
-            }
-
-            public void setUid(String uid) {
-                this.uid = uid;
-            }
-
-            public String getHost_user_id() {
-                return host_user_id;
-            }
-
-            public void setHost_user_id(String host_user_id) {
-                this.host_user_id = host_user_id;
-            }
-
-            public String getNickname() {
-                return nickname;
-            }
-
-            public void setNickname(String nickname) {
-                this.nickname = nickname;
-            }
-
-            public String getAvatar() {
-                return avatar;
-            }
-
-            public void setAvatar(String avatar) {
-                this.avatar = avatar;
             }
         }
 

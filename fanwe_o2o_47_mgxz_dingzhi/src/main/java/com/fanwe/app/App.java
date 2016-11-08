@@ -33,7 +33,6 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -310,10 +309,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     public String getToken() {
         String token = "";
         if (this.mUserCurrentInfo != null) {
-            UserInfoNew infoNew = mUserCurrentInfo.getUserInfoNew();
-            if (infoNew != null) {
-                token = mUserCurrentInfo.getToken();
-            }
+            token = mUserCurrentInfo.getToken();
         }
         return token;
     }

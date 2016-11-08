@@ -54,6 +54,7 @@ import com.miguo.live.definition.TabId;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.getLiveListNew.ModelHost;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.utils.BaseUtils;
@@ -166,6 +167,16 @@ public class HiHomeCategory extends Category implements
         initJpush();
         initUserInfo();
         locationCity();
+        initDict();
+    }
+
+    private void initDict() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new LiveHttpHelper(null, null).getBussDictionInfo("Client");
+            }
+        }).start();
     }
 
     @Override
@@ -287,7 +298,7 @@ public class HiHomeCategory extends Category implements
             }
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
-            if (TextUtils.isEmpty(userid) || !TextUtils.isEmpty(password)) {
+            if (TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)) {
                 return;
             }
 
@@ -334,8 +345,11 @@ public class HiHomeCategory extends Category implements
                 });
                 dialog.show();
             } else {
+
 //                liveHttpHelper.getUseReceiveCode(code);
-                getUseReceiveCode.getUserReceiveCode(code);
+                if (!TextUtils.isEmpty(App.getApplication().getToken())) {
+                    getUseReceiveCode.getUserReceiveCode(code);
+                }
             }
         }
     }
@@ -419,25 +433,30 @@ public class HiHomeCategory extends Category implements
         }
     }
 
+    SDDialogConfirm dialog;
+
     private void showChangeLocationDialog(final String location) {
-        new SDDialogConfirm(getActivity())
-                .setTextContent(
-                        "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
-                .setmListener(new SDDialogCustom.SDDialogCustomListener() {
-                    @Override
-                    public void onDismiss(SDDialogCustom dialog) {
+        if (dialog != null && dialog.isShowing()) {
+            return;
+        }
+        dialog = new SDDialogConfirm(getActivity());
+        dialog.setTextContent(
+                "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ");
+        dialog.setmListener(new SDDialogCustom.SDDialogCustomListener() {
+            @Override
+            public void onDismiss(SDDialogCustom dialog) {
 
-                    }
+            }
 
-                    @Override
-                    public void onClickConfirm(View v, SDDialogCustom dialog) {
-                        AppRuntimeWorker.setCity_name(location);
-                    }
+            @Override
+            public void onClickConfirm(View v, SDDialogCustom dialog) {
+                AppRuntimeWorker.setCity_name(location);
+            }
 
-                    @Override
-                    public void onClickCancel(View v, SDDialogCustom dialog) {
-                    }
-                }).show();
+            @Override
+            public void onClickCancel(View v, SDDialogCustom dialog) {
+            }
+        }).show();
     }
 
     /**
@@ -467,7 +486,7 @@ public class HiHomeCategory extends Category implements
      */
     @Override
     public void loginSuccess(UserInfoNew user, String mobile, String password) {
-        Log.d(tag, "login success.. ");
+        Log.e(tag, "login success.. ");
         /**
          * 检查是否有兑换码
          */

@@ -30,6 +30,7 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDActivityUtil;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
@@ -188,6 +189,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
      */
     private void getServiceNum() {
         List<DictModel> dict = MGDict.getDict();
+        if (SDCollectionUtil.isEmpty(dict)) {
+            return;
+        }
         for (DictModel data : dict) {
             String dic_value = data.getDic_value();
             if ("support_phone".equals(dic_value)) {
@@ -206,10 +210,10 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void bindData() {
-        String remark="";
-        String sex="性别";
-        if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null){
-            remark =  App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark();
+        String remark = "";
+        String sex = "性别";
+        if (App.getInstance().getmUserCurrentInfo() != null && App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
+            remark = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark();
             sex = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex();
         }
         SDViewBinder.setTextView(tvSign, remark, "个人简介");

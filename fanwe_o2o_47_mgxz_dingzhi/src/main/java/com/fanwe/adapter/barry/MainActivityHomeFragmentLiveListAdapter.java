@@ -269,7 +269,6 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
             if (TextUtils.isEmpty(App.getInstance().getToken())) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 BaseUtils.jumpToNewActivity(getActivity(), intent);
-//                startActivity(intent);
                 return;
             }
             //判断网络环境
