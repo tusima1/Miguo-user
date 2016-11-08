@@ -12,13 +12,14 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
-import com.miguo.live.views.customviews.MGToast;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.live.model.GiftDanmuBean;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
+import com.miguo.live.views.customviews.MGToast;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;
@@ -55,6 +56,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -317,19 +319,19 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             @Override
             public void onSuccessResponse(String responseBody) {
                 GiftDanmuBean bean = new Gson().fromJson(responseBody, GiftDanmuBean.class);
-                String userdiamond="";
+                String userdiamond = "";
                 if (bean.getStatusCode() == 200) {
                     GiftDanmuBean.ResultBean resultBean = bean.getResult().get(0);
-                    if (resultBean!=null){
+                    if (resultBean != null) {
                         List<GiftDanmuBean.ResultBean.BodyBean> body = resultBean.getBody();
-                        if (body!=null && body.size()>0){
+                        if (body != null && body.size() > 0) {
                             GiftDanmuBean.ResultBean.BodyBean bodyBean = body.get(0);
                             userdiamond = bodyBean.getUserdiamond();
                         }
                     }
-                    if (!TextUtils.isEmpty(userdiamond)){
+                    if (!TextUtils.isEmpty(userdiamond)) {
                         sendIMDanmuMessage(message, userName, userId, avatarUrl, userdiamond);
-                    }else {
+                    } else {
                         if (mLiveView != null) {
                             mLiveView.withoutEnoughMoney(bean.getMessage());
                         }
@@ -356,7 +358,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         sendGiftMessage(bean);
     }
 
-    private void sendGiftMessage(GiftListBean bean){
+    private void sendGiftMessage(GiftListBean bean) {
         TIMMessage Nmsg = new TIMMessage();
         TIMTextElem elem = new TIMTextElem();
         elem.setText("送了主播" + bean.getName());
@@ -467,7 +469,6 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         });
 
     }
-
 
 
     public void sendGroupMessage(int cmd, String param, TIMValueCallBack<TIMMessage> callback) {
@@ -728,7 +729,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                     Toast.makeText(mContext, identifier + " refuse !", Toast.LENGTH_SHORT).show();
                     break;
                 case Constants.AVIMCMD_Praise:
-                    if(mLiveView!=null) {
+                    if (mLiveView != null) {
                         mLiveView.refreshThumbUp();
                     }
                     break;
@@ -1016,12 +1017,16 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
                 @Override
                 public void onSuccess(TIMAvManager.StreamRes streamRes) {
+                    //这里的streamRes.getChnlId()直接打印的时候会是一个负数，所以如果需要打印查看的时候需要转换一下。结束推流的时候直接使用即可，不需要转换的。
+                    Long num = streamRes.getChnlId();
+                    BigInteger unsignedNum = BigInteger.valueOf(num);
+                    if (num < 0) unsignedNum = unsignedNum.add(BigInteger.ZERO.flipBit(64));
+                    Log.d(TAG, "create channel succ. channelid: " + unsignedNum
+                            + ", addr size " + streamRes.getUrls().size());
+
                     List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
                     streamChannelID = streamRes.getChnlId();
                     mLiveView.pushStreamSucc(streamRes);
-
-//                ClipToBoard(url, url2);
-
                 }
             });
         }
@@ -1035,21 +1040,16 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             @Override
             public void onError(int i, String s) {
                 SxbLog.e(TAG, "url stop error " + i + " : " + s);
-                Toast.makeText(mContext, "stop stream error,try again " + i + " : " + s, Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
             public void onSuccess() {
-                mLiveView.stopStreamSucc();
-
             }
         });
     }
 
 
     public void startRecord(TIMAvManager.RecordParam mRecordParam) {
-
         TIMAvManager.RoomInfo roomInfo = TIMAvManager.getInstance().new RoomInfo();
         roomInfo.setRelationId(CurLiveInfo.getRoomNum());
         roomInfo.setRoomId(CurLiveInfo.getRoomNum());
@@ -1066,9 +1066,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 mLiveView.startRecordCallback(true);
             }
         });
-
     }
-
 
     public void stopRecord() {
         TIMAvManager.RoomInfo roomInfo = TIMAvManager.getInstance().new RoomInfo();
@@ -1078,14 +1076,13 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             @Override
             public void onError(int i, String s) {
                 Log.e(TAG, "stop record error " + i + " : " + s);
-                mLiveView.stopRecordCallback(false, null);
             }
 
             @Override
             public void onSuccess(List<String> files) {
-                mLiveView.stopRecordCallback(true, files);
-
-
+                if (!SDCollectionUtil.isEmpty(files)) {
+                    Log.e(TAG, "files:" + files.toString());
+                }
             }
         });
         Log.d(TAG, "success");

@@ -20,7 +20,6 @@ import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
@@ -28,6 +27,7 @@ import com.fanwe.utils.ChineseCharClassifier;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.adapter.LiveSortTypeAdapter;
 import com.miguo.live.views.customviews.SpaceItemDecoration;
@@ -48,13 +48,13 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
 /**
  * Created by Administrator on 2016/10/20.
  */
-public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener,CallbackView2, SDEventObserver,CallbackView {
+public class FunnyFragment extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener, CallbackView2, SDEventObserver, CallbackView {
 
 
     PtrFrameLayout ptrFrameLayout;
 
     RecyclerScrollView recyclerScrollView;
-   //直播分类
+    //直播分类
     private RecyclerView mSpvAd;
     /**
      * 大字体。
@@ -69,7 +69,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private LiveSortTypeAdapter mAdapter;
 
 
-
     private SDFragmentManager mFragmentManager;
     /**
      * 直播列表。
@@ -81,7 +80,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     /**
      * 直播点播 数据列表。
      */
-    private List<Room> rooms;
+    private List<ModelRoom> rooms;
 
     private boolean isRefresh = true;
     private int pageNum = 1;
@@ -91,20 +90,21 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private CommonHttpHelper commonHttpHelper;
 
     private SharedPreferences settings;
-    private String interestingStr="";
-    String cityId="";
-    String currentData="";
+    private String interestingStr = "";
+    String cityId = "";
+    String currentData = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         SDEventManager.register(this);
-        cityId=AppRuntimeWorker.getCity_id();
-        currentData = DateFormat.format("yyyy-MM-dd",new Date(System.currentTimeMillis())).toString();
+        cityId = AppRuntimeWorker.getCity_id();
+        currentData = DateFormat.format("yyyy-MM-dd", new Date(System.currentTimeMillis())).toString();
         settings = getActivity().getSharedPreferences("miguo", Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
     }
 
     private View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (null != rootView) {
@@ -118,7 +118,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         }
         return rootView;
     }
-
 
 
     @Override
@@ -135,29 +134,29 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             commonHttpHelper = new CommonHttpHelper(getActivity(), this);
         }
         commonHttpHelper.getHomeClassifyList();
-        if(!TextUtils.isEmpty(interestingStr)){
+        if (!TextUtils.isEmpty(interestingStr)) {
             String[] list = interestingStr.split("-");
-            if(list.length<3){
-                settings.edit().putString("Interesting","").commit();
+            if (list.length < 3) {
+                settings.edit().putString("Interesting", "").commit();
                 commonHttpHelper.getInterestingString(cityId);
-            }else{
-                if(cityId.equals(list[0])&&currentData.equals(list[1])){
+            } else {
+                if (cityId.equals(list[0]) && currentData.equals(list[1])) {
                     setInterestingStr(list[2]);
-                }else{
-                    settings.edit().putString("Interesting","").commit();
+                } else {
+                    settings.edit().putString("Interesting", "").commit();
                     commonHttpHelper.getInterestingString(cityId);
                 }
             }
-        }else{
+        } else {
             commonHttpHelper.getInterestingString(cityId);
         }
     }
 
     private void initView() {
-        interestingStr = settings.getString("Interesting","");
+        interestingStr = settings.getString("Interesting", "");
         mFragmentManager = new SDFragmentManager(getChildFragmentManager());
 
-        liveHelper = new LiveHttpHelper(getActivity(),  this, "");
+        liveHelper = new LiveHttpHelper(getActivity(), this, "");
         initPtrLayout();
         init();
         if (mHomeFragmentLiveList == null) {
@@ -223,20 +222,22 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         mSpvAd.setAdapter(mAdapter);
     }
 
-    public void parseInteresting(List<HashMap<String,String>> datas){
-        if(datas==null||datas.size()<1){
+    public void parseInteresting(List<HashMap<String, String>> datas) {
+        if (datas == null || datas.size() < 1) {
             return;
-        }else{
+        } else {
             String value = datas.get(0).get("value");
-            if(!TextUtils.isEmpty(value)){
+            if (!TextUtils.isEmpty(value)) {
                 setInterestingStr(value);
-                settings.edit().putString("Interesting",cityId+"-"+currentData+"-"+value).commit();
+                settings.edit().putString("Interesting", cityId + "-" + currentData + "-" + value).commit();
 
             }
         }
     }
+
     /**
      * 显示有趣页欢迎的话。
+     *
      * @param interestingStr
      */
     public void setInterestingStr(String interestingStr) {
@@ -265,8 +266,10 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             summaryText.setText(summaryStr);
         }
     }
+
     /**
      * 获取分类数据。
+     *
      * @param datas
      */
 
@@ -284,15 +287,17 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     private void requestLiveList() {
         if (liveHelper != null) {
-        liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
+//            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
+            liveHelper.getLiveListNew(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
         }
     }
+
     /**
      * 直播列表
      *
      * @param datas
      */
-    public void getLiveList(ArrayList<Room> datas) {
+    public void getLiveList(ArrayList<ModelRoom> datas) {
 
         if (SDCollectionUtil.isEmpty(datas)) {
             rooms = null;
@@ -311,6 +316,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
     }
+
     @Override
     public void onEvent(SDBaseEvent sdBaseEvent) {
 
@@ -368,10 +374,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         isRefresh = false;
         requestLiveList();
     }
-    public void loadComplete(){
+
+    public void loadComplete() {
         ptrFrameLayout.refreshComplete();
         recyclerScrollView.loadComplite();
     }
+
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
 //        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
@@ -384,13 +392,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     @Override
     public void onSuccess(String method, final List datas) {
-        if (LiveConstants.LIVE_LIST.equals(method)) {
+        if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             //直播列表
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    getLiveList((ArrayList<Room>) datas);
+                    getLiveList((ArrayList<ModelRoom>) datas);
                 }
             });
         } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
@@ -400,7 +407,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                     setHomeClassifyList(datas);
                 }
             });
-        }else if(CommonConstants.INTERESTING.equals(method)){
+        } else if (CommonConstants.INTERESTING.equals(method)) {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -409,6 +416,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             });
         }
     }
+
     @Override
     public void onFailue(String responseBody) {
 
@@ -416,7 +424,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     @Override
     public void onFinish(String method) {
-
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadComplete();
+            }
+        });
     }
 
     @Override

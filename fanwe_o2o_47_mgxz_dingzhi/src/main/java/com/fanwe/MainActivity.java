@@ -19,8 +19,6 @@ import com.fanwe.fragment.FunnytFragment;
 import com.fanwe.fragment.HomeFragment;
 import com.fanwe.fragment.MarketFragment;
 import com.fanwe.fragment.MyFragment;
-import com.fanwe.home.model.Host;
-import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.customview.SDTabItemBottom;
 import com.fanwe.library.customview.SDViewBase;
@@ -43,6 +41,9 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getLiveListNew.ModelHost;
+import com.miguo.live.model.getLiveListNew.ModelRecordFile;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.LiveStartActivity;
@@ -59,6 +60,7 @@ import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -669,19 +671,25 @@ public class MainActivity extends BaseActivity implements CallbackView {
     @Override
     public void onSuccess(String method, List datas) {
         if (LiveConstants.USE_RECEIVE_CODE.equals(method)) {
-            List<Room> items = datas;
+            List<ModelRoom> items = datas;
             if (!SDCollectionUtil.isEmpty(items)) {
                 if (clipboardManager != null)
                     clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "mgxz"));
-                Room room = items.get(0);
+                ModelRoom room = items.get(0);
+
                 //分点播和直播 直播类型  1 表示直播，2表示点播
                 String live_type = room.getLive_type();
                 if ("1".equals(live_type)) {
-                    //直播
-                    gotoLiveActivity(room);
+                    if ("1".equals(room.getPlayback_status())) {
+                        //直播回放
+                        gotoPlayBackActivity(room, true);
+                    } else {
+                        //直播
+                        gotoLiveActivity(room);
+                    }
                 } else if ("2".equals(live_type)) {
                     //点播
-                    gotoPlayBackActivity(room);
+                    gotoPlayBackActivity(room, false);
                 } else {
                     if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
                         if (room.getHost() != null) {
@@ -749,7 +757,7 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
     }
 
-    private void gotoLiveActivity(Room room) {
+    private void gotoLiveActivity(ModelRoom room) {
         Intent intent = new Intent(mContext, LiveActivity.class);
         intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
         MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
@@ -761,30 +769,30 @@ public class MainActivity extends BaseActivity implements CallbackView {
      * 进入点播页面
      *
      * @param room
+     * @param isLivePlayBack
      */
-    private void gotoPlayBackActivity(Room room) {
+    private void gotoPlayBackActivity(ModelRoom room, boolean isLivePlayBack) {
+        //点播；直播回放
         addCommonData(room);
-        String chat_room_id = room.getChat_room_id();//im的id
-        String file_size = room.getFile_size();//文件大小
-        String duration = room.getDuration();//时长
-        String file_id = room.getFile_id();
-        String vid = room.getVid();
-        String playset = room.getPlayset();
+        //im的id
+        String room_id = room.getChat_room_id();
+        if (isLivePlayBack) {
+            room_id = room.getPlayback_room_id();
+            CurLiveInfo.setRoomNum(DataFormat.toInt(room_id));
+        }
+        List<ModelRecordFile> fileSet = room.getFileset();
 
-        Intent intent = new Intent(mContext, PlayBackActivity.class);
+        Intent intent = new Intent(MainActivity.this, PlayBackActivity.class);
         Bundle data = new Bundle();
-        data.putString("chat_room_id", chat_room_id);
-        data.putString("file_size", file_size);
-        data.putString("duration", duration);
-        data.putString("file_id", file_id);
-        data.putString("vid", vid);
-        data.putString("playset", playset);
+        data.putString("room_id", room_id);
+        data.putSerializable("fileSet", (Serializable) fileSet);
         intent.putExtras(data);
         BaseUtils.jumpToNewActivity(MainActivity.this, intent);
     }
 
-    private void addCommonData(Room room) {
-        Host host = room.getHost();
+
+    private void addCommonData(ModelRoom room) {
+        ModelHost host = room.getHost();
         String nickName = App.getInstance().getUserNickName();
         String avatar = "";
         if (App.getInstance().getmUserCurrentInfo() != null) {

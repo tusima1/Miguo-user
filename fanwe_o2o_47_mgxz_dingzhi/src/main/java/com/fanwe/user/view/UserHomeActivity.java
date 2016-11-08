@@ -2,7 +2,6 @@ package com.fanwe.user.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,35 +19,23 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.home.model.Host;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.adapters.ImageAdapter;
 import com.fanwe.user.adapters.UserHomeLiveImgAdapter;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
 import com.fanwe.user.model.getProductList.ModelProductList;
 import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
-import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
-import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.live.views.view.PlayBackActivity;
-import com.miguo.utils.NetWorkStateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDEventManager;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,81 +208,6 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                 }
             }
         });
-    }
-
-
-    private void gotoLiveActivity(Room room) {
-        Intent intent = new Intent(mContext, LiveActivity.class);
-        intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
-        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-        addCommonData(room);
-        BaseUtils.jumpToNewActivity(UserHomeActivity.this, intent);
-//            startActivity(intent);
-    }
-
-    /**
-     * 进入点播页面
-     *
-     * @param room
-     */
-    private void gotoPlayBackActivity(Room room) {
-        addCommonData(room);
-        String chat_room_id = room.getChat_room_id();//im的id
-        String file_size = room.getFile_size();//文件大小
-        String duration = room.getDuration();//时长
-        String file_id = room.getFile_id();
-        String vid = room.getVid();
-        String playset = room.getPlayset();
-
-        Intent intent = new Intent(mContext, PlayBackActivity.class);
-        Bundle data = new Bundle();
-        data.putString("chat_room_id", chat_room_id);
-        data.putString("file_size", file_size);
-        data.putString("duration", duration);
-        data.putString("file_id", file_id);
-        data.putString("vid", vid);
-        data.putString("playset", playset);
-        intent.putExtras(data);
-//            startActivity(intent);
-        BaseUtils.jumpToNewActivity(UserHomeActivity.this, intent);
-    }
-
-    private void addCommonData(Room room) {
-        Host host = room.getHost();
-        String nickName = App.getInstance().getUserNickName();
-        String avatar = "";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo.getUserInfoNew() != null) {
-                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-            }
-        }
-        MySelfInfo.getInstance().setAvatar(avatar);
-        MySelfInfo.getInstance().setNickName(nickName);
-        MySelfInfo.getInstance().setJoinRoomWay(false);
-        CurLiveInfo.setHostID(host.getHost_user_id());
-        CurLiveInfo.setHostName(host.getNickname());
-
-        CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-        App.getInstance().addLiveRoomIdList(room.getId());
-        CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
-        if (room.getLbs() != null) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-            ModelStoreList modelStoreList = new ModelStoreList();
-            modelStoreList.setShop_name(room.getLbs().getShop_name());
-            modelStoreList.setId(room.getLbs().getShop_id());
-            CurLiveInfo.setModelShop(modelStoreList);
-        }
-        CurLiveInfo.setLive_type(room.getLive_type());
-
-        CurLiveInfo.setHostUserID(room.getHost().getUid());
-//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-        CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
-        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-        }
-        CurLiveInfo.setAdmires(1);
     }
 
     private void preWidget() {

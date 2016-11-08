@@ -102,6 +102,7 @@ import com.tencent.qcloud.suixinbo.utils.SxbLog;
 import com.tencent.qcloud.suixinbo.views.customviews.BaseActivity;
 import com.tencent.qcloud.suixinbo.views.customviews.HeartLayout;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -203,6 +204,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private PagerBaoBaoAdapter mBaoBaoAdapter;
 
     boolean isAnchor = false;
+    boolean isRecording = false;
 
 
     /**
@@ -244,12 +246,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
                 break;
             case FOCUS_CHANGE_YES:
-                if (mUserHeadTopView!=null){
+                if (mUserHeadTopView != null) {
                     mUserHeadTopView.setFocusStatus(true);
                 }
                 break;
             case FOCUS_CHANGE_NO:
-                if (mUserHeadTopView!=null){
+                if (mUserHeadTopView != null) {
                     mUserHeadTopView.setFocusStatus(false);
                 }
                 break;
@@ -797,6 +799,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         mRecordHelper.setOnLiveRecordListener(new LiveRecordListener() {
             @Override
             public void startRecord() {
+                isRecording = true;
                 mOrientationHelper.startOrientationListener();
             }
 
@@ -805,7 +808,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mOrientationHelper.stopOrientationListener();
             }
         });
-
+        mRecordHelper.show();
 
 //            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
 //            mBeautySettings = (LinearLayout) findViewById(R.id.qav_beauty_setting);
@@ -1060,6 +1063,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             QavsdkControl.getInstance().clearVideoMembers();
             QavsdkControl.getInstance().onDestroy();
             MySelfInfo.getInstance().setMyRoomNum(-1);
+
         } catch (Exception e) {
 
         }
@@ -1102,7 +1106,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             @Override
             public void clickSure() {
                 //如果是直播，发消息
-                if (null != mLiveHelper) {
+                if (mLiveHelper != null) {
+                    if (isRecording) {
+                        mLiveHelper.stopRecord();
+                    }
                     //向后台发送主播退出
                     mLiveHelper.perpareQuitRoom(true);
                     App.getInstance().setAvStart(false);
@@ -1165,10 +1172,23 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
                 MGLog.e("观众:enterRoomComplete");
             }
+            //旁路直播
+            startPush();
         }
         //TODO 完全进入房间了开始加载数据(Fake)
         mPeopleTimer=new Timer();
         mPeopleTimer.schedule(mPeopleTimerTask,1000,2500);
+    }
+
+    /**
+     * 旁路直播
+     */
+    private void startPush() {
+        TIMAvManager.StreamParam mStreamParam = TIMAvManager.getInstance().new StreamParam();
+        mStreamParam.setChannelName("ChanelName");
+        //适应H5观看直播，指定HLS格式
+        mStreamParam.setEncode(TIMAvManager.StreamEncode.HLS);
+        mLiveHelper.pushAction(mStreamParam);
     }
 
 
@@ -1919,18 +1939,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     //旁路直播
     private static boolean isPushed = false;
 
-    /**
-     * 旁路直播 退出房间时必须退出推流。否则会占用后台channel。
-     */
-    public void pushStream() {
-        if (!isPushed) {
-            if (mPushDialog != null)
-                mPushDialog.show();
-        } else {
-            mLiveHelper.stopPushAction();
-        }
-    }
-
     private Dialog mPushDialog;
 
     private void initPushDialog() {
@@ -1987,8 +1995,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      */
     @Override
     public void pushStreamSucc(TIMAvManager.StreamRes streamRes) {
-        List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
         isPushed = true;
+        List<TIMAvManager.LiveUrl> liveUrls = streamRes.getUrls();
         int length = liveUrls.size();
         String url = null;
         String url2 = null;
@@ -2001,7 +2009,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             TIMAvManager.LiveUrl avUrl2 = liveUrls.get(1);
             url2 = avUrl2.getUrl();
         }
-        ClipToBoard(url, url2);
+        //这里的streamRes.getChnlId()直接打印的时候会是一个负数，所以如果需要打印查看的时候需要转换一下。结束推流的时候直接使用即可，不需要转换的。
+        Long num = streamRes.getChnlId();
+        BigInteger unsignedNum = BigInteger.valueOf(num);
+        if (num < 0) unsignedNum = unsignedNum.add(BigInteger.ZERO.flipBit(64));
+
+        mLiveHttphelper.getByPassLive(url, String.valueOf(unsignedNum), String.valueOf(CurLiveInfo.getRoomNum()));
     }
 
     /**

@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
-import com.fanwe.home.model.Host;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -25,6 +23,9 @@ import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.model.getLiveListNew.ModelHost;
+import com.miguo.live.model.getLiveListNew.ModelRecordFile;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
@@ -34,14 +35,16 @@ import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by zlh on 2016/9/23.
  */
-public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAdapter{
+public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAdapter {
 
     public static final String LIVE = "1";
+    public static final String LIVE_PLAY_BACK = "1";
     public static final String PLAY_BACK = "2";
 
     public MainActivityHomeFragmentLiveListAdapter(Activity activity, List datas) {
@@ -80,7 +83,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         setImageBgParams(holder, position);
     }
 
-    private void setImageBgParams(RecyclerView.ViewHolder holder, int position){
+    private void setImageBgParams(RecyclerView.ViewHolder holder, int position) {
         int width = getImageHeight();
         int height = width;
         RelativeLayout.LayoutParams params = getRelativeLayoutParams(width, height);
@@ -88,15 +91,15 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         getHolder(holder).image.setLayoutParams(params);
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return getItemCount() * (getImageHeight() + getMarginTop());
     }
 
-    private int getMarginTop(){
+    private int getMarginTop() {
         return dip2px(10);
     }
 
-    private int getImageHeight(){
+    private int getImageHeight() {
         return getScreenWidth() - dip2px(8 * 2);
     }
 
@@ -109,8 +112,8 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
 
     }
 
-    private void setTags(RecyclerView.ViewHolder holder, int position){
-        Host host = getItem(position).getHost();
+    private void setTags(RecyclerView.ViewHolder holder, int position) {
+        ModelHost host = getItem(position).getHost();
         int maxLength = 15;
         if (host != null) {
             List<String> tags = host.getTags();
@@ -155,39 +158,51 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
 
     /**
      * 直播类型
+     *
      * @param position
      * @return
      */
-    private String getLiveType(int position){
-        try{
-            return getItem(position).getLive_type().equals(LIVE) ? "正在直播" : "精彩视频";
-        }catch (NullPointerException e){
-            return "正在直播";
+    private String getLiveType(int position) {
+        ModelRoom room = getItem(position);
+        try {
+            if (LIVE.equals(room.getLive_type())) {
+                if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
+                    return "精彩视频";
+                } else {
+                    return "正在直播";
+                }
+            } else {
+                return "精彩视频";
+            }
+        } catch (NullPointerException e) {
+            return "精彩视频";
         }
     }
 
     /**
      * 直播类型
+     *
      * @param position
      * @return
      */
-    private int  getLiveTypeColor(int position){
-        try{
+    private int getLiveTypeColor(int position) {
+        try {
             return getItem(position).getLive_type().equals(LIVE) ? R.drawable.bg_orange : R.drawable.bg_grey_big;
-        }catch (NullPointerException e){
-            return  R.drawable.bg_orange ;
+        } catch (NullPointerException e) {
+            return R.drawable.bg_orange;
         }
     }
 
     /**
      * 地址
+     *
      * @param position
      * @return
      */
-    private String getAddress(int position){
-        try{
+    private String getAddress(int position) {
+        try {
             return null == getItem(position).getLbs().getAddress() ? "" : getItem(position).getLbs().getAddress();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return "";
         }
     }
@@ -209,16 +224,16 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         }
     }
     @Override
-    public Room getItem(int position) {
-        return (Room)super.getItem(position);
+    public ModelRoom getItem(int position) {
+        return (ModelRoom) super.getItem(position);
     }
 
     @Override
     public ViewHolder getHolder(RecyclerView.ViewHolder holder) {
-        return (ViewHolder)super.getHolder(holder);
+        return (ViewHolder) super.getHolder(holder);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @ViewInject(R.id.iv_bg_item_live)
         ImageView image;
@@ -230,28 +245,27 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         LinearLayout layoutTags;
 
 
-
         public ViewHolder(View itemView) {
             super(itemView);
         }
     }
 
-    public class MainActivityHomeFragmentLiveListAdapterListener extends BarryListener{
+    public class MainActivityHomeFragmentLiveListAdapterListener extends BarryListener {
 
-        public MainActivityHomeFragmentLiveListAdapterListener(BarryBaseRecyclerAdapter adapter,RecyclerView.ViewHolder holder, int position) {
-            super(adapter,holder, position);
+        public MainActivityHomeFragmentLiveListAdapterListener(BarryBaseRecyclerAdapter adapter, RecyclerView.ViewHolder holder, int position) {
+            super(adapter, holder, position);
         }
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.iv_bg_item_live:
                     clickItem();
                     break;
             }
         }
 
-        private void clickItem(){
+        private void clickItem() {
             if (TextUtils.isEmpty(App.getInstance().getToken())) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 BaseUtils.jumpToNewActivity(getActivity(), intent);
@@ -264,59 +278,62 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
                 MGToast.showToast("没有网络,请检测网络环境!");
                 return;
             }
-            Room room = getAdapter().getItem(position);
+            ModelRoom room = getAdapter().getItem(position);
             //分点播和直播 直播类型  1 表示直播，2表示点播
             String live_type = room.getLive_type();
-            if ("1".equals(live_type)){
-                //直播
-                gotoLiveActivity(room);
-            }else if ("2".equals(live_type)){
+            if (LIVE.equals(live_type)) {
+                if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
+                    //直播回放
+                    gotoPlayBackActivity(room, true);
+                } else {
+                    //直播
+                    gotoLiveActivity(room);
+                }
+            } else if (PLAY_BACK.equals(live_type)) {
                 //点播
-                gotoPlayBackActivity(room);
-            }else {
+                gotoPlayBackActivity(room, false);
+            } else {
                 //异常数据
                 MGToast.showToast("异常数据");
                 return;
             }
         }
 
-        private void gotoLiveActivity(Room room){
+        private void gotoLiveActivity(ModelRoom room) {
             Intent intent = new Intent(getActivity(), LiveActivity.class);
             intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
             MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
             addCommonData(room);
             BaseUtils.jumpToNewActivity(getActivity(), intent);
-//            startActivity(intent);
         }
 
         /**
          * 进入点播页面
+         *
          * @param room
+         * @param isLivePlayBack
          */
-        private void gotoPlayBackActivity(Room room){
+        private void gotoPlayBackActivity(ModelRoom room, boolean isLivePlayBack) {
+            //点播；直播回放
             addCommonData(room);
-            String chat_room_id = room.getChat_room_id();//im的id
-            String file_size = room.getFile_size();//文件大小
-            String duration = room.getDuration();//时长
-            String file_id = room.getFile_id();
-            String vid = room.getVid();
-            String playset = room.getPlayset();
+            //im的id
+            String room_id = room.getChat_room_id();
+            if (isLivePlayBack) {
+                room_id = room.getPlayback_room_id();
+                CurLiveInfo.setRoomNum(DataFormat.toInt(room_id));
+            }
+            List<ModelRecordFile> fileSet = room.getFileset();
 
-            Intent intent=new Intent(getActivity(), PlayBackActivity.class);
-            Bundle data=new Bundle();
-            data.putString("chat_room_id",chat_room_id);
-            data.putString("file_size",file_size);
-            data.putString("duration",duration);
-            data.putString("file_id",file_id);
-            data.putString("vid",vid);
-            data.putString("playset",playset);
+            Intent intent = new Intent(getActivity(), PlayBackActivity.class);
+            Bundle data = new Bundle();
+            data.putString("room_id", room_id);
+            data.putSerializable("fileSet", (Serializable) fileSet);
             intent.putExtras(data);
-//            startActivity(intent);
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 
-        private void addCommonData(Room room){
-            Host host = room.getHost();
+        private void addCommonData(ModelRoom room) {
+            ModelHost host = room.getHost();
             String nickName = App.getInstance().getUserNickName();
             String avatar = "";
             if (App.getInstance().getmUserCurrentInfo() != null) {

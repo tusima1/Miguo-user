@@ -20,7 +20,6 @@ import com.fanwe.dao.barry.CommandGroupBuyDao;
 import com.fanwe.dao.barry.impl.CommandGroupBuyDaoImpl;
 import com.fanwe.dao.barry.view.CommandGroupBuyView;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.home.model.Room;
 import com.fanwe.home.views.FragmentHomeTimeLimit;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
@@ -36,6 +35,7 @@ import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -80,7 +80,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     private boolean isRefresh = true;
     private int pageNum = 1;
     private int pageSize = 10;
-    private List<Room> rooms;
+    private List<ModelRoom> rooms;
     private String typeLiveHome = "";
 
     CommandGroupBuyDao commandGroupBuyDao;
@@ -238,7 +238,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     private void requestLiveList() {
         if (liveHelper != null) {
-            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
+            liveHelper.getLiveListNew(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
         }
     }
 
@@ -281,7 +281,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
      *
      * @param datas
      */
-    public void getLiveList(ArrayList<Room> datas) {
+    public void getLiveList(ArrayList<ModelRoom> datas) {
         if (mHomeFragmentLiveList == null) {
             mHomeFragmentLiveList = new HomeFragmentLiveList();
             getSDFragmentManager().replace(R.id.frag_home_new_fl_recommend_deals, mHomeFragmentLiveList);
@@ -337,7 +337,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     public void onSuccess(String method, List datas) {
         if (LiveConstants.LIVE_LIST.equals(method)) {
             //直播列表
-            getLiveList((ArrayList<Room>) datas);
+            getLiveList((ArrayList<ModelRoom>) datas);
         } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
             itemsHomeClassify = datas;
             Message message = new Message();
