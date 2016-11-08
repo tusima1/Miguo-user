@@ -33,6 +33,7 @@ import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
@@ -158,7 +159,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             mBt_account.setBackgroundColor(getResources().getColor(
                     R.color.text_fenxiao));
             mBt_account.setClickable(false);
-            mTv_sum.setText("0.00");
+            mTv_sum.setText("￥0.00");
             // 初始化adapter.
             mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
             mLvCartGoods.setAdapter(mAdapter);
@@ -185,7 +186,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             public void onClick(View arg0) {
                 boolean isChecked = mCb_xuanze.isChecked();
                 BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
-                mTv_sum.setText(String.valueOf(bd));
+                mTv_sum.setText("￥"+ DataFormat.toDoubleTwo(String.valueOf(bd)));
                 if (isChecked && count > 0) {
                     mBt_account.setText("结算" + "（" + count + "）");
                     mBt_account.setBackgroundColor(getResources().getColor(
@@ -248,7 +249,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     public void updateSumMoneyAndCount() {
         BigDecimal sumMoney = getSumMoney();
         int count = getSumSeleted();
-        mTv_sum.setText(String.valueOf(sumMoney));
+        mTv_sum.setText("￥"+DataFormat.toDoubleTwo(String.valueOf(sumMoney)));
         if (count > 0) {
             mBt_account.setText("结算" + "（" + count + "）");
             mBt_account.setBackgroundColor(getResources().getColor(

@@ -19,6 +19,7 @@ import com.fanwe.MainActivity;
 import com.fanwe.constant.Constant;
 import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.utils.BaseUtils;
 
 /**
@@ -57,7 +58,7 @@ public class SellerFragment extends Fragment {
 
     private void setView() {
         //主界面，隐藏返回按钮
-        if (getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof HiHomeActivity) {
             ivBack.setVisibility(View.GONE);
         } else {
             ivBack.setVisibility(View.VISIBLE);

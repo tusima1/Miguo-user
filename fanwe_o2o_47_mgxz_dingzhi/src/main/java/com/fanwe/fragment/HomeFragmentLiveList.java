@@ -35,6 +35,7 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     private Context mContext;
     private Activity mActivity;
     private LiveHttpHelper liveHttpHelper;
+    private LinearLayout ll_empty;
 
     /**
      * 直播列表
@@ -42,12 +43,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     HomeLiveFragmentRecyclerView recyclerView;
     MainActivityHomeFragmentLiveListAdapter mainActivityHomeFragmentLiveListAdapter;
 
-    /**
-     * 团购列表
-     * @param savedInstanceState
-     */
-    HomeLiveFragmentRecyclerView recyclerView2;
-    MainActivityHomeFragmentTuanAdapter mainActivityHomeFragmentTuanAdapter;
 
 
     @Override
@@ -81,20 +76,17 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         mainActivityHomeFragmentLiveListAdapter = new MainActivityHomeFragmentLiveListAdapter(getActivity(), datas);
         recyclerView.setAdapter(mainActivityHomeFragmentLiveListAdapter);
 
-        mainActivityHomeFragmentTuanAdapter = new MainActivityHomeFragmentTuanAdapter(getActivity(), new ArrayList());
-        recyclerView2.setAdapter(mainActivityHomeFragmentTuanAdapter);
     }
 
     private void initView(LayoutInflater inflater, ViewGroup container) {
         view = inflater.inflate(R.layout.fragment_home_live_list, container, false);
         recyclerView = (HomeLiveFragmentRecyclerView) view.findViewById(R.id.recyclerview);
-        recyclerView2 = (HomeLiveFragmentRecyclerView) view.findViewById(R.id.recyclerview_tuan);
+        ll_empty = (LinearLayout)view.findViewById(R.id.ll_empty);
         tvTitle = (TextView) view.findViewById(R.id.tv_title_live_list);
     }
 
     private void initRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void updateTitle(String title) {
@@ -110,8 +102,14 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         if (isRefresh) {
             datas.clear();
         }
-        if (!SDCollectionUtil.isEmpty(rooms))
+        if (!SDCollectionUtil.isEmpty(rooms)) {
             datas.addAll(rooms);
+        }
+        if(datas==null||datas.size()<1){
+            ll_empty.setVisibility(View.VISIBLE);
+        }else{
+            ll_empty.setVisibility(View.GONE);
+        }
         if(mainActivityHomeFragmentLiveListAdapter != null){
             mainActivityHomeFragmentLiveListAdapter.notifyDataSetChanged(rooms);
             updateRecyclerViewHeight();
@@ -120,26 +118,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     }
 
 
-    public void onRefreshTuan(boolean refresh,List<CommandGroupBuyBean.Result.Body> bodys){
-//        List<CommandGroupBuyBean.Result.Body> bodys = new ArrayList<>();
-//        for(int i = 0; i<12; i++){
-//            bodys.addAll(bodys1);
-//        }
-        if(bodys != null){
-            if(refresh){
-                if(mainActivityHomeFragmentTuanAdapter!=null) {
-                    mainActivityHomeFragmentTuanAdapter.notifyDataSetChanged(bodys);
-                }
-            }else {
-                if(mainActivityHomeFragmentTuanAdapter!=null) {
-                    mainActivityHomeFragmentTuanAdapter.notifyDataSetChangedLoadmore(bodys);
-                }
-            }
-            if(mainActivityHomeFragmentTuanAdapter != null){
-                updateRecyclerView2Height();
-            }
-        }
-    }
 
     private void updateRecyclerViewHeight(){
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, mainActivityHomeFragmentLiveListAdapter.getHeight());
@@ -147,11 +125,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         recyclerView.setLayoutParams(params);
     }
 
-    private void updateRecyclerView2Height(){
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, mainActivityHomeFragmentTuanAdapter.getHeight());
-        params.setMargins(0, 0, 0, BaseUtils.dip2px(getContext(), 10));
-        recyclerView2.setLayoutParams(params);
-    }
 
     @Override
     protected String setUmengAnalyticsTag() {

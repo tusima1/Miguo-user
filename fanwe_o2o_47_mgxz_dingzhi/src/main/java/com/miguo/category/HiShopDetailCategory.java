@@ -258,7 +258,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         ArrayList<Fragment> fragments = new ArrayList<>();
         if (result.getShop_images() == null || result.getShop_images().size() == 0) {
             HiShopDetailBean.Result.ShopImage banner = new HiShopDetailBean().new Result().new ShopImage();
-            banner.setImage_url("http://www.xxx.com/1/img");
+            banner.setImage_url("");
             result.getShop_images().add(banner);
         }
         for (int i = 0; i < result.getShop_images().size(); i++) {

@@ -3,6 +3,7 @@ package com.miguo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -107,10 +108,10 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
         getHolder(holder).title.setText(model.getName());
         getHolder(holder).location.setText(model.getLocation());
-        getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":model.getOrigin_price() + "元");
+        getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":DataFormat.toDoubleTwo(model.getOrigin_price()) + "元");
         String tuanStr= "";
         if(!TextUtils.isEmpty(model.getTuan_price())){
-            tuanStr +=model.getTuan_price();
+            tuanStr +=DataFormat.toDoubleTwo(model.getTuan_price());
         }
         if(!TextUtils.isEmpty(model.getUnit())){
             String unit = model.getUnit().trim();
@@ -125,7 +126,7 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             tuanStr +="元";
         }
         getHolder(holder).tuanPrice.setText(tuanStr);
-        getHolder(holder).salary.setText(model.getSalary() + "元佣金");
+        getHolder(holder).salary.setText(DataFormat.toDoubleTwo(model.getSalary()) + "元佣金");
 
         setTags(holder,position);
     }

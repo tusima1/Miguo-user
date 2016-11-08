@@ -401,10 +401,10 @@ public class HiShopDetailBean implements Serializable{
 
 
             public String getLocation(){
-                String area = getArea_name() == null || getArea_name().equals("") ? "" : StringTool.getStringFixed(getArea_name(), 5, "") + " | ";
-                String disntance = SDDistanceUtil.getFormatDistance(DataFormat.toDouble(getDistance())) + "";
-                String place = getCate_type_name() == null || getCate_type_name().equals("") ? "" : " | " + getCate_type_name();
-                return area + disntance + place;
+                String area = getArea_name() == null || getArea_name().equals("") ? "..|" : StringTool.getStringFixed(getArea_name(), 5, "") + " | ";
+                String distance = getDistance() == null || getDistance().equals("") ? "..|" : SDDistanceUtil.getMGDistance(DataFormat.toDouble(getDistance())) + " | ";
+                String place = getCate_type_name() == null || getCate_type_name().equals("") ? ".." :  getCate_type_name();
+                return area + distance + place;
             }
 
             public String getDistance() {

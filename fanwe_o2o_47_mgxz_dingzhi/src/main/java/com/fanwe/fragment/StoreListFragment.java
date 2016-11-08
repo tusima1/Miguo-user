@@ -550,6 +550,11 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                     if (!SDCollectionUtil.isEmpty(itemsModelBusinessListings)) {
                         mListModel.addAll(itemsModelBusinessListings);
                     }
+                    if(mListModel==null||mListModel.size()<1){
+                        mLlEmpty.setVisibility(View.VISIBLE);
+                    }else{
+                        mLlEmpty.setVisibility(View.GONE);
+                    }
                     mAdapter.notifyDataSetChanged();
                     mPtrlvContent.onRefreshComplete();
                     break;
