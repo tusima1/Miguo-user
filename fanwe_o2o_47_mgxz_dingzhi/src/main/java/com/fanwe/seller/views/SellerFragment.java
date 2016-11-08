@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.constant.Constant;
 import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.o2o.miguo.R;
@@ -157,8 +156,10 @@ public class SellerFragment extends Fragment {
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding(View view) {
-        if (view != null) {
-            view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
+        if(getActivity() instanceof HiHomeActivity){
+            if (view != null) {
+                view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
+            }
         }
     }
 

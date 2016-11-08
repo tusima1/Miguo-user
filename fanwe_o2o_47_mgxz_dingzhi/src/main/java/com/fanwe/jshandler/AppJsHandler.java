@@ -10,7 +10,6 @@ import com.fanwe.EventDetailActivity;
 import com.fanwe.EventListActivity;
 import com.fanwe.GoodsListActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
@@ -41,6 +40,7 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
@@ -313,7 +313,7 @@ public class AppJsHandler extends BaseJsHandler {
 
     @JavascriptInterface
     public void start_main() {
-        Intent intent = new Intent(mActivity, MainActivity.class);
+        Intent intent = new Intent(mActivity, HiHomeActivity.class);
         startActivity(intent);
     }
 

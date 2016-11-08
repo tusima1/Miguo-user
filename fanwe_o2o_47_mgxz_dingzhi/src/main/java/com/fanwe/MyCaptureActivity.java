@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.zxing.CaptureActivity;
 import com.google.zxing.Result;
+import com.miguo.app.HiHomeActivity;
 
 public class MyCaptureActivity extends CaptureActivity
 {
@@ -68,7 +69,7 @@ public class MyCaptureActivity extends CaptureActivity
 	{
 		if (mIsStartByAdvs)
 		{
-			startActivity(new Intent(this, MainActivity.class));
+			startActivity(new Intent(this, HiHomeActivity.class));
 		}
 		super.finish();
 	}

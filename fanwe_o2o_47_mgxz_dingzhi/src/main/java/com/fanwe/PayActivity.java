@@ -59,6 +59,7 @@ import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
@@ -473,7 +474,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
                         if (type == 1) {
                             // 去首页的"我的"页面
-                            Intent intent = new Intent(PayActivity.this, MainActivity.class);
+                            Intent intent = new Intent(PayActivity.this, HiHomeActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putInt("index", 3);
                             intent.putExtras(bundle);
@@ -751,7 +752,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         switch (keyCode) {
 
             case KeyEvent.KEYCODE_BACK:
-                startActivity(new Intent(PayActivity.this, MainActivity.class));
+                startActivity(new Intent(PayActivity.this, HiHomeActivity.class));
                 finish();
                 break;
         }

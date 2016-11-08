@@ -208,6 +208,7 @@
             android:layout_height="match_parent"
             android:background="#e65322"
             android:text="删除"
+            android:ellipsize="end"
             android:textColor="#ffffff"
             android:textSize="11sp" />
     </LinearLayout>

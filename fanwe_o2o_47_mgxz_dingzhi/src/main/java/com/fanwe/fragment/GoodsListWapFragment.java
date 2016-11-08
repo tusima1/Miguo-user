@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.ServerUrl;
@@ -19,6 +18,7 @@ import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.UrlLinkBuilder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
+import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
 public class GoodsListWapFragment extends BaseFragment
@@ -94,7 +94,7 @@ public class GoodsListWapFragment extends BaseFragment
 
 		mTitle.setMiddleTextTop(title);
 
-		if (getActivity() instanceof MainActivity)
+		if (getActivity() instanceof HiHomeActivity)
 		{
 			mTitle.setLeftImageLeft(0);
 		} else

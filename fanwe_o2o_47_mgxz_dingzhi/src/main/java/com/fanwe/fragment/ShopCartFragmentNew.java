@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
 import com.fanwe.app.App;
@@ -40,9 +39,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
-import com.sunday.eventbus.SDBaseEvent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -207,7 +206,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void initTitle() {
         mTitle.setMiddleTextTop("购物车");
-        if (getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof HiHomeActivity) {
             mTitle.setLeftImageLeft(0);
         }
     }

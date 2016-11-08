@@ -1,18 +1,5 @@
 package com.fanwe.fragment;
 
-import com.fanwe.CityListActivity;
-import com.fanwe.HomeSearchActivity;
-import com.fanwe.MainActivity;
-import com.fanwe.MyMessageActivity;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.jpush.JpushHelper;
-import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.o2o.miguo.R;
-import com.fanwe.work.AppRuntimeWorker;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.sunday.eventbus.SDBaseEvent;
-import com.sunday.eventbus.SDEventManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +9,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.fanwe.CityListActivity;
+import com.fanwe.HomeSearchActivity;
+import com.fanwe.MyMessageActivity;
+import com.fanwe.event.EnumEventTag;
+import com.fanwe.jpush.JpushHelper;
+import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.AppRuntimeWorker;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
+import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 
 /**
  * 首页标题栏fragment
@@ -102,7 +102,7 @@ public class HomeTitleBarFragment extends BaseFragment {
      * 扫一扫
      */
     private void clickSao() {
-        SDEventManager.post(MainActivity.class, EnumEventTag.START_SCAN_QRCODE.ordinal());
+        SDEventManager.post(HiHomeActivity.class, EnumEventTag.START_SCAN_QRCODE.ordinal());
     }
 
     /**
