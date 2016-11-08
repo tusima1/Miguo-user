@@ -1,6 +1,11 @@
 
 package com.fanwe.fragment;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+
 import com.fanwe.BaseActivity;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.jpush.JpushHelper;
@@ -11,11 +16,6 @@ import com.fanwe.library.title.SDTitleSimple.SDTitleSimpleListener;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 
 public abstract class BaseFragment extends SDBaseFragment implements SDTitleSimpleListener
 {
@@ -66,7 +66,7 @@ public abstract class BaseFragment extends SDBaseFragment implements SDTitleSimp
 
 	protected void init()
 	{	
-		JpushHelper.setTag("city_"+AppRuntimeWorker.getCity_id());
+		JpushHelper.setTag(AppRuntimeWorker.getCity_id());
 //		tag = setUmengAnalyticsTag();
 	}
 	

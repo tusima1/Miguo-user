@@ -138,11 +138,19 @@ public class SpecialTopicAdapter extends BaseAdapter {
         String tempLocation = getLimitedString(location, 4);
         if (!TextUtils.isEmpty(tempMapLocation)){
             tempMapLocation+=" | ";
+        }else {
+            tempMapLocation=".. | ";
         }
-        if (!TextUtils.isEmpty(tempLocation)&&!TextUtils.isEmpty(tempDistance)){
-            tempDistance+=" | ";
+//        if (!TextUtils.isEmpty(tempLocation)&&!TextUtils.isEmpty(tempDistance)){
+//            tempDistance+=" | ";
+//        }
+        if (TextUtils.isEmpty(tempLocation)){
+            tempLocation="..";
         }
-        return tempMapLocation+ tempDistance +tempLocation;
+        if (TextUtils.isEmpty(tempDistance)){
+            tempDistance="..";
+        }
+        return tempMapLocation+ tempDistance +" | "+tempLocation;
     }
 
     private String getLimitedString(String text,int limitNum){

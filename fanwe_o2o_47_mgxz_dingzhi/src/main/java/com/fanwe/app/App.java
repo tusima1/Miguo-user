@@ -169,6 +169,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
 
     private void initJPush() {
         JPushInterface.init(this);
+        JPushInterface.setDebugMode(true);
         JpushHelper.registerAll();
     }
 
