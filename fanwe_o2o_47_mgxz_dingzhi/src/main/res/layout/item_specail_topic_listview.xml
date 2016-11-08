@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:id="@+id/layout_item_featured_groupon"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:id="@+id/layout_item_featured_groupon"
+              android:orientation="vertical">
 
     <ImageView
         android:id="@+id/iv_img"
@@ -66,6 +66,7 @@
             android:id="@+id/tv_price_original"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp5"
             android:layout_toLeftOf="@+id/tv_price_tuan"
             android:text=""

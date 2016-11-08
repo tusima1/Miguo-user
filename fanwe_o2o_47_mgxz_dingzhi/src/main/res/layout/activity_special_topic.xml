@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_activity_white"
     tools:context="com.fanwe.seller.views.SpecialTopicActivity"
     >
 
@@ -37,6 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/dark_20"
+                    android:scaleType="centerCrop"
                     />
 
                 <TextView

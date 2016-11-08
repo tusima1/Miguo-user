@@ -99,15 +99,17 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
                     if (resultSpecialTopic!=null){
                         List<ModelSpecialTopic> body = resultSpecialTopic.getBody();
                         callback2Success(mView2,SellerConstants.SPECIAL_TOPIC,body);
-                        return;
                     }
+                }else {
+                    callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
                 }
-                callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
+                callback2Finish(mView2,SellerConstants.SPECIAL_TOPIC);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(errorCode,message);
+                callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
             }
         });
     }
@@ -143,7 +145,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mView2.onFailue(method);
+                    mView2.onFinish(method);
                 }
             });
         }
