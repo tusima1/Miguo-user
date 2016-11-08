@@ -550,6 +550,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
         List<ShopListBean> shop_list = modelGoodsDetailNew.getShop_list();
         bindShopList(shop_list);
+        if (shop_list!=null && shop_list.size()<=1){
+            mLLLauncher.setVisibility(View.GONE);
+        }
 
         //温馨提示
         String notes = modelGoodsDetailNew.getNotes();
