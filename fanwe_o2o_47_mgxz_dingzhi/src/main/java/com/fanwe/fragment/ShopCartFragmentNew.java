@@ -237,7 +237,14 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 sumMoney += model.getSumPrice();
             }
         }
-        mAdapter.notifyDataSetChanged();
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+
         value = new BigDecimal(sumMoney);
         value = value.setScale(2, BigDecimal.ROUND_HALF_UP);
         return value;
@@ -568,8 +575,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                         if (mAdapter != null) {
                             listModel = datas;
                             mAdapter.setData(listModel);
-                            bindData();
                             mAdapter.notifyDataSetChanged();
+                            bindData();
+
                         }
                         mContentPtr.onRefreshComplete();
                         new Handler().postDelayed(new Runnable() {

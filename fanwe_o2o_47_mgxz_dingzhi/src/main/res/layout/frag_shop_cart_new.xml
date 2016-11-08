@@ -118,7 +118,7 @@
                     android:src="@drawable/buy_car" />
             </RelativeLayout>
 
-            <com.fanwe.customview.HorizontalSlideDeleteListView
+            <ListView
                 android:id="@+id/lv_cart_goods"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
