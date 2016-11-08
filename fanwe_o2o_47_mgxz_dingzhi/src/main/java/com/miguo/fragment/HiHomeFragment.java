@@ -30,7 +30,9 @@ public class HiHomeFragment extends HiBaseFragment{
     }
 
     public void onRefreshGreeting(){
-        getCategory().onRefreshGreeting();
+        if(null != getCategory()) {
+            getCategory().onRefreshGreeting();
+        }
     }
 
     public HiHomeFragmentCategory getCategory(){

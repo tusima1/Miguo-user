@@ -258,7 +258,9 @@ public class HiHomeCategory extends Category implements
     }
 
     public void onRefreshGreeting(){
-        getHomeFragment().onRefreshGreeting();
+        if(null != getHomeFragment()){
+            getHomeFragment().onRefreshGreeting();
+        }
     }
 
     /**
@@ -739,7 +741,7 @@ public class HiHomeCategory extends Category implements
     }
 
     public HiHomeFragment getHomeFragment(){
-        return (HiHomeFragment)fragments.get(0);
+        return null != fragments && fragments.size() > 0 ? (HiHomeFragment)fragments.get(0) : null;
     }
 
 
