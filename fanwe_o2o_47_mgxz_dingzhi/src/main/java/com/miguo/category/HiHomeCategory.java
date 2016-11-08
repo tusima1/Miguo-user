@@ -257,6 +257,10 @@ public class HiHomeCategory extends Category implements
         getActivity().startService(new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.APP_UPGRADE_SERVICE)));
     }
 
+    public void onRefreshGreeting(){
+        getHomeFragment().onRefreshGreeting();
+    }
+
     /**
      * 获取剪切板的领取码
      */
@@ -732,6 +736,10 @@ public class HiHomeCategory extends Category implements
         MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
         addCommonData(room);
         BaseUtils.jumpToNewActivity(getActivity(), intent);
+    }
+
+    public HiHomeFragment getHomeFragment(){
+        return (HiHomeFragment)fragments.get(0);
     }
 
 

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/c_F2F2F2"
     app:ptr_keep_header_when_refresh="true"
+    android:paddingBottom="45dp"
     app:ptr_pull_to_fresh="true">
 
     <com.fanwe.view.RecyclerScrollView

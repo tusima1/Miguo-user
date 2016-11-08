@@ -81,7 +81,7 @@ public abstract class MgCallback<T> implements Callback {
                         userCurrentInfo.setToken(token);
                     }
                     if (code == 320 || code == 321) {
-                        MGToast.showToast(message);
+//                        MGToast.showToast(message);
                         userCurrentInfo.setToken("");
                         SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {

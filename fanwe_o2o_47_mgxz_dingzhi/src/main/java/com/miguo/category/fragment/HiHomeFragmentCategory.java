@@ -332,11 +332,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /**
      * 刷新问候语
      */
-    private void onRefreshGreeting(){
+    public void onRefreshGreeting(){
         homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
     }
-
-
 
 
     public void loadComplete() {
@@ -549,17 +547,17 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void updateFromCityChanged(CitylistModel model){
-        updateCityName(model.getName());
+        updateCityName(model.getName(), model.getPy());
         onRefresh();
     }
 
-    public void updateCityName(String cityName){
+    public void updateCityName(String cityName, String cityPy){
         city.setText(cityName);
         /**
          * View有可能已经被移除了
          */
         try{
-            citySayHi.setText(cityName);
+            citySayHi.setText(cityPy);
         }catch (Exception e){
 
         }
@@ -702,7 +700,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getHomeGreetingSuccess(final String greeting) {
-        sayhi.setText(greeting);
+        try {
+            sayhi.setText(greeting);
+        }catch (Exception e){
+
+        }
     }
 
     @Override

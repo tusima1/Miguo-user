@@ -25,6 +25,13 @@ public class HiHomeActivity extends HiBaseActivity{
     }
 
     @Override
+    protected void doOnResume() {
+        if(null != getCategory()){
+            getCategory().onRefreshGreeting();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
             switch (requestCode){
@@ -41,7 +48,6 @@ public class HiHomeActivity extends HiBaseActivity{
 
     private void handlerReturnCityId(Intent data){
         CitylistModel model = (CitylistModel)data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
-        showToastWithShortTime(model.getName());
         getCategory().updateFromCityChanged(model);
     }
 

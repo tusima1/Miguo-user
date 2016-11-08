@@ -29,6 +29,10 @@ public class HiHomeFragment extends HiBaseFragment{
         getCategory().updateFromCityChanged(model);
     }
 
+    public void onRefreshGreeting(){
+        getCategory().onRefreshGreeting();
+    }
+
     public HiHomeFragmentCategory getCategory(){
         return (HiHomeFragmentCategory)category;
     }
