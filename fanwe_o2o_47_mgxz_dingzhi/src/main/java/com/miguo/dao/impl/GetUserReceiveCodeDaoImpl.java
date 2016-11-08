@@ -3,8 +3,6 @@ package com.miguo.dao.impl;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
-import com.fanwe.home.model.Room;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.miguo.dao.GetUserReceiveCodeDao;

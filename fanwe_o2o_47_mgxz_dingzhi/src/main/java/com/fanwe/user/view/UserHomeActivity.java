@@ -2,7 +2,7 @@ package com.fanwe.user.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -169,43 +169,6 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                 Intent intent = new Intent(UserHomeActivity.this, DistributionStoreWapActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
-            }
-        });
-        gridViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (true) {
-                    return;
-                }
-                //TODO 跳转暂时屏蔽
-                ModelSpokePlay modelSpokePlay = datasLive.get(position);
-                //判断网络环境
-                boolean connected = NetWorkStateUtil.isConnected(mContext);
-                if (!connected) {
-                    MGToast.showToast("没有网络,请检测网络环境!");
-                    return;
-                }
-                Room room = new Room();
-                room.setAv_room_id(modelSpokePlay.getAv_room_id());
-                room.setChat_room_id(modelSpokePlay.getChat_room_id());
-                room.setCover(modelSpokePlay.getCover());
-                room.setCreate_time(modelSpokePlay.getCreate_time());
-                room.setId(modelSpokePlay.getId());
-                room.setLive_type(modelSpokePlay.getStart_status());
-
-                //分点播和直播 直播类型  1 表示直播，2表示点播
-                String live_type = modelSpokePlay.getStart_status();
-                if ("1".equals(live_type)) {
-                    //直播
-                    gotoLiveActivity(room);
-                } else if ("2".equals(live_type)) {
-                    //点播
-                    gotoPlayBackActivity(room);
-                } else {
-                    //异常数据
-                    MGToast.showToast("异常数据");
-                    return;
-                }
             }
         });
     }
