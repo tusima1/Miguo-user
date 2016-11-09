@@ -299,7 +299,7 @@ public class HiHomeCategory extends Category implements
             }
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
-            if(TextUtils.isEmpty(userid) || !TextUtils.isEmpty(password)){
+            if(TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)){
                 return;
             }
 

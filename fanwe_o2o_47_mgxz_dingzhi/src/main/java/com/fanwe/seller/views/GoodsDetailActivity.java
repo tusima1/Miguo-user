@@ -164,13 +164,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void init() {
-        getIntentData(getIntent());
-        initTitleLayout();
-        initSScrollView();
-        mHttpHelper = new SellerNewHttpHelper(this);
-        mSellerHelper = new SellerHttpHelper(null, this, "");
-        mShoppingCartHelper = new ShoppingCartHelper(this);
-        requestData();
+        if (getIntentData(getIntent())){
+            initTitleLayout();
+            initSScrollView();
+            mHttpHelper = new SellerNewHttpHelper(this);
+            mSellerHelper = new SellerHttpHelper(null, this, "");
+            mShoppingCartHelper = new ShoppingCartHelper(this);
+            requestData();
+        }
+
     }
     private void requestData(){
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
@@ -187,14 +189,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        getIntentData(intent);
-        requestData();
+        if (getIntentData(intent)){
+            requestData();
+        }
     }
 
-    private void getIntentData(Intent intent) {
+    private boolean getIntentData(Intent intent) {
         if (intent==null){
             finish();
-            return;
+            return false;
         }
         GoodsId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
@@ -202,8 +205,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         if (TextUtils.isEmpty(GoodsId)) {
             MGToast.showToast("id为空");
             finish();
-            return;
+            return false;
         }
+        return true;
     }
 
     private void initTitleLayout() {
@@ -844,7 +848,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         } else {
             //当前未登录.
             if ("0".equals(mTimeStatus)) {
-                MGToast.showToast("商品活动未开始。");
+                MGToast.showToast("商品活动未开始");
                 return;
             } else if ("1".equals(mTimeStatus)) {
                 addToLocalShopping();

@@ -33,7 +33,6 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
 import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -316,14 +315,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     }
 
     public String getToken() {
-        String token = "";
-        if (this.mUserCurrentInfo != null) {
-            UserInfoNew infoNew = mUserCurrentInfo.getUserInfoNew();
-            if (infoNew != null) {
-                token = mUserCurrentInfo.getToken();
-            }
-        }
-        return token;
+        return mUserCurrentInfo==null ? "": mUserCurrentInfo.getToken();
     }
 
 
