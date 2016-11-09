@@ -334,29 +334,20 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-//                Log.e("test", "团购券 :" + responseBody);
                 RootGroupCoupon rootGroupCoupon = gson.fromJson(responseBody, RootGroupCoupon
                         .class);
                 final List<ResultGroupCoupon> result = rootGroupCoupon.getResult();
                 if (result != null && result.size() > 0) {
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onSuccess(mView,UserConstants.GROUP_BUY_COUPON_LIST, result);
-                        }
-                    });
+                    onSuccess(mView,UserConstants.GROUP_BUY_COUPON_LIST, result);
+                }else {
+                    onFailure2(mView,UserConstants.GROUP_BUY_COUPON_LIST);
                 }
 
             }
 
             @Override
             public void onFinish() {
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mView.onFinish(UserConstants.GROUP_BUY_COUPON_LIST);
-                    }
-                });
+                onFinish2(mView,UserConstants.GROUP_BUY_COUPON_LIST);
             }
         });
     }
