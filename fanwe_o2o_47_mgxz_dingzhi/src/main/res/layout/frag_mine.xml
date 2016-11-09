@@ -22,8 +22,15 @@
         <include layout="@layout/item_my_frag_order"/>
         <!--网格表-->
         <include layout="@layout/item_my_frag_grid"/>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="45dp"/>
 
     </LinearLayout>
+    
+    
+    
 </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 
 

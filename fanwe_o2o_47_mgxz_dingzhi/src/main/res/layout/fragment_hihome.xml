@@ -207,6 +207,14 @@
                     android:layout_height="500dp"
                     android:scrollbars="none" />
 
+
+                <ImageView
+                    android:id="@+id/nodata"
+                    android:background="@drawable/city_no_data"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
         </com.fanwe.view.RecyclerScrollView>

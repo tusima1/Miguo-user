@@ -285,7 +285,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         int lastMin = (int)(millisUntilFinished / 1000 % 3600);
         int min = lastMin / 60;
         int sec = lastMin % 60;
-        return ((day < 1) ? "" : day + ":") + (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
+        return ((day < 1) ? "" : day + "天") + (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
     }
 
 }

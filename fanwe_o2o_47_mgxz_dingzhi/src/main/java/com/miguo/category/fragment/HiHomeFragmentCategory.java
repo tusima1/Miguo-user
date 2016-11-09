@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,10 +32,12 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
 import com.miguo.adapter.HomePagerAdapter;
+import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;
 import com.miguo.dao.HomeGreetingDao;
 import com.miguo.dao.LoginByMobileDao;
+import com.miguo.dao.impl.CheckCitySignDaoImpl;
 import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetMenuListDaoImpl;
 import com.miguo.dao.impl.HomeGreetingDaoImpl;
@@ -56,6 +59,7 @@ import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
+import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
 import com.miguo.view.HomeGreetingView;
@@ -80,7 +84,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
         HomeGreetingView,
-        GetAdspaceListView, GetMenuListView{
+        GetAdspaceListView, GetMenuListView, CheckCityView{
 
     /**
      * 顶部导航栏的东西
@@ -138,6 +142,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     CircleIndicator circleIndicator;
 
     /**
+     * 有商家回家的标志
+     */
+    boolean hasSeeler = false;
+
+    /**
      * 限时特惠
      */
     @ViewInject(R.id.home_tuan)
@@ -164,6 +173,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     HomeGreetingDao homeGreetingDao;
     GetAdspaceListDao getAdspaceListDao;
     GetMenuListDao getMenuListDao;
+    CheckCitySignDao checkCitySignDao;
+
     /**
      * 今日精选
      */
@@ -173,6 +184,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     int topHeight = dip2px(150);
 
     boolean touchDisableMove = false;
+
+    @ViewInject(R.id.nodata)
+    ImageView nodata;
 
     public HiHomeFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -184,6 +198,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeGreetingDao = new HomeGreetingDaoImpl(this);
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
         getMenuListDao = new GetMenuListDaoImpl(this);
+        checkCitySignDao = new CheckCitySignDaoImpl(this);
     }
 
     @Override
@@ -225,7 +240,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         /**
          * 因为问候语上滑要消失，所以不加入刷新方法
          */
-        onRefreshGreeting();
         onRefresh();
     }
 
@@ -238,12 +252,32 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         city.setText(AppRuntimeWorker.getCity_name());
     }
 
-    public void onRefresh(){
+    public void onRefreshAfter(){
+        clearPage();
+        onRefreshGreeting();
         onRefreshTimeLimit();
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
         onRefreshMenus();
         startTabShowAnimation();
+    }
+
+    public void onRefresh(){
+        checkCitySign();
+    }
+
+    private void checkCitySign(){
+        checkCitySignDao.checkCitySign(AppRuntimeWorker.getCity_id());
+    }
+
+    private void clearPage(){
+        sayHiLayout.setVisibility(View.GONE);
+        bannerLayout.setVisibility(View.GONE);
+        homeTuanTimeLimitView.setVisibility(View.GONE);
+        homeTuanLimitBottomLayout.setVisibility(View.GONE);
+        homeTagsView.setVisibility(View.GONE);
+        homeADView2.setVisibility(View.GONE);
+        featuredGrouponCategory.clearPage();
     }
 
     /**
@@ -340,6 +374,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 刷新问候语
      */
     public void onRefreshGreeting(){
+        if(!isHasSeeler()){
+            return;
+        }
         homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
     }
 
@@ -644,6 +681,21 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** ptr framelayout 下拉刷新监听 end*/
 
 
+    @Override
+    public void checkCitySignSuccess() {
+        setHasSeeler(true);
+        nodata.setVisibility(View.GONE);
+        onRefreshAfter();
+    }
+
+    @Override
+    public void checkCitySignError() {
+        clearPage();
+        setTitleAlpha(titleLayout, 1);
+        nodata.setVisibility(View.VISIBLE);
+        setHasSeeler(false);
+    }
+
     /** 获取限时特惠数据回调*/
     @Override
     public void getSpecialListSuccess(final SpecialListModel.Result result) {
@@ -702,6 +754,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
+        bannerLayout.setVisibility(View.VISIBLE);
+        homeADView2.setVisibility(View.VISIBLE);
         updateAdspaceViews(body, type);
         loadComplete();
     }
@@ -731,6 +785,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getHomeGreetingSuccess(final String greeting) {
+        sayHiLayout.setVisibility(View.VISIBLE);
         try {
             sayhi.setText(greeting);
         }catch (Exception e){
@@ -749,6 +804,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
+        homeTagsView.setVisibility(View.VISIBLE);
         initHomeMenuView(list);
         loadComplete();
     }
@@ -825,4 +881,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void setTouchDisableMove(boolean touchDisableMove) {
         this.touchDisableMove = touchDisableMove;
     }
+
+    public boolean isHasSeeler() {
+        return hasSeeler;
+    }
+
+    public void setHasSeeler(boolean hasSeeler) {
+        this.hasSeeler = hasSeeler;
+    }
+
 }
