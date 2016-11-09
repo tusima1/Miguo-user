@@ -227,7 +227,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     /**
      * 获取Category
      */
-    protected Category getCategory(){
+    public Category getCategory(){
         return category;
     }
 

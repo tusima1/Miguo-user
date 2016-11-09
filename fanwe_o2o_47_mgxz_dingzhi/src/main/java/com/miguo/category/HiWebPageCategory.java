@@ -1,11 +1,15 @@
 package com.miguo.category;
 
+import android.text.TextUtils;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
+import com.fanwe.app.AppHelper;
+import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -63,11 +67,22 @@ public class HiWebPageCategory extends Category{
         setTitlePadding(titleLayout);
     }
 
-    private void updateTitle(){
-        title.setText(getActivity().getWebTitle().equals("") ? "" : getActivity().getWebTitle());
+    public void updateTitle(String title){
+        this.title.setText(title);
     }
 
     private void initWebView(){
+        String url = getActivity().getUrl();
+        LocalUserModel userModel = AppHelper.getLocalUser();
+        if(userModel == null){
+            return;
+        }
+        String userid = userModel.getUser_mobile();
+        String password = userModel.getUser_pwd();
+        if(!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)){
+            url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password : url;
+        }
+
         WebSettings webSettings = webView.getSettings();
         //支持js
         webSettings.setJavaScriptEnabled(true);
@@ -86,7 +101,7 @@ public class HiWebPageCategory extends Category{
                 return true;
             }
         });
-        webView.loadUrl(getActivity().getUrl());
+        webView.loadUrl(url);
         webView.addJavascriptInterface(handler, "mgxz");
     }
 

@@ -342,8 +342,8 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			}
 
 				model.setSumPrice(sumPrice);
-				SDViewBinder.setTextView(tvSinglePrice, model.getTuan_price());
-				SDViewBinder.setTextView(tvTotalPrice, MGStringFormatter.getFloat2(sumPrice));
+				SDViewBinder.setTextView(tvSinglePrice, "￥"+model.getTuan_price());
+				SDViewBinder.setTextView(tvTotalPrice, "￥"+MGStringFormatter.getFloat2(sumPrice));
 			}
 	}
 

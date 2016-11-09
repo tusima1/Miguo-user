@@ -1,5 +1,6 @@
 package com.miguo.category.fragment;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,6 +51,10 @@ public class ShopDetailItemFragmentCategory extends FragmentCategory{
             int height = width * 420 / 750;
             LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
             image.setLayoutParams(params);
+            image.setImageResource(R.drawable.nullpic);
+            if(TextUtils.isEmpty(getFragment().getBanner().getImage_url())){
+                return;
+            }
             SDViewBinder.setImageView(getFragment().getBanner().getImage_url(), image, ImageLoaderManager.getOptionsNoResetViewBeforeLoading());
         }catch (Exception e){
 

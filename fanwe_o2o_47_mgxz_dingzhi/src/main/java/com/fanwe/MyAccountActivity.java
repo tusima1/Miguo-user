@@ -188,6 +188,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
      */
     private void getServiceNum() {
         List<DictModel> dict = MGDict.getDict();
+        if(dict==null||dict.size()<1){
+            return;
+        }
         for (DictModel data : dict) {
             String dic_value = data.getDic_value();
             if ("support_phone".equals(dic_value)) {

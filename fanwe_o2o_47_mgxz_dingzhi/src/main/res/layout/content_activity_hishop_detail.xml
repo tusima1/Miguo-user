@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="center_horizontal"
+    android:id="@+id/recycler_scrollview"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <com.miguo.ui.view.ShopDetailViewPager
-                android:id="@+id/viewpager"
+                android:id="@+id/shopdetail_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"></com.miguo.ui.view.ShopDetailViewPager>
 

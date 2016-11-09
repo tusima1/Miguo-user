@@ -27,6 +27,7 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
+import com.fanwe.view.RecyclerScrollView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiShopDetailLiveAdapter;
@@ -59,11 +60,16 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/19.
  */
-public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView, RepresentMerchantView {
+public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView, RepresentMerchantView, RecyclerScrollView.OnRecyclerScrollViewListener {
 
+    @ViewInject(R.id.recycler_scrollview)
+    RecyclerScrollView scrollView;
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
+
+    @ViewInject(R.id.title_layout_bg)
+    RelativeLayout titleLayoutBg;
 
     @ViewInject(R.id.back)
     ImageView back;
@@ -71,10 +77,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     @ViewInject(R.id.share)
     ImageView share;
 
+    @ViewInject(R.id.title)
+    TextView title;
+
     /**
      * 轮播图
      */
-    @ViewInject(R.id.viewpager)
+    @ViewInject(R.id.shopdetail_viewpager)
     ShopDetailViewPager viewPager;
 
     ShopDetailPagerAdapter viewpagerAdapter;
@@ -216,6 +225,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         back.setOnClickListener(listener);
         share.setOnClickListener(listener);
         represent.setOnClickListener(listener);
+        scrollView.setOnRecyclerScrollViewListener(this);
     }
 
     @Override
@@ -226,6 +236,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     @Override
     protected void initViews() {
         setTitlePadding(titleLayout);
+        setTitlePadding(titleLayoutBg);
+        setTitleAlpha(titleLayout, 0);
         initRecommendRecyclerView();
         initLiveRecyclerView();
     }
@@ -258,7 +270,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         ArrayList<Fragment> fragments = new ArrayList<>();
         if (result.getShop_images() == null || result.getShop_images().size() == 0) {
             HiShopDetailBean.Result.ShopImage banner = new HiShopDetailBean().new Result().new ShopImage();
-            banner.setImage_url("http://www.xxx.com/1/img");
+            banner.setImage_url("");
             result.getShop_images().add(banner);
         }
         for (int i = 0; i < result.getShop_images().size(); i++) {
@@ -399,6 +411,23 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
 
     }
 
+    @Override
+    public void onScrollToEnd() {
+
+    }
+
+    @Override
+    public void onScrollChanged(int l, int t, int oldl, int oldt) {
+        float radio = t / (float)getBannerHeight();
+        if(radio <= 1){
+            setTitleAlpha(titleLayout, radio);
+        }
+    }
+
+    public int getBannerHeight(){
+        return dip2px(200);
+    }
+
     /**
      * 更新推荐商品列表高度
      */
@@ -444,6 +473,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         } else {
             call.setImageResource(R.drawable.ic_phone_enable);
         }
+        /**
+         * 标题
+         */
+        title.setText(result.getShop_name());
         /**
          * 轮播图
          */

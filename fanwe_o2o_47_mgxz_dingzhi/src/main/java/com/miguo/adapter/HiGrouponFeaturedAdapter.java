@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDDistanceUtil;
 import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -88,6 +90,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
                     params.setMargins(dip2px(12), 0, dip2px(12), 0);
                     getHolder(holder).tvName.setLayoutParams(params);
                     getHolder(holder).tvName.setGravity(Gravity.CENTER_VERTICAL);
+                    Log.d(tag, "two lines..." + lines.get(position));
                 }
             }
         });
@@ -109,30 +112,31 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         /**
          * 位置信息
          */
-        String strLocation = "";
+        StringBuffer strLocation = new StringBuffer("");
         if (!TextUtils.isEmpty(getItem(position).getArea_name())) {
-            strLocation = getItem(position).getArea_name();
-            strLocation = StringTool.getStringFixed(strLocation, 6, "");
-            if (!TextUtils.isEmpty(getItem(position).getDistance()) || !TextUtils.isEmpty(getItem(position).getCate_name())) {
-                strLocation = strLocation + " | ";
-            }
+            String str = getItem(position).getArea_name();
+            strLocation.append(StringTool.getStringFixed(str, 6, "")+"|");
+        }else{
+            strLocation.append("..|");
         }
         if (!TextUtils.isEmpty(getItem(position).getDistance())) {
-            strLocation = strLocation + StringTool.getDistance(getItem(position).getDistance());
-            if (!TextUtils.isEmpty(getItem(position).getCate_name())) {
-                strLocation = strLocation + " | ";
-            }
+            double distanceValue = Double.valueOf(getItem(position).getDistance());
+            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+"|");
+        }else{
+            strLocation.append("..|");
         }
         if (!TextUtils.isEmpty(getItem(position).getCate_name())) {
-            strLocation = strLocation + getItem(position).getCate_name();
+            strLocation.append(getItem(position).getCate_name());
+        }else{
+            strLocation.append("..");
         }
-        SDViewBinder.setTextView(getHolder(holder).tvLocation, strLocation, "");
+        SDViewBinder.setTextView(getHolder(holder).tvLocation, strLocation.toString(), "");
 
         /**
          * 原价
          */
         if (!TextUtils.isEmpty(getItem(position).getOrigin_price())) {
-            String temp = getItem(position).getOrigin_price() + "元";
+            String temp = DataFormat.toDoubleTwo(getItem(position).getOrigin_price()) + "元";
             SDViewBinder.setTextView(getHolder(holder).tvOriginal, temp, "");
         } else {
             SDViewBinder.setTextView(getHolder(holder).tvOriginal, "");
@@ -142,7 +146,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
          * 团购价
          */
         if (!TextUtils.isEmpty(getItem(position).getTuan_price())) {
-            String temp = getItem(position).getTuan_price() + "元/张";
+            String temp = DataFormat.toDoubleTwo(getItem(position).getTuan_price()) + "元/张";
             SDViewBinder.setTextView(getHolder(holder).tvTuan, temp, "");
         } else {
             SDViewBinder.setTextView(getHolder(holder).tvTuan, "");
@@ -152,7 +156,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
          * 佣金
          */
         if (!TextUtils.isEmpty(getItem(position).getSalary()) && DataFormat.toDouble(getItem(position).getSalary()) != 0) {
-            String temp = getItem(position).getSalary() + "元佣金";
+            String temp =  DataFormat.toDoubleTwo(getItem(position).getSalary())  + "元佣金";
             getHolder(holder).tvSalary.setVisibility(View.VISIBLE);
             SDViewBinder.setTextView(getHolder(holder).tvSalary, temp);
         } else {
@@ -208,12 +212,13 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         int allHeight = 0;
         for(int i = 0; i<getItemCount(); i++){
             int imageHeight = dip2px(196);
-            int titleHeight = dip2px(35);
+            int tagHeight = dip2px(35);
             int addressHeight = dip2px(25);
-            int tagHeight = lines.get(i) ? dip2px(DOUBBLE_LINE_HEIGHT) : dip2px(SINGLE_LINE_HEIGHT);
+            int titleHeight = lines.get(i) ? dip2px(DOUBBLE_LINE_HEIGHT) : dip2px(SINGLE_LINE_HEIGHT);
             int spaceHeight = dip2px(30);
             int itemHeight = imageHeight + titleHeight + addressHeight + tagHeight + spaceHeight;
             allHeight += itemHeight;
+            Log.d(tag, "get item height: " + allHeight + " ,is two lines : " + lines.get(i));
         }
         return allHeight;
     }

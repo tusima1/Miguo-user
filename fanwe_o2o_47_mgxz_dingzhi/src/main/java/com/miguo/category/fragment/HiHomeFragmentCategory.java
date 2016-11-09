@@ -117,11 +117,20 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.city_sayhi)
     TextView citySayHi;
 
+    @ViewInject(R.id.sayhi_layout)
+    RelativeLayout sayHiLayout;
+
+    @ViewInject(R.id.title_space)
+    View space;
+
     /**
      * 轮播ViewPager
      */
     @ViewInject(R.id.home_view_pager)
     HomeBannerViewPager homeViewPager;
+
+    @ViewInject(R.id.banner_layout)
+    RelativeLayout bannerLayout;
 
     HomeBannerAdapter homeBannerAdapter;
     @ViewInject(R.id.indicator_circle)
@@ -201,6 +210,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     protected void init() {
         setTopHeight(dip2px(150));
         setTitleAlpha(titleLayout, 0);
+        setTitlePadding(space);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
         initChirldViewsParent();
@@ -241,10 +251,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         ArrayList<Fragment> fragmets = new ArrayList<>();
 
         if(bodys == null || bodys.size() == 0){
-            bodys = new ArrayList<>();
-            AdspaceListBean.Result.Body body = new AdspaceListBean().new Result().new Body();
-            body.setIcon("");
-            bodys.add(body);
+//            bodys = new ArrayList<>();
+//            AdspaceListBean.Result.Body body = new AdspaceListBean().new Result().new Body();
+//            body.setIcon("");
+//            bodys.add(body);
+            return;
         }
 
         for(int i = 0; i< bodys.size(); i++){
@@ -391,7 +402,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
         if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning() && titleLayout.getAlpha() == 1){
             currentT = 0;
-            startTitleLeaveAnimation();
+//            startTitleLeaveAnimation();
+            startTitleShowAnimation();
             startTabShowAnimation();
         }
 
@@ -538,10 +550,17 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     private void checkTop(int l, int t, int oldl, int oldt){
         if(isHasTop()){
-            if(t >= getTopHeight()){
+
+            float radio = t / (float)(getTopHeight() - space.getMeasuredHeight());
+            setTitleAlpha(titleLayout, radio);
+
+            if(t >= getTopHeight() - space.getMeasuredHeight()){
                 setHasTop(false);
-                scrollContent.removeView(topSayHi);
-                scrollView.scrollTo(0,0);
+                sayHiLayout.removeView(topSayHi);
+                LinearLayout.LayoutParams params = getLineaLayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                params.setMargins(0, titleLayout.getMeasuredHeight(), 0, 0);
+//                bannerLayout.setLayoutParams(params);
+//                scrollView.scrollTo(titleLayout.getMeasuredHeight(),0);
             }
         }
     }

@@ -17,6 +17,4 @@ public class ShopDetailViewPager extends ViewPager{
         super(context, attrs);
     }
 
-
-
 }

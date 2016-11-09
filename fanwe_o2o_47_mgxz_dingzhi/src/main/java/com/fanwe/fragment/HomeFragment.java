@@ -51,7 +51,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  *
  * @author js02
  */
-public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2, PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener, CommandGroupBuyView {
+public class HomeFragment extends BaseFragment implements CallbackView, CallbackView2, PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener{
 
     @ViewInject(R.id.ptr_layout)
     FixRequestDisallowTouchEventPtrFrameLayout ptrFrameLayout;
@@ -94,7 +94,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     @Override
     protected void init() {
         super.init();
-        initDao();
+
         getHomeClassify();
 //		initPageModel();
         locationCity();
@@ -120,9 +120,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
                 mFragmentHomeTimeLimit);
     }
 
-    private void initDao() {
-        commandGroupBuyDao = new CommandGroupBuyDaoImpl(this);
-    }
+
 
     private void getTuanList(int page) {
         try {
@@ -371,7 +369,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
     public void onRefreshBegin(PtrFrameLayout frame) {
         pageNum = 1;
         requestLiveList();
-        getTuanList(pageNum);
+
         mFragmentHomeTimeLimit.onRefresh();
         //判断是否要请求头部
         if (SDCollectionUtil.isEmpty(itemsHomeClassify)) {
@@ -384,7 +382,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
      */
     @Override
     public void onScrollToEnd() {
-        getTuanList(pageNum);
+
     }
 
     @Override
@@ -396,52 +394,10 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
         recyclerScrollView.loadComplite();
     }
 
-    /**
-     * 首页团购列表回调
-     */
-    @Override
-    public void getCommandGroupBuyDaoListSuccess(final CommandGroupBuyBean.Result result) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setPageNum(result.getPage());
-                if (mHomeFragmentLiveList != null) {
-                    mHomeFragmentLiveList.onRefreshTuan(true, result.getBody());
-                    setPageNum(result.getPage() + 1);
-                }
-                loadComplete();
-            }
-        });
-    }
 
-    @Override
-    public void getCommandGroupBuyDaoListLoadMore(final CommandGroupBuyBean.Result result) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                setPageNum(result.getPage());
-                if (mHomeFragmentLiveList != null) {
-                    mHomeFragmentLiveList.onRefreshTuan(false, result.getBody());
-                }
-                if (result.getBody() != null && result.getBody().size() > 0) {
-                    setPageNum(result.getPage() + 1);
-                }
-                loadComplete();
-            }
-        });
-    }
 
-    @Override
-    public void getCommandGroupBuyDaoListError(String msg) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadComplete();
-                }
-            });
-        }
-    }
+
+
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;

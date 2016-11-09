@@ -21,6 +21,7 @@ public class HiHomeActivity extends HiBaseActivity{
 
     @Override
     protected Category initCategory() {
+        setTwiceKeyDownToCloseActivity(true);
         return new HiHomeCategory(this);
     }
 
@@ -52,7 +53,8 @@ public class HiHomeActivity extends HiBaseActivity{
     }
 
     @Override
-    protected HiHomeCategory getCategory() {
+    public HiHomeCategory getCategory() {
         return (HiHomeCategory) super.getCategory();
     }
+
 }

@@ -14,7 +14,6 @@
         android:src="@drawable/bg_empty" />
 
     <TextView
-        android:singleLine="true"
         android:gravity="center_vertical"
         android:id="@+id/tv_name_item_featured_groupon"
         android:layout_width="match_parent"

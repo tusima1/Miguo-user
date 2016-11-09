@@ -143,8 +143,8 @@ public abstract class Category implements BaseView {
      * 一般用于滑动时候的处理
      * @param radio
      */
-    protected void setTitleAlpha(float radio){
-//        top.setAlpha(radio);
+    protected void setTitleAlpha(View top, float radio){
+        top.setAlpha(radio);
     }
 
     /**
