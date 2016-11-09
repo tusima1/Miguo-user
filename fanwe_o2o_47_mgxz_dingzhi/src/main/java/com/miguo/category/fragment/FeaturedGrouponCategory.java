@@ -87,6 +87,15 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 BaiduMapManager.getInstance().getLatitude() + "");
     }
 
+    public void clearPage(){
+        recyclerView.setVisibility(View.GONE);
+        featuredTitleLayout.setVisibility(View.GONE);
+    }
+
+    public void showPage(){
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
     public void onLoadMore(){
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
@@ -106,6 +115,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             @Override
             public void run() {
                 featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+                recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
                 getCategory().loadComplete();
                 updateFeaturedGrouponViewHeight();
@@ -122,6 +132,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             @Override
             public void run() {
                 featuredTitleLayout.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
                 adapter.notifyDataSetChangedLoadmore(list);
                 getCategory().loadComplete();
                 updateFeaturedGrouponViewHeight();
@@ -140,6 +151,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             @Override
             public void run() {
                 featuredTitleLayout.setVisibility(View.GONE);
+                clearPage();
                 getCategory().loadComplete();
             }
         });

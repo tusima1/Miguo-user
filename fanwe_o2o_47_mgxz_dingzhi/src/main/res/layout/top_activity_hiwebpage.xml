@@ -12,13 +12,12 @@
         android:layout_height="50dp">
 
         <ImageView
-            android:layout_marginLeft="8dp"
             android:layout_centerVertical="true"
             android:id="@+id/back"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_left_arrow_dark"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent" />
 
         <TextView
             android:text="活动"

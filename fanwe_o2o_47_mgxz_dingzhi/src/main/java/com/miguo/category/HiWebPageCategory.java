@@ -2,9 +2,11 @@ package com.miguo.category;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,6 +49,9 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     ShoppingCartInfo mShoppingCartInfo;
 
+    @ViewInject(R.id.back)
+    ImageView back;
+
 
     public HiWebPageCategory(HiBaseActivity activity) {
         super(activity);
@@ -65,7 +70,12 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     @Override
     protected void initThisListener() {
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BaseUtils.finishActivity(getActivity());
+            }
+        });
     }
 
     @Override

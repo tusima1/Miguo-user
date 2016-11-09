@@ -119,20 +119,20 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         StringBuffer strLocation = new StringBuffer("");
         if (!TextUtils.isEmpty(getItem(position).getArea_name())) {
             String str = getItem(position).getArea_name();
-            strLocation.append(StringTool.getStringFixed(str, 6, "")+"|");
+            strLocation.append(StringTool.getStringFixed(str, 6, "")+" |");
         }else{
-            strLocation.append("..|");
+            strLocation.append(".. | ");
         }
         if (!TextUtils.isEmpty(getItem(position).getDistance())) {
             double distanceValue = Double.valueOf(getItem(position).getDistance());
-            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+"|");
+            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+" | ");
         }else{
-            strLocation.append("..|");
+            strLocation.append(".. | ");
         }
         if (!TextUtils.isEmpty(getItem(position).getCate_name())) {
             strLocation.append(getItem(position).getCate_name());
         }else{
-            strLocation.append("..");
+            strLocation.append(" ..");
         }
         SDViewBinder.setTextView(getHolder(holder).tvLocation, strLocation.toString(), "");
 
