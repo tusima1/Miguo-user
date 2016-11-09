@@ -1439,7 +1439,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                     //主播心跳
                     mHearBeatTimer = new Timer(true);
                     mHeartBeatTask = new HeartBeatTask();
-                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 30 * 1000);
+                    mHearBeatTimer.schedule(mHeartBeatTask, 1000, 5 * 1000);
 
                     //直播时间
                     mVideoTimer = new Timer(true);

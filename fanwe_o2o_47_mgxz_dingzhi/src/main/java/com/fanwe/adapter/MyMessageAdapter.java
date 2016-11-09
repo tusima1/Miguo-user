@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.fanwe.DaiYanStoreWapActivity;
 import com.fanwe.DistributionMyXiaoMiActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.MemberRankActivity;
 import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.WithdrawLogActivity;
@@ -32,6 +31,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 
 import java.util.List;
@@ -209,7 +209,7 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 		} else {
 			// 默认,去首页
 			bundle.putInt("index", 3);
-			startActivity(mActivity, MainActivity.class, bundle);
+			startActivity(mActivity, HiHomeActivity.class, bundle);
 		}
 	}
 

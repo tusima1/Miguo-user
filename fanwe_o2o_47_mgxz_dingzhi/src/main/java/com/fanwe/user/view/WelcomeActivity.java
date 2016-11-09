@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.fanwe.MainActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.WelcomePagerAdapter;
 import com.fanwe.user.view.customviews.WelcomeView;

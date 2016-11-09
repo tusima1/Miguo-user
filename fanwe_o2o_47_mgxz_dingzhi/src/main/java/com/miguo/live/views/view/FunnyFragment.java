@@ -94,11 +94,15 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private String interestingStr="";
     String cityId="";
     String currentData="";
+    /**
+     * 是否加载过。
+
+     */
+    boolean  hasLoad=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         SDEventManager.register(this);
-        cityId=AppRuntimeWorker.getCity_id();
         currentData = DateFormat.format("yyyy-MM-dd",new Date(System.currentTimeMillis())).toString();
         settings = getActivity().getSharedPreferences("miguo", Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
@@ -124,7 +128,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     @Override
     public void onResume() {
         super.onResume();
-        requestLiveList();
     }
 
     /**
@@ -154,6 +157,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
 
     private void initView() {
+        requestLiveList();
         interestingStr = settings.getString("Interesting","");
         mFragmentManager = new SDFragmentManager(getChildFragmentManager());
 
@@ -212,6 +216,15 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         mSpvAd.setAdapter(mAdapter);
 
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if(!hasLoad&&isVisibleToUser){
+            requestLiveList();
+            hasLoad = true;
+        }
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     /**
@@ -283,6 +296,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
 
     private void requestLiveList() {
+        cityId = AppRuntimeWorker.getCity_id();
         if (liveHelper != null) {
         liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
         }
@@ -304,7 +318,9 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
         rooms = datas;
         //直播列表
-        mHomeFragmentLiveList.updateView(isRefresh, rooms);
+        if(mHomeFragmentLiveList!=null) {
+            mHomeFragmentLiveList.updateView(isRefresh, rooms);
+        }
         loadComplete();
     }
 
@@ -368,8 +384,10 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         requestLiveList();
     }
     public void loadComplete(){
-        ptrFrameLayout.refreshComplete();
-        recyclerScrollView.loadComplite();
+        if(ptrFrameLayout!=null&&recyclerScrollView!=null) {
+            ptrFrameLayout.refreshComplete();
+            recyclerScrollView.loadComplite();
+        }
     }
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {

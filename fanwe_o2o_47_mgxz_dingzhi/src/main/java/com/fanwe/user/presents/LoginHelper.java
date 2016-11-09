@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;

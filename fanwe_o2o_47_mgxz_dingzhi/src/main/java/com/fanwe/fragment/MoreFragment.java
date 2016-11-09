@@ -1,7 +1,5 @@
 package com.fanwe.fragment;
 
-import java.io.File;
-
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.MainActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.app.App;
@@ -28,14 +25,17 @@ import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDPackageUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
+import com.miguo.live.views.customviews.MGToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDEventManager;
+
+import java.io.File;
 
 /**
  * 更多fragment
@@ -227,7 +227,7 @@ public class MoreFragment extends BaseFragment
 	 */
 	private void clickQrcode()
 	{
-		SDEventManager.post(MainActivity.class, EnumEventTag.START_SCAN_QRCODE.ordinal());
+		SDEventManager.post(HiHomeActivity.class, EnumEventTag.START_SCAN_QRCODE.ordinal());
 	}
 
 	/**
