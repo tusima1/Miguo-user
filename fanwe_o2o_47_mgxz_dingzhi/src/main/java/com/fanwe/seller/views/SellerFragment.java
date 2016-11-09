@@ -50,7 +50,7 @@ public class SellerFragment extends Fragment {
         setWidget();
         setListener();
         setTitlePadding(titleLayout);
-        clickTitle("all");
+        clickTitle("groupon");
         setView();
         return view;
     }
