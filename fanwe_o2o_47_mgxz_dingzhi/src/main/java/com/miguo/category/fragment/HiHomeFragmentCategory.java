@@ -166,6 +166,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @ViewInject(R.id.home_ad_view_2)
     HomeADView2 homeADView2;
+    @ViewInject(R.id.home_ad_view_2_space_layout)
+    LinearLayout homeAdView2SpaceLayout;
 
     /**
      * 接口类
@@ -369,7 +371,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_INDEX, AdspaceParams.TERMINAL_TYPE);
     }
 
-
     /**
      * 刷新问候语
      */
@@ -400,14 +401,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     }
 
-
     int moveDistance = dip2px(30);
     int currentT = 0;
     boolean animRunning = false;
     long animDuration = 200;
     private void checkTitle(int l, int t, int oldl, int oldt){
 
-        if(!isHasTop() && !isAnimRunning() && t > getTopHeight()){
+        if(!isHasTop() && !isAnimRunning() && t > getTopHeight() && isHasSeeler()){
             if(currentT == 0){
                 currentT = t;
             }
@@ -495,7 +495,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     }
 
-
     private void startTitleShowAnimation(){
         if(titleLayout.getAlpha() == 1){
             return;
@@ -567,7 +566,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             }
         });
         getTab().startAnimation(tabAnimation);
-
     }
 
 
@@ -588,7 +586,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @param oldt
      */
     private void checkTop(int l, int t, int oldl, int oldt){
-        if(isHasTop()){
+        if(isHasTop() && isHasSeeler()){
 
             float radio = t / (float)(getTopHeight() - space.getMeasuredHeight());
             setTitleAlpha(titleLayout, radio);
@@ -685,6 +683,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void checkCitySignSuccess() {
         setHasSeeler(true);
         nodata.setVisibility(View.GONE);
+        homeAdView2SpaceLayout.setVisibility(View.VISIBLE);
         onRefreshAfter();
     }
 
@@ -692,8 +691,18 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void checkCitySignError() {
         clearPage();
         setTitleAlpha(titleLayout, 1);
+        currentT = 0;
+        sayHiLayout.setVisibility(View.VISIBLE);
+        space.setVisibility(View.VISIBLE);
+        homeAdView2SpaceLayout.setVisibility(View.GONE);
+        try{
+            topSayHi.setVisibility(View.GONE);
+        }catch (Exception e){
+
+        }
         nodata.setVisibility(View.VISIBLE);
         setHasSeeler(false);
+        loadComplete();
     }
 
     /** 获取限时特惠数据回调*/
@@ -725,7 +734,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getSpecialListError(String msg) {
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
-//        homeTuanTimeLimitView.setVisibility(View.GONE);
         loadComplete();
     }
 
