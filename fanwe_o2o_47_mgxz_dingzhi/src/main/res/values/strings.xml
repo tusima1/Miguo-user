@@ -7,7 +7,6 @@
     <string name="i_want_comment">我要点评</string>
     <string name="detail">详情</string>
     <string name="see_all_comment">查看全部评论</string>
-    <string name="market">市场</string>
 
     <!-- 活动相关 -->
     <string name="event">活动</string>
@@ -102,6 +101,5 @@
     <string name="red_count_string">选择数量</string>
 
     <string name="red_time_countdown">抢红包倒计时</string>
-    <string name="pop_share_live">送朋友20钻，如果朋友本场有消费，你可以共享直播收益的20%</string>
 
 </resources>

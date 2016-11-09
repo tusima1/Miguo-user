@@ -37,7 +37,6 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -616,7 +615,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
 
         //--end bind data
-        SDDialogManager.dismissProgressDialog();
     }
 
     private void loadWebData(WebView webView, String data) {
