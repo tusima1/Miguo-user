@@ -716,6 +716,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             JSONObject json = (JSONObject) jsonParser.nextValue();
             int action = json.getInt(Constants.CMD_KEY);
             switch (action) {
+                case Constants.AVIMCMD_Manager_exit:
+                    mLiveView.hostExitByForce();
+                    break;
                 case Constants.AVIMCMD_MUlTI_HOST_INVITE:
                     mLiveView.showInviteDialog();
                     break;
@@ -1191,8 +1194,8 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 String token = root.getToken();
                 if ("200".equals(statusCode)) {
 
-                } else {
-                    MGToast.showToast("账户已失效");
+                } else{
+                    MGToast.showToast("主播房间已关闭");
                     mLiveView.tokenInvalidateAndQuit();
                 }
             }

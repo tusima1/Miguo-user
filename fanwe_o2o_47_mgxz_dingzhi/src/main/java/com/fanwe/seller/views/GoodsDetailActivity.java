@@ -653,7 +653,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void parseGoodsDetailNew(List data) {
-        if (data != null) {
+        if (data != null&&data.size()>0) {
             ModelGoodsDetailNew modelGoodsDetailNew = (ModelGoodsDetailNew) data.get(0);
             if (modelGoodsDetailNew != null) {
                 bindData(modelGoodsDetailNew);

@@ -990,6 +990,11 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     }
 
     @Override
+    public void hostExitByForce() {
+        userExit();
+    }
+
+    @Override
     public void enterRoomComplete(int id_status, boolean isSucc) {
 
         if (isSucc == true) {

@@ -1093,34 +1093,52 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         finish();
     }
 
+    @Override
+    public void hostExitByForce() {
+        //向后台发送主播退出
+        if (null != mLiveHelper&&LiveUtil.checkIsHost()) {
+             mLiveHelper.perpareQuitRoom(true);
+            App.getInstance().setAvStart(false);
+            if (isPushed) {
+                mLiveHelper.stopPushAction();
+            }
+                finish();
+        }
+    }
+
+     LiveBackDialog dialog=null;
     /**
      * 退出直播对话框
      */
     public void showBackDialog() {
-        final LiveBackDialog dialog = new LiveBackDialog(this);
-        dialog.setOnLiveBackClickListener(new LiveBackDialogCategory.OnLiveBackClickListener() {
-            @Override
-            public void clickSure() {
-                //如果是直播，发消息
-                if (null != mLiveHelper) {
-                    //向后台发送主播退出
-                    mLiveHelper.perpareQuitRoom(true);
-                    App.getInstance().setAvStart(false);
-                    if (isPushed) {
-                        mLiveHelper.stopPushAction();
+        if(dialog==null) {
+            dialog = new LiveBackDialog(this);
+            dialog.setOnLiveBackClickListener(new LiveBackDialogCategory.OnLiveBackClickListener() {
+                @Override
+                public void clickSure() {
+                    //如果是直播，发消息
+                    if (null != mLiveHelper) {
+                        //向后台发送主播退出
+                        mLiveHelper.perpareQuitRoom(true);
+                        App.getInstance().setAvStart(false);
+                        if (isPushed) {
+                            mLiveHelper.stopPushAction();
+                        }
+                        startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
+                        finish();
+                        dialog.dismiss();
                     }
-                    startActivity(new Intent(LiveActivity.this, LiveEndActivity.class));
-                    finish();
+                }
+
+                @Override
+                public void clickCancel() {
                     dialog.dismiss();
                 }
-            }
-
-            @Override
-            public void clickCancel() {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+            });
+        }
+        if(dialog!=null&&!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     /**

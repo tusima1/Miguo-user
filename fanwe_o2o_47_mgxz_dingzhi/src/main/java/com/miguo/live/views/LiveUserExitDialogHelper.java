@@ -2,6 +2,7 @@ package com.miguo.live.views;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.adapters.UserExitAdapter;
 import com.miguo.live.interf.IHelper;
@@ -147,7 +149,10 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
      * 优惠
      */
     private void clickYouHui() {
-        MGToast.showToast("优惠");
+        if(mActivity!=null) {
+            Intent intent = new Intent(mActivity, RedPacketListActivity.class);
+            mActivity.startActivity(intent);
+        }
     }
 
     @Override
