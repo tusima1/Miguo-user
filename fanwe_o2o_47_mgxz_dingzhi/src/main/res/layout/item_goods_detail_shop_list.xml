@@ -9,11 +9,14 @@
         android:id="@+id/tv_name_or_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
         android:gravity="center"
         android:layout_marginTop="@dimen/dp20"
         android:textSize="@dimen/sp13"
         android:textColor="@color/gray_text_59"
-        android:lines="1"
+        android:lines="2"
+        android:ellipsize="end"
         />
     <TextView
         android:id="@+id/tv_time"
