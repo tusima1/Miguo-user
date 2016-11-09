@@ -101,6 +101,7 @@
                 android:layout_toRightOf="@id/location_line"
                 android:maxLines="2"
                 android:text=""
+                android:ellipsize="end"
                 android:textColor="#999999"
                 android:textSize="12sp" />
 
