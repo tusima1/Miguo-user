@@ -438,8 +438,10 @@ MyFragment extends BaseFragment implements RedDotView
     }
 
     private void callKeFu(String tel) {
-        Intent intent = SDIntentUtil.getIntentCallPhone(tel);
-        SDActivityUtil.startActivity(getActivity(), intent);
+        if(getActivity()!=null) {
+            Intent intent = SDIntentUtil.getIntentCallPhone(tel);
+            SDActivityUtil.startActivity(getActivity(), intent);
+        }
     }
 
     //------------http start---------------

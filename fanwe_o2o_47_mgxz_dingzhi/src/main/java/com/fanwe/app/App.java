@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,7 +56,7 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 
 
-public class App extends Application implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
+public class App extends MultiDexApplication implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
 
     private static App mApp = null;
 
@@ -126,7 +127,13 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
             LocalUserModelDao.insertModel(localUser);
         }
     }
-
+    public class MultiDexApplication extends Application {
+        @Override
+        protected void attachBaseContext(Context base) {
+            super.attachBaseContext(base);
+            MultiDex.install(this);
+        }
+    }
 
     @Override
     public void onCreate() {

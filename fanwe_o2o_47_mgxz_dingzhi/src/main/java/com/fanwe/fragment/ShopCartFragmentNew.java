@@ -485,7 +485,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             if (outSideShoppingCartHelper == null) {
                 outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
             }
-            if (dialog == null) {
+            if (dialog == null&&getActivity()!=null) {
                 dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
             }
             dialog.show();
