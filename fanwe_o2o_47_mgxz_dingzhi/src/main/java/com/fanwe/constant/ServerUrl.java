@@ -40,7 +40,7 @@ public class ServerUrl {
 
     public static String getServerApiUrl() {
         if (DEBUG) {
-            return SERVER_API_URL_PRE + SERVER_API_TEST_URL + SERVER_API_URL_END;
+            return SERVER_API_URL_PRE + SERVER_API_JAVA_TEST_URL + SERVER_API_URL_END;
         } else {
             //线上正式
             return SERVER_API_URL_ONLINE;
