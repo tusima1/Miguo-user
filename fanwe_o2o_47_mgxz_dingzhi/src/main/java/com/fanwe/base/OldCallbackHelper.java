@@ -35,7 +35,7 @@ public class OldCallbackHelper {
         handResult(view2,FAILURE,responseBody,null);
     }
 
-    protected void onFinish(CallbackView2 view2, String method){
+    protected void onFinish2(CallbackView2 view2, String method){
         handResult(view2,FINISH,method,null);
     }
     private void handResult(final Object o, final int who, final String method, final List data){

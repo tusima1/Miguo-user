@@ -25,8 +25,7 @@ public class JpushHelper {
 	public static void initJPushConfig() {
 		Set<String> tagSet = getTag();
 		String alias =getAlias();
-		if (TextUtils.isEmpty(alias)||"null".equals(alias) || tagSet == null) {
-			Log.e("Jpush", "initJPushConfig: token为空");
+		if (TextUtils.isEmpty(alias)|| tagSet == null) {
 			return;
 		}
 		/**
@@ -85,7 +84,6 @@ public class JpushHelper {
 	public static void initJpushRegister() {
 		String user_id =getAlias();
 		if (TextUtils.isEmpty(user_id)) {
-			Log.e("Jpush", "initJpushRegister: token为空");
 			return;
 		}
 		CommonHelper commonHelper = new CommonHelper(null,null);

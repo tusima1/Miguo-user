@@ -25,6 +25,16 @@ public class DetailListBean {
     /**
      * title : 随时退
      */
+    //TODO 2016.11.9 后台直接拼装好的字符串
+    private String tuan_price_with_unit;
+
+    public String getTuan_price_with_unit() {
+        return tuan_price_with_unit;
+    }
+
+    public void setTuan_price_with_unit(String tuan_price_with_unit) {
+        this.tuan_price_with_unit = tuan_price_with_unit;
+    }
 
     private List<TagListBean> tag_list;
 

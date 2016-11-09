@@ -92,13 +92,10 @@ public class SpecialTopicAdapter extends BaseAdapter {
             SDViewBinder.setImageView(detailListBean.getIcon(),holder.iv_img);
             holder.tv_location.setText(getLocationInfo(detailListBean.getArea_name(),detailListBean.getDistance(),""));
             holder.tv_name.setText(detailListBean.getTitle());
-            String type = detailListBean.getType();
-            //TODO 类型
-
             holder.tv_price_original.setText(detailListBean.getOrigin_price()+"元");
             holder.tv_price_original.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
 
-            holder.tv_price_tuan.setText(detailListBean.getTuan_price()+"元/张");
+            holder.tv_price_tuan.setText(detailListBean.getTuan_price_with_unit());
 
             //添加tags
             List<DetailListBean.TagListBean> tag_list = detailListBean.getTag_list();
