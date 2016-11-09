@@ -457,6 +457,10 @@ public class HiHomeCategory extends Category implements
         ((HiHomeFragment)fragments.get(0)).updateFromCityChanged(model);
     }
 
+    public void handlerFunnyFragment(){
+        homeViewPager.setCurrentItem(1);
+    }
+
     /**
      * 登录回调
      */

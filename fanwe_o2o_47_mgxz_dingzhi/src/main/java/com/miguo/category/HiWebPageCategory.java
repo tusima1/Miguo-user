@@ -1,5 +1,6 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -7,20 +8,29 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
+import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiWebPageActivity;
+import com.miguo.dao.ShoppingCartDao;
+import com.miguo.dao.impl.ShoppingCartDaoImpl;
 import com.miguo.framework.WebActionJSHandler;
+import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.view.ShoppingCartView;
+
+import java.util.List;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/3.
  */
-public class HiWebPageCategory extends Category{
+public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     @ViewInject(R.id.webView)
     WebView webView;
@@ -33,12 +43,18 @@ public class HiWebPageCategory extends Category{
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
 
+    ShoppingCartDao shoppingCartDao;
+
+    ShoppingCartInfo mShoppingCartInfo;
+
+
     public HiWebPageCategory(HiBaseActivity activity) {
         super(activity);
     }
 
     @Override
     protected void initFirst() {
+        shoppingCartDao = new ShoppingCartDaoImpl(this);
         handler = new WebActionJSHandler(getActivity());
     }
 
@@ -108,5 +124,41 @@ public class HiWebPageCategory extends Category{
     @Override
     public HiWebPageActivity getActivity() {
         return (HiWebPageActivity) super.getActivity();
+    }
+
+    public void addToShoppingCart(String cart_type,String goods_id,String add_goods_num,String fx_user_id,String roomId){
+        if(!TextUtils.isEmpty(App.getInstance().getToken())){
+            shoppingCartDao.addToShoppingCart(roomId, fx_user_id, App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(), goods_id, cart_type, add_goods_num);
+            return;
+        }
+        addLocalShoppingCart(cart_type, goods_id, add_goods_num, fx_user_id, roomId);
+
+    }
+
+    private void addLocalShoppingCart(String cart_type,String goods_id,String add_goods_num,String fx_user_id,String roomId){
+        mShoppingCartInfo = new ShoppingCartInfo();
+        mShoppingCartInfo.setId(goods_id);
+        mShoppingCartInfo.setFx_user_id(fx_user_id);//TODO fx_id 没登陆都是空
+        mShoppingCartInfo.setNumber("1");
+        mShoppingCartInfo.setImg("");
+        mShoppingCartInfo.setLimit_num("");
+        mShoppingCartInfo.setIs_first("");
+        mShoppingCartInfo.setIs_first_price("");
+        mShoppingCartInfo.setOrigin_price("");
+        mShoppingCartInfo.setTuan_price("");
+        mShoppingCartInfo.setTitle("");
+        LocalShoppingcartDao.insertModel(mShoppingCartInfo);
+        addToShoppingCartSuccess();
+    }
+
+    @Override
+    public void addToShoppingCartSuccess() {
+        Intent intent = new Intent(getActivity(), ShopCartActivity.class);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
+    }
+
+    @Override
+    public void addToShoppingCartError() {
+        showToast("添加购物车失败！");
     }
 }

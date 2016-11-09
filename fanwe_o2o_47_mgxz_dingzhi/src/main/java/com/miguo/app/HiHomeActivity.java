@@ -42,6 +42,9 @@ public class HiHomeActivity extends HiBaseActivity{
                 case RequestCode.RESUTN_CITY_ID:
                     handlerReturnCityId(data);
                     break;
+                case RequestCode.HOME_WEB_PAGE:
+                    handlerFunnyFragment();
+                    break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -50,6 +53,10 @@ public class HiHomeActivity extends HiBaseActivity{
     private void handlerReturnCityId(Intent data){
         CitylistModel model = (CitylistModel)data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
         getCategory().updateFromCityChanged(model);
+    }
+
+    private void handlerFunnyFragment(){
+        getCategory().handlerFunnyFragment();
     }
 
     @Override

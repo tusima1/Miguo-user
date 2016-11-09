@@ -97,8 +97,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private int mFLViewpagerHeight;
     private View mLayoutTop;
     private SellerNewHttpHelper mHttpHelper;
-    //    private String GoodsId="0ecd5927-1322-4d9e-b092-9cb213ada070";
-//    private String GoodsId="004c0d20-43f8-4ef8-ae7f-a15d8359655f";
     private String GoodsId = "";
     private TextView mTestHtmlTextView;
     private TextView mHtmlTipDesc;//温馨提示

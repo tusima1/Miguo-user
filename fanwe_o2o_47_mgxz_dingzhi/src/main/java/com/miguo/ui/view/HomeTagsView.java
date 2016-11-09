@@ -84,7 +84,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             icon.setHomeTagsView(this);
 
 
-            SDViewBinder.setImageView(getItem(i).getIcon(), icon, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+            SDViewBinder.setImageView(getItem(i).getIcon(), icon);
             group.addView(icon);
 
             TextView title = new TextView(getContext());

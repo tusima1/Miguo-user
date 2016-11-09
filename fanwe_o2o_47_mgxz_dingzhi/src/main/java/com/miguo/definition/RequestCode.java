@@ -6,4 +6,5 @@ package com.miguo.definition;
  */
 public class RequestCode {
     public static final int RESUTN_CITY_ID = 0x00011;
+    public static final int HOME_WEB_PAGE = 0x0002;
 }

@@ -3,6 +3,7 @@ package com.miguo.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,7 +14,7 @@ import java.util.Random;
  * Created by zlh/狗蛋哥/Barry on 16/8/18.
  * 首页banner
  */
-public class HomeBannerAdapter extends FragmentPagerAdapter {
+public class HomeBannerAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<Fragment> fragments;
     int itemCount = 0;
@@ -32,13 +33,6 @@ public class HomeBannerAdapter extends FragmentPagerAdapter {
         return fragments.get(position);
     }
 
-    public void notifyDataSetChanged(ArrayList<Fragment> adds) {
-        for(int i = 0; i<fragments.size(); i++){
-            fm.beginTransaction().remove(fragments.get(i)).commit();
-        }
-        this.fragments = adds;
-        super.notifyDataSetChanged();
-    }
 
     @Override
     public int getCount() {
