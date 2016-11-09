@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -16,7 +15,6 @@ import com.baidu.location.BDLocationListener;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.base.Root;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
@@ -28,20 +26,17 @@ import com.fanwe.model.GoodsModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.User_infoModel;
+import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.views.SellerFragment;
-import com.fanwe.service.AppUpgradeService;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.miguo.adapter.HomePagerAdapter;
-import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.dao.GetUserReceiveCodeDao;
 import com.miguo.dao.IMLoginDao;
@@ -59,8 +54,8 @@ import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
+import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.FunnyFragment;
@@ -78,7 +73,6 @@ import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,12 +168,22 @@ public class HiHomeCategory extends Category implements
         initJpush();
         initUserInfo();
         locationCity();
+        initDict();
     }
 
     @Override
     protected void initViews() {
         initTab();
         initHomePagers();
+    }
+
+    private void initDict() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new LiveHttpHelper(null, null).getBussDictionInfo("Client");
+            }
+        }).start();
     }
 
     /**

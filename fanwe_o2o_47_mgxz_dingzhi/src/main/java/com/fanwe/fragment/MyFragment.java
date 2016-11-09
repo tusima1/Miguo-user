@@ -423,11 +423,13 @@ MyFragment extends BaseFragment implements RedDotView
         }
 
         List<DictModel> dict = MGDict.getDict();
-        for (DictModel data : dict) {
-            String dic_value = data.getDic_value();
-            if ("support_phone".equals(dic_value)) {
-                mKefuNum = data.getDic_mean();
-                break;
+        if (dict!=null){
+            for (DictModel data : dict) {
+                String dic_value = data.getDic_value();
+                if ("support_phone".equals(dic_value)) {
+                    mKefuNum = data.getDic_mean();
+                    break;
+                }
             }
         }
         if (TextUtils.isEmpty(mKefuNum)) {
