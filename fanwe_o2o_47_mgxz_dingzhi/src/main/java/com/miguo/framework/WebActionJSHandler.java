@@ -5,10 +5,12 @@ import android.webkit.JavascriptInterface;
 
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.miguo.app.HiBaseActivity;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.app.HiWebPageActivity;
 import com.miguo.category.HiWebPageCategory;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.utils.BaseUtils;
 
@@ -36,6 +38,9 @@ public class WebActionJSHandler {
 
     @JavascriptInterface
     public void addCart(String cart_type,String goods_id,String add_goods_num,String fx_user_id,String roomId){
+        if(null != getCategory()){
+            getCategory().addToShoppingCart(cart_type, goods_id, add_goods_num, fx_user_id, roomId);
+        }
     }
 
     @JavascriptInterface
@@ -56,8 +61,11 @@ public class WebActionJSHandler {
         return baseActivity instanceof HiWebPageActivity ? (HiWebPageCategory)baseActivity.getCategory() : null;
     }
 
+    @JavascriptInterface
     public void goLive(String tag_id){
-
+        Intent intent = new Intent(baseActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
+        baseActivity.setResult(ResultCode.RESUTN_OK, intent);
+        BaseUtils.finishActivity(baseActivity);
     }
 
 

@@ -60,7 +60,7 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/19.
  */
-public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView, RepresentMerchantView, RecyclerScrollView.OnRecyclerScrollViewListener {
+public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView, RepresentMerchantView, RecyclerScrollView.OnRecyclerScrollViewListener, HiShopDetailRecommendAdapter.OnItemDataChangedListener {
 
     @ViewInject(R.id.recycler_scrollview)
     RecyclerScrollView scrollView;
@@ -226,6 +226,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         share.setOnClickListener(listener);
         represent.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
+        recommendAdapter.setOnItemDataChangedListener(this);
     }
 
     @Override
@@ -655,5 +656,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     @Override
     public void onFinish() {
         represent.setClickable(true);
+    }
+
+    @Override
+    public void onItemChanged() {
+        updateRecommendRecyclerViewHeight();
     }
 }

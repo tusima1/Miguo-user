@@ -18,6 +18,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.dao.barry.GetSpecialListDao;
 import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
 import com.fanwe.dao.barry.view.GetSpecialListView;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
@@ -142,6 +143,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.home_tuan)
     HomeTuanTimeLimitView homeTuanTimeLimitView;
     GetSpecialListDao getSpecialListDao;
+    @ViewInject(R.id.home_tuan_limit_bottom_layout)
+    LinearLayout homeTuanLimitBottomLayout;
 
     /**
      * 标签栏
@@ -208,9 +211,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void init() {
-        setTopHeight(dip2px(150));
+        setTopHeight(dip2px(210));
         setTitleAlpha(titleLayout, 0);
-        setTitlePadding(space);
+        setTitlePadding(sayHiLayout);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
         initChirldViewsParent();
@@ -248,16 +251,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     private void initBanner(List<AdspaceListBean.Result.Body> bodys){
 
+        RelativeLayout.LayoutParams bannerParams = getRelativeLayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(200));
+        homeViewPager.setLayoutParams(bannerParams);
+
+        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
+
         ArrayList<Fragment> fragmets = new ArrayList<>();
-
-        if(bodys == null || bodys.size() == 0){
-//            bodys = new ArrayList<>();
-//            AdspaceListBean.Result.Body body = new AdspaceListBean().new Result().new Body();
-//            body.setIcon("");
-//            bodys.add(body);
-            return;
-        }
-
         for(int i = 0; i< bodys.size(); i++){
             HomeBannerFragmet fragmet = new HomeBannerFragmet();
             Bundle bundle = new Bundle();
@@ -265,14 +265,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             fragmet.setArguments(bundle);
             fragmets.add(fragmet);
         }
-        if(homeBannerAdapter != null){
-            homeBannerAdapter.notifyDataSetChanged(fragmets);
-        }
         homeBannerAdapter = new HomeBannerAdapter(fragment.getChildFragmentManager(), fragmets);
         homeViewPager.setAdapter(homeBannerAdapter);
         circleIndicator.setViewPager(homeViewPager);
         homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
-        homeBannerAdapter.notifyDataSetChanged();
     }
 
     private void initFeaturedGrouponCategory(){
@@ -400,9 +396,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             }
         }
 
-        if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning() && titleLayout.getAlpha() == 1){
+        if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning()){
             currentT = 0;
 //            startTitleLeaveAnimation();
+            startTitleShowAnimation();
+            startTabShowAnimation();
+        }
+
+        if(t == 0 && !isAnimRunning()){
+            currentT = 0;
             startTitleShowAnimation();
             startTabShowAnimation();
         }
@@ -560,7 +562,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
                 LinearLayout.LayoutParams params = getLineaLayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, titleLayout.getMeasuredHeight(), 0, 0);
 //                bannerLayout.setLayoutParams(params);
-//                scrollView.scrollTo(titleLayout.getMeasuredHeight(),0);
+                scrollView.scrollTo(0,0);
             }
         }
     }
@@ -652,25 +654,34 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             @Override
             public void run() {
                 if(result != null){
-                        homeTuanTimeLimitView.setVisibility(View.VISIBLE);
-                        homeTuanTimeLimitView.init(result);
-                        homeTuanTimeLimitView.setParent(ptrFrameLayout);
-                        homeTuanTimeLimitView.setOnTimeLimitClickListener(HiHomeFragmentCategory.this);
+                    homeTuanLimitBottomLayout.setVisibility(SDCollectionUtil.isEmpty(result.getBody()) ? View.GONE : View.VISIBLE);
+                    homeTuanTimeLimitView.setVisibility(SDCollectionUtil.isEmpty(result.getBody()) ? View.GONE : View.VISIBLE);
+                    homeTuanTimeLimitView.init(result);
+                    homeTuanTimeLimitView.setParent(ptrFrameLayout);
+                    homeTuanTimeLimitView.setOnTimeLimitClickListener(HiHomeFragmentCategory.this);
                 }
+                loadComplete();
             }
         });
     }
 
     @Override
     public void getSpecialListLoadmoreSuccess(SpecialListModel.Result result) {
+        loadComplete();
     }
 
     @Override
     public void getSpecialListError(String msg) {
+        homeTuanLimitBottomLayout.setVisibility(View.GONE);
+//        homeTuanTimeLimitView.setVisibility(View.GONE);
+        loadComplete();
     }
 
     @Override
     public void getSpecialListNoData(String msg) {
+        homeTuanLimitBottomLayout.setVisibility(View.GONE);
+        homeTuanTimeLimitView.setVisibility(View.GONE);
+        loadComplete();
     }
     /** 获取限时特惠数据回调 end*/
 
@@ -692,6 +703,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
         updateAdspaceViews(body, type);
+        loadComplete();
     }
 
     private void updateAdspaceViews(final List<AdspaceListBean.Result.Body> body, String type){
@@ -710,7 +722,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getAdspaceListError() {
-
+        loadComplete();
     }
 
     /**
@@ -729,6 +741,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getHomeGreetingError() {
         getHomeGreetingSuccess("神秘人，你好！");
+        loadComplete();
     }
 
     /**
@@ -737,11 +750,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @Override
     public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
         initHomeMenuView(list);
+        loadComplete();
     }
 
     @Override
     public void getMenuListError() {
-
+        loadComplete();
     }
 
     /**

@@ -44,13 +44,23 @@ public abstract class MgCallback<T> implements Callback {
     public void onStart() {
     }
 
-    public void onFinish() {
+    public void onFinishResponse() {
         //TODO finish 回调一定会走,没有网络也会.
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                onFinish();
+            }
+        });
+
+    }
+    public void onFinish() {
+
     }
 
     @Override
     public void onFailure(Call call, IOException e) {
-        onFinish();
+        onFinishResponse();
     }
 
     @Override
@@ -99,7 +109,7 @@ public abstract class MgCallback<T> implements Callback {
                 onFailure(call,null);
             }
         }
-        onFinish();
+        onFinishResponse();
     }
 
     private void onSuccessResponseOnMainThread(final String responseBody){

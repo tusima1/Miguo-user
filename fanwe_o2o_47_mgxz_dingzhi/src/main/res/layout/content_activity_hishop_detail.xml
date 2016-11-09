@@ -65,8 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
             android:textColor="@color/text_base_color"
             android:textSize="14sp" />
         <!-- 时间  营业时间：11:00-22:00 -->

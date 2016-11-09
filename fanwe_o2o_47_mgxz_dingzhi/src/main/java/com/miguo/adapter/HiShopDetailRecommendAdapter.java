@@ -37,6 +37,8 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
     public static final int SINGLE_LINE_HEIGHT = 35;
     public static final int DOUBBLE_LINE_HEIGHT = 60;
 
+    OnItemDataChangedListener onItemDataChangedListener;
+
     public HiShopDetailRecommendAdapter(Activity activity, List datas) {
         super(activity, datas);
         lines = new ArrayList<>();
@@ -93,6 +95,9 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
                     params.setMargins(dip2px(12), 0, dip2px(12), 0);
                     getHolder(holder).title.setLayoutParams(params);
                     getHolder(holder).title.setGravity(Gravity.CENTER_VERTICAL);
+                    if(onItemDataChangedListener != null){
+                        onItemDataChangedListener.onItemChanged();
+                    }
                 }
             }
         });
@@ -189,6 +194,14 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             allHeight += itemHeight;
         }
         return allHeight;
+    }
+
+    public interface OnItemDataChangedListener{
+        void onItemChanged();
+    }
+
+    public void setOnItemDataChangedListener(OnItemDataChangedListener onItemDataChangedListener) {
+        this.onItemDataChangedListener = onItemDataChangedListener;
     }
 
     @Override
