@@ -827,6 +827,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @param ad
      */
     public void onTopicAdsClick(AdspaceListBean.Result.Body ad) {
+        if(null == ad){
+            return;
+        }
+
+        if(null == ad.getType() || null == ad.getType_id()){
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
         Bundle bundle = new Bundle();
         bundle.putString(IntentKey.SPECIAL_TOPIC_ID, ad.getType_id());
@@ -835,6 +843,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void onTagsClick(MenuBean.Result.Body item){
+        if(null == item){
+            return;
+        }
+
+        if(null == item.getType_id() || null == item.getType_id()){
+            return;
+        }
+
         if(item.getType().equals(AdspaceParams.BANNER_LIVE_LIST)){
             onActionLiveList();
             return;
