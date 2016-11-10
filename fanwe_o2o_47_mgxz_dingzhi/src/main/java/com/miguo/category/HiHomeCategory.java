@@ -130,7 +130,6 @@ public class HiHomeCategory extends Category implements
 
     /**
      * 绑定用户信息到IM接口
-     *
      */
     IMUserInfoDao imUserInfoDao;
 
@@ -160,7 +159,7 @@ public class HiHomeCategory extends Category implements
 
     @Override
     protected void setThisListener() {
-        tab.setOnTabClickListener((HiHomeListener)listener);
+        tab.setOnTabClickListener((HiHomeListener) listener);
     }
 
     @Override
@@ -193,56 +192,56 @@ public class HiHomeCategory extends Category implements
      * create time:2016 10/13
      * modified time:null
      */
-    private void initTab(){
+    private void initTab() {
         tab.
-            /**
-             * 首页
-             * 名字 默认图标 按下后图标 tab id
-             */
-            addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
-            addTab(getString(R.string.funny), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
-            addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
-            addTab(getString(R.string.find), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
-            addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
-            /**
-             * 设置为默认模式（图标+文字形式）
-             */
-            setTabType(BarryTab.Type.NORMAL).
-            /**
-             * 设置文字大小
-             */
-            setTextSize(12).
-            /**
-             * 设置图标大小，单位：dp
-             * 设置了width等于设置了height
-             */
-            setIconWidht(20).
-            /**
-             * 设置中间图标的宽高
-             */
-            setCenterIconWidth(35).
-            /**
-             * 设置tab默认文字颜色
-             */
-            setNormalColor(R.color.text_home_menu_normal).
-            /**
-             * 设置tab选中时候的文字颜色
-             */
-            setPressColor(R.color.c_f5b830).
-            /**
-             * 绑定ViewPager
-             */
-            setViewPager(homeViewPager).
-            /**
-             * 生产
-             */
-            builder();
+                /**
+                 * 首页
+                 * 名字 默认图标 按下后图标 tab id
+                 */
+                        addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
+                addTab(getString(R.string.funny), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
+                addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
+                addTab(getString(R.string.find), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
+                addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
+                /**
+                 * 设置为默认模式（图标+文字形式）
+                 */
+                        setTabType(BarryTab.Type.NORMAL).
+                /**
+                 * 设置文字大小
+                 */
+                        setTextSize(12).
+                /**
+                 * 设置图标大小，单位：dp
+                 * 设置了width等于设置了height
+                 */
+                        setIconWidht(20).
+                /**
+                 * 设置中间图标的宽高
+                 */
+                        setCenterIconWidth(35).
+                /**
+                 * 设置tab默认文字颜色
+                 */
+                        setNormalColor(R.color.text_home_menu_normal).
+                /**
+                 * 设置tab选中时候的文字颜色
+                 */
+                        setPressColor(R.color.c_f5b830).
+                /**
+                 * 绑定ViewPager
+                 */
+                        setViewPager(homeViewPager).
+                /**
+                 * 生产
+                 */
+                        builder();
     }
 
     /**
      * 初始化首页四大板块
      */
-    private void initHomePagers(){
+    private void initHomePagers() {
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
         fragments.add(new FunnyFragment());
@@ -258,12 +257,12 @@ public class HiHomeCategory extends Category implements
     /**
      * 检查app版本
      */
-    private void checkAppVersion(){
+    private void checkAppVersion() {
         getActivity().startService(new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.APP_UPGRADE_SERVICE)));
     }
 
-    public void onRefreshGreeting(){
-        if(null != getHomeFragment()){
+    public void onRefreshGreeting() {
+        if (null != getHomeFragment()) {
             getHomeFragment().onRefreshGreeting();
         }
     }
@@ -280,7 +279,7 @@ public class HiHomeCategory extends Category implements
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */
-        if(!TextUtils.isEmpty(App.getInstance().getToken())){
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             initCode();
         }
 
@@ -297,18 +296,18 @@ public class HiHomeCategory extends Category implements
     /**
      * 检查用户是否登录过，如果登录过则自动登录
      */
-    private void autoLogin(){
+    private void autoLogin() {
         /**
          * 全局里面没登录信息，未登录
          */
-        if(TextUtils.isEmpty(App.getInstance().getToken())){
+        if (TextUtils.isEmpty(App.getInstance().getToken())) {
             LocalUserModel userModel = AppHelper.getLocalUser();
-            if(userModel == null){
+            if (userModel == null) {
                 return;
             }
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
-            if(TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)){
+            if (TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)) {
                 return;
             }
 
@@ -322,7 +321,7 @@ public class HiHomeCategory extends Category implements
     /**
      * 展示领取码对话框
      */
-    private void initCode(){
+    private void initCode() {
         if (App.getInstance().isShowCode) {
             if ("mgxz".equals(code) || TextUtils.isEmpty(code)) {
                 if (App.getInstance().isAlreadyShowCode) {
@@ -364,14 +363,14 @@ public class HiHomeCategory extends Category implements
     /**
      * 推送
      */
-    private void initJpush(){
+    private void initJpush() {
         JpushHelper.initJPushConfig();
     }
 
     /**
      * 初始化用户信息
      */
-    private void initUserInfo(){
+    private void initUserInfo() {
         checkCode();
         autoLogin();
     }
@@ -440,10 +439,16 @@ public class HiHomeCategory extends Category implements
         }
     }
 
+    SDDialogConfirm sdDialogConfirm;
+
     private void showChangeLocationDialog(final String location) {
-        new SDDialogConfirm(getActivity())
-                .setTextContent(
-                        "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
+        if (sdDialogConfirm != null && sdDialogConfirm.isShowing()) {
+            return;
+        }
+        sdDialogConfirm =
+                new SDDialogConfirm(getActivity());
+        sdDialogConfirm.setTextContent(
+                "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
                 .setmListener(new SDDialogCustom.SDDialogCustomListener() {
                     @Override
                     public void onDismiss(SDDialogCustom dialog) {
@@ -460,17 +465,20 @@ public class HiHomeCategory extends Category implements
                     }
                 }).show();
     }
-    /** 定位，城市处理 */
 
-    public void clickTab(int position){
+    /**
+     * 定位，城市处理
+     */
+
+    public void clickTab(int position) {
         homeViewPager.setCurrentItem(position);
     }
 
-    public void updateFromCityChanged(CitylistModel model){
-        ((HiHomeFragment)fragments.get(0)).updateFromCityChanged(model);
+    public void updateFromCityChanged(CitylistModel model) {
+        ((HiHomeFragment) fragments.get(0)).updateFromCityChanged(model);
     }
 
-    public void handlerFunnyFragment(){
+    public void handlerFunnyFragment() {
         homeViewPager.setCurrentItem(1);
     }
 
@@ -484,6 +492,7 @@ public class HiHomeCategory extends Category implements
 
     /**
      * 登录成功
+     *
      * @param user
      */
     @Override
@@ -508,20 +517,21 @@ public class HiHomeCategory extends Category implements
     }
 
     /**
-     *
      * 保存用户信息SharedPreferences
+     *
      * @param mobile
      * @param password
      */
-    private void handlerSaveUser(String mobile, String password){
+    private void handlerSaveUser(String mobile, String password) {
         SharedPreferencesUtils.getInstance(getActivity()).saveUserNameAndUserPassword(mobile, password);
     }
 
     /**
      * 将用户信息保存到本地以及全局
+     *
      * @param user
      */
-    private void saveUserToLocal(UserInfoNew user, String mobile, String password){
+    private void saveUserToLocal(UserInfoNew user, String mobile, String password) {
         UserInfoNew userInfoNew = user;
         if (userInfoNew != null) {
             App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
@@ -545,17 +555,18 @@ public class HiHomeCategory extends Category implements
 
     /**
      * 获取腾讯签名
+     *
      * @param token
      */
-    private void handlerTencentSign(String token){
-        if(TextUtils.isEmpty(token)){
+    private void handlerTencentSign(String token) {
+        if (TextUtils.isEmpty(token)) {
             Log.d(tag, "handler tencent sign token is null...");
             return;
         }
         tencentSignDao.getTencentSign(token);
     }
 
-    private void handlerIMLogin(String userId,String usersig){
+    private void handlerIMLogin(String userId, String usersig) {
         imLoginDao.imLogin(userId, usersig);
     }
 
@@ -566,7 +577,7 @@ public class HiHomeCategory extends Category implements
     @Override
     public void getUserReceiveCodeSuccess(Room room) {
         Log.d(tag, "get user receive vode success...");
-        if(null != room){
+        if (null != room) {
             if (clipboardManager != null)
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "mgxz"));
             //分点播和直播 直播类型  1 表示直播，2表示点播
@@ -600,6 +611,7 @@ public class HiHomeCategory extends Category implements
     /**
      * 领取码回调
      * 失败
+     *
      * @param message
      */
     @Override
@@ -613,7 +625,7 @@ public class HiHomeCategory extends Category implements
      */
     @Override
     public void getTencentSignSuccess(ModelGenerateSign sign) {
-        if(null == sign){
+        if (null == sign) {
             return;
         }
         String usersig = sign.getUsersig();
@@ -652,7 +664,7 @@ public class HiHomeCategory extends Category implements
      */
     @Override
     public void imLoginSuccess() {
-        if(!TextUtils.isEmpty(App.getInstance().getToken())){
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             imUserInfoDao.updateTencentNickName(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick());
             imUserInfoDao.updateTencentAvatar(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon());
         }
@@ -662,6 +674,7 @@ public class HiHomeCategory extends Category implements
         startAVSDK();
         App.getInstance().setImLoginSuccess(true);
     }
+
     /**
      * 初始化AVSDK
      */
