@@ -325,8 +325,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("tuan_id", tuan_id);
         params.put("method", SellerConstants.GROUP_BUY_COLLECT);
-
-        OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
+        OkHttpUtils.getInstance().delete( params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 if (mView2!=null){
