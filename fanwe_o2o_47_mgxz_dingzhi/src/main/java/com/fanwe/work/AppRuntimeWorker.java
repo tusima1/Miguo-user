@@ -307,6 +307,30 @@ public class AppRuntimeWorker {
         return cityId;
     }
 
+    /**
+     * 根据城市名字获得城市id，如果未找到返回-1
+     *
+     * @return
+     */
+    public static String getCityPyByCityName(String cityName) {
+        String cityPy = "";
+        if (!TextUtils.isEmpty(cityName)) {
+            List<CitylistModel> listCity = getCitylist();
+            if (listCity != null && listCity.size() > 0) {
+                CitylistModel cityModel;
+                for (int i = 0; i < listCity.size(); i++) {
+                    cityModel = listCity.get(i);
+                    if (cityModel != null) {
+                        if (cityName.equals(cityModel.getName())) {
+                            cityPy = cityModel.getPy();
+                        }
+                    }
+                }
+            }
+        }
+        return cityPy;
+    }
+
     public static int getServerRegionVersion() {
         int regionVersion = -1;
         Init_indexActModel model = getInitActModel();

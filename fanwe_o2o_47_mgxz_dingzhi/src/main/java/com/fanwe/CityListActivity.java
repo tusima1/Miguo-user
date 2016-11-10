@@ -280,6 +280,7 @@ public class CityListActivity extends BaseActivity {
                 if (BaiduMapManager.getInstance().hasLocationSuccess()) {
                     String locationCity = mTv_location.getText().toString();
                     String cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
+                    String cityPy = AppRuntimeWorker.getCityPyByCityName(locationCity);
                     if (TextUtils.isEmpty(cityId)) {
                         MGToast.showToast("不支持当前城市:" + locationCity);
                     } else {
@@ -306,6 +307,7 @@ public class CityListActivity extends BaseActivity {
                         CitylistModel tempBean = new CitylistModel();
                         tempBean.setId(cityId);
                         tempBean.setName(locationCity);
+                        tempBean.setPy(cityPy);
                         CurrCityModelDao.insertModel(tempBean);
                         setActivityResult(tempBean);
                     }
