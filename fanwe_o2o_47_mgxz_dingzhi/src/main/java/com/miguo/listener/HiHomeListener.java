@@ -92,8 +92,6 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
                 BaseUtils.jumpToNewActivity(getActivity(), intent);
             }
         }
-        Intent intent = new Intent(getActivity(), LiveStartActivity.class);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     private void clickTab(int position){
