@@ -49,6 +49,7 @@ import com.miguo.dao.impl.IMUserInfoDaoImpl;
 import com.miguo.dao.impl.LoginByMobileDaoImpl;
 import com.miguo.dao.impl.TencentSignDaoImpl;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.HomePageState;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
@@ -283,6 +284,14 @@ public class HiHomeCategory extends Category implements
             initCode();
         }
 
+    }
+
+    public void checkIfInMyFragment(){
+        if(TextUtils.isEmpty(App.getInstance().getToken())){
+            if(homeViewPager.getCurrentItem() == HomePageState.MY){
+                homeViewPager.setCurrentItem(HomePageState.HOME);
+            }
+        }
     }
 
     /**
@@ -749,7 +758,7 @@ public class HiHomeCategory extends Category implements
     }
 
     public HiHomeFragment getHomeFragment(){
-        return null != fragments && fragments.size() > 0 ? (HiHomeFragment)fragments.get(0) : null;
+        return null != fragments && fragments.size() > 0 ? (HiHomeFragment)fragments.get(HomePageState.HOME) : null;
     }
 
 
