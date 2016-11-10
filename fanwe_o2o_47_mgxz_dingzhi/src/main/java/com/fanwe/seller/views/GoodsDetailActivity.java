@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.didikee.uilibs.views.WaitFinishTextView;
+import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -786,6 +787,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     //收藏
     private void doCollect() {
+        if (TextUtils.isEmpty(App.getInstance().getToken())){
+            startActivity(new Intent(App.getApplication(), LoginActivity.class));
+            return;
+        }
         if ("1".equals(isCollected)) {
             //已经收藏
             mSellerHelper.deleteGroupBuyCollect(GoodsId);
