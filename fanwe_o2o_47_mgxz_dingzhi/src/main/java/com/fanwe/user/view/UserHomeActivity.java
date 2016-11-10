@@ -28,11 +28,11 @@ import com.fanwe.user.adapters.ImageAdapter;
 import com.fanwe.user.adapters.UserHomeLiveImgAdapter;
 import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
 import com.fanwe.user.model.getProductList.ModelProductList;
-import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.MGDictUtil;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.customviews.MGToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDEventManager;
@@ -57,7 +57,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private TextView tvName, tvAttention, tvFans, tvSupport, tvSign, tvAttentionStatus;
 
     private List<String> imgsProduct = new ArrayList<>();
-    private List<ModelSpokePlay> datasLive = new ArrayList<>();
+    private List<ModelRoom> datasLive = new ArrayList<>();
     private RelativeLayout layoutShopEmpty, layoutLiveEmpty, layoutShop;
     private String nick;
 
@@ -195,7 +195,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
 
     List<ModelPersonHomePage> itemsPerson;
     List<ModelProductList> itemsProduct;
-    List<ModelSpokePlay> itemsLive;
+    List<ModelRoom> itemsLive;
     List<ModelUserAttention> itemsAttention;
     List<ModelAttention> itemsForcus;
 

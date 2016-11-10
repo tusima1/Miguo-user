@@ -2,20 +2,15 @@ package com.miguo.live.model;
 
 public class LiveConstants {
     /**
-     * 请求成功 。
+     * 请求成功
      */
-
     public static final String RESULT_SUCCESS = "200";
-    /**
-     * 获取直播列表
-     */
-    public static final String COMMAND_GROUP_BUY = "CommandGroupBuy";
     /**
      * 获取首页团购列表
      */
-    public static final String LIVE_LIST = "LiveList";
+    public static final String COMMAND_GROUP_BUY = "CommandGroupBuy";
     /**
-     * 获取首页团购列表新版
+     * 获取直播列表新版
      */
     public static final String LIVE_LIST_NEW = "LiveListNew";
     /**

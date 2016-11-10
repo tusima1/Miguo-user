@@ -1002,17 +1002,15 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     public void pushAction(TIMAvManager.StreamParam mStreamParam) {
         int roomid = (int) QavsdkControl.getInstance().getAVContext().getRoom().getRoomId();
         SxbLog.i(TAG, "Push roomid: " + roomid);
-        SxbLog.d(TAG, "Push groupid: " + CurLiveInfo.getRoomNum());
         roomInfo = TIMAvManager.getInstance().new RoomInfo();
         roomInfo.setRoomId(roomid);
-        roomInfo.setRelationId(CurLiveInfo.getRoomNum());
+        roomInfo.setRelationId(MySelfInfo.getInstance().getMyRoomNum());
         //推流的接口
         if (TIMAvManager.getInstance() != null) {
             TIMAvManager.getInstance().requestMultiVideoStreamerStart(roomInfo, mStreamParam, new TIMValueCallBack<TIMAvManager.StreamRes>() {
                 @Override
                 public void onError(int i, String s) {
                     SxbLog.e(TAG, "url error " + i + " : " + s);
-                    Toast.makeText(mContext, "start stream error,try again " + i + " : " + s, Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

@@ -112,11 +112,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     public void initNeed(Activity activity) {
         this.mActivity = activity;
-        userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
     }
 
     public void setViews() {
-        userExitDialogHelper.setView(this);
     }
 
 
@@ -251,6 +249,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     public void showExitDialog() {
         if (userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
+            userExitDialogHelper.show();
+        }else{
+            userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
             userExitDialogHelper.show();
         }
     }

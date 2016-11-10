@@ -53,11 +53,10 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
         createDialog();
-//        setView();
+        setView();
     }
 
-    public void setView(CallbackView2 callbackView2) {
-        this.callbackView2 = callbackView2;
+    private void setView() {
         liveHttpHelper = new LiveHttpHelper(mActivity, this, "");
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
         liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
@@ -87,7 +86,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         tv_follow = (TextView) dialog.findViewById(R.id.tv_follow);//关注
         //关注
         gridview = (MaxHeightGridView) dialog.findViewById(R.id.mhgridview_show);
-
+        gridview.setEnabled(false);
 
         //init click
         iv_close.setOnClickListener(this);
@@ -192,12 +191,12 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                 count = bean.getCount();
             }
             message.what = 2;
-        } else if (LiveConstants.LIVE_LIST.equals(method)) {
+        } else if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 datasList.clear();
                 //请求了5个room，需要剔除当前观看的房间，并最后保留4个
                 for (ModelRoom room : (ArrayList<ModelRoom>) datas) {
-                    if (!room.getHost().getHost_user_id().equals(CurLiveInfo.getHostID()) && datasList.size() < 5) {
+                    if (!room.getHost().getHost_user_id().equals(CurLiveInfo.getHostID()) && datasList.size() < 4) {
                         datasList.add(room);
                     }
                 }

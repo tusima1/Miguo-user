@@ -1,5 +1,6 @@
 package com.miguo.live.views.view;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -155,13 +156,15 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private int totalDuration = 0;
     //已播放的文件的时长
     private int timePlayed = 0;
+    //是否是直播回放
+    private String is_playback;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setActivityParams();
         setContentView(R.layout.act_play_back);
-        getIntentData();
+        getIntentData(getIntent().getExtras());
         mPlayConfig = new TXLivePlayConfig();
         if (mLivePlayer == null) {
             mLivePlayer = new TXLivePlayer(this);
@@ -169,6 +172,20 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         getPlayUrlList();
         initHelper();
         initView();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        getIntentData(intent.getExtras());
+        mPlayConfig = new TXLivePlayConfig();
+        if (mLivePlayer == null) {
+            mLivePlayer = new TXLivePlayer(this);
+        }
+        getPlayUrlList();
+        initHelper();
+        refreshView();
+        startPlayRtmp();
     }
 
     /**
@@ -212,14 +229,13 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         finish();
     }
 
-    private void getIntentData() {
-        Bundle data = getIntent().getExtras();
+    private void getIntentData(Bundle data) {
         if (data == null) {
-            MGToast.showToast("数据传输错误!");
             finish();
             return;
         }
         room_id = data.getString("room_id", "");
+        is_playback = data.getString("is_playback", "");
         fileSet = (ArrayList<ModelRecordFile>) data.getSerializable("fileSet");
         getTotalSize();
         getTotalDuration();
@@ -238,34 +254,12 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
      * 点播文件总时长
      */
     private void getTotalDuration() {
+        totalDuration = 0;
         if (!SDCollectionUtil.isEmpty(fileSet)) {
             for (ModelRecordFile bean : fileSet) {
                 totalDuration = totalDuration + DataFormat.toInt(bean.getDuration());
             }
         }
-    }
-
-    /**
-     * 假数据
-     */
-    private void preData() {
-        ModelRecordFile modelRecordFile1 = new ModelRecordFile();
-        modelRecordFile1.setDuration("5396");
-        ArrayList<PlaySetInfo> playSet1 = new ArrayList<>();
-        PlaySetInfo modelPlaySet1 = new PlaySetInfo();
-        modelPlaySet1.setUrl("http://200023194.vod.myqcloud.com/200023194_76cb4e51d43d4d0ba5d908089f35e115.f0.mp4");
-        playSet1.add(modelPlaySet1);
-        modelRecordFile1.setPlayset("");
-        fileSet.add(modelRecordFile1);
-
-        ModelRecordFile modelRecordFile2 = new ModelRecordFile();
-        modelRecordFile2.setDuration("1231");
-        ArrayList<PlaySetInfo> playSet2 = new ArrayList<>();
-        PlaySetInfo modelPlaySet2 = new PlaySetInfo();
-        modelPlaySet2.setUrl("http://200023194.vod.myqcloud.com/200023194_b114ee44296149b1bd1d1fdc07967929.f0.mp4");
-        playSet2.add(modelPlaySet2);
-        modelRecordFile2.setPlayset("");
-        fileSet.add(modelRecordFile2);
     }
 
     /**
@@ -311,11 +305,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mTextDuration = (TextView) playBackSeekBarView.findViewById(R.id.duration);
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
         //底部IM + 其它。
-
         playBackBottomToolView = (PlayBackBottomToolView) findViewById(R.id.normal_user_bottom_tool);
-
         playBackBottomToolView.setmBaobaoAdapter(mBaoBaoAdapter);
-
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
         mUserHeadTopView.setmLiveView(this);
         mHeadTopAdapter = new HeadTopAdapter(null, this);
@@ -323,8 +314,20 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mUserHeadTopView.init();
         mUserHeadTopView.setVisibility(View.VISIBLE);
         mUserHeadTopView.initNeed(this);
-        doUpdateMembersCount();
 
+        mRedPacketAdapter = new PagerRedPacketAdapter();
+        playBackBottomToolView.setmRedPacketAdapter(mRedPacketAdapter);
+
+        mListViewMsgItems = (ListView) findViewById(R.id.im_msg_listview);
+        mArrayListChatEntity = new ArrayList<LiveChatEntity>();
+        mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems,
+                mArrayListChatEntity);
+        mListViewMsgItems.setAdapter(mChatMsgListAdapter);
+        refreshView();
+    }
+
+    private void refreshView(){
+        doUpdateMembersCount();
         String hostImg = CurLiveInfo.getHostAvator();
         mUserHeadTopView.setHostImg(hostImg);
         mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
@@ -332,23 +335,11 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 .getShop_name())) {
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
-
-        mRedPacketAdapter = new PagerRedPacketAdapter();
-        playBackBottomToolView.setmRedPacketAdapter(mRedPacketAdapter);
         initViewNeed();
-        mLiveHttphelper.getAudienceCount(room_id, "1");
-
         //顶部用户头像列表
         mAudienceTimer = new Timer(true);
         mGetAudienceTask = new GetAudienceTask();
         mAudienceTimer.schedule(mGetAudienceTask, 1000, 30 * 1000);
-
-        mListViewMsgItems = (ListView) findViewById(R.id.im_msg_listview);
-        mArrayListChatEntity = new ArrayList<LiveChatEntity>();
-        mChatMsgListAdapter = new LiveChatMsgListAdapter(this, mListViewMsgItems,
-                mArrayListChatEntity);
-        mListViewMsgItems.setAdapter(mChatMsgListAdapter);
-
         mLiveHttphelper.getStoresRandomComment(CurLiveInfo.getShopID(), "3");
     }
 
@@ -691,13 +682,16 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 //错误码code列表请参见错误码表
                 if (10013 == code) {
                     Log.e("进来了errorcode:" + code + ",", desc);
-                    if (mLiveHttphelper != null) {
-                        mLiveHttphelper.enterRoom(room_id, "2", "");
-                    }
                     mLiveHelper.initTIMListener(room_id);
                     //发消息通知上线
                     if (mLiveHttphelper != null) {
-                        mLiveHttphelper.enterRoom(room_id, "2", "");
+                        if ("1".equals(is_playback)) {
+                            //直播回放，type=1
+                            mLiveHttphelper.enterRoom(room_id, "1", "");
+                        } else {
+                            //点播回放，type=2
+                            mLiveHttphelper.enterRoom(room_id, "2", "");
+                        }
                         mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
                     }
                 }
@@ -710,7 +704,13 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 mLiveHelper.initTIMListener(room_id);
                 //发消息通知上线
                 if (mLiveHttphelper != null) {
-                    mLiveHttphelper.enterRoom(room_id, "2", "");
+                    if ("1".equals(is_playback)) {
+                        //直播回放，type=1
+                        mLiveHttphelper.enterRoom(room_id, "1", "");
+                    } else {
+                        //点播回放，type=2
+                        mLiveHttphelper.enterRoom(room_id, "2", "");
+                    }
                     mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
                 }
             }
@@ -837,7 +837,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private class GetAudienceTask extends TimerTask {
         @Override
         public void run() {
-            mLiveHttphelper.getAudienceList(room_id);
+            mLiveHttphelper.getAudienceList(room_id, is_playback);
+            mLiveHttphelper.getAudienceCount(room_id, is_playback);
         }
     }
 

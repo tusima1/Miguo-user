@@ -48,6 +48,7 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveActivity;
 import com.miguo.live.views.LiveStartActivity;
 import com.miguo.live.views.LiveStartAuthActivity;
+import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
@@ -679,17 +680,8 @@ public class MainActivity extends BaseActivity implements CallbackView {
 
                 //分点播和直播 直播类型  1 表示直播，2表示点播
                 String live_type = room.getLive_type();
-                if ("1".equals(live_type)) {
-                    if ("1".equals(room.getPlayback_status())) {
-                        //直播回放
-                        gotoPlayBackActivity(room, true);
-                    } else {
-                        //直播
-                        gotoLiveActivity(room);
-                    }
-                } else if ("2".equals(live_type)) {
-                    //点播
-                    gotoPlayBackActivity(room, false);
+                if ("1".equals(live_type)||"2".equals(live_type)) {
+                    LiveUtil.clickRoom(room,this);
                 } else {
                     if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
                         if (room.getHost() != null) {
@@ -756,77 +748,4 @@ public class MainActivity extends BaseActivity implements CallbackView {
         super.onDestroy();
 
     }
-
-    private void gotoLiveActivity(ModelRoom room) {
-        Intent intent = new Intent(mContext, LiveActivity.class);
-        intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
-        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-        addCommonData(room);
-        BaseUtils.jumpToNewActivity(MainActivity.this, intent);
-    }
-
-    /**
-     * 进入点播页面
-     *
-     * @param room
-     * @param isLivePlayBack
-     */
-    private void gotoPlayBackActivity(ModelRoom room, boolean isLivePlayBack) {
-        //点播；直播回放
-        addCommonData(room);
-        //im的id
-        String room_id = room.getChat_room_id();
-        if (isLivePlayBack) {
-            room_id = room.getPlayback_room_id();
-            CurLiveInfo.setRoomNum(DataFormat.toInt(room_id));
-        }
-        List<ModelRecordFile> fileSet = room.getFileset();
-
-        Intent intent = new Intent(MainActivity.this, PlayBackActivity.class);
-        Bundle data = new Bundle();
-        data.putString("room_id", room_id);
-        data.putSerializable("fileSet", (Serializable) fileSet);
-        intent.putExtras(data);
-        BaseUtils.jumpToNewActivity(MainActivity.this, intent);
-    }
-
-
-    private void addCommonData(ModelRoom room) {
-        ModelHost host = room.getHost();
-        String nickName = App.getInstance().getUserNickName();
-        String avatar = "";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo.getUserInfoNew() != null) {
-                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-            }
-        }
-        MySelfInfo.getInstance().setAvatar(avatar);
-        MySelfInfo.getInstance().setNickName(nickName);
-        MySelfInfo.getInstance().setJoinRoomWay(false);
-        CurLiveInfo.setHostID(host.getHost_user_id());
-        CurLiveInfo.setHostName(host.getNickname());
-
-        CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-        App.getInstance().setCurrentRoomId(room.getId());
-        CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
-        if (room.getLbs() != null) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-            ModelStoreList modelStoreList = new ModelStoreList();
-            modelStoreList.setShop_name(room.getLbs().getShop_name());
-            modelStoreList.setId(room.getLbs().getShop_id());
-            CurLiveInfo.setModelShop(modelStoreList);
-        }
-        CurLiveInfo.setLive_type(room.getLive_type());
-
-        CurLiveInfo.setHostUserID(room.getHost().getUid());
-//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-        CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
-        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-        }
-        CurLiveInfo.setAdmires(1);
-    }
-
 }

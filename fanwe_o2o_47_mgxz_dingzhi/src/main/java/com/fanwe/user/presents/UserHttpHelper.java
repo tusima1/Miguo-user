@@ -40,9 +40,6 @@ import com.fanwe.user.model.getProductList.RootProductList;
 import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
 import com.fanwe.user.model.getShopAndUserCollect.ResultShopAndUserCollect;
 import com.fanwe.user.model.getShopAndUserCollect.RootShopAndUserCollect;
-import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
-import com.fanwe.user.model.getSpokePlay.ResultSpokePlay;
-import com.fanwe.user.model.getSpokePlay.RootSpokePlay;
 import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.getUserAttention.ResultUserAttention;
 import com.fanwe.user.model.getUserAttention.RootUserAttention;
@@ -60,6 +57,9 @@ import com.fanwe.user.model.putAttention.ResultAttention;
 import com.fanwe.user.model.putAttention.RootAttention;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.model.getLiveListNew.ModelResultLive;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
+import com.miguo.live.model.getLiveListNew.ModelRootLive;
 import com.miguo.live.model.getWallet.ModelMyWallet;
 import com.miguo.live.model.getWallet.ResultMyWallet;
 import com.miguo.live.model.getWallet.RootMyWallet;
@@ -107,7 +107,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                onSuccess(mView,UserConstants.USER_INFO_METHOD, null);
+                onSuccess(mView, UserConstants.USER_INFO_METHOD, null);
             }
 
             @Override
@@ -147,7 +147,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onSuccess(mView,UserConstants.PERSONALHOME, body);
+                                    onSuccess(mView, UserConstants.PERSONALHOME, body);
                                 }
                             });
                         }
@@ -195,10 +195,10 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         RootMyDistributionCorps.class);
                 List<ResultMyDistributionCorps> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.MY_DISTRIBUTION_CROPS, null);
+                    onSuccess(mView, UserConstants.MY_DISTRIBUTION_CROPS, null);
                     return;
                 }
-                onSuccess(mView,UserConstants.MY_DISTRIBUTION_CROPS, result);
+                onSuccess(mView, UserConstants.MY_DISTRIBUTION_CROPS, result);
             }
 
             @Override
@@ -241,7 +241,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onSuccess(mView,modelUserChangeMobile.getMessage());
+                                onSuccess(mView, modelUserChangeMobile.getMessage());
                             }
                         });
                     }
@@ -276,7 +276,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onSuccess(mView,UserConstants.USER_RED_PACKET_LIST, result);
+                                onSuccess(mView, UserConstants.USER_RED_PACKET_LIST, result);
                             }
                         });
                     }
@@ -296,7 +296,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(mView!=null) {
+                        if (mView != null) {
                             mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
                         }
                     }
@@ -342,7 +342,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            onSuccess(mView,UserConstants.GROUP_BUY_COUPON_LIST, result);
+                            onSuccess(mView, UserConstants.GROUP_BUY_COUPON_LIST, result);
                         }
                     });
                 }
@@ -381,7 +381,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            onSuccess(mView,UserConstants.DISTR_INFO, null);
+                            onSuccess(mView, UserConstants.DISTR_INFO, null);
                         }
                     });
                     return;
@@ -390,7 +390,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        onSuccess(mView,UserConstants.DISTR_INFO, items);
+                        onSuccess(mView, UserConstants.DISTR_INFO, items);
                     }
                 });
             }
@@ -437,7 +437,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onSuccess(mView,UserConstants.QR_SHOP_CARD, body);
+                                onSuccess(mView, UserConstants.QR_SHOP_CARD, body);
                             }
                         });
                     }
@@ -478,11 +478,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         RootGetUserUpgradeOrder.class);
                 List<ResultGetUserUpgradeOrder> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
-                    onSuccess(mView,UserConstants.USER_UPGRADE_ORDER_GET, null);
+                    onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_GET, null);
                     return;
                 }
                 List<ModelGetUserUpgradeOrder> items = results.get(0).getBody();
-                onSuccess(mView,UserConstants.USER_UPGRADE_ORDER_GET, items);
+                onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_GET, items);
             }
 
             @Override
@@ -510,11 +510,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         RootPostUserUpgradeOrder.class);
                 List<ResultPostUserUpgradeOrder> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
-                    onSuccess(mView,UserConstants.USER_UPGRADE_ORDER_POST, null);
+                    onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_POST, null);
                     return;
                 }
                 List<ModelPostUserUpgradeOrder> items = results.get(0).getBody();
-                onSuccess(mView,UserConstants.USER_UPGRADE_ORDER_POST, items);
+                onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_POST, items);
             }
 
             @Override
@@ -547,10 +547,10 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                     //错误
                     List<RootShopComment> roots = new ArrayList<>();
                     roots.add(root);
-                    onSuccess(mView,UserConstants.USER_CHANGE_PWD, roots);
+                    onSuccess(mView, UserConstants.USER_CHANGE_PWD, roots);
                     return;
                 }
-                onSuccess(mView,UserConstants.USER_CHANGE_PWD, null);
+                onSuccess(mView, UserConstants.USER_CHANGE_PWD, null);
             }
 
             @Override
@@ -583,10 +583,10 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                     //错误
                     List<RootShopComment> roots = new ArrayList<>();
                     roots.add(root);
-                    onSuccess(mView,UserConstants.USER_FORGOT, roots);
+                    onSuccess(mView, UserConstants.USER_FORGOT, roots);
                     return;
                 }
-                onSuccess(mView,UserConstants.USER_FORGOT, null);
+                onSuccess(mView, UserConstants.USER_FORGOT, null);
             }
 
             @Override
@@ -612,7 +612,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                onSuccess(mView,UserConstants.ADVICE, null);
+                onSuccess(mView, UserConstants.ADVICE, null);
             }
 
             @Override
@@ -655,7 +655,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onSuccess(mView,UserConstants.ATTENTION_Fans, resultFans.getBody());
+                                onSuccess(mView, UserConstants.ATTENTION_Fans, resultFans.getBody());
                             }
                         });
                         return;
@@ -707,11 +707,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 RootAttentionFocus root = gson.fromJson(responseBody, RootAttentionFocus.class);
                 List<ResultAttentionFocus> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.ATTENTION_FOCUS, null);
+                    onSuccess(mView, UserConstants.ATTENTION_FOCUS, null);
                     return;
                 }
                 List<ModelAttentionFocus> items = result.get(0).getBody();
-                onSuccess(mView,UserConstants.ATTENTION_FOCUS, items);
+                onSuccess(mView, UserConstants.ATTENTION_FOCUS, items);
             }
 
             @Override
@@ -745,11 +745,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 RootShopAndUserCollect root = gson.fromJson(responseBody, RootShopAndUserCollect.class);
                 List<ResultShopAndUserCollect> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.SHOP_AND_USER_COLLECT, null);
+                    onSuccess(mView, UserConstants.SHOP_AND_USER_COLLECT, null);
                     return;
                 }
                 List<ModelShopAndUserCollect> items = result.get(0).getBody();
-                onSuccess(mView,UserConstants.SHOP_AND_USER_COLLECT, items);
+                onSuccess(mView, UserConstants.SHOP_AND_USER_COLLECT, items);
             }
 
             @Override
@@ -795,7 +795,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onSuccess(mView,UserConstants.ATTENTION, body);
+                                    onSuccess(mView, UserConstants.ATTENTION, body);
                                 }
                             });
                         }
@@ -835,7 +835,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onSuccess(mView,UserConstants.MY_WALLET, body);
+                                onSuccess(mView, UserConstants.MY_WALLET, body);
                             }
                         });
                         return;
@@ -879,11 +879,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 RootPersonHomePage root = gson.fromJson(responseBody, RootPersonHomePage.class);
                 List<ResultPersonHomePage> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.PERSON_HOME_PAGE, null);
+                    onSuccess(mView, UserConstants.PERSON_HOME_PAGE, null);
                     return;
                 }
                 List<ModelPersonHomePage> items = result.get(0).getBody();
-                onSuccess(mView,UserConstants.PERSON_HOME_PAGE, items);
+                onSuccess(mView, UserConstants.PERSON_HOME_PAGE, items);
             }
 
             @Override
@@ -910,11 +910,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 RootProductList root = gson.fromJson(responseBody, RootProductList.class);
                 List<ResultProductList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.GET_PRODUCT_LIST, null);
+                    onSuccess(mView, UserConstants.GET_PRODUCT_LIST, null);
                     return;
                 }
                 List<ModelProductList> items = result.get(0).getBody();
-                onSuccess(mView,UserConstants.GET_PRODUCT_LIST, items);
+                onSuccess(mView, UserConstants.GET_PRODUCT_LIST, items);
             }
 
             @Override
@@ -938,14 +938,14 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootSpokePlay root = gson.fromJson(responseBody, RootSpokePlay.class);
-                List<ResultSpokePlay> result = root.getResult();
+                ModelRootLive root = gson.fromJson(responseBody, ModelRootLive.class);
+                List<ModelResultLive> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.GET_SPOKE_PLAY, null);
+                    onSuccess(mView, UserConstants.GET_SPOKE_PLAY, null);
                     return;
                 }
-                List<ModelSpokePlay> items = result.get(0).getBody();
-                onSuccess(mView,UserConstants.GET_SPOKE_PLAY, items);
+                List<ModelRoom> items = result.get(0).getBody();
+                onSuccess(mView, UserConstants.GET_SPOKE_PLAY, items);
             }
 
             @Override
@@ -972,11 +972,11 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 RootUserAttention root = gson.fromJson(responseBody, RootUserAttention.class);
                 List<ResultUserAttention> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,UserConstants.USER_ATTENTION, null);
+                    onSuccess(mView, UserConstants.USER_ATTENTION, null);
                     return;
                 }
                 List<ModelUserAttention> items = result.get(0).getBody();
-                onSuccess(mView,UserConstants.USER_ATTENTION, items);
+                onSuccess(mView, UserConstants.USER_ATTENTION, items);
             }
 
             @Override

@@ -335,7 +335,7 @@ public class HomeFragment extends BaseFragment implements CallbackView, Callback
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (LiveConstants.LIVE_LIST.equals(method)) {
+        if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             //直播列表
             getLiveList((ArrayList<ModelRoom>) datas);
         } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
