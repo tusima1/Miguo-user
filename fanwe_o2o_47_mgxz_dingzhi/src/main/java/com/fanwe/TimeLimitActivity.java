@@ -143,7 +143,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     }
 
     private void initTitle(){
-        mTitle.setMiddleTextTop("即时特惠");
+        mTitle.setMiddleTextTop("限时特惠");
 //        mTitle.initRightItem(1);
 //        mTitle.getItemRight(0).setImageLeft(R.drawable.ic_tuan_detail_share);
     }
