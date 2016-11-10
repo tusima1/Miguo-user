@@ -417,7 +417,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             Log.d(tag + "a" , "t: " + t + " ,t - moveDistance : " + (t - moveDistance) + " ,current: " + currentT);
             Log.d(tag + "b" , "t: " + t + " ,t + moveDistance : " + (t + moveDistance) + " ,current: " + currentT);
             if(t - moveDistance > currentT){
-                if(titleLayout.getAlpha() > 1 || getTab().getAlpha() == 1){
+                if(titleLayout.getAlpha() > 0 || getTab().getAlpha() > 0){
                     startTitleLeaveAnimation();
                     startTabLeaveAnimation();
                 }
@@ -435,7 +435,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
         if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning()){
             currentT = 0;
-//            startTitleLeaveAnimation();
             startTitleShowAnimation();
             startTabShowAnimation();
         }
@@ -496,7 +495,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     private void startTitleShowAnimation(){
-        if(titleLayout.getAlpha() == 1){
+        if(titleLayout.getAlpha() > 0){
             return;
         }
         setTitleAlpha(titleLayout, 1);
@@ -543,7 +542,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     private void startTabShowAnimation(){
-        if(getTab().getAlpha() == 1){
+        if(getTab().getAlpha() > 0){
             return;
         }
         setTitleAlpha(getTab(), 1);

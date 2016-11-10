@@ -5,10 +5,12 @@ import android.text.TextUtils;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
+import com.fanwe.umeng.UmengEventStatistics;
 import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.views.LiveStartActivity;
+import com.miguo.live.views.LiveStartAuthActivity;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.BarryTab;
 
@@ -68,8 +70,28 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
     }
 
     private void clickLive(){
-        Intent intent = new Intent(getActivity(), LiveStartActivity.class);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+        UmengEventStatistics.sendEvent(getActivity(), UmengEventStatistics.MAIN_2);
+
+        if (TextUtils.isEmpty(App.getInstance().getToken()))// 未登录 以后加入是不是主播的判断。
+        {
+            BaseUtils.jumpToNewActivity(getActivity(), new Intent(getActivity(), LoginActivity.class));
+        } else {
+            String is_host = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIs_host();
+            if ("0".equals(is_host)) {
+                //未认证
+                Intent intent = new Intent(getActivity(), LiveStartAuthActivity.class);
+                intent.putExtra("pageType", "start");
+                BaseUtils.jumpToNewActivity(getActivity(), intent);
+            } else if ("1".equals(is_host)) {
+                //已认证
+                BaseUtils.jumpToNewActivity(getActivity(), new Intent(getActivity(), LiveStartActivity.class));
+            } else {
+                //认证中
+                Intent intent = new Intent(getActivity(), LiveStartAuthActivity.class);
+                intent.putExtra("pageType", "wait");
+                BaseUtils.jumpToNewActivity(getActivity(), intent);
+            }
+        }
     }
 
     private void clickTab(int position){

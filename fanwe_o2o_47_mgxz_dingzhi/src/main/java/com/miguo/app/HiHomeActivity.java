@@ -30,6 +30,13 @@ public class HiHomeActivity extends HiBaseActivity{
         if(null != getCategory()){
             getCategory().onRefreshGreeting();
         }
+        if(null != getCategory()){
+            checkIfInMyFragment();
+        }
+    }
+
+    private void checkIfInMyFragment(){
+        getCategory().checkIfInMyFragment();
     }
 
     @Override

@@ -100,13 +100,12 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
     private void initWebView(){
         String url = getActivity().getUrl();
         LocalUserModel userModel = AppHelper.getLocalUser();
-        if(userModel == null){
-            return;
-        }
-        String userid = userModel.getUser_mobile();
-        String password = userModel.getUser_pwd();
-        if(!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)){
-            url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password : url;
+        if(userModel != null){
+            String userid = userModel.getUser_mobile();
+            String password = userModel.getUser_pwd();
+            if(!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)){
+                url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password : url;
+            }
         }
 
         WebSettings webSettings = webView.getSettings();

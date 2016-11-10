@@ -73,9 +73,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
 
     @ViewInject(R.id.back)
     ImageView back;
+    @ViewInject(R.id.back_bg)
+    ImageView backBg;
 
     @ViewInject(R.id.share)
     ImageView share;
+    @ViewInject(R.id.share_bg)
+    ImageView shareBg;
 
     @ViewInject(R.id.title)
     TextView title;
@@ -224,6 +228,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         collect.setOnClickListener(listener);
         back.setOnClickListener(listener);
         share.setOnClickListener(listener);
+        backBg.setOnClickListener(listener);
+        shareBg.setOnClickListener(listener);
         represent.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
         recommendAdapter.setOnItemDataChangedListener(this);
