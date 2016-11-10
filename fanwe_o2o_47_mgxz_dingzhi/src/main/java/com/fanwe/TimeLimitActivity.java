@@ -297,11 +297,12 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     }
 
     private String getTimeText(long millisUntilFinished){
-        int hour = (int)(millisUntilFinished / 1000 / 3600);
+        int day = (int)(millisUntilFinished / 1000 / 3600 / 24);
+        int hour = (int)(millisUntilFinished / 1000 / 3600 % 24);
         int lastMin = (int)(millisUntilFinished / 1000 % 3600);
         int min = lastMin / 60;
         int sec = lastMin % 60;
-        return (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
+        return (day <= 0 ? "" : day + "天") + (hour < 10 ? "0" + hour : hour) + ":" + (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
     }
 
     public void loadComplete(){
