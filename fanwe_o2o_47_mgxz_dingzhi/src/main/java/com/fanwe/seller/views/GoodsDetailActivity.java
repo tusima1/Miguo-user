@@ -542,8 +542,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mTvTopYouHui.setText(tuan_price_with_unit);
 
         //bind bottom(底部悬浮)
-        mTvOldMoney.setText(origin_price);
-        mTvNewMoney.setText(tuan_price);
+        mTvOldMoney.setText(MGStringFormatter.getFloat2(origin_price));
+        mTvNewMoney.setText(MGStringFormatter.getFloat2(tuan_price));
 
         //收藏的状态
         isCollected = modelGoodsDetailNew.getIs_my_collect();
