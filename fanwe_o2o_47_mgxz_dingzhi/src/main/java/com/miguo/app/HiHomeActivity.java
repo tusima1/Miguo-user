@@ -2,6 +2,10 @@ package com.miguo.app;
 
 import android.content.Intent;
 
+import com.fanwe.DistributionStoreWapActivity;
+import com.fanwe.MyCaptureActivity;
+import com.fanwe.StoreDetailActivity;
+import com.fanwe.TuanDetailActivity;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.category.Category;
@@ -9,11 +13,34 @@ import com.miguo.category.HiHomeCategory;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
  */
 public class HiHomeActivity extends HiBaseActivity{
+    /**
+     * 商家id (int)
+     */
+    public static final String EXTRA_MERCHANT_ID = "extra_merchant_id";
+    public static final String EXTRA_GOODS_ID = "extra_goods_id";
+    /**
+     * http://m.w2.mgxz.com/user/shop/uid/88025143-194f-4705-991b-7f5a3587dc9c
+     * 门店详情
+     */
+    private final static String SHOP_DETAIL = "^https?://[^/]+.mgxz.com/index/retail/id/([^/\\s]+)";
+    /**
+     * 他的小店.
+     */
+    private final static String SHOP_PATTERN = "^https?://[^/]+.mgxz.com/user/shop/uid/([^/\\s]+)";
+    /**
+     * 团购详情.
+     */
+    private final static String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
+
 
     @Override
     protected void setContentView() {
@@ -44,6 +71,7 @@ public class HiHomeActivity extends HiBaseActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
             switch (requestCode){
+
                 /**
                  * 城市列表返回回调
                  */
@@ -67,13 +95,47 @@ public class HiHomeActivity extends HiBaseActivity{
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+    /**
+     * //获取完整的域名
+     *
+     * @param text 获取浏览器分享出来的text文本
+     */
+    public static boolean getCompleteUrl(String text, String pattern) {
+        Pattern p = Pattern.compile(pattern);
+        Matcher matcher = p.matcher(text);
+
+        boolean result = matcher.find();
+        return result;
+
+    }
 
     /**
      * 处理扫码
      * @param extraString
      */
     private void handlerScanQrCode(String extraString){
-
+                //他的小店.
+                if (getCompleteUrl(extraString, SHOP_PATTERN)) {
+                    String user_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
+                    Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
+                    intentStore.putExtra("user_id", user_id);
+                    intentStore.putExtra("url", extraString);
+                    startActivity(intentStore);
+                } else if (getCompleteUrl(extraString, SHOP_DETAIL)) {
+                    //门店详情
+                    String extra_merchant_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
+                    Intent intentStore = new Intent(this, StoreDetailActivity.class);
+                    intentStore.putExtra(EXTRA_MERCHANT_ID, extra_merchant_id);
+                    startActivity(intentStore);
+                } else if (getCompleteUrl(extraString, SHOPPING_DETAIL)) {
+                    //团购详情
+                    String mId = extraString.split("\\/")[extraString.split("\\/").length - 1];
+                    Intent intentStore = new Intent(this, TuanDetailActivity.class);
+                    intentStore.putExtra(EXTRA_GOODS_ID, mId);
+                    startActivity(intentStore);
+                } else {
+                    MGToast.showToast("对不起，无法识别。");
+                }
     }
 
     private void handlerReturnCityId(Intent data){

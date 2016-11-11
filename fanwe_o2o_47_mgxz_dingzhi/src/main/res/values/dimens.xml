@@ -60,8 +60,11 @@
     <dimen name="size_px2sp_28">14sp</dimen>
     <dimen name="size_px2sp_60">30sp</dimen>
     <dimen name="list_image_size">80dp</dimen>
+    <dimen name="size_px2sp_63">63dp</dimen>
+
     <!--login-->
     <dimen name="margin_top">100dp</dimen>
+    <dimen name="size_px2sp_228">228dp</dimen>
 
     <!--自动生成的-->
 
