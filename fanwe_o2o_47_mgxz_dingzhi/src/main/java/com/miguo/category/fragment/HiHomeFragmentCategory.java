@@ -95,6 +95,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.frag_home_title_bar_tv_earn)
     TextView city;
 
+    @ViewInject(R.id.frag_home_title_bar_ll_saoyisao)
+    ImageView qrScran;
+
     @ViewInject(R.id.frag_home_title_bar_ll_search)
     RelativeLayout searchLayout;
 
@@ -218,6 +221,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         messageLayout.setOnClickListener(listener);
         areaLayout.setOnClickListener(listener);
         searchLayout.setOnClickListener(listener);
+        qrScran.setOnClickListener(listener);
         citySayHi.setOnClickListener(listener);
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener)listener);
         homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener)listener);
@@ -390,7 +394,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** scroll view 滚动监听 */
     @Override
     public void onScrollToEnd() {
-        featuredGrouponCategory.onLoadMore();
+        if(isHasSeeler()){
+            featuredGrouponCategory.onLoadMore();
+        }
     }
 
     @Override
@@ -398,7 +404,45 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         checkTop(l, t, oldl, oldt);
         checkTitle(l, t , oldl, oldt);
         checkTopPadding(l, t , oldl, oldt);
+    }
 
+    /**
+     * 如果在tab消失过程中的点击了tab，这个时候设置tab出现是无效的，因为处于动画中
+     * 所以在这里设置一个标志判断是否需要显示，如果这个标志为true
+     * 那就需要在tab消失动画结束后再调用这个方法
+     */
+    boolean showTitleAndTabFlag = false;
+
+    public boolean isShowTitleAndTabFlag() {
+        return showTitleAndTabFlag;
+    }
+
+    public void setShowTitleAndTabFlag(boolean showTitleAndTabFlag) {
+        this.showTitleAndTabFlag = showTitleAndTabFlag;
+    }
+
+    public void showTitleAndTab(){
+        if(isAnimRunning()){
+            setShowTitleAndTabFlag(true);
+            return;
+        }
+        setShowTitleAndTabFlag(false);
+        startTabShowAnimation();
+        startTitleShowAnimation();
+    }
+
+    private void setTitleVisibility(int visibility){
+        if(titleLayout == null){
+            return;
+        }
+        titleLayout.setVisibility(visibility);
+    }
+
+    private void setTabVisibility(int visibility){
+        if(getTab() == null){
+            return;
+        }
+        getTab().setVisibility(visibility);
     }
 
     int moveDistance = dip2px(30);
@@ -460,6 +504,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             public void onAnimationEnd(Animation animation) {
                 setAnimRunning(false);
                 setTitleAlpha(titleLayout, 0);
+                setTitleVisibility(View.GONE);
+                if(isShowTitleAndTabFlag()){
+                    showTitleAndTab();
+                }
             }
 
             @Override
@@ -483,6 +531,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             public void onAnimationEnd(Animation animation) {
                 setAnimRunning(false);
                 setTitleAlpha(getTab(), 0);
+                setTabVisibility(View.GONE);
             }
 
             @Override
@@ -499,6 +548,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
         setTitleAlpha(titleLayout, 1);
+        setTitleVisibility(View.VISIBLE);
         TranslateAnimation titleAnimation = new TranslateAnimation(0, 0, -titleLayout.getMeasuredHeight(), 0);
         titleAnimation.setDuration(animDuration);
         titleAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -519,26 +569,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         });
         titleLayout.startAnimation(titleAnimation);
 
-        TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, getTab().getMeasuredHeight(), 0);
-        tabAnimation.setDuration(animDuration);
-        tabAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                setAnimRunning(true);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                setAnimRunning(false);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        getTab().startAnimation(titleAnimation);
-
     }
 
     private void startTabShowAnimation(){
@@ -546,6 +576,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
         setTitleAlpha(getTab(), 1);
+        setTabVisibility(View.VISIBLE);
         TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, getTab().getMeasuredHeight(), 0);
         tabAnimation.setDuration(animDuration);
         tabAnimation.setAnimationListener(new Animation.AnimationListener() {

@@ -27,4 +27,6 @@ public class IntentKey {
      */
     public static final String SPECIAL_TOPIC_ID = "id";
 
+    public static final String EXTRA_RESULT_SUCCESS_STRING = "extra_result_success_string";
+
 }

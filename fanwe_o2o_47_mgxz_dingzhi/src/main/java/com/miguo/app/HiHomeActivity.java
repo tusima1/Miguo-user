@@ -8,6 +8,7 @@ import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
+import com.miguo.definition.ResultCode;
 
 /**
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
@@ -54,7 +55,25 @@ public class HiHomeActivity extends HiBaseActivity{
                     break;
             }
         }
+
+        /**
+         * 扫码
+         */
+        if(resultCode == ResultCode.RESULT_CODE_SCAN_SUCCESS){
+            if(data != null){
+                handlerScanQrCode(data.getStringExtra(IntentKey.EXTRA_RESULT_SUCCESS_STRING));
+            }
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * 处理扫码
+     * @param extraString
+     */
+    private void handlerScanQrCode(String extraString){
+
     }
 
     private void handlerReturnCityId(Intent data){

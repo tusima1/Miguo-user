@@ -88,6 +88,10 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     }
 
     public void clearPage(){
+        if(recyclerView == null || adapter == null){
+            return;
+        }
+        adapter.notifyDataSetChanged(new ArrayList());
         recyclerView.setVisibility(View.GONE);
         featuredTitleLayout.setVisibility(View.GONE);
     }

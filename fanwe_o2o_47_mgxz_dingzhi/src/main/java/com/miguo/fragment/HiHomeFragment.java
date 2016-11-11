@@ -37,6 +37,12 @@ public class HiHomeFragment extends HiBaseFragment{
         }
     }
 
+    public void showTitleAndTab(){
+        if(null != getCategory()){
+            getCategory().showTitleAndTab();
+        }
+    }
+
     public HiHomeFragmentCategory getCategory(){
         return (HiHomeFragmentCategory)category;
     }

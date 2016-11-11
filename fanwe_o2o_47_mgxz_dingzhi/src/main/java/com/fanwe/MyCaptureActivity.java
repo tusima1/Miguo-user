@@ -9,13 +9,14 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.zxing.CaptureActivity;
 import com.google.zxing.Result;
 import com.miguo.app.HiHomeActivity;
+import com.miguo.definition.ResultCode;
 
 public class MyCaptureActivity extends CaptureActivity
 {
 	/** 是否扫描成功后结束二维码扫描activity，0：否，1:是,值为字符串 */
 	public static final String EXTRA_IS_FINISH_ACTIVITY = "extra_is_finish_activity";
 	/** 扫描成功返回码 */
-	public static final int RESULT_CODE_SCAN_SUCCESS = 10;
+	public static final int RESULT_CODE_SCAN_SUCCESS = ResultCode.RESULT_CODE_SCAN_SUCCESS;
 	/** 扫描成功，扫描activity结束后Intent中取扫描结果的key */
 	public static final String EXTRA_RESULT_SUCCESS_STRING = "extra_result_success_string";
 

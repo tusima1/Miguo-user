@@ -34,5 +34,9 @@ public class ClassPath {
      * 活动页
      */
     public static final String WEB_PAGE_ACTIVITY = "com.miguo.app.HiWebPageActivity";
+    /**
+     * 扫码页
+     */
+    public static final String SCAN_QR_CODE = "com.fanwe.MyCaptureActivity";
 
 }
