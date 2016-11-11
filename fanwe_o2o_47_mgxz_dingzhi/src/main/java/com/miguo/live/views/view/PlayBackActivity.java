@@ -1046,115 +1046,129 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void onSuccess(String method, final List datas) {
-        switch (method) {
-            case LiveConstants.RECEIVE_CODE:
-                if (!SDCollectionUtil.isEmpty(datas)) {
-                    String code = ((ModelReceiveCode) datas.get(0)).getReceive_code();
-                    if (!TextUtils.isEmpty(code)) {
-                        App.getInstance().setReceiveCode(code);
+        try{
+            switch (method) {
+                case LiveConstants.RECEIVE_CODE:
+                    if (!SDCollectionUtil.isEmpty(datas)) {
+                        String code = ((ModelReceiveCode) datas.get(0)).getReceive_code();
+                        if (!TextUtils.isEmpty(code)) {
+                            App.getInstance().setReceiveCode(code);
+                        }
                     }
-                }
-                break;
-            case LiveConstants.AUDIENCE_LIST:
-                //观众列表
-                final List<ModelAudienceInfo> audienceList = datas;
+                    break;
+                case LiveConstants.AUDIENCE_LIST:
+                    //观众列表
+                    final List<ModelAudienceInfo> audienceList = datas;
 
 
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final boolean isHost = LiveUtil.checkIsHost();
-                        final int size = datas.size();
-                        if (audienceList != null && audienceList.size() >= 0) {
-                            CurLiveInfo.setMembers(size);
-                        }
-                        if (mUserHeadTopView != null) {
-                            mUserHeadTopView.refreshData(datas);
-                        }
-                        doUpdateMembersCount();
-                        mHeadTopAdapter.notifyDataSetChanged();
-                    }
-                });
-
-
-                break;
-
-            case LiveConstants.ENTER_ROOM:
-                //观众进入房间
-                if (!checkDataIsNull(datas)) {
-                    //成功
-                }
-                break;
-            case LiveConstants.EXIT_ROOM:
-                //观众退出房间
-                break;
-            case LiveConstants.HOST_INFO:
-                //获取host资料
-                if (checkDataIsNull(datas)) {
-                    MGLog.e("LiveConstants.HOST_INFO 返回数据失败!");
-                    return;
-                }
-                ModelHostInfo hostInfo = (ModelHostInfo) datas.get(0);
-                if (hostInfo != null && mUserHeadTopView != null) {
-                    //TODO 主播的资料放哪里?
-                }
-                break;
-            case LiveConstants.HOST_TAGS:
-                //获取主播标签
-                break;
-            case LiveConstants.AUDIENCE_COUNT:
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //获取观众人数
-                        if (checkDataIsNull(datas)) {
-                            MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
-                            return;
-                        }
-                        ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
-                        //更新观众人数
-                        if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
-
-                            CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final boolean isHost = LiveUtil.checkIsHost();
+                            final int size = datas.size();
+                            if (audienceList != null && audienceList.size() >= 0) {
+                                CurLiveInfo.setMembers(size);
+                            }
+                            if (mUserHeadTopView != null) {
+                                mUserHeadTopView.refreshData(datas);
+                            }
                             doUpdateMembersCount();
+                            if(mHeadTopAdapter != null){
+                                mHeadTopAdapter.notifyDataSetChanged();
+                            }
                         }
-                    }
-                });
-                break;
-            case LiveConstants.LIST_OF_STORES:
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (datas == null) {
-                            mBaoBaoAdapter.setData(null);
-                        } else {
-                            mBaoBaoAdapter.setData(datas);
-                        }
-                        mBaoBaoAdapter.notifyDataSetChanged();
-                    }
-                });
+                    });
 
-                break;
-            case SellerConstants.LIVE_BIZ_SHOP:
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (datas != null && datas.size() > 0) {
-                            playBackBottomToolView.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
-                            playBackBottomToolView.notifyDataChange();
-                        }
-                    }
-                });
-                break;
 
-            case LiveConstants.STORES_RANDOM_COMMENT:
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
+                    break;
+
+                case LiveConstants.ENTER_ROOM:
+                    //观众进入房间
+                    if (!checkDataIsNull(datas)) {
+                        //成功
                     }
-                });
-                break;
+                    break;
+                case LiveConstants.EXIT_ROOM:
+                    //观众退出房间
+                    break;
+                case LiveConstants.HOST_INFO:
+                    //获取host资料
+                    if (checkDataIsNull(datas)) {
+                        MGLog.e("LiveConstants.HOST_INFO 返回数据失败!");
+                        return;
+                    }
+                    ModelHostInfo hostInfo = (ModelHostInfo) datas.get(0);
+                    if (hostInfo != null && mUserHeadTopView != null) {
+                        //TODO 主播的资料放哪里?
+                    }
+                    break;
+                case LiveConstants.HOST_TAGS:
+                    //获取主播标签
+                    break;
+                case LiveConstants.AUDIENCE_COUNT:
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //获取观众人数
+                            if (checkDataIsNull(datas)) {
+                                MGLog.e("LiveConstants.AUDIENCE_COUNT 返回数据失败!");
+                                return;
+                            }
+                            ModelAudienceCount audienceCount = (ModelAudienceCount) datas.get(0);
+                            //更新观众人数
+                            if (audienceCount != null && !TextUtils.isEmpty(audienceCount.getCount())) {
+
+                                CurLiveInfo.setMembers(Integer.valueOf(audienceCount.getCount()));
+                                doUpdateMembersCount();
+                            }
+                        }
+                    });
+                    break;
+                case LiveConstants.LIST_OF_STORES:
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(mBaoBaoAdapter == null){
+                                return;
+                            }
+                            if (datas == null) {
+                                mBaoBaoAdapter.setData(null);
+                            } else {
+                                mBaoBaoAdapter.setData(datas);
+                            }
+                            mBaoBaoAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    break;
+                case SellerConstants.LIVE_BIZ_SHOP:
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                                if (datas != null && datas.size() > 0 && playBackBottomToolView != null) {
+                                    playBackBottomToolView.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                                    playBackBottomToolView.notifyDataChange();
+                                }
+
+                        }
+                    });
+                    break;
+
+                case LiveConstants.STORES_RANDOM_COMMENT:
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(mUserHeadTopView == null || datas == null){
+                                return;
+                            }
+                            mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
+                        }
+                    });
+                    break;
+            }
+        }catch (Exception e){
+            Log.e("PlaybackActivity", "excetion..");
         }
     }
 
