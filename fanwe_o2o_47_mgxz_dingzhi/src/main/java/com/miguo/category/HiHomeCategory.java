@@ -458,6 +458,11 @@ public class HiHomeCategory extends Category implements
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
                         AppRuntimeWorker.setCity_name(location);
+                        CitylistModel tempBean = new CitylistModel();
+                        tempBean.setId(AppRuntimeWorker.getCityIdByCityName(location));
+                        tempBean.setName(location);
+                        tempBean.setPy(AppRuntimeWorker.getCityPyByCityName(location));
+                        updateFromCityChanged(tempBean);
                     }
 
                     @Override
