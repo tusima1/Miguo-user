@@ -43,26 +43,16 @@
             android:ellipsize="end"
             android:lines="1"
             android:singleLine="true"
-            android:text="西湖北线/黄龙 | 10.6km | 居酒屋"
+            android:text=".. | .. | .."
             android:textColor="@color/text_base_color"
-            android:textSize="@dimen/dp12" />
-
-        <TextView
-            android:id="@+id/tv_type_item_featured_groupon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="代金券"
-            android:textColor="@color/c_f5b830"
             android:textSize="@dimen/dp12" />
 
         <TextView
             android:id="@+id/tv_price_tuan_item_featured_groupon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp5"
-            android:layout_toLeftOf="@+id/tv_type_item_featured_groupon"
-            android:text="95.00元/张"
+            android:layout_alignParentRight="true"
+            android:text=""
             android:textColor="@color/c_f5b830"
             android:textSize="@dimen/dp12" />
 

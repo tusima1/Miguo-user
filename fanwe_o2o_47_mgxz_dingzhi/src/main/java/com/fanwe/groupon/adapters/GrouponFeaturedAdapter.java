@@ -92,9 +92,9 @@ public class GrouponFeaturedAdapter extends RecyclerView.Adapter<GrouponFeatured
         } else {
             SDViewBinder.setTextView(mViewHolder.tvOriginal, "");
         }
-        //团购价
+        //团购价带单位
         if (!TextUtils.isEmpty(currBean.getTuan_price())) {
-            String temp = currBean.getTuan_price() + "元/张";
+            String temp = currBean.getTuan_price_with_unit();
             SDViewBinder.setTextView(mViewHolder.tvTuan, temp, "");
         } else {
             SDViewBinder.setTextView(mViewHolder.tvTuan, "");

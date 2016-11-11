@@ -4,15 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.OrderOutAdapter;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemOut;
@@ -25,6 +23,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -40,14 +39,11 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
 
     @ViewInject(R.id.ptrlv_content)
     private PullToRefreshListView mPtrlv_content;
+    @ViewInject(R.id.ll_empty)
+    private LinearLayout ll_empty;
     private OrderOutAdapter mAdapter;
     private List<ModelOrderItemOut> mListModel = new ArrayList<ModelOrderItemOut>();
-
-    private PageModel mPage=new PageModel();
-
     private String mPayStatus;
-
-    private boolean mStatus = false;
     private int mOrderMode;
 //    protected User_Order mActModel;
     private OrderHttpHelper httpHelper;
@@ -93,23 +89,6 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
         }
 
         mTitle.setMiddleTextTop(title);
-//        mTitle.initRightItem(1);
-//        mTitle.getItemRight(0).setTextTop("编辑");
-    }
-
-    @Override
-    public void onCLickRight_SDTitleSimple(SDTitleItem v, int index) {
-        super.onCLickRight_SDTitleSimple(v, index);
-        if (mStatus) {
-            bindDefaultData();
-            mTitle.getItemRight(0).setTextTop("编辑");
-            mStatus = false;
-        } else {
-            mAdapter = new OrderOutAdapter(mListModel, getActivity(), true, mOrderMode);
-            mPtrlv_content.setAdapter(mAdapter);
-            mTitle.getItemRight(0).setTextTop("完成");
-            mStatus = true;
-        }
     }
 
     private void getIntentData() {
@@ -190,17 +169,29 @@ public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         ResultOrderInfo resultOrderInfo = (ResultOrderInfo) datas.get(0);
+        if (resultOrderInfo == null || resultOrderInfo.getItems()==null){
+            ll_empty.setVisibility(View.VISIBLE);
+            return;
+        }
+        int anInt = MGStringFormatter.getInt(resultOrderInfo.getPage());
+        List<ModelOrderItemOut> items = resultOrderInfo.getItems();
+        if (anInt <=1 && items.size()<1){
+            ll_empty.setVisibility(View.VISIBLE);
+        }else {
+            ll_empty.setVisibility(View.GONE);
+        }
         int pageItemNum = MGStringFormatter.getInt(resultOrderInfo.getData_num());
         if (pageItemNum!=10){
             hasMore=false;
         }
-        SDViewUtil.updateAdapterByList(mListModel, resultOrderInfo.getItems(), mAdapter,
+
+        SDViewUtil.updateAdapterByList(mListModel,items , mAdapter,
 							isLoadMore);
     }
 
     @Override
     public void onFailue(String responseBody) {
-
+        ll_empty.setVisibility(View.VISIBLE);
     }
 
     @Override
