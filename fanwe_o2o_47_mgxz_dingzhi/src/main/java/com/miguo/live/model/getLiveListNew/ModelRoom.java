@@ -12,7 +12,7 @@ public class ModelRoom extends Body {
     // 直播房间的创建时间
     private String create_time;
     private String play_url;
-    // 是否开通直播回访 1开通0关闭
+    // 是否开通直播回放 1开通0关闭
     private String playback_status;
     // 直播类型 1直播(直播回放)2点播
     private String live_type;

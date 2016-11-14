@@ -76,14 +76,8 @@ public class UserHomeLiveImgAdapter extends BaseAdapter {
         currModelRoom = datas.get(position);
         SDViewBinder.setTextView(mHolder.tvName, currModelRoom.getLbs().getShop_name(), "");
         ImageLoader.getInstance().displayImage(currModelRoom.getCover(), mHolder.ivBg);
-        // 开始状态,0:未开始，1:直播中，2:已结束
-        if ("0".equals(currModelRoom.getStart_status())) {
-            SDViewBinder.setTextView(mHolder.tvStatus, "未开始");
-        } else if ("1".equals(currModelRoom.getStart_status())) {
-            SDViewBinder.setTextView(mHolder.tvStatus, "直播中");
-        } else if ("2".equals(currModelRoom.getStart_status())) {
-            SDViewBinder.setTextView(mHolder.tvStatus, "已结束");
-        }
+        SDViewBinder.setTextView(mHolder.tvStatus, LiveUtil.getLiveType(currModelRoom));
+        mHolder.tvStatus.setBackgroundResource(LiveUtil.getLiveTypeColor(currModelRoom));
         mHolder.ivBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
