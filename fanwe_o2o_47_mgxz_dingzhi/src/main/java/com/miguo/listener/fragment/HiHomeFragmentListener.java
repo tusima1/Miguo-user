@@ -79,7 +79,7 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
      */
     private void clickQrScan(){
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SCAN_QR_CODE));
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+        BaseUtils.jumpToNewActivityForResult(getActivity(), intent, 12);
     }
 
     /**
