@@ -82,7 +82,7 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         view = inflater.inflate(R.layout.fragment_home_live_list, container, false);
         recyclerView = (HomeLiveFragmentRecyclerView) view.findViewById(R.id.recyclerview);
         ll_empty = (LinearLayout)view.findViewById(R.id.ll_empty);
-        tvTitle = (TextView) view.findViewById(R.id.tv_title_live_list);
+//        tvTitle = (TextView) view.findViewById(R.id.tv_title_live_list);
     }
 
     private void initRecyclerView(){

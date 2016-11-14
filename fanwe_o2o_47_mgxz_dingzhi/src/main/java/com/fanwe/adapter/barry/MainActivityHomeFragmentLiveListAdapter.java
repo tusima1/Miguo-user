@@ -18,6 +18,7 @@ import com.fanwe.home.model.Host;
 import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -81,10 +82,10 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     }
 
     private void setImageBgParams(RecyclerView.ViewHolder holder, int position){
-        int width = getImageHeight();
-        int height = width;
+        int width = SDViewUtil.getScreenWidth();
+        int height = getImageHeight();
         RelativeLayout.LayoutParams params = getRelativeLayoutParams(width, height);
-        params.setMargins(dip2px(8), getMarginTop(), 0, 0);
+        params.setMargins(0, getMarginTop(), 0, 0);
         getHolder(holder).image.setLayoutParams(params);
     }
 
@@ -96,8 +97,8 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         return dip2px(10);
     }
 
-    private int getImageHeight(){
-        return getScreenWidth() - dip2px(8 * 2);
+    private  int getImageHeight(){
+        return  dip2px(228);
     }
 
     @Override

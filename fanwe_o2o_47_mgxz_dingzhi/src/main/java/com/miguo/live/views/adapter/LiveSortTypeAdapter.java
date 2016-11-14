@@ -57,20 +57,16 @@ public class LiveSortTypeAdapter extends RecyclerView.Adapter<LiveSortTypeAdapte
 
         holder.tvName.setText(TextUtils.isEmpty(modelHomeClassifyList.getName())?"":modelHomeClassifyList.getName());
 
-        if (modelHomeClassifyList.is_checked()) {
-            ImageLoader.getInstance().displayImage(modelHomeClassifyList.getImg(), holder.ivImg);
-        } else {
-            String imageUrl = modelHomeClassifyList.getImg();
-            if(!TextUtils.isEmpty(modelHomeClassifyList.getUncheck_img())){
-                imageUrl = modelHomeClassifyList.getUncheck_img();
-            }
-            ImageLoader.getInstance().displayImage(imageUrl,holder.ivImg);
-        }
         ImageLoader.getInstance().displayImage(modelHomeClassifyList.getImg(),holder.ivImg);
-        holder.imageGallery.setVisibility(View.VISIBLE);
-
         holder.updateImageParams(holder.ivImg,position);
         holder.updateImageParams(holder.imageGallery,position);
+        if (modelHomeClassifyList.is_checked()) {
+            ImageLoader.getInstance().displayImage(modelHomeClassifyList.getImg(), holder.ivImg);
+            holder.imageGallery.setVisibility(View.GONE);
+        } else {
+            holder.imageGallery.setVisibility(View.VISIBLE);
+        }
+
 
         holder.ivImg.setOnClickListener(new View.OnClickListener() {
             @Override
