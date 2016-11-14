@@ -1,6 +1,8 @@
 package com.fanwe.user.adapters;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +10,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fanwe.LoginActivity;
+import com.fanwe.app.App;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
+import com.miguo.live.views.LiveUtil;
+import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.NetWorkStateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -20,12 +28,12 @@ import java.util.List;
  */
 
 public class UserHomeLiveImgAdapter extends BaseAdapter {
-    private Context mContext;
+    private Activity mContext;
     private LayoutInflater inflater;
-    private List<ModelSpokePlay> datas;
-    private ModelSpokePlay currModelSpokePlay;
+    private List<ModelRoom> datas;
+    private ModelRoom currModelRoom;
 
-    public UserHomeLiveImgAdapter(Context mContext, LayoutInflater layoutInflater, List<ModelSpokePlay> datas) {
+    public UserHomeLiveImgAdapter(Activity mContext, LayoutInflater layoutInflater, List<ModelRoom> datas) {
         this.mContext = mContext;
         this.inflater = layoutInflater;
         this.datas = datas;
@@ -65,17 +73,23 @@ public class UserHomeLiveImgAdapter extends BaseAdapter {
     }
 
     private void setData(Holder mHolder, final int position) {
-        currModelSpokePlay = datas.get(position);
-        SDViewBinder.setTextView(mHolder.tvName, currModelSpokePlay.getShop_name(), "");
-        ImageLoader.getInstance().displayImage(currModelSpokePlay.getCover(), mHolder.ivBg);
+        currModelRoom = datas.get(position);
+        SDViewBinder.setTextView(mHolder.tvName, currModelRoom.getLbs().getShop_name(), "");
+        ImageLoader.getInstance().displayImage(currModelRoom.getCover(), mHolder.ivBg);
         // 开始状态,0:未开始，1:直播中，2:已结束
-        if ("0".equals(currModelSpokePlay.getStart_status())) {
+        if ("0".equals(currModelRoom.getStart_status())) {
             SDViewBinder.setTextView(mHolder.tvStatus, "未开始");
-        } else if ("1".equals(currModelSpokePlay.getStart_status())) {
+        } else if ("1".equals(currModelRoom.getStart_status())) {
             SDViewBinder.setTextView(mHolder.tvStatus, "直播中");
-        } else if ("2".equals(currModelSpokePlay.getStart_status())) {
+        } else if ("2".equals(currModelRoom.getStart_status())) {
             SDViewBinder.setTextView(mHolder.tvStatus, "已结束");
         }
+        mHolder.ivBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickItem(position);
+            }
+        });
     }
 
     private static class Holder {
@@ -83,4 +97,23 @@ public class UserHomeLiveImgAdapter extends BaseAdapter {
         TextView tvName, tvStatus;
     }
 
+    private final String LIVE = "1";
+    private final String LIVE_PLAY_BACK = "1";
+    private final String PLAY_BACK = "2";
+
+    private void clickItem(int position) {
+        if (TextUtils.isEmpty(App.getInstance().getToken())) {
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            BaseUtils.jumpToNewActivity(mContext, intent);
+            return;
+        }
+        //判断网络环境
+        boolean connected = NetWorkStateUtil.isConnected(mContext);
+        if (!connected) {
+            MGToast.showToast("没有网络,请检测网络环境!");
+            return;
+        }
+        ModelRoom room = (ModelRoom) getItem(position);
+        LiveUtil.clickRoom(room, mContext);
+    }
 }

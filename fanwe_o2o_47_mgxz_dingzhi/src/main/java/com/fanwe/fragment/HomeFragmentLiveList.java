@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.fanwe.adapter.barry.MainActivityHomeFragmentLiveListAdapter;
 import com.fanwe.adapter.barry.MainActivityHomeFragmentTuanAdapter;
 import com.fanwe.base.CallbackView;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.HomeLiveFragmentRecyclerView;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.utils.BaseUtils;
 import com.tencent.imcore.Context;
@@ -31,7 +31,7 @@ import java.util.List;
 public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     private View view;
     private TextView tvTitle;
-    private ArrayList<Room> datas = new ArrayList<>();
+    private ArrayList<ModelRoom> datas = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
     private LiveHttpHelper liveHttpHelper;
@@ -98,7 +98,7 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         }
     }
 
-    public void updateView(boolean isRefresh, List<Room> rooms) {
+    public void updateView(boolean isRefresh, List<ModelRoom> rooms) {
         if (isRefresh) {
             datas.clear();
         }

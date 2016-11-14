@@ -1,10 +1,10 @@
-package com.fanwe.home.model;
+package com.miguo.live.model.getLiveListNew;
 
 /**
  * 位置信息
  * Created by Administrator on 2016/7/27.
  */
-public class Lbs {
+public class ModelLbs {
     //                "lbs": {                                                                        门店信息
 //            "geo_y": "0",                                                                经纬度
 //            "geo_x": "0",

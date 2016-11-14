@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,8 +15,6 @@ import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.fragment.MyFragment;
-import com.fanwe.home.model.Host;
-import com.fanwe.home.model.Room;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
@@ -27,12 +24,10 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
-import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -55,12 +50,12 @@ import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.live.views.LiveActivity;
+import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.FunnyFragment;
-import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.utils.SharedPreferencesUtils;
@@ -70,7 +65,6 @@ import com.miguo.view.IMUserInfoView;
 import com.miguo.view.LoginByMobileView;
 import com.miguo.view.TencentSignView;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
 
@@ -169,6 +163,15 @@ public class HiHomeCategory extends Category implements
         initUserInfo();
         locationCity();
         initDict();
+    }
+
+    private void initDict() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new LiveHttpHelper(null, null).getBussDictionInfo("Client");
+            }
+        }).start();
     }
 
     @Override
@@ -340,7 +343,7 @@ public class HiHomeCategory extends Category implements
 //                            liveHttpHelper.getUseReceiveCode(dialog.getCode());
                             getUseReceiveCode.getUserReceiveCode(dialog.getCode());
                             code = dialog.getCode();
-//                            App.getInstance().code = dialog.getCode();
+                            App.getInstance().code = dialog.getCode();
                         }
                         dialog.dismiss();
                     }
@@ -355,7 +358,10 @@ public class HiHomeCategory extends Category implements
                 dialog.show();
             } else {
 //                liveHttpHelper.getUseReceiveCode(code);
-                getUseReceiveCode.getUserReceiveCode(code);
+                if (!TextUtils.isEmpty(App.getApplication().getToken())) {
+                    getUseReceiveCode.getUserReceiveCode(code);
+                    App.getInstance().code = code;
+                }
             }
         }
     }
@@ -453,7 +459,7 @@ public class HiHomeCategory extends Category implements
                     @Override
                     public void onDismiss(SDDialogCustom dialog) {
 
-                    }
+            }
 
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
@@ -465,10 +471,10 @@ public class HiHomeCategory extends Category implements
                         updateFromCityChanged(tempBean);
                     }
 
-                    @Override
-                    public void onClickCancel(View v, SDDialogCustom dialog) {
-                    }
-                }).show();
+            @Override
+            public void onClickCancel(View v, SDDialogCustom dialog) {
+            }
+        }).show();
     }
 
     /**
@@ -505,7 +511,7 @@ public class HiHomeCategory extends Category implements
      */
     @Override
     public void loginSuccess(UserInfoNew user, String mobile, String password) {
-        Log.d(tag, "login success.. ");
+        Log.e(tag, "login success.. ");
         /**
          * 检查是否有兑换码
          */
@@ -578,25 +584,21 @@ public class HiHomeCategory extends Category implements
         imLoginDao.imLogin(userId, usersig);
     }
 
+    private final String LIVE = "1";
+    private final String LIVE_PLAY_BACK = "1";
+    private final String PLAY_BACK = "2";
+
     /**
      * 领取码回调
      * 成功
      */
     @Override
-    public void getUserReceiveCodeSuccess(Room room) {
-        Log.d(tag, "get user receive vode success...");
+    public void getUserReceiveCodeSuccess(ModelRoom room) {
         if (null != room) {
             if (clipboardManager != null)
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "mgxz"));
-            //分点播和直播 直播类型  1 表示直播，2表示点播
             String live_type = room.getLive_type();
-            if ("1".equals(live_type)) {
-                //直播
-                gotoLiveActivity(room);
-            } else if ("2".equals(live_type)) {
-                //点播
-                gotoPlayBackActivity(room);
-            } else {
+            if (!LIVE.equals(live_type) && !(PLAY_BACK.equals(live_type))) {
                 if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
                     if (room.getHost() != null) {
                         if (!TextUtils.isEmpty(room.getHost().getUid())) {
@@ -609,10 +611,39 @@ public class HiHomeCategory extends Category implements
                         }
                     }
                 }
-                //异常数据
-//                MGToast.showToast("异常数据");
                 return;
+            } else {
+                LiveUtil.clickRoom(room, getActivity());
             }
+        } else {
+            //未请求到数据
+            if (App.getInstance().isAlreadyShowCode) {
+                return;
+            } else {
+                App.getInstance().isAlreadyShowCode = true;
+            }
+            final GetDiamondInputDialog dialog = new GetDiamondInputDialog(getActivity());
+            dialog.setSubmitListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //分享码
+                    if (TextUtils.isEmpty(dialog.getCode())) {
+                        App.getInstance().isShowCode = false;
+                    } else {
+                        getUseReceiveCode.getUserReceiveCode(dialog.getCode());
+                        App.getInstance().code = dialog.getCode();
+                    }
+                    dialog.dismiss();
+                }
+            });
+            dialog.setCloseListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    App.getInstance().isShowCode = false;
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     }
 
@@ -699,88 +730,8 @@ public class HiHomeCategory extends Category implements
         Log.e("LoginHelper", "初始化AVSDK");
     }
 
-
-    /**
-     * 进入点播
-     */
-    /**
-     * 进入点播页面
-     *
-     * @param room
-     */
-    private void gotoPlayBackActivity(Room room) {
-        addCommonData(room);
-        String chat_room_id = room.getChat_room_id();//im的id
-        String file_size = room.getFile_size();//文件大小
-        String duration = room.getDuration();//时长
-        String file_id = room.getFile_id();
-        String vid = room.getVid();
-        String playset = room.getPlayset();
-
-        Intent intent = new Intent(getActivity(), PlayBackActivity.class);
-        Bundle data = new Bundle();
-        data.putString("chat_room_id", chat_room_id);
-        data.putString("file_size", file_size);
-        data.putString("duration", duration);
-        data.putString("file_id", file_id);
-        data.putString("vid", vid);
-        data.putString("playset", playset);
-        intent.putExtras(data);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+    public HiHomeFragment getHomeFragment() {
+        return null != fragments && fragments.size() > 0 ? (HiHomeFragment) fragments.get(0) : null;
     }
-
-    private void addCommonData(Room room) {
-        Host host = room.getHost();
-        String nickName = App.getInstance().getUserNickName();
-        String avatar = "";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo.getUserInfoNew() != null) {
-                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-            }
-        }
-        MySelfInfo.getInstance().setAvatar(avatar);
-        MySelfInfo.getInstance().setNickName(nickName);
-        MySelfInfo.getInstance().setJoinRoomWay(false);
-        CurLiveInfo.setHostID(host.getHost_user_id());
-        CurLiveInfo.setHostName(host.getNickname());
-
-        CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-        App.getInstance().setCurrentRoomId(room.getId());
-        CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
-        if (room.getLbs() != null) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-            ModelStoreList modelStoreList = new ModelStoreList();
-            modelStoreList.setShop_name(room.getLbs().getShop_name());
-            modelStoreList.setId(room.getLbs().getShop_id());
-            CurLiveInfo.setModelShop(modelStoreList);
-        }
-        CurLiveInfo.setLive_type(room.getLive_type());
-
-        CurLiveInfo.setHostUserID(room.getHost().getUid());
-//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-        CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
-        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-        }
-        CurLiveInfo.setAdmires(1);
-    }
-
-    /**
-     * 进入直播
-     */
-    private void gotoLiveActivity(Room room) {
-        Intent intent = new Intent(getActivity(), LiveActivity.class);
-        intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
-        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-        addCommonData(room);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
-    }
-
-    public HiHomeFragment getHomeFragment(){
-        return null != fragments && fragments.size() > 0 ? (HiHomeFragment)fragments.get(HomePageState.HOME) : null;
-    }
-
 
 }
