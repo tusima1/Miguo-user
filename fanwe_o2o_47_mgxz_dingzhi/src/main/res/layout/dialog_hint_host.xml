@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="@dimen/dp150"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_cricle_solid_white">
+
+
+        <TextView
+            android:id="@+id/location_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp35"
+            android:text="你正在做直播，不可以观看其他视频"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/sp16" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/location_2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp25"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel_action"
+                android:layout_width="@dimen/dp104"
+                android:layout_height="@dimen/dp33"
+                android:layout_marginRight="@dimen/dp8"
+                android:background="@drawable/shape_cricle_gray_solid_white_radius_big"
+                android:text="朕知道了"
+                android:textColor="@color/dark_text"
+                android:textSize="@dimen/sp16" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
+

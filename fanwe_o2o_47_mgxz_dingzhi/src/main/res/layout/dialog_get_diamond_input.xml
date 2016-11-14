@@ -48,6 +48,7 @@
             android:background="@drawable/bg_gray_smallline"
             android:hint="粘帖或输入领取码，获得钻石"
             android:padding="@dimen/dp10"
+            android:textColor="@color/text_home_recommend"
             android:textColorHint="@color/c_CCCCCC"
             android:textSize="@dimen/dp16" />
 

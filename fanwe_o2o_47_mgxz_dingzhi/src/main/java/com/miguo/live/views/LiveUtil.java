@@ -3,10 +3,13 @@ package com.miguo.live.views;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -15,9 +18,12 @@ import com.miguo.live.model.getLiveListNew.ModelHost;
 import com.miguo.live.model.getLiveListNew.ModelRecordFile;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.dialog.HintHostDialog;
+import com.miguo.live.views.dialog.HintMemberDialog;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.NetWorkStateUtil;
+import com.sunday.eventbus.SDEventManager;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -150,7 +156,13 @@ public class LiveUtil {
         }
     }
 
+    private static long timeTemp;
+
     public static void clickRoom(ModelRoom room, Activity mActivity) {
+        //过滤快速点击
+        if ((System.currentTimeMillis() - timeTemp) < 2000) {
+            return;
+        }
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
             Intent intent = new Intent(mActivity, LoginActivity.class);
             BaseUtils.jumpToNewActivity(mActivity, intent);
@@ -162,23 +174,120 @@ public class LiveUtil {
             MGToast.showToast("没有网络,请检测网络环境!");
             return;
         }
+        //跳转前需要完成的动作
+        judgeStatus(room, mActivity);
+    }
+
+    private static HintMemberDialog dialogHintMemberDialog;
+
+    /**
+     * 判断当前播放状态
+     *
+     * @param room
+     * @param mActivity
+     * @return
+     */
+    private static void judgeStatus(final ModelRoom room, final Activity mActivity) {
         //分点播和直播 直播类型  1 表示直播，2表示点播
-        String live_type = room.getLive_type();
+        final String live_type = room.getLive_type();
+        if (!LIVE.equals(live_type) && !PLAY_BACK.equals(live_type)) {
+            MGToast.showToast("异常数据");
+            return;
+        }
+        dialogHintMemberDialog = new HintMemberDialog(mActivity);
+        dialogHintMemberDialog.setCloseListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeTemp = 0;
+                dialogHintMemberDialog.dismiss();
+            }
+        });
+        //直播相关
+        if (LiveActivity.isLiving) {
+            if (checkIsHost()) {
+                //主播直播中，不能进行任何操作
+                final HintHostDialog dialog = new HintHostDialog(mActivity);
+                dialog.setCloseListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeTemp = 0;
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            } else {
+                dialogHintMemberDialog.setSureListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        timeTemp = System.currentTimeMillis();
+                        //观看直播中,先关闭直播
+                        SDEventManager.post(EnumEventTag.CLOSE_LIVE.ordinal());
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                if (LIVE.equals(live_type)) {
+                                    if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
+                                        //直播回放
+                                        gotoPlayBackActivity(room, true, mActivity);
+                                    } else {
+                                        //直播
+                                        gotoLiveActivity(room, mActivity);
+                                    }
+                                } else if (PLAY_BACK.equals(live_type)) {
+                                    //点播
+                                    gotoPlayBackActivity(room, false, mActivity);
+                                }
+                            }
+                        }, 1000);
+                        dialogHintMemberDialog.dismiss();
+                    }
+                });
+                dialogHintMemberDialog.show();
+            }
+            return;
+        }
+        //点播相关
+        if (PlayBackActivity.isPlaying) {
+            dialogHintMemberDialog.setSureListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timeTemp = System.currentTimeMillis();
+                    //先关闭点播
+                    SDEventManager.post(EnumEventTag.CLOSE_PLAY.ordinal());
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            if (LIVE.equals(live_type)) {
+                                if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
+                                    //直播回放
+                                    gotoPlayBackActivity(room, true, mActivity);
+                                } else {
+                                    //跳转直播
+                                    gotoLiveActivity(room, mActivity);
+                                }
+                            } else if (PLAY_BACK.equals(live_type)) {
+                                //点播
+                                //跳转点播，直接跳转
+                                gotoPlayBackActivity(room, false, mActivity);
+                            }
+                        }
+                    }, 1000);
+                    dialogHintMemberDialog.dismiss();
+                }
+            });
+            dialogHintMemberDialog.show();
+            return;
+        }
+        //不在直播，也不在点播
         if (LIVE.equals(live_type)) {
             if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
                 //直播回放
                 gotoPlayBackActivity(room, true, mActivity);
             } else {
-                //直播
+                //跳转直播
                 gotoLiveActivity(room, mActivity);
             }
         } else if (PLAY_BACK.equals(live_type)) {
             //点播
             gotoPlayBackActivity(room, false, mActivity);
-        } else {
-            //异常数据
-            MGToast.showToast("异常数据");
-            return;
         }
     }
 
@@ -220,7 +329,7 @@ public class LiveUtil {
 
     private static void addCommonData(ModelRoom room) {
         ModelHost host = room.getHost();
-        String nickName = App.getInstance().getUserNickName();
+        String nickName = host.getNickname();
         String avatar = "";
         if (App.getInstance().getmUserCurrentInfo() != null) {
             UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
@@ -251,9 +360,6 @@ public class LiveUtil {
 //                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
         CurLiveInfo.setMembers(1); // 添加自己
 //                CurLiveInfo.setAddress(item.getLbs().getAddress());
-        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-        }
         CurLiveInfo.setAdmires(1);
     }
 

@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -1061,6 +1060,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccess() {
+                Log.e(TAG, "startRecord success");
                 mLiveView.startRecordCallback(true);
             }
         });
@@ -1078,12 +1078,9 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
 
             @Override
             public void onSuccess(List<String> files) {
-                if (!SDCollectionUtil.isEmpty(files)) {
-                    Log.e(TAG, "files:" + files.toString());
-                }
             }
         });
-        Log.d(TAG, "success");
+        Log.d(TAG, "stop record success");
     }
 
 

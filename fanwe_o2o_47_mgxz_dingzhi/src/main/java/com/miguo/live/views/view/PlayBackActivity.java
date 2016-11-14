@@ -19,15 +19,18 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -54,6 +57,8 @@ import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.RTMPUtils;
 import com.miguo.utils.test.MGTimer;
+import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMGroupManager;
 import com.tencent.av.TIMAvManager;
@@ -85,6 +90,7 @@ import java.util.TimerTask;
  * Created by Administrator on 2016/9/20.
  */
 public class PlayBackActivity extends BaseActivity implements ITXLivePlayListener, View.OnClickListener, LiveView, CallbackView, EnterQuiteRoomView, ShopAndProductView {
+    public static boolean isPlaying = false;
     private TXLivePlayer mLivePlayer = null;
     private boolean mVideoPlay;
     private TXCloudVideoView mPlayerView;
@@ -172,20 +178,19 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         getPlayUrlList();
         initHelper();
         initView();
+        SDEventManager.register(this);
+        isPlaying = true;
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        getIntentData(intent.getExtras());
-        mPlayConfig = new TXLivePlayConfig();
-        if (mLivePlayer == null) {
-            mLivePlayer = new TXLivePlayer(this);
+    public void onEventMainThread(SDBaseEvent event) {
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case CLOSE_PLAY:
+                //退出点播
+                finish();
+                break;
+            default:
+                break;
         }
-        getPlayUrlList();
-        initHelper();
-        refreshView();
-        startPlayRtmp();
     }
 
     /**
@@ -326,7 +331,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         refreshView();
     }
 
-    private void refreshView(){
+    private void refreshView() {
         doUpdateMembersCount();
         String hostImg = CurLiveInfo.getHostAvator();
         mUserHeadTopView.setHostImg(hostImg);
@@ -756,6 +761,8 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SDEventManager.unregister(this);
+        isPlaying = false;
         userExit();
         if (mLivePlayer != null) {
             mLivePlayer.stopPlay(true);
@@ -1073,7 +1080,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void userExit() {
-
         if (mLiveHttphelper != null) {
             mLiveHttphelper.exitRoom(room_id, "2");
         }

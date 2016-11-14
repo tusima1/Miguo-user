@@ -566,7 +566,6 @@ public class HiHomeCategory extends Category implements
         if (null != room) {
             if (clipboardManager != null)
                 clipboardManager.setPrimaryClip(ClipData.newPlainText(null, "mgxz"));
-            LiveUtil.clickRoom(room, getActivity());
             String live_type = room.getLive_type();
             if (!LIVE.equals(live_type) && !(PLAY_BACK.equals(live_type))) {
                 if (TextUtils.isEmpty(live_type) && TextUtils.isEmpty(room.getChat_room_id())) {
@@ -582,6 +581,8 @@ public class HiHomeCategory extends Category implements
                     }
                 }
                 return;
+            } else {
+                LiveUtil.clickRoom(room, getActivity());
             }
         } else {
             //未请求到数据

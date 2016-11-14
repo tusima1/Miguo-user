@@ -76,6 +76,9 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     }
 
     private void preView() {
+        if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() == null) {
+            return;
+        }
         if (id.equals(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id())) {
             //当前用户
             tvAttentionStatus.setVisibility(View.GONE);

@@ -43,12 +43,13 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.SDDateUtil;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
 import com.miguo.live.adapters.PagerRedPacketAdapter;
-import com.miguo.live.interf.LiveRecordListener;
 import com.miguo.live.interf.LiveSwitchScreenListener;
 import com.miguo.live.model.LiveChatEntity;
 import com.miguo.live.model.LiveConstants;
@@ -120,6 +121,7 @@ import master.flame.danmaku.ui.widget.DanmakuView;
  */
 public class LiveActivity extends BaseActivity implements ShopAndProductView, EnterQuiteRoomView,
         LiveView, View.OnClickListener, ProfileView, CallbackView, UserBottomToolView.OnGiftSendListener {
+    public static boolean isLiving = false;
     public static final String TAG = LiveActivity.class.getSimpleName();
     private static final int GETPROFILE_JOIN = 0x200;
     private final int REQUEST_PHONE_PERMISSIONS = 0;
@@ -236,6 +238,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initHelper();
         checkUserAndPermission();
         SDEventManager.register(this);
+        isLiving = true;
     }
 
     public void onEventMainThread(SDBaseEvent event) {
@@ -254,6 +257,10 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 if (mUserHeadTopView != null) {
                     mUserHeadTopView.setFocusStatus(false);
                 }
+                break;
+            case CLOSE_LIVE:
+                //观众退出直播
+                userExit();
                 break;
             default:
                 break;
@@ -794,21 +801,21 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //        showBackDialog();//退出的第一个界面,问你是否退出
 //        initPushDialog();
 //            initRecordDialog();
-        //录制功能
-        mRecordHelper = new LiveRecordDialogHelper(this, mLiveHelper);
-        mRecordHelper.setOnLiveRecordListener(new LiveRecordListener() {
-            @Override
-            public void startRecord() {
-                isRecording = true;
-                mOrientationHelper.startOrientationListener();
-            }
 
-            @Override
-            public void stopRecord() {
-                mOrientationHelper.stopOrientationListener();
-            }
-        });
-        mRecordHelper.show();
+//        mRecordHelper = new LiveRecordDialogHelper(this, mLiveHelper);
+//        mRecordHelper.setOnLiveRecordListener(new LiveRecordListener() {
+//            @Override
+//            public void startRecord() {
+//                isRecording = true;
+//                mOrientationHelper.startOrientationListener();
+//            }
+//
+//            @Override
+//            public void stopRecord() {
+//                mOrientationHelper.stopOrientationListener();
+//            }
+//        });
+//        mRecordHelper.show();
 
 //            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
 //            mBeautySettings = (LinearLayout) findViewById(R.id.qav_beauty_setting);
@@ -849,6 +856,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                    }
 //                }
 //            });
+    }
+
+    private TIMAvManager.RecordParam mRecordParam;
+
+    private void startRecord() {
+        isRecording = true;
+        mRecordParam = TIMAvManager.getInstance().new RecordParam();
+        mRecordParam.setFilename("" + CurLiveInfo.getRoomNum());
+        mRecordParam.setClassId(8921);
+        mLiveHelper.startRecord(mRecordParam);
     }
 
     /**
@@ -994,6 +1011,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     protected void onDestroy() {
         SDEventManager.unregister(this);
+        isLiving = false;
         try {
             /**
              * 一定要退出聊天室
@@ -1063,7 +1081,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             QavsdkControl.getInstance().clearVideoMembers();
             QavsdkControl.getInstance().onDestroy();
             MySelfInfo.getInstance().setMyRoomNum(-1);
-
+            MySelfInfo.getInstance().setIdStatus(0);
         } catch (Exception e) {
 
         }
@@ -1170,6 +1188,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 MGLog.e("主播:createlive enterRoomComplete");
                 //旁路直播
                 startPush();
+                //录制功能
+                startRecord();
             } else {
                 //发消息通知上线
                 mLiveHelper.sendGroupMessage(Constants.AVIMCMD_EnterLive, "");
@@ -2080,15 +2100,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void startRecordCallback(boolean isSucc) {
         mRecord = true;
-
-
     }
 
     @Override
     public void stopRecordCallback(boolean isSucc, List<String> files) {
         if (isSucc == true) {
             mRecord = false;
-
         }
     }
 
