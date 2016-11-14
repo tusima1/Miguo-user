@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.didikee.uilibs.views.WaitFinishTextView;
+import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -37,7 +38,6 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -97,8 +97,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private int mFLViewpagerHeight;
     private View mLayoutTop;
     private SellerNewHttpHelper mHttpHelper;
-    //    private String GoodsId="0ecd5927-1322-4d9e-b092-9cb213ada070";
-//    private String GoodsId="004c0d20-43f8-4ef8-ae7f-a15d8359655f";
     private String GoodsId = "";
     private TextView mTestHtmlTextView;
     private TextView mHtmlTipDesc;//温馨提示
@@ -167,13 +165,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void init() {
-        getIntentData(getIntent());
-        initTitleLayout();
-        initSScrollView();
-        mHttpHelper = new SellerNewHttpHelper(this);
-        mSellerHelper = new SellerHttpHelper(null, this, "");
-        mShoppingCartHelper = new ShoppingCartHelper(this);
-        requestData();
+        if (getIntentData(getIntent())){
+            initTitleLayout();
+            initSScrollView();
+            mHttpHelper = new SellerNewHttpHelper(this);
+            mSellerHelper = new SellerHttpHelper(null, this, "");
+            mShoppingCartHelper = new ShoppingCartHelper(this);
+            requestData();
+        }
+
     }
     private void requestData(){
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
@@ -190,14 +190,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        getIntentData(intent);
-        requestData();
+        if (getIntentData(intent)){
+            requestData();
+        }
     }
 
-    private void getIntentData(Intent intent) {
+    private boolean getIntentData(Intent intent) {
         if (intent==null){
             finish();
-            return;
+            return false;
         }
         GoodsId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
@@ -205,8 +206,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         if (TextUtils.isEmpty(GoodsId)) {
             MGToast.showToast("id为空");
             finish();
-            return;
+            return false;
         }
+        return true;
     }
 
     private void initTitleLayout() {
@@ -541,8 +543,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mTvTopYouHui.setText(tuan_price_with_unit);
 
         //bind bottom(底部悬浮)
-        mTvOldMoney.setText(origin_price);
-        mTvNewMoney.setText(tuan_price);
+        mTvOldMoney.setText(MGStringFormatter.getFloat2(origin_price));
+        mTvNewMoney.setText(MGStringFormatter.getFloat2(tuan_price));
 
         //收藏的状态
         isCollected = modelGoodsDetailNew.getIs_my_collect();
@@ -616,7 +618,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
 
         //--end bind data
-        SDDialogManager.dismissProgressDialog();
     }
 
     private void loadWebData(WebView webView, String data) {
@@ -786,6 +787,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     //收藏
     private void doCollect() {
+        if (TextUtils.isEmpty(App.getInstance().getToken())){
+            startActivity(new Intent(App.getApplication(), LoginActivity.class));
+            return;
+        }
         if ("1".equals(isCollected)) {
             //已经收藏
             mSellerHelper.deleteGroupBuyCollect(GoodsId);
@@ -848,7 +853,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         } else {
             //当前未登录.
             if ("0".equals(mTimeStatus)) {
-                MGToast.showToast("商品活动未开始。");
+                MGToast.showToast("商品活动未开始");
                 return;
             } else if ("1".equals(mTimeStatus)) {
                 addToLocalShopping();

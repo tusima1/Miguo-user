@@ -25,9 +25,9 @@ public class MD5Util
 				sb.append(hex);
 			}
 			result = sb.toString();
-		} catch (NoSuchAlgorithmException e)
+		} catch (Exception e)
 		{
-			result = null;
+			result = "";
 		}
 		return result;
 	}

@@ -9,12 +9,14 @@
     <FrameLayout
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
-        android:layout_height="163dp">
+        android:layout_height="wrap_content"
+        android:minHeight="163dp"
+        >
         <com.fanwe.customview.ListViewForScrollView
             android:id="@+id/list_shoplist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:dividerHeight="1dp"
+            android:dividerHeight="1px"
             android:divider="@color/bg_activity_gray"
             android:scrollbars="vertical"
             android:scrollbarStyle="insideInset"

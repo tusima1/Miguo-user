@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
@@ -26,7 +27,11 @@ import java.util.List;
  * Created by zlh/狗蛋哥/Barry on 2016/10/28.
  * 首页精选推荐列表
  */
-public class FeaturedGrouponCategory extends FragmentCategory implements FeaturedGrouponView{
+public class FeaturedGrouponCategory extends FragmentCategory implements FeaturedGrouponView, HiGrouponFeaturedAdapter.OnItemDataChangedListener{
+
+
+    @ViewInject(R.id.featured_title_layout)
+    LinearLayout featuredTitleLayout;
 
     @ViewInject(R.id.recyclerview_frag_featured_groupon)
     private RecyclerView recyclerView;
@@ -57,7 +62,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     @Override
     protected void setFragmentListener() {
-
+        adapter.setOnItemDataChangedListener(this);
     }
 
     @Override
@@ -82,6 +87,19 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 BaiduMapManager.getInstance().getLatitude() + "");
     }
 
+    public void clearPage(){
+        if(recyclerView == null || adapter == null){
+            return;
+        }
+        adapter.notifyDataSetChanged(new ArrayList());
+        recyclerView.setVisibility(View.GONE);
+        featuredTitleLayout.setVisibility(View.GONE);
+    }
+
+    public void showPage(){
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
     public void onLoadMore(){
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
@@ -100,6 +118,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+                recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
                 getCategory().loadComplete();
                 updateFeaturedGrouponViewHeight();
@@ -115,6 +135,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                featuredTitleLayout.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
                 adapter.notifyDataSetChangedLoadmore(list);
                 getCategory().loadComplete();
                 updateFeaturedGrouponViewHeight();
@@ -123,10 +145,17 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     }
 
     @Override
+    public void onItemChanged() {
+        updateFeaturedGrouponViewHeight();
+    }
+
+    @Override
     public void getFeaturedGrouponError(String message) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                featuredTitleLayout.setVisibility(View.GONE);
+                clearPage();
                 getCategory().loadComplete();
             }
         });

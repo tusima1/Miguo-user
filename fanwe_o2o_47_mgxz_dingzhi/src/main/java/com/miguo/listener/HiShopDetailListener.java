@@ -28,9 +28,11 @@ public class HiShopDetailListener extends Listener{
                 clickCollect();
                 break;
             case R.id.back:
+            case R.id.back_bg:
                 clickBack();
                 break;
             case R.id.share:
+            case R.id.share_bg:
                 clickShare();
                 break;
             case R.id.represent:

@@ -26,12 +26,20 @@ public class HiHomeFragment extends HiBaseFragment{
     }
 
     public void updateFromCityChanged(CitylistModel model){
-        getCategory().updateFromCityChanged(model);
+        if(null != getCategory()){
+            getCategory().updateFromCityChanged(model);
+        }
     }
 
     public void onRefreshGreeting(){
         if(null != getCategory()) {
             getCategory().onRefreshGreeting();
+        }
+    }
+
+    public void showTitleAndTab(){
+        if(null != getCategory()){
+            getCategory().showTitleAndTab();
         }
     }
 

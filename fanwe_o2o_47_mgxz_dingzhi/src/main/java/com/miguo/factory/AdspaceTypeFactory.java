@@ -3,19 +3,22 @@ package com.miguo.factory;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
+import com.miguo.live.views.utils.BaseUtils;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/11/2.
  */
 public class AdspaceTypeFactory {
 
-    public static void clickWidthType(String type, Activity context, String type_id){
+    public static void clickWidthType(String type, AppCompatActivity context, String type_id){
         switch (type){
             case AdspaceParams.BANNER_TYPE_SALE_DETAIL:
                 goGoodsDetail(context, type_id);
@@ -72,12 +75,12 @@ public class AdspaceTypeFactory {
      * @param context
      * @param type_id
      */
-    private static void goWebAction(Activity context, String type_id){
+    private static void goWebAction(AppCompatActivity context, String type_id){
         Intent intent = new Intent(context, ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
         Bundle bundle = new Bundle();
         bundle.putString(IntentKey.HOME_BANNER_WEB_PAGE, type_id);
         intent.putExtras(bundle);
-        com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(context, intent);
+        BaseUtils.jumpToNewActivityForResult(context, intent, RequestCode.HOME_WEB_PAGE);
     }
 
 

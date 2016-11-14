@@ -55,17 +55,7 @@
             android:background="@color/stroke"
             android:layout_marginLeft="10dp"
             />
-        <LinearLayout 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-        <!-- <WebView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/web_content"
-            /> -->
-        </LinearLayout>
-        <View 
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/stroke"

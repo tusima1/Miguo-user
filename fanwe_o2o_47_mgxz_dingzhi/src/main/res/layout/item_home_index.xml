@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp93">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/item_home_index_iv_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/item_home_index_iv_image"
+            android:layout_width="@dimen/size_px2sp_63"
+            android:layout_height="@dimen/size_px2sp_63"/>
+
+        <ImageView
+            android:id="@+id/image_gallery"
+            android:layout_width="@dimen/size_px2sp_63"
+            android:layout_height="@dimen/size_px2sp_63"
+            android:layout_above="@+id/item_home_index_iv_image"
+            android:src="@drawable/mask" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/item_home_index_tv_name"

@@ -41,6 +41,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
     List<Boolean> lines;
     public static final int SINGLE_LINE_HEIGHT = 35;
     public static final int DOUBBLE_LINE_HEIGHT = 60;
+    OnItemDataChangedListener onItemDataChangedListener;
 
     public HiGrouponFeaturedAdapter(Activity activity, List datas) {
         super(activity, datas);
@@ -91,6 +92,9 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
                     getHolder(holder).tvName.setLayoutParams(params);
                     getHolder(holder).tvName.setGravity(Gravity.CENTER_VERTICAL);
                     Log.d(tag, "two lines..." + lines.get(position));
+                    if(onItemDataChangedListener != null){
+                        onItemDataChangedListener.onItemChanged();
+                    }
                 }
             }
         });
@@ -115,20 +119,20 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         StringBuffer strLocation = new StringBuffer("");
         if (!TextUtils.isEmpty(getItem(position).getArea_name())) {
             String str = getItem(position).getArea_name();
-            strLocation.append(StringTool.getStringFixed(str, 6, "")+"|");
+            strLocation.append(StringTool.getStringFixed(str, 6, "")+" |");
         }else{
-            strLocation.append("..|");
+            strLocation.append(".. | ");
         }
         if (!TextUtils.isEmpty(getItem(position).getDistance())) {
             double distanceValue = Double.valueOf(getItem(position).getDistance());
-            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+"|");
+            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+" | ");
         }else{
-            strLocation.append("..|");
+            strLocation.append(".. | ");
         }
         if (!TextUtils.isEmpty(getItem(position).getCate_name())) {
             strLocation.append(getItem(position).getCate_name());
         }else{
-            strLocation.append("..");
+            strLocation.append(" ..");
         }
         SDViewBinder.setTextView(getHolder(holder).tvLocation, strLocation.toString(), "");
 
@@ -157,7 +161,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
          */
         if (!TextUtils.isEmpty(getItem(position).getSalary()) && DataFormat.toDouble(getItem(position).getSalary()) != 0) {
             String temp =  DataFormat.toDoubleTwo(getItem(position).getSalary())  + "元佣金";
-            getHolder(holder).tvSalary.setVisibility(View.VISIBLE);
+            getHolder(holder).tvSalary.setVisibility(View.GONE);
             SDViewBinder.setTextView(getHolder(holder).tvSalary, temp);
         } else {
             getHolder(holder).tvSalary.setVisibility(View.GONE);
@@ -284,6 +288,13 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
     }
 
+    public interface OnItemDataChangedListener{
+        void onItemChanged();
+    }
+
+    public void setOnItemDataChangedListener(OnItemDataChangedListener onItemDataChangedListener) {
+        this.onItemDataChangedListener = onItemDataChangedListener;
+    }
 
     class GrouponFeaturedAdapterListener extends BarryListener{
 

@@ -11,7 +11,7 @@
 
 
         <ImageView
-            android:id="@+id/back"
+            android:id="@+id/back_bg"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:src="@drawable/ic_arrow_left_white"
@@ -24,7 +24,7 @@
 
         <ImageView
             android:layout_alignParentRight="true"
-            android:id="@+id/share"
+            android:id="@+id/share_bg"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:src="@drawable/ic_share_pure"

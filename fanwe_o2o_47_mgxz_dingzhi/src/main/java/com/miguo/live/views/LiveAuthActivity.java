@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -28,6 +29,8 @@ import com.fanwe.utils.Bimp;
 import com.fanwe.utils.StringTool;
 import com.fanwe.utils.UriUtil;
 import com.fanwe.work.AppRuntimeWorker;
+import com.miguo.definition.RequestCode;
+import com.miguo.definition.ResultCode;
 import com.miguo.live.adapters.VisitImgAdapter;
 import com.miguo.live.model.DataBindingLiveAuth;
 import com.miguo.live.model.LiveConstants;
@@ -35,6 +38,7 @@ import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -65,6 +69,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     private UploadManager uploadManager;
     private EditText etPhone;
     private TextView tvInterest;
+    private Button btnSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         dataBindingLiveAuth = new DataBindingLiveAuth();
         binding.setLive(dataBindingLiveAuth);
         dataBindingLiveAuth.mobile.set(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile());
+        btnSubmit = (Button) findViewById(R.id.btn_submit_live_auth);
 
         preData();
         setListener();
@@ -100,7 +106,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         switch (id) {
             case R.id.layout_city_live_auth:
                 intent = new Intent(mContext, CityListActivity.class);
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent, RequestCode.RESUTN_CITY_ID);
                 break;
             case R.id.iv_arrow_left_bar:
                 finish();
@@ -140,6 +146,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         } else if (datas.size() < 3) {
             MGToast.showToast("请上传2-3张生活照");
         } else {
+            btnSubmit.setClickable(false);
             liveHttpHelper.getBussDictionInfo("Client");
         }
     }
@@ -227,7 +234,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == 8888) {
+        if (requestCode == RequestCode.RESUTN_CITY_ID && resultCode == ResultCode.RESUTN_OK) {
             dataBindingLiveAuth.city.set(AppRuntimeWorker.getCity_name());
             cityId = AppRuntimeWorker.getCity_id();
             return;
@@ -241,13 +248,18 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
             return;
         }
         if (requestCode == TAKE_PHOTO) {
+            doBimp();
         } else if (requestCode == SELECT_FILE_CODE) {
             mPhotoUri = data.getData();
             if (Build.VERSION.SDK_INT >= 19) {
                 mPhotoPath = UriUtil.getImageAbsolutePath(this, mPhotoUri);
                 mPhotoUri = Uri.fromFile(new File(mPhotoPath));
             }
+            doBimp();
         }
+    }
+
+    private void doBimp() {
         Bitmap temp = null;
         try {
             temp = Bimp.revitionImageSize(UriUtil.getImageAbsolutePath(LiveAuthActivity.this, mPhotoUri));
@@ -344,6 +356,12 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
             MGToast.showToast("申请认证成功");
             finish();
             App.getInstance().getmUserCurrentInfo().getUserInfoNew().setIs_host("2");
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnSubmit.setClickable(true);
+                }
+            });
         }
 
     }
@@ -388,7 +406,12 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
 
     @Override
     public void onFailue(String responseBody) {
-
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                btnSubmit.setClickable(true);
+            }
+        });
     }
 
 }

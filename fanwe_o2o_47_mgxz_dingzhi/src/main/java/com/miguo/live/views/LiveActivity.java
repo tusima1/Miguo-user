@@ -739,38 +739,40 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         OKhttpHelper.getInstance().registerRoomInfo(title, url, roomId + "", roomId + "", roomId
                 + "");
         //host的views
-        mHostBottomToolView1.setVisibility(View.VISIBLE);
+        if(mHostBottomToolView1 != null){
+            mHostBottomToolView1.setVisibility(View.VISIBLE);
+        }
 
-        mHostBottomMeiView2.setVisibility(View.VISIBLE);
-        mUserBottomTool.setVisibility(View.GONE);
+        if(mHostBottomMeiView2 != null){
+            mHostBottomMeiView2.setVisibility(View.VISIBLE);
+        }
+
+        if(mUserBottomTool != null){
+            mUserBottomTool.setVisibility(View.GONE);
+        }
         //host的topview
         mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
-        mHostTopView.setmAdapter(mHeadTopAdapter);
-        mHostTopView.init(this);
-        mHostTopView.setVisibility(View.VISIBLE);
-        mHostTopView.setNeed(this, mCommonHelper);
+        if(mHostTopView != null){
+            mHostTopView.setmAdapter(mHeadTopAdapter);
+            mHostTopView.init(this);
+            mHostTopView.setVisibility(View.VISIBLE);
+            mHostTopView.setNeed(this, mCommonHelper);
+        }
 
         doUpdateMembersCount();
 
-        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop()
-                .getShop_name())) {
+        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name()) && mHostTopView!=null) {
             mHostTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             if (!TextUtils.isEmpty(CurLiveInfo.getModelShop().getCons_count()))
                 mHostTopView.setArriveNum(CurLiveInfo.getModelShop().getCons_count() + "人到过");
         }
 
         //红包倒计时小view
-        mHostRedPacketCountDownView = ((HostRedPacketTimeView) findViewById(R.id
-                .host_red_countdown));
+        mHostRedPacketCountDownView = ((HostRedPacketTimeView) findViewById(R.id.host_red_countdown));
 
-        mHostRedPacketCountDownView.setVisibility(View.VISIBLE);
-//            mRecordBall = (ImageView) findViewById(R.id.record_ball);
-//            BtnBeauty = (TextView) findViewById(R.id.beauty_btn);
-//            BtnWhite = (TextView) findViewById(R.id.white_btn);
-//            mVideoChat.setVisibility(View.VISIBLE);
-//            BtnBeauty.setOnClickListener(this);
-//            BtnWhite.setOnClickListener(this);
-//            mVideoChat.setOnClickListener(this);
+        if(mHostRedPacketCountDownView != null){
+            mHostRedPacketCountDownView.setVisibility(View.VISIBLE);
+        }
 
             /*邀请直播*/
         inviteView1 = (TextView) findViewById(R.id.invite_view1);
@@ -780,18 +782,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         inviteView2.setOnClickListener(this);
         inviteView3.setOnClickListener(this);
 
-
-//            pushBtn = (TextView) findViewById(R.id.push_btn);
-//            pushBtn.setVisibility(View.VISIBLE);
-//            pushBtn.setOnClickListener(this);
-//
-//            recordBtn = (TextView) findViewById(R.id.record_btn);
-//            recordBtn.setVisibility(View.VISIBLE);
-//            recordBtn.setOnClickListener(this);
-
-//        showBackDialog();//退出的第一个界面,问你是否退出
-//        initPushDialog();
-//            initRecordDialog();
         //录制功能
         mRecordHelper = new LiveRecordDialogHelper(this, mLiveHelper);
         mRecordHelper.setOnLiveRecordListener(new LiveRecordListener() {
@@ -806,46 +796,6 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             }
         });
 
-
-//            mMemberDg = new MembersDialog(this, R.style.floag_dialog, this);
-//            mBeautySettings = (LinearLayout) findViewById(R.id.qav_beauty_setting);
-//            mBeautyConfirm = (TextView) findViewById(R.id.qav_beauty_setting_finish);
-//            mBeautyConfirm.setOnClickListener(this);
-//            mBeautyBar = (SeekBar) (findViewById(R.id.qav_beauty_progress));
-//            mBeautyBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//
-//                @Override
-//                public void onStopTrackingTouch(SeekBar seekBar) {
-//                    SxbLog.e("SeekBar", "onStopTrackingTouch");
-//                    if (mProfile == mBeatuy) {
-//                        Toast.makeText(LiveActivity.this, "beauty " + mBeautyRate + "%", Toast
-// .LENGTH_SHORT).show();//美颜度
-//                    } else {
-//                        Toast.makeText(LiveActivity.this, "white " + mWhiteRate + "%", Toast
-// .LENGTH_SHORT).show();//美白度
-//                    }
-//                }
-//
-//                @Override
-//                public void onStartTrackingTouch(SeekBar seekBar) {
-//                    SxbLog.e("SeekBar", "onStartTrackingTouch");
-//                }
-//
-//                @Override
-//                public void onProgressChanged(SeekBar seekBar, int progress,
-//                                              boolean fromUser) {
-//                    Log.i(TAG, "onProgressChanged " + progress);
-//                    if (mProfile == mBeatuy) {
-//                        mBeautyRate = progress;
-//                        QavsdkControl.getInstance().getAVContext().getVideoCtrl()
-// .inputBeautyParam(LiveUtil.getBeautyProgress(progress));//美颜
-//                    } else {
-//                        mWhiteRate = progress;
-//                        QavsdkControl.getInstance().getAVContext().getVideoCtrl()
-// .inputWhiteningParam(LiveUtil.getBeautyProgress(progress));//美白
-//                    }
-//                }
-//            });
     }
 
     /**
@@ -855,30 +805,46 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initInviteDialog();
 
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
-        mUserBottomTool.setVisibility(View.VISIBLE);
-        mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
+        if(mUserBottomTool != null){
+            mUserBottomTool.setVisibility(View.VISIBLE);
+            mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
+        }
 
         mRedPacketAdapter = new PagerRedPacketAdapter();
-        mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
+        if(mUserBottomTool != null){
+            mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
+        }
 
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
-        mUserHeadTopView.setmLiveView(this);
-        mUserHeadTopView.setmAdapter(mHeadTopAdapter);
-        mUserHeadTopView.init();
 
-        mUserHeadTopView.setVisibility(View.VISIBLE);
-        mUserHeadTopView.initNeed(this);
+        if(mUserHeadTopView != null){
+            mUserHeadTopView.setmLiveView(this);
+            mUserHeadTopView.setmAdapter(mHeadTopAdapter);
+            mUserHeadTopView.init();
 
-        mHostBottomToolView1.setVisibility(View.GONE);
-        mHostBottomMeiView2.setVisibility(View.GONE);
+            mUserHeadTopView.setVisibility(View.VISIBLE);
+            mUserHeadTopView.initNeed(this);
+        }
+
+        if(mHostBottomToolView1 != null){
+            mHostBottomToolView1.setVisibility(View.GONE);
+        }
+
+        if(mHostBottomMeiView2 != null){
+            mHostBottomMeiView2.setVisibility(View.GONE);
+        }
+
         String hostImg = CurLiveInfo.getHostAvator();
-        mUserHeadTopView.setHostImg(hostImg);
-        mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
+
+        if(mUserHeadTopView != null){
+            mUserHeadTopView.setHostImg(hostImg);
+            mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
+        }
+
         doUpdateMembersCount();
 
 
-        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop()
-                .getShop_name())) {
+        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name()) && mUserHeadTopView != null) {
             mUserHeadTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
         }
         if (mLiveHttphelper != null) {
@@ -886,7 +852,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //            mLiveHttphelper.checkFocus(CurLiveInfo.getHostID());
 
         }
-        mUserHeadTopView.setViews();
+        if(mUserHeadTopView != null){
+            mUserHeadTopView.setViews();
+        }
     }
 
     /**

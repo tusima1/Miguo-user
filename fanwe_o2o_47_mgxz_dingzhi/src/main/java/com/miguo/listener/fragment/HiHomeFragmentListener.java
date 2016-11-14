@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.fanwe.CityListActivity;
 import com.fanwe.HomeSearchActivity;
+import com.fanwe.MyCaptureActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiShopDetailActivity;
@@ -32,6 +33,9 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()){
+            case R.id.frag_home_title_bar_ll_saoyisao:
+                clickQrScan();
+                break;
             case R.id.frag_home_title_bar_ll_msg:
                 clickMessage();
                 break;
@@ -70,6 +74,17 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
         BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.RESUTN_CITY_ID);
     }
 
+    /**
+     * 点击扫码
+     */
+    private void clickQrScan(){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SCAN_QR_CODE));
+        BaseUtils.jumpToNewActivityForResult(getActivity(), intent, 12);
+    }
+
+    /**
+     * 点击消息中心
+     */
     private void clickMessage(){
         Intent intent = new Intent(getActivity(), MyMessageActivity.class);
         BaseUtils.jumpToNewActivity(getActivity(), intent);
