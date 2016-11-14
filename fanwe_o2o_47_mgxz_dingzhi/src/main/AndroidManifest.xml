@@ -198,14 +198,7 @@
 
         <!--android:name="com.miguo.app.HiShopDetailActivity-->
 
-        <!-- 新主界面 -->
-        <activity
-            android:name="com.miguo.app.HiHomeActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Transparent_title_area"
-            android:windowSoftInputMode="adjustPan" />
+
 
         <!-- 商品管理 -->
         <activity
@@ -1110,11 +1103,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.miguo.live.views.TestMyFragmentActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name="com.fanwe.user.view.FansActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"

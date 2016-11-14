@@ -180,15 +180,6 @@ public class HiHomeCategory extends Category implements
         initHomePagers();
     }
 
-    private void initDict() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new LiveHttpHelper(null, null).getBussDictionInfo("Client");
-            }
-        }).start();
-    }
-
     /**
      * 初始化tab
      * author：zlh/Barry/狗蛋哥
