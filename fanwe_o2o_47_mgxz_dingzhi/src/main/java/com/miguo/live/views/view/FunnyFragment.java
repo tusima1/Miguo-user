@@ -67,7 +67,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private TextView summaryText;
 
     private List<ModelHomeClassifyList> mList = new ArrayList<>();
-//    private LiveSortTypeAdapter mAdapter;
 
     FunnyTypeHorizantalScrollView funnyType;
 
@@ -100,6 +99,11 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
      */
     boolean  hasLoad=false;
+
+    /**
+     * 是否能下拉刷新
+     */
+    boolean touchDisableMove = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,7 +181,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     protected void initPtrLayout() {
         ptrFrameLayout = (PtrFrameLayout)rootView.findViewById(R.id.ptr_layout);
         recyclerScrollView = (RecyclerScrollView)rootView.findViewById(R.id.recycler_scrollview);
-//        mSpvAd =(RecyclerView) rootView.findViewById(R.id.sort_type_list);
         funnyType =(FunnyTypeHorizantalScrollView) rootView.findViewById(R.id.funny_type);
         titleText =(TextView)rootView.findViewById(R.id.title_text);
         summaryText = (TextView)rootView.findViewById(R.id.summary_text);
@@ -195,6 +198,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         recyclerScrollView.setOnRecyclerScrollViewListener(this);
 
         funnyType.setOnFunnyTypeChangeListener(this);
+        funnyType.setFunnyFragment(this);
     }
 
     @Override
@@ -224,8 +228,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
     private void bindData() {
         getTopData();
-//        mAdapter = new LiveSortTypeAdapter(mList, getActivity());
-//        mSpvAd.setAdapter(mAdapter);
     }
 
     public void parseInteresting(List<HashMap<String,String>> datas){
@@ -282,11 +284,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         }
 
         funnyType.init(datas);
-
-//        if (mAdapter != null) {
-//            mAdapter.setmData(mList);
-//            mAdapter.notifyDataSetChanged();
-//        }
     }
 
     private void requestLiveList() {
@@ -358,7 +355,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return recyclerScrollView.canRefresh();
+        return recyclerScrollView.canRefresh() && !isTouchDisableMove();
     }
 
 
@@ -434,5 +431,13 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     public void onDestroy() {
         SDEventManager.unregister(this);
         super.onDestroy();
+    }
+
+    public boolean isTouchDisableMove() {
+        return touchDisableMove;
+    }
+
+    public void setTouchDisableMove(boolean touchDisableMove) {
+        this.touchDisableMove = touchDisableMove;
     }
 }

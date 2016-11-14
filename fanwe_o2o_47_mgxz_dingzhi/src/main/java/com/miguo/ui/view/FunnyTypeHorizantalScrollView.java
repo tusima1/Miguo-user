@@ -3,6 +3,8 @@ package com.miguo.ui.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -16,6 +18,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.RoundImageView;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
+import com.miguo.live.views.view.FunnyFragment;
 
 import java.util.List;
 
@@ -24,10 +27,12 @@ import java.util.List;
  */
 public class FunnyTypeHorizantalScrollView extends BaseHorizantalScrollView{
 
-    LinearLayout content;
+    FunnyTypeContentLinearLayout content;
     int lastIndex = 0;
     OnFunnyTypeChangeListener onFunnyTypeChangeListener;
     List<ModelHomeClassifyList> mData;
+
+    FunnyFragment funnyFragment;
 
     public FunnyTypeHorizantalScrollView(Context context) {
         super(context);
@@ -46,7 +51,7 @@ public class FunnyTypeHorizantalScrollView extends BaseHorizantalScrollView{
 
     private void init(){
         setHorizontalScrollBarEnabled(false);
-        content = new LinearLayout(getContext());
+        content = new FunnyTypeContentLinearLayout(getContext());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(wrapContent(), wrapContent());
         content.setLayoutParams(params);
         content.setBackgroundColor(getColor(R.color.c_F2F2F2));
@@ -61,7 +66,7 @@ public class FunnyTypeHorizantalScrollView extends BaseHorizantalScrollView{
         this.mData = mData;
 
         for(int i = 0;i < mData.size(); i++){
-            RelativeLayout group = new RelativeLayout(getContext());
+            FunnyTypeGroupView group = new FunnyTypeGroupView(getContext());
             LinearLayout.LayoutParams groupParams = getLinearLayoutParams(getImageHeight(), getImageHeight());
             groupParams.setMargins(i == 0 ? dip2px(17) : dip2px(15), dip2px(15), i == mData.size() - 1 ? dip2px(17) : 0, dip2px(15));
             group.setLayoutParams(groupParams);
@@ -96,6 +101,55 @@ public class FunnyTypeHorizantalScrollView extends BaseHorizantalScrollView{
 
     private int getImageHeight(){
         return (int)((getScreenWidth() - 4 * dip2px(13) - dip2px(17)) / 4.5);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                handlerActionDown();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                handlerActionMove();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                handlerActionCancel();
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void handlerActionDown(){
+        Log.d(tag, "handler down..");
+        if(getFunnyFragment() != null){
+            getFunnyFragment().setTouchDisableMove(true);
+        }
+    }
+
+    public void handlerActionMove(){
+        Log.d(tag, "handler move..");
+        if(getFunnyFragment() != null) {
+            Log.d(tag, "handlerActionMove parent disable : " + getFunnyFragment().isTouchDisableMove());
+            getFunnyFragment().setTouchDisableMove(true);
+        }
+    }
+
+    public void handlerActionCancel(){
+        Log.d(tag, "handler cancel..");
+        if(getFunnyFragment() != null) {
+            getFunnyFragment().setTouchDisableMove(false);
+            Log.d(tag, "parent disable : " + getFunnyFragment().isTouchDisableMove());
+
+        }
+    }
+
+    public FunnyFragment getFunnyFragment() {
+        return funnyFragment;
+    }
+
+    public void setFunnyFragment(FunnyFragment funnyFragment) {
+        this.funnyFragment = funnyFragment;
     }
 
     class FunnyTypeListener implements View.OnClickListener{
