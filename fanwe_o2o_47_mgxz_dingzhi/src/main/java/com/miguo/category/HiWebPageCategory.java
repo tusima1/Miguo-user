@@ -3,6 +3,8 @@ package com.miguo.category;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -124,6 +126,12 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
                 //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 view.loadUrl(url);
                 return true;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                showToast("加载失败！");
+                super.onReceivedError(view, request, error);
             }
         });
         webView.loadUrl(url);

@@ -31,6 +31,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.adapter.LiveSortTypeAdapter;
 import com.miguo.live.views.customviews.SpaceItemDecoration;
+import com.miguo.ui.view.FunnyTypeHorizantalScrollView;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -48,14 +49,14 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
 /**
  * Created by Administrator on 2016/10/20.
  */
-public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener,CallbackView2, SDEventObserver,CallbackView {
+public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener,CallbackView2, SDEventObserver,CallbackView, FunnyTypeHorizantalScrollView.OnFunnyTypeChangeListener {
 
 
     PtrFrameLayout ptrFrameLayout;
 
     RecyclerScrollView recyclerScrollView;
    //直播分类
-    private RecyclerView mSpvAd;
+//    private RecyclerView mSpvAd;
     /**
      * 大字体。
      */
@@ -66,9 +67,9 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private TextView summaryText;
 
     private List<ModelHomeClassifyList> mList = new ArrayList<>();
-    private LiveSortTypeAdapter mAdapter;
+//    private LiveSortTypeAdapter mAdapter;
 
-
+    FunnyTypeHorizantalScrollView funnyType;
 
     private SDFragmentManager mFragmentManager;
     /**
@@ -176,7 +177,8 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     protected void initPtrLayout() {
         ptrFrameLayout = (PtrFrameLayout)rootView.findViewById(R.id.ptr_layout);
         recyclerScrollView = (RecyclerScrollView)rootView.findViewById(R.id.recycler_scrollview);
-        mSpvAd =(RecyclerView) rootView.findViewById(R.id.sort_type_list);
+//        mSpvAd =(RecyclerView) rootView.findViewById(R.id.sort_type_list);
+        funnyType =(FunnyTypeHorizantalScrollView) rootView.findViewById(R.id.funny_type);
         titleText =(TextView)rootView.findViewById(R.id.title_text);
         summaryText = (TextView)rootView.findViewById(R.id.summary_text);
 
@@ -191,6 +193,13 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
          */
         ptrFrameLayout.setPtrHandler(this);
         recyclerScrollView.setOnRecyclerScrollViewListener(this);
+
+        funnyType.setOnFunnyTypeChangeListener(this);
+    }
+
+    @Override
+    public void onTypeChanged(ModelHomeClassifyList model) {
+        SDEventManager.post(model, EnumEventTag.HOME_TYPE_CHANGE.ordinal());
     }
 
     /**
@@ -198,24 +207,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
 
     protected void init() {
-        initSlidingPlayView();
         bindData();
-    }
-
-    private void initSlidingPlayView() {
-
-        mSpvAd.setHasFixedSize(true);
-
-        LinearLayoutManager llmanager = new LinearLayoutManager(getContext());
-        llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mSpvAd.setLayoutManager(llmanager);
-
-        //设置间距
-        mSpvAd.addItemDecoration(new SpaceItemDecoration(5));
-        mSpvAd.setHasFixedSize(true);
-        mSpvAd.setAdapter(mAdapter);
-
-
     }
 
     @Override
@@ -232,8 +224,8 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
     private void bindData() {
         getTopData();
-        mAdapter = new LiveSortTypeAdapter(mList, getActivity());
-        mSpvAd.setAdapter(mAdapter);
+//        mAdapter = new LiveSortTypeAdapter(mList, getActivity());
+//        mSpvAd.setAdapter(mAdapter);
     }
 
     public void parseInteresting(List<HashMap<String,String>> datas){
@@ -289,10 +281,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             mList.addAll(datas);
         }
 
-        if (mAdapter != null) {
-            mAdapter.setmData(mList);
-            mAdapter.notifyDataSetChanged();
-        }
+        funnyType.init(datas);
+
+//        if (mAdapter != null) {
+//            mAdapter.setmData(mList);
+//            mAdapter.notifyDataSetChanged();
+//        }
     }
 
     private void requestLiveList() {
