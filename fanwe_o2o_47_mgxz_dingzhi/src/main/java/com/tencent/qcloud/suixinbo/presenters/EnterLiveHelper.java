@@ -434,6 +434,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
         byte[] authBuffer = null;//权限位加密串；TODO：请业务侧填上自己的加密串
 
         AVRoomMulti.EnterParam.Builder enterRoomParam = new AVRoomMulti.EnterParam.Builder(roomNum);
+        enterRoomParam.isDegreeFixed(true);
         if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST) {
             enterRoomParam.auth(Constants.HOST_AUTH, authBuffer).avControlRole(Constants.HOST_ROLE).autoCreateRoom(true).isEnableMic(true).isEnableSpeaker(true);//；TODO：主播权限 所有权限
         } else {
