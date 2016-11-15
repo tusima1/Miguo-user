@@ -474,7 +474,7 @@ public class HiHomeCategory extends Category implements
 
     public void clickTab(int position) {
         if(null != getHomeFragment() && position != 0){
-            getHomeFragment().showTitleAndTab();
+//            getHomeFragment().showTitleAndTab();
         }
         homeViewPager.setCurrentItem(position);
     }

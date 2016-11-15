@@ -455,7 +455,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     long animDuration = 200;
     private void checkTitle(int l, int t, int oldl, int oldt){
 
-        if(!isHasTop() && !isAnimRunning() && t > getTopHeight() && isHasSeeler()){
+        if(!isHasTop() && !isAnimRunning() && t > (hasBanner() ? getTopHeight() : 0) && isHasSeeler()){
             if(currentT == 0){
                 currentT = t;
             }
@@ -481,18 +481,25 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             }
         }
 
-        if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning()){
+        if(hasBanner()){
+            if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning()){
+                currentT = 0;
+                startTitleShowAnimation();
+                startTabShowAnimation();
+            }
+        }
+
+
+        if(hasBanner() && !isHasTop() && t == 0 && !isAnimRunning()){
             currentT = 0;
             startTitleShowAnimation();
             startTabShowAnimation();
         }
 
-        if(!isHasTop() && t == 0 && !isAnimRunning()){
-            currentT = 0;
-            startTitleShowAnimation();
-            startTabShowAnimation();
-        }
+    }
 
+    public boolean hasBanner(){
+        return bannerLayout.getVisibility() == View.VISIBLE;
     }
 
     private void startTitleLeaveAnimation(){
@@ -905,7 +912,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @return
      */
     public int getTopHeight() {
-        return bannerLayout.getVisibility() == View.VISIBLE ? topHeight : 0;
+        return topHeight;
     }
 
     public BarryTab getTab(){
