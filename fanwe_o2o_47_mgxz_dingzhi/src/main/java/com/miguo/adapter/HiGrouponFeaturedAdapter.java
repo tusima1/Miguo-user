@@ -149,9 +149,9 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         /**
          * 团购价
          */
-        if (!TextUtils.isEmpty(getItem(position).getTuan_price())) {
-            String temp = DataFormat.toDoubleTwo(getItem(position).getTuan_price()) + "元/张";
-            SDViewBinder.setTextView(getHolder(holder).tvTuan, temp, "");
+        String tuanPrice = getItem(position).getTuan_price_with_unit();
+        if (!TextUtils.isEmpty(tuanPrice)) {
+            SDViewBinder.setTextView(getHolder(holder).tvTuan, tuanPrice, "");
         } else {
             SDViewBinder.setTextView(getHolder(holder).tvTuan, "");
         }

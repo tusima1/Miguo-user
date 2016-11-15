@@ -27,6 +27,11 @@ public class ModelFeaturedGroupBuy {
     private String salary;
 
     private String biz_id;
+    /**
+     * 单位字符串。
+     */
+
+    private String tuan_price_with_unit;
 
     public String getArea_name() {
         return area_name;
@@ -114,5 +119,13 @@ public class ModelFeaturedGroupBuy {
 
     public void setBiz_id(String biz_id) {
         this.biz_id = biz_id;
+    }
+
+    public String getTuan_price_with_unit() {
+        return tuan_price_with_unit;
+    }
+
+    public void setTuan_price_with_unit(String tuan_price_with_unit) {
+        this.tuan_price_with_unit = tuan_price_with_unit;
     }
 }

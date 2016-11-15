@@ -78,10 +78,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
 
     private LiveHttpHelper liveHelper;
-    /**
-     * 直播点播 数据列表。
-     */
-    private List<ModelRoom> rooms;
+
 
     private boolean isRefresh = true;
     private int pageNum = 1;
@@ -305,18 +302,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
     public void getLiveList(ArrayList<ModelRoom> datas) {
 
-        if (SDCollectionUtil.isEmpty(datas)) {
-            rooms = null;
-        }else{
-            if(datas.size()>=pageSize){
+        if (!SDCollectionUtil.isEmpty(datas)) {
                 setPageNum(this.pageNum++);
-            }
         }
-
-        rooms = datas;
         //直播列表
         if(mHomeFragmentLiveList!=null) {
-            mHomeFragmentLiveList.updateView(isRefresh, rooms);
+            mHomeFragmentLiveList.updateView(isRefresh, datas);
         }
         loadComplete();
     }
