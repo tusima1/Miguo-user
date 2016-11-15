@@ -467,7 +467,11 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
+                if(sellerHttpHelper==null){
+                    break;
+                }
                 initData();
+                sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
                 mPtrlvContent.setRefreshing();
                 break;
 

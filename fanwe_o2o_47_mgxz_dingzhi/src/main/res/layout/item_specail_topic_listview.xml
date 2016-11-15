@@ -43,14 +43,7 @@
             android:textColor="@color/text_base_color"
             android:textSize="@dimen/dp12" />
 
-        <!--<TextView
-            android:id="@+id/tv_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="代金券"
-            android:textColor="@color/c_F5B830"
-            android:textSize="@dimen/dp14" />-->
+
 
         <TextView
             android:id="@+id/tv_price_tuan"
