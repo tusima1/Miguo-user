@@ -36,7 +36,6 @@ import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;
 import com.miguo.dao.HomeGreetingDao;
-import com.miguo.dao.LoginByMobileDao;
 import com.miguo.dao.impl.CheckCitySignDaoImpl;
 import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetMenuListDaoImpl;
@@ -163,7 +162,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.home_tags_view)
     HomeTagsView homeTagsView;
     @ViewInject(R.id.home_tags_view_layout)
-    LinearLayout home_tags_view_layout;
+    LinearLayout homeTagsViewLayout;
 
     /**
      * 广告位2
@@ -283,7 +282,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeTuanTimeLimitView.setVisibility(View.GONE);
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
         homeTagsView.setVisibility(View.GONE);
-        home_tags_view_layout.setVisibility(View.GONE);
+        homeTagsViewLayout.setVisibility(View.GONE);
         homeADView2.setVisibility(View.GONE);
         featuredGrouponCategory.clearPage();
     }
@@ -322,7 +321,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     private void initHomeMenuView(List<MenuBean.Result.Body> list){
         homeTagsView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
-        home_tags_view_layout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+        homeTagsViewLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
         homeTagsView.init(list);
     }
 
