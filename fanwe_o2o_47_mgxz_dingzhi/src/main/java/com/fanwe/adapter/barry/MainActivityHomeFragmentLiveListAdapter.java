@@ -90,16 +90,17 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         return dip2px(10);
     }
 
-    private  int getImageHeight(){
-        return  dip2px(228);
+    private int getImageHeight() {
+        return dip2px(228);
     }
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        SDViewBinder.setImageView(getItem(position).getCover(), getHolder(holder).image);
-        getHolder(holder).tvAdd.setText(getShopName(position));
-        getHolder(holder).tvType.setText(getLiveType(position));
-        getHolder(holder).tvType.setBackgroundResource(getLiveTypeColor(position));
+        ModelRoom room = (ModelRoom) datas.get(position);
+        SDViewBinder.setImageView(room.getCover(), getHolder(holder).image);
+        getHolder(holder).tvAdd.setText(getShopName(room));
+        getHolder(holder).tvType.setText(LiveUtil.getLiveType(room));
+        getHolder(holder).tvType.setBackgroundResource(LiveUtil.getLiveTypeColor(room));
 
     }
 
@@ -148,43 +149,6 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     }
 
     /**
-     * 直播类型
-     *
-     * @param position
-     * @return
-     */
-    private String getLiveType(int position) {
-        ModelRoom room = getItem(position);
-        try {
-            if (LIVE.equals(room.getLive_type())) {
-                if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
-                    return "精彩视频";
-                } else {
-                    return "正在直播";
-                }
-            } else {
-                return "精彩视频";
-            }
-        } catch (NullPointerException e) {
-            return "精彩视频";
-        }
-    }
-
-    /**
-     * 直播类型
-     *
-     * @param position
-     * @return
-     */
-    private int getLiveTypeColor(int position) {
-        try {
-            return getItem(position).getLive_type().equals(LIVE) ? R.drawable.bg_orange : R.drawable.bg_grey_big;
-        } catch (NullPointerException e) {
-            return R.drawable.bg_orange;
-        }
-    }
-
-    /**
      * 地址
      *
      * @param position
@@ -201,16 +165,16 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     /**
      * 店名称。
      *
-     * @param position
+     * @param room
      * @return
      */
 
-    private String getShopName(int position) {
-        if (getItem(position).getLbs() == null) {
+    private String getShopName(ModelRoom room) {
+        if (room.getLbs() == null) {
             return "";
         }
         try {
-            return null == getItem(position).getLbs().getShop_name() ? "" : getItem(position).getLbs().getShop_name();
+            return null == room.getLbs().getShop_name() ? "" : room.getLbs().getShop_name();
         } catch (NullPointerException e) {
             return "";
         }

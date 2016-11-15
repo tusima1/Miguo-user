@@ -781,6 +781,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         CurLiveInfo.setMembers(0);
         CurLiveInfo.setAdmires(0);
         CurLiveInfo.setCurrentRequestCount(0);
+        CurLiveInfo.setRoomNum(0);
         unregisterReceiver();
         if (mLiveHelper != null) {
             mLiveHelper.onDestory();

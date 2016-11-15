@@ -136,10 +136,10 @@ public class LiveUtil {
                     return "正在直播";
                 }
             } else {
-                return "精彩视频";
+                return "精彩回放";
             }
         } catch (NullPointerException e) {
-            return "精彩视频";
+            return "";
         }
     }
 
@@ -150,7 +150,15 @@ public class LiveUtil {
      */
     public static int getLiveTypeColor(ModelRoom room) {
         try {
-            return room.getLive_type().equals(LIVE) ? R.drawable.shape_cricle_bg_yellow : R.drawable.shape_cricle_bg_black_alphe_60;
+            if (LIVE.equals(room.getLive_type())) {
+                if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
+                    return R.drawable.shape_cricle_bg_black_alphe_60;
+                } else {
+                    return R.drawable.shape_cricle_bg_yellow;
+                }
+            } else {
+                return R.drawable.shape_cricle_bg_black_alphe_60;
+            }
         } catch (NullPointerException e) {
             return R.drawable.shape_cricle_bg_yellow;
         }
@@ -205,6 +213,11 @@ public class LiveUtil {
         //直播相关
         if (LiveActivity.isLiving) {
             if (checkIsHost()) {
+                //如果点击的是当前看的，直接跳转，不提示
+//                if (judgeCurrent(room)) {
+//                    jumpLive(room, mActivity, live_type);
+//                    return;
+//                } else {
                 //主播直播中，不能进行任何操作
                 final HintHostDialog dialog = new HintHostDialog(mActivity);
                 dialog.setCloseListener(new View.OnClickListener() {
@@ -215,6 +228,7 @@ public class LiveUtil {
                     }
                 });
                 dialog.show();
+//                }
             } else {
                 dialogHintMemberDialog.setSureListener(new View.OnClickListener() {
                     @Override
@@ -277,6 +291,23 @@ public class LiveUtil {
             return;
         }
         //不在直播，也不在点播
+        jumpLive(room, mActivity, live_type);
+    }
+
+    /**
+     * 判断点击的是不是当前正在看的
+     *
+     * @param room
+     * @return
+     */
+    private static boolean judgeCurrent(ModelRoom room) {
+        if (room.getId().equals(CurLiveInfo.getRoomNum() + "")) {
+            return true;
+        }
+        return false;
+    }
+
+    private static void jumpLive(ModelRoom room, Activity mActivity, String live_type) {
         if (LIVE.equals(live_type)) {
             if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
                 //直播回放
