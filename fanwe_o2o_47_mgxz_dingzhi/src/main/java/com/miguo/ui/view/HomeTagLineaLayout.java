@@ -36,9 +36,6 @@ public class HomeTagLineaLayout extends BaseLinearLayout{
             case MotionEvent.ACTION_DOWN:
                 handlerActionDown();
                 break;
-//            case MotionEvent.ACTION_MOVE:
-//                handlerActionMove();
-//                break;
         }
         return super.onTouchEvent(event);
     }

@@ -63,7 +63,6 @@ import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
 import com.miguo.view.HomeGreetingView;
-import com.miguo.view.LoginByMobileView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,6 +162,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @ViewInject(R.id.home_tags_view)
     HomeTagsView homeTagsView;
+    @ViewInject(R.id.home_tags_view_layout)
+    LinearLayout home_tags_view_layout;
 
     /**
      * 广告位2
@@ -282,6 +283,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeTuanTimeLimitView.setVisibility(View.GONE);
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
         homeTagsView.setVisibility(View.GONE);
+        home_tags_view_layout.setVisibility(View.GONE);
         homeADView2.setVisibility(View.GONE);
         featuredGrouponCategory.clearPage();
     }
@@ -290,7 +292,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页banner数据
      */
     private void initBanner(List<AdspaceListBean.Result.Body> bodys){
-
+        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
         RelativeLayout.LayoutParams bannerParams = getRelativeLayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(200));
         homeViewPager.setLayoutParams(bannerParams);
@@ -319,10 +321,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页标签、菜单栏
      */
     private void initHomeMenuView(List<MenuBean.Result.Body> list){
+        homeTagsView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+        home_tags_view_layout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
         homeTagsView.init(list);
     }
 
     private void initHomeADView2(List<AdspaceListBean.Result.Body> body){
+        homeADView2.setVisibility(SDCollectionUtil.isEmpty(body) ? View.GONE : View.VISIBLE);
         homeADView2.init(body);
     }
 
@@ -483,7 +488,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             startTabShowAnimation();
         }
 
-        if(t == 0 && !isAnimRunning()){
+        if(!isHasTop() && t == 0 && !isAnimRunning()){
             currentT = 0;
             startTitleShowAnimation();
             startTabShowAnimation();
@@ -791,8 +796,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
-        bannerLayout.setVisibility(View.VISIBLE);
-        homeADView2.setVisibility(View.VISIBLE);
         updateAdspaceViews(body, type);
         loadComplete();
     }
@@ -841,7 +844,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
-        homeTagsView.setVisibility(View.VISIBLE);
         initHomeMenuView(list);
         loadComplete();
     }
@@ -904,7 +906,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @return
      */
     public int getTopHeight() {
-        return topHeight;
+        return bannerLayout.getVisibility() == View.VISIBLE ? topHeight : 0;
     }
 
     public BarryTab getTab(){
