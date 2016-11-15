@@ -78,7 +78,10 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
 
     private LiveHttpHelper liveHelper;
-
+    /**
+     * 直播点播 数据列表。
+     */
+    private List<ModelRoom> rooms;
 
     private boolean isRefresh = true;
     private int pageNum = 1;

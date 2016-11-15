@@ -115,20 +115,8 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
         getHolder(holder).location.setText(model.getLocation());
         getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":DataFormat.toDoubleTwo(model.getOrigin_price()) + "元");
         String tuanStr= "";
-        if(!TextUtils.isEmpty(model.getTuan_price())){
-            tuanStr +=DataFormat.toDoubleTwo(model.getTuan_price());
-        }
-        if(!TextUtils.isEmpty(model.getUnit())){
-            String unit = model.getUnit().trim();
-            if("张".equals(unit)){
-                tuanStr +="/"+model.getUnit() +"  "+"代金券";
-            }else if("人".equals(unit)){
-                tuanStr +="/"+model.getUnit() +"  "+"专属优惠";
-            }else{
-                tuanStr +="元";
-            }
-        }else{
-            tuanStr +="元";
+        if(!TextUtils.isEmpty(model.getTuanPriceFormat())){
+            tuanStr =model.getTuanPriceFormat();
         }
         getHolder(holder).tuanPrice.setText(tuanStr);
         getHolder(holder).salary.setText(DataFormat.toDoubleTwo(model.getSalary()) + "元佣金");

@@ -396,6 +396,10 @@ public class HiShopDetailBean implements Serializable{
             private String distance;
 
             private String area_name;
+            /**
+             * 格式化后的团购价格和单位 。
+             */
+            private String tuanPriceFormat;
 
 
             private List<TuanTag> tag_list;
@@ -581,6 +585,14 @@ public class HiShopDetailBean implements Serializable{
 
             public void setIs_expire_refund(String is_expire_refund) {
                 this.is_expire_refund = is_expire_refund;
+            }
+
+            public String getTuanPriceFormat() {
+                return tuanPriceFormat;
+            }
+
+            public void setTuanPriceFormat(String tuanPriceFormat) {
+                this.tuanPriceFormat = tuanPriceFormat;
             }
         }
 
