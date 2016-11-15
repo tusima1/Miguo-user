@@ -369,7 +369,7 @@ public class LiveUtil {
             }
         }
         MySelfInfo.getInstance().setAvatar(avatar);
-        MySelfInfo.getInstance().setNickName(nickName);
+        MySelfInfo.getInstance().setNickName(App.getInstance().getUserNickName());
         MySelfInfo.getInstance().setJoinRoomWay(false);
         CurLiveInfo.setHostID(host.getHost_user_id());
         CurLiveInfo.setHostName(host.getNickname());
