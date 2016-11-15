@@ -27,10 +27,10 @@
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:src="@drawable/my_home_recommend" />
+            android:src="@drawable/list_empty" />
     </LinearLayout>
 
 

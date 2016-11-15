@@ -50,13 +50,6 @@
                     />
             </LinearLayout>
 
-            <!-- 直播分类数据 -->
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:background="@color/c_F2F2F2"-->
-                <!--android:id="@+id/sort_type_list"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/dp93"-->
-                <!--android:layout_marginTop="@dimen/dp5"/>-->
 
 
             <com.miguo.ui.view.FunnyTypeHorizantalScrollView
@@ -69,8 +62,8 @@
             <!-- 直播点播列表。 -->
             <FrameLayout
                 android:id="@+id/frag_home_new_fl_recommend_deals"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
 

@@ -37,7 +37,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
             @Override
             public void onSuccessResponseWithBean(Object responseBody) {
                 LoginUserBean userBean = (LoginUserBean)responseBody;
-                if(userBean.getStatusCode() == 210){//Not 200
+                if(userBean.getStatusCode() == 210){
                     /**
                      * 如果Result实体为空
                      */
@@ -60,7 +60,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                     getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0), mobile, password);
                 }else {
                     /**
-                     * 状态码不是200，登录失败
+                     * 状态码不是210，登录失败
                      */
                     getListener().loginError(userBean.getMessage());
                 }

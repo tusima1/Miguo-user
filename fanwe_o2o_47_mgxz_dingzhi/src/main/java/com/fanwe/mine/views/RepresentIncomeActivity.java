@@ -144,7 +144,7 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    SDViewBinder.setTextView(tvMoney, resultCommissionLog.getSalary(), "0");
+                    SDViewBinder.setTextView(tvMoney, resultCommissionLog.getSalary_total(), "0");
                 }
             });
             if (isRefresh) {
