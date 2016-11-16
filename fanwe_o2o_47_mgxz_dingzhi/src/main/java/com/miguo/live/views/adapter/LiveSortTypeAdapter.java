@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.utils.BaseUtils;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDEventManager;
 
@@ -54,16 +57,17 @@ public class LiveSortTypeAdapter extends RecyclerView.Adapter<LiveSortTypeAdapte
 
         holder.tvName.setText(TextUtils.isEmpty(modelHomeClassifyList.getName())?"":modelHomeClassifyList.getName());
 
+        ImageLoader.getInstance().displayImage(modelHomeClassifyList.getImg(),holder.ivImg);
+        holder.updateImageParams(holder.ivImg,position);
+        holder.updateImageParams(holder.imageGallery,position);
         if (modelHomeClassifyList.is_checked()) {
             ImageLoader.getInstance().displayImage(modelHomeClassifyList.getImg(), holder.ivImg);
+            holder.imageGallery.setVisibility(View.GONE);
         } else {
-            String imageUrl = modelHomeClassifyList.getImg();
-            if(!TextUtils.isEmpty(modelHomeClassifyList.getUncheck_img())){
-                imageUrl = modelHomeClassifyList.getUncheck_img();
-            }
-            ImageLoader.getInstance().displayImage(imageUrl,holder.ivImg);
+            holder.imageGallery.setVisibility(View.VISIBLE);
         }
-        ImageLoader.getInstance().displayImage(modelHomeClassifyList.getUncheck_img(),holder.ivImg);
+
+
         holder.ivImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,11 +75,12 @@ public class LiveSortTypeAdapter extends RecyclerView.Adapter<LiveSortTypeAdapte
                 modelHomeClassifyList.setIs_checked(true);
                 notifyItemChanged(position);
                 SDEventManager.post(modelHomeClassifyList, EnumEventTag.HOME_TYPE_CHANGE.ordinal());
+                holder.imageGallery.setVisibility(View.GONE);
                 //修改原 来被选择的model.
                 if(lastCheckedIndex!=position){
                     if(lastcheckedModel!=null){
                         lastcheckedModel.setIs_checked(false);
-                        ImageLoader.getInstance().displayImage(modelHomeClassifyList.getImg(),lastViewHolder.ivImg);
+                        lastViewHolder.imageGallery.setVisibility(View.VISIBLE);
                         notifyItemChanged(lastCheckedIndex);
                     }                  
                 }
@@ -108,14 +113,25 @@ public class LiveSortTypeAdapter extends RecyclerView.Adapter<LiveSortTypeAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public   ImageView ivImg ;
+        public   ImageView imageGallery ;
         public   TextView tvName ;
+        public   int imgWidth= getImageWidth();
 
         public ViewHolder(View itemView) {
             super(itemView);
             ivImg = (ImageView) itemView.findViewById(R.id.item_home_index_iv_image);
-            SDViewUtil.setViewWidth(ivImg, SDViewUtil.getScreenWidth() / 6);
-            SDViewUtil.setViewHeight(ivImg, SDViewUtil.getScreenWidth() / 6);
+            imageGallery = (ImageView)itemView.findViewById(R.id.image_gallery);
             tvName = com.fanwe.library.utils.ViewHolder.get(itemView, R.id.item_home_index_tv_name);
+        }
+
+        public void updateImageParams(View ivImg, int position){
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(imgWidth, imgWidth);
+            params.setMargins((position == 0 ? 34 : 26) , BaseUtils.dip2px(mContext, 15), 0, BaseUtils.dip2px(mContext, 15));
+            ivImg.setLayoutParams(params);
+        }
+
+        public int getImageWidth(){
+            return (SDViewUtil.getScreenWidth()-4*26-34)*2/9;
         }
     }
 }

@@ -36,7 +36,6 @@ import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;
 import com.miguo.dao.HomeGreetingDao;
-import com.miguo.dao.LoginByMobileDao;
 import com.miguo.dao.impl.CheckCitySignDaoImpl;
 import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetMenuListDaoImpl;
@@ -63,7 +62,6 @@ import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
 import com.miguo.view.HomeGreetingView;
-import com.miguo.view.LoginByMobileView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +92,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @ViewInject(R.id.frag_home_title_bar_tv_earn)
     TextView city;
+
+    @ViewInject(R.id.frag_home_title_bar_ll_saoyisao)
+    ImageView qrScran;
 
     @ViewInject(R.id.frag_home_title_bar_ll_search)
     RelativeLayout searchLayout;
@@ -160,6 +161,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @ViewInject(R.id.home_tags_view)
     HomeTagsView homeTagsView;
+    @ViewInject(R.id.home_tags_view_layout)
+    LinearLayout homeTagsViewLayout;
 
     /**
      * 广告位2
@@ -218,6 +221,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         messageLayout.setOnClickListener(listener);
         areaLayout.setOnClickListener(listener);
         searchLayout.setOnClickListener(listener);
+        qrScran.setOnClickListener(listener);
         citySayHi.setOnClickListener(listener);
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener)listener);
         homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener)listener);
@@ -278,6 +282,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeTuanTimeLimitView.setVisibility(View.GONE);
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
         homeTagsView.setVisibility(View.GONE);
+        homeTagsViewLayout.setVisibility(View.GONE);
         homeADView2.setVisibility(View.GONE);
         featuredGrouponCategory.clearPage();
     }
@@ -286,7 +291,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页banner数据
      */
     private void initBanner(List<AdspaceListBean.Result.Body> bodys){
-
+        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
         RelativeLayout.LayoutParams bannerParams = getRelativeLayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(200));
         homeViewPager.setLayoutParams(bannerParams);
@@ -315,10 +320,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页标签、菜单栏
      */
     private void initHomeMenuView(List<MenuBean.Result.Body> list){
+        homeTagsView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+        homeTagsViewLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
         homeTagsView.init(list);
     }
 
     private void initHomeADView2(List<AdspaceListBean.Result.Body> body){
+        homeADView2.setVisibility(SDCollectionUtil.isEmpty(body) ? View.GONE : View.VISIBLE);
         homeADView2.init(body);
     }
 
@@ -390,7 +398,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /** scroll view 滚动监听 */
     @Override
     public void onScrollToEnd() {
-        featuredGrouponCategory.onLoadMore();
+        if(isHasSeeler()){
+            featuredGrouponCategory.onLoadMore();
+        }
     }
 
     @Override
@@ -398,7 +408,45 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         checkTop(l, t, oldl, oldt);
         checkTitle(l, t , oldl, oldt);
         checkTopPadding(l, t , oldl, oldt);
+    }
 
+    /**
+     * 如果在tab消失过程中的点击了tab，这个时候设置tab出现是无效的，因为处于动画中
+     * 所以在这里设置一个标志判断是否需要显示，如果这个标志为true
+     * 那就需要在tab消失动画结束后再调用这个方法
+     */
+    boolean showTitleAndTabFlag = false;
+
+    public boolean isShowTitleAndTabFlag() {
+        return showTitleAndTabFlag;
+    }
+
+    public void setShowTitleAndTabFlag(boolean showTitleAndTabFlag) {
+        this.showTitleAndTabFlag = showTitleAndTabFlag;
+    }
+
+    public void showTitleAndTab(){
+        if(isAnimRunning()){
+            setShowTitleAndTabFlag(true);
+            return;
+        }
+        setShowTitleAndTabFlag(false);
+        startTabShowAnimation();
+        startTitleShowAnimation();
+    }
+
+    private void setTitleVisibility(int visibility){
+        if(titleLayout == null){
+            return;
+        }
+        titleLayout.setVisibility(visibility);
+    }
+
+    private void setTabVisibility(int visibility){
+        if(getTab() == null){
+            return;
+        }
+        getTab().setVisibility(visibility);
     }
 
     int moveDistance = dip2px(30);
@@ -407,7 +455,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     long animDuration = 200;
     private void checkTitle(int l, int t, int oldl, int oldt){
 
-        if(!isHasTop() && !isAnimRunning() && t > getTopHeight() && isHasSeeler()){
+        if(!isHasTop() && !isAnimRunning() && t > (hasBanner() ? getTopHeight() : 0) && isHasSeeler()){
             if(currentT == 0){
                 currentT = t;
             }
@@ -433,18 +481,25 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             }
         }
 
-        if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning()){
+        if(hasBanner()){
+            if(!isHasTop() && t < getTopHeight() - moveDistance && !isAnimRunning()){
+                currentT = 0;
+                startTitleShowAnimation();
+                startTabShowAnimation();
+            }
+        }
+
+
+        if(hasBanner() && !isHasTop() && t == 0 && !isAnimRunning()){
             currentT = 0;
             startTitleShowAnimation();
             startTabShowAnimation();
         }
 
-        if(t == 0 && !isAnimRunning()){
-            currentT = 0;
-            startTitleShowAnimation();
-            startTabShowAnimation();
-        }
+    }
 
+    public boolean hasBanner(){
+        return bannerLayout.getVisibility() == View.VISIBLE;
     }
 
     private void startTitleLeaveAnimation(){
@@ -460,6 +515,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             public void onAnimationEnd(Animation animation) {
                 setAnimRunning(false);
                 setTitleAlpha(titleLayout, 0);
+                setTitleVisibility(View.GONE);
+                if(isShowTitleAndTabFlag()){
+                    showTitleAndTab();
+                }
             }
 
             @Override
@@ -483,6 +542,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             public void onAnimationEnd(Animation animation) {
                 setAnimRunning(false);
                 setTitleAlpha(getTab(), 0);
+                setTabVisibility(View.GONE);
             }
 
             @Override
@@ -499,6 +559,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
         setTitleAlpha(titleLayout, 1);
+        setTitleVisibility(View.VISIBLE);
         TranslateAnimation titleAnimation = new TranslateAnimation(0, 0, -titleLayout.getMeasuredHeight(), 0);
         titleAnimation.setDuration(animDuration);
         titleAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -519,26 +580,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         });
         titleLayout.startAnimation(titleAnimation);
 
-        TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, getTab().getMeasuredHeight(), 0);
-        tabAnimation.setDuration(animDuration);
-        tabAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                setAnimRunning(true);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                setAnimRunning(false);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        getTab().startAnimation(titleAnimation);
-
     }
 
     private void startTabShowAnimation(){
@@ -546,6 +587,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
         setTitleAlpha(getTab(), 1);
+        setTabVisibility(View.VISIBLE);
         TranslateAnimation tabAnimation = new TranslateAnimation(0, 0, getTab().getMeasuredHeight(), 0);
         tabAnimation.setDuration(animDuration);
         tabAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -760,8 +802,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
-        bannerLayout.setVisibility(View.VISIBLE);
-        homeADView2.setVisibility(View.VISIBLE);
         updateAdspaceViews(body, type);
         loadComplete();
     }
@@ -810,7 +850,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
-        homeTagsView.setVisibility(View.VISIBLE);
         initHomeMenuView(list);
         loadComplete();
     }

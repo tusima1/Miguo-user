@@ -26,6 +26,7 @@ public interface LiveView extends MvpView {
     void refreshText(String text, String name);
     void refreshText(String text, String name,String faceUrl);
 
+
     void refreshThumbUp();
 
     void refreshUI(String id);
@@ -94,4 +95,8 @@ public interface LiveView extends MvpView {
      */
     void withoutEnoughMoney(String msg);
 
+    /**
+     * 主播强制退出直播。如管理台强制关闭直播。
+     */
+    void hostExitByForce();
 }

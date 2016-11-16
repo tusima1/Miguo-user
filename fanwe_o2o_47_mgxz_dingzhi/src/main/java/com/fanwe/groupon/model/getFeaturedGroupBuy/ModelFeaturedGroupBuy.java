@@ -124,4 +124,12 @@ public class ModelFeaturedGroupBuy {
     public void setBiz_id(String biz_id) {
         this.biz_id = biz_id;
     }
+
+    public String getTuan_price_with_unit() {
+        return tuan_price_with_unit;
+    }
+
+    public void setTuan_price_with_unit(String tuan_price_with_unit) {
+        this.tuan_price_with_unit = tuan_price_with_unit;
+    }
 }

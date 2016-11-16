@@ -20,7 +20,6 @@ import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
@@ -28,9 +27,11 @@ import com.fanwe.utils.ChineseCharClassifier;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.adapter.LiveSortTypeAdapter;
 import com.miguo.live.views.customviews.SpaceItemDecoration;
+import com.miguo.ui.view.FunnyTypeHorizantalScrollView;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -48,14 +49,14 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
 /**
  * Created by Administrator on 2016/10/20.
  */
-public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener,CallbackView2, SDEventObserver,CallbackView {
+public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener,CallbackView2, SDEventObserver,CallbackView, FunnyTypeHorizantalScrollView.OnFunnyTypeChangeListener {
 
 
     PtrFrameLayout ptrFrameLayout;
 
     RecyclerScrollView recyclerScrollView;
-   //直播分类
-    private RecyclerView mSpvAd;
+    //直播分类
+//    private RecyclerView mSpvAd;
     /**
      * 大字体。
      */
@@ -66,9 +67,8 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private TextView summaryText;
 
     private List<ModelHomeClassifyList> mList = new ArrayList<>();
-    private LiveSortTypeAdapter mAdapter;
 
-
+    FunnyTypeHorizantalScrollView funnyType;
 
     private SDFragmentManager mFragmentManager;
     /**
@@ -81,7 +81,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     /**
      * 直播点播 数据列表。
      */
-    private List<Room> rooms;
+    private List<ModelRoom> rooms;
 
     private boolean isRefresh = true;
     private int pageNum = 1;
@@ -91,14 +91,19 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private CommonHttpHelper commonHttpHelper;
 
     private SharedPreferences settings;
-    private String interestingStr="";
-    String cityId="";
-    String currentData="";
+    private String interestingStr = "";
+    String cityId = "";
+    String currentData = "";
     /**
      * 是否加载过。
 
      */
     boolean  hasLoad=false;
+
+    /**
+     * 是否能下拉刷新
+     */
+    boolean touchDisableMove = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
 
     private View rootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (null != rootView) {
@@ -124,7 +130,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -138,20 +143,20 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             commonHttpHelper = new CommonHttpHelper(getActivity(), this);
         }
         commonHttpHelper.getHomeClassifyList();
-        if(!TextUtils.isEmpty(interestingStr)){
+        if (!TextUtils.isEmpty(interestingStr)) {
             String[] list = interestingStr.split("-");
-            if(list.length<3){
-                settings.edit().putString("Interesting","").commit();
+            if (list.length < 3) {
+                settings.edit().putString("Interesting", "").commit();
                 commonHttpHelper.getInterestingString(cityId);
-            }else{
-                if(cityId.equals(list[0])&&currentData.equals(list[1])){
+            } else {
+                if (cityId.equals(list[0]) && currentData.equals(list[1])) {
                     setInterestingStr(list[2]);
-                }else{
-                    settings.edit().putString("Interesting","").commit();
+                } else {
+                    settings.edit().putString("Interesting", "").commit();
                     commonHttpHelper.getInterestingString(cityId);
                 }
             }
-        }else{
+        } else {
             commonHttpHelper.getInterestingString(cityId);
         }
     }
@@ -161,7 +166,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         interestingStr = settings.getString("Interesting","");
         mFragmentManager = new SDFragmentManager(getChildFragmentManager());
 
-        liveHelper = new LiveHttpHelper(getActivity(),  this, "");
+        liveHelper = new LiveHttpHelper(getActivity(), this, "");
         initPtrLayout();
         init();
         if (mHomeFragmentLiveList == null) {
@@ -176,7 +181,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     protected void initPtrLayout() {
         ptrFrameLayout = (PtrFrameLayout)rootView.findViewById(R.id.ptr_layout);
         recyclerScrollView = (RecyclerScrollView)rootView.findViewById(R.id.recycler_scrollview);
-        mSpvAd =(RecyclerView) rootView.findViewById(R.id.sort_type_list);
+        funnyType =(FunnyTypeHorizantalScrollView) rootView.findViewById(R.id.funny_type);
         titleText =(TextView)rootView.findViewById(R.id.title_text);
         summaryText = (TextView)rootView.findViewById(R.id.summary_text);
 
@@ -191,6 +196,14 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
          */
         ptrFrameLayout.setPtrHandler(this);
         recyclerScrollView.setOnRecyclerScrollViewListener(this);
+
+        funnyType.setOnFunnyTypeChangeListener(this);
+        funnyType.setFunnyFragment(this);
+    }
+
+    @Override
+    public void onTypeChanged(ModelHomeClassifyList model) {
+        SDEventManager.post(model, EnumEventTag.HOME_TYPE_CHANGE.ordinal());
     }
 
     /**
@@ -198,24 +211,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
 
     protected void init() {
-        initSlidingPlayView();
         bindData();
-    }
-
-    private void initSlidingPlayView() {
-
-        mSpvAd.setHasFixedSize(true);
-
-        LinearLayoutManager llmanager = new LinearLayoutManager(getContext());
-        llmanager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mSpvAd.setLayoutManager(llmanager);
-
-        //设置间距
-        mSpvAd.addItemDecoration(new SpaceItemDecoration(5));
-        mSpvAd.setHasFixedSize(true);
-        mSpvAd.setAdapter(mAdapter);
-
-
     }
 
     @Override
@@ -232,24 +228,24 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      */
     private void bindData() {
         getTopData();
-        mAdapter = new LiveSortTypeAdapter(mList, getActivity());
-        mSpvAd.setAdapter(mAdapter);
     }
 
-    public void parseInteresting(List<HashMap<String,String>> datas){
-        if(datas==null||datas.size()<1){
+    public void parseInteresting(List<HashMap<String, String>> datas) {
+        if (datas == null || datas.size() < 1) {
             return;
-        }else{
+        } else {
             String value = datas.get(0).get("value");
-            if(!TextUtils.isEmpty(value)){
+            if (!TextUtils.isEmpty(value)) {
                 setInterestingStr(value);
-                settings.edit().putString("Interesting",cityId+"-"+currentData+"-"+value).commit();
+                settings.edit().putString("Interesting", cityId + "-" + currentData + "-" + value).commit();
 
             }
         }
     }
+
     /**
      * 显示有趣页欢迎的话。
+     *
      * @param interestingStr
      */
     public void setInterestingStr(String interestingStr) {
@@ -278,8 +274,10 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             summaryText.setText(summaryStr);
         }
     }
+
     /**
      * 获取分类数据。
+     *
      * @param datas
      */
 
@@ -289,37 +287,35 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             mList.addAll(datas);
         }
 
-        if (mAdapter != null) {
-            mAdapter.setmData(mList);
-            mAdapter.notifyDataSetChanged();
-        }
+        funnyType.init(datas);
     }
 
     private void requestLiveList() {
         cityId = AppRuntimeWorker.getCity_id();
         if (liveHelper != null) {
-        liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "",cityId);
+//            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
+            liveHelper.getLiveListNew(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
         }
     }
+
     /**
      * 直播列表
      *
      * @param datas
      */
-    public void getLiveList(ArrayList<Room> datas) {
-
-        if (SDCollectionUtil.isEmpty(datas)) {
-            rooms = null;
+    public void getLiveList(ArrayList<ModelRoom> datas) {
+        if(this.pageNum==1){
+            isRefresh = true;
         }else{
-            if(datas.size()>=pageSize){
-                setPageNum(this.pageNum++);
-            }
+            isRefresh = false;
         }
-
-        rooms = datas;
+        if (!SDCollectionUtil.isEmpty(datas)) {
+                setPageNum(this.pageNum++);
+        }
         //直播列表
         if(mHomeFragmentLiveList!=null) {
-            mHomeFragmentLiveList.updateView(isRefresh, rooms);
+
+            mHomeFragmentLiveList.updateView(isRefresh, datas);
         }
         loadComplete();
     }
@@ -327,6 +323,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
     }
+
     @Override
     public void onEvent(SDBaseEvent sdBaseEvent) {
 
@@ -364,7 +361,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return recyclerScrollView.canRefresh();
+        return recyclerScrollView.canRefresh() && !isTouchDisableMove();
     }
 
 
@@ -383,12 +380,14 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         isRefresh = false;
         requestLiveList();
     }
-    public void loadComplete(){
+
+    public void loadComplete() {
         if(ptrFrameLayout!=null&&recyclerScrollView!=null) {
             ptrFrameLayout.refreshComplete();
             recyclerScrollView.loadComplite();
         }
     }
+
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
 //        Log.d("FunnyFragment","L:"+l +"  t:"+t +" oldL:"+oldl +"  oldt:"+oldt);
@@ -401,13 +400,12 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     @Override
     public void onSuccess(String method, final List datas) {
-        if (LiveConstants.LIVE_LIST.equals(method)) {
+        if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             //直播列表
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    getLiveList((ArrayList<Room>) datas);
+                    getLiveList((ArrayList<ModelRoom>) datas);
                 }
             });
         } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {
@@ -417,7 +415,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                     setHomeClassifyList(datas);
                 }
             });
-        }else if(CommonConstants.INTERESTING.equals(method)){
+        } else if (CommonConstants.INTERESTING.equals(method)) {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -426,6 +424,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             });
         }
     }
+
     @Override
     public void onFailue(String responseBody) {
 
@@ -433,12 +432,25 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
 
     @Override
     public void onFinish(String method) {
-
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadComplete();
+            }
+        });
     }
 
     @Override
     public void onDestroy() {
         SDEventManager.unregister(this);
         super.onDestroy();
+    }
+
+    public boolean isTouchDisableMove() {
+        return touchDisableMove;
+    }
+
+    public void setTouchDisableMove(boolean touchDisableMove) {
+        this.touchDisableMove = touchDisableMove;
     }
 }

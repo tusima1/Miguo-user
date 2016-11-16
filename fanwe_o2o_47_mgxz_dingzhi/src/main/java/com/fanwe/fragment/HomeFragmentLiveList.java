@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.fanwe.adapter.barry.MainActivityHomeFragmentLiveListAdapter;
 import com.fanwe.adapter.barry.MainActivityHomeFragmentTuanAdapter;
 import com.fanwe.base.CallbackView;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.HomeLiveFragmentRecyclerView;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.utils.BaseUtils;
 import com.tencent.imcore.Context;
@@ -31,7 +31,7 @@ import java.util.List;
 public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
     private View view;
     private TextView tvTitle;
-    private ArrayList<Room> datas = new ArrayList<>();
+    private ArrayList<ModelRoom> datas = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
     private LiveHttpHelper liveHttpHelper;
@@ -82,7 +82,7 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         view = inflater.inflate(R.layout.fragment_home_live_list, container, false);
         recyclerView = (HomeLiveFragmentRecyclerView) view.findViewById(R.id.recyclerview);
         ll_empty = (LinearLayout)view.findViewById(R.id.ll_empty);
-        tvTitle = (TextView) view.findViewById(R.id.tv_title_live_list);
+//        tvTitle = (TextView) view.findViewById(R.id.tv_title_live_list);
     }
 
     private void initRecyclerView(){
@@ -98,22 +98,26 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         }
     }
 
-    public void updateView(boolean isRefresh, List<Room> rooms) {
-        if (isRefresh) {
-            datas.clear();
+    public void updateView(boolean isRefresh, List<ModelRoom> rooms) {
+
+        if(null == mainActivityHomeFragmentLiveListAdapter){
+            return;
         }
-        if (!SDCollectionUtil.isEmpty(rooms)) {
-            datas.addAll(rooms);
-        }
-        if(datas==null||datas.size()<1){
-            ll_empty.setVisibility(View.VISIBLE);
-        }else{
-            ll_empty.setVisibility(View.GONE);
-        }
-        if(mainActivityHomeFragmentLiveListAdapter != null){
+
+        if(isRefresh){
             mainActivityHomeFragmentLiveListAdapter.notifyDataSetChanged(rooms);
-            updateRecyclerViewHeight();
+
+            if(mainActivityHomeFragmentLiveListAdapter.getItemCount() > 0){
+                ll_empty.setVisibility(View.GONE);
+            }else {
+                ll_empty.setVisibility(View.VISIBLE);
+            }
+        }else {
+            mainActivityHomeFragmentLiveListAdapter.notifyDataSetChangedLoadmore(rooms);
         }
+        updateRecyclerViewHeight();
+
+
 
     }
 

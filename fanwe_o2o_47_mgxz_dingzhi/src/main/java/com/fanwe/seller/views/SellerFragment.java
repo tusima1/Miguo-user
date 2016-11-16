@@ -149,6 +149,10 @@ public class SellerFragment extends Fragment {
     public void handlerCateIdChanged(String cate_id){
         if(mFragAll != null){
             mFragAll.handlerCateIdChanged(cate_id);
+            return;
+        }
+        if(mFragGroupon != null){
+            mFragGroupon.handlerCateIdChanged(cate_id);
         }
     }
 

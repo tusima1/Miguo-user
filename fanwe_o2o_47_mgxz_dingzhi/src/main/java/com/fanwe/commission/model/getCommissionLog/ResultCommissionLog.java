@@ -13,6 +13,10 @@ public class ResultCommissionLog {
     private PageBean page;
     private String salary;
     private String blocksalary;
+    /**\
+     * 累计佣金
+     */
+    private String salary_total;
 
 
     private List<ModelCommissionLog> list;
@@ -47,5 +51,13 @@ public class ResultCommissionLog {
 
     public void setList(List<ModelCommissionLog> list) {
         this.list = list;
+    }
+
+    public String getSalary_total() {
+        return salary_total;
+    }
+
+    public void setSalary_total(String salary_total) {
+        this.salary_total = salary_total;
     }
 }

@@ -3,8 +3,6 @@ package com.miguo.dao.impl;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
-import com.fanwe.home.model.Room;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.miguo.dao.GetUserReceiveCodeDao;
@@ -21,7 +19,7 @@ import java.util.TreeMap;
  * Created by zlh/Barry/狗蛋哥 on 2016/11/7.
  * 使用分享领取码进入房间并领钻 接口实现类
  */
-public class GetUserReceiveCodeDaoImpl extends BaseDaoImpl implements GetUserReceiveCodeDao{
+public class GetUserReceiveCodeDaoImpl extends BaseDaoImpl implements GetUserReceiveCodeDao {
 
     public GetUserReceiveCodeDaoImpl(BaseView baseView) {
         super(baseView);
@@ -29,7 +27,7 @@ public class GetUserReceiveCodeDaoImpl extends BaseDaoImpl implements GetUserRec
 
     @Override
     public GetUserReceiveCodeView getListener() {
-        return (GetUserReceiveCodeView)baseView;
+        return (GetUserReceiveCodeView) baseView;
     }
 
     @Override
@@ -50,24 +48,26 @@ public class GetUserReceiveCodeDaoImpl extends BaseDaoImpl implements GetUserRec
 
             @Override
             public void onSuccessResponseWithBean(Object responseBody) {
-                RootUseReceiveCode receiveCode = (RootUseReceiveCode)responseBody;
+                RootUseReceiveCode receiveCode = (RootUseReceiveCode) responseBody;
                 /**
                  * 请求成功
                  */
-                if(receiveCode.getStatusCode().equals("200")){
+                if (receiveCode.getStatusCode().equals("200")) {
                     List<ResultUseReceiveCode> results = receiveCode.getResult();
                     if (null == results || null == results.get(0)) {
                         getListener().getUserReceiveCodeError(receiveCode.getMessage());
                         return;
                     }
 
-                    if(null == results.get(0).getBody() || null == results.get(0).getBody().get(0)){
+                    if (null == results.get(0).getBody() || null == results.get(0).getBody().get(0)) {
                         getListener().getUserReceiveCodeError(receiveCode.getMessage());
                         return;
                     }
 
                     getListener().getUserReceiveCodeSuccess(results.get(0).getBody().get(0));
                     return;
+                } else {
+                    getListener().getUserReceiveCodeSuccess(null);
                 }
 
                 getListener().getUserReceiveCodeError(receiveCode.getMessage());

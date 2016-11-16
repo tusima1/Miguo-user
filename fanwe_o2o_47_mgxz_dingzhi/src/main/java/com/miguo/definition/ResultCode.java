@@ -9,4 +9,5 @@ import android.app.Activity;
 public class ResultCode {
     public static final int RESUTN_OK = Activity.RESULT_OK;
     public static final int RESUTN_CITY_ID = 888;
+    public static final int RESULT_CODE_SCAN_SUCCESS = 10;
 }

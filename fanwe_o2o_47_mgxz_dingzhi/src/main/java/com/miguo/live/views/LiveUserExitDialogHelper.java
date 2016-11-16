@@ -2,6 +2,7 @@ package com.miguo.live.views;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -9,15 +10,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView2;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.view.RedPacketListActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.adapters.UserExitAdapter;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.getAudienceCount.ModelAudienceCount;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.model.userFocus.RootUserFocus;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -46,22 +48,21 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private Dialog dialog;
     private LiveHttpHelper liveHttpHelper;
     private String count = "";
-    private List<Room> datasList = new ArrayList<>();
+    private List<ModelRoom> datasList = new ArrayList<>();
     private UserExitAdapter mUserExitAdapter;
     CallbackView2 callbackView2;
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
         createDialog();
-//        setView();
+        setView();
     }
 
-    public void setView(CallbackView2 callbackView2) {
-        this.callbackView2 = callbackView2;
+    private void setView() {
         liveHttpHelper = new LiveHttpHelper(mActivity, this, "");
         liveHttpHelper.checkFocus(CurLiveInfo.getHostID());
         liveHttpHelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
-        liveHttpHelper.getLiveList(1, 5, "", "", AppRuntimeWorker.getCity_id());
+        liveHttpHelper.getLiveListNew(1, 5, "", "", AppRuntimeWorker.getCity_id());
         ImageLoader.getInstance().displayImage(CurLiveInfo.getHostAvator(), civ_user_image);
         tv_username.setText(CurLiveInfo.getHostName());
         tv_user_location.setText(CurLiveInfo.modelShop.getShop_name());
@@ -87,7 +88,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
         tv_follow = (TextView) dialog.findViewById(R.id.tv_follow);//关注
         //关注
         gridview = (MaxHeightGridView) dialog.findViewById(R.id.mhgridview_show);
-
+        gridview.setEnabled(false);
 
         //init click
         iv_close.setOnClickListener(this);
@@ -147,7 +148,10 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
      * 优惠
      */
     private void clickYouHui() {
-        MGToast.showToast("优惠");
+        if(mActivity!=null) {
+            Intent intent = new Intent(mActivity, RedPacketListActivity.class);
+            mActivity.startActivity(intent);
+        }
     }
 
     @Override
@@ -192,12 +196,12 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
                 count = bean.getCount();
             }
             message.what = 2;
-        } else if (LiveConstants.LIVE_LIST.equals(method)) {
+        } else if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
                 datasList.clear();
                 //请求了5个room，需要剔除当前观看的房间，并最后保留4个
-                for (Room room : (ArrayList<Room>) datas) {
-                    if (!room.getHost().getHost_user_id().equals(CurLiveInfo.getHostID()) && datasList.size() < 5) {
+                for (ModelRoom room : (ArrayList<ModelRoom>) datas) {
+                    if (!room.getHost().getHost_user_id().equals(CurLiveInfo.getHostID()) && datasList.size() < 4) {
                         datasList.add(room);
                     }
                 }

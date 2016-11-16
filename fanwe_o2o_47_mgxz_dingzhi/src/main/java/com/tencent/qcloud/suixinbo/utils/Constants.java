@@ -121,6 +121,10 @@ public class Constants {
     private static final String TAG = "AvConstants";
     private static final String PACKAGE = "com.tencent.qcloud.suixinbo";
 
+
+    public static final int AVIMCMD_MANAGER = 0x900;             // 自定义控制台事件。
+    public static final int AVIMCMD_Manager_exit = AVIMCMD_MANAGER + 1;         //后台强制关闭直播和点播 。
+
     public volatile static String inputYuvFilePath = "/sdcard/123.yuv";
     public volatile static int yuvWide = 320;
     public volatile static int yuvHigh = 240;

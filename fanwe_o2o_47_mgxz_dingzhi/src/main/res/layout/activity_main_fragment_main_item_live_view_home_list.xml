@@ -6,9 +6,8 @@
     <ImageView
         android:id="@+id/iv_bg_item_live"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/iv_bg" />
+        android:layout_height="@dimen/size_px2sp_228"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/tv_type"

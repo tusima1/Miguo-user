@@ -2,18 +2,17 @@ package com.miguo.live.model;
 
 public class LiveConstants {
     /**
-     * 请求成功 。
+     * 请求成功
      */
-
     public static final String RESULT_SUCCESS = "200";
-    /**
-     * 获取直播列表
-     */
-    public static final String COMMAND_GROUP_BUY = "CommandGroupBuy";
     /**
      * 获取首页团购列表
      */
-    public static final String LIVE_LIST = "LiveList";
+    public static final String COMMAND_GROUP_BUY = "CommandGroupBuy";
+    /**
+     * 获取直播列表新版
+     */
+    public static final String LIVE_LIST_NEW = "LiveListNew";
     /**
      * 申请直播房间ID
      */
@@ -137,7 +136,7 @@ public class LiveConstants {
     /**
      * 使用分享领取码进入房间并领钻
      */
-    public static final String USE_RECEIVE_CODE = "UseReceiveCode";
+    public static final String USE_RECEIVE_CODE = "UseReceiveCodeNew";
 
     /**
      * 会员升级获取用户余额相关信息
@@ -155,6 +154,9 @@ public class LiveConstants {
      * 首页限时特惠
      */
     public static final String SPECIAL_LIST = "GetSpecialList";
-
+    /**
+     * 添加旁路直播
+     */
+    public static final String BY_PASS_LIVE = "BypassLive";
 
 }
