@@ -35,12 +35,12 @@ import com.fanwe.user.view.FansActivity;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.user.view.UserHomeActivity;
-import com.fanwe.user.view.WalletActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.live.views.TestLiveActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 
@@ -273,7 +273,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
             //TODO 测试部分 佣金提现
-            startActivity(WalletActivity.class);
+//            startActivity(WalletActivity.class);
+            startActivity(TestLiveActivity.class);
 
         } else if (v == mSuggestion) {
             //建议

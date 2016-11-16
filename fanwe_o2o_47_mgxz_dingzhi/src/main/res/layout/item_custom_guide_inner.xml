@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/white"
+              android:layout_width="228dp"
+              android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="143dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/test_xisuo_bg"
+        />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp10"
+        android:textColor="#2e2e2e"
+        android:textSize="@dimen/sp13"
+        android:text="行子H偶速度解决赛多利斯速度扫扫地大三的第三代四代"
+        android:ellipsize="end"
+        android:maxLines="2"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp7"
+        android:textSize="@dimen/sp11"
+        android:textColor="@color/gray_text_99"
+        android:text="西湖北线/黄龙 | 10.6km | 菊花酒"
+        android:lines="1"
+        android:ellipsize="end"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp7"
+        android:layout_marginBottom="@dimen/dp10"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp11"
+            android:textColor="#2e2e2e"
+            android:text="95元 / 张"
+            android:lines="1"
+            android:ellipsize="end"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp11"
+            android:textColor="@color/gray_text_99"
+            android:text="代金券"
+            android:lines="1"
+            android:ellipsize="end"
+            />
+    </LinearLayout>
+
+</LinearLayout>
