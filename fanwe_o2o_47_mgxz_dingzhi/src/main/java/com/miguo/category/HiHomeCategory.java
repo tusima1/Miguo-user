@@ -331,7 +331,6 @@ public class HiHomeCategory extends Category implements
                         if (TextUtils.isEmpty(dialog.getCode())) {
                             App.getInstance().isShowCode = false;
                         } else {
-//                            liveHttpHelper.getUseReceiveCode(dialog.getCode());
                             getUseReceiveCode.getUserReceiveCode(dialog.getCode());
                             code = dialog.getCode();
                             App.getInstance().code = dialog.getCode();
@@ -348,7 +347,6 @@ public class HiHomeCategory extends Category implements
                 });
                 dialog.show();
             } else {
-//                liveHttpHelper.getUseReceiveCode(code);
                 if (!TextUtils.isEmpty(App.getApplication().getToken())) {
                     getUseReceiveCode.getUserReceiveCode(code);
                     App.getInstance().code = code;

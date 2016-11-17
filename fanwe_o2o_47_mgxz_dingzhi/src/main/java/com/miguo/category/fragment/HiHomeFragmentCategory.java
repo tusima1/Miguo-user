@@ -254,7 +254,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     private void initDefaultCity(){
-        citySayHi.setText(AppRuntimeWorker.getCity_name());
+        citySayHi.setText(AppRuntimeWorker.getCityNameInPy());
         city.setText(AppRuntimeWorker.getCity_name());
     }
 
