@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHostAuthTime.ModelHostAuthTime;
 import com.miguo.live.model.getHostAuthTime.ResultHostAuthTime;
@@ -107,7 +108,7 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
                         List<ModelHostAuthTime> modelHostAuthTimes = resultHostAuthTime.getBody();
                         if (!SDCollectionUtil.isEmpty(modelHostAuthTimes)) {
                             modelHostAuthTime = modelHostAuthTimes.get(0);
-                            tempTime = Long.valueOf(modelHostAuthTime.getSystem_time()) - Long.valueOf(modelHostAuthTime.getInsert_time());
+                            tempTime = DataFormat.toLong(modelHostAuthTime.getSystem_time()) - DataFormat.toLong(modelHostAuthTime.getInsert_time());
                             Message msg = new Message();
                             msg.what = 0;
                             mHandler.sendMessage(msg);
