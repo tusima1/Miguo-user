@@ -595,6 +595,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             if ((progress + timePlayed) >= totalDuration) {
                 //时间轴异常，结束播放
                 playDone();
+                return;
             }
             //设置播放时间，需要把已经播放完成的文件的时间加上来
             if (mTextStart != null) {
