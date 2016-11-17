@@ -106,9 +106,8 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
                         ResultHostAuthTime resultHostAuthTime = resultHostAuthTimes.get(0);
                         List<ModelHostAuthTime> modelHostAuthTimes = resultHostAuthTime.getBody();
                         if (!SDCollectionUtil.isEmpty(modelHostAuthTimes)) {
-                            long currTime = System.currentTimeMillis();
                             modelHostAuthTime = modelHostAuthTimes.get(0);
-                            tempTime = currTime - Long.valueOf(modelHostAuthTime.getInsert_time());
+                            tempTime = Long.valueOf(modelHostAuthTime.getSystem_time()) - Long.valueOf(modelHostAuthTime.getInsert_time());
                             Message msg = new Message();
                             msg.what = 0;
                             mHandler.sendMessage(msg);
@@ -140,6 +139,9 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
                         startActivity(new Intent(LiveStartAuthActivity.this, LiveStartActivity.class));
                         finish();
                     } else {
+                        if (tempTime < 0) {
+                            return;
+                        }
                         // 设置开始时间
                         chronometer.setBase(SystemClock.elapsedRealtime() - tempTime);
                         // 开始记时
