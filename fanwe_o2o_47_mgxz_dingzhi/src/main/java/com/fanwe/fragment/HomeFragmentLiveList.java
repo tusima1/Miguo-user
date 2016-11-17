@@ -98,7 +98,7 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
         }
     }
 
-    public void updateView(boolean isRefresh, List<ModelRoom> rooms) {
+    public void updateView(boolean isRefresh, List<Object> rooms) {
 
         if(null == mainActivityHomeFragmentLiveListAdapter){
             return;
@@ -106,7 +106,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
 
         if(isRefresh){
             mainActivityHomeFragmentLiveListAdapter.notifyDataSetChanged(rooms);
-
             if(mainActivityHomeFragmentLiveListAdapter.getItemCount() > 0){
                 ll_empty.setVisibility(View.GONE);
             }else {
@@ -116,8 +115,6 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
             mainActivityHomeFragmentLiveListAdapter.notifyDataSetChangedLoadmore(rooms);
         }
         updateRecyclerViewHeight();
-
-
 
     }
 

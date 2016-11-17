@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.PageModel;
 import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.checkFocus.ResultCheckFocus;
@@ -75,6 +76,7 @@ import com.miguo.utils.MGLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -151,9 +153,18 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
                     mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, null);
                     return;
                 }
+
                 ModelResultLive resultLive = results.get(0);
+                 String  page_count= resultLive.getPage_count();
+                PageModel page = new PageModel();
+                page.setPage_count(resultLive.getPage_count());
+                page.setPage_total(resultLive.getPage_total());
+                page.setPage(resultLive.getPage());
+                List<Object> datas =new ArrayList<Object>();
+                datas.add(page);
                 List<ModelRoom> rooms = resultLive.getBody();
-                mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, rooms);
+                datas.addAll(rooms);
+                mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, datas);
             }
 
             @Override

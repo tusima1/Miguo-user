@@ -145,6 +145,9 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
             need_pay_line.setVisibility(View.VISIBLE);
         }
         if(need_pay_fee!=null) {
+            if(needFloat<0){
+                needFloat =0;
+            }
             need_pay_fee.setText(DataFormat.toDoubleTwo(needFloat));
         }
         if(firstPriceTotal>0){
@@ -199,6 +202,12 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         float youhuiFloat = SDFormatUtil.stringToFloat(mCheckActModel.getYouhuiPrice());
         float needFloat = totalFloat - yueFloat - youhuiFloat;
         float needFloat2= totalFloat-youhuiFloat;
+        if(needFloat<0){
+            needFloat = 0;
+        }
+        if(needFloat2<0){
+            needFloat2=0;
+        }
         //余额 》= 总金额。
         if (yueFloat >= totalFloat) {
             if (ifYueChecked) {

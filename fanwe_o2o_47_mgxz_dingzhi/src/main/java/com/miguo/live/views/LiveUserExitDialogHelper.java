@@ -198,6 +198,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
             message.what = 2;
         } else if (LiveConstants.LIVE_LIST_NEW.equals(method)) {
             if (!SDCollectionUtil.isEmpty(datas)) {
+                //去除第一个model 目前记录的是分面页信息。
+                datas.remove(0);
                 datasList.clear();
                 //请求了5个room，需要剔除当前观看的房间，并最后保留4个
                 for (ModelRoom room : (ArrayList<ModelRoom>) datas) {

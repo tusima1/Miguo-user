@@ -131,12 +131,12 @@ public class LiveUtil {
         try {
             if (LIVE.equals(room.getLive_type())) {
                 if (LIVE_PLAY_BACK.equals(room.getPlayback_status())) {
-                    return "精彩视频";
+                    return "精彩回放";
                 } else {
                     return "正在直播";
                 }
             } else {
-                return "精彩回放";
+                return "精彩视频";
             }
         } catch (NullPointerException e) {
             return "";
