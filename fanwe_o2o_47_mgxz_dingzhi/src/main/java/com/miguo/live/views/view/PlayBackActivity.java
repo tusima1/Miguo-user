@@ -1,6 +1,5 @@
 package com.miguo.live.views.view;
 
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,11 +25,9 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -86,7 +83,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 点播页面。
+ * 点播页面
  * Created by Administrator on 2016/9/20.
  */
 public class PlayBackActivity extends BaseActivity implements ITXLivePlayListener, View.OnClickListener, LiveView, CallbackView, EnterQuiteRoomView, ShopAndProductView {
@@ -595,6 +592,11 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 //腾讯回来的progress，是当前文件的progress，需要加上已经播放的时间
                 mSeekBar.setProgress(progress + timePlayed);
             }
+            if ((progress + timePlayed) >= totalDuration) {
+                //时间轴异常，结束播放
+                playDone();
+                return;
+            }
             //设置播放时间，需要把已经播放完成的文件的时间加上来
             if (mTextStart != null) {
                 mTextStart.setText(String.format("%02d:%02d", (progress + timePlayed) / 60, (progress + timePlayed) % 60));
@@ -610,33 +612,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             return;
         } else if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT) {
             //连接中断
-            indexPlay = 0;
-            timePlayed = 0;
-            getPlayUrlList();
-            stopPlayRtmp();
-            mVideoPlay = false;
-            mVideoPause = false;
-            if (mTextStart != null) {
-                mTextStart.setText("00:00");
-            }
-            if (mSeekBar != null) {
-                mSeekBar.setProgress(0);
-            }
+            playDone();
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_END) {
             if (indexPlay == (totalFile - 1)) {
-                //播放完毕
-                indexPlay = 0;
-                timePlayed = 0;
-                getPlayUrlList();
-                stopPlayRtmp();
-                mVideoPlay = false;
-                mVideoPause = false;
-                if (mTextStart != null) {
-                    mTextStart.setText("00:00");
-                }
-                if (mSeekBar != null) {
-                    mSeekBar.setProgress(0);
-                }
+                playDone();
             } else {
                 //当前文件播放完毕，需要播放下一个文件；已播放时长先做累加
                 timePlayed = timePlayed + DataFormat.toInt(fileSet.get(indexPlay).getDuration());
@@ -655,6 +634,22 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             SDToast.showToast(param.getString(TXLiveConstants.EVT_DESCRIPTION), Toast.LENGTH_SHORT);
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
             stopLoadingAnimation();
+        }
+    }
+
+    private void playDone() {
+        //播放完毕
+        indexPlay = 0;
+        timePlayed = 0;
+        getPlayUrlList();
+        stopPlayRtmp();
+        mVideoPlay = false;
+        mVideoPause = false;
+        if (mTextStart != null) {
+            mTextStart.setText("00:00");
+        }
+        if (mSeekBar != null) {
+            mSeekBar.setProgress(0);
         }
     }
 
@@ -1169,7 +1164,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     @Override
     public void onSuccess(String method, final List datas) {
-        try{
+        try {
             switch (method) {
                 case LiveConstants.RECEIVE_CODE:
                     if (!SDCollectionUtil.isEmpty(datas)) {
@@ -1196,7 +1191,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                                 mUserHeadTopView.refreshData(datas);
                             }
                             doUpdateMembersCount();
-                            if(mHeadTopAdapter != null){
+                            if (mHeadTopAdapter != null) {
                                 mHeadTopAdapter.notifyDataSetChanged();
                             }
                         }
@@ -1251,7 +1246,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(mBaoBaoAdapter == null){
+                            if (mBaoBaoAdapter == null) {
                                 return;
                             }
                             if (datas == null) {
@@ -1269,10 +1264,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                         @Override
                         public void run() {
 
-                                if (datas != null && datas.size() > 0 && playBackBottomToolView != null) {
-                                    playBackBottomToolView.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
-                                    playBackBottomToolView.notifyDataChange();
-                                }
+                            if (datas != null && datas.size() > 0 && playBackBottomToolView != null) {
+                                playBackBottomToolView.setmSellerDetailInfo((SellerDetailInfo) datas.get(0));
+                                playBackBottomToolView.notifyDataChange();
+                            }
 
                         }
                     });
@@ -1282,7 +1277,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(mUserHeadTopView == null || datas == null){
+                            if (mUserHeadTopView == null || datas == null) {
                                 return;
                             }
                             mUserHeadTopView.setKeyWord(getKeyWord((List<ModelStoresRandomComment>) datas));
@@ -1290,7 +1285,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                     });
                     break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("PlaybackActivity", "excetion..");
         }
     }
@@ -1344,6 +1339,5 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     public void getGift(HashMap<String, String> params) {
 
     }
-
 
 }

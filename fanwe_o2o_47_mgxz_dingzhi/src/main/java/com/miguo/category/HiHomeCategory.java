@@ -279,9 +279,9 @@ public class HiHomeCategory extends Category implements
 
     }
 
-    public void checkIfInMyFragment(){
-        if(TextUtils.isEmpty(App.getInstance().getToken())){
-            if(homeViewPager.getCurrentItem() == HomePageState.MY){
+    public void checkIfInMyFragment() {
+        if (TextUtils.isEmpty(App.getInstance().getToken())) {
+            if (homeViewPager.getCurrentItem() == HomePageState.MY) {
                 homeViewPager.setCurrentItem(HomePageState.HOME);
             }
         }
@@ -439,6 +439,9 @@ public class HiHomeCategory extends Category implements
     SDDialogConfirm sdDialogConfirm;
 
     private void showChangeLocationDialog(final String location) {
+        if (getActivity() == null) {
+            return;
+        }
         if (sdDialogConfirm != null && sdDialogConfirm.isShowing()) {
             return;
         }
@@ -450,7 +453,7 @@ public class HiHomeCategory extends Category implements
                     @Override
                     public void onDismiss(SDDialogCustom dialog) {
 
-            }
+                    }
 
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
@@ -462,10 +465,10 @@ public class HiHomeCategory extends Category implements
                         updateFromCityChanged(tempBean);
                     }
 
-            @Override
-            public void onClickCancel(View v, SDDialogCustom dialog) {
-            }
-        }).show();
+                    @Override
+                    public void onClickCancel(View v, SDDialogCustom dialog) {
+                    }
+                }).show();
     }
 
     /**
@@ -473,7 +476,7 @@ public class HiHomeCategory extends Category implements
      */
 
     public void clickTab(int position) {
-        if(null != getHomeFragment() && position != 0){
+        if (null != getHomeFragment() && position != 0) {
 //            getHomeFragment().showTitleAndTab();
         }
         homeViewPager.setCurrentItem(position);
