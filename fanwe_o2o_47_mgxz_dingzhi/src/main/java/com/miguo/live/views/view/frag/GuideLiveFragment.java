@@ -2,14 +2,19 @@ package com.miguo.live.views.view.frag;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
+import com.fanwe.app.App;
+import com.fanwe.network.HttpCallback;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.GuideLiveOutRVAdapter;
-import com.miguo.live.model.guidelive.GuideOutModel;
+import com.miguo.model.guidelive.GuideOutModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by didik on 2016/11/16.
@@ -35,7 +40,11 @@ public class GuideLiveFragment extends BaseFragment {
 
     @Override
     protected void startFlow() {
-//        addActGuideLayout();
+        requestGuideLives();
+    }
+
+    private void bindDataView() {
+        //        addActGuideLayout();
         List<GuideOutModel> data=new ArrayList<>();
         data.add(new GuideOutModel());
         data.add(new GuideOutModel());
@@ -70,4 +79,29 @@ public class GuideLiveFragment extends BaseFragment {
 //        ActGuideLayout mGuideLayout=new ActGuideLayout(getContext());
 //        ll_root_Layout.addView(mGuideLayout);
 //    }
+
+
+
+
+    private void requestGuideLives(){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("tab_id", "");
+        params.put("page_size", "10");
+        params.put("page", "1");
+        params.put("method", "InterestingGuideVideo");
+        OkHttpUtil.getInstance().get(params, new HttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                super.onSuccess(response);
+                Log.e("test",response);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+    }
+
 }

@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -16,7 +17,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
+import com.fanwe.network.HttpCallback;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.adapter.base.BaseRVViewHolder;
 import com.miguo.adapter.base.SimpleRVAdapter;
 import com.miguo.live.views.customviews.MGToast;
@@ -29,6 +34,7 @@ import com.miguo.utils.MGLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by didik on 2016/11/16.
@@ -48,6 +54,8 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
     private FrameLayout fl_rv_container;//rv
     private ExpandListener expandListener;
     private boolean expandable=false;
+    private ActLayoutReceiveDataListener sendDataListener;
+    private RecyclerView parentRV;
 //    private RecyclerView mRVInner;
 
     public ActGuideLayout(Context context) {
@@ -207,6 +215,26 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
             }
         };
         rvInner.setAdapter(adapter);
+        rvInner.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                float x = event.getX();
+                float y = event.getY();
+                float rawX = event.getRawX();
+                float rawY = event.getRawY();
+                Log.e("test-inner","x: "+x+"   y:"+y+"   rawX:"+rawX + "   rawY: "+rawY);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+
+                        break;
+                }
+                return false;
+            }
+        });
         rvContainer.addView(rvInner,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
@@ -215,6 +243,11 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         if (rvContainer == null)return;
         rvContainer.removeAllViews();
         rvContainer.setVisibility(GONE);
+    }
+
+    @Override
+    public void sendData2Parent(List childData) {
+
     }
 
     @Override
@@ -276,5 +309,42 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
 //        }
         Log.e("test","height-layout: "+getHeight());
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    private void requestGuideGoods(String guide_id){
+        String city_id = AppRuntimeWorker.getCity_id();
+        if (TextUtils.isEmpty(city_id) || TextUtils.isEmpty(guide_id))return;
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        params.put("city_id", city_id);
+        params.put("guide_id", guide_id);
+        params.put("method", "InterestingGuideGoods");
+        OkHttpUtil.getInstance().get(params, new HttpCallback() {
+            @Override
+            public void onSuccess(String response) {
+                super.onSuccess(response);
+                Log.e("test",response);
+                if (sendDataListener !=null){
+                    sendDataListener.onChildReceiveData(null);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+    }
+
+    public void setOnChildReceiveDataListener(ActLayoutReceiveDataListener listener){
+        this.sendDataListener=listener;
+    }
+
+    public void setRecycerView(RecyclerView mRecyclerView) {
+        this.parentRV=mRecyclerView;
+    }
+
+    public interface ActLayoutReceiveDataListener{
+        void onChildReceiveData(List childData);
     }
 }

@@ -49,4 +49,6 @@ public interface IActGuideLayout<T> {
     void addHorizontalRecyclerView(List<T> data,ViewGroup rvContainer);
 
     void hideHorizontalRecyclerView(ViewGroup rvContainer);
+
+    void sendData2Parent(List childData);
 }

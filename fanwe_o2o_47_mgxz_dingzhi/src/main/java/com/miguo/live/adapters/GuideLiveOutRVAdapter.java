@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.model.guidelive.GuideOutModel;
+import com.miguo.model.guidelive.GuideOutModel;
 import com.miguo.ui.view.ActGuideLayout;
 import com.miguo.ui.view.interf.ExpandListener;
 import com.miguo.ui.view.interf.ExpandStatus;
@@ -27,6 +27,14 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
     private int page =1;
     protected List<GuideOutModel> data=new ArrayList<>();
     private View emptyLayout;
+    private int preLivePosition=-1;//之前直播的
+    private RecyclerView mRecyclerView;
+//    private int curPosition=-1;
+
+    public void setRecycerView(RecyclerView recycerView){
+        this.mRecyclerView=recycerView;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_act_guide_live,null));
@@ -47,6 +55,8 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
                 //TODO nothing
             }
         });
+        holder.act_guide.setRecycerView(mRecyclerView);
+
     }
 
     @Override
