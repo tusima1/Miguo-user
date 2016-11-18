@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,9 +15,11 @@ import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.adapters.GuideLiveOutRVAdapter;
+import com.miguo.model.guidelive.GuideOutBody;
 import com.miguo.model.guidelive.GuideOutModel;
+import com.miguo.model.guidelive.GuideOutRoot;
+import com.miguo.view.video.VideoPlayerView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -31,6 +32,8 @@ public class GuidePagerFragment extends Fragment {
     private String mRequestID="";
     private RecyclerView mRV;
     private View mEmptyLayout;
+    private GuideLiveOutRVAdapter adapter;
+    private DataRequestCompleteListener requestDataListener;
 
     public static GuidePagerFragment newInstance(String tag) {
         Bundle args = new Bundle();
@@ -56,32 +59,11 @@ public class GuidePagerFragment extends Fragment {
         return view;
     }
 
-    private void startFlow(){
-        List<GuideOutModel> data=new ArrayList<>();
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        GuideLiveOutRVAdapter adapter=new GuideLiveOutRVAdapter();
+    private void startFlow(List<GuideOutModel> guide_list){
+        if (guide_list == null)return;
+        adapter = new GuideLiveOutRVAdapter();
         adapter.setEmptyLayout(mEmptyLayout);
-        adapter.setData(data);
+        adapter.setData(guide_list);
         mRV.setHasFixedSize(true);
         final LinearLayoutManager llManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
@@ -93,29 +75,48 @@ public class GuidePagerFragment extends Fragment {
                     oldScrollY) {
                 if (llManager !=null){
                     int firstVisibleItemPosition = llManager.findFirstVisibleItemPosition();
-                    Log.e("test","first: "+firstVisibleItemPosition);
+                    int playingPosition = adapter.getPlayingPosition();
+                    Log.e("test","play :"+" visible item ="+(firstVisibleItemPosition-1) +"   playing item: "+playingPosition);
+                    if (firstVisibleItemPosition -1 ==playingPosition){
+                        View childAt = mRV.getChildAt(playingPosition);
+                        VideoPlayerView viewById = (VideoPlayerView) childAt.findViewById(R.id.av_live);
+                        viewById.stopPlay();
+                        adapter.resetPlayingPosition();
+                    }
+
+//                    adapter.setFirstVisiblePosition(firstVisibleItemPosition);
+//                    Log.e("test","first: "+firstVisibleItemPosition);
                 }
             }
         });
-        mRV.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                float x = event.getX();
-                float y = event.getY();
-                float rawX = event.getRawX();
-                float rawY = event.getRawY();
-                Log.e("test-out","x: "+x+"   y:"+y+"   rawX:"+rawX + "   rawY: "+rawY);
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        mRV.requestDisallowInterceptTouchEvent(true);
-                        break;
-                }
-                return false;
-            }
-        });
+//        mRV.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                float x = event.getX();
+//                float y = event.getY();
+//                float rawX = event.getRawX();
+//                float rawY = event.getRawY();
+//                Log.e("test-out","x: "+x+"   y:"+y+"   rawX:"+rawX + "   rawY: "+rawY);
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_MOVE:
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                    case MotionEvent.ACTION_CANCEL:
+//                        mRV.requestDisallowInterceptTouchEvent(true);
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+    }
+
+    public void refreshData(){
+        adapter.resetPage();
+        requestGuideLives();
+    }
+
+    public void loadMoreData(){
+        requestGuideLives();
     }
 
     private void requestGuideLives(){
@@ -123,20 +124,39 @@ public class GuidePagerFragment extends Fragment {
         params.put("token", App.getInstance().getToken());
         params.put("tab_id", "");
         params.put("page_size", "10");
-        params.put("page", "1");
+        params.put("page", adapter ==null ? "1":adapter.getRequestPage()+"");
         params.put("method", "InterestingGuideVideo");
-        OkHttpUtil.getInstance().get(params, new HttpCallback() {
+        OkHttpUtil.getInstance().get(params, new HttpCallback<GuideOutRoot>() {
             @Override
-            public void onSuccess(String response) {
-                super.onSuccess(response);
-                startFlow();
-                Log.e("test",response);
+            public void onSuccessWithBean(GuideOutRoot guideOutRoot) {
+                List<GuideOutBody> body = guideOutRoot.getResult().get(0).getBody();
+                if (body !=null  && body.size()>0){
+                    List<GuideOutModel> guide_list = body.get(0).getGuide_list();
+                    if (adapter==null){
+                        startFlow(guide_list);
+                    }else {
+                        adapter.setData(guide_list);
+                    }
+                }
             }
 
             @Override
             public void onFinish() {
-
+                if (requestDataListener!=null)requestDataListener.requestComplete();
             }
         });
+    }
+
+    public interface DataRequestCompleteListener{
+        void requestComplete();
+    }
+
+    /**
+     * 如果parent需要知道数据请求完毕
+     * 使用此回调
+     * @param listener
+     */
+    public void setOnDataRequestCompleteListener(DataRequestCompleteListener listener){
+        this.requestDataListener=listener;
     }
 }

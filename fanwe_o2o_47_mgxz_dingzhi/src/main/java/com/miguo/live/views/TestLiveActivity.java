@@ -42,6 +42,7 @@ public class TestLiveActivity extends AppCompatActivity {
         tabLayout = (ExtTabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(ExtTabLayout.MODE_SCROLLABLE);
+        requestTags();
     }
 
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {

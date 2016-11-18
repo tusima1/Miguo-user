@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -371,6 +372,7 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
         if (iPlayEvent != null) {
             iPlayEvent.onAvChange(iPlayEvent.FINISH, null);
         }
+        Log.e("test","play: "+"----------stop-------------");
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.miguo.ui.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -21,7 +23,9 @@ import com.fanwe.app.App;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.work.AppRuntimeWorker;
+import com.miguo.adapter.base.BaseRVAdapter;
 import com.miguo.adapter.base.BaseRVViewHolder;
 import com.miguo.adapter.base.SimpleRVAdapter;
 import com.miguo.live.views.customviews.MGToast;
@@ -208,12 +212,26 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         RecyclerView rvInner=new RecyclerView(context);
         rvInner.setHasFixedSize(true);
         rvInner.setLayoutManager(new LinearLayoutManager(context,HORIZONTAL,false));
-        SimpleRVAdapter<String> adapter=new SimpleRVAdapter<String>(context,R.layout.item_custom_guide_inner,data2) {
+        final SimpleRVAdapter<String> adapter=new SimpleRVAdapter<String>(context,R.layout.item_custom_guide_inner,data2) {
             @Override
             protected void bindView(BaseRVViewHolder helper, String item) {
 
             }
         };
+        final int offset = DisplayUtil.dp2px(context, 5);
+        rvInner.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView
+                    .State state) {
+                if (parent.getChildAdapterPosition(view)==0){
+                    outRect.left=0;
+                    outRect.right=offset;
+                }else {
+                    outRect.left=offset;
+                    outRect.right=offset;
+                }
+            }
+        });
         rvInner.setAdapter(adapter);
         rvInner.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -222,10 +240,10 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
                 float y = event.getY();
                 float rawX = event.getRawX();
                 float rawY = event.getRawY();
-                Log.e("test-inner","x: "+x+"   y:"+y+"   rawX:"+rawX + "   rawY: "+rawY);
+//                Log.e("test-inner","x: "+x+"   y:"+y+"   rawX:"+rawX + "   rawY: "+rawY);
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
-                        
+
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -233,6 +251,16 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
                         break;
                 }
                 return false;
+            }
+        });
+        adapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String goods_id = adapter.getItem(position);
+                if (TextUtils.isEmpty(goods_id))return;
+                Intent intent=new Intent(context, GoodsDetailActivity.class);
+                intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID,goods_id);
+                context.startActivity(intent);
             }
         });
         rvContainer.addView(rvInner,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
