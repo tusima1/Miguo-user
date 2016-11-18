@@ -124,4 +124,5 @@ public class ModelFeaturedGroupBuy {
     public void setBiz_id(String biz_id) {
         this.biz_id = biz_id;
     }
+
 }
