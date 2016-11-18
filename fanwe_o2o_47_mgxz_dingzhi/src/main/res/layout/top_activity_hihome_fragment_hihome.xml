@@ -72,7 +72,7 @@
                     android:layout_toRightOf="@+id/frag_home_title_bar_iv_search"
                     android:text="输入商户名、地点"
                     android:textColor="@color/c_CCCCCC"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:visibility="visible"
@@ -94,12 +94,12 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingLeft="14dp"
+                android:paddingRight="17dp">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
                     android:gravity="center"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_message_home_title_v2" />
