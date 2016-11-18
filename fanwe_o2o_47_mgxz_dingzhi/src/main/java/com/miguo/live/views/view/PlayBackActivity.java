@@ -398,7 +398,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mBtnPlay.setBackgroundResource(R.drawable.play_pause);
         int result = mLivePlayer.startPlay(playUrl, mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
         if (result == -2) {
-            showInvalidateToast("非腾讯云链接地址。");
+            showInvalidateToast("链接地址有误");
         }
         if (result != 0) {
             mBtnPlay.setBackgroundResource(R.drawable.play_start);
@@ -595,6 +595,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 //腾讯回来的progress，是当前文件的progress，需要加上已经播放的时间
                 mSeekBar.setProgress(progress + timePlayed);
             }
+            if ((progress + timePlayed) >= totalDuration) {
+                //时间轴异常，结束播放
+                playDone();
+            }
             //设置播放时间，需要把已经播放完成的文件的时间加上来
             if (mTextStart != null) {
                 mTextStart.setText(String.format("%02d:%02d", (progress + timePlayed) / 60, (progress + timePlayed) % 60));
@@ -610,33 +614,11 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             return;
         } else if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT) {
             //连接中断
-            indexPlay = 0;
-            timePlayed = 0;
-            getPlayUrlList();
-            stopPlayRtmp();
-            mVideoPlay = false;
-            mVideoPause = false;
-            if (mTextStart != null) {
-                mTextStart.setText("00:00");
-            }
-            if (mSeekBar != null) {
-                mSeekBar.setProgress(0);
-            }
+            playDone();
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_END) {
             if (indexPlay == (totalFile - 1)) {
                 //播放完毕
-                indexPlay = 0;
-                timePlayed = 0;
-                getPlayUrlList();
-                stopPlayRtmp();
-                mVideoPlay = false;
-                mVideoPause = false;
-                if (mTextStart != null) {
-                    mTextStart.setText("00:00");
-                }
-                if (mSeekBar != null) {
-                    mSeekBar.setProgress(0);
-                }
+                playDone();
             } else {
                 //当前文件播放完毕，需要播放下一个文件；已播放时长先做累加
                 timePlayed = timePlayed + DataFormat.toInt(fileSet.get(indexPlay).getDuration());
@@ -655,6 +637,22 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             SDToast.showToast(param.getString(TXLiveConstants.EVT_DESCRIPTION), Toast.LENGTH_SHORT);
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
             stopLoadingAnimation();
+        }
+    }
+
+    private void playDone() {
+        //播放完毕
+        indexPlay = 0;
+        timePlayed = 0;
+        getPlayUrlList();
+        stopPlayRtmp();
+        mVideoPlay = false;
+        mVideoPause = false;
+        if (mTextStart != null) {
+            mTextStart.setText("00:00");
+        }
+        if (mSeekBar != null) {
+            mSeekBar.setProgress(0);
         }
     }
 
