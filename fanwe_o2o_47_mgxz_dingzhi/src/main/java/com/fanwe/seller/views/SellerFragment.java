@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class SellerFragment extends Fragment {
     private StoreListFragment mFragGroupon;
     private Bundle bundle;
     private LinearLayout titleLayout;
+    private FrameLayout layoutContent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,8 +61,14 @@ public class SellerFragment extends Fragment {
         //主界面，隐藏返回按钮
         if (getActivity() instanceof HiHomeActivity) {
             ivBack.setVisibility(View.GONE);
+            if (layoutContent != null) {
+                layoutContent.setPadding(0, 0, 0, BaseUtils.dip2px(getActivity(), 45));
+            }
         } else {
             ivBack.setVisibility(View.VISIBLE);
+            if (layoutContent != null) {
+                layoutContent.setPadding(0, 0, 0, 0);
+            }
         }
     }
 
@@ -72,6 +80,7 @@ public class SellerFragment extends Fragment {
         viewGroupon = (View) view.findViewById(R.id.view_groupon_frag_seller);
         ivSearch = (ImageView) view.findViewById(R.id.iv_search_frag_seller);
         ivBack = (ImageView) view.findViewById(R.id.iv_back_frag_seller);
+        layoutContent = (FrameLayout) view.findViewById(R.id.layout_content_frag_seller);
     }
 
     private void setListener() {
@@ -146,12 +155,12 @@ public class SellerFragment extends Fragment {
         ft.commit();
     }
 
-    public void handlerCateIdChanged(String cate_id){
-        if(mFragAll != null){
+    public void handlerCateIdChanged(String cate_id) {
+        if (mFragAll != null) {
             mFragAll.handlerCateIdChanged(cate_id);
             return;
         }
-        if(mFragGroupon != null){
+        if (mFragGroupon != null) {
             mFragGroupon.handlerCateIdChanged(cate_id);
         }
     }
@@ -160,7 +169,7 @@ public class SellerFragment extends Fragment {
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding(View view) {
-        if(getActivity() instanceof HiHomeActivity){
+        if (getActivity() instanceof HiHomeActivity) {
             if (view != null) {
                 view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
             }
