@@ -353,6 +353,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                     mHomeFragmentLiveList.updateTitle(bean.getName());
                 }
                 typeLiveHome = bean.getId();
+                this.pageNum = 1;
                 requestLiveList();
                 break;
 
