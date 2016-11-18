@@ -13,29 +13,17 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.miguo.live.model.PlaySetInfo;
-import com.miguo.live.model.getLiveListNew.ModelRecordFile;
 import com.miguo.live.views.customviews.PlayBackSeekBarView;
-import com.miguo.utils.RTMPUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.rtmp.ITXLivePlayListener;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.TXLivePlayConfig;
 import com.tencent.rtmp.TXLivePlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/11/16.
@@ -48,25 +36,11 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
     private TXLivePlayConfig mPlayConfig;
     private int mCurrentRenderRotation;
     private int mPlayType = TXLivePlayer.PLAY_TYPE_LIVE_RTMP;
-    private HashMap<Integer, PlaySetInfo> playUrlList;
-    private PlaySetInfo currentPlayInfo;
     //拉流地址
     String playUrl = "";
-    //点播文件列表
-    private List<ModelRecordFile> fileSet = new ArrayList<>();
-    //当前播放的文件序号
-    private int indexPlay = 0;
-    //总的文件数
-    private int totalFile = 0;
-    //总播放时长
-    private int totalDuration = 0;
-    //已播放的文件的时长
-    private int timePlayed = 0;
     private boolean mVideoPlay = false;
     private boolean mVideoPause = false;
     private boolean mStartSeek = false;
-    private boolean flagSwitch = false;
-    private int progressSwitch = 0;
     private long mTrackingTouchTS = 0;
     //////////////////////////////////控件相关///////////////////////////////////
     //播放界面
@@ -152,10 +126,10 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
         initSeekBar();
     }
 
+    private ModelVideoPlayer model = new ModelVideoPlayer();
+
     public void setData(ModelVideoPlayer model) {
-        this.fileSet = model.getFileSet();
-        getTotalSize();
-        getTotalDuration();
+        this.model = model;
         if (mPlayConfig == null) {
             mPlayConfig = new TXLivePlayConfig();
         }
@@ -182,70 +156,13 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //判断本次拖动，是否需要切换点播文件
-                int indexTemp = judgeIndex(seekBar.getProgress());
-                if (indexPlay != indexTemp) {
-                    //需要切换文件，记录拖动的状态，等视频加载后，自动跳转到相应的时间轴
-                    flagSwitch = true;
-                    indexPlay = indexTemp;
-                    getPlayUrlList();
-                    playWithSwitch();
-                    return;
-                }
-                if (flagSwitch) {
-                    progressSwitch = seekBar.getProgress();
-                }
-                //不需要切换文件，走原先的逻辑
                 if (mLivePlayer != null) {
-                    mLivePlayer.seek(seekBar.getProgress() - timePlayed);
+                    mLivePlayer.seek(seekBar.getProgress());
                 }
                 mTrackingTouchTS = System.currentTimeMillis();
                 mStartSeek = false;
             }
         });
-    }
-
-    /**
-     * 切换视频，不重新配置播放器
-     */
-    private void playWithSwitch() {
-        if (!checkPlayUrl(playUrl)) {
-            return;
-        }
-        mBtnPlay.setBackgroundResource(R.drawable.play_pause);
-        int result = mLivePlayer.startPlay(playUrl, mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
-        if (result == -2) {
-            showInvalidateToast("链接地址有误");
-        }
-        if (result != 0) {
-            mBtnPlay.setBackgroundResource(R.drawable.play_start);
-            return;
-        }
-        mLivePlayer.setLogLevel(TXLiveConstants.LOG_LEVEL_DEBUG);
-        startLoadingAnimation();
-        return;
-    }
-
-    /**
-     * 判断当前应该播放哪个文件
-     *
-     * @param progress
-     */
-    private int judgeIndex(int progress) {
-        if (!SDCollectionUtil.isEmpty(fileSet)) {
-            int tempTime = 0;
-            timePlayed = 0;
-            for (int i = 0; i < totalFile; i++) {
-                ModelRecordFile bean = fileSet.get(i);
-                tempTime = tempTime + DataFormat.toInt(bean.getDuration());
-                if (tempTime >= progress) {
-                    return i;
-                }
-                //记录需要跳过的时间长度
-                timePlayed = tempTime;
-            }
-        }
-        return 0;
     }
 
     private boolean startPlayRtmp() {
@@ -307,35 +224,11 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
      * 解析直播流地址。
      */
     private void getPlayUrlList() {
-        if (playUrlList == null) {
-            playUrlList = new HashMap<>();
-        } else {
-            playUrlList.clear();
-        }
-        if (!SDCollectionUtil.isEmpty(fileSet)) {
-            ModelRecordFile modelRecordFile = fileSet.get(indexPlay);
-            Type listType = new TypeToken<List<PlaySetInfo>>() {
-            }.getType();
-            Gson gson = new Gson();
-            List<PlaySetInfo> playSetInfoList = gson.fromJson(modelRecordFile.getPlayset(), listType);
-            if (SDCollectionUtil.isEmpty(playSetInfoList)) {
-                playError();
-                return;
-            }
-            for (Iterator iterator = playSetInfoList.iterator(); iterator.hasNext(); ) {
-                PlaySetInfo o = (PlaySetInfo) iterator.next();
-                playUrlList.put(o.getDefinition(), o);
-            }
-            currentPlayInfo = RTMPUtils.checkUrlByWIFI(playUrlList);
-            if (currentPlayInfo == null) {
-                playError();
-                return;
-            }
-            playUrl = currentPlayInfo.getUrl();
+        playUrl = model.getPlayUrl();
+        if (!TextUtils.isEmpty(playUrl)) {
             changeOrientation();
         } else {
             playError();
-            return;
         }
     }
 
@@ -366,11 +259,11 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
      * 根据宽高比设置当前的方向。
      */
     private void changeOrientation() {
-        if (mLivePlayer == null || currentPlayInfo == null) {
+        if (mLivePlayer == null || model == null) {
             return;
         }
-        float width = currentPlayInfo.getVwidth();
-        float height = currentPlayInfo.getVheight();
+        float width = DataFormat.toFloat(model.getW());
+        float height = DataFormat.toFloat(model.getH());
         //横屏。
         if (width - height > 0) {
             mCurrentRenderRotation = TXLiveConstants.RENDER_ROTATION_LANDSCAPE;
@@ -381,7 +274,6 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
     }
 
     private void playError() {
-        showInvalidateToast("网络有问题或者当前点播地址错误。");
         return;
     }
 
@@ -395,44 +287,14 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
             message = defaultMessage;
         }
         SDToast.showToast(message, Toast.LENGTH_LONG);
+        playDone();
     }
 
-
-    /**
-     * 点播文件总个数
-     */
-    private void getTotalSize() {
-        if (!SDCollectionUtil.isEmpty(fileSet)) {
-            totalFile = fileSet.size();
-        }
-    }
-
-    /**
-     * 点播文件总时长
-     */
-    private void getTotalDuration() {
-        totalDuration = 0;
-        if (!SDCollectionUtil.isEmpty(fileSet)) {
-            for (ModelRecordFile bean : fileSet) {
-                totalDuration = totalDuration + DataFormat.toInt(bean.getDuration());
-            }
-        }
-    }
 
     @Override
     public void onPlayEvent(int event, Bundle param) {
         if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
             stopLoadingAnimation();
-            //判断是否切换了文件，如果切换了就调整时间轴
-            if (flagSwitch) {
-                flagSwitch = false;
-                if (mLivePlayer != null) {
-                    //调整的时候，需要把已经播放过的时间减去
-                    mLivePlayer.seek(progressSwitch - timePlayed);
-                }
-                mTrackingTouchTS = System.currentTimeMillis();
-                mStartSeek = false;
-            }
             if (iPlayEvent != null) {
                 iPlayEvent.onAvChange(iPlayEvent.START, null);
             }
@@ -444,9 +306,8 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
             int progress = param.getInt(TXLiveConstants.EVT_PLAY_PROGRESS);
             int duration = param.getInt(TXLiveConstants.EVT_PLAY_DURATION);
             long curTS = System.currentTimeMillis();
-            int progressTotal = progress + timePlayed;
             if (iPlayEvent != null) {
-                iPlayEvent.onAvChange(iPlayEvent.PLAYING, progressTotal);
+                iPlayEvent.onAvChange(iPlayEvent.PLAYING, progress);
             }
             // 避免滑动进度条松开的瞬间可能出现滑动条瞬间跳到上一个位置
             if (Math.abs(curTS - mTrackingTouchTS) < 500) {
@@ -454,45 +315,32 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
             }
             mTrackingTouchTS = curTS;
             if (mSeekBar != null) {
-                //腾讯回来的progress，是当前文件的progress，需要加上已经播放的时间
-                mSeekBar.setProgress(progressTotal);
+                mSeekBar.setProgress(progress);
             }
-            if (progressTotal >= totalDuration) {
+            if (progress >= duration) {
                 //时间轴异常，结束播放
                 playDone();
                 return;
             }
             //设置播放时间，需要把已经播放完成的文件的时间加上来
             if (mTextStart != null) {
-                mTextStart.setText(String.format("%02d:%02d", progressTotal / 60, progressTotal % 60));
+                mTextStart.setText(String.format("%02d:%02d", progress / 60, progress % 60));
             }
-            //设置总时长，totalDuration
+            //设置总时长，duration
             if (mTextDuration != null) {
-                mTextDuration.setText(String.format("%02d:%02d", totalDuration / 60, totalDuration % 60));
+                mTextDuration.setText(String.format("%02d:%02d", duration / 60, duration % 60));
             }
-            //设置最大时长，totalDuration
+            //设置最大时长，duration
             if (mSeekBar != null) {
-                mSeekBar.setMax(totalDuration);
+                mSeekBar.setMax(duration);
             }
             return;
         } else if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT) {
             //连接中断
             playDone();
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_END) {
-            if (indexPlay == (totalFile - 1)) {
-                //播放完毕
-                playDone();
-            } else {
-                //当前文件播放完毕，需要播放下一个文件；已播放时长先做累加
-                timePlayed = timePlayed + DataFormat.toInt(fileSet.get(indexPlay).getDuration());
-                indexPlay++;
-                //设置播放时间，需要把已经播放完成的文件的时间加上来
-                if (mTextStart != null) {
-                    mTextStart.setText(String.format("%02d:%02d", (timePlayed) / 60, (timePlayed) % 60));
-                }
-                getPlayUrlList();
-                playWithSwitch();
-            }
+            //播放完毕
+            playDone();
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_LOADING) {
             startLoadingAnimation();
         }
@@ -503,10 +351,10 @@ public class VideoPlayerView extends FrameLayout implements ITXLivePlayListener 
         }
     }
 
+    /**
+     * 播放完毕
+     */
     private void playDone() {
-        //播放完毕
-        indexPlay = 0;
-        timePlayed = 0;
         getPlayUrlList();
         stopPlayRtmp();
         mVideoPlay = false;
