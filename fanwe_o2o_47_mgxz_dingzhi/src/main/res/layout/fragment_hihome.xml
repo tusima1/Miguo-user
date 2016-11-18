@@ -13,7 +13,7 @@
         app:ptr_keep_header_when_refresh="true"
         app:ptr_pull_to_fresh="true">
 
-        <com.fanwe.view.RecyclerScrollView
+        <com.miguo.ui.view.RecyclerBounceScrollView
             android:id="@+id/recycler_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -230,7 +230,7 @@
 
             </LinearLayout>
 
-        </com.fanwe.view.RecyclerScrollView>
+        </com.miguo.ui.view.RecyclerBounceScrollView>
 
     </com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout>
 

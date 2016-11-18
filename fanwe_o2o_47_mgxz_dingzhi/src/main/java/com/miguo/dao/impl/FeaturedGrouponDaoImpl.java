@@ -77,8 +77,13 @@ public class FeaturedGrouponDaoImpl extends BaseDaoImpl implements FeaturedGroup
             }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
                 getListener().getFeaturedGrouponError(message);
+            }
+
+            @Override
+            public void onFinishResponse() {
+                super.onFinishResponse();
             }
         });
     }
