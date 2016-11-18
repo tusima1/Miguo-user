@@ -1126,7 +1126,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.fanwe.seller.views.SpecialTopicActivity"
+            android:theme="@style/Transparent_title_area"
             android:configChanges="keyboard|keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
     </application>
 

@@ -110,7 +110,7 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                 });
             }
 
-            holder.tv_time.setText(shopListBean.getTrade_day());
+            holder.tv_time.setText("营业时间: "+shopListBean.getTrade_day());
 
             final String tel = shopListBean.getTel();
             if (TextUtils.isEmpty(tel)) {
