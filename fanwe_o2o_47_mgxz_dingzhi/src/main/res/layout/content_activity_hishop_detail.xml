@@ -28,7 +28,7 @@
                 android:id="@+id/indicator_circle"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_alignBottom="@+id/viewpager"
+                android:layout_alignBottom="@+id/shopdetail_viewpager"
                 android:layout_gravity="bottom"
                 android:gravity="center"
                 app:ci_drawable="@drawable/black_radius_square"
