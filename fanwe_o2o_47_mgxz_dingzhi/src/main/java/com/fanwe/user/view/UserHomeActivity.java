@@ -75,6 +75,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         preView();
     }
 
+
     private void preView() {
         if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() == null) {
             return;

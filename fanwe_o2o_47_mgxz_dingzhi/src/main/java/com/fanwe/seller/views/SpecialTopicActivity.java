@@ -11,6 +11,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.didikee.uilibs.views.MaxHeightListView;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -89,7 +90,7 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
                 isLoadMore=false;
-                httpHelper.getTopicDetail(id,"1","10","","");
+                httpHelper.getTopicDetail(id,"1","10", BaiduMapManager.getInstance().getLongitude()+"",BaiduMapManager.getInstance().getLatitude()+"");
                 mPscrollView.onRefreshComplete();
             }
 
@@ -98,14 +99,14 @@ public class SpecialTopicActivity extends Activity implements View.OnClickListen
                 isLoadMore=true;
                 if (page==null){
                     isLoadMore=false;
-                    httpHelper.getTopicDetail(id,"1","10","","");
+                    httpHelper.getTopicDetail(id,"1","10",BaiduMapManager.getInstance().getLongitude()+"",BaiduMapManager.getInstance().getLatitude()+"");
                 }else {
                     int currentPage = DataFormat.toInt(page.getPage());
                     int totalPage = DataFormat.toInt(page.getPage_total());
                     if (currentPage<totalPage){
-                        httpHelper.getTopicDetail(id,currentPage+1+"","10","","");
+                        httpHelper.getTopicDetail(id,currentPage+1+"","10",BaiduMapManager.getInstance().getLongitude()+"",BaiduMapManager.getInstance().getLatitude()+"");
                     }else if (currentPage==totalPage){
-                        httpHelper.getTopicDetail(id,currentPage+"","10","","");
+                        httpHelper.getTopicDetail(id,currentPage+"","10",BaiduMapManager.getInstance().getLongitude()+"",BaiduMapManager.getInstance().getLatitude()+"");
                     }else {
                         MGToast.showToast("没有更多数据");
                         mPscrollView.onRefreshComplete();

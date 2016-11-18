@@ -87,9 +87,9 @@ public class DistributionStoreWapActivity extends BaseActivity {
             if (userModel != null) {
                 String name = userModel.getUser_mobile();
                 String pwd = userModel.getUser_pwd();
-                url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app&uid=" + id;
+                url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app&uid="+id ;
             } else {
-                url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id;
+                url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id+"/";
             }
 
             frag.setUrl(url);

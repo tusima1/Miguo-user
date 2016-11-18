@@ -268,6 +268,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mFriends) {
             /*分销战队*/
             startActivity(DistributionMyXiaoMiActivity.class);
+
         } else if (v == mQuan) {
             /*消费券*/
             startActivity(MyCouponListActivity.class);

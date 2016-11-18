@@ -132,7 +132,7 @@ public class LiveConstants {
     /**
      * 发送礼物(支付)
      */
-    public static final String POST_GIFT_INFO = "GiftInfo";
+    public static final String POST_GIFT_INFO = "Post_GiftInfo";
     /**
      * 使用分享领取码进入房间并领钻
      */

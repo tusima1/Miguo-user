@@ -25,6 +25,7 @@ import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
 import java.util.List;
@@ -143,6 +144,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         View view = inflater.inflate(R.layout.tv_tag_item_live_home, null);
         TextView tvTag = (TextView) view.findViewById(R.id.tv_describe_item_live_list_home_fragment);
         tvTag.setText(tag);
+        tvTag.setTextSize(BaseUtils.px2dip(getActivity(),24));
         view.setPadding(dip2px(3), 0, dip2px(3), 0);
         view.setLayoutParams(lp);
         return view;
