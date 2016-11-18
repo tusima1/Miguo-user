@@ -85,8 +85,8 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page", page);
         params.put("pageSize", pageSize);
         if (!TextUtils.isEmpty(m_latitude)  && !TextUtils.isEmpty(m_longitude)){
-            params.put("pageSize", pageSize);
-            params.put("pageSize", pageSize);
+            params.put("m_longitude", m_longitude);
+            params.put("m_latitude", m_latitude);
         }
         params.put("method", SellerConstants.SPECIAL_TOPIC);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
