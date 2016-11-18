@@ -53,7 +53,7 @@
             android:layout_alignParentRight="true"
             android:text=""
             android:textColor="@color/c_F5B830"
-            android:textSize="@dimen/dp14" />
+            android:textSize="@dimen/dp12" />
 
         <TextView
             android:id="@+id/tv_price_original"

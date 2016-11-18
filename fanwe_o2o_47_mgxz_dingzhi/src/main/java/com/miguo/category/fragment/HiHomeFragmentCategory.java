@@ -186,7 +186,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     FeaturedGrouponCategory featuredGrouponCategory;
 
     boolean hasTop = true;
-    int topHeight = dip2px(150);
+    int topHeight = dip2px(206);
 
     boolean touchDisableMove = false;
 
