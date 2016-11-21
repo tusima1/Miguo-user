@@ -130,7 +130,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                 clickShare();
             }
         });
-        ((TextView) findViewById(R.id.tv_middle)).setText("网红主页");
+        ((TextView) findViewById(R.id.tv_middle)).setText("个人主页");
     }
 
 
