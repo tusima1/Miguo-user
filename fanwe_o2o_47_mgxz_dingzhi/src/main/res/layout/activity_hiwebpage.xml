@@ -4,6 +4,8 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/content_activity_hiwebpage"/>
+    <include layout="@layout/content_activity_hiwebpage_loadfail"/>
+
     <include layout="@layout/top_activity_hiwebpage"/>
 
 </RelativeLayout>
