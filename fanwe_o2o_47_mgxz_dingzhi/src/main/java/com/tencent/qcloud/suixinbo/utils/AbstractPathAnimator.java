@@ -99,8 +99,8 @@ public abstract class AbstractPathAnimator {
 //                    res.getDimensionPixelOffset(R.dimen.heart_size_height));//动画图片高度
             config.heartWidth = heartWidth;
             config.heartHeight = heartHeight;
-            config.animDuration = typedArray.getInteger(R.styleable.HeartLayout_anim_duration,
-                    res.getInteger(R.integer.anim_duration));//持续期
+            config.animDuration = typedArray.getInteger(R.styleable.HeartLayout_anim_durationQQ,
+                    res.getInteger(R.integer.anim_durationFanwe));//持续期
             return config;
         }
 

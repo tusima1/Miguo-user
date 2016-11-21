@@ -38,7 +38,7 @@
                     <View
                         android:id="@+id/title_space"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp" />
+                        android:layout_height="43dp" />
 
                     <LinearLayout
                         android:paddingTop="15dp"
@@ -46,11 +46,11 @@
                         xmlns:autofit="http://schemas.android.com/apk/res-auto"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="160dp">
+                        android:layout_height="206dp">
 
                         <com.miguo.ui.view.AutofitTextView
                             android:layout_marginTop="40dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="17dp"
                             android:layout_marginRight="40dp"
                             android:singleLine="true"
                             android:id="@+id/sayhi"
@@ -64,9 +64,8 @@
 
 
                         <TextView
-                            android:layout_marginTop="10dp"
+                            android:padding="17dp"
                             android:textColor="@color/text_base_color_2"
-                            android:layout_marginLeft="10dp"
                             android:text="Migoo"
                             android:textSize="12sp"
                             android:id="@+id/city_sayhi"
@@ -156,13 +155,6 @@
                     </com.miguo.ui.view.HomeTagsView>
 
                 </LinearLayout>
-
-
-
-
-
-
-
 
                 <LinearLayout
                     android:id="@+id/home_ad_view_2_space_layout"

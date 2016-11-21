@@ -19,6 +19,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -70,11 +71,11 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
                 RootHomeClassifyList root = gson.fromJson(responseBody, RootHomeClassifyList.class);
                 List<ResultHomeClassifyList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,CommonConstants.HOME_CLASSIFY_LIST, null);
+                    onSuccess(mView, CommonConstants.HOME_CLASSIFY_LIST, null);
                     return;
                 }
                 List<ModelHomeClassifyList> items = result.get(0).getBody();
-                onSuccess(mView,CommonConstants.HOME_CLASSIFY_LIST, items);
+                onSuccess(mView, CommonConstants.HOME_CLASSIFY_LIST, items);
             }
 
             @Override
@@ -84,7 +85,8 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         });
     }
 
-    public void getInterestingString(String city_id){
+
+    public void getInterestingString(String city_id) {
 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("city_id", city_id);
@@ -93,10 +95,10 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
                 }.getType();
                 Gson gson = new Gson();
-                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                Root<HashMap<String, String>> root = gson.fromJson(responseBody, type);
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
                 if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
@@ -105,7 +107,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
                     if (map != null) {
                         datas.add(map);
                     }
-                    onSuccess(mView,CommonConstants.INTERESTING, datas);
+                    onSuccess(mView, CommonConstants.INTERESTING, datas);
                 } else {
                     mView.onFailue(message);
                 }
@@ -130,15 +132,15 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootVersion rootVersion=gson.fromJson(responseBody,RootVersion.class);
-                if (rootVersion!=null){
+                RootVersion rootVersion = gson.fromJson(responseBody, RootVersion.class);
+                if (rootVersion != null) {
                     ResultVersion result = rootVersion.getResult().get(0);
-                    if (result!=null){
+                    if (result != null) {
                         final List<ModelVersion> body = result.getBody();
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onSuccess(mView,CommonConstants.UPGRADE_VERSION,body);
+                                onSuccess(mView, CommonConstants.UPGRADE_VERSION, body);
                             }
                         });
                         return;
@@ -149,7 +151,45 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGLog.e(CommonConstants.UPGRADE_VERSION+" :"+message+errorCode);
+                MGLog.e(CommonConstants.UPGRADE_VERSION + " :" + message + errorCode);
+            }
+        });
+    }
+
+    /**
+     * 获取当前用户的会员 等级。
+     */
+
+    public void getDistributionLevel() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("method", CommonConstants.USERDISTRIBUTIIONLEVEL);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String, String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if ("200".equals(status)) {
+                    HashMap<String, String> hashMap = (HashMap<String, String>) validateBody(root);
+                    if (hashMap != null) {
+                        List<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
+                        datas.add(hashMap);
+                        onSuccess(mView, CommonConstants.USERDISTRIBUTIIONLEVEL, datas);
+                    } else {
+                        mView.onFailue(CommonConstants.USERDISTRIBUTIIONLEVEL);
+                    }
+                } else {
+                    mView.onFailue(CommonConstants.USERDISTRIBUTIIONLEVEL);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGLog.e(CommonConstants.UPGRADE_VERSION + " :" + message + errorCode);
             }
         });
     }

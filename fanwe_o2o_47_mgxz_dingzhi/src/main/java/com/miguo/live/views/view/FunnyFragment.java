@@ -27,6 +27,7 @@ import com.fanwe.utils.ChineseCharClassifier;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.PageModel;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.adapter.LiveSortTypeAdapter;
@@ -86,6 +87,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private boolean isRefresh = true;
     private int pageNum = 1;
     private int pageSize = 10;
+    private int maxPageTotal=1;
     private String typeLiveHome = "";
 
     private CommonHttpHelper commonHttpHelper;
@@ -293,7 +295,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     private void requestLiveList() {
         cityId = AppRuntimeWorker.getCity_id();
         if (liveHelper != null) {
-//            liveHelper.getLiveList(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
             liveHelper.getLiveListNew(pageNum, pageSize, typeLiveHome, "", AppRuntimeWorker.getCity_id());
         }
     }
@@ -303,18 +304,29 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      *
      * @param datas
      */
-    public void getLiveList(ArrayList<ModelRoom> datas) {
+    public void getLiveList(List<Object> datas) {
+        if(datas==null||datas.size()<1){
+            return;
+        }
+        PageModel page = (PageModel)datas.get(0);
+        if(!TextUtils.isEmpty(page.getPage_total())){
+            maxPageTotal = Integer.valueOf(page.getPage_total());
+        }
+        if(!TextUtils.isEmpty(page.getPage())){
+            pageNum = Integer.valueOf(page.getPage());
+        }
         if(this.pageNum==1){
             isRefresh = true;
         }else{
             isRefresh = false;
         }
-        if (!SDCollectionUtil.isEmpty(datas)) {
-                setPageNum(this.pageNum++);
-        }
+
+            pageNum +=1;
+            setPageNum(this.pageNum);
+
+        datas.remove(0);
         //直播列表
         if(mHomeFragmentLiveList!=null) {
-
             mHomeFragmentLiveList.updateView(isRefresh, datas);
         }
         loadComplete();
@@ -341,6 +353,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                     mHomeFragmentLiveList.updateTitle(bean.getName());
                 }
                 typeLiveHome = bean.getId();
+                this.pageNum = 1;
                 requestLiveList();
                 break;
 
@@ -378,6 +391,9 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     @Override
     public void onScrollToEnd() {
         isRefresh = false;
+        if(this.pageNum>maxPageTotal) {
+           return;
+        }
         requestLiveList();
     }
 
@@ -405,7 +421,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    getLiveList((ArrayList<ModelRoom>) datas);
+                    getLiveList(datas);
                 }
             });
         } else if (CommonConstants.HOME_CLASSIFY_LIST.equals(method)) {

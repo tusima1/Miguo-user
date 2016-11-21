@@ -264,10 +264,17 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(ShopCartActivity.class);
         } else if (v == mShop) {
             /*我的小店*/
-            startActivity(DistributionStoreWapActivity.class);
+            Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
+            String id="";
+            if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null) {
+                id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            }
+            intent.putExtra("id", id);
+            startActivity(intent);
         } else if (v == mFriends) {
             /*分销战队*/
             startActivity(DistributionMyXiaoMiActivity.class);
+
         } else if (v == mQuan) {
             /*消费券*/
             startActivity(MyCouponListActivity.class);

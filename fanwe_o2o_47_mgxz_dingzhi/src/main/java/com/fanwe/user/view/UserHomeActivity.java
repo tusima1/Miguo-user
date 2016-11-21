@@ -75,6 +75,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         preView();
     }
 
+
     private void preView() {
         if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() == null) {
             return;
@@ -179,6 +180,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private void preWidget() {
         recyclerViewShop = (RecyclerView) findViewById(R.id.recyclerview_shop_act_user_home);
         gridViewLive = (MyGridView) findViewById(R.id.gridView_live_act_user_home);
+        gridViewLive.setFocusable(false);
         circleImageView = (CircleImageView) findViewById(R.id.iv_icon_act_user_home);
         tvName = (TextView) findViewById(R.id.tv_name_act_user_home);
         tvAttention = (TextView) findViewById(R.id.tv_num_attention_act_user_home);

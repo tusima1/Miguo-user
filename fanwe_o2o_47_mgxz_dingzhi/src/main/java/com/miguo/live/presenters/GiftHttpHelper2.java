@@ -14,6 +14,7 @@ import com.miguo.live.model.getGiftInfo.RootGiftInfo;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -77,7 +78,7 @@ public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
         params.put("live_record_id", live_record_id);
         params.put("gift_num", gift_num);
         params.put("gift_id", gift_id);
-        params.put("method", LiveConstants.POST_GIFT_INFO);
+        params.put("method", LiveConstants.GET_GIFT_INFO);
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
@@ -94,7 +95,9 @@ public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        onSuccess(mView2,responseBody);
+                        List<String> data=new ArrayList<String>();
+                        data.add(responseBody);
+                        onSuccess(mView2,LiveConstants.POST_GIFT_INFO,data);
                     }
                 });
 

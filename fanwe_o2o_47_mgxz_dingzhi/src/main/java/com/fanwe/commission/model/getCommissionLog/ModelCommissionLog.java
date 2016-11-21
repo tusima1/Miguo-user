@@ -39,6 +39,37 @@ public class ModelCommissionLog {
     private String order_id;;
     private String order_sn;
     private String before_money;
+    private String jump_id;
+    private String order_id_item;
+    private int jump_type;
+
+    public boolean isJumpToGoodsDetail(){
+        return getJump_type() == 1;
+    }
+
+    public String getJump_id() {
+        return jump_id;
+    }
+
+    public void setJump_id(String jump_id) {
+        this.jump_id = jump_id;
+    }
+
+    public int getJump_type() {
+        return jump_type;
+    }
+
+    public void setJump_type(int jump_type) {
+        this.jump_type = jump_type;
+    }
+
+    public String getOrder_id_item() {
+        return order_id_item;
+    }
+
+    public void setOrder_id_item(String order_id_item) {
+        this.order_id_item = order_id_item;
+    }
 
     public String getOrder_sn() {
         return order_sn;

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/adapter_super_video_layout"
+        android:layout_width="match_parent"
+        android:layout_height="210dp">
+
+        <FrameLayout
+            android:id="@+id/adapter_super_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/adapter_player_control"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#30000000"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/iv_cover_view_video_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/tv_title_view_video_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="喝红酒有几种杯子"
+                android:textColor="#fffefe"
+                android:textSize="@dimen/dp18"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="@dimen/dp17"
+                android:layout_height="@dimen/dp17"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp7"
+                android:layout_toLeftOf="@+id/tv_title_view_video_player"
+                android:src="@drawable/ic_play_view_video" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

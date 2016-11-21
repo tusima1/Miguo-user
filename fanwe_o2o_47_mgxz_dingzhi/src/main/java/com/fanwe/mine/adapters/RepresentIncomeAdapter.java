@@ -1,6 +1,8 @@
 package com.fanwe.mine.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,10 @@ import android.widget.TextView;
 import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.GoodsDetailActivity;
 import com.handmark.pulltorefresh.library.PinnedSectionListView;
+import com.miguo.definition.IntentKey;
+import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.List;
 
@@ -49,7 +54,7 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Holder mHolder = null;
         if (null == convertView) {
             mHolder = new Holder();
@@ -67,6 +72,25 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             mHolder = (Holder) convertView.getTag();
         }
         setData(mHolder, position);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ModelCommissionLog currModle;
+                currModle = datas.get(position);
+                if(TITLE == currModle.getType()){
+                    return;
+                }
+
+                if(currModle.isJumpToGoodsDetail() && !TextUtils.isEmpty(currModle.getJump_id())){
+                    Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                    intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID, currModle.getJump_id());
+                    BaseUtils.jumpToNewActivity((Activity) mContext, intent);
+                }
+
+            }
+        });
+
         return convertView;
     }
 

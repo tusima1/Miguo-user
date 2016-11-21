@@ -1183,12 +1183,12 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
             public void onSuccessResponse(String responseBody) {
                 Root root = JSON.parseObject(responseBody, Root.class);
                 String statusCode = root.getStatusCode();
-                String token = root.getToken();
+
                 if ("200".equals(statusCode)) {
 
                 } else{
-                    MGToast.showToast("主播房间已关闭");
-                    mLiveView.tokenInvalidateAndQuit();
+//                    MGToast.showToast("主播房间已关闭");
+//                    mLiveView.tokenInvalidateAndQuit();
                 }
             }
         });

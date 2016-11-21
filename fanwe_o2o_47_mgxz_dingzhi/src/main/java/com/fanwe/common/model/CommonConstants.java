@@ -15,4 +15,9 @@ public class CommonConstants {
      */
     public static final String INTERESTING = "Interesting";
 
+    /**
+     * 取当前用户的分销等级。
+     */
+    public static final  String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
+
 }

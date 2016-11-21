@@ -1,6 +1,7 @@
 package com.fanwe.shoppingcart.presents;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
@@ -107,17 +108,21 @@ public class OutSideShoppingCartHelper extends Presenter {
                 if(mCallbackView == null){
                     return;
                 }
-                Root root = JSON.parseObject(responseBody, Root.class);
-                String statusCode = root.getStatusCode();
-                String message = root.getMessage();
-                if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
-                    if(mCallbackView!=null) {
-                        mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                try {
+                    Root root = JSON.parseObject(responseBody, Root.class);
+                    String statusCode = root.getStatusCode();
+                    String message = root.getMessage();
+                    if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
+                        if (mCallbackView != null) {
+                            mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                        }
+                    } else {
+                        if (mCallbackView != null) {
+                            mCallbackView.onFailue(message);
+                        }
                     }
-                } else {
-                    if(mCallbackView!=null) {
-                        mCallbackView.onFailue(message);
-                    }
+                }catch (Exception e){
+                    Log.e("exception",e.getLocalizedMessage());
                 }
             }
 

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="43dp">
 
         <LinearLayout
             android:layout_centerInParent="true"
@@ -25,8 +25,8 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingLeft="17dp"
+                android:paddingRight="16dp">
 
                 <TextView
                     android:id="@+id/frag_home_title_bar_tv_earn"
@@ -49,7 +49,7 @@
             <RelativeLayout
                 android:id="@+id/frag_home_title_bar_ll_search"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="23dp"
                 android:layout_gravity="center_vertical"
                 android:layout_toRightOf="@+id/frag_home_title_bar_ll_earn"
                 android:layout_weight="1"
@@ -72,7 +72,7 @@
                     android:layout_toRightOf="@+id/frag_home_title_bar_iv_search"
                     android:text="输入商户名、地点"
                     android:textColor="@color/c_CCCCCC"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
                 <ImageView
                     android:visibility="visible"
@@ -94,12 +94,12 @@
                 android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:paddingLeft="14dp"
+                android:paddingRight="17dp">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
                     android:gravity="center"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_message_home_title_v2" />

@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getHostAuthTime.ModelHostAuthTime;
 import com.miguo.live.model.getHostAuthTime.ResultHostAuthTime;
@@ -106,9 +107,8 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
                         ResultHostAuthTime resultHostAuthTime = resultHostAuthTimes.get(0);
                         List<ModelHostAuthTime> modelHostAuthTimes = resultHostAuthTime.getBody();
                         if (!SDCollectionUtil.isEmpty(modelHostAuthTimes)) {
-                            long currTime = System.currentTimeMillis();
                             modelHostAuthTime = modelHostAuthTimes.get(0);
-                            tempTime = currTime - Long.valueOf(modelHostAuthTime.getInsert_time());
+                            tempTime = DataFormat.toLong(modelHostAuthTime.getSystem_time()) - DataFormat.toLong(modelHostAuthTime.getInsert_time());
                             Message msg = new Message();
                             msg.what = 0;
                             mHandler.sendMessage(msg);
@@ -140,6 +140,9 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
                         startActivity(new Intent(LiveStartAuthActivity.this, LiveStartActivity.class));
                         finish();
                     } else {
+                        if (tempTime < 0) {
+                            return;
+                        }
                         // 设置开始时间
                         chronometer.setBase(SystemClock.elapsedRealtime() - tempTime);
                         // 开始记时

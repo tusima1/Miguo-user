@@ -251,6 +251,11 @@ public class AppRuntimeWorker {
         return "";
     }
 
+    public static String getCityNameInPy(){
+        String name = getCity_name();
+        return getCityPyByCityName(name);
+    }
+
     /**
      * 设置当前城市，也会设置当前城市id
      *

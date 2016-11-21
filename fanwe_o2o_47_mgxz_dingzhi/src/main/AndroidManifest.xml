@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.fanwe.o2o.miguo"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:installLocation="auto"
-          android:versionCode="2016111501"
-          android:versionName="6.0.33">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.fanwe.o2o.miguo"
+    android:installLocation="auto"
+    android:versionCode="2016111803"
+    android:versionName="6.0.34">
 
     <uses-sdk
         android:minSdkVersion="12"
@@ -1121,6 +1121,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.fanwe.seller.views.SpecialTopicActivity"
+            android:theme="@style/Transparent_title_area"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"/>
         <activity android:name="com.miguo.live.views.TestLiveActivity">

@@ -2,6 +2,6 @@
 <resources>
 
     <integer name="heart_anim_bezier_factor">6</integer>
-    <integer name="anim_duration">3000</integer>
+    <integer name="anim_durationFanwe">3000</integer>
 
 </resources>

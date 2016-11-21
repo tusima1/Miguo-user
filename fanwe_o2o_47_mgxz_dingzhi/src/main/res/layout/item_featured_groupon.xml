@@ -22,7 +22,7 @@
         android:layout_marginRight="@dimen/dp12"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="杭州知名人气日料店 航空直运生鲜一品日料精髓"
+        android:text=""
         android:textColor="@color/c_232323"
         android:textSize="@dimen/dp16" />
 
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp5"
             android:layout_toLeftOf="@+id/tv_price_tuan_item_featured_groupon"
-            android:text="104.00元"
+            android:text=""
             android:textColor="@color/text_base_color"
             android:textSize="@dimen/dp12" />
     </RelativeLayout>

@@ -186,7 +186,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     FeaturedGrouponCategory featuredGrouponCategory;
 
     boolean hasTop = true;
-    int topHeight = dip2px(150);
+    int topHeight = dip2px(206);
 
     boolean touchDisableMove = false;
 
@@ -254,7 +254,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     private void initDefaultCity(){
-        citySayHi.setText(AppRuntimeWorker.getCity_name());
+        citySayHi.setText(AppRuntimeWorker.getCityNameInPy());
         city.setText(AppRuntimeWorker.getCity_name());
     }
 
