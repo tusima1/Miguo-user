@@ -128,8 +128,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
-                getCategory().loadCompleteWithLoadmore();
                 updateFeaturedGrouponViewHeight();
+                getCategory().loadCompleteWithLoadmore();
             }
         });
     }
@@ -144,14 +144,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             public void run() {
                 featuredTitleLayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
-                adapter.notifyDataSetChangedLoadmore(list);
                 if(SDCollectionUtil.isEmpty(list)){
                     getCategory().loadCompleteWithNoData();
                     setNodata(true);
                 }else {
+                    adapter.notifyDataSetChangedLoadmore(list);
                     getCategory().loadCompleteWithLoadmore();
+                    updateFeaturedGrouponViewHeight();
                 }
-                updateFeaturedGrouponViewHeight();
             }
         });
     }

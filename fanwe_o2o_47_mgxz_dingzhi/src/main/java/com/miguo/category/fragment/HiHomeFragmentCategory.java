@@ -260,7 +260,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void onRefreshAfter(){
-        clearPage();
+//        clearPage();
         onRefreshGreeting();
         onRefreshTimeLimit();
         onRefreshAdspaceList();
@@ -328,6 +328,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void initHomeADView2(List<AdspaceListBean.Result.Body> body){
         homeADView2.setVisibility(SDCollectionUtil.isEmpty(body) ? View.GONE : View.VISIBLE);
+        homeAdView2SpaceLayout.setVisibility(SDCollectionUtil.isEmpty(body) ? View.GONE : View.VISIBLE);
         homeADView2.init(body);
     }
 
@@ -837,6 +838,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getAdspaceListError() {
+        homeADView2.setVisibility(View.GONE);
         loadComplete();
     }
 

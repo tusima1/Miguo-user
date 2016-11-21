@@ -138,15 +138,6 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="#21000000" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:background="@color/c_F2F2F2" />
 
                     <com.miguo.ui.view.HomeTagsView
                         android:id="@+id/home_tags_view"
@@ -155,13 +146,6 @@
                     </com.miguo.ui.view.HomeTagsView>
 
                 </LinearLayout>
-
-
-
-
-
-
-
 
                 <LinearLayout
                     android:id="@+id/home_ad_view_2_space_layout"
@@ -176,7 +160,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="5dp"
+                        android:layout_height="10dp"
                         android:background="@color/c_F2F2F2" />
 
                 </LinearLayout>

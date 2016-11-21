@@ -197,7 +197,7 @@ public class RecyclerBounceScrollView extends ScrollView{
 
 //                    LogUtil.d(tag, "distance: " + distance);
 
-                    if(Math.abs(distance) > dip2px(30)){
+                    if(Math.abs(distance) > dip2px(30) && (getCurrentTop() + 0 + getMeasuredHeight()) > getChildAt(0).getMeasuredHeight()){
                         onScrollToEnd();
                     }
                 }
@@ -229,7 +229,6 @@ public class RecyclerBounceScrollView extends ScrollView{
                     return true;
                 }
                 break;
-
         }
         return super.onInterceptTouchEvent(ev);
     }
