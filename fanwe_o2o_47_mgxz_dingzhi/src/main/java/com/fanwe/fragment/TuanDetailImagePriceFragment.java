@@ -205,7 +205,7 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
         shoppingCartInfo.setTitle(mDealModel.getSub_name());
         shoppingCartInfo.setBuyFlg(mDealModel.getTime_status()+"");
 
-        LocalShoppingcartDao.insertModel(shoppingCartInfo);
+        LocalShoppingcartDao.insertSingleNum(shoppingCartInfo);
     }
 
     private void clickBuyGoods() {

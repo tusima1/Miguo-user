@@ -164,7 +164,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         mShoppingCartInfo.setOrigin_price("");
         mShoppingCartInfo.setTuan_price("");
         mShoppingCartInfo.setTitle("");
-        LocalShoppingcartDao.insertModel(mShoppingCartInfo);
+        LocalShoppingcartDao.insertSingleNum(mShoppingCartInfo);
         addToShoppingCartSuccess();
     }
 

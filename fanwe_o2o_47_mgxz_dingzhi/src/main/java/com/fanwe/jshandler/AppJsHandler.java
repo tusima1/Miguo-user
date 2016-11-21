@@ -237,59 +237,12 @@ public class AppJsHandler extends BaseJsHandler {
 					"1",
 					"1");
 		} else {
-			if(LocalShoppingcartDao.insertModel(cartInfo)){
+			if(LocalShoppingcartDao.insertSingleNum(cartInfo)){
 				goLogin();
 			}
 		}
-
 	}
 
-//	/**
-//	 * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
-//	 *
-//	 * @param productId
-//	 * @param userId
-//	 */
-//	@JavascriptInterface
-//	public void addCart(String productId, String userId) {
-//		// 保存购物车
-//		checkLogin();
-//		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
-//		cartInfo.setNumber("1");
-//		cartInfo.setPro_id(productId);
-//		cartInfo.setFx_user_id(userId);
-//
-//
-//		if (ifLogin) {
-//			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
-//				@Override
-//				public void onSuccess(String responseBody) {
-//
-//				}
-//
-//				@Override
-//				public void onSuccess(String method, List datas) {
-//
-//				}
-//
-//				@Override
-//				public void onFailue(String responseBody) {
-//
-//				}
-//
-//				@Override
-//				public void onFailue(String method, String responseBody) {
-//
-//				}
-//			});
-//			List<ShoppingCartInfo> listModel = new ArrayList<>();
-//			  listModel.add(cartInfo);
-//			outSideShoppingCartHelper.multiAddShopCart(listModel);
-//		} else {
-//			LocalShoppingcartDao.insertModel(cartInfo);
-//		}
-//		goCart();
-//	}
 
 
 	public void checkLogin() {

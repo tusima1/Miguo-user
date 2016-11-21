@@ -123,7 +123,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
         shoppingCartInfo.setTitle(currStoreIn_list.getSub_name());
         shoppingCartInfo.setBuyFlg(currStoreIn_list.getTime_status() + "");
 
-        LocalShoppingcartDao.insertModel(shoppingCartInfo);
+        LocalShoppingcartDao.insertSingleNum(shoppingCartInfo);
     }
 
     private void clickBuyGoods(int position) {
