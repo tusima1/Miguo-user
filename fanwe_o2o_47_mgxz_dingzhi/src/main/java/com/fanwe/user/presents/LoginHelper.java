@@ -555,7 +555,7 @@ public class LoginHelper extends Presenter {
 
                 }
             });
-            helper.multiAddShopCart(list);
+            helper.multiAddShopCart(list,false);
         }
     }
 

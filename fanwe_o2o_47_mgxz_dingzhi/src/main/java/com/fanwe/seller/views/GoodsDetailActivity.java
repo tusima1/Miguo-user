@@ -894,8 +894,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             MGToast.showToast("添加购物车失败!");
             return;
         }
-        mTvBuy.onFinish();
         LocalShoppingcartDao.insertSingleNum(mShoppingCartInfo);
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvBuy.onFinish();
+            }
+        });
     }
 
     public void goToShopping() {

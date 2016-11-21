@@ -423,7 +423,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void returnToLastActivity() {
         currentGoTo = 2;
         if (ifLogin) {
-            outSideShoppingCartHelper.multiAddShopCart(listModel);
+            outSideShoppingCartHelper.multiAddShopCart(listModel,true);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
         }
@@ -441,7 +441,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             }
             dialog.show();
             //添加购物车调用接口
-            outSideShoppingCartHelper.multiAddShopCart(listModel);
+            outSideShoppingCartHelper.multiAddShopCart(listModel,true);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
             gotoLogin();

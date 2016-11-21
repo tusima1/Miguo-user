@@ -7,12 +7,14 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
+import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.model.getAttentionFans.ResultFans;
 import com.fanwe.user.model.getAttentionFans.RootFans;
 import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
@@ -56,6 +58,7 @@ import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.model.putAttention.ResultAttention;
 import com.fanwe.user.model.putAttention.RootAttention;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.getLiveListNew.ModelResultLive;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
@@ -67,7 +70,9 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -281,9 +286,13 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         });
                     }
                 } else {
+                    if(mView==null){
+                        return;
+                    }
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             mView.onFailue("没有请求到数据!");
                         }
                     });
@@ -425,6 +434,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                     ResultNameCardQR resultNameCardQR = result.get(0);
                     if (resultNameCardQR != null) {
                         final List<ModelNameCardQR> body = resultNameCardQR.getBody();
+
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -433,6 +443,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         });
                     }
                 } else {
+                    if(mView==null){
+                        return;
+                    }
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -444,6 +457,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if(mView==null){
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -468,8 +484,8 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 RootGetUserUpgradeOrder root = gson.fromJson(responseBody,
                         RootGetUserUpgradeOrder.class);
                 List<ResultGetUserUpgradeOrder> results = root.getResult();
-                if (SDCollectionUtil.isEmpty(results)) {
-                    onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_GET, null);
+                if (SDCollectionUtil.isEmpty(results)||!"200".equals(root.getStatusCode())) {
+                    onFailure2(mView, UserConstants.USER_UPGRADE_ORDER_GET);
                     return;
                 }
                 List<ModelGetUserUpgradeOrder> items = results.get(0).getBody();
@@ -478,7 +494,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+                onFailure2(mView, UserConstants.USER_UPGRADE_ORDER_GET);
             }
         });
     }
@@ -510,7 +526,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+//                MGToast.showToast(message);
             }
         });
     }
@@ -712,6 +728,10 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if(mView==null){
+                    return;
+                }
+
                 mView.onFinish(UserConstants.ATTENTION_FOCUS);
             }
         });
@@ -750,6 +770,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if(mView==null){
+                    return;
+                }
                 mView.onFinish(UserConstants.SHOP_AND_USER_COLLECT);
             }
         });
@@ -793,6 +816,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         return;
                     }
                 }
+                if(mView==null){
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -832,6 +858,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         return;
                     }
                 }
+                if(mView==null){
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -842,6 +871,9 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if(mView==null){
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -973,6 +1005,38 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 取当前用户的分销等级。
+     */
+    public void getUserLevel(){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("method", UserConstants.USER_DISTRIBUTION_LEVEL);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if ("200".equals(status)){
+                    List<HashMap<String,String>>datas = validateBodyList(root);
+                    onSuccess(mView, UserConstants.USER_DISTRIBUTION_LEVEL,datas);
+                }else
+                {
+                    onFailure2(mView,UserConstants.USER_DISTRIBUTION_LEVEL);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+//                MGToast.showToast(message);
             }
         });
     }
