@@ -239,7 +239,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo info = datas.get(i);
 
-            if (TextUtils.isEmpty(info.getPro_id()) || TextUtils.isEmpty(info.getNumber())) {
+            if (TextUtils.isEmpty(info.getId()) || TextUtils.isEmpty(info.getNumber())) {
                 continue;
             }
 
@@ -247,7 +247,7 @@ public class OutSideShoppingCartHelper extends Presenter {
                 continue;
             }
             fx_user_ids.append(info.getFx_user_id() == null ? "" : info.getFx_user_id() + ",");
-            goods_ids.append(info.getPro_id() + ",");
+            goods_ids.append(info.getId() + ",");
             cart_types.append("1,");
             add_goods_num.append(info.getNumber() + ",");
         }

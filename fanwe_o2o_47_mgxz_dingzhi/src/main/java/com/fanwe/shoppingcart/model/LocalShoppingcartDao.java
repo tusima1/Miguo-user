@@ -31,9 +31,11 @@ public class LocalShoppingcartDao {
                 ShoppingCartInfo shoppingCartInfo = cartInfos.get(i);
 //                if(shoppingCartInfo.getId() != null && shoppingCartInfo.getId().equals(model.getId())){
                 if(shoppingCartInfo.getId() != null && shoppingCartInfo.getId().equals(model.getId())){
+                    shoppingCartInfo = model;
                     int number = SDFormatUtil.stringToInteger(model.getNumber());
                     int number2=SDFormatUtil.stringToInteger(shoppingCartInfo.getNumber());
-                    shoppingCartInfo.setNumber((number + number2)+"");
+                    model.setNumber((number + number2)+"");
+                    cartInfos.add(i,model);
                     exist = true;
                 }
             }
@@ -69,7 +71,8 @@ public class LocalShoppingcartDao {
             ShoppingCartInfo shoppingCartInfo = cartInfos.get(i);
             if(shoppingCartInfo!=null) {
                 if (shoppingCartInfo.getId().equals(model.getId())) {
-                    cartInfos.remove(model);
+                    cartInfos.remove(i);
+                    System.out.println(cartInfos.size());
                     break;
                 }
             }

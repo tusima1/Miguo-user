@@ -533,27 +533,7 @@ public class LoginHelper extends Presenter {
     public void putLocalShoppingToServer() {
         List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
         if (list != null && list.size() > 0) {
-//            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
-//                @Override
-//                public void onSuccess(String responseBody) {
-//                    App.getInstance().deleteAllShoppingCartInfo();
-//                }
-//
-//                @Override
-//                public void onSuccess(String method, List datas) {
-//                    App.getInstance().deleteAllShoppingCartInfo();
-//                }
-//
-//                @Override
-//                public void onFailue(String responseBody) {
-//
-//                }
-//
-//                @Override
-//                public void onFinish(String method) {
-//
-//                }
-//            });
+
             final OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
                 @Override
                 public void onFailue(String method, String responseBody) {

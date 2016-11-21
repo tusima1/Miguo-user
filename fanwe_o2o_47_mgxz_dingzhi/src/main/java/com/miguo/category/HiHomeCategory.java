@@ -503,7 +503,7 @@ public class HiHomeCategory extends Category implements
      */
     @Override
     public void loginSuccess(UserInfoNew user, String mobile, String password) {
-        Log.e(tag, "login success.. ");
+
         /**
          * 检查是否有兑换码
          */
@@ -520,6 +520,7 @@ public class HiHomeCategory extends Category implements
          * 保存用户信息SharedPreferences
          */
         handlerSaveUser(mobile, password);
+        initJpush();
     }
 
     /**
