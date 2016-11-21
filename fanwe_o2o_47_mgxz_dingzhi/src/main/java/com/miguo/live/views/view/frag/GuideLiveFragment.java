@@ -1,107 +1,108 @@
 package com.miguo.live.views.view.frag;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
-import com.fanwe.app.App;
-import com.fanwe.network.HttpCallback;
-import com.fanwe.network.OkHttpUtil;
+import com.fanwe.customview.tab.ExtTabLayout;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.adapters.GuideLiveOutRVAdapter;
-import com.miguo.model.guidelive.GuideOutModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * Created by didik on 2016/11/16.
  */
 
 public class GuideLiveFragment extends BaseFragment {
+    private SimpleFragmentPagerAdapter pagerAdapter;
+    private ViewPager viewPager;
+    private ExtTabLayout tabLayout;
 
-    private RecyclerView mRV;
-    private View mEmptyLayout;
-//    private LinearLayout ll_root_Layout;
+    private ArrayList<String> tags=new ArrayList<>();
 
     @Override
     protected int setLayoutResId() {
-        return R.layout.frag_guide_live;
+        return R.layout.activity_test_live;
     }
 
     @Override
     protected void initView(View content) {
-        mRV = (RecyclerView) content.findViewById(R.id.recyclerview);
-        mEmptyLayout = content.findViewById(R.id.common_empty);
-//        ll_root_Layout = (LinearLayout) content.findViewById(R.id.ll_root);
+        viewPager = (ViewPager) content.findViewById(R.id.viewpager);
+        tabLayout = (ExtTabLayout) content.findViewById(R.id.tab);
     }
 
     @Override
     protected void startFlow() {
-        requestGuideLives();
+        bindDataView();
+    }
+
+    @Override
+    protected boolean getBundleData(Bundle args) {
+        if (args ==null)return false;
+        try {
+            tags = (ArrayList<String>) args.getSerializable("tags");
+        } catch (Exception e) {
+            Log.e("test",e.toString());
+        }
+        boolean a=!(tags == null || tags.size() <=0 );
+        Log.e("test","tags: "+a);
+        return a;
     }
 
     private void bindDataView() {
-        //        addActGuideLayout();
-        List<GuideOutModel> data=new ArrayList<>();
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        data.add(new GuideOutModel());
-        GuideLiveOutRVAdapter adapter=new GuideLiveOutRVAdapter();
-        adapter.setEmptyLayout(mEmptyLayout);
-        adapter.setData(data);
-        mRV.setHasFixedSize(true);
-        mRV.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        mRV.setAdapter(adapter);
+        pagerAdapter = new SimpleFragmentPagerAdapter(getActivity().getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(ExtTabLayout.MODE_SCROLLABLE);
     }
 
-//    private void addActGuideLayout() {
-//        ActGuideLayout mGuideLayout=new ActGuideLayout(getContext());
-//        ll_root_Layout.addView(mGuideLayout);
-//    }
 
+    public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
+        private String tabTitles[] = new String[]{"tab1","tab2","tab3","tab4","tab5","tab6","tab7"};
+        private List<GuidePagerFragment> pagers=new ArrayList<>();
 
+        public SimpleFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    private void requestGuideLives(){
-        TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("token", App.getInstance().getToken());
-        params.put("tab_id", "");
-        params.put("page_size", "10");
-        params.put("page", "1");
-        params.put("method", "InterestingGuideVideo");
-        OkHttpUtil.getInstance().get(params, new HttpCallback() {
-            @Override
-            public void onSuccess(String response) {
-                super.onSuccess(response);
-                Log.e("test",response);
+        @Override
+        public Fragment getItem(int position) {
+            int size = pagers.size();
+            if (size -1 < position){
+                GuidePagerFragment guidePagerFragment = GuidePagerFragment.newInstance
+                        (tabTitles[position]);
+                pagers.add(guidePagerFragment);
+                Log.e("test","new fragment :" +position);
             }
+            return pagers.get(position);
+        }
 
-            @Override
-            public void onFinish() {
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            return super.instantiateItem(container, position);
+        }
 
-            }
-        });
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
     }
 
 }

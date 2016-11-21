@@ -24,12 +24,17 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
         content = inflater.inflate(setLayoutResId(), container, false);
-        initView(content);
-        startFlow();
+        if (getBundleData(getArguments())){
+            initView(content);
+            startFlow();
+        }
         return content;
     }
 
     protected abstract int setLayoutResId();
     protected abstract void initView(View content);
     protected abstract void startFlow();
+    protected boolean getBundleData(Bundle args){
+        return true;
+    }
 }

@@ -5,16 +5,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
 
 import com.fanwe.app.App;
-import com.fanwe.customview.tab.ExtTabLayout;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.live.views.view.frag.GuideLiveFragment;
 import com.miguo.live.views.view.frag.GuidePagerFragment;
 import com.miguo.model.GuideTags;
 
@@ -24,25 +23,39 @@ import java.util.TreeMap;
 
 public class TestLiveActivity extends AppCompatActivity {
 
-    private SimpleFragmentPagerAdapter pagerAdapter;
-    private ViewPager viewPager;
-    private ExtTabLayout tabLayout;
+    private ArrayList<String> tags=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_live);
+        setContentView(R.layout.act_normal_test);
+        addData();
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        GuideLiveFragment guideLiveFragment = new GuideLiveFragment();
+        Bundle args=new Bundle();
+        args.putSerializable("tags",tags);
+        guideLiveFragment.setArguments(args);
+        supportFragmentManager.beginTransaction().add(R.id.frag_guide_live,guideLiveFragment).commit();
 
-//        FragmentManager supportFragmentManager = getSupportFragmentManager();
-//        supportFragmentManager.beginTransaction().add(R.id.activity_test_live,new GuideLiveFragment()).commit();
+//        pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), this);
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        viewPager.setAdapter(pagerAdapter);
+//        tabLayout = (ExtTabLayout) findViewById(R.id.tab);
+//        tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.setTabMode(ExtTabLayout.MODE_SCROLLABLE);
+//        requestTags();
+    }
 
-        pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), this);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(pagerAdapter);
-        tabLayout = (ExtTabLayout) findViewById(R.id.tab);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabMode(ExtTabLayout.MODE_SCROLLABLE);
-        requestTags();
+    private void addData() {
+        tags.add("tab1");
+        tags.add("tab2");
+        tags.add("tab3");
+        tags.add("tab4");
+        tags.add("tab5");
+        tags.add("tab6");
+        tags.add("tab7");
+        tags.add("tab8");
+        tags.add("tab9");
     }
 
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
