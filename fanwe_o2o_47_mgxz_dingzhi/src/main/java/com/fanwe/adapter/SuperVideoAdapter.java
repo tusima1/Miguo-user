@@ -6,13 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.model.guidelive.GuideOutModel;
+import com.miguo.ui.view.ActGuideLayout;
+import com.miguo.ui.view.interf.ExpandListener;
+import com.miguo.ui.view.interf.ExpandStatus;
 import com.superplayer.library.utils.SuperPlayerUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,9 +29,12 @@ import java.util.List;
  */
 public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.VideoViewHolder> {
     private final Context mContext;
-    private List<VideoListBean> dataList;
+    private List<GuideOutModel> preData =new ArrayList<>();
+    private int page =1;
+    private List<GuideOutModel> dataList=new ArrayList<>();
+    private View emptyLayout;
 
-    public SuperVideoAdapter(Context context, List<VideoListBean> dataList) {
+    public SuperVideoAdapter(Context context, List<GuideOutModel> dataList) {
         this.mContext = context;
         this.dataList = dataList;
     }
@@ -38,11 +48,32 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(SuperVideoAdapter.VideoViewHolder holder, int position) {
-        VideoListBean bean = dataList.get(position);
-        SDViewBinder.setTextView(holder.tvTitle, bean.getTitleName(), "");
-        SDViewBinder.setImageView(bean.getCoverUrl(), holder.ivCover);
+    public void onBindViewHolder(final SuperVideoAdapter.VideoViewHolder holder, int position) {
+        final GuideOutModel outModel = dataList.get(position);
+        //            "extend":"",//扩展子u按
+//            "img":"图片",//封面图
+//            "create_time":"111111111",
+//            "is_effect":"1",
+//            "id":"主键",
+//            "video":"视频地址",
+//            "sort":"1",
+//            "title":"标题",
+//            "descript":"描述"
+        SDViewBinder.setTextView(holder.tvTitle, outModel.getDescript(), "");
+        SDViewBinder.setImageView(outModel.getImg(), holder.ivCover);
         holder.update(position);
+        holder.act_guide.bindData(null,outModel.getStatus());
+        holder.act_guide.setExpandListener(new ExpandListener() {
+            @Override
+            public void expandStart() {
+                outModel.setStatus(ExpandStatus.EXPANDED);
+            }
+
+            @Override
+            public void shrinkStart() {
+                //TODO nothing
+            }
+        });
     }
 
     @Override
@@ -55,15 +86,17 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
         private RelativeLayout rlayPlayer;
         private ImageView ivCover;
         private TextView tvTitle;
+        private ActGuideLayout act_guide;
 
         public VideoViewHolder(View itemView) {
             super(itemView);
+            act_guide = (ActGuideLayout) itemView.findViewById(R.id.act_guide);
             rlayPlayerControl = (RelativeLayout) itemView.findViewById(R.id.adapter_player_control);
             rlayPlayer = (RelativeLayout) itemView.findViewById(R.id.adapter_super_video_layout);
             ivCover = (ImageView) itemView.findViewById(R.id.iv_cover_view_video_player);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title_view_video_player);
             if (rlayPlayer != null) {
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) rlayPlayer.getLayoutParams();
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) rlayPlayer.getLayoutParams();
                 layoutParams.height = (int) (SuperPlayerUtils.getScreenWidth((Activity) mContext) * 0.5652f);//这值是网上抄来的，我设置了这个之后就没有全屏回来拉伸的效果，具体为什么我也不太清楚
                 rlayPlayer.setLayoutParams(layoutParams);
             }
@@ -89,6 +122,64 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
 
     public interface onPlayClick {
         void onPlayclick(int position, RelativeLayout image);
+    }
+
+    /****************** 刷新 ********************/
+    private void clear(){
+        preData.clear();
+        dataList.clear();
+    }
+    public void setEmptyLayout(View emptyView){
+        this.emptyLayout=emptyView;
+    }
+
+    public void setData(List<GuideOutModel> body) {
+        if (page==1){
+            clear();
+        }
+        if (compareOldNewData(body)){
+            notifyDataSetChanged();
+        }else {
+            preData.clear();
+            SDToast.showToast("没有更多数据");
+        }
+        toggleEmptyLayout();
+    }
+    protected void toggleEmptyLayout(){
+        if (emptyLayout==null)return;
+        if (dataList.isEmpty() && emptyLayout.getVisibility()==View.GONE){
+            emptyLayout.setVisibility(View.VISIBLE);
+        }else if (!dataList.isEmpty() && emptyLayout.getVisibility()==View.VISIBLE){
+            emptyLayout.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     *
+     * @param news 新数据集
+     * @return false 没有新数据
+     *          true 有新数据
+     */
+    private boolean compareOldNewData(List<GuideOutModel> news){
+        if (news ==null)return false;
+        if (news.isEmpty())return false;
+        if (news.size() ==10){
+            page++;
+            dataList.addAll(news);
+        }else {
+            dataList.removeAll(preData);
+            dataList.addAll(news);
+            preData.clear();
+            preData.addAll(news);
+        }
+        return true;
+    }
+    public int getRequestPage(){
+        return page;
+    }
+
+    public void resetPage(){
+        page=1;
     }
 
 }

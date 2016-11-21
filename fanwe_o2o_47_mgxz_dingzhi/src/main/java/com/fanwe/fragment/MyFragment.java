@@ -282,6 +282,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             //TODO 测试部分 佣金提现
 //            startActivity(WalletActivity.class);
             startActivity(TestLiveActivity.class);
+//            startActivity(SuperVideoRecycleViewActivity.class);
 
         } else if (v == mSuggestion) {
             //建议

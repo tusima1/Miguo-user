@@ -1,7 +1,6 @@
 package com.miguo.live.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,28 +27,6 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
     private int page =1;
     protected List<GuideOutModel> data=new ArrayList<>();
     private View emptyLayout;
-    private int preLivePosition=-2;//之前直播的
-    private RecyclerView mRecyclerView;
-//    private int curPosition=-1;
-//    private HashMap<Integer,List<>>
-
-    public int getPlayingPosition(){
-        return preLivePosition;
-    }
-    public void resetPlayingPosition(){
-        preLivePosition=-2;
-    }
-
-    public void setRecycerView(RecyclerView recycerView){
-        this.mRecyclerView=recycerView;
-    }
-
-    public void setFirstVisiblePosition(int position){
-        Log.e("test","FirstVisiblePosition:"+position);
-        if (preLivePosition == position-1){
-
-        }
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -85,7 +62,6 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
                     default:
                         break;
                 }
-                preLivePosition =position;
             }
         });
         holder.act_guide.bindData(null,outModel.getStatus());
@@ -101,8 +77,6 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
                 //TODO nothing
             }
         });
-        holder.act_guide.setRecycerView(mRecyclerView);
-
     }
 
     @Override
@@ -112,15 +86,10 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
 
 
     private ModelVideoPlayer crateAVModel(GuideOutModel outModel){
-//        private List<ModelRecordFile> fileSet;
-//        private String coverUrl;
-//        private String title;
         ModelVideoPlayer result=new ModelVideoPlayer();
         result.setCoverUrl(outModel.getImg());
         result.setTitle(outModel.getTitle());
         result.setPlayUrl(outModel.getVideo());
-//        List<ModelRecordFile> fileSet=new ArrayList<>();
-//        fileSet.add()
         return  result;
     }
 
