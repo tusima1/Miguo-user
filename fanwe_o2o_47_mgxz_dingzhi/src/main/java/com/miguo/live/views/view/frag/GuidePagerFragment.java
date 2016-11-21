@@ -30,6 +30,7 @@ import java.util.TreeMap;
 public class GuidePagerFragment extends Fragment {
     public static final String PAGE_REQUEST_ID = "page_request_id";
     private String mRequestID="";
+    private View mFragmentView;
     private RecyclerView mRV;
     private View mEmptyLayout;
     private GuideLiveOutRVAdapter adapter;
@@ -52,11 +53,21 @@ public class GuidePagerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.frag_guide_live, container, false);
-        mRV = (RecyclerView) view.findViewById(R.id.recyclerview);
-        mEmptyLayout = view.findViewById(R.id.common_empty);
+        if (null == mFragmentView) {
+            mFragmentView = inflater.inflate(R.layout.frag_guide_live, container, false);
+            mRV = (RecyclerView) mFragmentView.findViewById(R.id.recyclerview);
+            mEmptyLayout = mFragmentView.findViewById(R.id.common_empty);
+        }
         requestGuideLives();
-        return view;
+        return mFragmentView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null !=mFragmentView){
+            ((ViewGroup)(mFragmentView.getParent())).removeView(mFragmentView);
+        }
     }
 
     private void startFlow(List<GuideOutModel> guide_list){

@@ -13,7 +13,7 @@ import com.fanwe.customview.tab.ExtTabLayout;
 import com.fanwe.o2o.miguo.R;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by didik on 2016/11/16.
@@ -25,6 +25,7 @@ public class GuideLiveFragment extends BaseFragment {
     private ExtTabLayout tabLayout;
 
     private ArrayList<String> tags=new ArrayList<>();
+    private FragmentManager fm;
 
     @Override
     protected int setLayoutResId() {
@@ -56,8 +57,10 @@ public class GuideLiveFragment extends BaseFragment {
     }
 
     private void bindDataView() {
-        pagerAdapter = new SimpleFragmentPagerAdapter(getActivity().getSupportFragmentManager());
+        fm = getActivity().getSupportFragmentManager();
+        pagerAdapter = new SimpleFragmentPagerAdapter(fm);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(ExtTabLayout.MODE_SCROLLABLE);
     }
@@ -66,7 +69,7 @@ public class GuideLiveFragment extends BaseFragment {
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
         private String tabTitles[] = new String[]{"tab1","tab2","tab3","tab4","tab5","tab6","tab7"};
-        private List<GuidePagerFragment> pagers=new ArrayList<>();
+        private HashMap<Integer,GuidePagerFragment> pagerMap=new HashMap<>();
 
         public SimpleFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -74,24 +77,27 @@ public class GuideLiveFragment extends BaseFragment {
 
         @Override
         public Fragment getItem(int position) {
-            int size = pagers.size();
-            if (size -1 < position){
-                GuidePagerFragment guidePagerFragment = GuidePagerFragment.newInstance
+            GuidePagerFragment target = pagerMap.get(position);
+            if (target == null){
+                target=GuidePagerFragment.newInstance
                         (tabTitles[position]);
-                pagers.add(guidePagerFragment);
+                pagerMap.put(position,target);
                 Log.e("test","new fragment :" +position);
             }
-            return pagers.get(position);
+            target=pagerMap.get(position);
+            return target;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            return super.instantiateItem(container, position);
+            Fragment fragment = (Fragment) super.instantiateItem(container,  position);
+            fm.beginTransaction().show(fragment).commit();
+            return fragment;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
+            fm.beginTransaction().hide(pagerMap.get(position)).commit();
         }
 
         @Override
