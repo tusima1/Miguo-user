@@ -2,6 +2,7 @@ package com.fanwe.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -89,7 +91,11 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView imple
             imgParams.setMargins(i == 0 ? margionSpaceFirst : margionSpace, 0, i == datas.size() - 1 ? margionSpaceFirst : 0, 0);
             img.setLayoutParams(imgParams);
             img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            SDViewBinder.setImageView(getImagePath(i), img);
+            String url=getImagePath(i);
+            if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+                url = DisplayUtil.qiniuUrlExchange(url,150,100);
+            }
+            SDViewBinder.setImageView(url, img);
             img.setBackgroundColor(getColor(R.color.gray_ee));
             img.setRectAdius((float)dip2px(5));
             img.setOnClickListener(new HomeTuanHorizontalScrollViewListener());

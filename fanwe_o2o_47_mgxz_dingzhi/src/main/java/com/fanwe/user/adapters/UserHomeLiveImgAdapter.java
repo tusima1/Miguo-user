@@ -18,6 +18,7 @@ import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.NetWorkStateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -75,7 +76,13 @@ public class UserHomeLiveImgAdapter extends BaseAdapter {
     private void setData(Holder mHolder, final int position) {
         currModelRoom = datas.get(position);
         SDViewBinder.setTextView(mHolder.tvName, currModelRoom.getLbs().getShop_name(), "");
-        ImageLoader.getInstance().displayImage(currModelRoom.getCover(), mHolder.ivBg);
+        String url=currModelRoom.getCover();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,125,125);
+        }
+
+
+        ImageLoader.getInstance().displayImage(url, mHolder.ivBg);
         SDViewBinder.setTextView(mHolder.tvStatus, LiveUtil.getLiveType(currModelRoom));
         mHolder.tvStatus.setBackgroundResource(LiveUtil.getLiveTypeColor(currModelRoom));
         mHolder.ivBg.setOnClickListener(new View.OnClickListener() {

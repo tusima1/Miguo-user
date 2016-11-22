@@ -462,6 +462,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         switch (method) {
             case UserConstants.PERSONALHOME:
                 modelPersonalHome = (ModelPersonalHome) datas.get(0);
+                mPtrsvAll.onRefreshComplete();
                 bindData();
                 break;
         }

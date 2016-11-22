@@ -2,6 +2,7 @@ package com.miguo.ui.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 import java.util.Random;
@@ -116,7 +118,12 @@ public class HomeADView2 extends BaseHorizantalScrollView{
             }
 
             img.setLayoutParams(imgParams);
-            SDViewBinder.setImageView(getItem(i).getIcon(), img);
+
+            String url =getItem(i).getIcon();
+            if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+                url = DisplayUtil.qiniuUrlExchange(url,400,200);
+            }
+            SDViewBinder.setImageView(url, img);
 
 
             title.setLayoutParams(imgParams);

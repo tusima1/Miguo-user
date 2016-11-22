@@ -23,6 +23,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.entity.HiShopDetailBean;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,9 +106,12 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        if(getItem(position).getImg().contains("http://")){
-            SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
+
+        String url=getItem(position).getImg();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,400,228);
         }
+        SDViewBinder.setImageView(url, getHolder(holder).image);
 
         HiShopDetailBean.Result.Tuan model = getItem(position);
 

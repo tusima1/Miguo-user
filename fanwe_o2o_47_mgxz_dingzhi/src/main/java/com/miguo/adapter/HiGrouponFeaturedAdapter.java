@@ -30,6 +30,7 @@ import com.miguo.entity.model.getFeaturedGroupBuy.Tag;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -109,7 +110,12 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         /**
          * 主图
          */
-        ImageLoader.getInstance().displayImage(getItem(position).getImg(), getHolder(holder).image);
+
+        String url =getItem(position).getImg();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,400,228);
+        }
+        ImageLoader.getInstance().displayImage(url, getHolder(holder).image);
 
         /**
          * 名字

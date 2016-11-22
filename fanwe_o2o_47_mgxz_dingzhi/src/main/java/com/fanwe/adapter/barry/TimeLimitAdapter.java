@@ -24,6 +24,7 @@ import com.fanwe.utils.SDDistanceUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -76,10 +77,12 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        if (getItem(position).getSpecial_icon().contains("http://")) {
-            SDViewBinder.setImageView(getItem(position).getSpecial_icon(), getHolder(holder).image);
-        }
 
+        String url=getItem(position).getSpecial_icon();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,100,100);
+        }
+        SDViewBinder.setImageView(url, getHolder(holder).image);
         getHolder(holder).title.setText(getItem(position).getSpecial_name());
         getHolder(holder).describe.setText(getItem(position).getSpecial_dec());
         getHolder(holder).distance.setText(getDistance(position));
