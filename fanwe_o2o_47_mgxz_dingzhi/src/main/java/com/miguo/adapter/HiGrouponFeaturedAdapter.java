@@ -86,6 +86,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         getHolder(holder).tvName.post(new Runnable() {
             @Override
             public void run() {
+                Log.d(tag, "tvName line count: " + getHolder(holder).tvName.getLineCount());
                 if(getHolder(holder).tvName.getLineCount() > 1){
                     lines.set(position, true);
                     getHolder(holder).tvName.setMaxLines(2);

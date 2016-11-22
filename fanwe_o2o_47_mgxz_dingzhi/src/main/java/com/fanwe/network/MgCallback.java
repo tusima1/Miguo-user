@@ -109,7 +109,7 @@ public abstract class MgCallback<T> implements Callback {
                 onFailure(call,null);
             }
         }
-        onFinishResponse();
+//        onFinishResponse();
     }
 
     private void onSuccessResponseOnMainThread(final String responseBody){
@@ -129,7 +129,7 @@ public abstract class MgCallback<T> implements Callback {
         });
     }
 
-    private void onErrorResponseOnMainThread(final String message,final String errorCode){
+    public void onErrorResponseOnMainThread(final String message,final String errorCode){
         MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {

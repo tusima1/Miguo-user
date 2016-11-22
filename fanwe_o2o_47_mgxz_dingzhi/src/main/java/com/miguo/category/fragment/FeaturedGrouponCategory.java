@@ -41,6 +41,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     FeaturedGrouponDao featuredGrouponDao;
     int pageNum;
 
+    boolean nodata = false;
+
     public FeaturedGrouponCategory(View view, HiBaseFragment fragment){
         super(view ,fragment);
     }
@@ -79,6 +81,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     public void onRefresh(){
         setPageNum(PageSize.BASE_NUMBER_ONE);
+        setNodata(false);
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
@@ -102,6 +105,10 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     }
 
     public void onLoadMore(){
+        if(isNodata()){
+            getCategory().loadCompleteWithNoData();
+           return;
+        }
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
@@ -122,8 +129,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
-                getCategory().loadComplete();
                 updateFeaturedGrouponViewHeight();
+                getCategory().loadCompleteWithLoadmore();
             }
         });
     }
@@ -138,9 +145,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             public void run() {
                 featuredTitleLayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
-                adapter.notifyDataSetChangedLoadmore(list);
-                getCategory().loadComplete();
-                updateFeaturedGrouponViewHeight();
+                if(SDCollectionUtil.isEmpty(list)){
+                    getCategory().loadCompleteWithNoData();
+                    setNodata(true);
+                }else {
+                    adapter.notifyDataSetChangedLoadmore(list);
+                    getCategory().loadCompleteWithLoadmore();
+                    updateFeaturedGrouponViewHeight();
+                }
             }
         });
     }
@@ -157,7 +169,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             public void run() {
                 featuredTitleLayout.setVisibility(View.GONE);
                 clearPage();
-                getCategory().loadComplete();
+                getCategory().loadCompleteWithError();
             }
         });
     }
@@ -178,6 +190,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public boolean isNodata() {
+        return nodata;
+    }
+
+    public void setNodata(boolean nodata) {
+        this.nodata = nodata;
     }
 
     public HiHomeFragmentCategory getCategory(){
