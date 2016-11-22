@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
@@ -16,6 +16,7 @@ import com.miguo.adapter.HiGrouponFeaturedAdapter;
 import com.miguo.dao.FeaturedGrouponDao;
 import com.miguo.dao.impl.FeaturedGrouponDaoImpl;
 import com.miguo.definition.PageSize;
+import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.view.FeaturedGrouponView;

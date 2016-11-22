@@ -75,7 +75,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
             frag.setUserId(user_id);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
-            Log.e("Test",url);
+        //    Log.e("Test",url);
         } else if (intent.hasExtra("id")) {
             //进别人的小店。
             String id = intent.getStringExtra("id");
@@ -91,7 +91,6 @@ public class DistributionStoreWapActivity extends BaseActivity {
             } else {
                 url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id+"/";
             }
-
             frag.setUrl(url);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);

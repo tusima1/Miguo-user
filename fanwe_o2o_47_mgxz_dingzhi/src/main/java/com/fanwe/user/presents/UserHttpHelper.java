@@ -139,7 +139,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test", "responseBody PERSONALHOME:" + responseBody);
+
                 //200为正常的返回 。
                 Gson gson = new Gson();
                 RootPersonalHome rootPersonalHome = gson.fromJson(responseBody, RootPersonalHome
@@ -158,7 +158,8 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                         }
                     }
                 } else {
-                    mView.onFailue(responseBody);
+                    onFailure2(mView,UserConstants.PERSONALHOME);
+
                 }
             }
 

@@ -14,8 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.Tag;
+
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -26,8 +25,11 @@ import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.definition.ClassPath;
+import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+import com.miguo.entity.model.getFeaturedGroupBuy.Tag;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;

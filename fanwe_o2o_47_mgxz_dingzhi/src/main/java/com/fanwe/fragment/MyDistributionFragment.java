@@ -9,7 +9,6 @@ import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
 import com.fanwe.MemberRankActivity;
-import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.WithdrawLogActivity;
 import com.fanwe.adapter.MyDistributionAdapter;
@@ -314,7 +313,7 @@ public class MyDistributionFragment extends BaseFragment
 			
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getActivity(), MyCollectionActivity.class));
+//				startActivity(new Intent(getActivity(), MyCollectionActivity.class));
 			}
 		});
 

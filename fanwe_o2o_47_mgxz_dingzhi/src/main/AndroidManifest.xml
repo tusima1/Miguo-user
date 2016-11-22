@@ -7,8 +7,8 @@
     android:versionName="6.0.35">
 
     <uses-sdk
-        android:minSdkVersion="12"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="14" />
 
     <permission
         android:name="com.fanwe.o2o.miguo.permission.JPUSH_MESSAGE"
@@ -276,11 +276,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 活动 -->
-        <activity
-            android:name="com.fanwe.EventListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
         <!-- 我的活动 -->
         <activity
             android:name="com.fanwe.MyEventListActivity"
@@ -289,12 +284,6 @@
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 活动详情 -->
-        <activity
-            android:name="com.fanwe.EventDetailActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
         <!-- 商家 -->
         <activity
             android:name="com.fanwe.StoreListActivity"
@@ -451,11 +440,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 收藏界面 -->
-        <activity
-            android:name="com.fanwe.MyCollectionActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
         <!-- 商场 -->
         <activity
             android:name="com.fanwe.ShoppingMallActivity"

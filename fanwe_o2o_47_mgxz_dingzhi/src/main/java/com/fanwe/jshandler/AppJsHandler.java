@@ -6,8 +6,7 @@ import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.EventDetailActivity;
-import com.fanwe.EventListActivity;
+
 import com.fanwe.GoodsListActivity;
 import com.fanwe.LoginActivity;
 import com.fanwe.NearbyVipActivity;
@@ -25,7 +24,6 @@ import com.fanwe.app.AppHelper;
 import com.fanwe.constant.Constant.IndexType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.fragment.EventListFragment;
 import com.fanwe.fragment.GoodsListFragment;
 import com.fanwe.fragment.ScoresListFragment;
 import com.fanwe.fragment.StoreListFragment;
@@ -84,8 +82,7 @@ public class AppJsHandler extends BaseJsHandler {
                 intent.putExtra(ScoresListFragment.EXTRA_CATE_ID, id);
                 break;
             case IndexType.EVENT_LIST:
-                intent = new Intent(App.getApplication(), EventListActivity.class);
-                intent.putExtra(EventListFragment.EXTRA_CATE_ID, id);
+
                 break;
             case IndexType.YOUHUI_LIST:
                 intent = new Intent(App.getApplication(), YouHuiListActivity.class);
@@ -103,8 +100,7 @@ public class AppJsHandler extends BaseJsHandler {
                 intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
                 break;
             case IndexType.EVENT_DETAIL:
-                intent = new Intent(App.getApplication(), EventDetailActivity.class);
-                intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, id);
+
                 break;
             case IndexType.YOUHUI_DETAIL:
                 intent = new Intent(App.getApplication(),

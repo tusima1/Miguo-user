@@ -1,6 +1,8 @@
 package com.miguo.view;
 
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+
+
+import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
 
 import java.util.List;
 

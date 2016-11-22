@@ -1,4 +1,4 @@
-package com.fanwe.groupon.model.getFeaturedGroupBuy;
+package com.miguo.entity.model.getFeaturedGroupBuy;
 
 import java.io.Serializable;
 import java.util.List;

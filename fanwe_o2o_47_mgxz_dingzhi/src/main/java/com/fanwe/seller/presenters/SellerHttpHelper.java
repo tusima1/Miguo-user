@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
@@ -65,6 +66,7 @@ import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -581,8 +583,8 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", String.valueOf(pageSize));
         params.put("page", String.valueOf(pageNum));
         params.put("can_endorsement", can_endorsement);
-        params.put("m_latitude", "");
-        params.put("m_latitude", "");
+        params.put("m_latitude", BaiduMapManager.getInstance().getLatitude()+"");
+        params.put("m_latitude", BaiduMapManager.getInstance().getLatitude()+"");
         params.put("method", SellerConstants.BUSINESS_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

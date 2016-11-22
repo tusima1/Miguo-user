@@ -49,6 +49,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
+ *
  * Created by didik on 2016/9/13.
  */
 public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewClickListener,
@@ -322,10 +323,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             intent.putExtras(userData);
             startActivity(intent);
         }
-        /*else if (v== mIvMsg){
-            //消息
-            startActivity(MessageActivity.class);
-        }*/
+
     }
 
     /**
@@ -471,7 +469,11 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onFailue(String responseBody) {
-
+        switch (responseBody) {
+            case UserConstants.PERSONALHOME:
+                mPtrsvAll.onRefreshComplete();
+                break;
+        }
     }
 
     @Override
