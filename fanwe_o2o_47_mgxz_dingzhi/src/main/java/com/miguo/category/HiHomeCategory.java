@@ -29,6 +29,7 @@ import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
+import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -269,8 +270,14 @@ public class HiHomeCategory extends Category implements
         clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
             code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+            if(!TextUtils.isEmpty(code)&&code.length()>=7){
+                if(!StringTool.checkStringPattern(code,StringTool.STRING_NUMBER)){
+                    code = "";
+                }
+            }else{
+                code = "";
+            }
         }
-
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */

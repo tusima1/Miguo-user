@@ -82,7 +82,10 @@ public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mView2.onFailue("####"+message);
+                if(mView2!=null) {
+                    onFailure2(mView2,LiveConstants.POST_GIFT_INFO);
+                    mView2.onFailue("####" + message);
+                }
             }
 
             @Override
