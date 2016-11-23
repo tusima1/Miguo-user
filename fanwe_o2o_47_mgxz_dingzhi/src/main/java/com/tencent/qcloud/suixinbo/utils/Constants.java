@@ -26,20 +26,11 @@ public class Constants {
     public static final String LIVE_ANIMATOR = "live_animator";
     public static final String LOG_LEVEL = "log_level";
 
-//    //
-//    public static final int ACCOUNT_TYPE = 792;
-//    //    //sdk appid 由腾讯分配
-//    public static final int SDK_APPID = 1400001533;
 
-    //    public static final int SDK_APPID = 1400001692;
-//
-//    public static final int ACCOUNT_TYPE = 884;// 用户的账号类型
-    //开发环境
-    public static final int SDK_APPID = 1400018408;//sdkappid,本应用的
     //生产环境
-//    public static final int SDK_APPID = 1400012005;//sdkappid,本应用的
-//    public static final int SDK_APPID = 1252383683 ;//sdkappid,本应用的
-//测试环境 账号。
+    public static final int SDK_APPID = 1400012005;//sdkappid,本应用的
+
+   //测试环境 账号。
    public static final int SDK_APPID_TEST = 1400018408;//sdkappid,本应用的
 
 
