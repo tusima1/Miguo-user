@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -48,7 +49,8 @@ public class HeadTopAdapter extends RecyclerView.Adapter<HeadTopAdapter.ViewHold
         int iconRes = modelAudienceInfo.getIconRes();
         if(modelAudienceInfo!=null){
             if (!TextUtils.isEmpty(modelAudienceInfo.getIcon())){
-                ImageLoader.getInstance().displayImage(modelAudienceInfo.getIcon(),holder.mCIV);
+                String  url = DisplayUtil.qiniuUrlExchange(modelAudienceInfo.getIcon(),60,60);
+                ImageLoader.getInstance().displayImage(url,holder.mCIV);
             }else if (iconRes!=0){
                 Log.e("test","final_res: "+iconRes);
                 holder.mCIV.setImageResource(iconRes);

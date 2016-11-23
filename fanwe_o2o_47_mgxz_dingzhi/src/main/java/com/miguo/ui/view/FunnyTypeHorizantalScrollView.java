@@ -19,6 +19,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.RoundImageView;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
 import com.miguo.live.views.view.FunnyFragment;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -77,7 +78,9 @@ public class FunnyTypeHorizantalScrollView extends BaseHorizantalScrollView{
             RelativeLayout.LayoutParams imgParams = getRelativeLayoutParams(matchParent(), matchParent());
             roundedImageView.setLayoutParams(imgParams);
             roundedImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            SDViewBinder.setImageView(mData.get(i).getImg(), roundedImageView);
+
+            String  url = DisplayUtil.qiniuUrlExchange(mData.get(i).getImg(),60,60);
+            SDViewBinder.setImageView(url, roundedImageView);
             group.addView(roundedImageView);
 
             RoundImageView mask = new RoundImageView(getContext());

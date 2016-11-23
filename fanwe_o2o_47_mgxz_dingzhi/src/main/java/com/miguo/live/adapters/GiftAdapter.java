@@ -11,6 +11,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.interf.GiftListener;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
+import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -46,7 +47,9 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         /*bind data*/
         GiftListBean info = mData.get(position);
-        SDViewBinder.setImageView(info.getIcon(),holder.iv_img);
+
+        String  url = DisplayUtil.qiniuUrlExchange(info.getIcon(),60,60);
+        SDViewBinder.setImageView(url,holder.iv_img);
         holder.tv_name.setText(info.getName());
         holder.tv_price.setText(info.getPrice()+"米果钻");
 

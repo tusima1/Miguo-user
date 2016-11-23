@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.model.LiveChatEntity;
+import com.miguo.utils.DisplayUtil;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.SxbLog;
 
@@ -193,7 +194,8 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
         holder.content.setText(item.getContent());
         String faceUrl = item.getFaceUrl();
         if(!TextUtils.isEmpty(faceUrl)){
-            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(faceUrl,holder.faceUrl);
+            String  url = DisplayUtil.qiniuUrlExchange(faceUrl,60,60);
+            com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(url,holder.faceUrl);
         }else{
             holder.faceUrl.setImageResource(R.drawable.list_empty);
         }

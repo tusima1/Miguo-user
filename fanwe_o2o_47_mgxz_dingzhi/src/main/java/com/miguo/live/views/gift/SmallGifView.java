@@ -24,6 +24,7 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.views.base.BaseLinearLayout;
 import com.miguo.live.views.customviews.RoundedImageView;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -173,7 +174,8 @@ public class SmallGifView extends BaseLinearLayout{
         if(avatarUrl.equals("") || avatarUrl == null){
             avatar.setImageResource(R.drawable.userlogo);
         }else {
-            avatar.setImageURI(Uri.parse(avatarUrl));
+            String  url = DisplayUtil.qiniuUrlExchange(avatarUrl,60,60);
+            avatar.setImageURI(Uri.parse(url));
         }
         left.addView(avatar);
 
