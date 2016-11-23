@@ -14,6 +14,7 @@ import com.baidu.location.BDLocationListener;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -714,13 +715,14 @@ public class HiHomeCategory extends Category implements
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
         int appId = Constants.SDK_APPID;
-
         int ccType = Constants.ACCOUNT_TYPE;
-        Log.e("LoginHelper", "初始化AVSDK");
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
 
-        Log.e("LoginHelper", "初始化AVSDK");
     }
 
     public HiHomeFragment getHomeFragment() {

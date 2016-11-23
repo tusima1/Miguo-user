@@ -1,6 +1,7 @@
 package com.fanwe.adapter;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getGroupBuyCoupon.ModelGroupCoupon;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -34,7 +36,14 @@ public class MyCouponsListAdapter extends SDBaseAdapter<ModelGroupCoupon> {
 
         ModelGroupCoupon model = getItem(position);
         if (model != null) {
-            SDViewBinder.setImageView(model.getIcon(), iv_icon);
+            String url =model.getIcon();
+
+            if(!TextUtils.isEmpty(url)){
+                url = DisplayUtil.qiniuUrlExchange(url,400,228);
+            }
+
+
+            SDViewBinder.setImageView(url, iv_icon);
             SDViewBinder.setTextView(tv_password, model.getPassword());
             SDViewBinder.setTextView(tv_name, model.getName());
             String end_time = model.getEnd_time();

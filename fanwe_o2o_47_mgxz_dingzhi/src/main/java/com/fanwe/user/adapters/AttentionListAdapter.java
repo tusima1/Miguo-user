@@ -1,6 +1,7 @@
 package com.fanwe.user.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -80,7 +82,12 @@ public class AttentionListAdapter extends BaseAdapter {
         } else {
             mHolder.tvStatus.setText("");
         }
-        ImageLoader.getInstance().displayImage(currModle.getIcon(), mHolder.ivIcon);
+
+       String url=currModle.getIcon();
+        if(!TextUtils.isEmpty(url)){
+            url = DisplayUtil.qiniuUrlExchange(url,100,100);
+        }
+        ImageLoader.getInstance().displayImage(url, mHolder.ivIcon);
     }
 
 

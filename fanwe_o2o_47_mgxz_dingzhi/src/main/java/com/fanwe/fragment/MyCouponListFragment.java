@@ -178,4 +178,5 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
         }
 
     }
+
 }

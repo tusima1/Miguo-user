@@ -19,6 +19,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getShopAndUserCollect.Image;
 import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
 import com.miguo.app.HiShopDetailActivity;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -101,7 +102,13 @@ public class CollectListAdapter extends BaseAdapter {
         currModle = datas.get(position);
         SDViewBinder.setTextView(mHolder.tvName, currModle.getShop_name(), "");
         SDViewBinder.setTextView(mHolder.tvNum, "销售量" + currModle.getCons_count() + "  收藏数" + currModle.getColl_count());
-        ImageLoader.getInstance().displayImage(currModle.getIndex_img(), mHolder.ivIcon);
+
+        String url =currModle.getIndex_img();
+
+        if(!TextUtils.isEmpty(url)){
+            url = DisplayUtil.qiniuUrlExchange(url,100,100);
+        }
+        ImageLoader.getInstance().displayImage(url, mHolder.ivIcon);
         List<String> listData = new ArrayList<String>();
         if (!SDCollectionUtil.isEmpty(currModle.getImg_arr())) {
             for (Image img : currModle.getImg_arr()) {

@@ -109,7 +109,7 @@ public abstract class MgCallback<T> implements Callback {
                 onFailure(call,null);
             }
         }
-//        onFinishResponse();
+        onFinishResponse();
     }
 
     private void onSuccessResponseOnMainThread(final String responseBody){

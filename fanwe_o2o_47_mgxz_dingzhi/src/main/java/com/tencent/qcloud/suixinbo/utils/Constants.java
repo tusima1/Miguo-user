@@ -37,9 +37,13 @@ public class Constants {
 
     public static final int SDK_APPID = 1400012005;//sdkappid,本应用的
 //    public static final int SDK_APPID = 1252383683 ;//sdkappid,本应用的
+//测试环境 账号。
+   public static final int SDK_APPID_TEST = 1400018408;//sdkappid,本应用的
+
 
     public static final int ACCOUNT_TYPE = 6410;// 用户的账号类型
-
+    //测试环境 账号类型。
+    public static final int ACCOUNT_TYPE_Test = 8640;// 用户的账号类型
     public static final String ID_STATUS = "id_status";
 
     public static final int HOST = 1;

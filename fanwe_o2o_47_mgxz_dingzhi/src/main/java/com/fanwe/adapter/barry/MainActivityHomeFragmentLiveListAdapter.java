@@ -102,9 +102,8 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         ModelRoom room = (ModelRoom) datas.get(position);
         String url = "";
-        if(!TextUtils.isEmpty(room.getCover())&&room.getCover().startsWith("http://")){
+        if(!TextUtils.isEmpty(room.getCover())){
             url = DisplayUtil.qiniuUrlExchange(room.getCover(),400,228);
-
         }
         SDViewBinder.setImageView(url, getHolder(holder).image);
         getHolder(holder).tvAdd.setText(getShopName(room));

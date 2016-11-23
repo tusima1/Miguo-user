@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.o2o.miguo.R;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMLogLevel;
@@ -104,12 +105,20 @@ public class InitBusinessHelper {
      */
     private static void reLoginIM(String identify, String userSig){
         TIMUser user = new TIMUser();
-        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
-        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+
+        user.setAccountType(String.valueOf(ccType));
+        user.setAppIdAt3rd(String.valueOf(appId));
         user.setIdentifier(identify);
         //发起登录请求
         TIMManager.getInstance().login(
-                Constants.SDK_APPID,
+                appId,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
                 new TIMCallBack() {
@@ -161,12 +170,16 @@ public class InitBusinessHelper {
      * @param context
      */
     public static void initTls(Context context) {
-        mLoginHelper = TLSLoginHelper.getInstance().init(context, Constants.SDK_APPID, Constants.ACCOUNT_TYPE, appVer);
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+        mLoginHelper = TLSLoginHelper.getInstance().init(context, appId, ccType, appVer);
         mLoginHelper.setTimeOut(5000);
-        mAccountHelper = TLSAccountHelper.getInstance().init(context, Constants.SDK_APPID, Constants.ACCOUNT_TYPE, appVer);
+        mAccountHelper = TLSAccountHelper.getInstance().init(context, appId, ccType, appVer);
         mAccountHelper.setTimeOut(5000);
-//      MySelfInfo.getInstance().setId(id);
-//      MySelfInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
     }
 
 }

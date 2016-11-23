@@ -33,6 +33,7 @@ import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.GiftId;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -477,11 +478,15 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
         int appId = Constants.SDK_APPID;
-
         int ccType = Constants.ACCOUNT_TYPE;
+
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
-        Log.e("liveActivity", "初始化AVSDK");
+
     }
 
     private Handler mHandler = new Handler(new Handler.Callback() {

@@ -41,6 +41,7 @@ import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.DisplayUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -164,7 +165,13 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			SDViewUtil.setViewHeight(iv_image, height);
 			tv_title.setText(model.getTitle());
 			tv_originalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-			SDViewBinder.setImageView(iv_image, model.getImg());
+
+			String url =model.getImg();
+			if(!TextUtils.isEmpty(url)){
+				url = DisplayUtil.qiniuUrlExchange(url,100,62);
+			}
+			SDViewBinder.setImageView(url, iv_image);
+
 			if (SDFormatUtil.stringToInteger(model.getLimit_num()) <= -1) {
 				SDViewUtil.hide(tv_max);
 			} else {
