@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.model.guidelive.GuideInnerGoods;
 import com.miguo.model.guidelive.GuideOutModel;
 import com.miguo.ui.view.ActGuideLayout;
 import com.miguo.ui.view.interf.ExpandListener;
@@ -20,6 +21,7 @@ import com.miguo.ui.view.interf.ExpandStatus;
 import com.superplayer.library.utils.SuperPlayerUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,6 +35,7 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
     private int page =1;
     private List<GuideOutModel> dataList=new ArrayList<>();
     private View emptyLayout;
+    private HashMap<Integer,List<GuideInnerGoods>> innerData=new HashMap<>();
 
     public SuperVideoAdapter(Context context, List<GuideOutModel> dataList) {
         this.mContext = context;
@@ -62,7 +65,7 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
         SDViewBinder.setTextView(holder.tvTitle, outModel.getDescript(), "");
         SDViewBinder.setImageView(outModel.getImg(), holder.ivCover);
         holder.update(position);
-        holder.act_guide.bindData(null,outModel.getStatus());
+        holder.act_guide.bindData(position,outModel.getId(),outModel.getStatus(),innerData.get(position));
         holder.act_guide.setExpandListener(new ExpandListener() {
             @Override
             public void expandStart() {
@@ -72,6 +75,12 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
             @Override
             public void shrinkStart() {
                 //TODO nothing
+            }
+        });
+        holder.act_guide.setOnChildReceiveDataListener(new ActGuideLayout.ActLayoutReceiveDataListener() {
+            @Override
+            public void onChildReceiveData(int position, List<GuideInnerGoods> childData) {
+                innerData.put(position,childData);
             }
         });
     }

@@ -64,7 +64,7 @@ public class GuideLiveOutRVAdapter extends RecyclerView.Adapter<GuideLiveOutRVAd
                 }
             }
         });
-        holder.act_guide.bindData(null,outModel.getStatus());
+//        holder.act_guide.bindData(null,outModel.getStatus());
         holder.act_guide.setExpandListener(new ExpandListener() {
             @Override
             public void expandStart() {

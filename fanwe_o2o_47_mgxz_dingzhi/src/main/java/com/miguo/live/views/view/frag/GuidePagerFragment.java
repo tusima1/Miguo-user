@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.fanwe.adapter.SuperVideoAdapter;
 import com.fanwe.app.App;
 import com.fanwe.network.HttpCallback;
@@ -32,12 +35,13 @@ import java.util.TreeMap;
  * Created by didik on 2016/11/17.
  */
 
-public class GuidePagerFragment extends Fragment {
+public class GuidePagerFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
     public static final String PAGE_REQUEST_ID = "page_request_id";
     private String mRequestID="";
     private RecyclerView mRV;
     private View mEmptyLayout;
     private DataRequestCompleteListener requestDataListener;
+    SwipeToLoadLayout swipeToLoadLayout;
 
     public static GuidePagerFragment newInstance(String tag) {
         Bundle args = new Bundle();
@@ -57,16 +61,31 @@ public class GuidePagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mFragmentView = inflater.inflate(R.layout.frag_guide_live, container, false);
-        mRV = (RecyclerView) mFragmentView.findViewById(R.id.recyclerview);
         mEmptyLayout = mFragmentView.findViewById(R.id.common_empty);
+        swipeToLoadLayout = (SwipeToLoadLayout) mFragmentView.findViewById(R.id.swipeToLoadLayout);
+        mRV = (RecyclerView)  mFragmentView.findViewById(R.id.swipe_target);
+
+        swipeToLoadLayout.setSwipeStyle(SwipeToLoadLayout.STYLE.ABOVE);
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
         requestGuideLives();
         return mFragmentView;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (player ==null)return;
+        if (isVisibleToUser){
+            player.onResume();
+        }else {
+            player.onPause();
+        }
     }
 
     private void startFlow(List<GuideOutModel> guide_list){
         if (guide_list == null)return;
         initPlayer();
-//        setData();
         initAdapter(guide_list);
         mRV.setHasFixedSize(true);
         final LinearLayoutManager llManager = new LinearLayoutManager(getContext(),
@@ -84,6 +103,34 @@ public class GuidePagerFragment extends Fragment {
         requestGuideLives();
     }
 
+    @Override
+    public void onRefresh() {
+        swipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(false);
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void onLoadMore() {
+        swipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setLoadingMore(false);
+            }
+        }, 2000);
+    }
+
+    private void autoRefresh() {
+        swipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeToLoadLayout.setRefreshing(true);
+            }
+        });
+    }
     private void requestGuideLives(){
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
@@ -127,8 +174,6 @@ public class GuidePagerFragment extends Fragment {
 
     /********************************* COPY ******************************************/
     private SuperVideoAdapter adapter;
-    private LinearLayoutManager mLayoutManager;
-//    private List<GuideOutModel> dataList = new ArrayList<>();
     private SuperPlayer player;
     private int postion = -1;
     private int lastPostion = -1;
@@ -144,7 +189,7 @@ public class GuidePagerFragment extends Fragment {
      * 初始化适配器
      */
     private void initAdapter(final List<GuideOutModel> guide_list) {
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRV.setLayoutManager(mLayoutManager);
         adapter = new SuperVideoAdapter(getActivity(), guide_list);
@@ -239,48 +284,6 @@ public class GuidePagerFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-
-//    private List<VideoListBean> setData() {
-//        dataList.clear();
-//        VideoListBean bean1 = new VideoListBean();
-//        bean1.setVideoUrl("http://cdn.mgxz.com/job_video/test/phptest.wmv");
-//        bean1.setTitleName("喝红酒1");
-//        bean1.setCoverUrl("http://pic25.nipic.com/20121121/1837405_112826532165_2.jpg");
-//        dataList.add(bean1);
-//        VideoListBean bean2 = new VideoListBean();
-//        bean2.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=9508&editionType=normal");
-//        bean2.setTitleName("喝红酒2");
-//        bean2.setCoverUrl("http://s13.sinaimg.cn/mw690/006dr1eOgy71i63tRSc7c&690");
-//        dataList.add(bean2);
-//        VideoListBean bean3 = new VideoListBean();
-//        bean3.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=8438&editionType=normal");
-//        bean3.setTitleName("喝红酒3");
-//        bean3.setCoverUrl("http://tupian.enterdesk.com/2012/0605/gha/21/111010114Z4-16.jpg");
-//        dataList.add(bean3);
-//        VideoListBean bean4 = new VideoListBean();
-//        bean4.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=8340&editionType=normal");
-//        dataList.add(bean4);
-//        VideoListBean bean5 = new VideoListBean();
-//        bean5.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=9392&editionType=normal");
-//        dataList.add(bean5);
-//        VideoListBean bean6 = new VideoListBean();
-//        bean6.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=7524&editionType=normal");
-//        dataList.add(bean6);
-//        VideoListBean bean7 = new VideoListBean();
-//        bean7.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=9444&editionType=normal");
-//        dataList.add(bean7);
-//        VideoListBean bean8 = new VideoListBean();
-//        bean8.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=9442&editionType=normal");
-//        dataList.add(bean8);
-//        VideoListBean bean9 = new VideoListBean();
-//        bean9.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=8530&editionType=normal");
-//        dataList.add(bean9);
-//        VideoListBean bean10 = new VideoListBean();
-//        bean10.setVideoUrl("http://baobab.wandoujia.com/api/v1/playUrl?vid=9418&editionType=normal");
-//        dataList.add(bean10);
-//        return dataList;
-//    }
-
 
     /**
      * 下面的这几个Activity的生命状态很重要

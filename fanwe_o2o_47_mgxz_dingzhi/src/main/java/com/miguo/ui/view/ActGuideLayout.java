@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
@@ -29,6 +30,8 @@ import com.miguo.adapter.base.BaseRVAdapter;
 import com.miguo.adapter.base.BaseRVViewHolder;
 import com.miguo.adapter.base.SimpleRVAdapter;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.model.guidelive.GuideInnerGoods;
+import com.miguo.model.guidelive.GuideInnerRoot;
 import com.miguo.ui.view.interf.ExpandListener;
 import com.miguo.ui.view.interf.ExpandStatus;
 import com.miguo.ui.view.interf.Expandable;
@@ -60,6 +63,9 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
     private boolean expandable=false;
     private ActLayoutReceiveDataListener sendDataListener;
     private RecyclerView parentRV;
+    private String mGuideID="";
+    private int position=-1;
+    private List<GuideInnerGoods> innerGoods;
 //    private RecyclerView mRVInner;
 
     public ActGuideLayout(Context context) {
@@ -102,8 +108,20 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         ll_text_container.setOnClickListener(this);
     }
 
-    public void bindData(List data,int statement) {
+    public void bindData(int position,String guide_id,int statement,List<GuideInnerGoods> innerGoods) {
+        this.mGuideID=guide_id;
+        this.position=position;
+        this.innerGoods=innerGoods;
         //TODO 默认是收缩时的状态
+        if (statement == ExpandStatus.NORMAL){
+            bindInnerData(statement);
+        }else if (statement == ExpandStatus.EXPANDED){
+            if (innerGoods != null && innerGoods.size()>1){
+                bindInnerData(statement);
+            }
+        }
+    }
+    private void bindInnerData(int statement){
         if (statement== ExpandStatus.NORMAL){
             ll_text_container.setClickable(true);
             ll_tools.setVisibility(GONE);
@@ -117,7 +135,6 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
             addTextView(createTestData(),ll_text_container,-1);
             addHorizontalRecyclerView(null,fl_rv_container);
         }
-
     }
 
     private List<String> createTestData(){
@@ -140,7 +157,7 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         minHeight=getHeight();
         expandable=true;
         MGLog.e("test","prepare=="+"height: "+getHeight() +"measuredHeight: "+getMeasuredHeight());
-        bindData(null,ExpandStatus.EXPANDED);
+        bindInnerData(ExpandStatus.EXPANDED);
         MGLog.e("test","prepare=="+"height: "+getHeight() +"measuredHeight: "+getMeasuredHeight());
     }
 
@@ -202,21 +219,35 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
 
     @Override
     public void addHorizontalRecyclerView(List data,ViewGroup rvContainer) {
-        if (rvContainer==null)return;
+        if (rvContainer==null || innerGoods==null || innerGoods.size()<1)return;
         rvContainer.removeAllViews();
         rvContainer.setVisibility(VISIBLE);
-        ArrayList<String> data2=new ArrayList();
-        data2.add("i");
-        data2.add("like");
-        data2.add("you");
         RecyclerView rvInner=new RecyclerView(context);
+        rvInner.setFocusable(false);
         rvInner.setHasFixedSize(true);
         rvInner.setLayoutManager(new LinearLayoutManager(context,HORIZONTAL,false));
-        final SimpleRVAdapter<String> adapter=new SimpleRVAdapter<String>(context,R.layout.item_custom_guide_inner,data2) {
-            @Override
-            protected void bindView(BaseRVViewHolder helper, String item) {
+        final SimpleRVAdapter<GuideInnerGoods> adapter=new SimpleRVAdapter<GuideInnerGoods>(context,R.layout.item_custom_guide_inner,innerGoods) {
 
+            @Override
+            protected void bindView(BaseRVViewHolder helper, GuideInnerGoods item) {
+                if (item == null)return;
+            /**
+             * area_name :
+             * tuan_price : 158.0
+             * unit :
+             * distance :
+             * icon : http://oc16x1ls4.bkt.clouddn.com/2016/11/Fv4FX2sFb_SIRPbVAch0b816eg4V
+             * name : 【嵊州】春暖花开西餐厅 仅售158元！价值188元的2-3人A套餐
+             * cate_name : 西餐
+             * tuan_price_with_unit : 158.00元
+             * id : 8dc211ad-1831-48e0-ba38-c9cbb834df41
+             */
+                SDViewBinder.setImageView(item.getIcon(),helper.getImageView(R.id.iv_img));
+                helper.setTextView(R.id.tv_title,item.getName(),"----");
+                helper.setTextView(R.id.tv_price_unit,item.getTuan_price_with_unit(),"--");
+                helper.setTextView(R.id.tv_location,item.getArea_name() +item.getDistance()+item.getCate_name(),"--");
             }
+
         };
         final int offset = DisplayUtil.dp2px(context, 5);
         rvInner.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -256,7 +287,7 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         adapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String goods_id = adapter.getItem(position);
+                String goods_id = adapter.getItem(position).getId();
                 if (TextUtils.isEmpty(goods_id))return;
                 Intent intent=new Intent(context, GoodsDetailActivity.class);
                 intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID,goods_id);
@@ -300,7 +331,11 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
                 doShare();
                 break;
             case R.id.ll_txt_container:
-                expand();
+                if (innerGoods == null || innerGoods.size()<1){
+                    requestGuideGoods(mGuideID);
+                }else {
+                    expand();
+                }
                 break;
             default:
                 break;
@@ -335,25 +370,36 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
 //            animator.setInterpolator(new AccelerateDecelerateInterpolator());
 //            animator.start();
 //        }
-        Log.e("test","height-layout: "+getHeight());
+//        Log.e("test","height-layout: "+getHeight());
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     private void requestGuideGoods(String guide_id){
         String city_id = AppRuntimeWorker.getCity_id();
-        if (TextUtils.isEmpty(city_id) || TextUtils.isEmpty(guide_id))return;
+        double latitude = BaiduMapManager.getInstance().getLatitude();
+        double longitude = BaiduMapManager.getInstance().getLongitude();
+        if (TextUtils.isEmpty(city_id) || TextUtils.isEmpty(guide_id)||latitude==0 || longitude ==0)return;
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("city_id", city_id);
         params.put("guide_id", guide_id);
+        params.put("m_longitude", longitude+"");
+        params.put("m_latitude", latitude+"");
         params.put("method", "InterestingGuideGoods");
-        OkHttpUtil.getInstance().get(params, new HttpCallback() {
+        OkHttpUtil.getInstance().get(params, new HttpCallback<GuideInnerRoot>() {
+
             @Override
-            public void onSuccess(String response) {
-                super.onSuccess(response);
-                Log.e("test",response);
-                if (sendDataListener !=null){
-                    sendDataListener.onChildReceiveData(null);
+            public void onSuccessWithBean(GuideInnerRoot guideInnerRoot) {
+                List<GuideInnerRoot.ResultBean.BodyBean> body = guideInnerRoot.getResult().get(0)
+                        .getBody();
+                if (body !=null && body.size()>0){
+                    innerGoods = body.get(0).getGoods_list();
+                    if (innerGoods!=null && innerGoods.size()>0){
+                        if (sendDataListener !=null){
+                            sendDataListener.onChildReceiveData(position,innerGoods);
+                        }
+                        expand();
+                    }
                 }
             }
 
@@ -373,6 +419,6 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
     }
 
     public interface ActLayoutReceiveDataListener{
-        void onChildReceiveData(List childData);
+        void onChildReceiveData(int position,List<GuideInnerGoods> childData);
     }
 }

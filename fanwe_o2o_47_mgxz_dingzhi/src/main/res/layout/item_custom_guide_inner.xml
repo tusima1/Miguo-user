@@ -5,6 +5,7 @@
               android:layout_width="228dp"
               android:layout_height="wrap_content">
     <ImageView
+        android:id="@+id/iv_img"
         android:layout_width="match_parent"
         android:layout_height="143dp"
         android:scaleType="centerCrop"
@@ -22,6 +23,7 @@
         android:maxLines="2"
         />
     <TextView
+        android:id="@+id/tv_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp7"
@@ -31,7 +33,7 @@
         android:lines="1"
         android:ellipsize="end"
         />
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp7"
@@ -57,6 +59,18 @@
             android:lines="1"
             android:ellipsize="end"
             />
-    </LinearLayout>
+    </LinearLayout>-->
+    <TextView
+        android:id="@+id/tv_price_unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp7"
+        android:layout_marginBottom="@dimen/dp10"
+        android:textSize="@dimen/sp11"
+        android:textColor="#2e2e2e"
+        android:text="95元 / 张"
+        android:lines="1"
+        android:ellipsize="end"
+        />
 
 </LinearLayout>

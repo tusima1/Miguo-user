@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:background="@color/bg_activity_white"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
     <include layout="@layout/common_empty" android:id="@+id/common_empty"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:background="#F2F2F2"
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        >
+
+        <com.fanwe.customview.GoogleCircleHookRefreshHeaderView
+            android:id="@id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/transparent"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/swipe_target"
+            android:background="#F2F2F2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.fanwe.customview.google.GoogleCircleHookLoadMoreFooterView
+            android:id="@id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/transparent"
+            />
+
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/recyclerview"-->
+        <!--android:background="#F2F2F2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 
 </FrameLayout>

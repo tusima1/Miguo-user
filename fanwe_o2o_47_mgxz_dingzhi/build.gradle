@@ -124,4 +124,5 @@ dependencies {
     //    compile 'com.github.hackware1993:MagicIndicator:1.4.0'
     compile files('libs/fastjson-1.2.20.jar')
     compile 'com.android.support:design:23.2.1'
+    compile 'com.github.Aspsine:SwipeToLoadLayout:1.0.3'
 }
