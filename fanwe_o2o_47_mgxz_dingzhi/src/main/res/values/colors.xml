@@ -57,8 +57,11 @@
 
     <!--color mgxz-->
     <!--说明,color_数字,数字代表color的透明度,例如80代表80%的透明度-->
+    <color name="black_43">#434343</color>
+    <color name="black_2e">#2e2e2e</color>
     <color name="green_0c">#0ca431</color>
     <color name="gray_30">#4D999999</color>
+    <color name="gray_a6">#a6a6a6</color>
     <color name="gray_gift">#46000000</color>
     <color name="orange">#ff6600</color>
     <color name="dark_80">#CC000000</color>
@@ -66,6 +69,7 @@
     <color name="black_60">#46000000</color>
     <color name="black_01">#01000000</color>
     <color name="black_80">#80000000</color>
+    <color name="gray_f5">#f5f3f0</color>
     <color name="gray_cc">#CCCCCC</color>
     <color name="gray_f0">#f0f0f0</color>
     <color name="gray_f2">#f2f2f2</color>
@@ -84,6 +88,7 @@
     <color name="gray_text_89">#989898</color>
     <color name="gray_text_59">#595959</color>
     <color name="gray_text_99">#999999</color>
+    <color name="gray_text_e2">#e2e2e2</color>
     <color name="gray_text_99_trans_46">#46000000</color>
     <!--淡黄色-->
     <color name="my_main_color">#f5b830</color>

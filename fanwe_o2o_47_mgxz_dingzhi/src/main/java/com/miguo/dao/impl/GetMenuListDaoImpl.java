@@ -36,7 +36,7 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-
+                Log.d(tag, responseBody);
             }
 
             @Override

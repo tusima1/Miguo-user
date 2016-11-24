@@ -259,7 +259,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void onRefreshAfter(){
-        clearPage();
+//        clearPage();
         onRefreshGreeting();
         onRefreshTimeLimit();
         onRefreshAdspaceList();

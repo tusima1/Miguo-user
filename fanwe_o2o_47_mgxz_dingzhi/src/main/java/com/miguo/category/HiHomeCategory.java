@@ -46,6 +46,7 @@ import com.miguo.dao.impl.TencentSignDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.HomePageState;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.fragment.HiFunnyFragment;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
@@ -238,7 +239,7 @@ public class HiHomeCategory extends Category implements
     private void initHomePagers() {
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
-        fragments.add(new FunnyFragment());
+        fragments.add(new HiFunnyFragment());
         fragments.add(new SellerFragment());
         fragments.add(new MyFragment());
 
