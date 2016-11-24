@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.o2o.miguo.R;
@@ -48,21 +49,24 @@ public class HiLiveListFragmentViewPager extends  ViewPager{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public AppBarLayout getAppbarLayout(){
-//        ViewGroup viewGroup = (ViewGroup) getParent();
-//        for(int i = 0; i<8; i++){
-//            viewGroup = (ViewGroup) viewGroup.getParent();
-//            if(viewGroup instanceof CoordinatorLayout){
-//                return (AppBarLayout)(viewGroup).getChildAt(0);
-//            }
-//        }
-        ;
-        return (AppBarLayout) (((CoordinatorLayout)((HiHomeActivity)getContext()).findViewById(R.id.coorddinatorlayout)).getChildAt(0));
-//        return null;
+    public LinearLayout getTopTextLinearLayout(){
+        return (LinearLayout) ((HiHomeActivity)getContext()).findViewById(R.id.top_text_layout);
+    }
+
+    public BarryTab getTab(){
+        return (BarryTab) ((HiHomeActivity)getContext()).findViewById(R.id.tab);
+    }
+
+    public int getTabHeight(){
+        return null != getTab() ? getTab().getMeasuredHeight() : 0;
+    }
+
+    public int getTopTextLinearLayoutHeight(){
+        return null != getTopTextLinearLayout() ? getTopTextLinearLayout().getMeasuredHeight() : 0;
     }
 
     public int getMinHeight(){
-        return  null != getAppbarLayout() ? BaseUtils.getHeight(getContext()) - getAppbarLayout().getMeasuredHeight() : 0;
+        return  BaseUtils.getHeight(getContext()) - getTopTextLinearLayoutHeight() - getTabHeight();
     }
 
 }

@@ -24,6 +24,7 @@
 
 
             <LinearLayout
+                android:id="@+id/top_text_layout"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:orientation="vertical">
@@ -56,41 +57,41 @@
         </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/title2"
-                android:background="@color/white"
-                android:orientation="horizontal"
+        <LinearLayout
+            android:id="@+id/title2"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/live2"
+                android:background="@drawable/shape_bg_gray_50"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="17dp"
+                android:layout_weight="1"
                 android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black_43"
+                android:text="直播发生在那里"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="55dp"/>
 
-                <TextView
-                    android:id="@+id/live2"
-                    android:background="@drawable/shape_bg_gray_50"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginLeft="17dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textColor="@color/black_43"
-                    android:text="直播发生在那里"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"/>
-
-                <TextView
-                    android:id="@+id/guide2"
-                    android:textColor="@color/gray_text_e2"
-                    android:background="@drawable/shape_bg_gray_50"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="17dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="银河系装逼指南"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp" />
+            <TextView
+                android:id="@+id/guide2"
+                android:textColor="@color/gray_text_e2"
+                android:background="@drawable/shape_bg_gray_50"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="17dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="银河系装逼指南"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
         <RelativeLayout
