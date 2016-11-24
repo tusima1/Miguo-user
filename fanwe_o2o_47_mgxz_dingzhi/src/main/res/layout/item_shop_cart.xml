@@ -113,7 +113,7 @@
                             android:layout_gravity="left"
                             android:layout_marginLeft="5dp"
                             android:layout_weight="2"
-                            android:text="52.99"
+                            android:text="0.00"
                             android:textColor="@color/text_line"
                             android:textSize="@dimen/text_size_base" />
 
@@ -177,7 +177,7 @@
                         android:id="@+id/tv_actualPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10.00"
+                        android:text="0.00"
                         android:textColor="@color/main_color"
                         android:textSize="18sp" />
 
@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="小计:"
+                        android:text="小计: ￥"
                         android:textColor="@color/text_fenxiao"
                         android:textSize="13sp" />
 
@@ -195,7 +195,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="12.00"
+                        android:text="0.00"
                         android:textColor="@color/text_fenxiao"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -208,6 +208,7 @@
             android:layout_height="match_parent"
             android:background="#e65322"
             android:text="删除"
+            android:ellipsize="end"
             android:textColor="#ffffff"
             android:textSize="11sp" />
     </LinearLayout>

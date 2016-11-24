@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -79,7 +80,6 @@ public abstract class FragmentCategory {
      * @param radio
      */
     protected void setTitleAlpha(View title, float radio){
-//        top.setAlpha(radio);
         title.setAlpha(radio);
     }
 
@@ -87,15 +87,26 @@ public abstract class FragmentCategory {
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
         if (view != null) {
             view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
         }
     }
 
+    protected void setStatusBarHeight(View statusbar){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+        if(statusbar != null){
+            if(statusbar.getParent() instanceof  RelativeLayout){
+                RelativeLayout.LayoutParams statusbarRelayoutParams = getRelativeLayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, BaseUtils.getStatusBarHeight(getActivity()));
+                statusbar.setLayoutParams(statusbarRelayoutParams);
+            }
+        }
+    }
 
-    /**
-     * utils
-     */
     /**
      * 获取Drawable对象
      * @param drawbleId

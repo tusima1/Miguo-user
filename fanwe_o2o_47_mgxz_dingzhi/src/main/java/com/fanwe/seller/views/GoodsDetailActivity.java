@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.didikee.uilibs.views.WaitFinishTextView;
+import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
@@ -69,6 +70,8 @@ import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
 
+import static com.fanwe.o2o.miguo.R.id.tv_buy;
+
 /**
  * created by didikee
  * 2016/10/20
@@ -97,8 +100,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private int mFLViewpagerHeight;
     private View mLayoutTop;
     private SellerNewHttpHelper mHttpHelper;
-    //    private String GoodsId="0ecd5927-1322-4d9e-b092-9cb213ada070";
-//    private String GoodsId="004c0d20-43f8-4ef8-ae7f-a15d8359655f";
     private String GoodsId = "";
     private TextView mTestHtmlTextView;
     private TextView mHtmlTipDesc;//温馨提示
@@ -190,14 +191,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        getIntentData(intent);
-        requestData();
+        if (getIntentData(intent)){
+            requestData();
+        }
     }
 
-    private void getIntentData(Intent intent) {
+    private boolean getIntentData(Intent intent) {
         if (intent==null){
             finish();
-            return;
+            return false;
         }
         GoodsId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
@@ -205,8 +207,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         if (TextUtils.isEmpty(GoodsId)) {
             MGToast.showToast("id为空");
             finish();
-            return;
+            return false;
         }
+        return true;
     }
 
     private void initTitleLayout() {
@@ -298,7 +301,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private void initBottomLayout() {
         mTvOldMoney = ((TextView) findViewById(R.id.tv_old_money));
         mTvNewMoney = ((TextView) findViewById(R.id.tv_new_money));
-        mTvBuy = ((WaitFinishTextView) findViewById(R.id.tv_buy));
+        mTvBuy = ((WaitFinishTextView) findViewById(tv_buy));
         mTvAdd2ShopCart = ((TextView) findViewById(R.id.tv_add_shop_cart));
         mTvOldMoney.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); //中划线
 
@@ -541,8 +544,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mTvTopYouHui.setText(tuan_price_with_unit);
 
         //bind bottom(底部悬浮)
-        mTvOldMoney.setText(origin_price);
-        mTvNewMoney.setText(tuan_price);
+        mTvOldMoney.setText(MGStringFormatter.getFloat2(origin_price));
+        mTvNewMoney.setText(MGStringFormatter.getFloat2(tuan_price));
 
         //收藏的状态
         isCollected = modelGoodsDetailNew.getIs_my_collect();
@@ -550,6 +553,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
         List<ShopListBean> shop_list = modelGoodsDetailNew.getShop_list();
         bindShopList(shop_list);
+        if (shop_list!=null && shop_list.size()<=1){
+            mLLLauncher.setVisibility(View.GONE);
+        }
 
         //温馨提示
         String notes = modelGoodsDetailNew.getNotes();
@@ -613,7 +619,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
 
         //--end bind data
-        SDDialogManager.dismissProgressDialog();
     }
 
     private void loadWebData(WebView webView, String data) {
@@ -650,7 +655,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void parseGoodsDetailNew(List data) {
-        if (data != null) {
+        if (data != null&&data.size()>0) {
             ModelGoodsDetailNew modelGoodsDetailNew = (ModelGoodsDetailNew) data.get(0);
             if (modelGoodsDetailNew != null) {
                 bindData(modelGoodsDetailNew);
@@ -775,7 +780,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             case R.id.tv_add_shop_cart:
                 clickBuyGoods(false);
                 break;
-            case R.id.tv_buy:
+            case tv_buy:
                 clickBuyGoods(true);
                 break;
         }
@@ -783,6 +788,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     //收藏
     private void doCollect() {
+        if (TextUtils.isEmpty(App.getInstance().getToken())){
+            startActivity(new Intent(App.getApplication(), LoginActivity.class));
+            return;
+        }
         if ("1".equals(isCollected)) {
             //已经收藏
             mSellerHelper.deleteGroupBuyCollect(GoodsId);
@@ -845,7 +854,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         } else {
             //当前未登录.
             if ("0".equals(mTimeStatus)) {
-                MGToast.showToast("商品活动未开始。");
+                MGToast.showToast("商品活动未开始");
                 return;
             } else if ("1".equals(mTimeStatus)) {
                 addToLocalShopping();
@@ -884,7 +893,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             MGToast.showToast("添加购物车失败!");
             return;
         }
-        LocalShoppingcartDao.insertModel(mShoppingCartInfo);
+        LocalShoppingcartDao.insertSingleNum(mShoppingCartInfo);
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvBuy.onFinish();
+            }
+        });
     }
 
     public void goToShopping() {

@@ -26,6 +26,16 @@ public class HomeBannerFakeData implements Serializable{
         return banners;
     }
 
+    String[] urls = {
+            "http://img.xiaoneiit.com/mgxz/ad2_1.jpg",
+            "http://img.xiaoneiit.com/mgxz/ad2_2.jpg",
+            "http://img.xiaoneiit.com/mgxz/ad2_3.jpg",
+            "http://img.xiaoneiit.com/mgxz/ad2_4.jpg",
+            "http://img.xiaoneiit.com/mgxz/ad2_5.jpg",
+            "http://img.xiaoneiit.com/mgxz/ad2_6.jpg"
+    };
+
+
     public class Banner implements Serializable{
         String url;
 

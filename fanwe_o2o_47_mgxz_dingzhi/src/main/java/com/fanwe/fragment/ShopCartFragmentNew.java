@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
 import com.fanwe.app.App;
@@ -33,15 +32,16 @@ import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
-import com.sunday.eventbus.SDBaseEvent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             mBt_account.setBackgroundColor(getResources().getColor(
                     R.color.text_fenxiao));
             mBt_account.setClickable(false);
-            mTv_sum.setText("0.00");
+            mTv_sum.setText("￥0.00");
             // 初始化adapter.
             mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
             mLvCartGoods.setAdapter(mAdapter);
@@ -185,7 +185,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             public void onClick(View arg0) {
                 boolean isChecked = mCb_xuanze.isChecked();
                 BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
-                mTv_sum.setText(String.valueOf(bd));
+                mTv_sum.setText("￥"+ DataFormat.toDoubleTwo(String.valueOf(bd)));
                 if (isChecked && count > 0) {
                     mBt_account.setText("结算" + "（" + count + "）");
                     mBt_account.setBackgroundColor(getResources().getColor(
@@ -206,7 +206,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void initTitle() {
         mTitle.setMiddleTextTop("购物车");
-        if (getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof HiHomeActivity) {
             mTitle.setLeftImageLeft(0);
         }
     }
@@ -236,7 +236,14 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 sumMoney += model.getSumPrice();
             }
         }
-        mAdapter.notifyDataSetChanged();
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+
         value = new BigDecimal(sumMoney);
         value = value.setScale(2, BigDecimal.ROUND_HALF_UP);
         return value;
@@ -248,7 +255,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     public void updateSumMoneyAndCount() {
         BigDecimal sumMoney = getSumMoney();
         int count = getSumSeleted();
-        mTv_sum.setText(String.valueOf(sumMoney));
+        mTv_sum.setText("￥"+DataFormat.toDoubleTwo(String.valueOf(sumMoney)));
         if (count > 0) {
             mBt_account.setText("结算" + "（" + count + "）");
             mBt_account.setBackgroundColor(getResources().getColor(
@@ -416,7 +423,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void returnToLastActivity() {
         currentGoTo = 2;
         if (ifLogin) {
-            outSideShoppingCartHelper.multiAddShopCart(listModel);
+            outSideShoppingCartHelper.multiAddShopCart(listModel,true);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
         }
@@ -434,7 +441,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             }
             dialog.show();
             //添加购物车调用接口
-            outSideShoppingCartHelper.multiAddShopCart(listModel);
+            outSideShoppingCartHelper.multiAddShopCart(listModel,true);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
             gotoLogin();
@@ -478,7 +485,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             if (outSideShoppingCartHelper == null) {
                 outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
             }
-            if (dialog == null) {
+            if (dialog == null&&getActivity()!=null) {
                 dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
             }
             dialog.show();
@@ -567,8 +574,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                         if (mAdapter != null) {
                             listModel = datas;
                             mAdapter.setData(listModel);
-                            bindData();
                             mAdapter.notifyDataSetChanged();
+                            bindData();
+
                         }
                         mContentPtr.onRefreshComplete();
                         new Handler().postDelayed(new Runnable() {

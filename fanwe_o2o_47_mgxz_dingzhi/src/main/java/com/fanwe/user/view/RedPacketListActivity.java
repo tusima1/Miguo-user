@@ -153,6 +153,7 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
             case UserConstants.USER_RED_PACKET_LIST:
                 ResultUserRedPacket resultUserRedPacket = (ResultUserRedPacket) datas.get(0);
                 if (resultUserRedPacket==null){
+                    showEmptyView(null);
                     return;
                 }
                 List<ModelUserRedPacket> body = resultUserRedPacket.getBody();
@@ -161,9 +162,9 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
                     if (Integer.valueOf(page)==1){
                         String page_size = resultUserRedPacket.getPage_size();
                     }
-
                     mAdapter.update(body);
                 }
+                showEmptyView(body);
                 break;
             case ShoppingCartconstants.GET_USERING_REDPACKETS:
                 mData = datas;
@@ -186,9 +187,18 @@ public class RedPacketListActivity extends MGBaseActivity implements CallbackVie
                         }
                     });
                 }
+                showEmptyView(mData);
                 break;
             default:
                 break;
+        }
+    }
+
+    private void showEmptyView(List data){
+        if (data==null || data.size()==0){
+            mLL_empty.setVisibility(View.VISIBLE);
+        }else {
+            mLL_empty.setVisibility(View.GONE);
         }
     }
 

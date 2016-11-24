@@ -58,9 +58,13 @@
     <dimen name="size_px2sp_32">16sp</dimen>
     <dimen name="size_px2sp_40">20sp</dimen>
     <dimen name="size_px2sp_28">14sp</dimen>
+    <dimen name="size_px2sp_60">30sp</dimen>
     <dimen name="list_image_size">80dp</dimen>
+    <dimen name="size_px2sp_63">63dp</dimen>
+
     <!--login-->
     <dimen name="margin_top">100dp</dimen>
+    <dimen name="size_px2sp_228">228dp</dimen>
 
     <!--自动生成的-->
 
@@ -200,10 +204,11 @@
 
     <dimen name="dp116">116dp</dimen>
 
+
     <dimen name="dp120">120dp</dimen>
 
     <dimen name="dp126">126dp</dimen>
-
+  <dimen name = "dp150">150dp</dimen>
     <dimen name="dp128">128dp</dimen>
     <dimen name="dp135">135dp</dimen>
 
@@ -218,7 +223,7 @@
     <dimen name="dp273">273dp</dimen>
 
     <dimen name="dp280">280dp</dimen>
-
+    <dimen name="dp400">400dp</dimen>
 
     <!--sp-->
 
@@ -244,7 +249,6 @@
 
     <dimen name="sp25">25sp</dimen>
     <dimen name="dp48">48dp</dimen>
-    <dimen name="dp150">150dp</dimen>
     <dimen name="dp170">170dp</dimen>
     <dimen name="dp90">90dp</dimen>
 

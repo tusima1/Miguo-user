@@ -12,7 +12,8 @@ import com.miguo.view.CollectShopView;
 import java.util.TreeMap;
 
 /**
- * Created by Administrator on 2016/10/21.
+ * Created by zlh/狗蛋哥/Barry on 2016/10/21.
+ * 商家详情收藏接口实现类
  */
 public class CollectShopDaoImpl extends BaseDaoImpl implements CollectShopDao{
 

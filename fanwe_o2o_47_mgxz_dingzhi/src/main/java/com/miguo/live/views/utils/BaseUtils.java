@@ -119,8 +119,12 @@ public class BaseUtils {
     }
 
     public static int dip2px(Context context,float dpValue) {
-        final float scale = App.getApplication().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+        try{
+            final float scale = App.getInstance().getResources().getDisplayMetrics().density;
+            return (int) (dpValue * scale + 0.5f);
+        }catch (Exception e){
+            return 0;
+        }
     }
 
     public static int px2dip(Context context, float pxValue) {

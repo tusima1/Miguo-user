@@ -145,28 +145,38 @@ public class MyCouponListFragment extends BaseFragment implements CallbackView2 
     public void onSuccess(String method, List datas) {
         if (UserConstants.GROUP_BUY_COUPON_LIST.endsWith(method)){
             ResultGroupCoupon resultGroupCoupon = (ResultGroupCoupon) datas.get(0);
-
             int page = MGStringFormatter.getInt(resultGroupCoupon.getPage());
-            if (page==1){
+            List<ModelGroupCoupon> body = resultGroupCoupon.getBody();
+            if (page<=1){
                 int pageSize = MGStringFormatter.getInt(resultGroupCoupon.getPage_count());
                 mPage.setPage_total(pageSize);
+                if (mAdapter !=null && mAdapter.getData()!=null && mAdapter.getData().size()>0){
+                    mIv_empty.setVisibility(View.GONE);
+                }else {
+                    if (body==null || body.size()==0){
+                        mIv_empty.setVisibility(View.VISIBLE);
+                    }else {
+                        mIv_empty.setVisibility(View.GONE);
+                    }
+                }
             }
-            List<ModelGroupCoupon> body = resultGroupCoupon.getBody();
             SDViewUtil.updateAdapterByList(mListModel, body, mAdapter, isLoadMore);
         }
     }
 
     @Override
     public void onFailue(String responseBody) {
-
+        if (UserConstants.GROUP_BUY_COUPON_LIST.endsWith(responseBody)){
+            mIv_empty.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onFinish(String method) {
         if (UserConstants.GROUP_BUY_COUPON_LIST.endsWith(method)){
             mPtrlv_content.onRefreshComplete();
-            SDViewUtil.toggleEmptyMsgByList(mListModel, mIv_empty);
         }
 
     }
+
 }

@@ -49,11 +49,11 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
+ *
  * Created by didik on 2016/9/13.
  */
-public class MyFragment extends BaseFragment implements RedDotView
-        .OnRedDotViewClickListener, View.OnClickListener, CallbackView2 {
-
+public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewClickListener,
+        View.OnClickListener, CallbackView2 {
     private RedDotView mRDV_orderNotPay;//待付款订单
     private RedDotView mRDV_orderNotUse;//待使用
     private RedDotView mRDV_orderNotComment;//待评价
@@ -233,7 +233,9 @@ public class MyFragment extends BaseFragment implements RedDotView
      * 请求我的账户接口
      */
     public void requestMyAccount() {
-        httpHelper.getPersonalHome();
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            httpHelper.getPersonalHome();
+        }
     }
 
     @Override
@@ -263,10 +265,17 @@ public class MyFragment extends BaseFragment implements RedDotView
             startActivity(ShopCartActivity.class);
         } else if (v == mShop) {
             /*我的小店*/
-            startActivity(DistributionStoreWapActivity.class);
+            Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
+            String id="";
+            if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null) {
+                id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            }
+            intent.putExtra("id", id);
+            startActivity(intent);
         } else if (v == mFriends) {
             /*分销战队*/
             startActivity(DistributionMyXiaoMiActivity.class);
+
         } else if (v == mQuan) {
             /*消费券*/
             startActivity(MyCouponListActivity.class);
@@ -314,10 +323,7 @@ public class MyFragment extends BaseFragment implements RedDotView
             intent.putExtras(userData);
             startActivity(intent);
         }
-        /*else if (v== mIvMsg){
-            //消息
-            startActivity(MessageActivity.class);
-        }*/
+
     }
 
     /**
@@ -422,11 +428,13 @@ public class MyFragment extends BaseFragment implements RedDotView
         }
 
         List<DictModel> dict = MGDict.getDict();
-        for (DictModel data : dict) {
-            String dic_value = data.getDic_value();
-            if ("support_phone".equals(dic_value)) {
-                mKefuNum = data.getDic_mean();
-                break;
+        if (dict!=null){
+            for (DictModel data : dict) {
+                String dic_value = data.getDic_value();
+                if ("support_phone".equals(dic_value)) {
+                    mKefuNum = data.getDic_mean();
+                    break;
+                }
             }
         }
         if (TextUtils.isEmpty(mKefuNum)) {
@@ -437,8 +445,10 @@ public class MyFragment extends BaseFragment implements RedDotView
     }
 
     private void callKeFu(String tel) {
-        Intent intent = SDIntentUtil.getIntentCallPhone(tel);
-        SDActivityUtil.startActivity(getActivity(), intent);
+        if(getActivity()!=null) {
+            Intent intent = SDIntentUtil.getIntentCallPhone(tel);
+            SDActivityUtil.startActivity(getActivity(), intent);
+        }
     }
 
     //------------http start---------------
@@ -452,6 +462,7 @@ public class MyFragment extends BaseFragment implements RedDotView
         switch (method) {
             case UserConstants.PERSONALHOME:
                 modelPersonalHome = (ModelPersonalHome) datas.get(0);
+                mPtrsvAll.onRefreshComplete();
                 bindData();
                 break;
         }
@@ -459,7 +470,11 @@ public class MyFragment extends BaseFragment implements RedDotView
 
     @Override
     public void onFailue(String responseBody) {
-
+        switch (responseBody) {
+            case UserConstants.PERSONALHOME:
+                mPtrsvAll.onRefreshComplete();
+                break;
+        }
     }
 
     @Override

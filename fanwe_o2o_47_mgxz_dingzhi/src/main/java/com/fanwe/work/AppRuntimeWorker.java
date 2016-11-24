@@ -5,8 +5,6 @@ import android.text.TextUtils;
 
 import com.fanwe.AppWebViewActivity;
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.EventDetailActivity;
-import com.fanwe.EventListActivity;
 import com.fanwe.GoodsListActivity;
 import com.fanwe.HoltelListActivity;
 import com.fanwe.NearbyVipActivity;
@@ -24,7 +22,6 @@ import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.IndexType;
 import com.fanwe.dao.InitActModelDao;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.fragment.EventListFragment;
 import com.fanwe.fragment.ScoresListFragment;
 import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.fragment.TuanListFragment;
@@ -251,6 +248,11 @@ public class AppRuntimeWorker {
         return "";
     }
 
+    public static String getCityNameInPy(){
+        String name = getCity_name();
+        return getCityPyByCityName(name);
+    }
+
     /**
      * 设置当前城市，也会设置当前城市id
      *
@@ -305,6 +307,30 @@ public class AppRuntimeWorker {
             }
         }
         return cityId;
+    }
+
+    /**
+     * 根据城市名字获得城市id，如果未找到返回-1
+     *
+     * @return
+     */
+    public static String getCityPyByCityName(String cityName) {
+        String cityPy = "";
+        if (!TextUtils.isEmpty(cityName)) {
+            List<CitylistModel> listCity = getCitylist();
+            if (listCity != null && listCity.size() > 0) {
+                CitylistModel cityModel;
+                for (int i = 0; i < listCity.size(); i++) {
+                    cityModel = listCity.get(i);
+                    if (cityModel != null) {
+                        if (cityName.equals(cityModel.getName())) {
+                            cityPy = cityModel.getPy();
+                        }
+                    }
+                }
+            }
+        }
+        return cityPy;
     }
 
     public static int getServerRegionVersion() {
@@ -398,12 +424,7 @@ public class AppRuntimeWorker {
                 }
                 break;
             case IndexType.EVENT_LIST:
-                intent = new Intent(App.getApplication(), EventListActivity.class);
-                if (data != null) {
-                    intent.putExtra(EventListFragment.EXTRA_CATE_ID, data.getCate_id());
-                    intent.putExtra(EventListFragment.EXTRA_TID, data.getTid());
-                    intent.putExtra(EventListFragment.EXTRA_QID, data.getQid());
-                }
+
                 break;
             case IndexType.YOUHUI_LIST:
                 intent = new Intent(App.getApplication(), YouHuiListActivity.class);
@@ -432,8 +453,8 @@ public class AppRuntimeWorker {
                 break;
             case IndexType.EVENT_DETAIL:
                 if (data != null) {
-                    intent = new Intent(App.getApplication(), EventDetailActivity.class);
-                    intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, data.getData_id());
+//                    intent = new Intent(App.getApplication(), EventDetailActivity.class);
+//                    intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, data.getData_id());
                 }
                 break;
             case IndexType.YOUHUI_DETAIL:

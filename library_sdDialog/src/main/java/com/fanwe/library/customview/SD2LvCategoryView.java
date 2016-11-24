@@ -98,6 +98,10 @@ public class SD2LvCategoryView extends SDViewBase
 		});
 	}
 
+	public void setTitle(String title){
+		mTvTitle.setText(title);
+	}
+
 	public void setLeftAdapter(SD2LvCategoryViewHelperAdapterInterface adapter)
 	{
 		mHelper.setLeftAdapter(adapter);

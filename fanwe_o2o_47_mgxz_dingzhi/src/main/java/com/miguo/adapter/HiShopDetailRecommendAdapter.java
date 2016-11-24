@@ -3,6 +3,7 @@ package com.miguo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.entity.HiShopDetailBean;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
     List<Boolean> lines;
     public static final int SINGLE_LINE_HEIGHT = 35;
     public static final int DOUBBLE_LINE_HEIGHT = 60;
+
+    OnItemDataChangedListener onItemDataChangedListener;
 
     public HiShopDetailRecommendAdapter(Activity activity, List datas) {
         super(activity, datas);
@@ -92,6 +96,9 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
                     params.setMargins(dip2px(12), 0, dip2px(12), 0);
                     getHolder(holder).title.setLayoutParams(params);
                     getHolder(holder).title.setGravity(Gravity.CENTER_VERTICAL);
+                    if(onItemDataChangedListener != null){
+                        onItemDataChangedListener.onItemChanged();
+                    }
                 }
             }
         });
@@ -99,33 +106,24 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        if(getItem(position).getImg().contains("http://")){
-            SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
+
+        String url=getItem(position).getImg();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,400,228);
         }
+        SDViewBinder.setImageView(url, getHolder(holder).image);
 
         HiShopDetailBean.Result.Tuan model = getItem(position);
 
         getHolder(holder).title.setText(model.getName());
         getHolder(holder).location.setText(model.getLocation());
-        getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":model.getOrigin_price() + "元");
+        getHolder(holder).oringePrice.setText((TextUtils.isEmpty(model.getOrigin_price())||model.getOrigin_price().equals("null"))?"":DataFormat.toDoubleTwo(model.getOrigin_price()) + "元");
         String tuanStr= "";
-        if(!TextUtils.isEmpty(model.getTuan_price())){
-            tuanStr +=model.getTuan_price();
-        }
-        if(!TextUtils.isEmpty(model.getUnit())){
-            String unit = model.getUnit().trim();
-            if("张".equals(unit)){
-                tuanStr +="/"+model.getUnit() +"  "+"代金券";
-            }else if("人".equals(unit)){
-                tuanStr +="/"+model.getUnit() +"  "+"专属优惠";
-            }else{
-                tuanStr +="元";
-            }
-        }else{
-            tuanStr +="元";
+        if(!TextUtils.isEmpty(model.getTuanPriceFormat())){
+            tuanStr =model.getTuanPriceFormat();
         }
         getHolder(holder).tuanPrice.setText(tuanStr);
-        getHolder(holder).salary.setText(model.getSalary() + "元佣金");
+        getHolder(holder).salary.setText(DataFormat.toDoubleTwo(model.getSalary()) + "元佣金");
 
         setTags(holder,position);
     }
@@ -188,6 +186,14 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             allHeight += itemHeight;
         }
         return allHeight;
+    }
+
+    public interface OnItemDataChangedListener{
+        void onItemChanged();
+    }
+
+    public void setOnItemDataChangedListener(OnItemDataChangedListener onItemDataChangedListener) {
+        this.onItemDataChangedListener = onItemDataChangedListener;
     }
 
     @Override

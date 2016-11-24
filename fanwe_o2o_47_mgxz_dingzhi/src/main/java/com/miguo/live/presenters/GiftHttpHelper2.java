@@ -2,6 +2,7 @@ package com.miguo.live.presenters;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
@@ -13,13 +14,14 @@ import com.miguo.live.model.getGiftInfo.RootGiftInfo;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
 /**
  * Created by didik on 2016/9/19.
  */
-public class GiftHttpHelper2 implements IHelper {
+public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
     private Gson gson;
     private CallbackView2 mView2;
 
@@ -48,7 +50,7 @@ public class GiftHttpHelper2 implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView2.onSuccess(LiveConstants.GET_GIFT_INFO,body);
+                                onSuccess(mView2,LiveConstants.GET_GIFT_INFO,body);
                             }
                         });
                         return;
@@ -76,11 +78,14 @@ public class GiftHttpHelper2 implements IHelper {
         params.put("live_record_id", live_record_id);
         params.put("gift_num", gift_num);
         params.put("gift_id", gift_id);
-        params.put("method", LiveConstants.POST_GIFT_INFO);
+        params.put("method", LiveConstants.GET_GIFT_INFO);
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mView2.onFailue("####"+message);
+                if(mView2!=null) {
+                    onFailure2(mView2,LiveConstants.POST_GIFT_INFO);
+                    mView2.onFailue("####" + message);
+                }
             }
 
             @Override
@@ -93,15 +98,12 @@ public class GiftHttpHelper2 implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView2.onSuccess(responseBody);
+                        List<String> data=new ArrayList<String>();
+                        data.add(responseBody);
+                        onSuccess(mView2,LiveConstants.POST_GIFT_INFO,data);
                     }
                 });
 
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
             }
         });
     }

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.SellerConstants;
@@ -26,7 +27,7 @@ import java.util.TreeMap;
  * Created by didik on 2016/10/17.
  */
 
-public class SellerNewHttpHelper implements IHelper {
+public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
     private CallbackView2 mView2;
     private Gson gson;
 
@@ -68,6 +69,7 @@ public class SellerNewHttpHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(errorCode,message);
+
             }
 
             @Override
@@ -83,8 +85,8 @@ public class SellerNewHttpHelper implements IHelper {
         params.put("page", page);
         params.put("pageSize", pageSize);
         if (!TextUtils.isEmpty(m_latitude)  && !TextUtils.isEmpty(m_longitude)){
-            params.put("pageSize", pageSize);
-            params.put("pageSize", pageSize);
+            params.put("m_longitude", m_longitude);
+            params.put("m_latitude", m_latitude);
         }
         params.put("method", SellerConstants.SPECIAL_TOPIC);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -97,15 +99,17 @@ public class SellerNewHttpHelper implements IHelper {
                     if (resultSpecialTopic!=null){
                         List<ModelSpecialTopic> body = resultSpecialTopic.getBody();
                         callback2Success(mView2,SellerConstants.SPECIAL_TOPIC,body);
-                        return;
                     }
+                }else {
+                    callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
                 }
-                callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
+                callback2Finish(mView2,SellerConstants.SPECIAL_TOPIC);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(errorCode,message);
+                callback2Failure(mView2,SellerConstants.SPECIAL_TOPIC);
             }
         });
     }
@@ -120,7 +124,7 @@ public class SellerNewHttpHelper implements IHelper {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mView2.onSuccess(method,data);
+                    onSuccess(mView2,method,data);
                 }
             });
         }
@@ -141,7 +145,7 @@ public class SellerNewHttpHelper implements IHelper {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mView2.onFailue(method);
+                    mView2.onFinish(method);
                 }
             });
         }

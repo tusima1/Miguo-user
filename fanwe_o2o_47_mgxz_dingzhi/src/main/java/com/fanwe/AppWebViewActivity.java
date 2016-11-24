@@ -44,16 +44,7 @@ public class AppWebViewActivity extends WebViewActivity
 		return fragment;
 	}
 
-	/*@Override
-	public void finish()
-	{
-		if (mIsStartByAdvs)
-		{
-			startActivity(new Intent(this, MainActivity.class));
-		}
-		super.finish();
-	}
-*/
+
 	@Override
 	public void onEventMainThread(SDBaseEvent event)
 	{

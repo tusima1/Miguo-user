@@ -156,7 +156,15 @@ public enum EnumEventTag {
     TOKEN_FAILUE,
     //关注
     FOCUS_CHANGE_YES,
-    FOCUS_CHANGE_NO;
+    FOCUS_CHANGE_NO,
+    /**
+     * 关闭直播
+     */
+    CLOSE_LIVE,
+    /**
+     * 关闭点播
+     */
+    CLOSE_PLAY;
 
     public static EnumEventTag valueOf(int index) {
         if (index >= 0 && index < values().length) {

@@ -1,15 +1,15 @@
 package com.fanwe.app;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.fanwe.BaseActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
@@ -33,7 +33,7 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
+import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -55,11 +55,11 @@ import java.util.List;
 import cn.jpush.android.api.JPushInterface;
 
 
-public class App extends Application implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
+public class App extends MultiDexApplication implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
 
     private static App mApp = null;
 
-    public List<Class<? extends BaseActivity>> mListClassNotFinishWhenLoginState0 = new ArrayList<Class<? extends BaseActivity>>();
+    public List<Class<? extends Activity>> mListClassNotFinishWhenLoginState0 = new ArrayList<Class<? extends Activity>>();
     public RuntimeConfigModel mRuntimeConfig = new RuntimeConfigModel();
     public Intent mPushIntent;
 
@@ -126,7 +126,13 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
             LocalUserModelDao.insertModel(localUser);
         }
     }
-
+    public class MultiDexApplication extends Application {
+        @Override
+        protected void attachBaseContext(Context base) {
+            super.attachBaseContext(base);
+            MultiDex.install(this);
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -162,11 +168,14 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
         LogUtil.isDebug = ServerUrl.DEBUG;
 
         mUserCurrentInfo = UserCurrentInfo.getInstance();
+
+        ActivityLifeManager.getInstance().init(this);
     }
 
 
     private void initJPush() {
         JPushInterface.init(this);
+        JPushInterface.setDebugMode(true);
         JpushHelper.registerAll();
     }
 
@@ -192,7 +201,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     private void addClassesNotFinishWhenLoginState0() {
-        mListClassNotFinishWhenLoginState0.add(MainActivity.class);
+        mListClassNotFinishWhenLoginState0.add(HiHomeActivity.class);
     }
 
 //    private void initAppCrashHandler() {
@@ -306,14 +315,7 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     }
 
     public String getToken() {
-        String token = "";
-        if (this.mUserCurrentInfo != null) {
-            UserInfoNew infoNew = mUserCurrentInfo.getUserInfoNew();
-            if (infoNew != null) {
-                token = mUserCurrentInfo.getToken();
-            }
-        }
-        return token;
+        return mUserCurrentInfo==null ? "": mUserCurrentInfo.getToken();
     }
 
 
@@ -323,12 +325,16 @@ public class App extends Application implements SDEventObserver, TANetChangeObse
     public void startAVSDK() {
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
-        int appId = Constants.SDK_APPID;
 
+        int appId = Constants.SDK_APPID;
         int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
-        Log.e("liveActivity", "初始化AVSDK");
+
     }
 
     public String getUserSign() {

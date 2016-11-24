@@ -10,29 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="5dp"/>
 
-    <TextView
-        android:id="@+id/tv_title_live_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:text="全部"
-        android:textColor="#2e2d2d"
-        android:textSize="15dp" />
-
-    <!--<com.fanwe.customview.SDGridViewInScroll-->
-        <!--android:id="@+id/gridView_home_fragment_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="12dp"-->
-        <!--android:layout_marginRight="12dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:horizontalSpacing="5dp"-->
-        <!--android:listSelector="@null"-->
-        <!--android:numColumns="2"-->
-        <!--android:stretchMode="columnWidth"-->
-        <!--android:verticalSpacing="5dp" />-->
-
 
     <com.fanwe.view.HomeLiveFragmentRecyclerView
         android:id="@+id/recyclerview"
@@ -40,34 +17,21 @@
         android:layout_height="wrap_content">
 
     </com.fanwe.view.HomeLiveFragmentRecyclerView>
-    
-    <View
-        android:background="@color/white_f2"
-        android:layout_width="match_parent"
-        android:layout_height="5dp"/>
 
-    <TextView
-        android:background="@color/white"
+    <LinearLayout
+        android:id="@+id/ll_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="16sp"
-        android:textColor="@color/text_base_color"
-        android:text="推荐团购"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:orientation="vertical"
+        android:visibility="gone">
 
-    <View
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:background="@color/text_base_color_2"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
-
-    <com.fanwe.view.HomeLiveFragmentRecyclerView
-        android:id="@+id/recyclerview_tuan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp400"
+            android:src="@drawable/nopic" />
+    </LinearLayout>
 
 
-    </com.fanwe.view.HomeLiveFragmentRecyclerView>
 
 </LinearLayout>

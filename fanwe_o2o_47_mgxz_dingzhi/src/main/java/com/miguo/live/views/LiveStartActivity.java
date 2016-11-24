@@ -255,6 +255,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == 8888) {
             dataBindingLiveStart.shopName.set(CurLiveInfo.modelShop.getShop_name());
+            CurLiveInfo.setShopID(CurLiveInfo.modelShop.getId());
             return;
         }
     }
@@ -274,7 +275,6 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
                 @Override
                 public void onSuccessResponse(String responseBody) {
-                    super.onSuccessResponse(responseBody);
 
                 }
             });

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.MapSearchActivity;
 import com.fanwe.constant.Constant.SearchTypeMap;
 import com.fanwe.constant.Constant.SearchTypeNormal;
@@ -20,6 +19,7 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.customview.SDViewNavigatorManager.SDViewNavigatorManagerListener;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
 public class StoreListContainerFragment extends BaseFragment {
@@ -52,7 +52,7 @@ public class StoreListContainerFragment extends BaseFragment {
     }
 
     private void initTitle() {
-        if (getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof HiHomeActivity) {
             mTitle.setLeftImageLeft(0);
         } else {
             mTitle.setLeftImageLeft(R.drawable.ic_arrow_left_white);

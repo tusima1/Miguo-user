@@ -2,6 +2,7 @@ package com.miguo.ui.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.entity.AdspaceListBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 import java.util.Random;
@@ -24,14 +27,8 @@ import java.util.Random;
 public class HomeADView2 extends BaseHorizantalScrollView{
 
     RelativeLayout content;
-    String[] urls = {
-      "http://img.xiaoneiit.com/mgxz/ad2_1.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_2.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_3.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_4.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_5.jpg",
-      "http://img.xiaoneiit.com/mgxz/ad2_6.jpg"
-    };
+    List<AdspaceListBean.Result.Body> ads;
+    OnTopicAdsClickListener onTopicAdsClickListener;
 
     public HomeADView2(Context context) {
         super(context);
@@ -56,12 +53,14 @@ public class HomeADView2 extends BaseHorizantalScrollView{
         addView(content);
     }
 
-    public void init(List ads){
+    public void init(List<AdspaceListBean.Result.Body> ads){
+        content.removeAllViews();
         if(ads == null || ads.size() == 0){
             return ;
         }
 
-        content.removeAllViews();
+        this.ads = ads;
+
 
         int width = getScreenWidth() * 3 / 4;
         int height = width / 2;
@@ -72,7 +71,7 @@ public class HomeADView2 extends BaseHorizantalScrollView{
              * 标题
              */
             TextView title = new TextView(getContext());
-            title.setText("啊~西湖的水~你的菜 我的饭 他的谁 还差一碗水…");
+            title.setText(getItem(i).getTitle());
             title.setTextSize(16);
             title.setTextColor(Color.WHITE);
             title.setPadding(dip2px(30), dip2px(30), dip2px(30), dip2px(30));
@@ -119,7 +118,12 @@ public class HomeADView2 extends BaseHorizantalScrollView{
             }
 
             img.setLayoutParams(imgParams);
-            SDViewBinder.setImageView(urls[i], img);
+
+            String url =getItem(i).getIcon();
+            if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+                url = DisplayUtil.qiniuUrlExchange(url,400,200);
+            }
+            SDViewBinder.setImageView(url, img);
 
 
             title.setLayoutParams(imgParams);
@@ -129,8 +133,38 @@ public class HomeADView2 extends BaseHorizantalScrollView{
             content.addView(img);
             content.addView(view);
             content.addView(title);
+
+            img.setOnClickListener(new TopicAdsListener(i));
+
+        }
+    }
+
+    class TopicAdsListener implements View.OnClickListener{
+
+        int position;
+
+        public TopicAdsListener(int position) {
+            this.position = position;
         }
 
+        @Override
+        public void onClick(View v) {
+            if(onTopicAdsClickListener != null){
+                onTopicAdsClickListener.onTopicAdsClick(getItem(position));
+            }
+        }
+    }
+
+    public void setOnTopicAdsClickListener(OnTopicAdsClickListener onTopicAdsClickListener) {
+        this.onTopicAdsClickListener = onTopicAdsClickListener;
+    }
+
+    public interface OnTopicAdsClickListener{
+        void onTopicAdsClick(AdspaceListBean.Result.Body ad);
+    }
+
+    public AdspaceListBean.Result.Body getItem(int position){
+        return ads.get(position);
     }
 
 }

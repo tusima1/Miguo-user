@@ -15,7 +15,8 @@ import com.miguo.view.HiShopDetailView;
 import java.util.TreeMap;
 
 /**
- * Created by Administrator on 2016/10/21.
+ * Created by zlh/狗蛋哥/Barry on 2016/10/21.
+ * 商家详情页接口实现类
  */
 public class HiShopDetailDaoImpl extends BaseDaoImpl implements HiShopDetailDao{
 
@@ -30,7 +31,7 @@ public class HiShopDetailDaoImpl extends BaseDaoImpl implements HiShopDetailDao{
             return;
         }
         TreeMap<String, String> map = new TreeMap<>();
-        map.put("method", "ShopDetails");
+        map.put("method", "ShopDetailsNew");
         map.put("shop_id", shop_id);
         map.put("m_longitude", m_longitude);
         map.put("m_latitude", m_latitude);

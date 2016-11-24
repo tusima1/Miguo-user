@@ -3,18 +3,27 @@ package com.miguo.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
- * Created by mac on 16/8/18.
+ * Created by zlh/狗蛋哥/Barry on 16/8/18.
+ * 首页banner
  */
-public class HomeBannerAdapter extends FragmentPagerAdapter {
+public class HomeBannerAdapter extends FragmentStatePagerAdapter {
 
     ArrayList<Fragment> fragments;
+    int itemCount = 0;
+    FragmentManager fm;
+
 
     public HomeBannerAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
         super(fm);
+        this.fm = fm;
         this.fragments = fragments;
     }
 
@@ -24,19 +33,18 @@ public class HomeBannerAdapter extends FragmentPagerAdapter {
         return fragments.get(position);
     }
 
+
     @Override
     public int getCount() {
         return fragments.size();
     }
 
-//    @Override
-//    public Object instantiateItem(ViewGroup container, int position) {
-//        if(position == -1){
-//            position = fragments.size() - 1;
-//        }
-//        if(position == fragments.size()){
-//            position = 0;
-//        }
-//        return fragments.get(position);
-//    }
+    @Override
+    public int getItemPosition(Object object) {
+        if(itemCount > 0){
+            itemCount--;
+            return POSITION_NONE;
+        }
+        return super.getItemPosition(object);
+    }
 }

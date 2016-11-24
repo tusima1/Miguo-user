@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.MapSearchActivity;
 import com.fanwe.adapter.CategoryCateLeftAdapter;
 import com.fanwe.adapter.CategoryCateRightAdapter;
@@ -59,6 +58,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -230,7 +230,7 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
         }
         mTitle.setMiddleTextTop(title);
 
-        if (getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof HiHomeActivity) {
             mTitle.setLeftImageLeft(0);
         } else {
             mTitle.setLeftImageLeft(R.drawable.ic_arrow_left_white);

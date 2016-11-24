@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="tencent_tls_ui_titleFontColor">#000000</color>
-
-
     <color name="transparent">#00000000</color>
-
-
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <!--蒙版-->
     <color name="dialog_btn_pressed_color">#efefef</color>
-
-
     <!--app主色调，背景色-->
     <color name="colorPrimary">#FFFFFF</color>
-    <!--背景色-->
-    <!--app主题色，应用于导航，按钮-->
-    <!--主题色激活态，如按钮高亮-->
-    <!--红色标签/提示-->
-    <!--红色标签/提示高亮-->
-    <!--黄色色标签/提示-->
-    <!--黄色色标签/提示高亮-->
-    <!--黄色蒙版-->
     <!--红色-->
     <color name="colorRed">#FF3333</color>
     <!--文字白色-->
@@ -29,21 +15,10 @@
     <!--文字G1-->
     <!--文字G2-->
     <color name="colorTextG2">#999999</color>
-    <!--文字G3-->
-    <!--文字G4-->
-    <!--文字black-->
-    <!--gray1-->
-    <!--light gray-->
     <!--gray2-->
     <color name="colorGray2">#DCDCDC</color>
     <!--gray3-->
     <color name="colorGray3">#C8C8C8</color>
-    <!--gray4-->
-    <!--gray5-->
-    <!--gray6-->
-
-
-
     <color name="colorSendName">#9966cc</color>
     <color name="colorSendName1">#FF3163</color>
     <color name="colorSendName2">#973365</color>
@@ -52,7 +27,4 @@
     <color name="colorSendName5">#97BC87</color>
     <color name="colorSendName6">#FFAE1F</color>
     <color name="colorSendName7">#FF437D</color>
-    <!--蒙版-->
-
-
 </resources>

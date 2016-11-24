@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -48,6 +49,18 @@ public abstract class Category implements BaseView {
 
     public Category(Category category, View view, String title) {
         this.title =title;
+        this.view = view;
+        this.activity = category.getActivity();
+        this.app = activity.getApp();
+        initFirst();
+        findViews();
+        initListener();
+        setListener();
+        initViews();
+        init();
+    }
+
+    public Category(Category category, View view) {
         this.view = view;
         this.activity = category.getActivity();
         this.app = activity.getApp();
@@ -120,11 +133,9 @@ public abstract class Category implements BaseView {
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding() {
-//        if (top != null) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                top.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
-//            }
-//        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
     }
 
     /**
@@ -132,14 +143,17 @@ public abstract class Category implements BaseView {
      * 一般用于滑动时候的处理
      * @param radio
      */
-    protected void setTitleAlpha(float radio){
-//        top.setAlpha(radio);
+    protected void setTitleAlpha(View top, float radio){
+        top.setAlpha(radio);
     }
 
     /**
      * 沉浸式标题栏效果需要设置padding
      */
     protected void setTitlePadding(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
         if (view != null) {
             view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
         }

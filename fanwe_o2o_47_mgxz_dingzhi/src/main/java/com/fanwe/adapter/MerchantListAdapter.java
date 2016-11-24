@@ -23,6 +23,7 @@ import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
 import com.miguo.app.HiShopDetailActivity;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -70,7 +71,12 @@ public class MerchantListAdapter extends SDSimpleBaseAdapter<ModelBusinessListin
             SDViewUtil.hide(viewHolderImage);
         }
         SDViewBinder.setTextView(tv_tuan_edtail, model.getTuan_name());
-        SDViewBinder.setImageView(model.getIndex_img(), iv_image);
+
+        String url=model.getIndex_img();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,100,100);
+        }
+        SDViewBinder.setImageView(url, iv_image);
         SDViewBinder.setTextView(tv_name, model.getShop_name());
         SDViewBinder.setRatingBar(rb_rating, DataFormat.toFloat(model.getAvg_grade()));
         if (!TextUtils.isEmpty(model.getAvg_grade())) {

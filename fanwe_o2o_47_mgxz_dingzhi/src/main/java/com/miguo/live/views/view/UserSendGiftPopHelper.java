@@ -290,41 +290,7 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
 
     @Override
     public void onSuccess(String responseBody) {
-        Gson gson = new Gson();
-        final GiftBean root = gson.fromJson(responseBody, GiftBean.class);
-        int statusCode = root.getStatusCode();
-        String message = root.getMessage();
-//                {"result":[{"body":[]}],"message":"用户余额不足，无法购买","token":"8e0b891282e5d6758d06e6da8bb8fa8e","statusCode":"302"}
-//                200  正常状态
-//                302  参数错误，message中会有描述
-//                300  处理错误，礼物未赠送成功
-//                500  服务器配置错误
-        if (statusCode == 200) {
-            //TODO 成功
-            MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    String userdiamond = root.getResult().get(0).getBody().get(0).getUserdiamond();
-                    int gift_num = root.getResult().get(0).getBody().get(0).getGift_num();
-                    if (!TextUtils.isEmpty(userdiamond)) {
-                        money = MGStringFormatter.getFloat(userdiamond);
-                        mTvMoney.setText(userdiamond);
-                    }
-                    if (mListener != null) {
-                        mListener.onPaySuc(selectedItemInfo, gift_num);
-                        Log.e("test", "给狗蛋的--->礼物数量: " + gift_num);
-                    }
-                }
-            });
-        } else if (statusCode == 369) {
-//            if (message.contains("余额不足")){
-//
-//            }else {
-//                MGToast.showToast("ERROR_OK:"+message);
-//            }
-            showDialog();
-        }
-        sendCount = 0;
+
     }
 
     @Override
@@ -339,6 +305,46 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
                 mTvMoney.setText(userdiamond);
                 mGiftAdapter.setData(giftList);
             }
+        }else if (LiveConstants.POST_GIFT_INFO.equals(method)){
+            if (datas==null || datas.size()<=0)return;
+            String str = datas.get(0).toString();
+            Gson gson = new Gson();
+            final GiftBean root = gson.fromJson(str, GiftBean.class);
+            int statusCode = root.getStatusCode();
+            String message = root.getMessage();
+//                {"result":[{"body":[]}],"message":"用户余额不足，无法购买","token":"8e0b891282e5d6758d06e6da8bb8fa8e","statusCode":"302"}
+//                200  正常状态
+//                302  参数错误，message中会有描述
+//                300  处理错误，礼物未赠送成功
+//                500  服务器配置错误
+            if (statusCode == 200) {
+                //TODO 成功
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String userdiamond = root.getResult().get(0).getBody().get(0).getUserdiamond();
+                        int gift_num = root.getResult().get(0).getBody().get(0).getGift_num();
+                        if (!TextUtils.isEmpty(userdiamond)) {
+                            money = MGStringFormatter.getFloat(userdiamond);
+                            mTvMoney.setText(userdiamond);
+                        }
+                        if (mListener != null) {
+                            mListener.onPaySuc(selectedItemInfo, gift_num);
+                            Log.e("test", "给狗蛋的--->礼物数量: " + gift_num);
+                        }
+                    }
+                });
+            } else if (statusCode == 369) {
+//            if (message.contains("余额不足")){
+//
+//            }else {
+//                MGToast.showToast("ERROR_OK:"+message);
+//            }
+                showDialog();
+            }else if(statusCode==399){
+                MGToast.showToast(message);
+            }
+            sendCount = 0;
         }
     }
 

@@ -15,7 +15,6 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/price_tag"
         android:layout_marginLeft="8dp"
         android:background="@drawable/shape_cricle_bg_white_stoke_black"
         android:textSize="10sp"

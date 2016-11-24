@@ -6,12 +6,15 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
+import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.model.getAttentionFans.ResultFans;
 import com.fanwe.user.model.getAttentionFans.RootFans;
 import com.fanwe.user.model.getAttentionFocus.ModelAttentionFocus;
@@ -39,9 +42,6 @@ import com.fanwe.user.model.getProductList.RootProductList;
 import com.fanwe.user.model.getShopAndUserCollect.ModelShopAndUserCollect;
 import com.fanwe.user.model.getShopAndUserCollect.ResultShopAndUserCollect;
 import com.fanwe.user.model.getShopAndUserCollect.RootShopAndUserCollect;
-import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
-import com.fanwe.user.model.getSpokePlay.ResultSpokePlay;
-import com.fanwe.user.model.getSpokePlay.RootSpokePlay;
 import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.getUserAttention.ResultUserAttention;
 import com.fanwe.user.model.getUserAttention.RootUserAttention;
@@ -58,7 +58,11 @@ import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.model.putAttention.ResultAttention;
 import com.fanwe.user.model.putAttention.RootAttention;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.model.getLiveListNew.ModelResultLive;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
+import com.miguo.live.model.getLiveListNew.ModelRootLive;
 import com.miguo.live.model.getWallet.ModelMyWallet;
 import com.miguo.live.model.getWallet.ResultMyWallet;
 import com.miguo.live.model.getWallet.RootMyWallet;
@@ -66,14 +70,16 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
 /**
  * Created by Administrator on 2016/8/6.
  */
-public class UserHttpHelper implements IHelper {
+public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = UserHttpHelper.class.getSimpleName();
     private Gson gson;
@@ -106,7 +112,23 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(UserConstants.USER_INFO_METHOD, null);
+                try {
+
+
+                    Type type = new TypeToken<Root<UserInfoNew>>() {
+                    }.getType();
+                    Gson gson = new Gson();
+                    Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+                    String status = root.getStatusCode();
+                    String message = root.getMessage();
+                    if ("200".equals(status)) {
+                        onSuccess(mView, UserConstants.USER_INFO_METHOD, null);
+                    } else {
+                        onErrorResponse(message, status);
+                    }
+                } catch (Exception e) {
+                    onErrorResponse("更新个人简介失败", "302");
+                }
             }
 
             @Override
@@ -116,7 +138,9 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onFinish() {
-                mView.onFinish(UserConstants.USER_INFO_METHOD);
+                if (mView != null) {
+                    mView.onFinish(UserConstants.USER_INFO_METHOD);
+                }
             }
         });
 
@@ -133,7 +157,7 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test", "responseBody PERSONALHOME:" + responseBody);
+
                 //200为正常的返回 。
                 Gson gson = new Gson();
                 RootPersonalHome rootPersonalHome = gson.fromJson(responseBody, RootPersonalHome
@@ -146,13 +170,14 @@ public class UserHttpHelper implements IHelper {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView.onSuccess(UserConstants.PERSONALHOME, body);
+                                    onSuccess(mView, UserConstants.PERSONALHOME, body);
                                 }
                             });
                         }
                     }
                 } else {
-                    mView.onFailue(responseBody);
+                    onFailure2(mView, UserConstants.PERSONALHOME);
+
                 }
             }
 
@@ -194,10 +219,10 @@ public class UserHttpHelper implements IHelper {
                         RootMyDistributionCorps.class);
                 List<ResultMyDistributionCorps> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, null);
+                    onSuccess(mView, UserConstants.MY_DISTRIBUTION_CROPS, null);
                     return;
                 }
-                mView.onSuccess(UserConstants.MY_DISTRIBUTION_CROPS, result);
+                onSuccess(mView, UserConstants.MY_DISTRIBUTION_CROPS, result);
             }
 
             @Override
@@ -240,7 +265,7 @@ public class UserHttpHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(modelUserChangeMobile.getMessage());
+                                onSuccess(mView, modelUserChangeMobile.getMessage());
                             }
                         });
                     }
@@ -275,14 +300,18 @@ public class UserHttpHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(UserConstants.USER_RED_PACKET_LIST, result);
+                                onSuccess(mView, UserConstants.USER_RED_PACKET_LIST, result);
                             }
                         });
                     }
                 } else {
+                    if (mView == null) {
+                        return;
+                    }
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             mView.onFailue("没有请求到数据!");
                         }
                     });
@@ -295,7 +324,7 @@ public class UserHttpHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(mView!=null) {
+                        if (mView != null) {
                             mView.onFinish(UserConstants.USER_RED_PACKET_LIST);
                         }
                     }
@@ -333,29 +362,20 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-//                Log.e("test", "团购券 :" + responseBody);
                 RootGroupCoupon rootGroupCoupon = gson.fromJson(responseBody, RootGroupCoupon
                         .class);
                 final List<ResultGroupCoupon> result = rootGroupCoupon.getResult();
                 if (result != null && result.size() > 0) {
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mView.onSuccess(UserConstants.GROUP_BUY_COUPON_LIST, result);
-                        }
-                    });
+                    onSuccess(mView, UserConstants.GROUP_BUY_COUPON_LIST, result);
+                } else {
+                    onFailure2(mView, UserConstants.GROUP_BUY_COUPON_LIST);
                 }
 
             }
 
             @Override
             public void onFinish() {
-                MGUIUtil.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mView.onFinish(UserConstants.GROUP_BUY_COUPON_LIST);
-                    }
-                });
+                onFinish2(mView, UserConstants.GROUP_BUY_COUPON_LIST);
             }
         });
     }
@@ -380,7 +400,7 @@ public class UserHttpHelper implements IHelper {
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView.onSuccess(UserConstants.DISTR_INFO, null);
+                            onSuccess(mView, UserConstants.DISTR_INFO, null);
                         }
                     });
                     return;
@@ -389,7 +409,7 @@ public class UserHttpHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onSuccess(UserConstants.DISTR_INFO, items);
+                        onSuccess(mView, UserConstants.DISTR_INFO, items);
                     }
                 });
             }
@@ -433,14 +453,18 @@ public class UserHttpHelper implements IHelper {
                     ResultNameCardQR resultNameCardQR = result.get(0);
                     if (resultNameCardQR != null) {
                         final List<ModelNameCardQR> body = resultNameCardQR.getBody();
+
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(UserConstants.QR_SHOP_CARD, body);
+                                onSuccess(mView, UserConstants.QR_SHOP_CARD, body);
                             }
                         });
                     }
                 } else {
+                    if (mView == null) {
+                        return;
+                    }
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -452,6 +476,9 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if (mView == null) {
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -476,17 +503,17 @@ public class UserHttpHelper implements IHelper {
                 RootGetUserUpgradeOrder root = gson.fromJson(responseBody,
                         RootGetUserUpgradeOrder.class);
                 List<ResultGetUserUpgradeOrder> results = root.getResult();
-                if (SDCollectionUtil.isEmpty(results)) {
-                    mView.onSuccess(UserConstants.USER_UPGRADE_ORDER_GET, null);
+                if (SDCollectionUtil.isEmpty(results) || !"200".equals(root.getStatusCode())) {
+                    onFailure2(mView, UserConstants.USER_UPGRADE_ORDER_GET);
                     return;
                 }
                 List<ModelGetUserUpgradeOrder> items = results.get(0).getBody();
-                mView.onSuccess(UserConstants.USER_UPGRADE_ORDER_GET, items);
+                onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_GET, items);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+                onFailure2(mView, UserConstants.USER_UPGRADE_ORDER_GET);
             }
         });
     }
@@ -509,16 +536,16 @@ public class UserHttpHelper implements IHelper {
                         RootPostUserUpgradeOrder.class);
                 List<ResultPostUserUpgradeOrder> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
-                    mView.onSuccess(UserConstants.USER_UPGRADE_ORDER_POST, null);
+                    onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_POST, null);
                     return;
                 }
                 List<ModelPostUserUpgradeOrder> items = results.get(0).getBody();
-                mView.onSuccess(UserConstants.USER_UPGRADE_ORDER_POST, items);
+                onSuccess(mView, UserConstants.USER_UPGRADE_ORDER_POST, items);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                MGToast.showToast(message);
+//                MGToast.showToast(message);
             }
         });
     }
@@ -546,10 +573,10 @@ public class UserHttpHelper implements IHelper {
                     //错误
                     List<RootShopComment> roots = new ArrayList<>();
                     roots.add(root);
-                    mView.onSuccess(UserConstants.USER_CHANGE_PWD, roots);
+                    onSuccess(mView, UserConstants.USER_CHANGE_PWD, roots);
                     return;
                 }
-                mView.onSuccess(UserConstants.USER_CHANGE_PWD, null);
+                onSuccess(mView, UserConstants.USER_CHANGE_PWD, null);
             }
 
             @Override
@@ -582,10 +609,10 @@ public class UserHttpHelper implements IHelper {
                     //错误
                     List<RootShopComment> roots = new ArrayList<>();
                     roots.add(root);
-                    mView.onSuccess(UserConstants.USER_FORGOT, roots);
+                    onSuccess(mView, UserConstants.USER_FORGOT, roots);
                     return;
                 }
-                mView.onSuccess(UserConstants.USER_FORGOT, null);
+                onSuccess(mView, UserConstants.USER_FORGOT, null);
             }
 
             @Override
@@ -657,7 +684,7 @@ public class UserHttpHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(UserConstants.ATTENTION_Fans, resultFans.getBody());
+                                onSuccess(mView, UserConstants.ATTENTION_Fans, resultFans.getBody());
                             }
                         });
                         return;
@@ -709,11 +736,11 @@ public class UserHttpHelper implements IHelper {
                 RootAttentionFocus root = gson.fromJson(responseBody, RootAttentionFocus.class);
                 List<ResultAttentionFocus> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.ATTENTION_FOCUS, null);
+                    onSuccess(mView, UserConstants.ATTENTION_FOCUS, null);
                     return;
                 }
                 List<ModelAttentionFocus> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.ATTENTION_FOCUS, items);
+                onSuccess(mView, UserConstants.ATTENTION_FOCUS, items);
             }
 
             @Override
@@ -723,6 +750,10 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if (mView == null) {
+                    return;
+                }
+
                 mView.onFinish(UserConstants.ATTENTION_FOCUS);
             }
         });
@@ -747,11 +778,11 @@ public class UserHttpHelper implements IHelper {
                 RootShopAndUserCollect root = gson.fromJson(responseBody, RootShopAndUserCollect.class);
                 List<ResultShopAndUserCollect> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.SHOP_AND_USER_COLLECT, null);
+                    onSuccess(mView, UserConstants.SHOP_AND_USER_COLLECT, null);
                     return;
                 }
                 List<ModelShopAndUserCollect> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.SHOP_AND_USER_COLLECT, items);
+                onSuccess(mView, UserConstants.SHOP_AND_USER_COLLECT, items);
             }
 
             @Override
@@ -761,6 +792,9 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if (mView == null) {
+                    return;
+                }
                 mView.onFinish(UserConstants.SHOP_AND_USER_COLLECT);
             }
         });
@@ -797,12 +831,15 @@ public class UserHttpHelper implements IHelper {
                             MGUIUtil.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mView.onSuccess(UserConstants.ATTENTION, body);
+                                    onSuccess(mView, UserConstants.ATTENTION, body);
                                 }
                             });
                         }
                         return;
                     }
+                }
+                if (mView == null) {
+                    return;
                 }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
@@ -837,11 +874,14 @@ public class UserHttpHelper implements IHelper {
                         MGUIUtil.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mView.onSuccess(UserConstants.MY_WALLET, body);
+                                onSuccess(mView, UserConstants.MY_WALLET, body);
                             }
                         });
                         return;
                     }
+                }
+                if (mView == null) {
+                    return;
                 }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
@@ -853,6 +893,9 @@ public class UserHttpHelper implements IHelper {
 
             @Override
             public void onFinish() {
+                if (mView == null) {
+                    return;
+                }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -881,11 +924,11 @@ public class UserHttpHelper implements IHelper {
                 RootPersonHomePage root = gson.fromJson(responseBody, RootPersonHomePage.class);
                 List<ResultPersonHomePage> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.PERSON_HOME_PAGE, null);
+                    onSuccess(mView, UserConstants.PERSON_HOME_PAGE, null);
                     return;
                 }
                 List<ModelPersonHomePage> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.PERSON_HOME_PAGE, items);
+                onSuccess(mView, UserConstants.PERSON_HOME_PAGE, items);
             }
 
             @Override
@@ -912,11 +955,11 @@ public class UserHttpHelper implements IHelper {
                 RootProductList root = gson.fromJson(responseBody, RootProductList.class);
                 List<ResultProductList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.GET_PRODUCT_LIST, null);
+                    onSuccess(mView, UserConstants.GET_PRODUCT_LIST, null);
                     return;
                 }
                 List<ModelProductList> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.GET_PRODUCT_LIST, items);
+                onSuccess(mView, UserConstants.GET_PRODUCT_LIST, items);
             }
 
             @Override
@@ -940,14 +983,14 @@ public class UserHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootSpokePlay root = gson.fromJson(responseBody, RootSpokePlay.class);
-                List<ResultSpokePlay> result = root.getResult();
+                ModelRootLive root = gson.fromJson(responseBody, ModelRootLive.class);
+                List<ModelResultLive> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.GET_SPOKE_PLAY, null);
+                    onSuccess(mView, UserConstants.GET_SPOKE_PLAY, null);
                     return;
                 }
-                List<ModelSpokePlay> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.GET_SPOKE_PLAY, items);
+                List<ModelRoom> items = result.get(0).getBody();
+                onSuccess(mView, UserConstants.GET_SPOKE_PLAY, items);
             }
 
             @Override
@@ -974,16 +1017,47 @@ public class UserHttpHelper implements IHelper {
                 RootUserAttention root = gson.fromJson(responseBody, RootUserAttention.class);
                 List<ResultUserAttention> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    mView.onSuccess(UserConstants.USER_ATTENTION, null);
+                    onSuccess(mView, UserConstants.USER_ATTENTION, null);
                     return;
                 }
                 List<ModelUserAttention> items = result.get(0).getBody();
-                mView.onSuccess(UserConstants.USER_ATTENTION, items);
+                onSuccess(mView, UserConstants.USER_ATTENTION, items);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 取当前用户的分销等级。
+     */
+    public void getUserLevel() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("method", UserConstants.USER_DISTRIBUTION_LEVEL);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String, String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if ("200".equals(status)) {
+                    List<HashMap<String, String>> datas = validateBodyList(root);
+                    onSuccess(mView, UserConstants.USER_DISTRIBUTION_LEVEL, datas);
+                } else {
+                    onFailure2(mView, UserConstants.USER_DISTRIBUTION_LEVEL);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+//                MGToast.showToast(message);
             }
         });
     }

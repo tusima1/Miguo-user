@@ -29,6 +29,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.ScanResultHandler;
 import com.fanwe.work.SystemBarTintManager;
 import com.lidroid.xutils.ViewUtils;
+import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
@@ -148,7 +149,7 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
     public void finish() {
         if (mIsStartByAdvs) {
             mIsStartByAdvs = false;
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, HiHomeActivity.class));
         }
         super.finish();
     }

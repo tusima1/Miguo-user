@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/activity_goods_detail"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -28,10 +27,6 @@
                 android:background="@color/bg_activity_gray"/>
             <!--门店列表-->
             <include layout="@layout/item_goodsdetail_shoplist"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp10"
-                android:background="@color/bg_activity_gray"/>
             <!--推荐理由-->
             <include layout="@layout/item_goodsdetail_description"/>
             <View

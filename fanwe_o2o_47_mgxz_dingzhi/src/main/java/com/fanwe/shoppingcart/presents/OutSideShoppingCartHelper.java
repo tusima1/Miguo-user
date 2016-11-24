@@ -1,6 +1,7 @@
 package com.fanwe.shoppingcart.presents;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
@@ -107,17 +108,21 @@ public class OutSideShoppingCartHelper extends Presenter {
                 if(mCallbackView == null){
                     return;
                 }
-                Root root = JSON.parseObject(responseBody, Root.class);
-                String statusCode = root.getStatusCode();
-                String message = root.getMessage();
-                if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
-                    if(mCallbackView!=null) {
-                        mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                try {
+                    Root root = JSON.parseObject(responseBody, Root.class);
+                    String statusCode = root.getStatusCode();
+                    String message = root.getMessage();
+                    if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
+                        if (mCallbackView != null) {
+                            mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                        }
+                    } else {
+                        if (mCallbackView != null) {
+                            mCallbackView.onFailue(message);
+                        }
                     }
-                } else {
-                    if(mCallbackView!=null) {
-                        mCallbackView.onFailue(message);
-                    }
+                }catch (Exception e){
+                    Log.e("exception",e.getLocalizedMessage());
                 }
             }
 
@@ -217,12 +222,16 @@ public class OutSideShoppingCartHelper extends Presenter {
 
     }
 
+
+
+
     /**
      * 批量加入购物车。
      *
      * @param datas
+     * @param fromShopCart  是否来自购物车，如果来自购物车的话取goods_id 要取 pro_id.。否则来自本地购物车的话取id
      */
-    public void multiAddShopCart(List<ShoppingCartInfo> datas) {
+    public void multiAddShopCart(List<ShoppingCartInfo> datas,boolean fromShopCart) {
         if (datas == null || datas.size() < 1) {
             return;
         }
@@ -234,7 +243,13 @@ public class OutSideShoppingCartHelper extends Presenter {
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo info = datas.get(i);
 
-            if (TextUtils.isEmpty(info.getPro_id()) || TextUtils.isEmpty(info.getNumber())) {
+             String pro_id = "";
+            if(fromShopCart){
+                pro_id = info.getPro_id();
+            }else{
+                pro_id= info.getId();
+            }
+            if (TextUtils.isEmpty(pro_id) || TextUtils.isEmpty(info.getNumber())) {
                 continue;
             }
 
@@ -242,7 +257,7 @@ public class OutSideShoppingCartHelper extends Presenter {
                 continue;
             }
             fx_user_ids.append(info.getFx_user_id() == null ? "" : info.getFx_user_id() + ",");
-            goods_ids.append(info.getPro_id() + ",");
+            goods_ids.append(pro_id + ",");
             cart_types.append("1,");
             add_goods_num.append(info.getNumber() + ",");
         }

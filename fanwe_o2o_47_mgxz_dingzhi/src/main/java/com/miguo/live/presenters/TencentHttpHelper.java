@@ -102,13 +102,13 @@ public class TencentHttpHelper implements ITencentResult {
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
                 if (SDCollectionUtil.isEmpty(resultGenerateSigns)) {
-//                    mView.onSuccess(LiveConstants.GENERATE_SIGN, null);
+//                    onSuccess(mView,LiveConstants.GENERATE_SIGN, null);
                     mListener.onResult(false);
                     return;
                 }
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
                 List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
-//                mView.onSuccess(LiveConstants.GENERATE_SIGN, modelGenerateSign);
+//                onSuccess(mView,LiveConstants.GENERATE_SIGN, modelGenerateSign);
                 if(modelGenerateSign!=null&& modelGenerateSign.size()>0) {
                     String usersig = modelGenerateSign.get(0).getUsersig();
                     MySelfInfo.getInstance().setUserSig(usersig);

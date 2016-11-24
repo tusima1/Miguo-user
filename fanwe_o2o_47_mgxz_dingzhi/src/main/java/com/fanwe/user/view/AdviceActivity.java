@@ -46,6 +46,7 @@ public class AdviceActivity extends BaseActivity implements CallbackView2 {
                 if (TextUtils.isEmpty(strAdvice)) {
                     MGToast.showToast("请输入建议");
                 } else {
+                    btnSubmit.setClickable(false);
                     userHttpHelper.advice(strAdvice);
                 }
             }

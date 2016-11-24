@@ -1,9 +1,4 @@
 package com.fanwe.service;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.fanwe.MainActivity;
-import com.fanwe.MyMessageActivity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.fanwe.MyMessageActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.jpush.android.api.JPushInterface;
 
 public class MyReceiver extends BroadcastReceiver{
@@ -22,7 +25,7 @@ public class MyReceiver extends BroadcastReceiver{
 		if(JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction()))
 		{
 			//打开通知
-			Intent in=new Intent(context,MainActivity.class);
+			Intent in=new Intent(context, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
 			bundle.putInt("index", 3);
 			in.putExtras(bundle);
         	in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );

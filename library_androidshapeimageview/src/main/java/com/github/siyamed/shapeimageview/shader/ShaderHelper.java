@@ -24,7 +24,7 @@ public abstract class ShaderHelper
 	protected int viewWidth;
 	protected int viewHeight;
 
-	protected int borderColor = Color.BLACK;
+	protected int borderColor = Color.TRANSPARENT;
 	protected int borderWidth = 0;
 	protected float borderAlpha = 1f;
 	protected boolean square = false;

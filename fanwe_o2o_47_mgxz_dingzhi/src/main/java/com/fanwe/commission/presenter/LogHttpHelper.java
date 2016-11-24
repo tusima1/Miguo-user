@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.RootCommissionLog;
@@ -21,7 +22,7 @@ import java.util.TreeMap;
  * Created by didik on 2016/8/28.
  * 日志模块
  */
-public class LogHttpHelper implements IHelper{
+public class LogHttpHelper extends OldCallbackHelper implements IHelper{
 
     private Gson gson;
     private CallbackView2 mView2;
@@ -59,7 +60,7 @@ public class LogHttpHelper implements IHelper{
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(CommissionConstance.COMMISSION_LOG,result);
+                            onSuccess(mView2,CommissionConstance.COMMISSION_LOG,result);
                         }
                     });
                 }else {
@@ -106,7 +107,7 @@ public class LogHttpHelper implements IHelper{
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mView2.onSuccess(CommissionConstance.USER_COMMISSION_LOG,result);
+                            onSuccess(mView2,CommissionConstance.USER_COMMISSION_LOG,result);
                         }
                     });
                 }else {

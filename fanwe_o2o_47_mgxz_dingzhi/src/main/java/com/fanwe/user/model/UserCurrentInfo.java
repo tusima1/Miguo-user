@@ -33,6 +33,9 @@ public class UserCurrentInfo  {
 
     }
     public UserInfoNew getUserInfoNew() {
+        if (userInfoNew == null){
+            userInfoNew=new UserInfoNew();
+        }
         return userInfoNew;
     }
 

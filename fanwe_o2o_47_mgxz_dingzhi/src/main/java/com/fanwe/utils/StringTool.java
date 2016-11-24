@@ -9,6 +9,10 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2016/8/18.
  */
 public class StringTool {
+
+    public static final String STRING_NUMBER="number";
+    public static final String STRING_ENGLISH="English";
+    public static final String STRING_CHINESE="Chinese";
     /**
      * 字符串处理
      *
@@ -147,5 +151,39 @@ public class StringTool {
             float y = distance / 1000;
             return DataFormat.toDoubleTwo(y + "") + "km";
         }
+    }
+
+    /**
+     * 判断输入的字符类型。
+     *
+     * @param data 需要判断的字符
+     * @param type number / English/Chinese
+     * @return
+     */
+    public static boolean checkStringPattern(String data, String type) {
+        boolean result = false;
+        Pattern p = null;
+        if (TextUtils.isEmpty(data)) {
+            return result;
+        }
+        switch (type) {
+            case STRING_NUMBER:
+                p = Pattern.compile("[0-9]*");
+                break;
+            case STRING_ENGLISH:
+                p = Pattern.compile("[a-zA-Z]");
+                break;
+            case STRING_CHINESE:
+                p = Pattern.compile("[\u4e00-\u9fa5]");
+                break;
+            default:
+                break;
+        }
+        Matcher m = p.matcher(data);
+
+        if (m.matches()) {
+            result = true;
+        }
+        return result;
     }
 }

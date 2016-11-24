@@ -4,6 +4,9 @@ package com.fanwe.common.model.getHomeClassifyList;
  * Created by Administrator on 2016/7/30.
  */
 public class ModelHomeClassifyList {
+    /**
+     * 已选中图片
+     */
     private String img;
 
     private String name;
@@ -15,6 +18,12 @@ public class ModelHomeClassifyList {
     private String sort;
 
     private String is_delete;
+    /**
+     * 未选中图片。
+     */
+    private String uncheck_img;
+
+    private boolean is_checked=false;
 
     public void setImg(String img) {
         this.img = img;
@@ -62,5 +71,21 @@ public class ModelHomeClassifyList {
 
     public String getIs_delete() {
         return this.is_delete;
+    }
+
+    public String getUncheck_img() {
+        return uncheck_img;
+    }
+
+    public void setUncheck_img(String uncheck_img) {
+        this.uncheck_img = uncheck_img;
+    }
+
+    public boolean is_checked() {
+        return is_checked;
+    }
+
+    public void setIs_checked(boolean is_checked) {
+        this.is_checked = is_checked;
     }
 }

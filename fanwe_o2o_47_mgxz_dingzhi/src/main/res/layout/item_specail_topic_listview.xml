@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:id="@+id/layout_item_featured_groupon"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:id="@+id/layout_item_featured_groupon"
+              android:orientation="vertical">
 
     <ImageView
         android:id="@+id/iv_img"
@@ -43,29 +43,23 @@
             android:textColor="@color/text_base_color"
             android:textSize="@dimen/dp12" />
 
-        <TextView
-            android:id="@+id/tv_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="代金券"
-            android:textColor="@color/c_F5B830"
-            android:textSize="@dimen/dp14" />
+
 
         <TextView
             android:id="@+id/tv_price_tuan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp5"
-            android:layout_toLeftOf="@+id/tv_type"
+            android:layout_alignParentRight="true"
             android:text=""
             android:textColor="@color/c_F5B830"
-            android:textSize="@dimen/dp14" />
+            android:textSize="@dimen/dp12" />
 
         <TextView
             android:id="@+id/tv_price_original"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp5"
             android:layout_toLeftOf="@+id/tv_price_tuan"
             android:text=""

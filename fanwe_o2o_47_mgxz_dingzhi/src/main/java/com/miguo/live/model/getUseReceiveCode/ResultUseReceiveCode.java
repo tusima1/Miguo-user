@@ -1,6 +1,6 @@
 package com.miguo.live.model.getUseReceiveCode;
 
-import com.fanwe.home.model.Room;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class ResultUseReceiveCode {
 
-    private List<Room> body;
+    private List<ModelRoom> body;
 
-    public List<Room> getBody() {
+    public List<ModelRoom> getBody() {
         return body;
     }
 
-    public void setBody(List<Room> body) {
+    public void setBody(List<ModelRoom> body) {
         this.body = body;
     }
 }

@@ -297,8 +297,7 @@ public class UserInfoNew extends Body {
     }
 
     public String getNick() {
-
-        return this.nick;
+        return (this.nick == null || this.nick.equals("")) ?  this.mobile : this.nick;
 
     }
 

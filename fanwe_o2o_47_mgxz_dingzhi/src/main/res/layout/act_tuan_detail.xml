@@ -39,11 +39,6 @@
             </FrameLayout>
 			
             <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-            </FrameLayout>
-
-            <FrameLayout
                 android:id="@+id/act_tuan_detail_fl_other_merchant"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >

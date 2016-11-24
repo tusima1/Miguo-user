@@ -8,20 +8,6 @@
 
     <dimen name="text_size">16sp</dimen>
 
-
-    <!--大小-->
-    <!--h1-->
-    <!--h2-->
-    <!--h3-->
-    <!--h4-->
-    <!--h5-->
-    <!--h6-->
-    <!--h7-->
-    <!--h8-->
-    <!--h9-->
-    <!--h10-->
-    <!--h11-->
-
     <!-- 飘星 -->
     <dimen name="heart_anim_bezier_x_rand">50.0dp</dimen>
     <dimen name="heart_anim_length">400.0dp</dimen>

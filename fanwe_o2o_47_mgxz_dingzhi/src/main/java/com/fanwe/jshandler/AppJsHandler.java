@@ -6,11 +6,9 @@ import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.EventDetailActivity;
-import com.fanwe.EventListActivity;
+
 import com.fanwe.GoodsListActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
@@ -26,7 +24,6 @@ import com.fanwe.app.AppHelper;
 import com.fanwe.constant.Constant.IndexType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.fragment.EventListFragment;
 import com.fanwe.fragment.GoodsListFragment;
 import com.fanwe.fragment.ScoresListFragment;
 import com.fanwe.fragment.StoreListFragment;
@@ -41,6 +38,7 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
+import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
@@ -84,8 +82,7 @@ public class AppJsHandler extends BaseJsHandler {
                 intent.putExtra(ScoresListFragment.EXTRA_CATE_ID, id);
                 break;
             case IndexType.EVENT_LIST:
-                intent = new Intent(App.getApplication(), EventListActivity.class);
-                intent.putExtra(EventListFragment.EXTRA_CATE_ID, id);
+
                 break;
             case IndexType.YOUHUI_LIST:
                 intent = new Intent(App.getApplication(), YouHuiListActivity.class);
@@ -103,8 +100,7 @@ public class AppJsHandler extends BaseJsHandler {
                 intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
                 break;
             case IndexType.EVENT_DETAIL:
-                intent = new Intent(App.getApplication(), EventDetailActivity.class);
-                intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, id);
+
                 break;
             case IndexType.YOUHUI_DETAIL:
                 intent = new Intent(App.getApplication(),
@@ -237,59 +233,12 @@ public class AppJsHandler extends BaseJsHandler {
 					"1",
 					"1");
 		} else {
-			if(LocalShoppingcartDao.insertModel(cartInfo)){
+			if(LocalShoppingcartDao.insertSingleNum(cartInfo)){
 				goLogin();
 			}
 		}
-
 	}
 
-//	/**
-//	 * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
-//	 *
-//	 * @param productId
-//	 * @param userId
-//	 */
-//	@JavascriptInterface
-//	public void addCart(String productId, String userId) {
-//		// 保存购物车
-//		checkLogin();
-//		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
-//		cartInfo.setNumber("1");
-//		cartInfo.setPro_id(productId);
-//		cartInfo.setFx_user_id(userId);
-//
-//
-//		if (ifLogin) {
-//			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
-//				@Override
-//				public void onSuccess(String responseBody) {
-//
-//				}
-//
-//				@Override
-//				public void onSuccess(String method, List datas) {
-//
-//				}
-//
-//				@Override
-//				public void onFailue(String responseBody) {
-//
-//				}
-//
-//				@Override
-//				public void onFailue(String method, String responseBody) {
-//
-//				}
-//			});
-//			List<ShoppingCartInfo> listModel = new ArrayList<>();
-//			  listModel.add(cartInfo);
-//			outSideShoppingCartHelper.multiAddShopCart(listModel);
-//		} else {
-//			LocalShoppingcartDao.insertModel(cartInfo);
-//		}
-//		goCart();
-//	}
 
 
 	public void checkLogin() {
@@ -313,7 +262,7 @@ public class AppJsHandler extends BaseJsHandler {
 
     @JavascriptInterface
     public void start_main() {
-        Intent intent = new Intent(mActivity, MainActivity.class);
+        Intent intent = new Intent(mActivity, HiHomeActivity.class);
         startActivity(intent);
     }
 

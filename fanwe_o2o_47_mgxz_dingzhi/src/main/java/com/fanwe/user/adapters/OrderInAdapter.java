@@ -21,6 +21,7 @@ import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -71,7 +72,13 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
 
         final ModelOrderItemIn model = getItem(position);
         if (model != null) {
-            SDViewBinder.setImageView(model.getIcon(), iv_image);
+
+            String url =model.getIcon();
+
+            if(!TextUtils.isEmpty(url)){
+                url = DisplayUtil.qiniuUrlExchange(url,100,62);
+            }
+            SDViewBinder.setImageView(url, iv_image);
             tv_name.setText(model.getName());//单个商品的名称
             tv_order_title.setText(model.getBuss_name());//商家名称
             tv_sno.setText(model.getOrder_sn());

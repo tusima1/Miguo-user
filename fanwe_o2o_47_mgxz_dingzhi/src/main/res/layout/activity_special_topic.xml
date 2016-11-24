@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    android:id="@+id/activity_special_topic"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ptr="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_activity_white"
     tools:context="com.fanwe.seller.views.SpecialTopicActivity"
     >
 
-    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+    <com.fanwe.customview.SPullToRefreshSScrollView
         android:id="@+id/ps_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,8 +27,7 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/fl_test"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:id="@+id/fl_top_img"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp170">
 
@@ -37,6 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/dark_20"
+                    android:scaleType="centerCrop"
                     />
 
                 <TextView
@@ -44,6 +44,7 @@
                     android:layout_width="225dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
+                    android:gravity="center"
                     android:layout_marginBottom="55dp"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp17"/>
@@ -56,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginBottom="45dp"
+                android:gravity="center"
                 android:layout_marginTop="@dimen/dp45"
                 android:textColor="@color/dark_text"
                 android:textSize="@dimen/sp17"/>
@@ -67,21 +69,50 @@
         </LinearLayout>
 
 
-    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+    </com.fanwe.customview.SPullToRefreshSScrollView>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <ImageView
-            android:id="@+id/iv_left"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/md_ripple_unbound_gray"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_arrow_left_white"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp23"
+            android:background="@color/transparent"
             />
+        <FrameLayout
+            android:id="@+id/fr_top_title"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/transparent"
+            >
 
-    </FrameLayout>
+            <ImageView
+                android:id="@+id/iv_left"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/md_ripple_unbound_gray"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left_white"
+                />
+            <TextView
+                android:id="@+id/tv_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp50"
+                android:layout_marginRight="@dimen/dp50"
+                android:text=""
+                android:textColor="@color/dark_text"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:lines="1"
+                android:textSize="@dimen/sp16"
+                android:ellipsize="end"
+                />
+
+        </FrameLayout>
+    </LinearLayout>
+
 </FrameLayout>

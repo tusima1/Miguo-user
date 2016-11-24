@@ -17,8 +17,6 @@ public class HiShopDetailActivity extends HiBaseActivity{
         setContentView(R.layout.activity_hishaop_detail);
     }
 
-
-
     @Override
     protected Category initCategory() {
         return new HiShopDetailCategory(this);

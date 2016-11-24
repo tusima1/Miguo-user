@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fanwe.EventDetailActivity;
 import com.fanwe.customview.SnapUpCountDownTimerView;
 import com.fanwe.home.viewHolder.ViewHolderTimeLimit;
 import com.fanwe.model.EventModel_List;
@@ -50,9 +49,9 @@ public class HomeTimeLimitAdapter extends RecyclerView.Adapter<ViewHolderTimeLim
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, EventDetailActivity.class);
-                intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, 1);
-                mContext.startActivity(intent);
+//                Intent intent = new Intent(mContext, EventDetailActivity.class);
+//                intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, 1);
+//                mContext.startActivity(intent);
             }
         });
         return vh;

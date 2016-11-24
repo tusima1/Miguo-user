@@ -247,9 +247,14 @@ public class UserConstants {
     /**
      * 获得网红的直播场次
      */
-    public static final String GET_SPOKE_PLAY = "GetSpokePlay";
+    public static final String GET_SPOKE_PLAY = "GetSpokePlayNew";
     /**
      * 获得关注状态
      */
     public static final String USER_ATTENTION = "UserAttention";
+    /**
+     * 用户分销等级。
+     */
+
+    public static final String  USER_DISTRIBUTION_LEVEL  ="UserDistributionLevel";
 }

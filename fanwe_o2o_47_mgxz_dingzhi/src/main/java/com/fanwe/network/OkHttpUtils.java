@@ -1,8 +1,12 @@
 package com.fanwe.network;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.fanwe.LoginActivity;
+import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
@@ -36,14 +40,20 @@ public class OkHttpUtils {
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
+    private static final int GET=0;
+    private static final int POST=1;
+    private static final int PUT=2;
+    private static final int DELETE=3;
+    private static final int THIRD_GET=4;
+
     private static String TAG = "StringRequestUrl";
-    private static String APP_KEY = "app_key";
-    private static String APP_SECURITY = "app_security";
-    private static String TIMESTAMP = "timestamp";
-    private static String IMEI = "imei";
-    private static String APP_TYPE = "app_type";
-    private static String APP_KEY_DEFAULT = "c3e67013-e439-11e5-bbcc-a0d3c1ef5680";
-    private static String APP_SECURITY_DEFAULT = "2acabf04914eeaec6b841a81f09711d8";
+    private static final String APP_KEY = "app_key";
+    private static final String APP_SECURITY = "app_security";
+    private static final String TIMESTAMP = "timestamp";
+    private static final String IMEI = "imei";
+    private static final String APP_TYPE = "app_type";
+    private static final String APP_KEY_DEFAULT = "c3e67013-e439-11e5-bbcc-a0d3c1ef5680";
+    private static final String APP_SECURITY_DEFAULT = "2acabf04914eeaec6b841a81f09711d8";
     /**
      * 加密方式 。
      */
@@ -64,228 +74,122 @@ public class OkHttpUtils {
         }
         return mInstance;
     }
-
-    private void initOkHttp() {
-        client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .build();
+    public void get(TreeMap<String, String> params, MgCallback mCallback){
+        get(params,mCallback,false);
     }
-
-    /**
-     * 判斷网络是否连接。
-     *
-     * @return
-     */
-    public boolean checkNetWorkValidate() {
-        //判断网络环境
-        boolean connected = NetWorkStateUtil.isConnected(App.getInstance());
-        if (!connected) {
-            MGToast.showToast("没有网络,请检测网络环境!");
-            return false;
-        }
-        return true;
+    public void get(TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin){
+        get(null,params,mCallback,isNeedLogin);
     }
-
-    /**
-     * 异步POST提交，带TAG 的 请求
-     * POST方法发送请求时，仍然使用基本的URL，将参数信息放在请求实体中发送。
-     *
-     * @param url       url 地址
-     * @param params    params
-     * @param mCallback 返回
-     */
+    public void get(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin){
+        get(url,params,mCallback,isNeedLogin,null);
+    }
+    //TODO for oldVersion
+    public void get(String url, TreeMap<String, String> params, MgCallback mCallback){
+        get(url,params,mCallback,false,null);
+    }
+    public void get(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin,Object tag){
+        httpHandle(GET,url,params,mCallback,isNeedLogin,tag);
+    }
+    public void put(TreeMap<String, String> params, MgCallback mCallback) {
+        put(params,mCallback,false);
+    }
+    public void put(TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin) {
+        put(null,params,mCallback,isNeedLogin);
+    }
+    public void put(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin) {
+        put(url,params,mCallback,isNeedLogin,null);
+    }
+    //TODO for oldVersion
+    public void put(String url, TreeMap<String, String> params, MgCallback mCallback) {
+        put(url,params,mCallback,false,null);
+    }
+    public void put(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin,Object tag) {
+        httpHandle(PUT,url,params,mCallback,isNeedLogin,tag);
+    }
+    public void post(TreeMap<String, String> params, MgCallback mCallback) {
+        post(params,mCallback,false);
+    }
+    public void post(TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin) {
+        post(null,params,mCallback,isNeedLogin);
+    }
+    public void post(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin) {
+        post(url,params,mCallback,isNeedLogin,null);
+    }
+    //TODO for oldVersion
     public void post(String url, TreeMap<String, String> params, MgCallback mCallback) {
-        post(url, params, mCallback, null);
+        post(url,params,mCallback,false,null);
+    }
+    public void post(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin,Object tag) {
+        httpHandle(POST,url,params,mCallback,isNeedLogin,tag);
+    }
+    public void delete(TreeMap<String, String> params, MgCallback mCallback){
+        delete(params,mCallback,false);
+    }
+    public void delete(TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin){
+        delete(null,params,mCallback,isNeedLogin);
+    }
+    public void delete(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin){
+        delete(url,params,mCallback,isNeedLogin,null);
+    }
+    //TODO for oldVersion
+    public void delete(String url, TreeMap<String, String> params, MgCallback mCallback){
+        delete(url,params,mCallback,false,null);
+    }
+    public void delete(String url, TreeMap<String, String> params, MgCallback mCallback,boolean isNeedLogin,Object tag){
+        httpHandle(DELETE,url,params,mCallback,isNeedLogin,tag);
+    }
+    public void thirdUrlGet(String url, TreeMap<String, String> params, MgCallback mCallback){
+        thirdUrlGet(url,params,mCallback,null);
+    }
+    public void thirdUrlGet(String url, TreeMap<String, String> params, MgCallback mCallback,Object tag){
+        httpHandle(THIRD_GET,url,params,mCallback,false,tag);
     }
 
-    public void post(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
-        String serverUrl;
-        if (!checkNetWorkValidate()) {
-            mCallback.onFailure(null,null);
-            return;
-        }
-        if (ServerUrl.DEBUG) {
-            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        } else {
-            serverUrl = ServerUrl.SERVER_API_URL_MID;
-        }
-        if (!TextUtils.isEmpty(url)) {
-            serverUrl += url;
-        }
-
-        //添加公共参数
-        params.putAll(commonParams());
-        //加密所有的参数
-        params = encryptParams(params);
-        StringBuilder requestStr = new StringBuilder("");
-
-        FormBody.Builder build = new FormBody.Builder();
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (!TextUtils.isEmpty(entry.getValue())) {
-                try {
-                    requestStr.append("key:" + entry.getKey() + "  value:" + entry.getValue());
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+    private void httpHandle(int method,String url, TreeMap<String, String> params, MgCallback callback,boolean isNeedLogin,Object tag){
+        if (NetWorkStateUtil.isConnected(App.getInstance())){
+            if (isNeedLogin){
+                String token = App.getInstance().getToken();
+                if (TextUtils.isEmpty(token)){
+                    //TODO login
+                    Activity lastActivity = ActivityLifeManager.getInstance().getLastActivity();
+                    if (lastActivity!=null){
+                        lastActivity.startActivity(new Intent(App.getApplication(), LoginActivity.class));
+                    }
                 }
-            } else {
-                build.add(entry.getKey(), "");
             }
-        }
-
-
-        RequestBody requestBodyPost = build.build();
-        Request requestPost = new Request.Builder()
-                .url(serverUrl)
-                .post(requestBodyPost)
-                .build();
-        if (ServerUrl.DEBUG) {
-            String method = params.get("method");
-            Log.e(TAG, "method :+=" + method + " post:" + requestStr.toString());
-        }
-
-        client.newCall(requestPost).enqueue(mCallback);
-    }
-
-    /**
-     * put请求
-     *
-     * @param url
-     * @param params
-     * @param mCallback
-     */
-    public void put(String url, TreeMap<String, String> params, Callback mCallback) {
-        if (!checkNetWorkValidate()) {
-            mCallback.onFailure(null,null);
-
-          return;
-        }
-        String serverUrl;
-        if (ServerUrl.DEBUG) {
-            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        } else {
-            serverUrl = ServerUrl.SERVER_API_URL_MID;
-        }
-        if (!TextUtils.isEmpty(url)) {
-            serverUrl += url;
-        }
-
-        //添加公共参数
-        params.putAll(commonParams());
-        //加密所有的参数
-        params = encryptParams(params);
-        StringBuilder requestStr = new StringBuilder("");
-
-        FormBody.Builder build = new FormBody.Builder();
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (!TextUtils.isEmpty(entry.getValue())) {
-                try {
-                    requestStr.append("key:" + entry.getKey() + "  value:" + entry.getValue());
-                    build.add(entry.getKey(), entry.getValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                build.add(entry.getKey(), "");
+            String serverUrl = doCommonURL(url);
+            TreeMap<String, String> finalParams = doCommonParams(params);
+            if (callback!=null){
+                callback.setTag(tag);
             }
-        }
-
-
-        RequestBody requestBodyPut = build.build();
-        Request requestPut = new Request.Builder()
-                .url(serverUrl)
-                .put(requestBodyPut)
-                .build();
-        if (ServerUrl.DEBUG) {
-            String method = params.get("method");
-            Log.e(TAG, "method :+=" + method + " put:" + requestStr.toString());
-        }
-
-        client.newCall(requestPut).enqueue(mCallback);
-    }
-
-    /**
-     * 异步delete提交
-     *
-     * @param url
-     * @param params
-     * @param mCallback
-     */
-    public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
-        if (!checkNetWorkValidate()) {
-            mCallback.onFailure(null,null);
-
-            return;
-        }
-        String serverUrl;
-        if (ServerUrl.DEBUG) {
-            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        } else {
-            serverUrl = ServerUrl.SERVER_API_URL_MID;
-        }
-        if (!TextUtils.isEmpty(url)) {
-            serverUrl += url;
-        }
-
-        //添加公共参数
-        params.putAll(commonParams());
-        //加密所有的参数
-        params = encryptParams(params);
-
-        FormBody.Builder build = new FormBody.Builder();
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (!TextUtils.isEmpty(entry.getValue())) {
-                try {
-                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                build.add(entry.getKey(), "");
+            switch (method){
+                case GET:
+                    if (serverUrl.endsWith("/")) {
+                        serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
+                    }
+                    handleHttpGet(serverUrl, finalParams,callback,tag);
+                    break;
+                case POST:
+                    handleHttpPost(serverUrl,finalParams,callback,tag);
+                    break;
+                case PUT:
+                    handleHttpPut(serverUrl,finalParams,callback,tag);
+                    break;
+                case DELETE:
+                    handleHttpDelete(serverUrl,finalParams,callback,tag);
+                    break;
+                case THIRD_GET:
+                    handleHttpThirdUrlGet(url,params,callback,tag);
+                    break;
             }
-        }
-
-        RequestBody requestBodyPut = build.build();
-        Request requestPut = new Request.Builder()
-                .url(serverUrl)
-                .delete(requestBodyPut)
-                .build();
-
-        client.newCall(requestPut).enqueue(mCallback);
-    }
-
-
-    /**
-     * 同步请求POST。
-     *
-     * @param url
-     * @param json
-     * @return
-     * @throws IOException
-     */
-    public String synchronousPost(String url, String json) throws IOException {
-        if (!checkNetWorkValidate()) {
-            return "";
-        }
-        RequestBody body = RequestBody.create(JSON, json);
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Response response = client.newCall(request).execute();
-        if (response.isSuccessful()) {
-            return response.body().string();
-        } else {
-            return "";
+        }else {
+            if (callback!=null){
+                callback.onFailure(null,null);
+                callback.onFinish();
+            }
+            MGToast.showToast("没有网络,请检测网络环境!");
         }
     }
-
-
     /**
      * 用从第三方的URL 取值。
      *
@@ -293,15 +197,9 @@ public class OkHttpUtils {
      * @param params
      * @param mCallback
      */
-    public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback) {
-        if (!checkNetWorkValidate()) {
-            mCallback.onFailure(null,null);
-
-           return;
-        }
+    private void handleHttpThirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback,Object tag) {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
-
             if (entry.getValue() == null) {
                 paramStr.append(entry.getKey() + "=" + "" + "&");
             } else {
@@ -323,36 +221,85 @@ public class OkHttpUtils {
         call.enqueue(mCallback);
     }
 
-    /**
-     * GET异步请求 GET方法需要用？将参数连接在URL后面，各个参数之间用&连接。
-     *
-     * @param url       utl
-     * @param mCallback
-     */
-    public void get(String url, TreeMap<String, String> params, Callback mCallback) {
-        if (!checkNetWorkValidate()) {
-            mCallback.onFailure(null, null);
-            return;
+    private void handleHttpDelete(String url, TreeMap<String, String> params, Callback mCallback,Object tag) {
+        FormBody.Builder build = new FormBody.Builder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                try {
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                build.add(entry.getKey(), "");
+            }
         }
-        String serverUrl;
+
+        RequestBody requestBodyPut = build.build();
+        Request requestPut = new Request.Builder()
+                .url(url)
+                .delete(requestBodyPut)
+                .build();
+        client.newCall(requestPut).enqueue(mCallback);
+    }
+
+    private void handleHttpPost(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+        StringBuilder requestStr = new StringBuilder("");
+        FormBody.Builder build = new FormBody.Builder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                try {
+                    requestStr.append("key:" + entry.getKey() + "  value:" + entry.getValue());
+                    build.add(entry.getKey(), URLEncoder.encode(entry.getValue(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                build.add(entry.getKey(), "");
+            }
+        }
+        RequestBody requestBodyPost = build.build();
+        Request requestPost = new Request.Builder()
+                .url(url)
+                .post(requestBodyPost)
+                .build();
         if (ServerUrl.DEBUG) {
-            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        } else {
-            serverUrl = ServerUrl.SERVER_API_URL_MID;
+            String method = params.get("method");
+            Log.e(TAG, "method :+=" + method + " post:" + requestStr.toString());
         }
-        if (!TextUtils.isEmpty(url)) {
-            serverUrl += url;
+        client.newCall(requestPost).enqueue(mCallback);
+    }
+
+    private void handleHttpPut(String url, TreeMap<String, String> params, Callback mCallback,Object tag){
+        StringBuilder requestStr = new StringBuilder("");
+        FormBody.Builder build = new FormBody.Builder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!TextUtils.isEmpty(entry.getValue())) {
+                try {
+                    requestStr.append("key:" + entry.getKey() + "  value:" + entry.getValue());
+                    build.add(entry.getKey(), entry.getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                build.add(entry.getKey(), "");
+            }
         }
-        if (serverUrl.endsWith("/")) {
-            serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
+        RequestBody requestBodyPut = build.build();
+        Request requestPut = new Request.Builder()
+                .url(url)
+                .put(requestBodyPut)
+                .build();
+        if (ServerUrl.DEBUG) {
+            String method = params.get("method");
+            Log.e(TAG, "method :+=" + method + " put:" + requestStr.toString());
         }
-        //添加公共参数
-        params.putAll(commonParams());
-        //加密所有的参数
-        params = encryptParams(params);
+        client.newCall(requestPut).enqueue(mCallback);
+    }
+
+    private void  handleHttpGet(String url, TreeMap<String, String> params, Callback callback,Object tag){
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
-
             if (entry.getValue() == null) {
                 paramStr.append(entry.getKey() + "=" + "" + "&");
             } else {
@@ -363,21 +310,64 @@ public class OkHttpUtils {
                 }
             }
         }
-        serverUrl = serverUrl + "?" + paramStr.substring(0, paramStr.length() - 1);
+        url = url + "?" + paramStr.substring(0, paramStr.length() - 1);
         if (ServerUrl.DEBUG) {
             String method = params.get("method");
-            Log.e(TAG, "method :+=" + method + " get:" + serverUrl);
+            Log.e(TAG, "method :+=" + method + " get:" + url);
 
         }
         //创建一个Request
         final Request request = new Request.Builder()
-                .url(serverUrl)
+                .url(url)
                 .build();
         //new call
         Call call = client.newCall(request);
         //请求加入调度
-        call.enqueue(mCallback);
+        call.enqueue(callback);
+    }
 
+    private String doCommonURL(String url){
+        String serverUrl;
+        if (ServerUrl.DEBUG) {
+            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
+        } else {
+            serverUrl = ServerUrl.SERVER_API_URL_MID;
+        }
+        if (!TextUtils.isEmpty(url)) {
+            serverUrl += url;
+        }
+        return serverUrl;
+    }
+
+    private TreeMap<String, String> doCommonParams(TreeMap<String, String> params){
+        //添加公共参数
+        params.putAll(commonParams());
+        //加密所有的参数
+        params = encryptParams(params);
+        return params;
+    }
+
+    /**
+     * 同步请求POST。
+     *
+     * @param url
+     * @param json
+     * @return
+     * @throws IOException
+     */
+    public String synchronousPost(String url, String json) throws IOException {
+        RequestBody body = RequestBody.create(JSON, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            return response.body().string();
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -396,13 +386,6 @@ public class OkHttpUtils {
                 call.cancel();
             }
         }
-    }
-
-    public static class METHOD {
-        public static final String HEAD = "HEAD";
-        public static final String DELETE = "DELETE";
-        public static final String PUT = "PUT";
-        public static final String PATCH = "PATCH";
     }
 
     /**
@@ -440,7 +423,6 @@ public class OkHttpUtils {
                 signString = signString + "|" + key + ":" + value;
             }
         }
-//        System.err.println(signString.toLowerCase());
         String checkSignString;
         switch (ENCRYPT_TYPE) {
             case "MD5":

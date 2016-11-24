@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.fanwe.MainActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
@@ -29,6 +28,9 @@ import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.app.HiHomeActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
@@ -503,10 +505,10 @@ public class LoginHelper extends Presenter {
             return;
         }
 
-        if (lastActivity instanceof MainActivity) {
+        if (lastActivity instanceof HiHomeActivity) {
             mActivity.finish();
         } else {
-            mActivity.startActivity(new Intent(mActivity, MainActivity.class));
+            mActivity.startActivity(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
         }
 
 
@@ -531,27 +533,7 @@ public class LoginHelper extends Presenter {
     public void putLocalShoppingToServer() {
         List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
         if (list != null && list.size() > 0) {
-//            OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView2() {
-//                @Override
-//                public void onSuccess(String responseBody) {
-//                    App.getInstance().deleteAllShoppingCartInfo();
-//                }
-//
-//                @Override
-//                public void onSuccess(String method, List datas) {
-//                    App.getInstance().deleteAllShoppingCartInfo();
-//                }
-//
-//                @Override
-//                public void onFailue(String responseBody) {
-//
-//                }
-//
-//                @Override
-//                public void onFinish(String method) {
-//
-//                }
-//            });
+
             final OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
                 @Override
                 public void onFailue(String method, String responseBody) {
@@ -573,7 +555,7 @@ public class LoginHelper extends Presenter {
 
                 }
             });
-            helper.multiAddShopCart(list);
+            helper.multiAddShopCart(list,false);
         }
     }
 

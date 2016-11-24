@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/gray_text_f3"
+    android:visibility="gone"
+    android:id="@+id/loading_fail"
+    android:gravity="center_horizontal"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_marginTop="85dp"
+        android:background="@drawable/nullpic2"
+        android:layout_width="153dp"
+        android:layout_height="153dp" />
+
+    <TextView
+        android:textColor="@color/gray_text_99"
+        android:layout_marginTop="25dp"
+        android:textSize="16sp"
+        android:text="启禀陛下，页面加载失败"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="62dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:id="@+id/refresh"
+        android:text="重新上朝"
+        android:background="@drawable/shape_bg_gray_stoke_black"
+        android:layout_width="186dp"
+        android:layout_height="40dp" />
+
+</LinearLayout>

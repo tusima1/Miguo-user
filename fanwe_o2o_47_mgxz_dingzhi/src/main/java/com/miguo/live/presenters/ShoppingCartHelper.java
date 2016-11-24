@@ -1,12 +1,13 @@
 package com.miguo.live.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
-import com.fanwe.base.Presenter;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -20,7 +21,7 @@ import java.util.TreeMap;
  * 直播中购物车处理。
  * Created by Administrator on 2016/8/15.
  */
-public class ShoppingCartHelper extends Presenter {
+public class ShoppingCartHelper extends OldCallbackHelper {
 
     public Context mContext;
     private CallbackView mView;
@@ -59,22 +60,26 @@ public class ShoppingCartHelper extends Presenter {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Root root = JSON.parseObject(responseBody, Root.class);
-                String statusCode = root.getStatusCode();
-                String message = root.getMessage();
-                if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
-                    MGToast.showToast("添加购物车成功");
-                    if(mView!=null){
-                        mView.onSuccess(LiveConstants.SHOPPING_CART, null);
-                    }else if (mView2!=null){
-                        mView2.onSuccess(LiveConstants.SHOPPING_CART, null);
+                try {
+                    Root root = JSON.parseObject(responseBody, Root.class);
+                    String statusCode = root.getStatusCode();
+                    String message = root.getMessage();
+                    if (LiveConstants.RESULT_SUCCESS.equals(statusCode)) {
+                        MGToast.showToast("添加购物车成功");
+                        if (mView != null) {
+                            onSuccess(mView, LiveConstants.SHOPPING_CART, null);
+                        } else if (mView2 != null) {
+                            onSuccess(mView2, LiveConstants.SHOPPING_CART, null);
+                        }
+                    } else {
+                        if (mView != null) {
+                            mView.onFailue(LiveConstants.SHOPPING_CART);
+                        } else if (mView2 != null) {
+                            mView2.onFailue(LiveConstants.SHOPPING_CART);
+                        }
                     }
-                }else{
-                    if(mView!=null) {
-                        mView.onFailue(LiveConstants.SHOPPING_CART);
-                    }else if (mView2!=null){
-                        mView2.onFailue(LiveConstants.SHOPPING_CART);
-                    }
+                }catch (Exception e){
+                    Log.e("exception",e.getLocalizedMessage());
                 }
             }
 
@@ -111,9 +116,9 @@ public class ShoppingCartHelper extends Presenter {
                 if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
                     MGToast.showToast("添加购物车成功");
                     if(mView!=null){
-                        mView.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                        onSuccess(mView,ShoppingCartconstants.SHOPPING_CART_ADD, null);
                     }else if (mView2!=null){
-                        mView2.onSuccess(ShoppingCartconstants.SHOPPING_CART_ADD, null);
+                        onSuccess(mView2,ShoppingCartconstants.SHOPPING_CART_ADD, null);
                     }
                 }else{
                     if(mView!=null) {
@@ -127,7 +132,11 @@ public class ShoppingCartHelper extends Presenter {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
-                mView.onFailue(message);
+                if(mView!=null) {
+                    mView.onFailue(message);
+                }else if (mView2!=null){
+                    mView2.onFailue(ShoppingCartconstants.SHOPPING_CART_ADD);
+                }
             }
         });
     }
@@ -150,7 +159,7 @@ public class ShoppingCartHelper extends Presenter {
                 if(LiveConstants.RESULT_SUCCESS.equals(statusCode)){
                     MGToast.showToast("添加购物车成功。");
                     if(mView!=null){
-                        mView.onSuccess(LiveConstants.SHOPPING_CART, null);
+                        onSuccess(mView,LiveConstants.SHOPPING_CART, null);
                     }
                 }else{
                     if(mView!=null) {
@@ -166,9 +175,5 @@ public class ShoppingCartHelper extends Presenter {
                 mView.onFailue(message);
             }
         });
-    }
-    @Override
-    public void onDestory() {
-
     }
 }

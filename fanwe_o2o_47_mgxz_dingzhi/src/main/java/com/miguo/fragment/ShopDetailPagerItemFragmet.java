@@ -18,7 +18,7 @@ public class ShopDetailPagerItemFragmet extends HiBaseFragment{
 
     @Override
     protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_hihome_fragment_banner, container, false);
+        return inflater.inflate(R.layout.activity_hishop_detail_banner, container, false);
     }
 
     @Override

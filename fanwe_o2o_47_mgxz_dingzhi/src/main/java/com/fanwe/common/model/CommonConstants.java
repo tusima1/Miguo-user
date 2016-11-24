@@ -10,5 +10,14 @@ public class CommonConstants {
     public static final String HOME_CLASSIFY_LIST = "HomeClassifyList";
     /*app版本升级*/
     public static final String UPGRADE_VERSION = "UpgradeVersion";
+    /**
+     * 专题模块欢迎的话.
+     */
+    public static final String INTERESTING = "Interesting";
+
+    /**
+     * 取当前用户的分销等级。
+     */
+    public static final  String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
 
 }

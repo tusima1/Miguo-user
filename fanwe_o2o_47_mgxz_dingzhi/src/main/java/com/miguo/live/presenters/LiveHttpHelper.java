@@ -8,11 +8,9 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.common.MGDict;
-import com.fanwe.home.model.ResultLive;
-import com.fanwe.home.model.Room;
-import com.fanwe.home.model.RootLive;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -20,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
+import com.miguo.live.model.PageModel;
 import com.miguo.live.model.UserRedPacketInfo;
 import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.checkFocus.ResultCheckFocus;
@@ -46,6 +45,9 @@ import com.miguo.live.model.getHostInfo.RootHostInfo;
 import com.miguo.live.model.getHostTags.ModelHostTags;
 import com.miguo.live.model.getHostTags.ResultHostTags;
 import com.miguo.live.model.getHostTags.RootHostTags;
+import com.miguo.live.model.getLiveListNew.ModelResultLive;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
+import com.miguo.live.model.getLiveListNew.ModelRootLive;
 import com.miguo.live.model.getReceiveCode.ModelReceiveCode;
 import com.miguo.live.model.getReceiveCode.ResultReceiveCode;
 import com.miguo.live.model.getReceiveCode.RootReceiveCode;
@@ -74,6 +76,7 @@ import com.miguo.utils.MGLog;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -103,7 +106,7 @@ import java.util.TreeMap;
  * 取直播门店的镇店之宝。
  * 获取用户主播认证时间
  */
-public class LiveHttpHelper implements IHelper {
+public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = LiveHttpHelper.class.getSimpleName();
     private Gson gson;
@@ -122,11 +125,12 @@ public class LiveHttpHelper implements IHelper {
         gson = new Gson();
     }
 
+
     /**
-     * 请求直播列表
+     * 请求直播列表新版
      * 首页fragment
      */
-    public void getLiveList(int pageNum, int pageSize, String tag, String keyword, String city) {
+    public void getLiveListNew(int pageNum, int pageSize, String tag, String keyword, String city) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("page", String.valueOf(pageNum));
@@ -135,30 +139,48 @@ public class LiveHttpHelper implements IHelper {
         params.put("keyword", keyword);
         params.put("city", city);
         params.put("tag", tag);
-        params.put("method", LiveConstants.LIVE_LIST);
+        params.put("method", LiveConstants.LIVE_LIST_NEW);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootLive rootLive = gson.fromJson(responseBody, RootLive.class);
-                List<ResultLive> resultLives = rootLive.getResult();
-                if (SDCollectionUtil.isEmpty(resultLives) || resultLives.size() < 1) {
-                    mView2.onSuccess(LiveConstants.LIVE_LIST, null);
+                if (mView2 == null) {
                     return;
                 }
-                ResultLive resultLive = resultLives.get(0);
-                List<Room> rooms = resultLive.getBody();
-                mView2.onSuccess(LiveConstants.LIVE_LIST, rooms);
+                ModelRootLive root = gson.fromJson(responseBody, ModelRootLive.class);
+                List<ModelResultLive> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, null);
+                    return;
+                }
+
+                ModelResultLive resultLive = results.get(0);
+                 String  page_count= resultLive.getPage_count();
+                PageModel page = new PageModel();
+                page.setPage_count(resultLive.getPage_count());
+                page.setPage_total(resultLive.getPage_total());
+                page.setPage(resultLive.getPage());
+                List<Object> datas =new ArrayList<Object>();
+                datas.add(page);
+                List<ModelRoom> rooms = resultLive.getBody();
+                datas.addAll(rooms);
+                mView2.onSuccess(LiveConstants.LIVE_LIST_NEW, datas);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
+                if (mView2 == null) {
+                    return;
+                }
                 mView2.onFailue(message);
             }
 
             @Override
             public void onFinish() {
-                mView2.onFinish(LiveConstants.LIVE_LIST);
+                if (mView2 == null) {
+                    return;
+                }
+                mView2.onFinish(LiveConstants.LIVE_LIST_NEW);
             }
         });
 
@@ -184,15 +206,16 @@ public class LiveHttpHelper implements IHelper {
      * 请求观众数
      *
      * @param room_id
+     * @param is_playback 是否是直播回放
      */
-    public void getAudienceCount(String room_id, String type) {
+    public void getAudienceCount(String room_id, String is_playback) {
         if (TextUtils.isEmpty(App.getInstance().getToken()) || TextUtils.isEmpty(room_id)) {
             return;
         }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
-        params.put("type", type);
+        params.put("is_playback", is_playback);
         params.put("method", LiveConstants.AUDIENCE_COUNT);
 
 
@@ -203,10 +226,10 @@ public class LiveHttpHelper implements IHelper {
                 List<ResultAudienceCount> resultAudienceCounts = rootAudienceCount.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceCounts)) {
                     if (mView2 != null) {
-                        mView2.onSuccess(LiveConstants.AUDIENCE_COUNT, new ArrayList());
+                        onSuccess(mView2, LiveConstants.AUDIENCE_COUNT, new ArrayList());
                     }
                     if (mView != null) {
-                        mView.onSuccess(LiveConstants.AUDIENCE_COUNT, new ArrayList());
+                        onSuccess(mView, LiveConstants.AUDIENCE_COUNT, new ArrayList());
 
                     }
                     return;
@@ -214,10 +237,10 @@ public class LiveHttpHelper implements IHelper {
                 ResultAudienceCount resultAudienceCount = resultAudienceCounts.get(0);
                 List<ModelAudienceCount> modelAudienceCounts = resultAudienceCount.getBody();
                 if (mView2 != null) {
-                    mView2.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
+                    onSuccess(mView2, LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
                 }
                 if (mView != null) {
-                    mView.onSuccess(LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
+                    onSuccess(mView, LiveConstants.AUDIENCE_COUNT, modelAudienceCounts);
                 }
             }
 
@@ -234,11 +257,12 @@ public class LiveHttpHelper implements IHelper {
      *
      * @param room_id
      */
-    public void getAudienceList(String room_id) {
+    public void getAudienceList(String room_id, String is_playback) {
 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
+        params.put("is_playback", is_playback);
         params.put("method", LiveConstants.AUDIENCE_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -248,12 +272,12 @@ public class LiveHttpHelper implements IHelper {
                         .class);
                 List<ResultAudienceList> resultAudienceLists = rootAudienceList.getResult();
                 if (SDCollectionUtil.isEmpty(resultAudienceLists)) {
-                    mView.onSuccess(LiveConstants.AUDIENCE_LIST, null);
+                    onSuccess(mView, LiveConstants.AUDIENCE_LIST, null);
                     return;
                 }
                 ResultAudienceList resultAudienceList = resultAudienceLists.get(0);
                 List<ModelAudienceInfo> modelAudienceList = resultAudienceList.getBody();
-                mView.onSuccess(LiveConstants.AUDIENCE_LIST, modelAudienceList);
+                onSuccess(mView, LiveConstants.AUDIENCE_LIST, modelAudienceList);
             }
 
             @Override
@@ -279,7 +303,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.END_INFO, null);
+                onSuccess(mView, LiveConstants.END_INFO, null);
             }
 
             @Override
@@ -307,7 +331,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.ENTER_ROOM, null);
+                onSuccess(mView, LiveConstants.ENTER_ROOM, null);
             }
 
             @Override
@@ -337,7 +361,7 @@ public class LiveHttpHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                mView.onSuccess(LiveConstants.EXIT_ROOM, null);
+                onSuccess(mView, LiveConstants.EXIT_ROOM, null);
             }
 
             @Override
@@ -364,12 +388,12 @@ public class LiveHttpHelper implements IHelper {
                         .class);
                 List<ResultGenerateSign> resultGenerateSigns = rootGenerateSign.getResult();
                 if (SDCollectionUtil.isEmpty(resultGenerateSigns)) {
-                    mView.onSuccess(LiveConstants.GENERATE_SIGN, null);
+                    onSuccess(mView, LiveConstants.GENERATE_SIGN, null);
                     return;
                 }
                 ResultGenerateSign resultGenerateSign = resultGenerateSigns.get(0);
                 List<ModelGenerateSign> modelGenerateSign = resultGenerateSign.getBody();
-                mView.onSuccess(LiveConstants.GENERATE_SIGN, modelGenerateSign);
+                onSuccess(mView, LiveConstants.GENERATE_SIGN, modelGenerateSign);
             }
 
             @Override
@@ -398,12 +422,12 @@ public class LiveHttpHelper implements IHelper {
                 RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
                 List<ResultHostInfo> resultHostInfos = rootHostInfo.getResult();
                 if (SDCollectionUtil.isEmpty(resultHostInfos)) {
-                    mView.onSuccess(LiveConstants.HOST_INFO, null);
+                    onSuccess(mView, LiveConstants.HOST_INFO, null);
                     return;
                 }
                 ResultHostInfo resultHostInfo = resultHostInfos.get(0);
                 List<ModelHostInfo> modelHostInfo = resultHostInfo.getBody();
-                mView.onSuccess(LiveConstants.HOST_INFO, modelHostInfo);
+                onSuccess(mView, LiveConstants.HOST_INFO, modelHostInfo);
             }
 
             @Override
@@ -441,12 +465,12 @@ public class LiveHttpHelper implements IHelper {
                 RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
                 List<ResultHostInfo> resultHostInfos = rootHostInfo.getResult();
                 if (SDCollectionUtil.isEmpty(resultHostInfos)) {
-                    mView.onSuccess(LiveConstants.HOST_INFO, null);
+                    onSuccess(mView, LiveConstants.HOST_INFO, null);
                     return;
                 }
                 ResultHostInfo resultHostInfo = resultHostInfos.get(0);
                 List<ModelHostInfo> modelHostInfo = resultHostInfo.getBody();
-                mView.onSuccess(LiveConstants.HOST_INFO, modelHostInfo);
+                onSuccess(mView, LiveConstants.HOST_INFO, modelHostInfo);
             }
 
             @Override
@@ -474,12 +498,12 @@ public class LiveHttpHelper implements IHelper {
                 RootHostTags rootHostTags = gson.fromJson(responseBody, RootHostTags.class);
                 List<ResultHostTags> resultHostTagss = rootHostTags.getResult();
                 if (SDCollectionUtil.isEmpty(resultHostTagss)) {
-                    mView.onSuccess(LiveConstants.HOST_TAGS, null);
+                    onSuccess(mView, LiveConstants.HOST_TAGS, null);
                     return;
                 }
                 ResultHostTags resultHostTags = resultHostTagss.get(0);
                 List<ModelHostTags> modelHostTags = resultHostTags.getBody();
-                mView.onSuccess(LiveConstants.HOST_TAGS, modelHostTags);
+                onSuccess(mView, LiveConstants.HOST_TAGS, modelHostTags);
             }
 
             @Override
@@ -507,14 +531,14 @@ public class LiveHttpHelper implements IHelper {
                 List<ResultStopLive> resultStopLives = rootStopLive.getResult();
                 if (SDCollectionUtil.isEmpty(resultStopLives)) {
                     if (mView != null) {
-                        mView.onSuccess(LiveConstants.STOP_LIVE, null);
+                        onSuccess(mView, LiveConstants.STOP_LIVE, null);
                     }
                     return;
                 }
                 ResultStopLive resultStopLive = resultStopLives.get(0);
                 List<ModelStopLive> modelStopLive = resultStopLive.getBody();
                 if (mView != null) {
-                    mView.onSuccess(LiveConstants.STOP_LIVE, modelStopLive);
+                    onSuccess(mView, LiveConstants.STOP_LIVE, modelStopLive);
                 }
             }
 
@@ -545,7 +569,7 @@ public class LiveHttpHelper implements IHelper {
                         .getResult();
                 if (SDCollectionUtil.isEmpty(resultBussDictionInfos)) {
                     if (mView != null) {
-                        mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, null);
+                        onSuccess(mView, LiveConstants.BUSS_DICTION_INFO, null);
                     }
                     return;
                 }
@@ -554,7 +578,7 @@ public class LiveHttpHelper implements IHelper {
                 String dict = gson.toJson(modelBussDictionInfo);
                 MGDict.save2File(dict);
                 if (mView != null) {
-                    mView.onSuccess(LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
+                    onSuccess(mView, LiveConstants.BUSS_DICTION_INFO, modelBussDictionInfo);
                 }
             }
 
@@ -580,12 +604,12 @@ public class LiveHttpHelper implements IHelper {
                 RootUpToken rootUpToken = gson.fromJson(responseBody, RootUpToken.class);
                 List<ResultUpToken> resultUpTokens = rootUpToken.getResult();
                 if (SDCollectionUtil.isEmpty(resultUpTokens)) {
-                    mView.onSuccess(LiveConstants.UP_TOKEN, null);
+                    onSuccess(mView, LiveConstants.UP_TOKEN, null);
                     return;
                 }
                 ResultUpToken resultUpToken = resultUpTokens.get(0);
                 List<ModelUpToken> modelUpToken = resultUpToken.getBody();
-                mView.onSuccess(LiveConstants.UP_TOKEN, modelUpToken);
+                onSuccess(mView, LiveConstants.UP_TOKEN, modelUpToken);
             }
 
             @Override
@@ -612,10 +636,10 @@ public class LiveHttpHelper implements IHelper {
                 List<ResultCheckFocus> resultCheckFocuss = rootCheckFocus.getResult();
                 if (SDCollectionUtil.isEmpty(resultCheckFocuss)) {
                     if (mView2 != null) {
-                        mView2.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
+                        onSuccess(mView2, LiveConstants.CHECK_FOCUS, new ArrayList());
                     }
                     if (mView != null) {
-                        mView.onSuccess(LiveConstants.CHECK_FOCUS, new ArrayList());
+                        onSuccess(mView, LiveConstants.CHECK_FOCUS, new ArrayList());
                     }
                     return;
                 }
@@ -623,10 +647,10 @@ public class LiveHttpHelper implements IHelper {
                 List<ModelCheckFocus> modelCheckFocus;
                 modelCheckFocus = resultCheckFocus.getBody();
                 if (mView2 != null) {
-                    mView2.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
+                    onSuccess(mView2, LiveConstants.CHECK_FOCUS, modelCheckFocus);
                 }
                 if (mView != null) {
-                    mView.onSuccess(LiveConstants.CHECK_FOCUS, modelCheckFocus);
+                    onSuccess(mView, LiveConstants.CHECK_FOCUS, modelCheckFocus);
                 }
             }
 
@@ -651,7 +675,7 @@ public class LiveHttpHelper implements IHelper {
                 RootUserFocus root = gson.fromJson(responseBody, RootUserFocus.class);
                 ArrayList<RootUserFocus> roots = new ArrayList<>();
                 roots.add(root);
-                mView2.onSuccess(LiveConstants.USER_FOCUS, roots);
+                onSuccess(mView2, LiveConstants.USER_FOCUS, roots);
             }
 
             @Override
@@ -681,12 +705,12 @@ public class LiveHttpHelper implements IHelper {
                 RootHandOutRedPacket rootHandOutRedPacket = gson.fromJson(responseBody, RootHandOutRedPacket.class);
                 List<ResultHandOutRedPacket> resultHandOutRedPackets = rootHandOutRedPacket.getResult();
                 if (SDCollectionUtil.isEmpty(resultHandOutRedPackets)) {
-                    mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_GET, null);
+                    onSuccess(mView, LiveConstants.HAND_OUT_RED_PACKET_GET, null);
                     return;
                 }
                 ResultHandOutRedPacket resultHandOutRedPacket = resultHandOutRedPackets.get(0);
                 List<ModelHandOutRedPacket> modelHandOutRedPacket = resultHandOutRedPacket.getBody();
-                mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_GET, modelHandOutRedPacket);
+                onSuccess(mView, LiveConstants.HAND_OUT_RED_PACKET_GET, modelHandOutRedPacket);
             }
 
             @Override
@@ -726,12 +750,12 @@ public class LiveHttpHelper implements IHelper {
                 RootHandOutRedPacketPost rootHandOutRedPacketPost = gson.fromJson(responseBody, RootHandOutRedPacketPost.class);
                 List<ResultHandOutRedPacketPost> resultHandOutRedPacketPosts = rootHandOutRedPacketPost.getResult();
                 if (SDCollectionUtil.isEmpty(resultHandOutRedPacketPosts)) {
-                    mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_POST, null);
+                    onSuccess(mView, LiveConstants.HAND_OUT_RED_PACKET_POST, null);
                     return;
                 }
                 ResultHandOutRedPacketPost resultHandOutRedPacketPost = resultHandOutRedPacketPosts.get(0);
                 List<ModelHandOutRedPacketPost> modelHandOutRedPacketPost = resultHandOutRedPacketPost.getBody();
-                mView.onSuccess(LiveConstants.HAND_OUT_RED_PACKET_POST, modelHandOutRedPacketPost);
+                onSuccess(mView, LiveConstants.HAND_OUT_RED_PACKET_POST, modelHandOutRedPacketPost);
             }
 
             @Override
@@ -773,7 +797,7 @@ public class LiveHttpHelper implements IHelper {
                 } else {
                     List<UserRedPacketInfo> datas = new ArrayList<UserRedPacketInfo>();
                     datas.add(userRedPacketInfo);
-                    mView.onSuccess(LiveConstants.GET_RED_PACKETS, datas);
+                    onSuccess(mView, LiveConstants.GET_RED_PACKETS, datas);
                 }
             }
 
@@ -810,9 +834,9 @@ public class LiveHttpHelper implements IHelper {
                 if (LiveConstants.RESULT_SUCCESS.equals(status)) {
                     if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
                         List<UserRedPacketInfo> datas = root.getResult().get(0).getBody();
-                        mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, datas);
+                        onSuccess(mView, LiveConstants.GET_USER_RED_PACKETS, datas);
                     } else {
-                        mView.onSuccess(LiveConstants.GET_USER_RED_PACKETS, null);
+                        onSuccess(mView, LiveConstants.GET_USER_RED_PACKETS, null);
                     }
                 }
 
@@ -846,12 +870,12 @@ public class LiveHttpHelper implements IHelper {
                 RootStoresRandomComment rootStoresRandomComment = gson.fromJson(responseBody, RootStoresRandomComment.class);
                 List<ResultStoresRandomComment> resultStoresRandomComments = rootStoresRandomComment.getResult();
                 if (SDCollectionUtil.isEmpty(resultStoresRandomComments)) {
-                    mView.onSuccess(LiveConstants.STORES_RANDOM_COMMENT, null);
+                    onSuccess(mView, LiveConstants.STORES_RANDOM_COMMENT, null);
                     return;
                 }
                 ResultStoresRandomComment resultStoresRandomComment = resultStoresRandomComments.get(0);
                 List<ModelStoresRandomComment> modelStoresRandomComment = resultStoresRandomComment.getBody();
-                mView.onSuccess(LiveConstants.STORES_RANDOM_COMMENT, modelStoresRandomComment);
+                onSuccess(mView, LiveConstants.STORES_RANDOM_COMMENT, modelStoresRandomComment);
             }
 
             @Override
@@ -890,9 +914,9 @@ public class LiveHttpHelper implements IHelper {
                 if (LiveConstants.RESULT_SUCCESS.equals(status)) {
                     if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
                         List<BaoBaoEntity> datas = root.getResult().get(0).getBody();
-                        mView.onSuccess(LiveConstants.LIST_OF_STORES, datas);
+                        onSuccess(mView, LiveConstants.LIST_OF_STORES, datas);
                     } else {
-                        mView.onSuccess(LiveConstants.LIST_OF_STORES, null);
+                        onSuccess(mView, LiveConstants.LIST_OF_STORES, null);
                     }
                 }
 
@@ -921,7 +945,7 @@ public class LiveHttpHelper implements IHelper {
                 RootHostAuthTime rootHostAuthTime = gson.fromJson(responseBody, RootHostAuthTime.class);
                 List<RootHostAuthTime> roots = new ArrayList<>();
                 roots.add(rootHostAuthTime);
-                mView.onSuccess(LiveConstants.HOST_AUTH_TIME, roots);
+                onSuccess(mView, LiveConstants.HOST_AUTH_TIME, roots);
             }
 
             @Override
@@ -949,11 +973,11 @@ public class LiveHttpHelper implements IHelper {
                 RootPayHistory root = gson.fromJson(responseBody, RootPayHistory.class);
                 List<ResultPayHistory> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
-                    mView2.onSuccess(LiveConstants.RECHARGE_DIAMOND_LIST, null);
+                    onSuccess(mView2, LiveConstants.RECHARGE_DIAMOND_LIST, null);
                     return;
                 }
                 List<ModelPayHistory> items = results.get(0).getBody();
-                mView2.onSuccess(LiveConstants.RECHARGE_DIAMOND_LIST, items);
+                onSuccess(mView2, LiveConstants.RECHARGE_DIAMOND_LIST, items);
             }
 
             @Override
@@ -989,16 +1013,16 @@ public class LiveHttpHelper implements IHelper {
                 RootReceiveCode root = gson.fromJson(responseBody, RootReceiveCode.class);
                 List<ResultReceiveCode> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
-                    mView.onSuccess(LiveConstants.RECEIVE_CODE, null);
+                    onSuccess(mView, LiveConstants.RECEIVE_CODE, null);
                     return;
                 }
                 List<ModelReceiveCode> items = results.get(0).getBody();
-                mView.onSuccess(LiveConstants.RECEIVE_CODE, items);
+                onSuccess(mView, LiveConstants.RECEIVE_CODE, items);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mView.onSuccess(LiveConstants.RECEIVE_CODE, null);
+                onSuccess(mView, LiveConstants.RECEIVE_CODE, null);
             }
 
         });
@@ -1037,11 +1061,6 @@ public class LiveHttpHelper implements IHelper {
 
                 MGLog.e(responseBody);
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
 
     }
@@ -1067,21 +1086,48 @@ public class LiveHttpHelper implements IHelper {
                 RootUseReceiveCode root = gson.fromJson(responseBody, RootUseReceiveCode.class);
                 List<ResultUseReceiveCode> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
-                    mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, null);
+                    onSuccess(mView, LiveConstants.USE_RECEIVE_CODE, null);
                     return;
                 }
-                List<Room> items = results.get(0).getBody();
-                mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, items);
+                List<ModelRoom> items = results.get(0).getBody();
+                onSuccess(mView, LiveConstants.USE_RECEIVE_CODE, items);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                mView.onSuccess(LiveConstants.USE_RECEIVE_CODE, null);
+                onSuccess(mView, LiveConstants.USE_RECEIVE_CODE, null);
             }
 
         });
 
     }
+
+    /**
+     * 添加旁路直播
+     *
+     * @param play_url
+     * @param channel_id
+     * @param room_id
+     */
+    public void getByPassLive(String play_url, String channel_id, String room_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("play_url", play_url);
+        params.put("channel_id", channel_id);
+        params.put("room_id", room_id);
+        params.put("token", App.getInstance().getToken());
+        params.put("method", LiveConstants.BY_PASS_LIVE);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+            }
+        });
+    }
+
 
     @Override
     public void onDestroy() {

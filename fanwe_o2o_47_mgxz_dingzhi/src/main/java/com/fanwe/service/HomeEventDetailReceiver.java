@@ -8,14 +8,14 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.DaiYanStoreWapActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.jpush.MessageHelper;
-import com.miguo.app.HiShopDetailActivity;
 import com.fanwe.seller.views.GoodsDetailActivity;
+import com.miguo.app.HiHomeActivity;
+import com.miguo.app.HiShopDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -128,7 +128,7 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 		} else {
 			// 默认,去首页
 			bundle.putInt("index", 3);
-			startActivity(context, MainActivity.class, bundle);
+			startActivity(context, HiHomeActivity.class, bundle);
 		}
 	}
 

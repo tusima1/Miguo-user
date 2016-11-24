@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.fanwe.MainActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.WelcomePagerAdapter;
 import com.fanwe.user.view.customviews.WelcomeView;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ public class WelcomeActivity extends Activity {
     }
 
     private void gotoMainActivity() {
-        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        Intent intent = new Intent(WelcomeActivity.this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
         startActivity(intent);
         finish();
     }

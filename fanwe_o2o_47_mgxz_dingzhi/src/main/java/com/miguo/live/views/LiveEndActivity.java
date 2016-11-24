@@ -61,10 +61,10 @@ public class LiveEndActivity extends Activity implements CallbackView {
         binding.setLive(dataBindingLiveEnd);
     }
 
-    @Override
-    public void onBackPressed() {
-        return;
-    }
+//    @Override
+//    public void onBackPressed() {
+//        return;
+//    }
 
     private void preData() {
         mLiveHttphelper = new LiveHttpHelper(this, this);

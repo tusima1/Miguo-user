@@ -3,7 +3,6 @@ package com.fanwe.user.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,35 +20,23 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.home.model.Host;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.adapters.ImageAdapter;
 import com.fanwe.user.adapters.UserHomeLiveImgAdapter;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.getPersonHomePage.ModelPersonHomePage;
 import com.fanwe.user.model.getProductList.ModelProductList;
-import com.fanwe.user.model.getSpokePlay.ModelSpokePlay;
 import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
-import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
-import com.miguo.live.views.LiveActivity;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.live.views.view.PlayBackActivity;
-import com.miguo.utils.NetWorkStateUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDEventManager;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +58,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private TextView tvName, tvAttention, tvFans, tvSupport, tvSign, tvAttentionStatus;
 
     private List<String> imgsProduct = new ArrayList<>();
-    private List<ModelSpokePlay> datasLive = new ArrayList<>();
+    private List<ModelRoom> datasLive = new ArrayList<>();
     private RelativeLayout layoutShopEmpty, layoutLiveEmpty, layoutShop;
     private String nick;
 
@@ -89,7 +76,11 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         preView();
     }
 
+
     private void preView() {
+        if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() == null) {
+            return;
+        }
         if (id.equals(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id())) {
             //当前用户
             tvAttentionStatus.setVisibility(View.GONE);
@@ -140,7 +131,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
                 clickShare();
             }
         });
-        ((TextView) findViewById(R.id.tv_middle)).setText("网红主页");
+        ((TextView) findViewById(R.id.tv_middle)).setText("个人主页");
     }
 
 
@@ -172,7 +163,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         recyclerViewShop.setAdapter(adapterShop);
 
         //GridLayout 3列
-        adapterLive = new UserHomeLiveImgAdapter(mContext, getLayoutInflater(), datasLive);
+        adapterLive = new UserHomeLiveImgAdapter(this, getLayoutInflater(), datasLive);
         gridViewLive.setAdapter(adapterLive);
     }
 
@@ -188,120 +179,17 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         gridViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (true) {
-                    return;
-                }
-                //TODO 跳转暂时屏蔽
-                ModelSpokePlay modelSpokePlay = datasLive.get(position);
-                //判断网络环境
-                boolean connected = NetWorkStateUtil.isConnected(mContext);
-                if (!connected) {
-                    MGToast.showToast("没有网络,请检测网络环境!");
-                    return;
-                }
-                Room room = new Room();
-                room.setAv_room_id(modelSpokePlay.getAv_room_id());
-                room.setChat_room_id(modelSpokePlay.getChat_room_id());
-                room.setCover(modelSpokePlay.getCover());
-                room.setCreate_time(modelSpokePlay.getCreate_time());
-                room.setId(modelSpokePlay.getId());
-                room.setLive_type(modelSpokePlay.getStart_status());
-
-                //分点播和直播 直播类型  1 表示直播，2表示点播
-                String live_type = modelSpokePlay.getStart_status();
-                if ("1".equals(live_type)) {
-                    //直播
-                    gotoLiveActivity(room);
-                } else if ("2".equals(live_type)) {
-                    //点播
-                    gotoPlayBackActivity(room);
-                } else {
-                    //异常数据
-                    MGToast.showToast("异常数据");
-                    return;
-                }
+                Intent intent = new Intent(UserHomeActivity.this, DistributionStoreWapActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
-    }
-
-
-    private void gotoLiveActivity(Room room) {
-        Intent intent = new Intent(mContext, LiveActivity.class);
-        intent.putExtra(Constants.ID_STATUS, Constants.MEMBER);
-        MySelfInfo.getInstance().setIdStatus(Constants.MEMBER);
-        addCommonData(room);
-        BaseUtils.jumpToNewActivity(UserHomeActivity.this, intent);
-//            startActivity(intent);
-    }
-
-    /**
-     * 进入点播页面
-     *
-     * @param room
-     */
-    private void gotoPlayBackActivity(Room room) {
-        addCommonData(room);
-        String chat_room_id = room.getChat_room_id();//im的id
-        String file_size = room.getFile_size();//文件大小
-        String duration = room.getDuration();//时长
-        String file_id = room.getFile_id();
-        String vid = room.getVid();
-        String playset = room.getPlayset();
-
-        Intent intent = new Intent(mContext, PlayBackActivity.class);
-        Bundle data = new Bundle();
-        data.putString("chat_room_id", chat_room_id);
-        data.putString("file_size", file_size);
-        data.putString("duration", duration);
-        data.putString("file_id", file_id);
-        data.putString("vid", vid);
-        data.putString("playset", playset);
-        intent.putExtras(data);
-//            startActivity(intent);
-        BaseUtils.jumpToNewActivity(UserHomeActivity.this, intent);
-    }
-
-    private void addCommonData(Room room) {
-        Host host = room.getHost();
-        String nickName = App.getInstance().getUserNickName();
-        String avatar = "";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo.getUserInfoNew() != null) {
-                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-            }
-        }
-        MySelfInfo.getInstance().setAvatar(avatar);
-        MySelfInfo.getInstance().setNickName(nickName);
-        MySelfInfo.getInstance().setJoinRoomWay(false);
-        CurLiveInfo.setHostID(host.getHost_user_id());
-        CurLiveInfo.setHostName(host.getNickname());
-
-        CurLiveInfo.setHostAvator(room.getHost().getAvatar());
-        App.getInstance().addLiveRoomIdList(room.getId());
-        CurLiveInfo.setRoomNum(DataFormat.toInt(room.getId()));
-        if (room.getLbs() != null) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-            ModelStoreList modelStoreList = new ModelStoreList();
-            modelStoreList.setShop_name(room.getLbs().getShop_name());
-            modelStoreList.setId(room.getLbs().getShop_id());
-            CurLiveInfo.setModelShop(modelStoreList);
-        }
-        CurLiveInfo.setLive_type(room.getLive_type());
-
-        CurLiveInfo.setHostUserID(room.getHost().getUid());
-//                CurLiveInfo.setMembers(item.getWatchCount() + 1); // 添加自己
-        CurLiveInfo.setMembers(1); // 添加自己
-//                CurLiveInfo.setAddress(item.getLbs().getAddress());
-        if (room.getLbs() != null && !TextUtils.isEmpty(room.getLbs().getShop_id())) {
-            CurLiveInfo.setShopID(room.getLbs().getShop_id());
-        }
-        CurLiveInfo.setAdmires(1);
     }
 
     private void preWidget() {
         recyclerViewShop = (RecyclerView) findViewById(R.id.recyclerview_shop_act_user_home);
         gridViewLive = (MyGridView) findViewById(R.id.gridView_live_act_user_home);
+        gridViewLive.setFocusable(false);
         circleImageView = (CircleImageView) findViewById(R.id.iv_icon_act_user_home);
         tvName = (TextView) findViewById(R.id.tv_name_act_user_home);
         tvAttention = (TextView) findViewById(R.id.tv_num_attention_act_user_home);
@@ -321,7 +209,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
 
     List<ModelPersonHomePage> itemsPerson;
     List<ModelProductList> itemsProduct;
-    List<ModelSpokePlay> itemsLive;
+    List<ModelRoom> itemsLive;
     List<ModelUserAttention> itemsAttention;
     List<ModelAttention> itemsForcus;
 

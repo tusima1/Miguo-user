@@ -1,12 +1,16 @@
 package com.fanwe;
 
-import com.fanwe.BaseActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.User_infoModel;
@@ -14,12 +18,8 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.TextView;
+import com.miguo.app.HiHomeActivity;
+import com.miguo.live.views.customviews.MGToast;
 
 public class SetPwActivity extends BaseActivity {
 
@@ -147,7 +147,7 @@ public class SetPwActivity extends BaseActivity {
 
 	protected void dealLoginNormalSuccess(User_infoModel actModel, boolean postEvent) {
 		LocalUserModel.dealLoginSuccess(actModel, postEvent);
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, HiHomeActivity.class);
 		startActivity(intent);
 		finish();
 	}

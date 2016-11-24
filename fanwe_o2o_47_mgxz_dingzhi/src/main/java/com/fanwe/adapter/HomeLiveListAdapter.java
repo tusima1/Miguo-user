@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.home.model.Host;
-import com.fanwe.home.model.Room;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.StringTool;
+import com.miguo.live.model.getLiveListNew.ModelHost;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -27,10 +27,10 @@ import java.util.List;
 public class HomeLiveListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater inflater;
-    private ArrayList<Room> datas;
+    private ArrayList<ModelRoom> datas;
 
     public HomeLiveListAdapter(Context mContext,
-                               LayoutInflater layoutInflater, ArrayList<Room> datas) {
+                               LayoutInflater layoutInflater, ArrayList<ModelRoom> datas) {
         this.mContext = mContext;
         this.inflater = layoutInflater;
         this.datas = datas;
@@ -73,7 +73,7 @@ public class HomeLiveListAdapter extends BaseAdapter {
     private int maxLength = 15;
 
     private void setData(Holder mHolder, int position) {
-        Room room = datas.get(position);
+        ModelRoom room = datas.get(position);
         ImageLoader.getInstance().displayImage(room.getCover(), mHolder.ivBg, null, null, null);
         if (!TextUtils.isEmpty(room.getLbs().getAddress())) {
             mHolder.tvAdd.setText(room.getLbs().getAddress());
@@ -92,7 +92,7 @@ public class HomeLiveListAdapter extends BaseAdapter {
         }
         //标签
         mHolder.layoutTags.removeAllViews();
-        Host host = room.getHost();
+        ModelHost host = room.getHost();
         if (host != null) {
             List<String> tags = host.getTags();
             if (!SDCollectionUtil.isEmpty(tags)) {

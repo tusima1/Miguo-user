@@ -88,10 +88,10 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
             String distance = shopListBean.getDistance();
             if (TextUtils.isEmpty(distance) || "-1".equals(distance)) {
                 holder.iv_map.setImageResource(R.drawable.ic_map_disable);
-                holder.tv_distance.setText("--km");
+                holder.tv_distance.setText("距离 --km");
             } else {
                 holder.iv_map.setImageResource(R.drawable.ic_map_enable);
-                holder.tv_distance.setText(SDDistanceUtil.getFormatDistance(DataFormat.toDouble(distance)));
+                holder.tv_distance.setText("距离 "+SDDistanceUtil.getFormatDistance(DataFormat.toDouble(distance)));
                 holder.iv_map.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -110,7 +110,7 @@ public class GoodsDetailShopListAdapter extends BaseAdapter {
                 });
             }
 
-            holder.tv_time.setText(shopListBean.getTrade_day());
+            holder.tv_time.setText("营业时间: "+shopListBean.getTrade_day());
 
             final String tel = shopListBean.getTel();
             if (TextUtils.isEmpty(tel)) {

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="center_horizontal"
+    android:id="@+id/recycler_scrollview"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content">
 
             <com.miguo.ui.view.ShopDetailViewPager
-                android:id="@+id/viewpager"
+                android:id="@+id/shopdetail_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"></com.miguo.ui.view.ShopDetailViewPager>
 
@@ -27,7 +28,7 @@
                 android:id="@+id/indicator_circle"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_alignBottom="@+id/viewpager"
+                android:layout_alignBottom="@+id/shopdetail_viewpager"
                 android:layout_gravity="bottom"
                 android:gravity="center"
                 app:ci_drawable="@drawable/black_radius_square"
@@ -64,8 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
             android:textColor="@color/text_base_color"
             android:textSize="14sp" />
         <!-- 时间  营业时间：11:00-22:00 -->

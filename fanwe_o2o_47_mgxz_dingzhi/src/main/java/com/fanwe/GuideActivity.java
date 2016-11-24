@@ -1,16 +1,17 @@
 package com.fanwe;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDEventManager;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
 
 public class GuideActivity extends BaseActivity {
 	private LinearLayout mHome;
@@ -82,7 +83,7 @@ public class GuideActivity extends BaseActivity {
 	private void startFragment(int index) {
 
 		Intent intent = new Intent(GuideActivity.this,
-				MainActivity.class);
+				HiHomeActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putInt("index", index);
 		intent.putExtras(bundle);

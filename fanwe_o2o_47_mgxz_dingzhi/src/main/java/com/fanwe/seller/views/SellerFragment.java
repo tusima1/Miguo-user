@@ -10,14 +10,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.MainActivity;
 import com.fanwe.constant.Constant;
 import com.fanwe.fragment.StoreListFragment;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiHomeActivity;
+import com.miguo.live.views.utils.BaseUtils;
 
 /**
  * Created by Administrator on 2016/10/19.
@@ -32,6 +35,8 @@ public class SellerFragment extends Fragment {
     private StoreListFragment mFragAll;
     private StoreListFragment mFragGroupon;
     private Bundle bundle;
+    private LinearLayout titleLayout;
+    private FrameLayout layoutContent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,27 +51,36 @@ public class SellerFragment extends Fragment {
         view = inflater.inflate(R.layout.frag_seller, container, false);
         setWidget();
         setListener();
-        clickTitle("all");
+        setTitlePadding(titleLayout);
+        clickTitle("groupon");
         setView();
         return view;
     }
 
     private void setView() {
         //主界面，隐藏返回按钮
-        if (getActivity() instanceof MainActivity) {
+        if (getActivity() instanceof HiHomeActivity) {
             ivBack.setVisibility(View.GONE);
+            if (layoutContent != null) {
+                layoutContent.setPadding(0, 0, 0, BaseUtils.dip2px(getActivity(), 45));
+            }
         } else {
             ivBack.setVisibility(View.VISIBLE);
+            if (layoutContent != null) {
+                layoutContent.setPadding(0, 0, 0, 0);
+            }
         }
     }
 
     private void setWidget() {
+        titleLayout = (LinearLayout) view.findViewById(R.id.title_layout);
         tvAll = (TextView) view.findViewById(R.id.tv_all_frag_seller);
         tvGroupon = (TextView) view.findViewById(R.id.tv_groupon_frag_seller);
         viewAll = (View) view.findViewById(R.id.view_all_frag_seller);
         viewGroupon = (View) view.findViewById(R.id.view_groupon_frag_seller);
         ivSearch = (ImageView) view.findViewById(R.id.iv_search_frag_seller);
         ivBack = (ImageView) view.findViewById(R.id.iv_back_frag_seller);
+        layoutContent = (FrameLayout) view.findViewById(R.id.layout_content_frag_seller);
     }
 
     private void setListener() {
@@ -140,5 +154,27 @@ public class SellerFragment extends Fragment {
         }
         ft.commit();
     }
+
+    public void handlerCateIdChanged(String cate_id) {
+        if (mFragAll != null) {
+            mFragAll.handlerCateIdChanged(cate_id);
+            return;
+        }
+        if (mFragGroupon != null) {
+            mFragGroupon.handlerCateIdChanged(cate_id);
+        }
+    }
+
+    /**
+     * 沉浸式标题栏效果需要设置padding
+     */
+    protected void setTitlePadding(View view) {
+        if (getActivity() instanceof HiHomeActivity) {
+            if (view != null) {
+                view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
+            }
+        }
+    }
+
 
 }

@@ -2,16 +2,21 @@ package com.miguo.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.common.ImageLoaderManager;
+import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.category.fragment.HiHomeFragmentCategory;
+import com.miguo.entity.MenuBean;
 import com.miguo.live.views.base.BaseHorizantalScrollView;
-import com.miguo.live.views.customviews.RoundedImageView;
 
 import java.util.List;
 
@@ -20,8 +25,10 @@ import java.util.List;
  */
 public class HomeTagsView extends BaseHorizantalScrollView{
 
-    LinearLayout content;
+    HomeTagLineaLayout content;
     OnHomeTagsClickListener onHomeTagsClickListener;
+    List<MenuBean.Result.Body> list;
+    HiHomeFragmentCategory hiHomeFragmentCategory;
 
     public HomeTagsView(Context context) {
         super(context);
@@ -44,19 +51,21 @@ public class HomeTagsView extends BaseHorizantalScrollView{
 
     private void initContent(){
         setHorizontalScrollBarEnabled(false);
-        content = new LinearLayout(getContext());
+        content = new HomeTagLineaLayout(getContext());
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(matchParent(), wrapContent());
         content.setOrientation(LinearLayout.HORIZONTAL);
         content.setLayoutParams(params);
         addView(content);
     }
 
-    public void init(List tags){
+    public void init(List<MenuBean.Result.Body> tags){
+        content.removeAllViews();
         if(tags == null || tags.size()==0){
             return ;
         }
 
-        content.removeAllViews();
+        this.list = tags;
+
 
         int iconWidth = getScreenWidth() / 8;
         int iconHeight = iconWidth;
@@ -65,16 +74,17 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             LinearLayout.LayoutParams grouParams = getLinearLayoutParams(wrapContent(), wrapContent());
             group.setLayoutParams(grouParams);
             group.setGravity(Gravity.CENTER);
-            group.setPadding(dip2px(15), dip2px(15), dip2px(15), dip2px(15));
+            group.setPadding(dip2px(18), dip2px(18), dip2px(18), dip2px(18));
             group.setOrientation(LinearLayout.VERTICAL);
             group.setOnClickListener(new HomeTagsViewListener(i));
 
-            RoundedImageView icon = new RoundedImageView(getContext());
+            HomeTagCircleImageView icon = new HomeTagCircleImageView(getContext());
             LinearLayout.LayoutParams iconParams = getLinearLayoutParams(iconWidth, iconHeight);
             icon.setLayoutParams(iconParams);
-            icon.setOval(true);
+            icon.setHomeTagsView(this);
 
-            SDViewBinder.setImageView("http://img.xiaoneiit.com/avatar/5.jpg", icon);
+
+            SDViewBinder.setImageView(getItem(i).getIcon(), icon);
             group.addView(icon);
 
             TextView title = new TextView(getContext());
@@ -83,7 +93,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             title.setLayoutParams(titleParams);
             title.setTextColor(getColor(R.color.text_base_color));
             title.setTextSize(12);
-            title.setText("米果小站");
+            title.setText(getItem(i).getTitle());
             group.addView(title);
 
             content.addView(group);
@@ -97,6 +107,50 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         content.addView(line);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                handlerActionDown();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                handlerActionMove();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                handlerActionCancel();
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void handlerActionDown(){
+        Log.d(tag, "handler down..");
+        if(getHiHomeFragmentCategory() != null){
+            getHiHomeFragmentCategory().setTouchDisableMove(true);
+        }
+    }
+
+    public void handlerActionMove(){
+        Log.d(tag, "handler move..");
+        if(getHiHomeFragmentCategory() != null) {
+            getHiHomeFragmentCategory().setTouchDisableMove(true);
+        }
+    }
+
+    public void handlerActionCancel(){
+        Log.d(tag, "handler cancel..");
+        if(getHiHomeFragmentCategory() != null) {
+            getHiHomeFragmentCategory().setTouchDisableMove(false);
+            Log.d(tag, "parent disable : " + getHiHomeFragmentCategory().isTouchDisableMove());
+
+        }
+    }
+
+    public MenuBean.Result.Body getItem(int position){
+        return list.get(position);
+    }
+
     class HomeTagsViewListener implements View.OnClickListener{
 
         int position;
@@ -108,13 +162,21 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         @Override
         public void onClick(View v) {
             if(onHomeTagsClickListener != null){
-                onHomeTagsClickListener.onTagsClick();
+                onHomeTagsClickListener.onTagsClick(getItem(position));
             }
         }
     }
 
+    public HiHomeFragmentCategory getHiHomeFragmentCategory() {
+        return hiHomeFragmentCategory;
+    }
+
+    public void setHiHomeFragmentCategory(HiHomeFragmentCategory hiHomeFragmentCategory) {
+        this.hiHomeFragmentCategory = hiHomeFragmentCategory;
+    }
+
     public interface OnHomeTagsClickListener{
-        void onTagsClick();
+        void onTagsClick(MenuBean.Result.Body item);
     }
 
     public void setOnHomeTagsClickListener(OnHomeTagsClickListener onHomeTagsClickListener) {
