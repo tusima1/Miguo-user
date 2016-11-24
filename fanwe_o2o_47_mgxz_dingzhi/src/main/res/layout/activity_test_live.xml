@@ -8,12 +8,12 @@
     android:orientation="vertical"
     tools:context="com.miguo.live.views.TestLiveActivity">
 
-    <com.fanwe.customview.tab.ExtTabLayout
+    <!--<com.fanwe.customview.tab.ExtTabLayout
         android:id="@+id/tab"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp48"/>
+        android:layout_height="@dimen/dp48"/>-->
 
-    <android.support.v4.view.ViewPager
+    <com.miguo.ui.view.HiLiveListFragmentViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

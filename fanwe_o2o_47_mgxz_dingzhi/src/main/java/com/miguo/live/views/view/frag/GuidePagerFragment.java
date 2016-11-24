@@ -43,9 +43,9 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
     private DataRequestCompleteListener requestDataListener;
     SwipeToLoadLayout swipeToLoadLayout;
 
-    public static GuidePagerFragment newInstance(String tag) {
+    public static GuidePagerFragment newInstance(String tab_id) {
         Bundle args = new Bundle();
-        args.putString(PAGE_REQUEST_ID, tag);
+        args.putString(PAGE_REQUEST_ID, tab_id);
         GuidePagerFragment pageFragment = new GuidePagerFragment();
         pageFragment.setArguments(args);
         return pageFragment;
