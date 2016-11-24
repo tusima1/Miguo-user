@@ -33,6 +33,14 @@ public class ModelFeaturedGroupBuy {
         return area_name;
     }
 
+    public String getTuan_price_with_unit() {
+        return tuan_price_with_unit;
+    }
+
+    public void setTuan_price_with_unit(String tuan_price_with_unit) {
+        this.tuan_price_with_unit = tuan_price_with_unit;
+    }
+
     public void setArea_name(String area_name) {
         this.area_name = area_name;
     }

@@ -6,8 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,21 +21,19 @@ import com.miguo.entity.HiFunnyTabBean;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiLiveListFragement;
 import com.miguo.listener.fragment.HiFunnyFragmentListener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.live.views.view.frag.GuideLiveFragment;
 import com.miguo.ui.view.FunnyViewPager;
-import com.miguo.ui.view.HiLiveListFragmentViewPager;
 import com.miguo.ui.view.SlidingTabLayout;
 import com.miguo.view.HiFunnyTabView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/16.
  */
 
-public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveListFragmentCategory.OnPagerInitListener, HiFunnyTabView{
+public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveListFragmentCategory.OnPagerInitListener, HiFunnyTabView, GuideLiveFragment.OnGuideLivePagerInitListener{
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
@@ -130,15 +126,18 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
     private void initViewPager(){
         fragments = new ArrayList<>();
         HiLiveListFragement liveListFragement = new HiLiveListFragement();
-        HiLiveListFragement liveListFragement2 = new HiLiveListFragement();
+        GuideLiveFragment guideLiveFragment = new GuideLiveFragment();
         liveListFragement.setOnPagerInitListener(this);
+        guideLiveFragment.setOnGuideLivePagerInitListener(this);
         fragments.add(liveListFragement);
-        fragments.add(liveListFragement2);
+        fragments.add(guideLiveFragment);
         funnyFragmentAdapter = new HiFunnyFragmentAdapter(fragment.getChildFragmentManager(), fragments);
         funnyViewPager.setAdapter(funnyFragmentAdapter);
     }
 
     private void initTabList(){
+        updateLiveSlidingTabLayout(true);
+        updateGuideSlidingTabLayout(false);
         hiFunnyTabDao.getFunnyTab(TabSet.LIVE);
         hiFunnyTabDao.getFunnyTab(TabSet.GUIDE);
     }
@@ -195,6 +194,10 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
     public void getGuideTabListError() {
 
     }
+    @Override
+    public void onGuideLivePagerInit(ViewPager viewPager, int number) {
+        slidingTabLayoutGuide.setViewPager(viewPager,number >= 6 ? 6 : number);
+    }
 
     @Override
     public void getLiveTabListSuccess(List<HiFunnyTabBean.Result.Body> tabs) {
@@ -205,7 +208,10 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
 
     @Override
     public void getGuideTabListSuccess(List<HiFunnyTabBean.Result.Body> tabs) {
-
+        if (tabs==null || tabs.size()<1)return;
+        if (getGuideLiveFragment()!=null){
+            getGuideLiveFragment().setViewPagerTags(tabs);
+        }
     }
 
     @Override
@@ -216,6 +222,13 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
     public HiLiveListFragement getHiLiveListFragement(){
         try {
             return (HiLiveListFragement)fragments.get(0);
+        }catch (Exception e){
+            return null;
+        }
+    }
+    private GuideLiveFragment getGuideLiveFragment(){
+        try {
+            return (GuideLiveFragment)fragments.get(1);
         }catch (Exception e){
             return null;
         }
