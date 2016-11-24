@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.didikee.uilibs.Text.UICharacterCount;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.library.utils.SDViewBinder;
@@ -25,6 +27,8 @@ import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.SDDistanceUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.adapter.base.BaseRVAdapter;
 import com.miguo.adapter.base.BaseRVViewHolder;
@@ -66,7 +70,8 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
     private String mGuideID="";
     private int position=-1;
     private List<GuideInnerGoods> innerGoods;
-//    private RecyclerView mRVInner;
+    private List<String> mTags;
+    //    private RecyclerView mRVInner;
 
     public ActGuideLayout(Context context) {
         this(context,null);
@@ -108,48 +113,80 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         ll_text_container.setOnClickListener(this);
     }
 
-    public void bindData(int position,String guide_id,int statement,List<GuideInnerGoods> innerGoods) {
+    public void bindData(int position,String guide_id,int statement,List<GuideInnerGoods> innerGoods,String desc) {
         this.mGuideID=guide_id;
         this.position=position;
         this.innerGoods=innerGoods;
+        if (!TextUtils.isEmpty(desc)){
+            mTags = getTags(desc);
+        }
         //TODO 默认是收缩时的状态
-        if (statement == ExpandStatus.NORMAL){
-            bindInnerData(statement);
-        }else if (statement == ExpandStatus.EXPANDED){
-            if (innerGoods != null && innerGoods.size()>1){
-                bindInnerData(statement);
+        bindInnerData(statement);
+    }
+
+    private List<String> getTags(String desc){
+        List<String> tags=new ArrayList<>();
+        desc="Display user-ge很好啊 ent into every aspect 我的歌 of your marketing in minutes.Display user-ge很好啊nerated content into every aspect 我的歌 of your marketing efforts in minutes";
+        float count = UICharacterCount.getCount(desc);
+        if (count*2  <=30){
+            tags.add(desc);
+            return tags;
+        }
+        int lastPosition=0;
+        int charCount=0;
+        int length=desc.length();
+        for (int i = 0; i < length; i++) {
+            boolean isChinese= UICharacterCount.isChinese(desc.charAt(i));
+            if (isChinese) {
+                charCount+=2;
+            }else {
+                charCount++;
+            }
+            if (charCount==29) {
+                if (UICharacterCount.isChinese(desc.charAt(i+1))) {
+                    //此时需要截取
+                    String str=desc.substring(lastPosition, i+1);
+                    tags.add(str);
+                    lastPosition = i+1;
+                    charCount=0;
+                }
+            }
+            if (charCount ==30) {
+                String str=desc.substring(lastPosition, i+1);
+                tags.add(str);
+                lastPosition=i+1;
+                charCount=0;
+            }
+
+            if (i==length-1){
+                //最后一遍的时候
+                if (lastPosition !=length-1){
+                    String str = desc.substring(lastPosition, length);
+                    tags.add(str);
+                }else {
+                    //empty
+                }
+
             }
         }
+        return tags;
     }
+
     private void bindInnerData(int statement){
         if (statement== ExpandStatus.NORMAL){
             ll_text_container.setClickable(true);
             ll_tools.setVisibility(GONE);
             addDot2LinearLayout(3,ll_dot_container);
-            addTextView(createTestData(),ll_text_container,2);
+            addTextView(mTags,ll_text_container,statement);
             hideHorizontalRecyclerView(fl_rv_container);
         }else if (statement == ExpandStatus.EXPANDED){
             ll_text_container.setClickable(false);
             ll_tools.setVisibility(VISIBLE);
             hideDotLayout(ll_dot_container);
-            addTextView(createTestData(),ll_text_container,-1);
+            addTextView(mTags,ll_text_container,statement);
             addHorizontalRecyclerView(null,fl_rv_container);
         }
     }
-
-    private List<String> createTestData(){
-        List<String> tags=new ArrayList<>();
-        tags.add("葡萄美酒夜光杯,背背背饿瘪贝贝");
-        tags.add("Smart PNG and JPEG compression");
-        tags.add("葡萄美酒夜光杯,背背背饿瘪贝贝");
-        tags.add("Smart PNG and JPEG compression");
-        tags.add("葡萄美酒夜光杯,背背背饿瘪贝贝");
-        tags.add("Smart PNG and JPEG compression");
-        tags.add("葡萄美酒夜光杯,背背背饿瘪贝贝");
-        tags.add("Smart PNG and JPEG compression");
-        return tags;
-    }
-
 
     @Override
     public void expand() {
@@ -174,7 +211,7 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         }
         target.removeAllViews();
         int size = DisplayUtil.dp2px(context, 2);
-        int margin = DisplayUtil.dp2px(context, 5);
+        int margin = DisplayUtil.dp2px(context, 4);
         LinearLayout.LayoutParams params=new LayoutParams(size,size);
         params.setMargins(margin,0,margin,0);
         for (int i = 0; i < num; i++) {
@@ -204,7 +241,7 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         TextView textView=new TextView(context);
         textView.setTextColor(Color.parseColor("#999999"));
         textView.setTextSize(12);
-        textView.setLines(1);
+        textView.setLineSpacing(2,1);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity(Gravity.CENTER);
         return textView;
@@ -231,21 +268,10 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
             @Override
             protected void bindView(BaseRVViewHolder helper, GuideInnerGoods item) {
                 if (item == null)return;
-            /**
-             * area_name :
-             * tuan_price : 158.0
-             * unit :
-             * distance :
-             * icon : http://oc16x1ls4.bkt.clouddn.com/2016/11/Fv4FX2sFb_SIRPbVAch0b816eg4V
-             * name : 【嵊州】春暖花开西餐厅 仅售158元！价值188元的2-3人A套餐
-             * cate_name : 西餐
-             * tuan_price_with_unit : 158.00元
-             * id : 8dc211ad-1831-48e0-ba38-c9cbb834df41
-             */
                 SDViewBinder.setImageView(item.getIcon(),helper.getImageView(R.id.iv_img));
                 helper.setTextView(R.id.tv_title,item.getName(),"----");
                 helper.setTextView(R.id.tv_price_unit,item.getTuan_price_with_unit(),"--");
-                helper.setTextView(R.id.tv_location,item.getArea_name() +item.getDistance()+item.getCate_name(),"--");
+                helper.setTextView(R.id.tv_location,getLocationInfo(item.getArea_name(),item.getDistance(),item.getCate_name()),"--");
             }
 
         };
@@ -297,6 +323,40 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
         rvContainer.addView(rvInner,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
+    private String getLocationInfo(String mapLocation,String distance,String location){
+        String tempMapLocation = getLimitedString(mapLocation, 6);
+        String tempDistance = SDDistanceUtil.getFormatDistance(DataFormat.toDouble(distance));
+        String tempLocation = getLimitedString(location, 4);
+        if (!TextUtils.isEmpty(tempMapLocation)){
+            tempMapLocation+=" | ";
+        }else {
+            tempMapLocation=".. | ";
+        }
+//        if (!TextUtils.isEmpty(tempLocation)&&!TextUtils.isEmpty(tempDistance)){
+//            tempDistance+=" | ";
+//        }
+        if (TextUtils.isEmpty(tempLocation)){
+            tempLocation="..";
+        }
+        if (TextUtils.isEmpty(tempDistance)){
+            tempDistance="..";
+        }
+        return tempMapLocation+ tempDistance +" | "+tempLocation;
+    }
+
+    private String getLimitedString(String text,int limitNum){
+        if (TextUtils.isEmpty(text)){
+            return "";
+        }
+        int length = Math.round(UICharacterCount.getCount(text));
+        if (length<=limitNum){
+            return text;
+        }else if (length>limitNum){
+            return text.substring(0,limitNum-1)+"...";
+        }
+        return "";
+    }
+
     @Override
     public void hideHorizontalRecyclerView(ViewGroup rvContainer) {
         if (rvContainer == null)return;
@@ -310,15 +370,40 @@ public class ActGuideLayout extends LinearLayout implements Expandable,IActGuide
     }
 
     @Override
-    public void addTextView(List tags, LinearLayout target,int num) {
+    public void addTextView(List tags, LinearLayout target,int status) {
         if (target == null ||tags==null || tags.size()<=0)return;
         target.removeAllViews();
-        int size = num ==-1 ? tags.size() : num;
-        for (int i = 0; i < size; i++) {
-            TextView textView = createTextView();
-            textView.setText(tags.get(i).toString());
-            target.addView(textView);
+//        int size = num ==-1 ? tags.size() : num;
+//        for (int i = 0; i < size; i++) {
+//            TextView textView = createTextView();
+//            textView.setText(tags.get(i).toString());
+//            target.addView(textView);
+//        }
+        TextView textView = createTextView();
+        String finalShow="";
+        int maxSize=0;
+        Log.e("test","size: "+tags.size());
+        if (status == ExpandStatus.EXPANDED){
+//            int maxSize=6;//3对
+            maxSize = tags.size()>6 ? 6:tags.size();
+        }else if (status == ExpandStatus.NORMAL){
+            maxSize = tags.size()>2 ? 2:tags.size();
         }
+        for (int i = 0; i < maxSize; i++) {
+            if (i==maxSize-1){
+                finalShow+=tags.get(i);
+            }else {
+                finalShow+=tags.get(i)+"\n";
+            }
+        }
+
+        int right = DisplayUtil.dp2px(context, 80);
+        int top = DisplayUtil.dp2px(context,9);
+        textView.setPadding(right,top,right,0);
+        finalShow = status ==ExpandStatus.NORMAL ? finalShow :finalShow+"\n";
+        Log.e("test","finalShow: "+finalShow);
+        textView.setText(finalShow);
+        target.addView(textView);
     }
 
     @Override

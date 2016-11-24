@@ -14,9 +14,9 @@ public class ServerUrl {
     //测试环境。
 //   public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";
     //H5地址 开发
-    //   public static final String SERVER_H5 = "http://m.dev.mgxz.com/";
+       public static final String SERVER_H5 = "http://m.dev.mgxz.com/";
     //H5地址 测试
-     public static final String SERVER_H5 = "http://m.test.mgxz.com/";
+//     public static final String SERVER_H5 = "http://m.test.mgxz.com/";
 
 
     /*袁浩*/

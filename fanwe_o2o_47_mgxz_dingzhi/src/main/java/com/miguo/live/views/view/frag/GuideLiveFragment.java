@@ -51,9 +51,7 @@ public class GuideLiveFragment extends BaseFragment {
         } catch (Exception e) {
             Log.e("test",e.toString());
         }
-        boolean a=!(tags == null || tags.size() <=0 );
-        Log.e("test","tags: "+a);
-        return a;
+        return !(tags == null || tags.size() <=0 );
     }
 
     private void bindDataView() {
@@ -68,7 +66,6 @@ public class GuideLiveFragment extends BaseFragment {
 
     public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
-        private String tabTitles[] = new String[]{"tab1","tab2","tab3","tab4","tab5","tab6","tab7"};
         private HashMap<Integer,GuidePagerFragment> pagerMap=new HashMap<>();
 
         public SimpleFragmentPagerAdapter(FragmentManager fm) {
@@ -80,7 +77,7 @@ public class GuideLiveFragment extends BaseFragment {
             GuidePagerFragment target = pagerMap.get(position);
             if (target == null){
                 target=GuidePagerFragment.newInstance
-                        (tabTitles[position]);
+                        (tags.get(position));
                 pagerMap.put(position,target);
                 Log.e("test","new fragment :" +position);
             }
@@ -102,12 +99,12 @@ public class GuideLiveFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return tabTitles.length;
+            return tags.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return tabTitles[position];
+            return tags.get(position);
         }
     }
 

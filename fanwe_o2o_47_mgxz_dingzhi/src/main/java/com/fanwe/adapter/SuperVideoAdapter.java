@@ -53,19 +53,10 @@ public class SuperVideoAdapter extends RecyclerView.Adapter<SuperVideoAdapter.Vi
     @Override
     public void onBindViewHolder(final SuperVideoAdapter.VideoViewHolder holder, int position) {
         final GuideOutModel outModel = dataList.get(position);
-        //            "extend":"",//扩展子u按
-//            "img":"图片",//封面图
-//            "create_time":"111111111",
-//            "is_effect":"1",
-//            "id":"主键",
-//            "video":"视频地址",
-//            "sort":"1",
-//            "title":"标题",
-//            "descript":"描述"
-        SDViewBinder.setTextView(holder.tvTitle, outModel.getDescript(), "");
+        SDViewBinder.setTextView(holder.tvTitle, outModel.getTitle(), "");
         SDViewBinder.setImageView(outModel.getImg(), holder.ivCover);
         holder.update(position);
-        holder.act_guide.bindData(position,outModel.getId(),outModel.getStatus(),innerData.get(position));
+        holder.act_guide.bindData(position,outModel.getId(),outModel.getStatus(),innerData.get(position),outModel.getDescript());
         holder.act_guide.setExpandListener(new ExpandListener() {
             @Override
             public void expandStart() {

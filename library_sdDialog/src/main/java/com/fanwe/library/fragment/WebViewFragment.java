@@ -1,8 +1,5 @@
 package com.fanwe.library.fragment;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,6 +26,9 @@ import com.fanwe.library.title.TitleItem;
 import com.fanwe.library.title.TitleItemConfig;
 import com.fanwe.library.utils.SDOtherUtil;
 import com.fanwe.library.utils.SDViewUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * WebView fragment
@@ -262,6 +262,7 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		addJavascriptInterface();
 		mWeb.setWebViewClient(getWebViewClient());
 		mWeb.setWebChromeClient(getWebChromeClient());
+		mWeb.clearHistory();
 
 	}
 
@@ -504,6 +505,7 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		if (mWeb.canGoBack())
 		{
 			mWeb.goBack();
+
 		} else
 		{
 			getActivity().finish();

@@ -30,7 +30,7 @@ public interface IActGuideLayout<T> {
      * @param tags 文字
      * @param target 目标容器
      */
-    void addTextView(List<String> tags, LinearLayout target,int num);
+    void addTextView(List<String> tags, LinearLayout target,int status);
 
     /**
      * 移除textview
