@@ -43,17 +43,6 @@ public class GuideLiveFragment extends BaseFragment {
         //empty
     }
 
-//    @Override
-//    protected boolean getBundleData(Bundle args) {
-//        if (args ==null)return false;
-//        try {
-//            tags = (ArrayList<String>) args.getSerializable("tags");
-//        } catch (Exception e) {
-//            Log.e("test",e.toString());
-//        }
-//        return !(tags == null || tags.size() <=0 );
-//    }
-
     public void setViewPagerTags(List<HiFunnyTabBean.Result.Body> tags){
         this.tags=tags;
         bindDataView();
@@ -78,7 +67,7 @@ public class GuideLiveFragment extends BaseFragment {
 
         private HashMap<Integer,GuidePagerFragment> pagerMap=new HashMap<>();
 
-        public SimpleFragmentPagerAdapter(FragmentManager fm) {
+        private SimpleFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
