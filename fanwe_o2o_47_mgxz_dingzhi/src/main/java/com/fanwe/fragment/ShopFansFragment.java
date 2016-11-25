@@ -168,6 +168,8 @@ public class ShopFansFragment extends Fragment implements CallbackView {
                 dataMember.add(modelTag);
             }
         }
+        //添加 神秘员工
+        generalMemberData();
         if (!SDCollectionUtil.isEmpty(fansInfoList)) {
             for (ModelFans bean : fansInfoList) {
                 ModelTag modelTag = new ModelTag();
@@ -175,6 +177,14 @@ public class ShopFansFragment extends Fragment implements CallbackView {
                 dataFans.add(modelTag);
             }
             generalFansData();
+        }
+    }
+
+    private void generalMemberData() {
+        if (SDCollectionUtil.isEmpty(shopMemberInfoList)) {
+            ModelTag modelTag = new ModelTag();
+            modelTag.setTagName("神秘员工");
+            dataMember.add(modelTag);
         }
     }
 

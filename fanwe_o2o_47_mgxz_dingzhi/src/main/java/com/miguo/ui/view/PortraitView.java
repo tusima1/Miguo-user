@@ -102,9 +102,17 @@ public class PortraitView extends BaseLinearLayout {
             }
         } else {
             //员工模块
-            tvTag.setVisibility(VISIBLE);
-            SDViewBinder.setTextView(tvTag, bean.getTagName(), "");
-            SDViewBinder.setImageView(bean.getIconUrl(), circleImageView);
+            if (TextUtils.isEmpty(bean.getIconUrl()) && "神秘员工".equals(bean.getTagName())) {
+                tvTag.setVisibility(GONE);
+                //显示灰色图标
+                circleImageView.setBackgroundResource(R.drawable.bg_grey_shop_fans);
+                tvName.setVisibility(VISIBLE);
+                SDViewBinder.setTextView(tvName, bean.getTagName(), "");
+            } else {
+                tvTag.setVisibility(VISIBLE);
+                SDViewBinder.setTextView(tvTag, bean.getTagName(), "");
+                SDViewBinder.setImageView(bean.getIconUrl(), circleImageView);
+            }
         }
         view.setLayoutParams(lp);
         return view;
