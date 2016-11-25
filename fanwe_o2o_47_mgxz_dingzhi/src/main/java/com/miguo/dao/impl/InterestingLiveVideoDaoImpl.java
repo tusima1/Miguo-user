@@ -60,10 +60,10 @@ public class InterestingLiveVideoDaoImpl extends BaseDaoImpl implements Interest
                     return;
                 }
                 if(page == PageSize.BASE_NUMBER_ONE){
-//                    getListener().getInterestingLiveVideoSuccess(bean.getResult().get(0).getBody().get(0).getLive_list());
+                    getListener().getInterestingLiveVideoSuccess(bean.getResult().get(0).getBody());
                     return;
                 }
-//                getListener().getInterestingLiveVideoLoadmoreSuccess(bean.getResult().get(0).getBody().get(0).getLive_list());
+                getListener().getInterestingLiveVideoLoadmoreSuccess(bean.getResult().get(0).getBody());
             }
 
             @Override

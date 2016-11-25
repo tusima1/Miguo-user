@@ -1,6 +1,8 @@
 package com.miguo.view;
 
+import com.miguo.entity.HiFunnyLiveVideoBean;
 import com.miguo.entity.InterestingLiveVideoBean;
+import com.miguo.live.model.getLiveListNew.ModelRoom;
 
 import java.util.List;
 
@@ -10,8 +12,8 @@ import java.util.List;
 
 public interface InterestingLiveVideoView extends BaseView {
 
-    void getInterestingLiveVideoSuccess(List<InterestingLiveVideoBean.Result.Body.Live> liveList);
-    void getInterestingLiveVideoLoadmoreSuccess(List<InterestingLiveVideoBean.Result.Body.Live> liveList);
+    void getInterestingLiveVideoSuccess(List<ModelRoom> liveList);
+    void getInterestingLiveVideoLoadmoreSuccess(List<ModelRoom> liveList);
     void getInterestingLiveVideoError();
 
 }

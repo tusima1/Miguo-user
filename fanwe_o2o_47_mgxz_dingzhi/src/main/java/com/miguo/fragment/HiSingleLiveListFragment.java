@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiSingleLiveListFragmentCategory;
 
 /**
@@ -15,6 +16,7 @@ import com.miguo.category.fragment.HiSingleLiveListFragmentCategory;
 public class HiSingleLiveListFragment extends HiBaseFragment {
 
     String tab_id;
+    boolean isFirstItem = false;
 
     @Override
     protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,6 +26,29 @@ public class HiSingleLiveListFragment extends HiBaseFragment {
     @Override
     protected void initFragmentCategory() {
         category = new HiSingleLiveListFragmentCategory(cacheView, this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if(isVisibleToUser){
+            if(null != getCategory()){
+                getCategory().onRefresh();
+            }
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public HiSingleLiveListFragmentCategory getCategory() {
+        return (HiSingleLiveListFragmentCategory)super.getCategory();
+    }
+
+    public boolean isFirstItem() {
+        return isFirstItem;
+    }
+
+    public void setFirstItem(boolean firstItem) {
+        isFirstItem = firstItem;
     }
 
     public String getTab_id() {

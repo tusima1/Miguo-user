@@ -91,6 +91,8 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
     Tab center;
 
+    public static final int LIVE_ID = 0x03217;
+
     public BarryTab(Context context) {
         super(context);
     }
@@ -196,6 +198,7 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
             icon.setLayoutParams(iconParams);
             icon.setImageResource(center.getIcon());
             icon.setOnClickListener(new TabListener(4, TabId.TAB_C));
+            icon.setId(LIVE_ID);
             addView(icon);
         }
 

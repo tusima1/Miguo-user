@@ -20,6 +20,11 @@ public class HiFunnyFragment extends HiBaseFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
     protected void initFragmentCategory() {
         category = new HiFunnyFragmentCategory(cacheView, this);
     }

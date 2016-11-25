@@ -63,10 +63,7 @@ public class HomeTagsView extends BaseHorizantalScrollView{
         if(tags == null || tags.size()==0){
             return ;
         }
-
         this.list = tags;
-
-
         int iconWidth = getScreenWidth() / 8;
         int iconHeight = iconWidth;
         for(int i = 0; i < tags.size(); i++){
@@ -95,7 +92,6 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             title.setTextSize(12);
             title.setText(getItem(i).getTitle());
             group.addView(title);
-
             content.addView(group);
         }
 

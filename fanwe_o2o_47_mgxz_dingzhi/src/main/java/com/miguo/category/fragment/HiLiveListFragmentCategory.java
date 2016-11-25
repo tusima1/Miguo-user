@@ -59,10 +59,14 @@ public class HiLiveListFragmentCategory extends FragmentCategory{
             HiSingleLiveListFragment hiLiveListFragement = new HiSingleLiveListFragment();
             hiLiveListFragement.setTab_id(tabs.get(i).getTab_id());
             fragments.add(hiLiveListFragement);
+            if(i == 0){
+                hiLiveListFragement.setFirstItem(true);
+            }
         }
         pagerAdapter = new HiLiveListFragmentViewPagerAdapter(fragment.getChildFragmentManager(), fragments);
         pagerAdapter.setTabs(tabs);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(7);
         if(getFragment().getOnPagerInitListener() != null){
             getFragment().getOnPagerInitListener().pagerInit(viewPager, fragments.size());
         }

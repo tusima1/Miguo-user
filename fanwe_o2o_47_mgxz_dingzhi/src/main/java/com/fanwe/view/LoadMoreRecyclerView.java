@@ -44,7 +44,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
          * 新版本的recycleview不支持此方法
          */
 //        setScrollbarFadingEnabled(false);
-        isLoading = true;
+        isLoading = false;
         setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
@@ -59,7 +59,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
         if(onRecyclerViewScrollListener != null){
             onRecyclerViewScrollListener.onScrolled(dx, dy);
         }
-        if (isLoading) {
+        if (!isLoading) {
 //        if (isLoading) {
             if (getLayoutManager() instanceof LinearLayoutManager) {
                 linearLayoutScrolled(dy);
@@ -78,7 +78,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
 //            LogUtil.d(tag, "dy: " + dy + " ,last visibleItem: " + lastVisibleItem + " total item count: " + totalItemCount);
             this.lastVisibleItem = lastVisibleItem;
             this.firstVisibleItem = firstVisibleItem;
-                Log.d(tag, " ,top: " + getChildAt(0).getTop() + " firstVisibleItem : " + firstVisibleItem);
+//                Log.d(tag, " ,top: " + getChildAt(0).getTop() + " firstVisibleItem : " + firstVisibleItem);
             if(lastVisibleItem == 1){
                 this.top = getChildAt(0).getTop();
                 if(top == 0 && mEndListener != null){
@@ -90,7 +90,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
              * 加载更多
              */
             if (lastVisibleItem + 1 >= totalItemCount && dy > 0) {
-                isLoading = false;
+                isLoading = true;
                 if (mEndListener != null) {
                     mEndListener.onLoadmore();
                 }
