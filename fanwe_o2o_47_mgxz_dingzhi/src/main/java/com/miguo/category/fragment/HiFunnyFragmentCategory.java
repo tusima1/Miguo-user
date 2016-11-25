@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,19 +23,21 @@ import com.miguo.entity.HiFunnyTabBean;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiLiveListFragement;
 import com.miguo.listener.fragment.HiFunnyFragmentListener;
-import com.miguo.live.views.view.frag.GuideLiveFragment;
+import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.FunnyViewPager;
+import com.miguo.ui.view.HiLiveListFragmentViewPager;
 import com.miguo.ui.view.SlidingTabLayout;
 import com.miguo.view.HiFunnyTabView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/16.
  */
 
-public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveListFragmentCategory.OnPagerInitListener, HiFunnyTabView, GuideLiveFragment.OnGuideLivePagerInitListener{
+public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveListFragmentCategory.OnPagerInitListener, HiFunnyTabView{
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
@@ -153,7 +157,7 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
     }
 
     public void clickGuide(){
-        updateLive2TextColor(false);
+       updateLive2TextColor(false);
         updateTitleLiveTextColor(false);
         updateGuide2TextColor(true);
         updateTitleGuideTextColor(true);
@@ -194,10 +198,6 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
     public void getGuideTabListError() {
 
     }
-    @Override
-    public void onGuideLivePagerInit(ViewPager viewPager, int number) {
-        slidingTabLayoutGuide.setViewPager(viewPager,number >= 6 ? 6 : number);
-    }
 
     @Override
     public void getLiveTabListSuccess(List<HiFunnyTabBean.Result.Body> tabs) {
@@ -206,6 +206,10 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
         }
     }
 
+    @Override
+    public void getGuideTabListSuccess(List<HiFunnyTabBean.Result.Body> tabs) {
+		slidingTabLayoutGuide.setViewPager(viewPager,number >= 6 ? 6 : number);
+    }
     @Override
     public void getGuideTabListSuccess(List<HiFunnyTabBean.Result.Body> tabs) {
         if (tabs==null || tabs.size()<1)return;
@@ -226,6 +230,7 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements HiLiveL
             return null;
         }
     }
+
     private GuideLiveFragment getGuideLiveFragment(){
         try {
             return (GuideLiveFragment)fragments.get(1);
