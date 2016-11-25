@@ -264,9 +264,9 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
      * 首页广告调用商家列表传参变化
      * @param cate_id
      */
-    public void handlerCateIdChanged(String cate_id){
+    public void handlerCateIdChanged(String cate_id,String tid){
         this.cate_id = cate_id;
-        tid = "";
+        tid = tid;
         mPtrlvContent.setRefreshing();
         mCvLeft.setTitle(getTitleNameByCateId(cate_id));
     }

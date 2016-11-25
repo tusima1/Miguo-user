@@ -1,14 +1,21 @@
 package com.miguo.dao.impl;
 
 import com.fanwe.app.App;
+import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.SellerConstants;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.miguo.dao.CollectShopDao;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.view.BaseView;
 import com.miguo.view.CollectShopView;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -36,7 +43,19 @@ public class CollectShopDaoImpl extends BaseDaoImpl implements CollectShopDao{
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                getListener().collectSuccess();
+
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if("200".equals(status)) {
+                    HashMap<String, String> map = (HashMap<String, String>) validateBody(root);
+                    getListener().collectSuccess(map);
+                }else{
+                    getListener().collectError();
+                }
+
             }
 
             @Override

@@ -155,13 +155,13 @@ public class SellerFragment extends Fragment {
         ft.commit();
     }
 
-    public void handlerCateIdChanged(String cate_id) {
+    public void handlerCateIdChanged(String cate_id,String tid) {
         if (mFragAll != null) {
-            mFragAll.handlerCateIdChanged(cate_id);
+            mFragAll.handlerCateIdChanged(cate_id,tid);
             return;
         }
         if (mFragGroupon != null) {
-            mFragGroupon.handlerCateIdChanged(cate_id);
+            mFragGroupon.handlerCateIdChanged(cate_id,tid);
         }
     }
 
