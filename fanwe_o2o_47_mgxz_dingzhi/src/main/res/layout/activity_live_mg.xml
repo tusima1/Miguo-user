@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/root"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <!--直播video-->
     <include
@@ -292,4 +293,16 @@
             android:text="@string/live_host_leave"
             android:textColor="@color/colorGray3" />
     </LinearLayout>
+    <com.fanwe.customview.MGGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp100"
+        app:gradient_gravity="BOTTOM"
+        android:layout_gravity="bottom"
+        />
+    <com.fanwe.customview.MGGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp100"
+        app:gradient_gravity="TOP"
+        android:layout_gravity="top"
+        />
 </FrameLayout>
