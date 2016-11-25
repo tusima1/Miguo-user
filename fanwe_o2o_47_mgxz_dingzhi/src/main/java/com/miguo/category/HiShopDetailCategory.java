@@ -1,5 +1,7 @@
 package com.miguo.category;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.fragment.ShopFansFragment;
 import com.fanwe.fragment.StoreLocationFragment;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -60,7 +63,11 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/19.
  */
-public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView, RepresentMerchantView, RecyclerScrollView.OnRecyclerScrollViewListener, HiShopDetailRecommendAdapter.OnItemDataChangedListener {
+public class HiShopDetailCategory extends Category implements HiShopDetailView,
+        CollectShopView, RepresentMerchantView,
+        RecyclerScrollView.OnRecyclerScrollViewListener,
+        HiShopDetailRecommendAdapter.OnItemDataChangedListener,
+        ShopFansFragment.ShowListener {
 
     @ViewInject(R.id.recycler_scrollview)
     RecyclerScrollView scrollView;
@@ -185,6 +192,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     LinearLayout layoutContent;
     @ViewInject(R.id.bottom_activity_hishop_detail)
     RelativeLayout layoutBottom;
+    @ViewInject(R.id.mode_top_layout)
+    LinearLayout modeTopLayout;
 
     HiShopDetailDao shopDetailDao;
     HiShopDetailBean.Result result;
@@ -247,6 +256,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         setTitleAlpha(titleLayout, 0);
         initRecommendRecyclerView();
         initLiveRecyclerView();
+        /**
+         * 大王和小伙伴
+         */
+        initShopMember(merchantID);
     }
 
     private String merchantID = "";
@@ -305,6 +318,20 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         updateLiveRecycleViewrHeight();
     }
 
+    private void initShopMember(String shopId) {
+        FragmentManager fragmentManager = getActivity().getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        ShopFansFragment fragment = new ShopFansFragment();
+        fragmentTransaction.add(R.id.content_shop_member, fragment);
+        fragmentTransaction.commit();
+        fragment.setShopId(shopId);
+        fragment.setShowListener(this);
+    }
+
+    @Override
+    public void showSomething() {
+        scrollView.smoothScrollTo(0, (modeTopLayout.getMeasuredHeight()-BaseUtils.dip2px(15)));
+    }
 
     /**
      * 点击代言
@@ -425,13 +452,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
 
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
-        float radio = t / (float)getBannerHeight();
-        if(radio <= 1){
+        float radio = t / (float) getBannerHeight();
+        if (radio <= 1) {
             setTitleAlpha(titleLayout, radio);
         }
     }
 
-    public int getBannerHeight(){
+    public int getBannerHeight() {
         return dip2px(200);
     }
 
@@ -526,6 +553,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         } else {
             distance.setText("距离 " + result.getDistanceFormat());
         }
+
         /**
          * 精选列表
          */

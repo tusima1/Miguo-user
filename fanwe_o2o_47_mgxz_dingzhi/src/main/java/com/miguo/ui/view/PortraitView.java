@@ -1,13 +1,19 @@
 package com.miguo.ui.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getShopMemberInfo.ModelTag;
 import com.miguo.live.views.base.BaseLinearLayout;
+
+import java.util.List;
 
 
 /**
@@ -32,24 +38,46 @@ public class PortraitView extends BaseLinearLayout {
     protected void init() {
     }
 
-    public void initData(int count) {
+    List<ModelTag> datas;
+
+    public void initData(List<ModelTag> datasList) {
+        datas = datasList;
         removeAllViews();
-        for (int i = 0; i < count; i++) {
-            addView(generalTag(i, count));
+        if (SDCollectionUtil.isEmpty(datas)) {
+            return;
+        }
+        doData();
+        for (int i = 0; i < datas.size(); i++) {
+            addView(generalTag(i, datas.size()));
+        }
+    }
+
+    /**
+     * data不能超过5个
+     */
+    private void doData() {
+        if (datas.size() > 5) {
+            datas = datas.subList(0, 5);
         }
     }
 
     private boolean flagFans;
 
-    public void initDataFans(int count) {
+    public void initDataFans(List<ModelTag> datasList) {
+        datas = datasList;
         flagFans = true;
         removeAllViews();
-        for (int i = 0; i < count; i++) {
-            addView(generalTag(i, count));
+        if (SDCollectionUtil.isEmpty(datas)) {
+            return;
+        }
+        doData();
+        for (int i = 0; i < datas.size(); i++) {
+            addView(generalTag(i, datas.size()));
         }
     }
 
     private View generalTag(int i, int count) {
+        ModelTag bean = datas.get(i);
         LayoutParams lp = getLinearLayoutParams(wrapContent(), wrapContent());
         int left = 0;
         if (i != 0) {
@@ -57,11 +85,26 @@ public class PortraitView extends BaseLinearLayout {
         }
         lp.setMargins(left, 0, 0, 0);
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_portrait_shop_fans, null);
+        CircleImageView circleImageView = (CircleImageView) view.findViewById(R.id.iv_portrait_item_shop_fans);
         TextView tvTag = (TextView) view.findViewById(R.id.tv_portrait_item_shop_fans);
+        TextView tvName = (TextView) view.findViewById(R.id.tv_name_fans_item_shop_fans);
         if (flagFans) {
+            //粉丝模块
             tvTag.setVisibility(GONE);
+            if (TextUtils.isEmpty(bean.getIconUrl()) && !TextUtils.isEmpty(bean.getTagName())) {
+                //显示灰色图标
+                circleImageView.setBackgroundResource(R.drawable.bg_grey_shop_fans);
+                tvName.setVisibility(VISIBLE);
+                SDViewBinder.setTextView(tvName, bean.getTagName(), "");
+            } else {
+                //显示头像
+                SDViewBinder.setImageView(bean.getIconUrl(), circleImageView);
+            }
         } else {
+            //员工模块
             tvTag.setVisibility(VISIBLE);
+            SDViewBinder.setTextView(tvTag, bean.getTagName(), "");
+            SDViewBinder.setImageView(bean.getIconUrl(), circleImageView);
         }
         view.setLayoutParams(lp);
         return view;

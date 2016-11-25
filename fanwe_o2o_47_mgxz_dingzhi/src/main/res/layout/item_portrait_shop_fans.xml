@@ -9,8 +9,17 @@
         android:layout_width="@dimen/dp44"
         android:layout_height="@dimen/dp44"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/ic_portrait_shop_fans"
-        android:src="@drawable/ic_r1" />
+        android:background="@drawable/ic_portrait_shop_fans" />
+
+    <TextView
+        android:id="@+id/tv_name_fans_item_shop_fans"
+        android:layout_width="@dimen/dp21"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp10"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_portrait_item_shop_fans"
@@ -21,7 +30,7 @@
         android:layout_marginTop="-8dp"
         android:background="@drawable/ic_tag_shop_fans"
         android:gravity="center"
-        android:paddingBottom="@dimen/dp4"
+        android:paddingBottom="@dimen/dp3"
         android:text="BOSS"
         android:textColor="@color/white"
         android:textSize="@dimen/dp9" />
