@@ -262,42 +262,60 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
     /**
      * 首页广告调用商家列表传参变化
+     *
      * @param cate_id
      */
-    public void handlerCateIdChanged(String cate_id,String tid){
+    public void handlerCateIdChanged(String cate_id, String tid) {
+        clearSelect();
         this.cate_id = cate_id;
         this.tid = tid;
         mPtrlvContent.setRefreshing();
-        if(!TextUtils.isEmpty(cate_id)&&!TextUtils.isEmpty(tid)){
-            mCvLeft.setTitle(getTitleNameByCateId(cate_id,tid));
-        }else if(!TextUtils.isEmpty(cate_id)){
-            mCvLeft.setTitle(getTitleNameByCateId(cate_id,""));
-        }else {
+        if (!TextUtils.isEmpty(cate_id) && !TextUtils.isEmpty(tid)) {
+            mCvLeft.setTitle(getTitleNameByCateId(cate_id, tid));
+        } else if (!TextUtils.isEmpty(cate_id)) {
+            mCvLeft.setTitle(getTitleNameByCateId(cate_id, ""));
+        } else {
             mCvLeft.setTitle(getTitleNameByTid(tid));
         }
         adapterLeft.notifyDataSetChanged();
     }
 
 
-    private String getTitleNameByTid(String tid){
-        if(adapterLeft == null){
+    /**
+     * 清除当前选择
+     */
+    private void clearSelect() {
+        if (!SDCollectionUtil.isEmpty(modelClassifyLists)) {
+            for (ModelClassifyList bean : modelClassifyLists) {
+                bean.setSelect(false);
+                if (!SDCollectionUtil.isEmpty(bean.getBcate_type())) {
+                    for (ModelClassifyList temp : bean.getBcate_type()) {
+                        temp.setSelect(false);
+                    }
+                }
+            }
+        }
+    }
+
+    private String getTitleNameByTid(String tid) {
+        if (adapterLeft == null) {
             return "全部分类";
         }
-        for(int i = 0; i<adapterLeft.getCount(); i++){
-            ModelClassifyList modelClassifyList = (ModelClassifyList)adapterLeft.getSelectModelFromPosition(i);
-            if(modelClassifyList == null){
+        for (int i = 0; i < adapterLeft.getCount(); i++) {
+            ModelClassifyList modelClassifyList = (ModelClassifyList) adapterLeft.getSelectModelFromPosition(i);
+            if (modelClassifyList == null) {
                 break;
             }
             List<ModelClassifyList> bcate_type = modelClassifyList.getBcate_type();
-            if(bcate_type==null||bcate_type.size()<1){
+            if (bcate_type == null || bcate_type.size() < 1) {
                 break;
             }
-            for(int j= 0 ; j<bcate_type.size();j++){
+            for (int j = 0; j < bcate_type.size(); j++) {
                 ModelClassifyList smodelClassifyList1 = bcate_type.get(j);
-                if(!TextUtils.isEmpty(smodelClassifyList1.getId())&&smodelClassifyList1.getId().equals(tid)){
+                if (!TextUtils.isEmpty(smodelClassifyList1.getId()) && smodelClassifyList1.getId().equals(tid)) {
                     adapterLeft.setmDefaultIndex(i);
-                    updateSelectItem(bcate_type,tid);
-                    updateSelectItem(adapterLeft.getData(),modelClassifyList.getId());
+                    updateSelectItem(bcate_type, tid);
+                    updateSelectItem(adapterLeft.getData(), modelClassifyList.getId());
                     mCvLeft.setAdapterFinish();
 
                     return smodelClassifyList1.getName();
@@ -306,46 +324,48 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         }
         return "全部分类";
     }
-    private String getTitleNameByCateId(String cate_id,String tid){
-        if(adapterLeft == null){
+
+    private String getTitleNameByCateId(String cate_id, String tid) {
+        if (adapterLeft == null) {
             return "全部分类";
         }
-        for(int i = 0; i<adapterLeft.getCount(); i++){
-            ModelClassifyList modelClassifyList = (ModelClassifyList)adapterLeft.getSelectModelFromPosition(i);
-            if(modelClassifyList == null){
+        for (int i = 0; i < adapterLeft.getCount(); i++) {
+            ModelClassifyList modelClassifyList = (ModelClassifyList) adapterLeft.getSelectModelFromPosition(i);
+            if (modelClassifyList == null) {
                 break;
             }
-            if(modelClassifyList.getId().equals(cate_id)){
+            if (modelClassifyList.getId().equals(cate_id)) {
 
-                if(!TextUtils.isEmpty(tid)){
+                if (!TextUtils.isEmpty(tid)) {
                     List<ModelClassifyList> bcate_type = modelClassifyList.getBcate_type();
-                    if(bcate_type==null||bcate_type.size()<1){
+                    if (bcate_type == null || bcate_type.size() < 1) {
                         break;
                     }
-                    for(int j= 0 ; j<bcate_type.size();j++){
+                    for (int j = 0; j < bcate_type.size(); j++) {
                         ModelClassifyList smodelClassifyList1 = bcate_type.get(j);
 
-                        if(!TextUtils.isEmpty(smodelClassifyList1.getId())&&smodelClassifyList1.getId().equals(tid)){
-                            updateSelectItem(bcate_type,tid);
+                        if (!TextUtils.isEmpty(smodelClassifyList1.getId()) && smodelClassifyList1.getId().equals(tid)) {
+                            updateSelectItem(bcate_type, tid);
                             return smodelClassifyList1.getName();
                         }
                     }
                 }
                 mCvLeft.setAdapterFinish();
-                updateSelectItem(adapterLeft.getData(),cate_id);
+                updateSelectItem(adapterLeft.getData(), cate_id);
                 return modelClassifyList.getName();
             }
         }
         return "全部分类";
     }
-    public void updateSelectItem(List<ModelClassifyList> modelClassifyList,String id){
-        if(modelClassifyList==null||TextUtils.isEmpty(id)){
+
+    public void updateSelectItem(List<ModelClassifyList> modelClassifyList, String id) {
+        if (modelClassifyList == null || TextUtils.isEmpty(id)) {
             return;
         }
-        for( ModelClassifyList model:modelClassifyList){
-            if(!TextUtils.isEmpty(model.getId())&&!model.getId().equals(id)){
+        for (ModelClassifyList model : modelClassifyList) {
+            if (!TextUtils.isEmpty(model.getId()) && !model.getId().equals(id)) {
                 model.setSelect(false);
-            }else{
+            } else {
                 model.setSelect(true);
             }
         }
@@ -361,8 +381,11 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
             @Override
             public void onRightItemSelect(int leftIndex, int rightIndex, Object leftModel, Object rightModel) {
+                clearSelect();
                 ModelClassifyList left = (ModelClassifyList) leftModel;
+                left.setSelect(true);
                 ModelClassifyList right = (ModelClassifyList) rightModel;
+                right.setSelect(true);
                 cate_id = left.getId();
                 tid = right.getId();
                 mPtrlvContent.setRefreshing();
@@ -371,11 +394,14 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             @Override
             public void onLeftItemSelect(int leftIndex, Object leftModel, boolean isNotifyDirect) {
                 if (isNotifyDirect) {
+                    clearSelect();
                     ModelClassifyList left = (ModelClassifyList) leftModel;
+                    left.setSelect(true);
                     ModelClassifyList right = SDCollectionUtil.get(left.getBcate_type(), 0);
                     cate_id = left.getId();
                     if (right != null) {
                         tid = right.getId();
+                        right.setSelect(true);
                     } else {
                         tid = "";
                     }
@@ -433,6 +459,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
 
 
     CategoryCateLeftAdapter adapterLeft;
+
     private void bindLeftCategoryViewData(List<ModelClassifyList> listModel) {
         if (!SDCollectionUtil.isEmpty(listModel)) {
             int[] arrIndex = ModelClassifyList.findIndex(cate_id, tid, listModel);
@@ -532,7 +559,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
-                if(sellerHttpHelper==null){
+                if (sellerHttpHelper == null) {
                     break;
                 }
                 initData();
@@ -619,9 +646,9 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                     if (!SDCollectionUtil.isEmpty(itemsModelBusinessListings)) {
                         mListModel.addAll(itemsModelBusinessListings);
                     }
-                    if(mListModel==null||mListModel.size()<1){
+                    if (mListModel == null || mListModel.size() < 1) {
                         mLlEmpty.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         mLlEmpty.setVisibility(View.GONE);
                     }
                     mAdapter.notifyDataSetChanged();
