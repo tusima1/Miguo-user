@@ -55,6 +55,7 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.user.UserConstants;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.utils.MGStringFormatter;
 import com.miguo.live.model.LiveConstants;
@@ -65,6 +66,7 @@ import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -702,7 +704,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     @Override
-    public void onSuccess(String method, List datas) {
+    public void onSuccess(String method, final List datas) {
         switch (method) {
             case SellerConstants.GROUP_BUY_DETAIL_NEW:
                 if (dialog!=null){
@@ -725,6 +727,17 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 break;
             case SellerConstants.GROUP_BUY_COLLECT_POST:
                 //收藏
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(datas==null||datas.size()<1){
+                            return;
+                        }
+                        HashMap<String,String> map =(HashMap<String,String>) datas.get(0);
+                        String popularity = map.get(UserConstants.POPULARITY);
+                        mTvTopHot.setText(popularity);
+                    }
+                });
                 isCollected = "1";
                 setCollectResult();
                 break;

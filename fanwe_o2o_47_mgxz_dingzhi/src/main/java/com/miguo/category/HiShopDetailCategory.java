@@ -24,6 +24,7 @@ import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.user.UserConstants;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
@@ -53,6 +54,7 @@ import com.miguo.view.HiShopDetailView;
 import com.miguo.view.RepresentMerchantView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -602,10 +604,15 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
      * 收藏和取消收藏
      */
     @Override
-    public void collectSuccess() {
+    public void collectSuccess(final HashMap<String,String> map) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(map!=null){
+                    //popularity  人气字段
+                    String popularity = map.get(UserConstants.POPULARITY);
+                    hots.setText("人气值 " + popularity);
+                }
                 collect.setImageResource(R.drawable.ic_collect_yes);
                 result.setIs_collect("1");
             }

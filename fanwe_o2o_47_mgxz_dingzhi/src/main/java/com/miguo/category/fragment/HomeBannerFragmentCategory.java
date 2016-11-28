@@ -9,6 +9,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.dao.BannerTypeModel;
 import com.miguo.definition.AdspaceParams;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.fragment.HiBaseFragment;
@@ -76,16 +77,22 @@ public class HomeBannerFragmentCategory extends FragmentCategory{
         if(getFragment().getBanner().getType() == null){
             return;
         }
+        BannerTypeModel model = HomeCategoryUtils.parseTypeJson(getFragment().getBanner().getType_id());
+
 
         if(getFragment().getBanner().getType().equals(AdspaceParams.BANNER_LIVE_LIST)){
             getHomeBannerViewPager().handlerActionLiveList();
             return;
         }
         if(getFragment().getBanner().getType().equals(AdspaceParams.BANNER_SHOP_LIST)){
-            getHomeBannerViewPager().handlerActionShopList(getFragment().getBanner().getType_id());
+            getHomeBannerViewPager().handlerActionShopList(model.getCate_id(),model.getTid());
             return;
         }
-        AdspaceTypeFactory.clickWidthType(getFragment().getBanner().getType(), getActivity(), getFragment().getBanner().getType_id());
+        String paramValue = model.getId();
+        if(TextUtils.isEmpty(paramValue)){
+            paramValue = model.getUrl();
+        }
+        AdspaceTypeFactory.clickWidthType(getFragment().getBanner().getType(), getActivity(), paramValue);
     }
 
     public HomeBannerViewPager getHomeBannerViewPager(){

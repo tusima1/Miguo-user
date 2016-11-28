@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
+import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.dao.GetMenuListDao;
 import com.miguo.entity.MenuBean;
 import com.miguo.view.BaseView;
@@ -30,6 +31,7 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
     public void getMenuList(String terminal_type, String menu_type) {
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "GetMenuList");
+        map.put("city_id", AppRuntimeWorker.getCity_id());
         map.put("menu_type", menu_type);
         map.put("terminal_type", terminal_type);
         OkHttpUtils.getInstance().get("", map, new MgCallback(MenuBean.class) {

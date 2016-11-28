@@ -67,9 +67,9 @@ public class HomeBannerViewPager extends ViewPager {
         }
     }
 
-    public void handlerActionShopList(String cate_id){
+    public void handlerActionShopList(String cate_id,String tid){
         if(getHomeBannerViewPagerOnTouchListener() != null){
-            getHomeBannerViewPagerOnTouchListener().onActionShopList(cate_id);
+            getHomeBannerViewPagerOnTouchListener().onActionShopList(cate_id,tid);
         }
     }
 
@@ -110,7 +110,7 @@ public class HomeBannerViewPager extends ViewPager {
         void onActionMove(MotionEvent ev);
         void onActionCancel(MotionEvent ev);
         void onActionLiveList();
-        void onActionShopList(String cate_id);
+        void onActionShopList(String cate_id,String tid);
     }
 
     @Override

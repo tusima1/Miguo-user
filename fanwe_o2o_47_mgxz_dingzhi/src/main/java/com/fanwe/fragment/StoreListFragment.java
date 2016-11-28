@@ -264,14 +264,49 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
      * 首页广告调用商家列表传参变化
      * @param cate_id
      */
-    public void handlerCateIdChanged(String cate_id){
+    public void handlerCateIdChanged(String cate_id,String tid){
         this.cate_id = cate_id;
-        tid = "";
+        this.tid = tid;
         mPtrlvContent.setRefreshing();
-        mCvLeft.setTitle(getTitleNameByCateId(cate_id));
+        if(!TextUtils.isEmpty(cate_id)&&!TextUtils.isEmpty(tid)){
+            mCvLeft.setTitle(getTitleNameByCateId(cate_id,tid));
+        }else if(!TextUtils.isEmpty(cate_id)){
+            mCvLeft.setTitle(getTitleNameByCateId(cate_id,""));
+        }else {
+            mCvLeft.setTitle(getTitleNameByTid(tid));
+        }
+        adapterLeft.notifyDataSetChanged();
     }
 
-    private String getTitleNameByCateId(String cate_id){
+
+    private String getTitleNameByTid(String tid){
+        if(adapterLeft == null){
+            return "全部分类";
+        }
+        for(int i = 0; i<adapterLeft.getCount(); i++){
+            ModelClassifyList modelClassifyList = (ModelClassifyList)adapterLeft.getSelectModelFromPosition(i);
+            if(modelClassifyList == null){
+                break;
+            }
+            List<ModelClassifyList> bcate_type = modelClassifyList.getBcate_type();
+            if(bcate_type==null||bcate_type.size()<1){
+                break;
+            }
+            for(int j= 0 ; j<bcate_type.size();j++){
+                ModelClassifyList smodelClassifyList1 = bcate_type.get(j);
+                if(!TextUtils.isEmpty(smodelClassifyList1.getId())&&smodelClassifyList1.getId().equals(tid)){
+                    adapterLeft.setmDefaultIndex(i);
+                    updateSelectItem(bcate_type,tid);
+                    updateSelectItem(adapterLeft.getData(),modelClassifyList.getId());
+                    mCvLeft.setAdapterFinish();
+
+                    return smodelClassifyList1.getName();
+                }
+            }
+        }
+        return "全部分类";
+    }
+    private String getTitleNameByCateId(String cate_id,String tid){
         if(adapterLeft == null){
             return "全部分类";
         }
@@ -281,10 +316,39 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                 break;
             }
             if(modelClassifyList.getId().equals(cate_id)){
+
+                if(!TextUtils.isEmpty(tid)){
+                    List<ModelClassifyList> bcate_type = modelClassifyList.getBcate_type();
+                    if(bcate_type==null||bcate_type.size()<1){
+                        break;
+                    }
+                    for(int j= 0 ; j<bcate_type.size();j++){
+                        ModelClassifyList smodelClassifyList1 = bcate_type.get(j);
+
+                        if(!TextUtils.isEmpty(smodelClassifyList1.getId())&&smodelClassifyList1.getId().equals(tid)){
+                            updateSelectItem(bcate_type,tid);
+                            return smodelClassifyList1.getName();
+                        }
+                    }
+                }
+                mCvLeft.setAdapterFinish();
+                updateSelectItem(adapterLeft.getData(),cate_id);
                 return modelClassifyList.getName();
             }
         }
         return "全部分类";
+    }
+    public void updateSelectItem(List<ModelClassifyList> modelClassifyList,String id){
+        if(modelClassifyList==null||TextUtils.isEmpty(id)){
+            return;
+        }
+        for( ModelClassifyList model:modelClassifyList){
+            if(!TextUtils.isEmpty(model.getId())&&!model.getId().equals(id)){
+                model.setSelect(false);
+            }else{
+                model.setSelect(true);
+            }
+        }
     }
 
     private void initCategoryView() {
@@ -379,6 +443,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             List<ModelClassifyList> listRight = leftModel.getBcate_type();
 
             adapterLeft = new CategoryCateLeftAdapter(listModel, getActivity());
+
             adapterLeft.setmDefaultIndex(leftIndex);
 
             CategoryCateRightAdapter adapterRight = new CategoryCateRightAdapter(listRight, getActivity());

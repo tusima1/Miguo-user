@@ -111,6 +111,9 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     private void initWebView(){
         String url = getActivity().getUrl();
+        if(TextUtils.isEmpty(url)){
+            return;
+        }
         LocalUserModel userModel = AppHelper.getLocalUser();
         if(userModel != null){
             String userid = userModel.getUser_mobile();

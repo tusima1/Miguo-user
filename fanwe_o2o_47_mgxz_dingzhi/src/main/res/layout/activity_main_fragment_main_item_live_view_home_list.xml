@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/iv_bg_item_live"
@@ -49,4 +50,10 @@
             android:orientation="horizontal" />
 
     </LinearLayout>
+    <com.fanwe.customview.MGGradientView
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        app:gradient_gravity="BOTTOM"
+        android:layout_alignParentBottom="true"
+        />
 </RelativeLayout>

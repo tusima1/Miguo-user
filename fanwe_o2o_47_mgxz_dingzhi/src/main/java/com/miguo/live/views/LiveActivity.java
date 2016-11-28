@@ -720,8 +720,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         });
         initViewNeed();
         //获取领取码
-        App.getInstance().setReceiveCode("");
-        mLiveHttphelper.getReceiveCode(CurLiveInfo.getRoomNum() + "", "1");
+//        App.getInstance().setReceiveCode("");
+//        mLiveHttphelper.getReceiveCode(CurLiveInfo.getRoomNum() + "", "1");
         mLiveHttphelper.getStoresRandomComment(CurLiveInfo.getShopID(), "3");
     }
 
