@@ -158,6 +158,8 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements
         initViewPager();
         initTabList();
         initInteresting();
+        updateLiveSlidingTabLayout(true);
+        updateGuideSlidingTabLayout(false);
     }
 
     private void initInteresting(){
