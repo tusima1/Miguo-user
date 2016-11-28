@@ -69,6 +69,8 @@ import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -76,6 +78,7 @@ import com.miguo.live.views.customviews.MGToast;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -279,11 +282,23 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2 != null) {
-                    onSuccess(mView2, SellerConstants.GROUP_BUY_COLLECT_POST, null);
-                } else if (mView != null) {
-                    onSuccess(mView, SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                HashMap<String,String> map = (HashMap<String,String>)validateBody(root);
+
+                if("200".equals(status)){
+                    List<HashMap<String,String>> datas = new ArrayList<HashMap<String, String>>();
+                    datas.add(map);
+                    if (mView2!=null){
+                        onSuccess(mView2,SellerConstants.GROUP_BUY_COLLECT_POST, datas);
+                    }else if (mView!=null){
+                        onSuccess(mView,SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                    }
                 }
+
             }
 
             @Override

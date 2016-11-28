@@ -46,7 +46,15 @@
         <attr name="sizeToFit" format="boolean" />
     </declare-styleable>
 
-    <declare-styleable name="GoogleCircleProgressView">
+    <declare-styleable name="MGGradientView">
+        <attr name="gradient_alpha" format="integer"/>
+        <attr name="gradient_gravity" format="enum">
+            <enum name="TOP" value="0"/>
+            <enum name="BOTTOM" value="1"/>
+        </attr>
+    </declare-styleable>
+
+<declare-styleable name="GoogleCircleProgressView">
         <attr name="gcp_inner_radius" format="dimension"/>
         <attr name="gcp_background_color" format="color"/>
         <attr name="gcp_progress_color" format="color"/>
@@ -70,5 +78,4 @@
             <enum name="invisible" value="1"/>
         </attr>
     </declare-styleable>
-
 </resources>

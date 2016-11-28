@@ -20,7 +20,7 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiFunnyFragmentAdapter;
-import com.miguo.dao.GetInterestingDao;
+import com.miguo.dao.HiGetInterestingDao;
 import com.miguo.dao.HiFunnyTabDao;
 import com.miguo.dao.impl.GetInterestingDaoImpl;
 import com.miguo.dao.impl.HiFunnyTabDaoImpl;
@@ -97,7 +97,7 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements
     ArrayList<Fragment> fragments;
 
     HiFunnyTabDao hiFunnyTabDao;
-    GetInterestingDao interestingDao;
+    HiGetInterestingDao interestingDao;
 
     private SharedPreferences settings;
     private String interestingStr = "";

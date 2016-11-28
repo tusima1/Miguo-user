@@ -7,7 +7,7 @@ import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.miguo.dao.GetInterestingDao;
+import com.miguo.dao.HiGetInterestingDao;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetInterestingView;
@@ -22,7 +22,7 @@ import java.util.TreeMap;
  * Created by Administrator on 2016/11/25.
  */
 
-public class GetInterestingDaoImpl extends BaseDaoImpl implements GetInterestingDao{
+public class GetInterestingDaoImpl extends BaseDaoImpl implements HiGetInterestingDao {
 
     public GetInterestingDaoImpl(BaseView baseView) {
         super(baseView);

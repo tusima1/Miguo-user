@@ -257,4 +257,19 @@ public class UserConstants {
      */
 
     public static final String  USER_DISTRIBUTION_LEVEL  ="UserDistributionLevel";
+    /**
+     * 人气值 。
+     */
+    public static final String   POPULARITY= "popularity";
+    /**
+     * 商家分类 大类
+     */
+    public static final String   CATE_ID= "cate_id";
+    /**
+     *
+     * 商家分类 小类
+     */
+
+    public static final String   TID= "tid";
+
 }

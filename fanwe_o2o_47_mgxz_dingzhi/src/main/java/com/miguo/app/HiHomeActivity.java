@@ -8,6 +8,7 @@ import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
 import com.miguo.definition.IntentKey;
@@ -22,6 +23,8 @@ import java.util.regex.Pattern;
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
  */
 public class HiHomeActivity extends HiBaseActivity{
+
+    String currentCityId;
     /**
      * 商家id (int)
      */
@@ -49,6 +52,7 @@ public class HiHomeActivity extends HiBaseActivity{
 
     @Override
     protected Category initCategory() {
+        setCurrentCityId(AppRuntimeWorker.getCity_id());
         setTwiceKeyDownToCloseActivity(true);
         return new HiHomeCategory(this);
     }
@@ -61,6 +65,14 @@ public class HiHomeActivity extends HiBaseActivity{
         if(null != getCategory()){
             checkIfInMyFragment();
         }
+        if(!AppRuntimeWorker.getCity_id().equals(getCurrentCityId())){
+            CitylistModel tempBean = new CitylistModel();
+            tempBean.setId(AppRuntimeWorker.getCity_id());
+            tempBean.setName(AppRuntimeWorker.getCity_name());
+            tempBean.setPy(AppRuntimeWorker.getCityPyByCityName(AppRuntimeWorker.getCity_id()));
+            handlerReturnCityId(tempBean);
+        }
+
     }
 
     private void checkIfInMyFragment(){
@@ -140,6 +152,11 @@ public class HiHomeActivity extends HiBaseActivity{
 
     private void handlerReturnCityId(Intent data){
         CitylistModel model = (CitylistModel)data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
+        handlerReturnCityId(model);
+    }
+
+    private void handlerReturnCityId(CitylistModel model){
+        setCurrentCityId(AppRuntimeWorker.getCity_id());
         getCategory().updateFromCityChanged(model);
     }
 
@@ -152,4 +169,11 @@ public class HiHomeActivity extends HiBaseActivity{
         return (HiHomeCategory) super.getCategory();
     }
 
+    public String getCurrentCityId() {
+        return currentCityId;
+    }
+
+    public void setCurrentCityId(String currentCityId) {
+        this.currentCityId = currentCityId;
+    }
 }

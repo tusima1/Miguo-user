@@ -3,6 +3,8 @@ package com.miguo.category.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,14 +26,17 @@ import com.fanwe.model.CitylistModel;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.SellerFragment;
+import com.fanwe.user.UserConstants;
 import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.view.RecyclerScrollView;
 import com.fanwe.work.AppRuntimeWorker;
+import com.google.gson.JsonObject;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
 import com.miguo.adapter.HomePagerAdapter;
+import com.miguo.dao.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;
@@ -64,6 +69,9 @@ import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
 import com.miguo.view.HomeGreetingView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +92,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
         HomeGreetingView,
         GetAdspaceListView, GetMenuListView, CheckCityView{
+
 
     /**
      * 顶部导航栏的东西
@@ -707,9 +716,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 跳转到门店列表
      */
     @Override
-    public void onActionShopList(String cate_id) {
+    public void onActionShopList(String cate_id,String tid) {
         getHomeViewPager().setCurrentItem(2);
-        ((SellerFragment)((HomePagerAdapter)getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id);
+        ((SellerFragment)((HomePagerAdapter)getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id,tid);
         /**
          * 如果当前的低栏隐藏了
          */
@@ -828,7 +837,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         for(AdspaceListBean.Result.Body bd : body ){
             if(bd.getAdspace_id().equals(AdspaceParams.TYPE_BANNER_INDEX)){
                 banner.add(bd);
-            }else {
+            }else if(bd.getAdspace_id().equals(AdspaceParams.TYPE_TOPIC_INDEX)){
                 topic.add(bd);
             }
         }
@@ -889,31 +898,62 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
 
-        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
-        Bundle bundle = new Bundle();
-        bundle.putString(IntentKey.SPECIAL_TOPIC_ID, ad.getType_id());
-        intent.putExtras(bundle);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+        String type_id = ad.getType_id();
+        if(TextUtils.isEmpty(type_id)||!type_id.startsWith("{")){
+            return;
+        }
+
+        BannerTypeModel model = HomeCategoryUtils.parseTypeJson(type_id);
+
+        if(ad.getType().equals(AdspaceParams.BANNER_LIVE_LIST)){
+            onActionLiveList();
+            return;
+        }
+        if(ad.getType().equals(AdspaceParams.BANNER_SHOP_LIST)){
+            onActionShopList(model.getCate_id(),ad.getType_id());
+            return;
+        }
+        String paramValue = model.getId();
+        if(TextUtils.isEmpty(paramValue)){
+            paramValue = model.getUrl();
+        }
+
+        AdspaceTypeFactory.clickWidthType(ad.getType(), getActivity(), paramValue);
     }
 
+    /**
+     * 2016-11-25 edit by zhouhy for 南洋 把item.getType_id 变成了JSON.
+      1 商品详情 门店详情 专题详情  id
+      50 URL   url   52门店列表  cate_id     tid  54直播列表      tag
+
+     //keyword
+     * @param item
+     */
     public void onTagsClick(MenuBean.Result.Body item){
         if(null == item){
             return;
         }
-
-        if(null == item.getType_id() || null == item.getType_id()){
+        String type_id = item.getType_id();
+        if(TextUtils.isEmpty(type_id)||!type_id.startsWith("{")){
             return;
         }
+
+        BannerTypeModel model = HomeCategoryUtils.parseTypeJson(type_id);
 
         if(item.getType().equals(AdspaceParams.BANNER_LIVE_LIST)){
             onActionLiveList();
             return;
         }
         if(item.getType().equals(AdspaceParams.BANNER_SHOP_LIST)){
-            onActionShopList(item.getType_id());
+            onActionShopList(model.getCate_id(),model.getTid());
             return;
         }
-        AdspaceTypeFactory.clickWidthType(item.getType(), getActivity(), item.getType_id());
+      String paramValue = model.getId();
+        if(TextUtils.isEmpty(paramValue)){
+            paramValue = model.getUrl();
+        }
+
+        AdspaceTypeFactory.clickWidthType(item.getType(), getActivity(), paramValue);
     }
 
     public boolean isHasTop() {
