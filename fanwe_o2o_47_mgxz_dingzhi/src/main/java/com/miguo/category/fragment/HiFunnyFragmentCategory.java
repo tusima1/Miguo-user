@@ -30,6 +30,7 @@ import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiLiveListFragement;
 import com.miguo.listener.fragment.HiFunnyFragmentListener;
 import com.miguo.live.views.view.frag.GuideLiveFragment;
+import com.miguo.ui.view.FunnyViewPager;
 import com.miguo.ui.view.SlidingTabLayout;
 import com.miguo.view.GetInterestingView;
 import com.miguo.view.HiFunnyTabView;
@@ -91,7 +92,7 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements
     AppBarLayout appBarLayout;
 
     @ViewInject(R.id.funny_viewpager)
-    ViewPager funnyViewPager;
+    FunnyViewPager funnyViewPager;
     HiFunnyFragmentAdapter funnyFragmentAdapter;
     ArrayList<Fragment> fragments;
 
@@ -158,6 +159,8 @@ public class HiFunnyFragmentCategory extends FragmentCategory implements
         initViewPager();
         initTabList();
         initInteresting();
+        updateLiveSlidingTabLayout(true);
+        updateGuideSlidingTabLayout(false);
     }
 
     private void initInteresting(){

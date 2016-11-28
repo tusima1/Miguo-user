@@ -41,7 +41,6 @@
                     />
                 <TextView
                     android:id="@+id/summary_text"
-                    android:layout_marginEnd="@dimen/dp20"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp40"
                     android:layout_marginTop="@dimen/dp20"
@@ -121,38 +120,38 @@
 
 
     <!--<android.support.v4.widget.NestedScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:fillViewport="true"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-        <!--&gt;-->
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical"-->
-            <!--android:fillViewport="true"-->
-            <!--&gt;-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:fillViewport="true"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--&gt;-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical"-->
+    <!--android:fillViewport="true"-->
+    <!--&gt;-->
 
-    <android.support.v4.view.ViewPager
+    <com.miguo.ui.view.FunnyViewPager
         android:id="@+id/funny_viewpager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-    </android.support.v4.view.ViewPager>
+    </com.miguo.ui.view.FunnyViewPager>
 
-            <!--<com.miguo.ui.view.FunnyViewPager-->
-                <!--android:fillViewport="true"-->
-                <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-                <!--android:id="@+id/funny_viewpager"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
+    <!--<com.miguo.ui.view.FunnyViewPager-->
+    <!--android:fillViewport="true"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--android:id="@+id/funny_viewpager"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
 
-            <!--</com.miguo.ui.view.FunnyViewPager>-->
+    <!--</com.miguo.ui.view.FunnyViewPager>-->
 
-        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
     <!--</android.support.v4.widget.NestedScrollView>-->
 
 </android.support.design.widget.CoordinatorLayout>
