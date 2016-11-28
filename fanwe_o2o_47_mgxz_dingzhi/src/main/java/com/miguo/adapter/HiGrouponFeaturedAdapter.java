@@ -14,8 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.Tag;
+
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -26,8 +25,12 @@ import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.definition.ClassPath;
+import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+import com.miguo.entity.model.getFeaturedGroupBuy.Tag;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
+
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -84,6 +87,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         getHolder(holder).tvName.post(new Runnable() {
             @Override
             public void run() {
+                Log.d(tag, "tvName line count: " + getHolder(holder).tvName.getLineCount());
                 if(getHolder(holder).tvName.getLineCount() > 1){
                     lines.set(position, true);
                     getHolder(holder).tvName.setMaxLines(2);
@@ -106,7 +110,12 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         /**
          * 主图
          */
-        ImageLoader.getInstance().displayImage(getItem(position).getImg(), getHolder(holder).image);
+
+        String url =getItem(position).getImg();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,400,228);
+        }
+        ImageLoader.getInstance().displayImage(url, getHolder(holder).image);
 
         /**
          * 名字

@@ -58,6 +58,7 @@ import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
+import com.miguo.ui.view.RecyclerBounceScrollView;
 import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
@@ -76,8 +77,8 @@ import me.relex.circleindicator.CircleIndicator;
  */
 public class HiHomeFragmentCategory extends FragmentCategory implements
         PtrHandler,
-        RecyclerScrollView.OnRecyclerScrollViewListener,
-        RecyclerScrollView.RecyclerScrollViewOnTouchListener,
+        RecyclerBounceScrollView.OnRecyclerScrollViewListener,
+        RecyclerBounceScrollView.RecyclerScrollViewOnTouchListener,
         HomeBannerViewPager.HomeBannerViewPagerOnTouchListener,
         HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
@@ -109,7 +110,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     FixRequestDisallowTouchEventPtrFrameLayout ptrFrameLayout;
 
     @ViewInject(R.id.recycler_scrollview)
-    RecyclerScrollView scrollView;
+    RecyclerBounceScrollView scrollView;
 
     /**
      * 狗蛋哥早安部分
@@ -327,6 +328,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void initHomeADView2(List<AdspaceListBean.Result.Body> body){
         homeADView2.setVisibility(SDCollectionUtil.isEmpty(body) ? View.GONE : View.VISIBLE);
+        homeAdView2SpaceLayout.setVisibility(SDCollectionUtil.isEmpty(body) ? View.GONE : View.VISIBLE);
         homeADView2.init(body);
     }
 
@@ -392,7 +394,21 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     public void loadComplete() {
         ptrFrameLayout.refreshComplete();
+    }
+
+    public void loadCompleteWithLoadmore(){
+        loadComplete();
         scrollView.loadComplite();
+    }
+
+    public void loadCompleteWithNoData(){
+        loadComplete();
+        scrollView.loadCompliteWithNoData();
+    }
+
+    public void loadCompleteWithError(){
+        loadComplete();
+        scrollView.loadCompliteWithError();
     }
 
     /** scroll view 滚动监听 */
@@ -822,6 +838,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getAdspaceListError() {
+        homeADView2.setVisibility(View.GONE);
         loadComplete();
     }
 

@@ -111,4 +111,8 @@ public class SellerConstants {
     public static final String GROUP_BUY_DETAIL_NEW = "GroupBuyDetailNew";
     //专题列表
     public static final String SPECIAL_TOPIC = "TopicDetail";
+    /**
+     * 取得大王和他的小伙伴 取得铁粉
+     */
+    public static final String GET_SHOP_MEMBER_INFO = "GetShopMemberInfo";
 }

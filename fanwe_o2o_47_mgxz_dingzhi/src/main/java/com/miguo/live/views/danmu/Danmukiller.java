@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.HashMap;
@@ -236,6 +237,7 @@ public class Danmukiller {
     }
 
     private Bitmap getAvatarBitMapFromUrl(String url){
+          url = DisplayUtil.qiniuUrlExchange(url,60,60);
         Bitmap bitmap = ImageLoader.getInstance().loadImageSync(url);
         Matrix matrix = new Matrix();
         bitmap = bitmap == null ? getAvatarBitmapFromLocal(R.drawable.userlogo) : bitmap;

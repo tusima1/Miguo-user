@@ -2,6 +2,7 @@ package com.miguo.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -68,9 +70,12 @@ public class HiShopDetailLiveAdapter extends BarryBaseRecyclerAdapter {
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         try {
             ModelRoom room = getItem(position);
-            if (room.getCover().contains("http:")) {
-                SDViewBinder.setImageView(getItem(position).getCover(), getHolder(holder).image);
-            }
+            String url="";
+                if(!TextUtils.isEmpty(room.getCover())&&room.getCover().startsWith("http://")){
+                   url = DisplayUtil.qiniuUrlExchange(room.getCover(),150,150);
+                }
+                SDViewBinder.setImageView(url, getHolder(holder).image);
+
             getHolder(holder).type.setText(LiveUtil.getLiveType(room));
             getHolder(holder).type.setBackgroundResource(LiveUtil.getLiveTypeColor(room));
             SDViewBinder.setTextView(getHolder(holder).localtion, room.getLbs().getAddress(), "");

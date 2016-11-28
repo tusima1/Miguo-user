@@ -20,7 +20,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.fanwe.EventDetailActivity;
 import com.fanwe.RouteInformationActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.YouHuiDetailActivity;
@@ -250,8 +249,8 @@ public class MapSearchFragment extends BaseBaiduMapFragment
 						intent.setClass(getActivity(), YouHuiDetailActivity.class);
 						break;
 					case SearchTypeMap.EVENT:
-						intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getId());
-						intent.setClass(getActivity(), EventDetailActivity.class);
+//						intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getId());
+//						intent.setClass(getActivity(), EventDetailActivity.class);
 						break;
 					case SearchTypeMap.TUAN:
 						intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getId());

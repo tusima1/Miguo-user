@@ -9,7 +9,6 @@ import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.DistributionWithdrawActivity;
 import com.fanwe.MemberRankActivity;
-import com.fanwe.MyCollectionActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.WithdrawLogActivity;
 import com.fanwe.adapter.MyDistributionAdapter;
@@ -40,9 +39,11 @@ import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.utils.DisplayUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -164,7 +165,12 @@ public class MyDistributionFragment extends BaseFragment
 		{
 			return;
 		}
-		SDViewBinder.setImageView(actModel.getUser_avatar(), mSiv_image, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
+
+		String url=actModel.getUser_avatar();
+		if(!TextUtils.isEmpty(url)){
+			url = DisplayUtil.qiniuUrlExchange(url,100,100);
+		}
+		SDViewBinder.setImageView(url, mSiv_image, ImageLoaderManager.getOptionsNoCacheNoResetViewBeforeLoading());
 		SDViewBinder.setTextView(mTv_username, actModel.getUser_name(), "未找到");
 	}
 	
@@ -314,7 +320,7 @@ public class MyDistributionFragment extends BaseFragment
 			
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(getActivity(), MyCollectionActivity.class));
+//				startActivity(new Intent(getActivity(), MyCollectionActivity.class));
 			}
 		});
 

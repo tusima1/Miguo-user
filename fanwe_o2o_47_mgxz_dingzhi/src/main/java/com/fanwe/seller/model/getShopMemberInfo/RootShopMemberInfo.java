@@ -1,14 +1,13 @@
-package com.fanwe.groupon.model.getFeaturedGroupBuy;
+package com.fanwe.seller.model.getShopMemberInfo;
 
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/28.
  */
-public class RootFeaturedGroupBuy implements Serializable{
-    private List<ResultFeaturedGroupBuy> result;
+public class RootShopMemberInfo {
+    private List<ResultShopMemberInfo> result;
 
     private String message;
 
@@ -16,11 +15,11 @@ public class RootFeaturedGroupBuy implements Serializable{
 
     private String token;
 
-    public List<ResultFeaturedGroupBuy> getResult() {
+    public List<ResultShopMemberInfo> getResult() {
         return result;
     }
 
-    public void setResult(List<ResultFeaturedGroupBuy> result) {
+    public void setResult(List<ResultShopMemberInfo> result) {
         this.result = result;
     }
 

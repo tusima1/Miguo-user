@@ -2,16 +2,16 @@ package com.miguo.dao.impl;
 
 import android.text.TextUtils;
 
-import com.fanwe.groupon.model.GrouponConstants;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.BodyFeaturedGroupBuy;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ResultFeaturedGroupBuy;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.RootFeaturedGroupBuy;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.dao.FeaturedGrouponDao;
+import com.miguo.entity.model.GrouponConstants;
+import com.miguo.entity.model.getFeaturedGroupBuy.BodyFeaturedGroupBuy;
+import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+import com.miguo.entity.model.getFeaturedGroupBuy.ResultFeaturedGroupBuy;
+import com.miguo.entity.model.getFeaturedGroupBuy.RootFeaturedGroupBuy;
 import com.miguo.view.BaseView;
 import com.miguo.view.FeaturedGrouponView;
 
@@ -77,8 +77,13 @@ public class FeaturedGrouponDaoImpl extends BaseDaoImpl implements FeaturedGroup
             }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
                 getListener().getFeaturedGrouponError(message);
+            }
+
+            @Override
+            public void onFinishResponse() {
+                super.onFinishResponse();
             }
         });
     }

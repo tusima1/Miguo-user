@@ -41,6 +41,7 @@ import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.DisplayUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -164,13 +165,22 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 			SDViewUtil.setViewHeight(iv_image, height);
 			tv_title.setText(model.getTitle());
 			tv_originalPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-			SDViewBinder.setImageView(iv_image, model.getImg());
+
+			String url =model.getImg();
+			if(!TextUtils.isEmpty(url)){
+				url = DisplayUtil.qiniuUrlExchange(url,100,62);
+			}
+			SDViewBinder.setImageView(url, iv_image);
+
 			if (SDFormatUtil.stringToInteger(model.getLimit_num()) <= -1) {
 				SDViewUtil.hide(tv_max);
 			} else {
 				SDViewUtil.show(tv_max);
 				SDViewBinder.setTextView(tv_max,
 						"限购" + model.getLimit_num() + "件");
+			}
+			if(TextUtils.isEmpty(App.getInstance().getToken())){
+				SDViewUtil.hide(tv_max);
 			}
 
 			et_number.setText(model.getNumber());
@@ -196,8 +206,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 				et_number.setVisibility(View.VISIBLE);
 			}
 
-
-				cb_check.setChecked(model.isChecked());
+           cb_check.setChecked(model.isChecked());
 
 			cb_check.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -223,7 +232,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 					int maxNumber = SDFormatUtil.stringToInteger(model.getLimit_num());
 					// -1表示无数量限制.
 					if ((maxNumber <= -1)
-							|| ((maxNumber > -1) && curNumber < maxNumber)) {
+							|| ((maxNumber > -1) && curNumber < maxNumber)||TextUtils.isEmpty(App.getInstance().getToken())) {
 						curNumber++;
 						et_number.setText(String.valueOf(curNumber));
 						model.setNumber(curNumber+"");
@@ -269,7 +278,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 						int inputNum = Integer.valueOf(s.toString());
 						// 输入数量必须大于0
 						if (inputNum > 0) {
-							if (maxNumber > -1 && inputNum > maxNumber) {
+							if ((maxNumber > -1 && inputNum > maxNumber)||TextUtils.isEmpty(App.getInstance().getToken())){
 								// 无限制
 								inputNum = maxNumber;
 							}

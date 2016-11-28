@@ -38,6 +38,7 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -68,6 +69,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
+
+import static com.fanwe.o2o.miguo.R.id.tv_buy;
 
 /**
  * created by didikee
@@ -165,15 +168,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void init() {
-        if (getIntentData(getIntent())){
-            initTitleLayout();
-            initSScrollView();
-            mHttpHelper = new SellerNewHttpHelper(this);
-            mSellerHelper = new SellerHttpHelper(null, this, "");
-            mShoppingCartHelper = new ShoppingCartHelper(this);
-            requestData();
-        }
-
+        getIntentData(getIntent());
+        initTitleLayout();
+        initSScrollView();
+        mHttpHelper = new SellerNewHttpHelper(this);
+        mSellerHelper = new SellerHttpHelper(null, this, "");
+        mShoppingCartHelper = new ShoppingCartHelper(this);
+        requestData();
     }
     private void requestData(){
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
@@ -300,7 +301,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private void initBottomLayout() {
         mTvOldMoney = ((TextView) findViewById(R.id.tv_old_money));
         mTvNewMoney = ((TextView) findViewById(R.id.tv_new_money));
-        mTvBuy = ((WaitFinishTextView) findViewById(R.id.tv_buy));
+        mTvBuy = ((WaitFinishTextView) findViewById(tv_buy));
         mTvAdd2ShopCart = ((TextView) findViewById(R.id.tv_add_shop_cart));
         mTvOldMoney.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG); //中划线
 
@@ -779,7 +780,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             case R.id.tv_add_shop_cart:
                 clickBuyGoods(false);
                 break;
-            case R.id.tv_buy:
+            case tv_buy:
                 clickBuyGoods(true);
                 break;
         }
@@ -892,7 +893,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             MGToast.showToast("添加购物车失败!");
             return;
         }
-        LocalShoppingcartDao.insertModel(mShoppingCartInfo);
+        LocalShoppingcartDao.insertSingleNum(mShoppingCartInfo);
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvBuy.onFinish();
+            }
+        });
     }
 
     public void goToShopping() {

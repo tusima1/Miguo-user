@@ -252,4 +252,9 @@ public class UserConstants {
      * 获得关注状态
      */
     public static final String USER_ATTENTION = "UserAttention";
+    /**
+     * 用户分销等级。
+     */
+
+    public static final String  USER_DISTRIBUTION_LEVEL  ="UserDistributionLevel";
 }

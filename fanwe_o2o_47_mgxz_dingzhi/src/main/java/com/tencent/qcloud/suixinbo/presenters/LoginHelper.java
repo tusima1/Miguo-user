@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -71,12 +72,20 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
-        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
-        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+
+        user.setAccountType(String.valueOf(ccType));
+        user.setAppIdAt3rd(String.valueOf(appId));
         user.setIdentifier(identify);
         //发起登录请求
         TIMManager.getInstance().login(
-                Constants.SDK_APPID,
+                appId,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
                 new TIMCallBack() {
@@ -114,18 +123,24 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
-        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
-        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+        user.setAccountType(ccType+"");
+        user.setAppIdAt3rd(appId+"");
         user.setIdentifier(identify);
         //发起登录请求
         TIMManager.getInstance().login(
-                Constants.SDK_APPID,
+                appId,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
                 new TIMCallBack() {
                     @Override
                     public void onError(int i, String s) {
-                        Toast.makeText(mContext, "IMLogin fail ：" + i + " msg " + s, Toast.LENGTH_SHORT).show();
+
                         mView.onFailue("IM 认证失败。");
                         callback.onErrorResponse("", null);
                     }
@@ -153,12 +168,19 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
-        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
-        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+        user.setAccountType(String.valueOf(ccType));
+        user.setAppIdAt3rd(String.valueOf(appId));
         user.setIdentifier(identify);
         //发起登录请求
         TIMManager.getInstance().login(
-                Constants.SDK_APPID,
+                appId,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
                 new TIMCallBack() {
@@ -195,12 +217,19 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
-        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
-        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+        user.setAccountType(String.valueOf(ccType));
+        user.setAppIdAt3rd(String.valueOf(appId));
         user.setIdentifier(identify);
         //发起登录请求
         TIMManager.getInstance().login(
-                Constants.SDK_APPID,
+                appId,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
                 new TIMCallBack() {
@@ -262,12 +291,18 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         MySelfInfo.getInstance().setId(identify);
         MySelfInfo.getInstance().setUserSig(userSig);
         TIMUser user = new TIMUser();
-        user.setAccountType(String.valueOf(Constants.ACCOUNT_TYPE));
-        user.setAppIdAt3rd(String.valueOf(Constants.SDK_APPID));
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+        user.setAccountType(String.valueOf(ccType));
+        user.setAppIdAt3rd(String.valueOf(appId));
         user.setIdentifier(identify);
         //发起登录请求
         TIMManager.getInstance().login(
-                Constants.SDK_APPID,
+                appId,
                 user,
                 userSig,                    //用户帐号签名，由私钥加密获得，具体请参考文档
                 callBack);
@@ -410,14 +445,19 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
     public void startAVSDK() {
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
-        int appId = Constants.SDK_APPID;
 
+
+        int appId = Constants.SDK_APPID;
         int ccType = Constants.ACCOUNT_TYPE;
-        Log.e("LoginHelper", "初始化AVSDK");
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
 
-        Log.e("LoginHelper", "初始化AVSDK");
+
     }
 
     /**

@@ -25,6 +25,7 @@ import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
@@ -38,9 +39,11 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     public static final String LIVE = "1";
     public static final String LIVE_PLAY_BACK = "1";
     public static final String PLAY_BACK = "2";
+    public int width =400;
 
     public MainActivityHomeFragmentLiveListAdapter(Activity activity, List datas) {
         super(activity, datas);
+        width = BaseUtils.getWidth(activity);
     }
 
     @Override
@@ -98,7 +101,11 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
         ModelRoom room = (ModelRoom) datas.get(position);
-        SDViewBinder.setImageView(room.getCover(), getHolder(holder).image);
+        String url = "";
+        if(!TextUtils.isEmpty(room.getCover())){
+            url = DisplayUtil.qiniuUrlExchange(room.getCover(),400,228);
+        }
+        SDViewBinder.setImageView(url, getHolder(holder).image);
         getHolder(holder).tvAdd.setText(getShopName(room));
         getHolder(holder).tvType.setText(LiveUtil.getLiveType(room));
         getHolder(holder).tvType.setBackgroundResource(LiveUtil.getLiveTypeColor(room));
@@ -182,6 +189,22 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
         }
     }
 
+    /**
+     *  店名称。
+     * @param position
+     * @return
+     */
+
+    private String getShopName(int position){
+        if(getItem(position).getLbs()==null){
+            return "";
+        }
+        try{
+            return null == getItem(position).getLbs().getShop_name() ? "" : getItem(position).getLbs().getShop_name();
+        }catch (NullPointerException e){
+            return "";
+        }
+    }
     @Override
     public ModelRoom getItem(int position) {
         return (ModelRoom) super.getItem(position);

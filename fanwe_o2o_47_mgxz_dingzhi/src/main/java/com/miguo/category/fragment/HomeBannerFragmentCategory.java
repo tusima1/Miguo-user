@@ -1,5 +1,6 @@
 package com.miguo.category.fragment;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -15,6 +16,7 @@ import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HomeBannerFragmentListener;
 import com.miguo.ui.view.HomeBannerImageView;
 import com.miguo.ui.view.HomeBannerViewPager;
+import com.miguo.utils.DisplayUtil;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/10/17.
@@ -54,7 +56,12 @@ public class HomeBannerFragmentCategory extends FragmentCategory{
         int height = width * 420 / 750;
         LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
         image.setLayoutParams(params);
-        SDViewBinder.setImageView(getFragment().getBanner().getIcon(), image, ImageLoaderManager.getOptionsNoResetViewBeforeLoading());
+        String url = getFragment().getBanner().getIcon();
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,375,210);
+
+        }
+        SDViewBinder.setImageView(url, image, ImageLoaderManager.getOptionsNoResetViewBeforeLoading());
     }
 
     public void clickImage(){

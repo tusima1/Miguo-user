@@ -116,7 +116,7 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             if (!TextUtils.isEmpty(currModle.getOrder_sn())) {
                 SDViewBinder.setTextView(mHolder.tvOrder, "订单号：" + currModle.getOrder_sn());
             } else {
-                SDViewBinder.setTextView(mHolder.tvOrder, "订单号：");
+                SDViewBinder.setTextView(mHolder.tvOrder, "");
             }
             SDViewBinder.setTextView(mHolder.tvTime, currModle.getInsert_time(), "");
             String comeFrom = "";

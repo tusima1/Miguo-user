@@ -341,6 +341,8 @@ public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, Cal
 //                MGToast.showToast("ERROR_OK:"+message);
 //            }
                 showDialog();
+            }else if(statusCode==399){
+                MGToast.showToast(message);
             }
             sendCount = 0;
         }

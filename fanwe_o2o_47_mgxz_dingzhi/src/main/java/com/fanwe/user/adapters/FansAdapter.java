@@ -3,6 +3,7 @@ package com.fanwe.user.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.user.view.UserHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
 
@@ -72,21 +74,16 @@ public class FansAdapter extends BaseAdapter {
         final ModelFans modelFans = mFansList.get(position);
         holder.tv_userName.setText(modelFans.getNick());
         String fx_level = modelFans.getFx_level();
-        //去除用户等级的显示图标。
-//        Drawable rankDrawable=null;
-//        if ("1".equals(fx_level)) {
-//            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_3);
-//        } else if ("2".equals(fx_level)) {
-//            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_2);
-//        } else if ("3".equals(fx_level)) {
-//            rankDrawable=parent.getResources().getDrawable(R.drawable.ic_rank_1);
-//        }
-//        if (rankDrawable!=null){
-//            rankDrawable.setBounds(0, 0, rankDrawable.getMinimumWidth(), rankDrawable.getMinimumHeight());
-//            holder.tv_userName.setCompoundDrawables(null,null,rankDrawable,null);
-//        }
+
         holder.tv_subName.setText(modelFans.getPersonality());
-        SDViewBinder.setImageView(modelFans.getIcon(),holder.civ_face);
+
+
+
+        String url=modelFans.getIcon();
+        if(!TextUtils.isEmpty(url)){
+            url = DisplayUtil.qiniuUrlExchange(url,100,100);
+        }
+        SDViewBinder.setImageView(url,holder.civ_face);
 
         String attention_status = modelFans.getAttention_status();
         //状态：1：未关注 2：已关注 3：互相关注

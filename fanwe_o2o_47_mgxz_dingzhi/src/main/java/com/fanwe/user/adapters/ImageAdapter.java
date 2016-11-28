@@ -2,11 +2,13 @@ package com.fanwe.user.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -42,7 +44,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MViewHolder>
 
     @Override
     public void onBindViewHolder(MViewHolder mViewHolder, int position) {
-        ImageLoader.getInstance().displayImage(listData.get(position), mViewHolder.image);
+
+        String url=listData.get(position);
+        if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+            url = DisplayUtil.qiniuUrlExchange(url,100,100);
+        }
+        ImageLoader.getInstance().displayImage(url, mViewHolder.image);
     }
 
     public class MViewHolder extends RecyclerView.ViewHolder {

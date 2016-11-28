@@ -325,12 +325,16 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     public void startAVSDK() {
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
-        int appId = Constants.SDK_APPID;
 
+        int appId = Constants.SDK_APPID;
         int ccType = Constants.ACCOUNT_TYPE;
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
-        Log.e("liveActivity", "初始化AVSDK");
+
     }
 
     public String getUserSign() {

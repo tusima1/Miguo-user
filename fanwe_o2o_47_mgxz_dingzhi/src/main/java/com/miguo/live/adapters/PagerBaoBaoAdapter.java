@@ -16,6 +16,7 @@ import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.presenters.ShoppingCartHelper;
+import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
@@ -58,15 +59,15 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
 //        holder.ll_two_bt.setVisibility(View.VISIBLE);
         final BaoBaoEntity baoBaoEntity = mData.get(position);
         if(baoBaoEntity!=null){
+
             if(!TextUtils.isEmpty(baoBaoEntity.getImg())){
-                ImageLoader.getInstance().displayImage(baoBaoEntity.getImg(),holder.iv_img);
+                String  url = DisplayUtil.qiniuUrlExchange(baoBaoEntity.getImg(),60,60);
+                ImageLoader.getInstance().displayImage(url,holder.iv_img);
             }else {
                 holder.iv_img.setImageResource(R.drawable.list_empty);
             }
             holder.tv_title .setText(baoBaoEntity.getName());
             holder.tv_price.setText(baoBaoEntity.getTuan_price());
-
-
         }
         final boolean clicked = baoBaoEntity.isClicked();
         if (clicked){

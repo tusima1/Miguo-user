@@ -26,20 +26,17 @@ public class Constants {
     public static final String LIVE_ANIMATOR = "live_animator";
     public static final String LOG_LEVEL = "log_level";
 
-//    //
-//    public static final int ACCOUNT_TYPE = 792;
-//    //    //sdk appid 由腾讯分配
-//    public static final int SDK_APPID = 1400001533;
 
-//    public static final int SDK_APPID = 1400001692;
-//
-//    public static final int ACCOUNT_TYPE = 884;// 用户的账号类型
-
+    //生产环境
     public static final int SDK_APPID = 1400012005;//sdkappid,本应用的
-//    public static final int SDK_APPID = 1252383683 ;//sdkappid,本应用的
+
+   //测试环境 账号。
+   public static final int SDK_APPID_TEST = 1400018408;//sdkappid,本应用的
+
 
     public static final int ACCOUNT_TYPE = 6410;// 用户的账号类型
-
+    //测试环境 账号类型。
+    public static final int ACCOUNT_TYPE_Test = 8640;// 用户的账号类型
     public static final String ID_STATUS = "id_status";
 
     public static final int HOST = 1;
@@ -67,24 +64,19 @@ public class Constants {
     /**
      * 自定义消息 类型开始
      */
-    public static final int AVIMCMD_CUSTOM=0x100;
-    public static final int AVIMCMD_RED_PACKET=AVIMCMD_CUSTOM+1;  //红包
-    public static final int AVIMCMD_DANMU = AVIMCMD_RED_PACKET+1; //弹幕
-    public static final int AVIMCOM_GIFT_SINGLE = AVIMCMD_DANMU+1; //小礼物 非连发
-    public static final int AVIMCMD_REWARD = AVIMCMD_RED_PACKET+1; //弹幕
-    public static final int AVIMCOM_GIFT = AVIMCMD_REWARD+1; //小礼物 非连发
-    public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT+1; //大礼物 非连发
-    public static final int AVIMCOM_BIG_GIFT_MULTI = AVIMCOM_BIG_GIFT_SINGLE+1; //大礼物 连发
+    public static final int AVIMCMD_CUSTOM = 0x100;
+    public static final int AVIMCMD_RED_PACKET = AVIMCMD_CUSTOM + 1;  //红包
+    public static final int AVIMCMD_DANMU = AVIMCMD_RED_PACKET + 1; //弹幕
+    public static final int AVIMCOM_GIFT_SINGLE = AVIMCMD_DANMU + 1; //小礼物 非连发
+    public static final int AVIMCMD_REWARD = AVIMCMD_RED_PACKET + 1; //弹幕
+    public static final int AVIMCOM_GIFT = AVIMCMD_REWARD + 1; //小礼物 非连发
+    public static final int AVIMCOM_BIG_GIFT_SINGLE = AVIMCOM_GIFT + 1; //大礼物 非连发
+    public static final int AVIMCOM_BIG_GIFT_MULTI = AVIMCOM_BIG_GIFT_SINGLE + 1; //大礼物 连发
 
-    public static final int PALYBACK_CUSTOM = AVIMCOM_BIG_GIFT_MULTI+1; //点播普通消息
-    public static final int PALYBACK_ENTERROOM = PALYBACK_CUSTOM+1; //点播进入房间
-    public static final int PALYBACK_EXITROOM = PALYBACK_ENTERROOM+1; //点播退出房间
-    public static final int PALYBACK_DESTROYROOM = PALYBACK_EXITROOM+1; //点播房间解散
-
-
-
-
-
+    public static final int PALYBACK_CUSTOM = AVIMCMD_CUSTOM + 8; //点播普通消息
+    public static final int PALYBACK_ENTERROOM = PALYBACK_CUSTOM + 1; //点播进入房间
+    public static final int PALYBACK_EXITROOM = PALYBACK_ENTERROOM + 1; //点播退出房间
+    public static final int PALYBACK_DESTROYROOM = PALYBACK_EXITROOM + 1; //点播房间解散
 
 
     public static final int AVIMCMD_MULTI = 0x800;             // 多人互动消息类型
@@ -230,7 +222,6 @@ public class Constants {
     public static final int AUTO_EXIT_ROOM = 101;
 
 
-
     public static final long HOST_AUTH = AVRoomMulti.AUTH_BITS_DEFAULT;//权限位；TODO：默认值是拥有所有权限。
     public static final long VIDEO_MEMBER_AUTH = AVRoomMulti.AUTH_BITS_DEFAULT;//权限位；TODO：默认值是拥有所有权限。
     public static final long NORMAL_MEMBER_AUTH = AVRoomMulti.AUTH_BITS_JOIN_ROOM | AVRoomMulti.AUTH_BITS_RECV_AUDIO | AVRoomMulti.AUTH_BITS_RECV_CAMERA_VIDEO | AVRoomMulti.AUTH_BITS_RECV_SCREEN_VIDEO;
@@ -242,19 +233,18 @@ public class Constants {
     public static final String NORMAL_MEMBER_ROLE = "NormalMember";
     /**
      * red_packet_id   红包场次
-
      */
-    public static final  String  RED_PACKET_ID="red_packet_id";
-    public static final  String  DANMU_ID = "danmu_id";
-    public static final  String  DANMU_MESSAGE = "message";
-    public static final  String  DANMU_USER_ID = "userId";
-    public static final  String  DANMU_USER_USER_NAME = "userName";
-    public static final  String  DANMU_USER_AVATAR_URL = "avatarUrl";
-    public static final  String  DANMU_MONEY = "userdiamond";
+    public static final String RED_PACKET_ID = "red_packet_id";
+    public static final String DANMU_ID = "danmu_id";
+    public static final String DANMU_MESSAGE = "message";
+    public static final String DANMU_USER_ID = "userId";
+    public static final String DANMU_USER_USER_NAME = "userName";
+    public static final String DANMU_USER_AVATAR_URL = "avatarUrl";
+    public static final String DANMU_MONEY = "userdiamond";
     /**
-     *  red_packet_duration  红包间隔时间
+     * red_packet_duration  红包间隔时间
      */
-    public static final  String  RED_PACKET_DURATION="red_packet_duration";
+    public static final String RED_PACKET_DURATION = "red_packet_duration";
 
     public static final String GIFT_DANMU_ID = "1000";
 

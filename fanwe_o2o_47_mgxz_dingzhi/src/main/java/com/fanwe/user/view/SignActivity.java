@@ -55,8 +55,8 @@ public class SignActivity extends BaseActivity implements CallbackView2 {
                 if (TextUtils.isEmpty(strSign)) {
                     MGToast.showToast("请输入个人简介");
                 } else {
-                    if (StringTool.getLengthChinese(strSign) > 60) {
-                        MGToast.showToast("不能超过60个字");
+                    if (StringTool.getLengthChinese(strSign) > 50) {
+                        MGToast.showToast("不能超过50个字");
                     } else {
                         btnSubmit.setClickable(false);
                         userHttpHelper.updateUserInfo("personality", strSign);

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.fanwe.adapter.PaymentAdapter;
@@ -289,6 +290,15 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     @Override
     public void onFailue(String method, String responseBody) {
 
+        switch(method){
+            case UserConstants.USER_UPGRADE_ORDER_GET:
+                MGToast.showToast("当前用户暂无法升级。");
+                finish();
+                break;
+            default:
+                break;
+
+        }
     }
 
     @Override
@@ -364,8 +374,16 @@ public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHan
     }
 
     @Override
-    public void onFailue(String responseBody) {
+    public void onFailue(String method) {
+        switch(method){
+            case UserConstants.USER_UPGRADE_ORDER_GET:
+                MGToast.showToast("当前用户暂无法升级。");
+                finish();
+                break;
+            default:
+                break;
 
+        }
     }
 
     @Override

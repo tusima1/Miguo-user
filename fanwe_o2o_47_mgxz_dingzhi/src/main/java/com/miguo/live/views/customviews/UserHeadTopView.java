@@ -29,6 +29,7 @@ import com.miguo.live.model.checkFocus.ModelCheckFocus;
 import com.miguo.live.model.getAudienceList.ModelAudienceInfo;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUserExitDialogHelper;
+import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.MGUIUtil;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.viewinface.LiveView;
@@ -210,6 +211,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         if (TextUtils.isEmpty(imgurl)) {
             mUserIamge.setImageResource(R.drawable.list_empty);
         } else {
+            imgurl =  DisplayUtil.qiniuUrlExchange(imgurl,60,60);
             SDViewBinder.setImageView(imgurl, mUserIamge);
         }
     }

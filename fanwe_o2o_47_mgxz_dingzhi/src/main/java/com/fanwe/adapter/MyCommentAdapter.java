@@ -12,7 +12,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.fanwe.AlbumActivity;
-import com.fanwe.EventDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.constant.Constant.CommentType;
@@ -97,8 +96,8 @@ public class MyCommentAdapter extends SDBaseAdapter<CommentModel>
 						intent.putExtra(YouHuiDetailActivity.EXTRA_YOUHUI_ID, model.getData_id());
 					} else if (CommentType.EVENT.equals(type))
 					{
-						intent = new Intent(mActivity, EventDetailActivity.class);
-						intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getData_id());
+//						intent = new Intent(mActivity, EventDetailActivity.class);
+//						intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getData_id());
 					} else if (CommentType.STORE.equals(type))
 					{
 						intent = new Intent(mActivity, HiShopDetailActivity.class);

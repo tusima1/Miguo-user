@@ -41,6 +41,7 @@ public class AdviceActivity extends BaseActivity implements CallbackView2 {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnSubmit.setClickable(false);
                 strAdvice = etAdvice.getText().toString().trim();
                 if (TextUtils.isEmpty(strAdvice)) {
                     MGToast.showToast("请输入建议");

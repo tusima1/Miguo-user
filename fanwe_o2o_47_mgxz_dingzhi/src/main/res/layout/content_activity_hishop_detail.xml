@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.fanwe.view.RecyclerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recycler_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:gravity="center_horizontal"
-    android:id="@+id/recycler_scrollview"
     android:orientation="vertical">
 
     <LinearLayout
@@ -15,88 +15,105 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/mode_top_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.miguo.ui.view.ShopDetailViewPager
-                android:id="@+id/shopdetail_viewpager"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"></com.miguo.ui.view.ShopDetailViewPager>
+                android:layout_height="wrap_content">
 
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/indicator_circle"
+                <com.miguo.ui.view.ShopDetailViewPager
+                    android:id="@+id/shopdetail_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"></com.miguo.ui.view.ShopDetailViewPager>
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/indicator_circle"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_alignBottom="@+id/shopdetail_viewpager"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    app:ci_drawable="@drawable/black_radius_square"
+                    app:ci_height="5dp"
+                    app:ci_margin="5dp"
+                    app:ci_width="5dp" />
+            </RelativeLayout>
+            <!--android:text="醉青蟹泰式餐厅"-->
+            <TextView
+                android:id="@+id/shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/text_base_color"
+                android:textSize="18sp" />
+            <!-- 标签部分 -->
+            <com.miguo.ui.view.ShopDetailTagView
+                android:id="@+id/tags"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/shopdetail_viewpager"
-                android:layout_gravity="bottom"
-                android:gravity="center"
-                app:ci_drawable="@drawable/black_radius_square"
-                app:ci_height="5dp"
-                app:ci_margin="5dp"
-                app:ci_width="5dp" />
-        </RelativeLayout>
-        <!--android:text="醉青蟹泰式餐厅"-->
-        <TextView
-            android:id="@+id/shop_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/text_base_color"
-            android:textSize="18sp" />
-        <!-- 标签部分 -->
-        <com.miguo.ui.view.ShopDetailTagView
-            android:id="@+id/tags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp" />
 
-        <!-- 100元/人 专属优惠 -->
-        <include layout="@layout/activity_hishaop_detail_item2" />
-        <!-- 人气值 32654 收藏图标 -->
-        <include layout="@layout/activity_hishaop_detail_item3" />
-        <!-- 空白留空部分 -->
-        <include layout="@layout/activity_hishaop_detail_item4" />
-        <!-- 地址  西湖区五常大道西溪映像城2楼（靠近西湖访谈溪）-->
-        <!--android:text="西湖区五常大道西溪映像城2楼（靠近西湖访谈溪）"-->
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center_horizontal"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:textColor="@color/text_base_color"
-            android:textSize="14sp" />
-        <!-- 时间  营业时间：11:00-22:00 -->
-        <!--android:text="营业时间：11:00-22:00"-->
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center_horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/text_base_color"
-            android:textSize="14sp" />
-        <!-- 距离  17km-->
-        <!--android:text="距离 17km"-->
-        <TextView
-            android:id="@+id/distance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center_horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="@color/text_base_color"
-            android:textSize="14sp" />
-        <!-- 电话和定位图标 -->
-        <include layout="@layout/activity_hishaop_detail_item5" />
-        <!-- 空白留空部分 -->
-        <include layout="@layout/activity_hishaop_detail_item4" />
+            <!-- 100元/人 专属优惠 -->
+            <include layout="@layout/activity_hishaop_detail_item2" />
+            <!-- 人气值 32654 收藏图标 -->
+            <include layout="@layout/activity_hishaop_detail_item3" />
+            <!-- 空白留空部分 -->
+            <include layout="@layout/activity_hishaop_detail_item4" />
+            <!-- 地址  西湖区五常大道西溪映像城2楼（靠近西湖访谈溪）-->
+            <!--android:text="西湖区五常大道西溪映像城2楼（靠近西湖访谈溪）"-->
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:textColor="@color/text_base_color"
+                android:textSize="14sp" />
+            <!-- 时间  营业时间：11:00-22:00 -->
+            <!--android:text="营业时间：11:00-22:00"-->
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/text_base_color"
+                android:textSize="14sp" />
+            <!-- 距离  17km-->
+            <!--android:text="距离 17km"-->
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/text_base_color"
+                android:textSize="14sp" />
+            <!-- 电话和定位图标 -->
+            <include layout="@layout/activity_hishaop_detail_item5" />
+            <!-- 空白留空部分 -->
+            <include layout="@layout/activity_hishaop_detail_item4" />
+
+            <FrameLayout
+                android:id="@+id/content_shop_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/gray_f2" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_recmmend"

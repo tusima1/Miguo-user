@@ -14,6 +14,7 @@ import com.baidu.location.BDLocationListener;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -28,6 +29,7 @@ import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
+import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -269,8 +271,14 @@ public class HiHomeCategory extends Category implements
         clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboardManager.hasPrimaryClip()) {
             code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+            if(!TextUtils.isEmpty(code)&&code.length()>=7){
+                if(!StringTool.checkStringPattern(code,StringTool.STRING_NUMBER)){
+                    code = "";
+                }
+            }else{
+                code = "";
+            }
         }
-
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */
@@ -504,7 +512,7 @@ public class HiHomeCategory extends Category implements
      */
     @Override
     public void loginSuccess(UserInfoNew user, String mobile, String password) {
-        Log.e(tag, "login success.. ");
+
         /**
          * 检查是否有兑换码
          */
@@ -521,6 +529,7 @@ public class HiHomeCategory extends Category implements
          * 保存用户信息SharedPreferences
          */
         handlerSaveUser(mobile, password);
+        initJpush();
     }
 
     /**
@@ -714,13 +723,14 @@ public class HiHomeCategory extends Category implements
         String userid = MySelfInfo.getInstance().getId();
         String userSign = MySelfInfo.getInstance().getUserSig();
         int appId = Constants.SDK_APPID;
-
         int ccType = Constants.ACCOUNT_TYPE;
-        Log.e("LoginHelper", "初始化AVSDK");
+        if(ServerUrl.DEBUG){
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
         QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
         QavsdkControl.getInstance().startContext();
 
-        Log.e("LoginHelper", "初始化AVSDK");
     }
 
     public HiHomeFragment getHomeFragment() {

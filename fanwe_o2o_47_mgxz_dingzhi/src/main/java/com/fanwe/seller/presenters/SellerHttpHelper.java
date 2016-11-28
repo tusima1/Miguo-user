@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
@@ -60,6 +61,9 @@ import com.fanwe.seller.model.getShopInfo.RootShopInfo;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.seller.model.getShopList.ResultShopList;
 import com.fanwe.seller.model.getShopList.RootShopList;
+import com.fanwe.seller.model.getShopMemberInfo.ModelShopMemberInfo;
+import com.fanwe.seller.model.getShopMemberInfo.ResultShopMemberInfo;
+import com.fanwe.seller.model.getShopMemberInfo.RootShopMemberInfo;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
@@ -126,11 +130,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootStoreList rootShopList = gson.fromJson(responseBody, RootStoreList.class);
                 List<ResultStoreList> resultShopList = rootShopList.getResult();
                 if (SDCollectionUtil.isEmpty(resultShopList)) {
-                    onSuccess(mView,SellerConstants.STORE_LIST, null);
+                    onSuccess(mView, SellerConstants.STORE_LIST, null);
                     return;
                 }
                 List<ModelStoreList> items = resultShopList.get(0).getBody();
-                onSuccess(mView,SellerConstants.STORE_LIST, items);
+                onSuccess(mView, SellerConstants.STORE_LIST, items);
 
             }
 
@@ -170,7 +174,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                     if (sellerDetailInfo != null) {
                         List<SellerDetailInfo> datas = new ArrayList<SellerDetailInfo>();
                         datas.add(sellerDetailInfo);
-                        onSuccess(mView,SellerConstants.LIVE_BIZ_SHOP, datas);
+                        onSuccess(mView, SellerConstants.LIVE_BIZ_SHOP, datas);
                     }
                 } else {
                     onErrorResponse(message, status);
@@ -198,7 +202,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                onSuccess(mView,SellerConstants.SHOP_COLLECT_POST, null);
+                onSuccess(mView, SellerConstants.SHOP_COLLECT_POST, null);
             }
 
             @Override
@@ -222,11 +226,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootStoreList root = gson.fromJson(responseBody, RootStoreList.class);
                 List<ResultStoreList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.SHOP_COLLECT_GET, null);
+                    onSuccess(mView, SellerConstants.SHOP_COLLECT_GET, null);
                     return;
                 }
                 List<ModelStoreList> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.SHOP_COLLECT_GET, items);
+                onSuccess(mView, SellerConstants.SHOP_COLLECT_GET, items);
             }
 
             @Override
@@ -248,10 +252,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2!=null){
-                    onSuccess(mView2,SellerConstants.SHOP_COLLECT_DELETE, null);
-                }else if (mView!=null){
-                    onSuccess(mView,SellerConstants.SHOP_COLLECT_DELETE, null);
+                if (mView2 != null) {
+                    onSuccess(mView2, SellerConstants.SHOP_COLLECT_DELETE, null);
+                } else if (mView != null) {
+                    onSuccess(mView, SellerConstants.SHOP_COLLECT_DELETE, null);
                 }
             }
 
@@ -275,10 +279,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2!=null){
-                    onSuccess(mView2,SellerConstants.GROUP_BUY_COLLECT_POST, null);
-                }else if (mView!=null){
-                    onSuccess(mView,SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                if (mView2 != null) {
+                    onSuccess(mView2, SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                } else if (mView != null) {
+                    onSuccess(mView, SellerConstants.GROUP_BUY_COLLECT_POST, null);
                 }
             }
 
@@ -303,11 +307,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootGroupBuyCollect root = gson.fromJson(responseBody, RootGroupBuyCollect.class);
                 List<ResultGroupBuyCollect> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.GROUP_BUY_COLLECT_GET, null);
+                    onSuccess(mView, SellerConstants.GROUP_BUY_COLLECT_GET, null);
                     return;
                 }
                 List<ModelGroupBuyCollect> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.GROUP_BUY_COLLECT_GET, items);
+                onSuccess(mView, SellerConstants.GROUP_BUY_COLLECT_GET, items);
             }
 
             @Override
@@ -325,13 +329,13 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("tuan_id", tuan_id);
         params.put("method", SellerConstants.GROUP_BUY_COLLECT);
-        OkHttpUtils.getInstance().delete( params, new MgCallback() {
+        OkHttpUtils.getInstance().delete(params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                if (mView2!=null){
-                    onSuccess(mView2,SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
-                }else if (mView!=null){
-                    onSuccess(mView,SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
+                if (mView2 != null) {
+                    onSuccess(mView2, SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
+                } else if (mView != null) {
+                    onSuccess(mView, SellerConstants.GROUP_BUY_COLLECT_DELETE, null);
                 }
             }
 
@@ -357,11 +361,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootBusinessCircleList root = gson.fromJson(responseBody, RootBusinessCircleList.class);
                 List<ResultBusinessCircleList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.BUSINESS_CIRCLE_LIST, null);
+                    onSuccess(mView, SellerConstants.BUSINESS_CIRCLE_LIST, null);
                     return;
                 }
                 List<ModelBusinessCircleList> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.BUSINESS_CIRCLE_LIST, items);
+                onSuccess(mView, SellerConstants.BUSINESS_CIRCLE_LIST, items);
             }
 
             @Override
@@ -389,9 +393,9 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 List<ResultCheckShopCollect> result = root.getResult();
                 if (!SDCollectionUtil.isEmpty(result) && result.get(0) != null && result.get(0).getBody() != null) {
                     List<ModelCheckShopCollect> items = result.get(0).getBody();
-                    onSuccess(mView,SellerConstants.CHECK_SHOP_COLLECT, items);
+                    onSuccess(mView, SellerConstants.CHECK_SHOP_COLLECT, items);
                 } else {
-                    onSuccess(mView,SellerConstants.CHECK_SHOP_COLLECT, null);
+                    onSuccess(mView, SellerConstants.CHECK_SHOP_COLLECT, null);
                 }
             }
 
@@ -420,16 +424,16 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 List<ResultCheckShopCollect> result = root.getResult();
                 if (!SDCollectionUtil.isEmpty(result) && result.get(0) != null && result.get(0).getBody() != null) {
                     List<ModelCheckShopCollect> items = result.get(0).getBody();
-                    if (mView2!=null){
-                        onSuccess(mView2,SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
-                    }else if (mView!=null){
-                        onSuccess(mView,SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
+                    if (mView2 != null) {
+                        onSuccess(mView2, SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
+                    } else if (mView != null) {
+                        onSuccess(mView, SellerConstants.CHECK_GROUP_BUY_COLLECT, items);
                     }
                 } else {
-                    if (mView2!=null){
-                        onSuccess(mView2,SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
-                    }else if (mView!=null){
-                        onSuccess(mView,SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
+                    if (mView2 != null) {
+                        onSuccess(mView2, SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
+                    } else if (mView != null) {
+                        onSuccess(mView, SellerConstants.CHECK_GROUP_BUY_COLLECT, null);
                     }
                 }
             }
@@ -455,11 +459,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootOrderByList root = gson.fromJson(responseBody, RootOrderByList.class);
                 List<ResultOrderByList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.ORDER_BY_LIST, null);
+                    onSuccess(mView, SellerConstants.ORDER_BY_LIST, null);
                     return;
                 }
                 List<ModelShopListNavs> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.ORDER_BY_LIST, items);
+                onSuccess(mView, SellerConstants.ORDER_BY_LIST, items);
             }
 
             @Override
@@ -483,11 +487,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootClassifyList root = gson.fromJson(responseBody, RootClassifyList.class);
                 List<ResultClassifyList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.CLASSIFY_LIST, null);
+                    onSuccess(mView, SellerConstants.CLASSIFY_LIST, null);
                     return;
                 }
                 List<ModelClassifyList> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.CLASSIFY_LIST, items);
+                onSuccess(mView, SellerConstants.CLASSIFY_LIST, items);
             }
 
             @Override
@@ -532,10 +536,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootShopList rootShopList = gson.fromJson(responseBody, RootShopList.class);
                 List<ResultShopList> result = rootShopList.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.SHOP_LIST, null);
+                    onSuccess(mView, SellerConstants.SHOP_LIST, null);
                     return;
                 }
-                onSuccess(mView,SellerConstants.SHOP_LIST, result);
+                onSuccess(mView, SellerConstants.SHOP_LIST, result);
             }
 
             @Override
@@ -581,8 +585,16 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", String.valueOf(pageSize));
         params.put("page", String.valueOf(pageNum));
         params.put("can_endorsement", can_endorsement);
-        params.put("m_latitude", "");
-        params.put("m_latitude", "");
+        double latitude = BaiduMapManager.getInstance().getLatitude();
+        double longitude = BaiduMapManager.getInstance().getLongitude();
+        if (latitude == 0 || longitude == 0) {
+            params.put("m_latitude", "");
+            params.put("m_longitude", "");
+        } else {
+            params.put("m_latitude", latitude + "");
+            params.put("m_longitude", longitude + "");
+        }
+
         params.put("method", SellerConstants.BUSINESS_LIST);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -591,11 +603,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootBusinessListings root = gson.fromJson(responseBody, RootBusinessListings.class);
                 List<ResultBusinessListings> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.BUSINESS_LIST, null);
+                    onSuccess(mView, SellerConstants.BUSINESS_LIST, null);
                     return;
                 }
                 List<ModelBusinessListings> items = result.get(0).getShop_list();
-                onSuccess(mView,SellerConstants.BUSINESS_LIST, items);
+                onSuccess(mView, SellerConstants.BUSINESS_LIST, items);
             }
 
             @Override
@@ -623,11 +635,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootCityList root = gson.fromJson(responseBody, RootCityList.class);
                 List<ResultCityList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.CITY_LIST, null);
+                    onSuccess(mView, SellerConstants.CITY_LIST, null);
                     return;
                 }
                 List<ModelCityList> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.CITY_LIST, items);
+                onSuccess(mView, SellerConstants.CITY_LIST, items);
             }
 
             @Override
@@ -656,11 +668,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootMarketList root = gson.fromJson(responseBody, RootMarketList.class);
                 List<ResultMarketList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView2,SellerConstants.MARKET_LIST, null);
+                    onSuccess(mView2, SellerConstants.MARKET_LIST, null);
                     return;
                 }
                 List<ModelMarketListItem> items = result.get(0).getList();
-                onSuccess(mView2,SellerConstants.MARKET_LIST, items);
+                onSuccess(mView2, SellerConstants.MARKET_LIST, items);
             }
 
             @Override
@@ -691,10 +703,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootShopInfo root = gson.fromJson(responseBody, RootShopInfo.class);
                 List<ResultShopInfo> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView2,SellerConstants.SHOP_INFO, null);
+                    onSuccess(mView2, SellerConstants.SHOP_INFO, null);
                     return;
                 }
-                onSuccess(mView2,SellerConstants.SHOP_INFO, result);
+                onSuccess(mView2, SellerConstants.SHOP_INFO, result);
             }
 
             @Override
@@ -731,10 +743,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootBusinessDistributionList root = gson.fromJson(responseBody, RootBusinessDistributionList.class);
                 List<ResultBusinessDistributionList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.BUSINESS_DISTRIBUTION_LIST, null);
+                    onSuccess(mView, SellerConstants.BUSINESS_DISTRIBUTION_LIST, null);
                     return;
                 }
-                onSuccess(mView,SellerConstants.BUSINESS_DISTRIBUTION_LIST, result);
+                onSuccess(mView, SellerConstants.BUSINESS_DISTRIBUTION_LIST, result);
             }
 
             @Override
@@ -761,11 +773,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootCroupBuyByMerchant root = gson.fromJson(responseBody, RootCroupBuyByMerchant.class);
                 List<ResultCroupBuyByMerchant> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.GROUP_BUY_BY_MERCHANT, null);
+                    onSuccess(mView, SellerConstants.GROUP_BUY_BY_MERCHANT, null);
                     return;
                 }
                 List<ModelCroupBuyByMerchant> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.GROUP_BUY_BY_MERCHANT, items);
+                onSuccess(mView, SellerConstants.GROUP_BUY_BY_MERCHANT, items);
             }
 
             @Override
@@ -793,11 +805,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootCommentList root = gson.fromJson(responseBody, RootCommentList.class);
                 List<ResultCommentList> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.COMMENT_LIST, null);
+                    onSuccess(mView, SellerConstants.COMMENT_LIST, null);
                     return;
                 }
                 List<ModelComment> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.COMMENT_LIST, items);
+                onSuccess(mView, SellerConstants.COMMENT_LIST, items);
             }
 
             @Override
@@ -822,13 +834,13 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootGroupBuyDetail root = gson.fromJson(responseBody, RootGroupBuyDetail.class);
                 List<ResultGroupBuyDetail> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.GROUP_BUY_DETAIL, null);
+                    onSuccess(mView, SellerConstants.GROUP_BUY_DETAIL, null);
                     return;
                 }
                 ModelGroupBuyDetail item = result.get(0).getDetail();
                 List<ModelGroupBuyDetail> items = new ArrayList<>();
                 items.add(item);
-                onSuccess(mView,SellerConstants.GROUP_BUY_DETAIL, items);
+                onSuccess(mView, SellerConstants.GROUP_BUY_DETAIL, items);
             }
 
             @Override
@@ -851,12 +863,13 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootRepresentMerchant root = gson.fromJson(responseBody, RootRepresentMerchant.class);
-                if ("307".equals(root.getStatusCode())) {
+                if ("200".equals(root.getStatusCode())) {
+                    mView.onSuccess(SellerConstants.REPRESENT_MERCHANT, null);
+                } else {
                     List<RootRepresentMerchant> roots = new ArrayList<RootRepresentMerchant>();
                     roots.add(root);
-                    onSuccess(mView,SellerConstants.REPRESENT_MERCHANT, roots);
-                } else
-                    onSuccess(mView,SellerConstants.REPRESENT_MERCHANT, null);
+                    onSuccess(mView, SellerConstants.REPRESENT_MERCHANT, roots);
+                }
             }
 
             @Override
@@ -901,11 +914,11 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootGroupList rootGroupList = gson.fromJson(responseBody, RootGroupList.class);
                 List<ResultGroupList> result = rootGroupList.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.GROUP_BUY, null);
+                    onSuccess(mView, SellerConstants.GROUP_BUY, null);
                     return;
                 }
                 List<ModelGroupList> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.GROUP_BUY, items);
+                onSuccess(mView, SellerConstants.GROUP_BUY, items);
             }
 
             @Override
@@ -939,10 +952,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 if (!"200".equals(root.getStatusCode())) {
                     List<RootShopComment> roots = new ArrayList<RootShopComment>();
                     roots.add(root);
-                    onSuccess(mView,SellerConstants.SHOP_COMMENT, roots);
+                    onSuccess(mView, SellerConstants.SHOP_COMMENT, roots);
                     return;
                 }
-                onSuccess(mView,SellerConstants.SHOP_COMMENT, null);
+                onSuccess(mView, SellerConstants.SHOP_COMMENT, null);
             }
 
             @Override
@@ -976,10 +989,10 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 if (!"200".equals(root.getStatusCode())) {
                     List<RootShopComment> roots = new ArrayList<RootShopComment>();
                     roots.add(root);
-                    onSuccess(mView,SellerConstants.SHOP_COMMENT, roots);
+                    onSuccess(mView, SellerConstants.SHOP_COMMENT, roots);
                     return;
                 }
-                onSuccess(mView,SellerConstants.SHOP_COMMENT, null);
+                onSuccess(mView, SellerConstants.SHOP_COMMENT, null);
             }
 
             @Override
@@ -997,7 +1010,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                onSuccess(mView,SellerConstants.MY_DISTRIBUTION_SHOP, null);
+                onSuccess(mView, SellerConstants.MY_DISTRIBUTION_SHOP, null);
             }
 
             @Override
@@ -1026,16 +1039,46 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 RootCommentTotal root = gson.fromJson(responseBody, RootCommentTotal.class);
                 List<ResultCommentTotal> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    onSuccess(mView,SellerConstants.COMMENT_TOTAL, null);
+                    onSuccess(mView, SellerConstants.COMMENT_TOTAL, null);
                     return;
                 }
                 List<ModelCommentTotal> items = result.get(0).getBody();
-                onSuccess(mView,SellerConstants.COMMENT_TOTAL, items);
+                onSuccess(mView, SellerConstants.COMMENT_TOTAL, items);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 取得大王和他的小伙伴 取得铁粉
+     *
+     * @param shop_id
+     */
+    public void getShopMemberInfo(String shop_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("shop_id", shop_id);
+        params.put("method", SellerConstants.GET_SHOP_MEMBER_INFO);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootShopMemberInfo root = gson.fromJson(responseBody, RootShopMemberInfo.class);
+                List<ResultShopMemberInfo> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    onSuccess(mView, SellerConstants.GET_SHOP_MEMBER_INFO, null);
+                    return;
+                }
+                List<ModelShopMemberInfo> items = result.get(0).getBody();
+                onSuccess(mView, SellerConstants.GET_SHOP_MEMBER_INFO, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
             }
         });
     }

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.groupon.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
@@ -16,6 +16,7 @@ import com.miguo.adapter.HiGrouponFeaturedAdapter;
 import com.miguo.dao.FeaturedGrouponDao;
 import com.miguo.dao.impl.FeaturedGrouponDaoImpl;
 import com.miguo.definition.PageSize;
+import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.view.FeaturedGrouponView;
@@ -39,6 +40,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     FeaturedGrouponDao featuredGrouponDao;
     int pageNum;
+
+    boolean nodata = false;
 
     public FeaturedGrouponCategory(View view, HiBaseFragment fragment){
         super(view ,fragment);
@@ -78,6 +81,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     public void onRefresh(){
         setPageNum(PageSize.BASE_NUMBER_ONE);
+        setNodata(false);
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
@@ -101,6 +105,10 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     }
 
     public void onLoadMore(){
+        if(isNodata()){
+            getCategory().loadCompleteWithNoData();
+           return;
+        }
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
@@ -121,8 +129,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
-                getCategory().loadComplete();
                 updateFeaturedGrouponViewHeight();
+                getCategory().loadCompleteWithLoadmore();
             }
         });
     }
@@ -137,9 +145,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             public void run() {
                 featuredTitleLayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
-                adapter.notifyDataSetChangedLoadmore(list);
-                getCategory().loadComplete();
-                updateFeaturedGrouponViewHeight();
+                if(SDCollectionUtil.isEmpty(list)){
+                    getCategory().loadCompleteWithNoData();
+                    setNodata(true);
+                }else {
+                    adapter.notifyDataSetChangedLoadmore(list);
+                    getCategory().loadCompleteWithLoadmore();
+                    updateFeaturedGrouponViewHeight();
+                }
             }
         });
     }
@@ -156,7 +169,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             public void run() {
                 featuredTitleLayout.setVisibility(View.GONE);
                 clearPage();
-                getCategory().loadComplete();
+                getCategory().loadCompleteWithError();
             }
         });
     }
@@ -177,6 +190,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public boolean isNodata() {
+        return nodata;
+    }
+
+    public void setNodata(boolean nodata) {
+        this.nodata = nodata;
     }
 
     public HiHomeFragmentCategory getCategory(){

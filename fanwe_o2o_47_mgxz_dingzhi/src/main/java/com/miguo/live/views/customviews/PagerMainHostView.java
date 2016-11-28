@@ -19,6 +19,7 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.miguo.live.interf.ItemChangeListener;
+import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.UIChars;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
@@ -105,7 +106,8 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
         if (mSellerDetailInfo != null) {
             String img = mSellerDetailInfo.getImg();
             if (!TextUtils.isEmpty(img)) {
-                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(img, mIv_img);
+                String  url = DisplayUtil.qiniuUrlExchange(img,60,60);
+                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(url, mIv_img);
             } else {
                 mIv_img.setImageResource(R.drawable.nopic);
             }

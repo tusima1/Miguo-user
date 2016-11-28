@@ -1,4 +1,4 @@
-package com.fanwe.groupon.model.getFeaturedGroupBuy;
+package com.miguo.entity.model.getFeaturedGroupBuy;
 
 /**
  * Created by Administrator on 2016/10/17.

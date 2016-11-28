@@ -1,6 +1,7 @@
 package com.miguo.category;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -9,6 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import com.miguo.app.HiWebPageActivity;
 import com.miguo.dao.ShoppingCartDao;
 import com.miguo.dao.impl.ShoppingCartDaoImpl;
 import com.miguo.framework.WebActionJSHandler;
+import com.miguo.listener.HiWebPageListener;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.view.ShoppingCartView;
 
@@ -46,6 +49,12 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
+
+    @ViewInject(R.id.loading_fail)
+    LinearLayout loadingFail;
+
+    @ViewInject(R.id.refresh)
+    TextView refresh;
 
     ShoppingCartDao shoppingCartDao;
 
@@ -72,6 +81,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     @Override
     protected void initThisListener() {
+        listener = new HiWebPageListener(this);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +92,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     @Override
     protected void setThisListener() {
-
+        refresh.setOnClickListener(listener);
     }
 
     @Override
@@ -122,6 +132,13 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
 
         webView.setWebViewClient(new WebViewClient(){
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                start();
+                super.onPageStarted(view, url, favicon);
+            }
+
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 view.loadUrl(url);
@@ -130,12 +147,27 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                showToast("加载失败！");
+                loaddingFail();
                 super.onReceivedError(view, request, error);
             }
         });
         webView.loadUrl(url);
         webView.addJavascriptInterface(handler, "mgxz");
+    }
+
+    public void start(){
+        webView.setVisibility(View.VISIBLE);
+        loadingFail.setVisibility(View.GONE);
+    }
+
+    public void loaddingFail(){
+        webView.setVisibility(View.GONE);
+        webView.clearView();
+        loadingFail.setVisibility(View.VISIBLE);
+    }
+
+    public void refresh(){
+        initWebView();
     }
 
     @Override
@@ -164,7 +196,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         mShoppingCartInfo.setOrigin_price("");
         mShoppingCartInfo.setTuan_price("");
         mShoppingCartInfo.setTitle("");
-        LocalShoppingcartDao.insertModel(mShoppingCartInfo);
+        LocalShoppingcartDao.insertSingleNum(mShoppingCartInfo);
         addToShoppingCartSuccess();
     }
 

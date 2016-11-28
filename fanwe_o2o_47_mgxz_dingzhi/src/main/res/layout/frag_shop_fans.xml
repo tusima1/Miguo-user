@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_f2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
+        android:background="@drawable/bg_white">
+
+        <TextView
+            android:id="@+id/tv_title_frag_shop_fans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp15"
+            android:text="大王一起来巡山"
+            android:textColor="@color/text_base_color" />
+
+        <TextView
+            android:id="@+id/tv_down_frag_shop_fans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_frag_shop_fans"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:paddingBottom="@dimen/dp15"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:paddingTop="@dimen/dp5"
+            android:text=". ."
+            android:textColor="@color/text_base_color" />
+
+        <LinearLayout
+            android:id="@+id/layout_detail_frag_shop_fans"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title_frag_shop_fans"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_arrow_frag_shop_fans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dp5"
+                android:paddingBottom="@dimen/dp10"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:paddingTop="@dimen/dp7"
+                android:src="@drawable/ic_arrow_shop_fans" />
+
+            <include layout="@layout/item_portrait_shop_fans" />
+
+            <com.miguo.ui.view.PortraitView
+                android:id="@+id/portraitView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp15"
+                android:gravity="center"
+                android:orientation="horizontal" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/dp30"
+                android:layout_marginRight="@dimen/dp30"
+                android:layout_marginTop="@dimen/dp20"
+                android:background="@color/text_line" />
+
+            <LinearLayout
+                android:id="@+id/layout_fans_empty_frag_shop_fans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp15"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="趁大家还没来，抢先承包老板全家！"
+                    android:textColor="@color/text_hongbao_title" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp7"
+                    android:text="买点东西，做一个铁杆"
+                    android:textColor="@color/text_fenxiao" />
+
+                <Button
+                    android:id="@+id/btn_something_frag_shop_fans"
+                    android:layout_width="@dimen/dp100"
+                    android:layout_height="@dimen/dp26"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/dp15"
+                    android:layout_marginTop="@dimen/dp17"
+                    android:background="@drawable/bg_black"
+                    android:text="有啥好东西"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp12" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_fans_frag_shop_fans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp15"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="给力后援团"
+                    android:textColor="@color/text_hongbao_title" />
+
+                <com.miguo.ui.view.PortraitView
+                    android:id="@+id/portraitView_fans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp15"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</FrameLayout>

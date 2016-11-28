@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fanwe.EventDetailActivity;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
@@ -51,10 +50,10 @@ public class MyEventAdapter extends SDBaseAdapter<Uc_eventActItemModel>
 
 				@Override
 				public void onClick(View arg0)
-				{
-					Intent itemintent = new Intent(mActivity, EventDetailActivity.class);
-					itemintent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getId());
-					mActivity.startActivity(itemintent);
+			{
+//					Intent itemintent = new Intent(mActivity, EventDetailActivity.class);
+//					itemintent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, model.getId());
+//					mActivity.startActivity(itemintent);
 				}
 			});
 		}
