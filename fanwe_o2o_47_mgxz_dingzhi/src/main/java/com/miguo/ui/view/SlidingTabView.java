@@ -144,7 +144,8 @@ public class SlidingTabView extends LinearLayout {
 
 
                 textLength = title.getText().toString().length() != 0 ? title.getText().toString().length() : textLength;
-                Log.d(tag, "textview width: " + title.getText().toString());
+                textLength = textLength > 4 ? 4 : textLength;
+                Log.d(tag, "textview width: " + title.getText().toString() + " ,length: " + title.getText().toString().length());
             }
 
 
