@@ -1,42 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:background="@color/bg_activity_white"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_activity_white">
 
-    <include layout="@layout/common_empty" android:id="@+id/common_empty"/>
-    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
-        android:id="@+id/swipeToLoadLayout"
+    <com.fanwe.view.LoadMoreRecyclerView
+        android:id="@id/swipe_target"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="#F2F2F2"/>
+</android.support.v4.widget.SwipeRefreshLayout>
 
-        <com.fanwe.customview.GoogleCircleHookRefreshHeaderView
-            android:id="@id/swipe_refresh_header"
+
+    <!--
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:background="@color/bg_activity_white"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+
+        <include layout="@layout/common_empty" android:id="@+id/common_empty"/>
+        <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+            android:id="@+id/swipeToLoadLayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/transparent"
-            />
+            android:layout_height="match_parent"
+            >
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@id/swipe_target"
-            android:background="#F2F2F2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <com.fanwe.customview.GoogleCircleHookRefreshHeaderView
+                android:id="@id/swipe_refresh_header"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/transparent"
+                />
 
-        <com.fanwe.customview.google.GoogleCircleHookLoadMoreFooterView
-            android:id="@id/swipe_load_more_footer"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/transparent"
-            />
+            <android.support.v7.widget.RecyclerView
+                android:id="@id/swipe_target"
+                android:background="#F2F2F2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+            <com.fanwe.customview.google.GoogleCircleHookLoadMoreFooterView
+                android:id="@id/swipe_load_more_footer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/transparent"
+                />
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recyclerview"-->
-        <!--android:background="#F2F2F2"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+        </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
-</FrameLayout>
+        &lt;!&ndash;<android.support.v7.widget.RecyclerView&ndash;&gt;
+            &lt;!&ndash;android:id="@+id/recyclerview"&ndash;&gt;
+            &lt;!&ndash;android:background="#F2F2F2"&ndash;&gt;
+            &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;
+            &lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;
+
+    </FrameLayout>-->

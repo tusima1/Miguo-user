@@ -4,22 +4,20 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.fanwe.adapter.SuperVideoAdapter;
 import com.fanwe.app.App;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.view.LoadMoreRecyclerView;
 import com.miguo.model.guidelive.GuideOutBody;
 import com.miguo.model.guidelive.GuideOutModel;
 import com.miguo.model.guidelive.GuideOutRoot;
@@ -35,13 +33,15 @@ import java.util.TreeMap;
  * Created by didik on 2016/11/17.
  */
 
-public class GuidePagerFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
+public class GuidePagerFragment extends Fragment implements LoadMoreRecyclerView
+        .OnRefreshEndListener, SwipeRefreshLayout.OnRefreshListener {
     public static final String PAGE_REQUEST_ID = "page_request_id";
-    private String mRequestID="";
-    private RecyclerView mRV;
-    private View mEmptyLayout;
+    private String mRequestID = "";
+    private LoadMoreRecyclerView mRV;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    //    private View mEmptyLayout;
     private DataRequestCompleteListener requestDataListener;
-    SwipeToLoadLayout swipeToLoadLayout;
+//    SwipeToLoadLayout swipeToLoadLayout;
 
     public static GuidePagerFragment newInstance(String tab_id) {
         Bundle args = new Bundle();
@@ -59,15 +59,20 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
         View mFragmentView = inflater.inflate(R.layout.frag_guide_live, container, false);
-        mEmptyLayout = mFragmentView.findViewById(R.id.common_empty);
-        swipeToLoadLayout = (SwipeToLoadLayout) mFragmentView.findViewById(R.id.swipeToLoadLayout);
-        mRV = (RecyclerView)  mFragmentView.findViewById(R.id.swipe_target);
-
-        swipeToLoadLayout.setSwipeStyle(SwipeToLoadLayout.STYLE.ABOVE);
-        swipeToLoadLayout.setOnRefreshListener(this);
-        swipeToLoadLayout.setOnLoadMoreListener(this);
+//        mEmptyLayout = mFragmentView.findViewById(R.id.common_empty);
+//        swipeToLoadLayout = (SwipeToLoadLayout) mFragmentView.findViewById(R.id
+// .swipeToLoadLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) mFragmentView.findViewById(R.id
+                .swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        mRV = (LoadMoreRecyclerView) mFragmentView.findViewById(R.id.swipe_target);
+        mRV.setOnRefreshEndListener(this);
+//        swipeToLoadLayout.setSwipeStyle(SwipeToLoadLayout.STYLE.ABOVE);
+//        swipeToLoadLayout.setOnRefreshListener(this);
+//        swipeToLoadLayout.setOnLoadMoreListener(this);
         requestGuideLives();
         return mFragmentView;
     }
@@ -75,16 +80,16 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (player ==null)return;
-        if (isVisibleToUser){
+        if (player == null) return;
+        if (isVisibleToUser) {
             player.onResume();
-        }else {
+        } else {
             player.onPause();
         }
     }
 
-    private void startFlow(List<GuideOutModel> guide_list){
-        if (guide_list == null)return;
+    private void startFlow(List<GuideOutModel> guide_list) {
+        if (guide_list == null) return;
         initPlayer();
         initAdapter(guide_list);
         mRV.setHasFixedSize(true);
@@ -94,59 +99,31 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
         mRV.setAdapter(adapter);
     }
 
-    public void refreshData(){
-        adapter.resetPage();
-        requestGuideLives();
-    }
+//    public void refreshData(){
+//        adapter.resetPage();
+//        requestGuideLives();
+//    }
+//
+//    public void loadMoreData(){
+//        requestGuideLives();
+//    }
 
-    public void loadMoreData(){
-        requestGuideLives();
-    }
-
-    @Override
-    public void onRefresh() {
-        swipeToLoadLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(false);
-            }
-        }, 2000);
-    }
-
-    @Override
-    public void onLoadMore() {
-        swipeToLoadLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setLoadingMore(false);
-            }
-        }, 2000);
-    }
-
-    private void autoRefresh() {
-        swipeToLoadLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeToLoadLayout.setRefreshing(true);
-            }
-        });
-    }
-    private void requestGuideLives(){
+    private void requestGuideLives() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
-        params.put("tab_id", "");
+        params.put("tab_id", mRequestID);
         params.put("page_size", "10");
-        params.put("page", adapter ==null ? "1":adapter.getRequestPage()+"");
+        params.put("page", adapter == null ? "1" : adapter.getRequestPage() + "");
         params.put("method", "InterestingGuideVideo");
         OkHttpUtil.getInstance().get(params, new HttpCallback<GuideOutRoot>() {
             @Override
             public void onSuccessWithBean(GuideOutRoot guideOutRoot) {
                 List<GuideOutBody> body = guideOutRoot.getResult().get(0).getBody();
-                if (body !=null  && body.size()>0){
+                if (body != null && body.size() > 0) {
                     List<GuideOutModel> guide_list = body.get(0).getGuide_list();
-                    if (adapter==null){
+                    if (adapter == null) {
                         startFlow(guide_list);
-                    }else {
+                    } else {
                         adapter.setData(guide_list);
                     }
                 }
@@ -154,12 +131,31 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
 
             @Override
             public void onFinish() {
-                if (requestDataListener!=null)requestDataListener.requestComplete();
+                swipeRefreshLayout.setRefreshing(false);
+                mRV.setLoading(false);
+                if (requestDataListener != null) requestDataListener.requestComplete();
             }
         });
     }
 
-    public interface DataRequestCompleteListener{
+    @Override
+    public void onLoadmore() {
+        requestGuideLives();
+    }
+
+    @Override
+    public void onMoveTop() {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        adapter.resetPage();
+        swipeRefreshLayout.setRefreshing(true);
+        requestGuideLives();
+    }
+
+    public interface DataRequestCompleteListener {
         void requestComplete();
     }
 
@@ -168,8 +164,8 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
      * 使用此回调
      * @param listener
      */
-    public void setOnDataRequestCompleteListener(DataRequestCompleteListener listener){
-        this.requestDataListener=listener;
+    public void setOnDataRequestCompleteListener(DataRequestCompleteListener listener) {
+        this.requestDataListener = listener;
     }
 
     /********************************* COPY ******************************************/
@@ -185,6 +181,7 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
         player = SuperPlayerManage.getSuperManage().initialize(getContext());
         player.setShowTopControl(false).setSupportGesture(false);
     }
+
     /**
      * 初始化适配器
      */
@@ -193,7 +190,7 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRV.setLayoutManager(mLayoutManager);
         adapter = new SuperVideoAdapter(getActivity(), guide_list);
-        adapter.setEmptyLayout(mEmptyLayout);
+//        adapter.setEmptyLayout(mEmptyLayout);
         mRV.setAdapter(adapter);
         adapter.setPlayClick(new SuperVideoAdapter.onPlayClick() {
             @Override
@@ -234,7 +231,8 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
                     last.removeAllViews();
                     View itemView = (View) last.getParent();
                     if (itemView != null) {
-                        itemView.findViewById(R.id.adapter_player_control).setVisibility(View.VISIBLE);
+                        itemView.findViewById(R.id.adapter_player_control).setVisibility(View
+                                .VISIBLE);
                     }
                 }
             }
@@ -242,7 +240,8 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
         /***
          * 监听列表的下拉滑动
          */
-        mRV.addOnChildAttachStateChangeListener(new SuperRecyclerView.OnChildAttachStateChangeListener() {
+        mRV.addOnChildAttachStateChangeListener(new SuperRecyclerView
+                .OnChildAttachStateChangeListener() {
             @Override
             public void onChildViewAttachedToWindow(View view) {
                 int index = mRV.getChildAdapterPosition(view);
@@ -252,10 +251,12 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
                 }
                 view.findViewById(R.id.adapter_player_control).setVisibility(View.VISIBLE);
                 if (index == postion) {
-                    FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.adapter_super_video);
+                    FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id
+                            .adapter_super_video);
                     frameLayout.removeAllViews();
                     if (player != null &&
-                            ((player.isPlaying()) || player.getVideoStatus() == IjkVideoView.STATE_PAUSED)) {
+                            ((player.isPlaying()) || player.getVideoStatus() == IjkVideoView
+                                    .STATE_PAUSED)) {
                         view.findViewById(R.id.adapter_player_control).setVisibility(View.GONE);
                     }
                     if (player.getVideoStatus() == IjkVideoView.STATE_PAUSED) {
@@ -272,9 +273,10 @@ public class GuidePagerFragment extends Fragment implements OnRefreshListener, O
                 int index = mRV.getChildAdapterPosition(view);
                 if ((index) == postion) {
                     if (player != null) {
-                            player.stop();
-                            player.release();
-                            player.showView(R.id.adapter_player_control);}
+                        player.stop();
+                        player.release();
+                        player.showView(R.id.adapter_player_control);
+                    }
                 }
             }
         });
