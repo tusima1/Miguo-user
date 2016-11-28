@@ -837,7 +837,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         for(AdspaceListBean.Result.Body bd : body ){
             if(bd.getAdspace_id().equals(AdspaceParams.TYPE_BANNER_INDEX)){
                 banner.add(bd);
-            }else {
+            }else if(bd.getAdspace_id().equals(AdspaceParams.TYPE_TOPIC_INDEX)){
                 topic.add(bd);
             }
         }
