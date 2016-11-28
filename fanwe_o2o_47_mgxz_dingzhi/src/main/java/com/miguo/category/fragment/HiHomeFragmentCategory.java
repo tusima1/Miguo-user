@@ -898,11 +898,27 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
 
-        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
-        Bundle bundle = new Bundle();
-        bundle.putString(IntentKey.SPECIAL_TOPIC_ID, ad.getType_id());
-        intent.putExtras(bundle);
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+        String type_id = ad.getType_id();
+        if(TextUtils.isEmpty(type_id)||!type_id.startsWith("{")){
+            return;
+        }
+
+        BannerTypeModel model = HomeCategoryUtils.parseTypeJson(type_id);
+
+        if(ad.getType().equals(AdspaceParams.BANNER_LIVE_LIST)){
+            onActionLiveList();
+            return;
+        }
+        if(ad.getType().equals(AdspaceParams.BANNER_SHOP_LIST)){
+            onActionShopList(model.getCate_id(),ad.getType_id());
+            return;
+        }
+        String paramValue = model.getId();
+        if(TextUtils.isEmpty(paramValue)){
+            paramValue = model.getUrl();
+        }
+
+        AdspaceTypeFactory.clickWidthType(ad.getType(), getActivity(), paramValue);
     }
 
     /**
@@ -929,7 +945,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             return;
         }
         if(item.getType().equals(AdspaceParams.BANNER_SHOP_LIST)){
-
             onActionShopList(model.getCate_id(),model.getTid());
             return;
         }
