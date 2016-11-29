@@ -40,8 +40,11 @@ import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.ClipboardUtils;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
@@ -117,6 +120,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
      */
     String shareCode="";
 
+    /**
+     * 如果是从领钻码对话框进来的，结束Activity的时候要设置requestcode用于HiHomeActivity接收
+     */
+    boolean isFromDiamond;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +135,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         //友盟授权登录初始化。
         su = new ShareUtils(this);
         mLoginHelper = new LoginHelper(this);
-
     }
 
     private void init() {
@@ -164,6 +171,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         if (!mListSelectIndex.contains(mSelectTabIndex)) {
             mSelectTabIndex = 0;
         }
+
+        if(getIntent() != null){
+            isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
+        }
+
     }
 
     private void initTitle() {
@@ -417,7 +429,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case LOGIN_SUCCESS:
                 JpushHelper.registerAll();
-                finish();
+                finishActivity();
                 break;
 
             default:
@@ -425,6 +437,13 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         }
     }
 
+    private void finishActivity(){
+        if(isFromDiamond){
+            Intent intent = new Intent(this, HiHomeActivity.class);
+            setResult(ResultCode.RESUTN_OK, intent);
+        }
+        BaseUtils.finishActivity(this);
+    }
 
     protected void dealLoginSuccess(User_infoModel actModel) {
         LocalUserModel.dealLoginSuccess(actModel, true);

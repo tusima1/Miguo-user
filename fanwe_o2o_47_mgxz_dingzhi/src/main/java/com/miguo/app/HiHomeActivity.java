@@ -6,6 +6,7 @@ import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyCaptureActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
@@ -15,6 +16,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.live.views.customviews.MGToast;
+import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,6 +82,23 @@ public class HiHomeActivity extends HiBaseActivity{
     }
 
     @Override
+    public void onEventMainThread(SDBaseEvent event) {
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+//            case LOCATION_SUCCESS:
+//                loginSuccessCallback();
+//                break;
+            default:
+                break;
+        }
+    }
+
+    private void handlerLoginSuccessFromDiamond(){
+        if(null != getCategory()){
+            getCategory().handlerLoginSuccessFromDiamond();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
             switch (requestCode){
@@ -92,6 +111,9 @@ public class HiHomeActivity extends HiBaseActivity{
                     break;
                 case RequestCode.HOME_WEB_PAGE:
                     handlerFunnyFragment();
+                    break;
+                case RequestCode.LOGIN_SUCCESS_FOR_DIAMON:
+                    handlerLoginSuccessFromDiamond();
                     break;
             }
         }

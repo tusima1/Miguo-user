@@ -11,10 +11,12 @@ import android.view.View;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -29,7 +31,6 @@ import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
-import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -47,6 +48,8 @@ import com.miguo.dao.impl.LoginByMobileDaoImpl;
 import com.miguo.dao.impl.TencentSignDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.HomePageState;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
@@ -56,6 +59,7 @@ import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
+import com.miguo.live.views.dialog.GetDiamondLoginDialog;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.ui.view.BarryTab;
@@ -67,6 +71,7 @@ import com.miguo.view.IMLoginView;
 import com.miguo.view.IMUserInfoView;
 import com.miguo.view.LoginByMobileView;
 import com.miguo.view.TencentSignView;
+import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -136,7 +141,7 @@ public class HiHomeCategory extends Category implements
 
     @Override
     protected void initFirst() {
-         clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
 
         loginByMobileDao = new LoginByMobileDaoImpl(this);
         getUseReceiveCode = new GetUserReceiveCodeDaoImpl(this);
@@ -288,6 +293,10 @@ public class HiHomeCategory extends Category implements
         }
     }
 
+    public void handlerLoginSuccessFromDiamond(){
+        checkCode();
+    }
+
     /**
      * 检查用户是否登录过，如果登录过则自动登录
      */
@@ -298,11 +307,13 @@ public class HiHomeCategory extends Category implements
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
             LocalUserModel userModel = AppHelper.getLocalUser();
             if (userModel == null) {
+                showDialogLogin();
                 return;
             }
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
             if (TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)) {
+                showDialogLogin();
                 return;
             }
 
@@ -312,6 +323,32 @@ public class HiHomeCategory extends Category implements
             loginByMobileDao.loginByMobile(userid, password);
         }
     }
+
+    GetDiamondLoginDialog getDiamondLoginDialog;
+
+    public void showDialogLogin() {
+        if (getDiamondLoginDialog != null && getDiamondLoginDialog.isShowing()) {
+            return;
+        }
+        getDiamondLoginDialog = new GetDiamondLoginDialog(getActivity());
+        getDiamondLoginDialog.setSubmitListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.putExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, true);
+                com.miguo.utils.BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
+                getDiamondLoginDialog.dismiss();
+            }
+        });
+        getDiamondLoginDialog.setCloseListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDiamondLoginDialog.dismiss();
+            }
+        });
+        getDiamondLoginDialog.show();
+    }
+
 
     /**
      * 展示领取码对话框
@@ -716,7 +753,7 @@ public class HiHomeCategory extends Category implements
         String userSign = MySelfInfo.getInstance().getUserSig();
         int appId = Constants.SDK_APPID;
         int ccType = Constants.ACCOUNT_TYPE;
-        if(ServerUrl.DEBUG){
+        if (ServerUrl.DEBUG) {
             appId = Constants.SDK_APPID_TEST;
             ccType = Constants.ACCOUNT_TYPE_Test;
         }

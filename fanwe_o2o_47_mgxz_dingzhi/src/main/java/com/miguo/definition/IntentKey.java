@@ -28,5 +28,9 @@ public class IntentKey {
     public static final String SPECIAL_TOPIC_ID = "id";
 
     public static final String EXTRA_RESULT_SUCCESS_STRING = "extra_result_success_string";
+    /**
+     * 是否是从领钻对话框跳转到登录界面
+     */
+    public static final String FROM_DIAMOND_TO_LOGIN = "from_diamond_to_login";
 
 }
