@@ -245,6 +245,6 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(getActivity(), this);
         }
-        commonHttpHelper.createShareRecord(Constant.ShareType.SHOP_HOME, "");
+        commonHttpHelper.createShareRecord(Constant.ShareType.SHOP_HOME, id);
     }
 }

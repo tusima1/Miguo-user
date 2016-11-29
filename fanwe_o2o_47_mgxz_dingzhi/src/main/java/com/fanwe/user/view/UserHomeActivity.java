@@ -361,6 +361,6 @@ public class UserHomeActivity extends Activity implements CallbackView2, Callbac
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(mContext, this);
         }
-        commonHttpHelper.createShareRecord(Constant.ShareType.USER_HOME, "");
+        commonHttpHelper.createShareRecord(Constant.ShareType.USER_HOME, id);
     }
 }
