@@ -1,4 +1,4 @@
-package com.miguo.utils;
+package com.miguo.utils.dev;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.os.Vibrator;
 import android.util.Log;
 
 import com.fanwe.library.utils.SDActivityUtil;
-import com.miguo.ui.view.DevActivity;
 
 /**
  * Created by didik on 2016/11/29.

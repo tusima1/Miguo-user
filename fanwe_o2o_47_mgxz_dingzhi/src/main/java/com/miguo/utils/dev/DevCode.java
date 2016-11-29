@@ -1,4 +1,4 @@
-package com.miguo.utils;
+package com.miguo.utils.dev;
 
 /**
  * Created by didik on 2016/11/29.

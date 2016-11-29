@@ -1,4 +1,4 @@
-package com.miguo.utils;
+package com.miguo.utils.dev;
 
 import android.content.Context;
 import android.content.SharedPreferences;

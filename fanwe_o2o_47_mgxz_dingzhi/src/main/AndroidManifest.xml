@@ -1110,7 +1110,7 @@
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name="com.miguo.ui.view.DevActivity"
+            android:name="com.miguo.utils.dev.DevActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"

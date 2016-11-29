@@ -15,7 +15,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.DevUtil;
+import com.miguo.utils.dev.DevUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

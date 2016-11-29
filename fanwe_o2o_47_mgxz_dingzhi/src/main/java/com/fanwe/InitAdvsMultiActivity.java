@@ -32,10 +32,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
-import com.miguo.utils.DevCode;
+import com.miguo.utils.dev.DevCode;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
-import com.miguo.utils.SPUtil;
+import com.miguo.utils.dev.SPUtil;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 

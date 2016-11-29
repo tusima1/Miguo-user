@@ -1,4 +1,4 @@
-package com.miguo.ui.view;
+package com.miguo.utils.dev;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +10,6 @@ import android.widget.ListView;
 import com.didikee.uilibs.views.MaxHeightListView;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.utils.DevCode;
-import com.miguo.utils.SPUtil;
 
 import java.util.ArrayList;
 import java.util.List;
