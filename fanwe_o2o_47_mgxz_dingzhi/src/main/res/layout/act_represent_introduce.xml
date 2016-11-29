@@ -39,6 +39,7 @@
             android:layout_marginLeft="@dimen/dp15"
             android:layout_marginRight="@dimen/dp15"
             android:layout_marginTop="@dimen/dp10"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView
