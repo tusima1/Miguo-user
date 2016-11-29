@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
@@ -57,8 +58,10 @@ public class HiHomeActivity extends HiBaseActivity{
     protected Category initCategory() {
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         setTwiceKeyDownToCloseActivity(true);
-        devUtil = new DevUtil(this);
-        devUtil.registerShakeListener();
+        if (ServerUrl.DEBUG){
+            devUtil = new DevUtil(this);
+            devUtil.registerShakeListener();
+        }
         return new HiHomeCategory(this);
     }
 
@@ -83,7 +86,9 @@ public class HiHomeActivity extends HiBaseActivity{
     @Override
     protected void doOnDestory() {
         super.doOnDestory();
-        devUtil.unregisterShakeListener();
+        if (devUtil!=null){
+            devUtil.unregisterShakeListener();
+        }
     }
 
     private void checkIfInMyFragment(){

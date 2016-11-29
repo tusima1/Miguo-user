@@ -2,16 +2,14 @@ package com.miguo.ui.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
 
 import com.didikee.uilibs.views.MaxHeightListView;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.DevCode;
 import com.miguo.utils.SPUtil;
 
@@ -22,10 +20,7 @@ public class DevActivity extends AppCompatActivity {
 
     private MaxHeightListView listView_api;
     private MaxHeightListView listView_h5;
-    private CheckedTextView checkedTextView;
-    //            "h5开发: http://m.dev.mgxz.com/",
-//            "h5测试: http://m.test.mgxz.com/",
-//            "h5线上: http://m.mgxz.com/"
+
     String[] h5Array = {
             DevCode.SERVER_H5_DEV,
             DevCode.SERVER_H5_TEST,
@@ -38,15 +33,8 @@ public class DevActivity extends AppCompatActivity {
             DevCode.JAVA_API_36,
             DevCode.JAVA_API_37,
             DevCode.JAVA_API_58
-
     };
 
-    //            "java开发: http://mapi.dev.mgxz.com/",
-//            "java测试: http://mapi.test.mgxz.com/",
-//            "java线上: http://mapi.mgxz.com/",
-//            "java个人: http://192.168.90.36:8080/",
-//            "java个人: http://192.168.90.37:8080/",
-//            "java个人: http://192.168.90.58:8080/"
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,14 +42,6 @@ public class DevActivity extends AppCompatActivity {
 
         listView_api = (MaxHeightListView) findViewById(R.id.listView_api);
         listView_h5 = (MaxHeightListView) findViewById(R.id.listView_h5);
-        checkedTextView = ((CheckedTextView) findViewById(R.id.ctv_debug));
-
-        checkedTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MGToast.showToast("haha");
-            }
-        });
         initApi();
         initH5();
 
@@ -74,54 +54,55 @@ public class DevActivity extends AppCompatActivity {
         listView_h5.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String h5;
                 switch (position) {
                     case 0:
-                        SPUtil.putData(DevActivity.this, DevCode.API_H5, DevCode.SERVER_H5_DEV);
+                        h5=DevCode.SERVER_H5_DEV;
                         break;
                     case 1:
-                        SPUtil.putData(DevActivity.this, DevCode.API_H5, DevCode.SERVER_H5_TEST);
+                        h5=DevCode.SERVER_H5_TEST;
                         break;
                     case 2:
-                        SPUtil.putData(DevActivity.this, DevCode.API_H5, DevCode.SERVER_H5_ONLINE);
+                        h5=DevCode.SERVER_H5_ONLINE;
                         break;
                     default:
-                        SPUtil.putData(DevActivity.this, DevCode.API_H5, DevCode.SERVER_H5_DEV);
+                        h5=DevCode.SERVER_H5_DEV;
                         break;
                 }
+                SPUtil.putData(DevActivity.this, DevCode.API_H5, h5);
+                ServerUrl.setServerH5Using(h5);
             }
         });
 
         listView_api.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("test", "item: " + listView_api.getCheckedItemPosition());
+                String api_java;
                 switch (position) {
                     case 0:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode
-                                .SERVER_API_JAVA_DEV_URL);
+                        api_java=DevCode.SERVER_API_JAVA_DEV_URL;
                         break;
                     case 1:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode
-                                .SERVER_API_JAVA_TEST_URL);
+                        api_java=DevCode.SERVER_API_JAVA_TEST_URL;
                         break;
                     case 2:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode
-                                .SERVER_API_ONLINE_URL);
+                        api_java=DevCode.SERVER_API_ONLINE_URL;
                         break;
                     case 3:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode.JAVA_API_36);
+                        api_java=DevCode.JAVA_API_36;
                         break;
                     case 4:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode.JAVA_API_37);
+                        api_java=DevCode.JAVA_API_37;
                         break;
                     case 5:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode.JAVA_API_58);
+                        api_java=DevCode.JAVA_API_58;
                         break;
                     default:
-                        SPUtil.putData(DevActivity.this, DevCode.API_JAVA, DevCode
-                                .SERVER_API_JAVA_DEV_URL);
+                        api_java=DevCode.SERVER_API_JAVA_DEV_URL;
                         break;
                 }
+                SPUtil.putData(DevActivity.this, DevCode.API_JAVA,api_java);
+                ServerUrl.setServerApi(api_java);
             }
         });
 
@@ -131,31 +112,28 @@ public class DevActivity extends AppCompatActivity {
         String javaApi = (String) SPUtil.getData(DevActivity.this, DevCode.API_JAVA, DevCode
                 .SERVER_API_JAVA_DEV_URL);
         String h5Api = (String) SPUtil.getData(DevActivity.this, DevCode.API_H5, DevCode
-                .SERVER_API_JAVA_DEV_URL);
+                .SERVER_H5_DEV);
         int javaIndex = -1;
-        for (int i = 0; i < h5Array.length; i++) {
-            if (h5Api.equals(h5Array[i])) {
+        for (int i = 0; i < apiArray.length; i++) {
+            if (javaApi.equals(apiArray[i])) {
                 javaIndex = i;
                 break;
             }
         }
         int h5Index = -1;
-        for (int i = 0; i < apiArray.length; i++) {
-            if (javaApi.equals(apiArray[i])) {
+        for (int i = 0; i < h5Array.length; i++) {
+            if (h5Api.equals(h5Array[i])) {
                 h5Index = i;
                 break;
             }
         }
         if (javaIndex != -1) {
-
+            listView_api.performItemClick(listView_api.getChildAt(javaIndex),javaIndex,listView_api.getAdapter().getItemId(javaIndex));
         }
 
         if (h5Index != -1) {
-
+            listView_h5.performItemClick(listView_h5.getChildAt(h5Index),h5Index,listView_h5.getAdapter().getItemId(h5Index));
         }
-
-//        String javaApi = (String) SPUtil.getData(DevActivity.this, DevCode.API_DEBUG, DevCode
-//                .SERVER_API_JAVA_DEV_URL);
 
     }
 
@@ -185,7 +163,6 @@ public class DevActivity extends AppCompatActivity {
 
         listView_api.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView_api.setAdapter(arrayAdapter);
-
     }
 
     @Override

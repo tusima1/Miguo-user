@@ -35,6 +35,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/sp14"
             android:text="java服务器地址(含个人)"
             />
 
@@ -46,9 +47,11 @@
             android:divider="@color/transparent"/>
 
         <TextView
+            android:layout_marginTop="@dimen/dp12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="App分享地址"
+            android:textSize="@dimen/sp14"
+            android:text="App H5地址"
             />
 
         <com.didikee.uilibs.views.MaxHeightListView
@@ -59,7 +62,7 @@
             android:divider="@color/transparent"
             />
 
-        <CheckedTextView
+<!--        <CheckedTextView
             android:id="@+id/ctv_debug"
             android:clickable="true"
             android:layout_width="match_parent"
@@ -73,6 +76,6 @@
             android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceListItemSmall"
             android:background="@drawable/md_ripple_orange_deep"
-            />
+            />-->
     </LinearLayout>
 </ScrollView>

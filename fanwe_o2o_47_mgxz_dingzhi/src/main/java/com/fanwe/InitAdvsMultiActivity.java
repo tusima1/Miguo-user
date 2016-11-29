@@ -15,6 +15,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.dao.InitActModelDao;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -31,8 +32,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.utils.DevCode;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.SPUtil;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
 
@@ -130,11 +133,23 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     private void init() {
         setting = getSharedPreferences("miguo", Context.MODE_PRIVATE);
+        initAppApi();
         loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
         startStatistics();
         getDeviceId();
         loadCityFile();
+    }
+
+    private void initAppApi() {
+        if (ServerUrl.DEBUG){
+            String javaApi = (String) SPUtil.getData(this, DevCode.API_JAVA, DevCode
+                    .SERVER_API_JAVA_DEV_URL);
+            String h5Api = (String) SPUtil.getData(this, DevCode.API_H5, DevCode
+                    .SERVER_API_JAVA_DEV_URL);
+            ServerUrl.setServerApi(javaApi);
+            ServerUrl.setServerH5Using(h5Api);
+        }
     }
 
     /**
