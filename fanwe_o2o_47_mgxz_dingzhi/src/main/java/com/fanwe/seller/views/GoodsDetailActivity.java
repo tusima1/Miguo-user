@@ -221,7 +221,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             share_record_id = intent.getStringExtra(CommonConstants.SHARE_RECORD_ID);
         }
         if (TextUtils.isEmpty(GoodsId)) {
-            MGToast.showToast("id为空");
+
             finish();
             return false;
         }
