@@ -189,7 +189,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
             }
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
             }

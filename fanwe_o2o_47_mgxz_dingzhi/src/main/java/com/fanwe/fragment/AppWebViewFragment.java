@@ -184,7 +184,7 @@ public class AppWebViewFragment extends WebViewFragment {
             }
         }
         if (TextUtils.isEmpty(url)) {
-            url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+            url = ServerUrl.getAppH5Url() + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
                     "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
         }
         if (TextUtils.isEmpty(mContent)) {

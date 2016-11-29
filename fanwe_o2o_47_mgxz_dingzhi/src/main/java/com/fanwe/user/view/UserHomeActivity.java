@@ -148,7 +148,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         if (!TextUtils.isEmpty(nick)) {
             title = nick + "的精彩推荐";
         }
-        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", ServerUrl.SERVER_H5 + "index/winnie/id/" + id, UmengShareManager.getUMImage(this, imageUrl), null);
+        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", ServerUrl.getAppH5Url() + "index/winnie/id/" + id, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 
     ImageAdapter adapterShop;

@@ -295,7 +295,7 @@ public class AppJsHandler extends BaseJsHandler {
             }
         }
         if (TextUtils.isEmpty(url)) {
-            url = ServerUrl.SERVER_H5;
+            url = ServerUrl.getAppH5Url();
         }
         final String finalTitle = title;
         final String finalSummary = summary;

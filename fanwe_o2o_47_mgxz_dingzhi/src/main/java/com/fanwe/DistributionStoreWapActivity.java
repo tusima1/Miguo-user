@@ -47,7 +47,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
         } else {
         }
         //9月23日添加  &from=app
-        url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app";
+        url = ServerUrl.getAppH5Url() + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app";
         frag.setUrl(url);
         frag.setmProgressMode(EnumProgressMode.NONE);
         getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
@@ -87,9 +87,9 @@ public class DistributionStoreWapActivity extends BaseActivity {
             if (userModel != null) {
                 String name = userModel.getUser_mobile();
                 String pwd = userModel.getUser_pwd();
-                url = ServerUrl.SERVER_H5 + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app&uid="+id ;
+                url = ServerUrl.getAppH5Url() + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app&uid="+id ;
             } else {
-                url = ServerUrl.SERVER_H5 + "user/shop/from/app/uid/" + id+"/";
+                url = ServerUrl.getAppH5Url() + "user/shop/from/app/uid/" + id+"/";
             }
             frag.setUrl(url);
             frag.setmProgressMode(EnumProgressMode.NONE);

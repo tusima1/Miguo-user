@@ -148,7 +148,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         }
 
         UmengShareManager.share(platform, mActivity, title, content,
-                ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                ServerUrl.getAppH5Url() + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
                 UmengShareManager.getUMImage(mActivity, imageUrl), null);
     }
 

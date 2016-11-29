@@ -310,7 +310,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             }
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 if (!TextUtils.isEmpty(fx_id)) {
                     clickUrl = clickUrl + "/ref_id/" + fx_id;

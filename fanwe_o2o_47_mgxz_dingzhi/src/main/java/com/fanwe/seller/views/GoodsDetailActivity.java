@@ -837,7 +837,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             }
             String clickUrl = mShare_info.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 if (!TextUtils.isEmpty(fx_id)) {
                     clickUrl = clickUrl + "/ref_id/" + fx_id;

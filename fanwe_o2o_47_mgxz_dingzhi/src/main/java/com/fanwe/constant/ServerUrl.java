@@ -7,10 +7,6 @@ package com.fanwe.constant;
  */
 public class ServerUrl {
     /*********************** Do Not Modify ***********************/
-    public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
-    public static final String SERVER_API_URL_PRE = "http://";
-    public static final String URL_PART_MOB = "/mob/main.html?from=app";
-    public static final String URL_PART_WAP = "/wap/index.php";
     public static final String KEY_AES = "FANWE5LMUQC436IM";
     private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
     private static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";
@@ -18,13 +14,9 @@ public class ServerUrl {
     private static final String SERVER_H5_TEST="http://m.test.mgxz.com/";//测试
     private static final String SERVER_H5_DEV="http://m.dev.mgxz.com/";//开发
     private static final String SERVER_H5_ONLINE="http://m.mgxz.com/";//线上
-    private static final String SERVER_API_37="http://192.168.90.37:8080/mgxz.BussRPC/";
-    private static final String SERVER_API_36="http://192.168.90.36:8080/mgxz.BussRPC/";
-    private static final String SERVER_API_58="http://192.168.90.58:8080/mgxz.BussRPC/";
 //    public static final String SERVER_API_58="http://192.168.90.37:8080/mgxz.BussRPC/";//袁浩
     /*********************** Do Not Modify ***********************/
-    public static boolean DEBUG =true;//默认开启debug
-    public static String SERVER_H5=SERVER_H5_DEV;//默认开发
+    private static String SERVER_H5_USING =SERVER_H5_DEV;//默认开发
     private static String SERVER_API_USING=SERVER_API_JAVA_DEV_URL;//默认开发
 
     public static boolean getDebug(){
@@ -41,15 +33,18 @@ public class ServerUrl {
         return SERVER_API_USING;
     }
 
-    public static void setServerH5(String h5api){
-        SERVER_H5=h5api;
+    public static void setServerH5Using(String h5api){
+        SERVER_H5_USING =h5api;
     }
 
-    public static String getServerH5(){
-        return SERVER_H5;
+    public static String getServerH5Using(){
+        return SERVER_H5_USING;
     }
     /************* Add End ************/
 
+
+    /***************************上线需要修改模式****************************/
+    public static boolean DEBUG =true;//默认开启debug
 
 
     public static String getAppServerApiUrl() {
@@ -58,6 +53,14 @@ public class ServerUrl {
         } else {
             //线上正式
             return SERVER_API_URL_ONLINE;
+        }
+    }
+
+    public static String getAppH5Url(){
+        if (DEBUG){
+            return SERVER_H5_USING;
+        }else {
+            return SERVER_H5_ONLINE;
         }
     }
 }
