@@ -41,6 +41,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
@@ -402,10 +403,9 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
         }
         intent.putExtra(UserConstants.SHARE_ID, shareCode);
-        startActivity(intent);
-        finish();
-
+        goRegisterActivity(intent);
     }
+
 
     protected void startRegisterActivity(boolean third, String type, String icon, String nick) {
 
@@ -418,9 +418,18 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
         }
         intent.putExtra(UserConstants.SHARE_ID, shareCode);
-        startActivity(intent);
-        finish();
+        goRegisterActivity(intent);
+    }
 
+    private void goRegisterActivity(Intent intent){
+        /**
+         * 如果是从领钻码进来的，则跳注册界面的时候不要销毁当前activity，应该注册成功后回调回来再结束，把结果传给HiHomeActivity
+         */
+        if(isFromDiamond){
+            BaseUtils.jumpToNewActivityForResult(this, intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
+            return;
+        }
+        BaseUtils.jumpToNewActivityWithFinish(this, intent);
     }
 
     @Override
@@ -431,7 +440,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                 JpushHelper.registerAll();
                 finishActivity();
                 break;
-
             default:
                 break;
         }
@@ -521,5 +529,12 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         su.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == ResultCode.RESUTN_OK){
+            switch (requestCode){
+                case RequestCode.LOGIN_SUCCESS_FOR_DIAMON:
+                    finishActivity();
+                    break;
+            }
+        }
     }
 }

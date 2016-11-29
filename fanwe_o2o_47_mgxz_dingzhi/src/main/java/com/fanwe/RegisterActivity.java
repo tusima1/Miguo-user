@@ -25,6 +25,7 @@ import com.fanwe.user.presents.LoginHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.IntentKey;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.lang.reflect.Type;
@@ -104,6 +105,10 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     String icon = "";
     String nick = "";
     String shareId="";
+    /**
+     * 如果是从领钻码对话框进来的，结束Activity的时候要设置requestcode用于HiHomeActivity接收
+     */
+    boolean isFromDiamond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,9 +129,17 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         }
     }
 
+    private void getIntentData() {
+        if(getIntent() != null){
+            isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
+        }
+
+    }
+
     private void init() {
         mFragmentHelper = new CommonHelper(this, this);
         mLoginHelper = new LoginHelper(RegisterActivity.this, this, null);
+        getIntentData();
         initGetIntent();
         initTitle();
         registeClick();
@@ -375,4 +388,11 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         }
     }
 
+    public boolean isFromDiamond() {
+        return isFromDiamond;
+    }
+
+    public void setFromDiamond(boolean fromDiamond) {
+        isFromDiamond = fromDiamond;
+    }
 }
