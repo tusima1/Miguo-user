@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -108,6 +109,10 @@ public class LoginActivity extends BaseActivity implements CallbackView {
      * 密码。
      */
     String nick = "";
+    /**
+     * 分享ID。
+     */
+    String shareCode="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,6 +207,10 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     private void changeViewLoginEmptyPhone() {
         mLl_tabs.setVisibility(View.GONE);
         clickLoginNormal();
+    }
+
+    public String getShareId(){
+        return shareCode;
     }
 
     private void changeViewUnLogin() {
@@ -353,6 +362,12 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         getSDFragmentManager().toggle(R.id.act_login_fl_content, null, LoginPhoneFragment.class);
     }
 
+
+    public  void getShareId(HashMap<String,String> map){
+        shareCode = map.get(CommonConstants.SHARE_RECORD_ID);
+
+
+    }
     protected void startRegisterActivity(boolean third, ThirdLoginInfo thirdLoginInfo) {
         String openId = thirdLoginInfo.getOpenId();
         String type = thirdLoginInfo.getPlatformType();
@@ -450,6 +465,16 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                 }
 
                 break;
+            case CommonConstants.GETSHAREID:
+                if (datas != null && datas.size() > 0) {
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getShareId((HashMap<String,String>)datas.get(0));
+                        }
+                    });
+                }
+                    break;
 
         }
 

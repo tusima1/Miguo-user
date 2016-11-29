@@ -103,6 +103,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     String platform = "";
     String icon = "";
     String nick = "";
+    String shareId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +145,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             platform = intent.getStringExtra(UserConstants.THIRD_PLATFORM);
             icon = intent.getStringExtra(UserConstants.THIRD_ICON);
             nick = intent.getStringExtra(UserConstants.THIRD_NICK);
+            shareId = intent.getStringExtra(UserConstants.SHARE_ID);
         }
     }
 
@@ -179,9 +181,9 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     private void clickRegister() {
         if (validateParam()) {
             if (!TextUtils.isEmpty(openid)) {
-                mLoginHelper.doThirdRegister(userPhone, openid, mStrPwd, icon, nick, platform);
+                mLoginHelper.doThirdRegister(userPhone, openid, mStrPwd, icon, nick, platform,shareId);
             } else {
-                mLoginHelper.doRegister(userPhone, mStrPwd, passwordStr);
+                mLoginHelper.doRegister(userPhone, mStrPwd, passwordStr,shareId);
             }
 
         }

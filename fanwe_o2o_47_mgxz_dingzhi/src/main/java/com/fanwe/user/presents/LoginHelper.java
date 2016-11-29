@@ -102,10 +102,11 @@ public class LoginHelper extends Presenter {
      * @param mobile
      * @param captcha
      */
-    public void doQuickLogin(final String mobile, String captcha , final View view) {
+    public void doQuickLogin(final String mobile, String captcha , final View view,String share_record_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
         params.put("captcha", captcha);
+        params.put("share_record_id",share_record_id);
         params.put("method", UserConstants.USER_QUICK_LOGIN);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
 
@@ -302,11 +303,12 @@ public class LoginHelper extends Presenter {
     /**
      * 注册 。
      */
-    public void doRegister(final String userName, String captcha, final String password) {
+    public void doRegister(final String userName, String captcha, final String password,String share_record_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", userName);
         params.put("pwd", MD5Util.MD5(password));
         params.put("captcha", captcha);
+        params.put("share_record_id",share_record_id);
         params.put("method", UserConstants.USER_REGISTER);
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
@@ -325,7 +327,7 @@ public class LoginHelper extends Presenter {
     /**
      * 第三方注册 。
      */
-    public void doThirdRegister(final String userPhone, String openid, String captcha, String icon, String nick, String platform) {
+    public void doThirdRegister(final String userPhone, String openid, String captcha, String icon, String nick, String platform,String share_record_id) {
         if (TextUtils.isEmpty(platform) || TextUtils.isEmpty(openid)) {
             MGToast.showToast("第三方登录失败");
             if (mActivity != null) {
@@ -335,6 +337,7 @@ public class LoginHelper extends Presenter {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", userPhone);
         params.put("openid", openid);
+        params.put("share_record_id",share_record_id);
         params.put("captcha", captcha);
         if (!TextUtils.isEmpty(icon)) {
             params.put("icon", icon);

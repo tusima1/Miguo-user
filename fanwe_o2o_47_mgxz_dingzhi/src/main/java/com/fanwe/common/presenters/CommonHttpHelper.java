@@ -194,6 +194,46 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         });
     }
 
+    /**
+     * 通过钻石领取码获取shareid
+     * @param code
+     */
+    public void getShareIdByCode(String code){
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("receive_code", code);
+        params.put("method", CommonConstants.GETSHAREID);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String, String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if ("200".equals(status)) {
+                    HashMap<String, String> hashMap = (HashMap<String, String>) validateBody(root);
+                    if (hashMap != null) {
+                        List<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
+                        datas.add(hashMap);
+                        onSuccess(mView, CommonConstants.GETSHAREID, datas);
+                    } else {
+                        onFailure2(mView,CommonConstants.GETSHAREID);
+                    }
+                } else {
+                    onFailure2(mView,CommonConstants.GETSHAREID);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGLog.e(CommonConstants.GETSHAREID + " :" + message + errorCode);
+                onFailure2(mView,CommonConstants.GETSHAREID);
+
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         mContext = null;

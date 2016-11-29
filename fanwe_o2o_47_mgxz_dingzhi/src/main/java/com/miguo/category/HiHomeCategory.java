@@ -60,6 +60,7 @@ import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
+import com.miguo.utils.ClipboardUtils;
 import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.GetUserReceiveCodeView;
 import com.miguo.view.IMLoginView;
@@ -267,17 +268,7 @@ public class HiHomeCategory extends Category implements
      * 获取剪切板的领取码
      */
     private void checkCode() {
-        clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboardManager.hasPrimaryClip()) {
-            code = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
-            if(!TextUtils.isEmpty(code)&&code.length()>=7){
-                if(!StringTool.checkStringPattern(code,StringTool.STRING_NUMBER)){
-                    code = "";
-                }
-            }else{
-                code = "";
-            }
-        }
+        code = ClipboardUtils.checkCode(getActivity());
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */

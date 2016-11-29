@@ -72,6 +72,8 @@ public class UserConstants {
 
     public static final String USER_AVATAR = "user_avatar";
 
+    public static final String SHARE_ID = "share_id";
+
 
     /**
      * 用户 密码。

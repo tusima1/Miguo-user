@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.fanwe.LoginActivity;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.library.customview.ClearEditText;
@@ -48,6 +49,11 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
     CommonHelper mFragmentHelper;
     private TimeCount time;
     LoginHelper mLoginHelper;
+
+    /**
+     * 分享ID。
+     */
+    String shareCode="";
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -173,7 +179,8 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             return;
         }
         mBtnLogin.setEnabled(false);
-        mLoginHelper.doQuickLogin(mNumberPhone, mStrCode,mBtnLogin);
+        shareCode = ((LoginActivity)getActivity()).getShareId();
+        mLoginHelper.doQuickLogin(mNumberPhone, mStrCode,mBtnLogin,shareCode);
         SDDialogManager.showProgressDialog("请稍候...");
     }
 
