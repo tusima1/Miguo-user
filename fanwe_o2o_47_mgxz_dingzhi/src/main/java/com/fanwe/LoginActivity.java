@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -41,6 +42,7 @@ import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.ClipboardUtils;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -100,6 +102,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     private ShareUtils su;
 
     LoginHelper mLoginHelper;
+    CommonHttpHelper commonHttpHelper;
     SHARE_MEDIA platform = null;
     /**
      * 头像。
@@ -119,14 +122,19 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         super.onCreate(savedInstanceState);
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_login);
+        commonHttpHelper= new CommonHttpHelper(this,this);
         init();
         //友盟授权登录初始化。
         su = new ShareUtils(this);
         mLoginHelper = new LoginHelper(this);
+
     }
 
     private void init() {
-
+       String diamondCode = ClipboardUtils.checkCode(this);
+        if(!TextUtils.isEmpty(diamondCode)){
+            commonHttpHelper.getShareIdByCode(diamondCode);
+        }
         getIntentData();
         initTitle();
         changeViewUnLogin();
@@ -379,7 +387,9 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             intent.putExtra(UserConstants.THIRD_PLATFORM, type);
             intent.putExtra(UserConstants.THIRD_ICON, icon);
             intent.putExtra(UserConstants.THIRD_NICK, nick);
+
         }
+        intent.putExtra(UserConstants.SHARE_ID, shareCode);
         startActivity(intent);
         finish();
 
@@ -393,7 +403,9 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             intent.putExtra(UserConstants.THIRD_PLATFORM, type);
             intent.putExtra(UserConstants.THIRD_ICON, icon);
             intent.putExtra(UserConstants.THIRD_NICK, nick);
+
         }
+        intent.putExtra(UserConstants.SHARE_ID, shareCode);
         startActivity(intent);
         finish();
 

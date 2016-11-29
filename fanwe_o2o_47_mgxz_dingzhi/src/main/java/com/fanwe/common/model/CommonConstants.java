@@ -22,7 +22,7 @@ public class CommonConstants {
     /**
      * 通过分享码获取分享id接口.
      */
-    public static final String  GETSHAREID="getshareid";
+    public static final String  GETSHAREID="GetShareID";
     /**
      * 分享ID.
      */

@@ -136,6 +136,8 @@ public class HiHomeCategory extends Category implements
 
     @Override
     protected void initFirst() {
+         clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+
         loginByMobileDao = new LoginByMobileDaoImpl(this);
         getUseReceiveCode = new GetUserReceiveCodeDaoImpl(this);
         tencentSignDao = new TencentSignDaoImpl(this);

@@ -240,5 +240,6 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         mView = null;
         gson = null;
         userCurrentInfo = null;
+        App.getInstance().code="";
     }
 }

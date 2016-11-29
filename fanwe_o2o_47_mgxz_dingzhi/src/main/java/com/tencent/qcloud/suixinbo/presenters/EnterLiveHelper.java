@@ -200,7 +200,7 @@ public class EnterLiveHelper extends com.tencent.qcloud.suixinbo.presenters.Pres
      */
     private void createIMChatRoom() {
         final ArrayList<String> list = new ArrayList<String>();
-        final String roomName = "this is a  test";
+        final String roomName = "" + MySelfInfo.getInstance().getMyRoomNum();
         TIMGroupManager.getInstance().createGroup("AVChatRoom", list, roomName, "" + MySelfInfo.getInstance().getMyRoomNum(), new TIMValueCallBack<String>() {
             @Override
             public void onError(int i, String s) {

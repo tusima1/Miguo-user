@@ -135,6 +135,8 @@ public class GoodsDetailInfo {
 
     private String max_num;
 
+
+
     public void setTuan_discount(String tuan_discount){
         this.tuan_discount = tuan_discount;
     }

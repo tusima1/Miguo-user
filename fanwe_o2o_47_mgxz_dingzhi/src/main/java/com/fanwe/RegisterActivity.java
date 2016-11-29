@@ -145,6 +145,8 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             platform = intent.getStringExtra(UserConstants.THIRD_PLATFORM);
             icon = intent.getStringExtra(UserConstants.THIRD_ICON);
             nick = intent.getStringExtra(UserConstants.THIRD_NICK);
+        }
+        if(intent.hasExtra(UserConstants.SHARE_ID)) {
             shareId = intent.getStringExtra(UserConstants.SHARE_ID);
         }
     }

@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -111,6 +113,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private LoginHelper mTLoginHelper;
     private TencentHttpHelper tencentHttpHelper;
     private LiveHttpHelper mLiveHttphelper;
+    private CommonHttpHelper commonHttpHelper;
     private ArrayList<LiveChatEntity> mArrayListChatEntity;
     private LiveChatMsgListAdapter mChatMsgListAdapter;
     private static final int MINFRESHINTERVAL = 500;
@@ -161,6 +164,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     private int timePlayed = 0;
     //是否是直播回放
     private String is_playback;
+    String shareId = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -481,6 +485,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     };
 
     private void initHelper() {
+        commonHttpHelper = new CommonHttpHelper(this,this);
+        if(!TextUtils.isEmpty(App.getInstance().code)){
+            commonHttpHelper.getShareIdByCode(App.getInstance().code);
+        }
         mTLoginHelper = new LoginHelper(this, this);
         mEnterRoomHelper = new EnterLiveHelper(this, this);
         mSellerHttpHelper = new SellerHttpHelper(this, this);
@@ -803,6 +811,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
             playBackBottomToolView.onDestroy();
             playBackBottomToolView = null;
         }
+        App.getInstance().code="";
     }
 
     @Override
@@ -1196,15 +1205,6 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                             }
                         }
                     });
-
-
-                    break;
-
-                case LiveConstants.ENTER_ROOM:
-                    //观众进入房间
-                    if (!checkDataIsNull(datas)) {
-                        //成功
-                    }
                     break;
                 case LiveConstants.EXIT_ROOM:
                     //观众退出房间
@@ -1284,12 +1284,49 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                         }
                     });
                     break;
+
+                case CommonConstants.GETSHAREID:
+
+                    if(datas!=null&&datas.size()>0){
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setShareId((HashMap<String,String>)datas.get(0));
+                            }
+                        });
+
+                    }
+                    break;
+                case LiveConstants.ENTER_ROOM:
+                    //观众进入房间。
+                    if(datas!=null&&datas.size()>0){
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setShareId((HashMap<String,String>)datas.get(0));
+                            }
+                        });
+
+                    }
+                    break;
             }
         } catch (Exception e) {
             Log.e("PlaybackActivity", "excetion..");
         }
     }
 
+
+    /**
+     * 通过钻石码获取领取码。
+     * @param map
+     */
+    private void setShareId(HashMap<String,String> map){
+
+        shareId = map.get(CommonConstants.SHARE_RECORD_ID);
+        if(mBaoBaoAdapter!=null){
+            mBaoBaoAdapter.setShare_record_id(shareId);
+        }
+    }
     private String getKeyWord(List<ModelStoresRandomComment> datas) {
         String keyWord = "";
         if (!SDCollectionUtil.isEmpty(datas)) {

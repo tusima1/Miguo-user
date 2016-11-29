@@ -11,6 +11,7 @@ import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.common.MGDict;
+import com.fanwe.common.model.CommonConstants;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -331,7 +332,24 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                onSuccess(mView, LiveConstants.ENTER_ROOM, null);
+
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<HashMap<String, String>> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                if ("200".equals(status)) {
+                    HashMap<String, String> hashMap = (HashMap<String, String>) validateBody(root);
+                    if (hashMap != null) {
+                        List<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
+                        datas.add(hashMap);
+                        onSuccess(mView, LiveConstants.ENTER_ROOM, datas);
+                    } else {
+                        onFailure2(mView,LiveConstants.ENTER_ROOM);
+                    }
+                } else {
+                    onFailure2(mView,LiveConstants.ENTER_ROOM);
+                }
             }
 
             @Override

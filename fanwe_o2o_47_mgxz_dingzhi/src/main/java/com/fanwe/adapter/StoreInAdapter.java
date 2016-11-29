@@ -168,7 +168,7 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
         String cart_type = "1";
         String add_goods_num = "1";
         if (mShoppingCartHelper != null) {
-            mShoppingCartHelper.addToShoppingCart("", fx_id, lgn_user_id, goods_id, cart_type, add_goods_num);
+            mShoppingCartHelper.addToShoppingCart("", fx_id, lgn_user_id, goods_id, cart_type, add_goods_num,"");
         }
     }
 

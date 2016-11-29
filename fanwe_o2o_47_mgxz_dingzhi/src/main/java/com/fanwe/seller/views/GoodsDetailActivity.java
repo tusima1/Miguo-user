@@ -34,6 +34,7 @@ import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.common.model.CommonConstants;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
@@ -150,6 +151,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private boolean isTop;
     private boolean isBottom;
     private MGProgressDialog dialog;
+    private String share_record_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +209,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         GoodsId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
         fx_id = intent.getStringExtra(EXTRA_FX_ID);
+        if(intent.hasExtra(CommonConstants.SHARE_RECORD_ID)) {
+            share_record_id = intent.getStringExtra(CommonConstants.SHARE_RECORD_ID);
+        }
         if (TextUtils.isEmpty(GoodsId)) {
             MGToast.showToast("id为空");
             finish();
@@ -891,13 +896,14 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         if (mShoppingCartHelper != null) {
             if (isGoToShoppingCart) {
                 mShoppingCartHelper.addToShoppingCart("", fx_id, lgn_user_id, GoodsId, cart_type,
-                        mNumber + "");
+                        mNumber + "",share_record_id);
             } else {
                 mShoppingCartHelper.addToShoppingCart2("", fx_id, lgn_user_id, GoodsId,
-                        cart_type, mNumber + "");
+                        cart_type, mNumber + "",share_record_id);
             }
         }
     }
+
 
     /**
      * 加入本地购物车。
