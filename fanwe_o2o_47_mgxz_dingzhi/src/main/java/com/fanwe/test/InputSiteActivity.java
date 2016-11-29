@@ -1,7 +1,5 @@
 package com.fanwe.test;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,13 +21,15 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.dialog.SDDialogMenu;
 import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.utils.SDOtherUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.List;
 
 /**
  * 域名变更界面
@@ -86,7 +86,7 @@ public class InputSiteActivity extends BaseActivity
 
 	private void initViewState()
 	{
-		mTv_current_site.setText("当前地址:" + ServerUrl.SERVER_API_URL_MID);
+		mTv_current_site.setText("当前地址:" + ServerUrl.getAppServerApiUrl());
 	}
 
 	private void bindData()

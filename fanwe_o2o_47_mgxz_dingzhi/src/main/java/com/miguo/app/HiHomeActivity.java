@@ -3,7 +3,6 @@ package com.miguo.app;
 import android.content.Intent;
 
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.MyCaptureActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.model.CitylistModel;
@@ -15,6 +14,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.DevUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +45,9 @@ public class HiHomeActivity extends HiBaseActivity{
     private final static String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
 
 
+    private DevUtil devUtil;
+
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_hihome_activity);
@@ -54,6 +57,8 @@ public class HiHomeActivity extends HiBaseActivity{
     protected Category initCategory() {
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         setTwiceKeyDownToCloseActivity(true);
+        devUtil = new DevUtil(this);
+        devUtil.registerShakeListener();
         return new HiHomeCategory(this);
     }
 
@@ -73,6 +78,12 @@ public class HiHomeActivity extends HiBaseActivity{
             handlerReturnCityId(tempBean);
         }
 
+    }
+
+    @Override
+    protected void doOnDestory() {
+        super.doOnDestory();
+        devUtil.unregisterShakeListener();
     }
 
     private void checkIfInMyFragment(){

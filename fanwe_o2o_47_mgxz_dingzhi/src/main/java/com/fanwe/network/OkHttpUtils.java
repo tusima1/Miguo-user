@@ -327,12 +327,7 @@ public class OkHttpUtils {
     }
 
     private String doCommonURL(String url){
-        String serverUrl;
-        if (ServerUrl.DEBUG) {
-            serverUrl = ServerUrl.SERVER_API_JAVA_TEST_URL;
-        } else {
-            serverUrl = ServerUrl.SERVER_API_URL_MID;
-        }
+        String serverUrl=ServerUrl.getAppServerApiUrl();
         if (!TextUtils.isEmpty(url)) {
             serverUrl += url;
         }

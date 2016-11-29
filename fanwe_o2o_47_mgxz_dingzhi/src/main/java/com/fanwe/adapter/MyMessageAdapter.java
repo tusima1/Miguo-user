@@ -217,14 +217,7 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 		Intent intent = new Intent(mActivity, DaiYanStoreWapActivity.class);
 		Bundle bundle = new Bundle();
 		String session = AppConfig.getSessionId();
-		String url;
-		if (ServerUrl.DEBUG) {
-			url = ServerUrl.SERVER_API_URL_PRE + ServerUrl.SERVER_API_TEST_URL + "/wap/index.php?ctl=activity&id="
-					+ id + "&sess_id=" + session;
-		}else{
-			url = ServerUrl.SERVER_API_URL_PRE + ServerUrl.SERVER_API_URL_MID + "/wap/index.php?ctl=activity&id="
-					+ id + "&sess_id=" + session;
-		}
+		String url= ServerUrl.getAppServerApiUrl() + "/wap/index.php?ctl=activity&id=" + id + "&sess_id=" + session;
 		bundle.putString("url", url);
 		bundle.putInt("user_id", 1);
 		intent.putExtras(bundle);

@@ -91,8 +91,9 @@ public class OutSideShoppingCartHelper extends Presenter {
      * @param goods_id      商品ID
      * @param cart_type     商品类型“1” 为团购
      * @param add_goods_num 商品数量。
+     * @param share_record_id  分享id
      */
-    public void addShopCart(String fx_user_id, String lgn_user_id, String token, String goods_id, String cart_type, String add_goods_num) {
+    public void addShopCart(String fx_user_id, String lgn_user_id, String token, String goods_id, String cart_type, String add_goods_num,String share_record_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("fx_user_id", fx_user_id);
         params.put("lgn_user_id", lgn_user_id);
@@ -100,6 +101,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("goods_id", goods_id);
         params.put("cart_type", cart_type);
         params.put("add_goods_num", add_goods_num);
+        params.put("share_record_id", share_record_id);
         params.put("method", ShoppingCartconstants.SHOPPING_CART);
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 
@@ -230,6 +232,7 @@ public class OutSideShoppingCartHelper extends Presenter {
      *
      * @param datas
      * @param fromShopCart  是否来自购物车，如果来自购物车的话取goods_id 要取 pro_id.。否则来自本地购物车的话取id
+     *
      */
     public void multiAddShopCart(List<ShoppingCartInfo> datas,boolean fromShopCart) {
         if (datas == null || datas.size() < 1) {
@@ -239,6 +242,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         StringBuffer goods_ids = new StringBuffer();
         StringBuffer cart_types = new StringBuffer();
         StringBuffer add_goods_num = new StringBuffer();
+        StringBuffer share_record_ids = new StringBuffer();
         int size = datas.size();
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo info = datas.get(i);
@@ -260,6 +264,7 @@ public class OutSideShoppingCartHelper extends Presenter {
             goods_ids.append(pro_id + ",");
             cart_types.append("1,");
             add_goods_num.append(info.getNumber() + ",");
+            share_record_ids.append(info.getShare_record_id()+",");
         }
         String values = goods_ids.toString();
         if (TextUtils.isEmpty(values) || values.length() < 1) {
@@ -274,6 +279,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("goods_ids", goods_ids.substring(0, goods_ids.length() - 1));
         params.put("cart_types", cart_types.substring(0, cart_types.length() - 1));
         params.put("add_goods_num", add_goods_num.substring(0, add_goods_num.length() - 1));
+        params.put("share_record_ids", share_record_ids.substring(0, add_goods_num.length() - 1));
         params.put("method", ShoppingCartconstants.BATCH_SHOPPING_CART);
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
 

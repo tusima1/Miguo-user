@@ -194,7 +194,7 @@ public class AppJsHandler extends BaseJsHandler {
 	 * @param userId
 	 */
 	@JavascriptInterface
-	public void addCart(String productId, String userId) {
+	public void addCart(String productId, String userId,String share_record_id) {
 		// 保存购物车
 		checkLogin();
 		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
@@ -231,7 +231,8 @@ public class AppJsHandler extends BaseJsHandler {
 					App.getApplication().getToken(),
 					productId,
 					"1",
-					"1");
+					"1",
+                    share_record_id);//TODO 分享id
 		} else {
 			if(LocalShoppingcartDao.insertSingleNum(cartInfo)){
 				goLogin();

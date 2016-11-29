@@ -86,10 +86,10 @@ public class InterfaceServer
 				}
 				if (httpUtils != null)
 				{
-					return httpUtils.send(httpMethod, ServerUrl.getServerApiUrl(), requestParams, listener);
+					return httpUtils.send(httpMethod, ServerUrl.getAppServerApiUrl(), requestParams, listener);
 				} else
 				{
-					return HttpManagerX.getHttpUtils().send(httpMethod, ServerUrl.getServerApiUrl(), requestParams, listener);
+					return HttpManagerX.getHttpUtils().send(httpMethod, ServerUrl.getAppServerApiUrl(), requestParams, listener);
 				}
 			} else
 			{
@@ -119,7 +119,7 @@ public class InterfaceServer
 
 	private String getRequestUrl(RequestParams param)
 	{
-		StringBuilder sb = new StringBuilder(ServerUrl.getServerApiUrl() + "?");
+		StringBuilder sb = new StringBuilder(ServerUrl.getAppServerApiUrl() + "?");
 		if (param != null)
 		{
 			List<NameValuePair> listParam = param.getQueryStringParams();

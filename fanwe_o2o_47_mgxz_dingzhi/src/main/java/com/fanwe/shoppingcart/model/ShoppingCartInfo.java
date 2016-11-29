@@ -70,6 +70,15 @@ public class ShoppingCartInfo implements Serializable {
      * 团购券ID。
      */
     private String pro_id;
+    private String share_record_id;//分享id
+
+    public String getShare_record_id() {
+        return share_record_id;
+    }
+
+    public void setShare_record_id(String share_record_id) {
+        this.share_record_id = share_record_id;
+    }
 
     public void setNumber(String number){
         this.number = number;
