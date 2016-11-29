@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
@@ -104,6 +106,14 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         init();
     }
 
+    private CommonHttpHelper commonHttpHelper;
+
+    private String shareRecordId;
+
+    public void setShareRecordId(String shareRecordId) {
+        this.shareRecordId = shareRecordId;
+    }
+
     private void init() {
         LayoutInflater.from(mContext).inflate(R.layout.user_bottom_tool, this);
         mTvTalk2host = this.findViewById(R.id.tv_talk2host);
@@ -129,8 +139,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 
     @Override
     public void onDestroy() {
-        if(redPacketDialogHelper!=null){
-        redPacketDialogHelper.dismiss();
+        if (redPacketDialogHelper != null) {
+            redPacketDialogHelper.dismiss();
         }
     }
 
@@ -154,6 +164,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
             clickGift();
         } else if (v == mShare) {
             clickShare();
+            getRecordId();
         } else if (v == mLike) {
             clickLike2ShowHeart();
         }
@@ -185,7 +196,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false, shareRecordId);
         sharePopHelper.show();
     }
 
@@ -369,7 +380,8 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
     public void setOnGiftSendListener(OnGiftSendListener onGiftSendListener) {
         this.onGiftSendListener = onGiftSendListener;
     }
-//    private boolean showBaoBao=false;
+
+    //    private boolean showBaoBao=false;
 //
 //    @Override
 //    protected void onAttachedToWindow() {
@@ -380,4 +392,10 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
 //            showBaoBao = true;
 //        }
 //    }
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(mAct, mCallbackView);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE, CurLiveInfo.getRoomNum() + "");
+    }
 }

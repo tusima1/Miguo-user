@@ -15,7 +15,12 @@ import android.widget.TextView;
 
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
 import com.fanwe.event.EnumEventTag;
@@ -46,7 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 网红主页
  * Created by Administrator on 2016/9/20.
  */
-public class UserHomeActivity extends Activity implements CallbackView2 {
+public class UserHomeActivity extends Activity implements CallbackView2, CallbackView {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;
@@ -61,6 +66,9 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
     private RelativeLayout layoutShopEmpty, layoutLiveEmpty, layoutShop;
     private String nick;
 
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +81,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         getData();
         preData();
         preView();
+        getRecordId();
     }
 
 
@@ -138,6 +147,7 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
      * 分享
      */
     private void clickShare() {
+        getRecordId();
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (!TextUtils.isEmpty(strIcon)) {
             imageUrl = strIcon;
@@ -148,7 +158,8 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         if (!TextUtils.isEmpty(nick)) {
             title = nick + "的精彩推荐";
         }
-        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", ServerUrl.SERVER_H5 + "index/winnie/id/" + id, UmengShareManager.getUMImage(this, imageUrl), null);
+        String clickUrl = ServerUrl.SERVER_H5 + "index/winnie/id/" + id + "/share_record_id/" + shareRecordId;
+        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 
     ImageAdapter adapterShop;
@@ -222,6 +233,11 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
         } else if (UserConstants.ATTENTION.equals(method)) {
             itemsForcus = datas;
             msg.what = 4;
+        } else if (CommonConstants.CREATE_SHARE_RECORD.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                shareRecordId = bean.getId();
+            }
         }
         mHandler.sendMessage(msg);
     }
@@ -341,4 +357,10 @@ public class UserHomeActivity extends Activity implements CallbackView2 {
 
     }
 
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(mContext, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.USER_HOME, id);
+    }
 }

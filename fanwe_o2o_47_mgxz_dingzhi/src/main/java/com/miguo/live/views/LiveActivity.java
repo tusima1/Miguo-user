@@ -32,12 +32,14 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+
 import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.GiftId;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -46,9 +48,7 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.SDDateUtil;
-import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -192,7 +192,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     private HostMeiToolView mHostBottomMeiView2;
     private TencentHttpHelper tencentHttpHelper;
     private LiveHttpHelper mLiveHttphelper;
-    private CommonHttpHelper commonHttpHelper;
+
     private HostRedPacketTimeView mHostRedPacketCountDownView;
 
     /**
@@ -234,6 +234,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     /**
      * 分享者ID.
      */
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
 
     String shareId = "";
 
@@ -248,6 +250,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         checkUserAndPermission();
         SDEventManager.register(this);
         isLiving = true;
+        getRecordId();
     }
 
     public void onEventMainThread(SDBaseEvent event) {
@@ -2241,6 +2244,27 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
                 }
                 break;
+            case CommonConstants.CREATE_SHARE_RECORD:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                    shareRecordId = bean.getId();
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAnchor) {
+                                if (mHostTopView != null) {
+                                    mHostTopView.setShareRecordId(shareRecordId);
+                                    mHostTopView.setCommonHttpHelper(commonHttpHelper);
+                                }
+                            } else {
+                                if (mUserBottomTool != null) {
+                                    mUserBottomTool.setShareRecordId(shareRecordId);
+                                }
+                            }
+                        }
+                    });
+                }
+                break;
         }
     }
 
@@ -2439,5 +2463,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         baseArray.recycle();
         return temp;
     }
+
     //----------------- Robot People end ---------------
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(LiveActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE, CurLiveInfo.getRoomNum() + "");
+    }
 }

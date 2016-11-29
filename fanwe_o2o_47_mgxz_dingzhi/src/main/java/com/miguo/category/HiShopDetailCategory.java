@@ -16,6 +16,11 @@ import com.fanwe.LoginActivity;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.StoreLocationFragment;
 import com.fanwe.library.utils.SDActivityUtil;
@@ -62,7 +67,9 @@ import me.relex.circleindicator.CircleIndicator;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/19.
  */
-public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView, RepresentMerchantView, RecyclerScrollView.OnRecyclerScrollViewListener, HiShopDetailRecommendAdapter.OnItemDataChangedListener {
+public class HiShopDetailCategory extends Category implements HiShopDetailView, CollectShopView,
+        RepresentMerchantView, RecyclerScrollView.OnRecyclerScrollViewListener,
+        HiShopDetailRecommendAdapter.OnItemDataChangedListener, CallbackView {
 
     @ViewInject(R.id.recycler_scrollview)
     RecyclerScrollView scrollView;
@@ -195,6 +202,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     CollectShopDao collectShopDao;
 
     RepresentMerchantDao representMerchantDao;
+    private CommonHttpHelper commonHttpHelper;
 
     public HiShopDetailCategory(HiBaseActivity activity) {
         super(activity);
@@ -203,6 +211,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     @Override
     protected void initFirst() {
         getIntentData();
+        getRecordId();
         shopDetailDao = new HiShopDetailDaoImpl(this);
         collectShopDao = new CollectShopDaoImpl(this);
         representMerchantDao = new RepresentMerchantDaoImpl(this);
@@ -251,7 +260,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         initLiveRecyclerView();
     }
 
-    private String merchantID = "";
+    private String merchantID;
 
     private void getIntentData() {
         merchantID = getActivity().getIntent().getExtras().getString(HiShopDetailActivity.EXTRA_MERCHANT_ID);
@@ -332,10 +341,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         BaseUtils.finishActivity(getActivity());
     }
 
+    private String shareRecordId;
+
     /**
      * 点击分享
      */
     public void clickShare() {
+        getRecordId();
         if (result != null && result.getShare() != null) {
             String content = result.getShare().getSummary();
             if (TextUtils.isEmpty(content)) {
@@ -357,7 +369,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
             if (TextUtils.isEmpty(clickUrl)) {
                 clickUrl = ServerUrl.SERVER_H5;
             } else {
-                clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
             }
             String title = result.getShare().getTitle();
             if (TextUtils.isEmpty(title)) {
@@ -368,6 +380,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
         } else {
             MGToast.showToast("无分享内容");
         }
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(getActivity(), this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.SHOP, merchantID);
     }
 
     /**
@@ -427,13 +446,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
 
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
-        float radio = t / (float)getBannerHeight();
-        if(radio <= 1){
+        float radio = t / (float) getBannerHeight();
+        if (radio <= 1) {
             setTitleAlpha(titleLayout, radio);
         }
     }
 
-    public int getBannerHeight(){
+    public int getBannerHeight() {
         return dip2px(200);
     }
 
@@ -604,11 +623,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
      * 收藏和取消收藏
      */
     @Override
-    public void collectSuccess(final HashMap<String,String> map) {
+    public void collectSuccess(final HashMap<String, String> map) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(map!=null){
+                if (map != null) {
                     //popularity  人气字段
                     String popularity = map.get(UserConstants.POPULARITY);
                     hots.setText("人气值 " + popularity);
@@ -674,5 +693,25 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     @Override
     public void onItemChanged() {
         updateRecommendRecyclerViewHeight();
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (CommonConstants.CREATE_SHARE_RECORD.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                shareRecordId = bean.getId();
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
     }
 }
