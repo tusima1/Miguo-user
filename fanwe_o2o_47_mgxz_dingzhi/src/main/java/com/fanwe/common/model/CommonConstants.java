@@ -18,7 +18,7 @@ public class CommonConstants {
     /**
      * 取当前用户的分销等级。
      */
-    public static final  String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
+    public static final String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
     /**
      * 通过分享码获取分享id接口.
      */
@@ -28,4 +28,8 @@ public class CommonConstants {
      */
     public static final String   SHARE_RECORD_ID = "share_record_id";
 
+    /**
+     * 生成分享记录。
+     */
+    public static final String CREATE_SHARE_RECORD = "CreateShareRecord";
 }

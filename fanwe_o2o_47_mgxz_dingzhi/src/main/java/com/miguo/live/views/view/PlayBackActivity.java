@@ -18,6 +18,10 @@ import android.widget.Toast;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
@@ -162,6 +166,9 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     //是否是直播回放
     private String is_playback;
 
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,6 +184,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         initView();
         SDEventManager.register(this);
         isPlaying = true;
+        getRecordId();
     }
 
     public void onEventMainThread(SDBaseEvent event) {
@@ -1284,6 +1292,19 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                         }
                     });
                     break;
+                case CommonConstants.CREATE_SHARE_RECORD:
+                    if (!SDCollectionUtil.isEmpty(datas)) {
+                        ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                        shareRecordId = bean.getId();
+                        MGUIUtil.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (playBackBottomToolView != null)
+                                    playBackBottomToolView.setShareRecordId(shareRecordId);
+                            }
+                        });
+                    }
+                    break;
             }
         } catch (Exception e) {
             Log.e("PlaybackActivity", "excetion..");
@@ -1338,6 +1359,13 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
     @Override
     public void getGift(HashMap<String, String> params) {
 
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(PlayBackActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE, CurLiveInfo.getRoomNum() + "");
     }
 
 }

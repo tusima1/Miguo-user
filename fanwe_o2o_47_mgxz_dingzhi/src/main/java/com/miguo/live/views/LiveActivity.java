@@ -32,10 +32,13 @@ import android.widget.Toast;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.GiftId;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
@@ -44,9 +47,7 @@ import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.SDDateUtil;
-import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -228,6 +229,8 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 大礼物动画
      */
     BigGifView bigGifView;
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +243,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         checkUserAndPermission();
         SDEventManager.register(this);
         isLiving = true;
+        getRecordId();
     }
 
     public void onEventMainThread(SDBaseEvent event) {
@@ -480,7 +484,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         int appId = Constants.SDK_APPID;
         int ccType = Constants.ACCOUNT_TYPE;
 
-        if(ServerUrl.DEBUG){
+        if (ServerUrl.DEBUG) {
             appId = Constants.SDK_APPID_TEST;
             ccType = Constants.ACCOUNT_TYPE_Test;
         }
@@ -753,20 +757,20 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         OKhttpHelper.getInstance().registerRoomInfo(title, url, roomId + "", roomId + "", roomId
                 + "");
         //host的views
-        if(mHostBottomToolView1 != null){
+        if (mHostBottomToolView1 != null) {
             mHostBottomToolView1.setVisibility(View.VISIBLE);
         }
 
-        if(mHostBottomMeiView2 != null){
+        if (mHostBottomMeiView2 != null) {
             mHostBottomMeiView2.setVisibility(View.VISIBLE);
         }
 
-        if(mUserBottomTool != null){
+        if (mUserBottomTool != null) {
             mUserBottomTool.setVisibility(View.GONE);
         }
         //host的topview
         mHostTopView = ((HostTopView) findViewById(R.id.host_top_layout));
-        if(mHostTopView != null){
+        if (mHostTopView != null) {
             mHostTopView.setmAdapter(mHeadTopAdapter);
             mHostTopView.init(this);
             mHostTopView.setVisibility(View.VISIBLE);
@@ -775,7 +779,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
         doUpdateMembersCount();
 
-        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name()) && mHostTopView!=null) {
+        if (CurLiveInfo.getModelShop() != null && !TextUtils.isEmpty(CurLiveInfo.getModelShop().getShop_name()) && mHostTopView != null) {
             mHostTopView.setLocation(CurLiveInfo.getModelShop().getShop_name());
             if (!TextUtils.isEmpty(CurLiveInfo.getModelShop().getCons_count()))
                 mHostTopView.setArriveNum(CurLiveInfo.getModelShop().getCons_count() + "人到过");
@@ -784,7 +788,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //红包倒计时小view
         mHostRedPacketCountDownView = ((HostRedPacketTimeView) findViewById(R.id.host_red_countdown));
 
-        if(mHostRedPacketCountDownView != null){
+        if (mHostRedPacketCountDownView != null) {
             mHostRedPacketCountDownView.setVisibility(View.VISIBLE);
         }
 
@@ -870,19 +874,19 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         initInviteDialog();
 
         mBaoBaoAdapter = new PagerBaoBaoAdapter(this);
-        if(mUserBottomTool != null){
+        if (mUserBottomTool != null) {
             mUserBottomTool.setVisibility(View.VISIBLE);
             mUserBottomTool.setmBaobaoAdapter(mBaoBaoAdapter);
         }
 
         mRedPacketAdapter = new PagerRedPacketAdapter();
-        if(mUserBottomTool != null){
+        if (mUserBottomTool != null) {
             mUserBottomTool.setmRedPacketAdapter(mRedPacketAdapter);
         }
 
         mUserHeadTopView = (UserHeadTopView) findViewById(R.id.user_top_layout);//观众的topview
 
-        if(mUserHeadTopView != null){
+        if (mUserHeadTopView != null) {
             mUserHeadTopView.setmLiveView(this);
             mUserHeadTopView.setmAdapter(mHeadTopAdapter);
             mUserHeadTopView.init();
@@ -891,17 +895,17 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
             mUserHeadTopView.initNeed(this);
         }
 
-        if(mHostBottomToolView1 != null){
+        if (mHostBottomToolView1 != null) {
             mHostBottomToolView1.setVisibility(View.GONE);
         }
 
-        if(mHostBottomMeiView2 != null){
+        if (mHostBottomMeiView2 != null) {
             mHostBottomMeiView2.setVisibility(View.GONE);
         }
 
         String hostImg = CurLiveInfo.getHostAvator();
 
-        if(mUserHeadTopView != null){
+        if (mUserHeadTopView != null) {
             mUserHeadTopView.setHostImg(hostImg);
             mUserHeadTopView.setHostName(CurLiveInfo.getHostName());
         }
@@ -917,7 +921,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //            mLiveHttphelper.checkFocus(CurLiveInfo.getHostID());
 
         }
-        if(mUserHeadTopView != null){
+        if (mUserHeadTopView != null) {
             mUserHeadTopView.setViews();
         }
     }
@@ -1132,31 +1136,32 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void hostExitByForce() {
         //向后台发送主播退出
-        if (null != mLiveHelper&&LiveUtil.checkIsHost()) {
-             mLiveHelper.perpareQuitRoom(true);
+        if (null != mLiveHelper && LiveUtil.checkIsHost()) {
+            mLiveHelper.perpareQuitRoom(true);
             App.getInstance().setAvStart(false);
             if (isPushed) {
                 mLiveHelper.stopPushAction();
             }
-                finish();
+            finish();
         }
     }
 
-     LiveBackDialog dialog=null;
+    LiveBackDialog dialog = null;
+
     /**
      * 退出直播对话框
      */
     public void showBackDialog() {
-        if(dialog==null) {
+        if (dialog == null) {
             dialog = new LiveBackDialog(this);
             dialog.setOnLiveBackClickListener(new LiveBackDialogCategory.OnLiveBackClickListener() {
                 @Override
                 public void clickSure() {
                     //如果是直播，发消息
                     if (null != mLiveHelper) {
-						if (isRecording) {
-	                        mLiveHelper.stopRecord();
-	                    }
+                        if (isRecording) {
+                            mLiveHelper.stopRecord();
+                        }
                         //向后台发送主播退出
                         mLiveHelper.perpareQuitRoom(true);
                         App.getInstance().setAvStart(false);
@@ -1175,7 +1180,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
                 }
             });
         }
-        if(dialog!=null&&!dialog.isShowing()) {
+        if (dialog != null && !dialog.isShowing()) {
             dialog.show();
         }
     }
@@ -2313,6 +2318,27 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //                    }
 //                }
 //                break;
+            case CommonConstants.CREATE_SHARE_RECORD:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                    shareRecordId = bean.getId();
+                    MGUIUtil.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAnchor) {
+                                if (mHostTopView != null) {
+                                    mHostTopView.setShareRecordId(shareRecordId);
+                                    mHostTopView.setCommonHttpHelper(commonHttpHelper);
+                                }
+                            } else {
+                                if (mUserBottomTool != null) {
+                                    mUserBottomTool.setShareRecordId(shareRecordId);
+                                }
+                            }
+                        }
+                    });
+                }
+                break;
         }
     }
 
@@ -2499,5 +2525,12 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         baseArray.recycle();
         return temp;
     }
+
     //----------------- Robot People end ---------------
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(LiveActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE, CurLiveInfo.getRoomNum() + "");
+    }
 }

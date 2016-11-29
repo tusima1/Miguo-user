@@ -9,6 +9,10 @@ import android.view.View;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
@@ -45,6 +49,9 @@ public class LiveEndActivity extends Activity implements CallbackView {
     private CircleImageView ivIcon;
     private boolean clickEnable = true;
 
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +66,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
         dataBindingLiveEnd = new DataBindingLiveEnd();
         preData();
         binding.setLive(dataBindingLiveEnd);
+        getRecordId();
     }
 
 //    @Override
@@ -126,6 +134,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
     }
 
     private void endLive() {
+        getRecordId();
         SHARE_MEDIA platform = SHARE_MEDIA.QQ;
         //已认证的，去直播
         if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQ) {
@@ -171,7 +180,8 @@ public class LiveEndActivity extends Activity implements CallbackView {
             //朋友圈
             title = content;
         }
-        UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "index/winnie/id/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+        UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "index/winnie/id/" +
+                        App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
                 UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
     }
 
@@ -220,13 +230,24 @@ public class LiveEndActivity extends Activity implements CallbackView {
                 dataBindingLiveEnd.countGood.set(modelStopLive.getSell_total());
                 dataBindingLiveEnd.countMi.set(modelStopLive.getMiguobean());
             }
+            MySelfInfo.getInstance().setMyRoomNum(-1);
+        } else if (CommonConstants.CREATE_SHARE_RECORD.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                shareRecordId = bean.getId();
+            }
         }
-        MySelfInfo.getInstance().setMyRoomNum(-1);
-
     }
 
     @Override
     public void onFailue(String responseBody) {
 
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(LiveEndActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE,  CurLiveInfo.getRoomNum() + "");
     }
 }
