@@ -137,7 +137,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false, shareRecordId);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false, shareRecordId, true);
         sharePopHelper.show();
     }
 
@@ -240,7 +240,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(mAct, mCallbackView);
         }
-        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE,  CurLiveInfo.getRoomNum() + "");
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE, CurLiveInfo.getRoomNum() + "");
     }
 }
 

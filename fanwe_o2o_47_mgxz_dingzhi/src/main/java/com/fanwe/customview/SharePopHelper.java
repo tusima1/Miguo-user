@@ -30,6 +30,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     private PopupWindow popupWindow;
     private boolean isHost;
     private String shareRecordId;
+    private boolean isBack;
 
     public SharePopHelper(Activity mActivity, boolean isHost) {
         this.mActivity = mActivity;
@@ -38,6 +39,14 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     }
 
     public SharePopHelper(Activity mActivity, boolean isHost, String shareRecordId) {
+        this.shareRecordId = shareRecordId;
+        this.mActivity = mActivity;
+        this.isHost = isHost;
+        createPopWindow();
+    }
+
+    public SharePopHelper(Activity mActivity, boolean isHost, String shareRecordId, boolean isBack) {
+        this.isBack = isBack;
         this.shareRecordId = shareRecordId;
         this.mActivity = mActivity;
         this.isHost = isHost;
@@ -154,11 +163,13 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
             //朋友圈
             title = content;
         }
+        String clickUrl = ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/"
+                + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId;
+        if (isBack) {
+            clickUrl = ServerUrl.SERVER_H5 + "index/dianbo/room_id/" + CurLiveInfo.getRoomNum() + "/share_record_id/" + shareRecordId;
+        }
 
-        UmengShareManager.share(platform, mActivity, title, content,
-                ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/"
-                        + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
-                UmengShareManager.getUMImage(mActivity, imageUrl), null);
+        UmengShareManager.share(platform, mActivity, title, content, clickUrl, UmengShareManager.getUMImage(mActivity, imageUrl), null);
     }
 
     /**
