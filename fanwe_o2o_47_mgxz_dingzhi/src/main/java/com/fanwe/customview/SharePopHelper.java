@@ -29,8 +29,16 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     private Activity mActivity;
     private PopupWindow popupWindow;
     private boolean isHost;
+    private String shareRecordId;
 
     public SharePopHelper(Activity mActivity, boolean isHost) {
+        this.mActivity = mActivity;
+        this.isHost = isHost;
+        createPopWindow();
+    }
+
+    public SharePopHelper(Activity mActivity, boolean isHost, String shareRecordId) {
+        this.shareRecordId = shareRecordId;
         this.mActivity = mActivity;
         this.isHost = isHost;
         createPopWindow();
@@ -148,7 +156,8 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         }
 
         UmengShareManager.share(platform, mActivity, title, content,
-                ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                ServerUrl.SERVER_H5 + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/"
+                        + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
                 UmengShareManager.getUMImage(mActivity, imageUrl), null);
     }
 

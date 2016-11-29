@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
@@ -18,6 +20,7 @@ import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.model.pagermodel.BaoBaoEntity;
 import com.miguo.live.views.LiveInputDialogHelper;
 import com.miguo.live.views.LiveUserPopHelper;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.tencent.qcloud.suixinbo.presenters.LiveHelper;
 
 import java.util.List;
@@ -66,8 +69,13 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
 
     private PagerBaoBaoAdapter mBaobaoAdapter;
 
+    private CommonHttpHelper commonHttpHelper;
 
+    private String shareRecordId;
 
+    public void setShareRecordId(String shareRecordId) {
+        this.shareRecordId = shareRecordId;
+    }
 
     public PlayBackBottomToolView(Context context) {
         this(context, null);
@@ -107,6 +115,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
         this.mLiveHelper = liveHelper;
         this.rootView = rootView;
         this.mCallbackView = mCallbackView;
+        getRecordId();
     }
 
     @Override
@@ -117,6 +126,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
             clickGoods(GOODS_TYPE);
         } else if (v == mShare) {
             clickShare();
+            getRecordId();
         } else {
             return;
         }
@@ -127,7 +137,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct,false);
+        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false, shareRecordId);
         sharePopHelper.show();
     }
 
@@ -163,7 +173,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
         if (mAct == null || mLiveHelper == null || mContext == null) {
             return;
         }
-        LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mAct,true);
+        LiveInputDialogHelper inputDialogHelper = new LiveInputDialogHelper(mLiveHelper, mAct, true);
         inputDialogHelper.dismissDanmu();
 
         inputDialogHelper.show();
@@ -226,6 +236,11 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
         this.mBaobaoAdapter = mBaobaoAdapter;
     }
 
-
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(mAct, mCallbackView);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE,  CurLiveInfo.getRoomNum() + "");
+    }
 }
 

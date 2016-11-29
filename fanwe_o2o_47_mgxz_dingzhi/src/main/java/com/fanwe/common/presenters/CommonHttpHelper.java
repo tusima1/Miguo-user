@@ -7,6 +7,9 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.model.createShareRecord.ResultCreateShareRecord;
+import com.fanwe.common.model.createShareRecord.RootCreateShareRecord;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.ResultHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.RootHomeClassifyList;
@@ -19,7 +22,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.model.UserCurrentInfo;
-import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -190,6 +192,36 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGLog.e(CommonConstants.UPGRADE_VERSION + " :" + message + errorCode);
+            }
+        });
+    }
+
+    /**
+     * 生成分享记录
+     */
+    public void createShareRecord(String content_type, String content_id) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("lgn_user_id", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        params.put("content_type", content_type);
+        params.put("content_id", content_id);
+        params.put("method", CommonConstants.CREATE_SHARE_RECORD);
+
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootCreateShareRecord root = gson.fromJson(responseBody, RootCreateShareRecord.class);
+                List<ResultCreateShareRecord> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result) || !"200".equals(root.getStatusCode())) {
+                    onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, null);
+                    return;
+                }
+                List<ModelCreateShareRecord> items = new ArrayList<>();
+                items.add(result.get(0).getBody());
+                onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
             }
         });
     }

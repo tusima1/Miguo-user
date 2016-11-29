@@ -33,11 +33,17 @@ import com.didikee.uilibs.views.WaitFinishTextView;
 import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.CallbackView2;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -77,8 +83,8 @@ import static com.fanwe.o2o.miguo.R.id.tv_buy;
  * created by didikee
  * 2016/10/20
  */
-public class GoodsDetailActivity extends AppCompatActivity implements CallbackView2, View
-        .OnClickListener {
+public class GoodsDetailActivity extends AppCompatActivity implements CallbackView2, CallbackView,
+        View.OnClickListener {
     /**
      * 商品id (int)
      */
@@ -145,11 +151,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private View mLL5_Tips;
     private int mCollectTopHeight;
 
-    private int mListViewHeight ;
+    private int mListViewHeight;
 
     private boolean isTop;
     private boolean isBottom;
     private MGProgressDialog dialog;
+    private CommonHttpHelper commonHttpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +176,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void init() {
-        if (getIntentData(getIntent())){
+        if (getIntentData(getIntent())) {
+            getRecordId();
             initTitleLayout();
             initSScrollView();
             mHttpHelper = new SellerNewHttpHelper(this);
@@ -179,12 +187,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         }
 
     }
-    private void requestData(){
+
+    private void requestData() {
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
         mStatusBar.post(new Runnable() {
             @Override
             public void run() {
-                dialog = new MGProgressDialog(GoodsDetailActivity.this,R.style.MGProgressDialog);
+                dialog = new MGProgressDialog(GoodsDetailActivity.this, R.style.MGProgressDialog);
                 dialog.needFinishActivity(GoodsDetailActivity.this);
                 dialog.show();
             }
@@ -194,13 +203,13 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (getIntentData(intent)){
+        if (getIntentData(intent)) {
             requestData();
         }
     }
 
     private boolean getIntentData(Intent intent) {
-        if (intent==null){
+        if (intent == null) {
             finish();
             return false;
         }
@@ -241,9 +250,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 mFlViewpager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 mTitleHeight = mVGTitle.getHeight(); //height is ready
                 mFLViewpagerHeight = mFlViewpager.getHeight();
-                int[] location=new int[2];
+                int[] location = new int[2];
                 mIbCollect.getLocationInWindow(location);
-                mCollectTopHeight = location[1] - mTitleHeight - getSystemStatusBarHeight(GoodsDetailActivity.this) + mIbCollect.getHeight() ;
+                mCollectTopHeight = location[1] - mTitleHeight - getSystemStatusBarHeight(GoodsDetailActivity.this) + mIbCollect.getHeight();
 
                 mListViewHeight = mShopListView.getHeight();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
@@ -357,7 +366,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                         } else {
                             mIvTitleCollect.setImageResource(R.drawable.ic_collect_no_dark);
                         }
-                    }else {
+                    } else {
                         mIvTitleCollect.setVisibility(View.GONE);
                     }
                 }
@@ -365,12 +374,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 //-------------- listView 滑动冲突 ---------------
                 //展开
                 if (isOpen) {
-                    if (isTop && oldY< y){
-                        isTop=false;
+                    if (isTop && oldY < y) {
+                        isTop = false;
                         mShopListView.setInterceptTouchEventEnable(true);
                     }
-                    if (isBottom && oldY > y){
-                        isBottom=false;
+                    if (isBottom && oldY > y) {
+                        isBottom = false;
                         mShopListView.setInterceptTouchEventEnable(true);
                     }
                 }
@@ -391,9 +400,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                     View firstVisibleItemView = mShopListView.getChildAt(0);
                     if (firstVisibleItemView != null && firstVisibleItemView.getTop() == 0) {
                         mShopListView.setInterceptTouchEventEnable(false);
-                        isTop=true;
-                    }else {
-                        isTop=false;
+                        isTop = true;
+                    } else {
+                        isTop = false;
                         mShopListView.setInterceptTouchEventEnable(true);
                     }
                 } else if ((firstVisibleItem + visibleItemCount) == totalItemCount) {
@@ -401,9 +410,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                     View lastVisibleItemView = mShopListView.getChildAt(mShopListView.getChildCount() - 1);
                     if (lastVisibleItemView != null && lastVisibleItemView.getBottom() == mListViewHeight) {
                         mShopListView.setInterceptTouchEventEnable(false);
-                        isBottom=true;
-                    }else {
-                        isBottom=false;
+                        isBottom = true;
+                    } else {
+                        isBottom = false;
                         mShopListView.setInterceptTouchEventEnable(true);
                     }
                 }
@@ -556,7 +565,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
         List<ShopListBean> shop_list = modelGoodsDetailNew.getShop_list();
         bindShopList(shop_list);
-        if (shop_list!=null && shop_list.size()<=1){
+        if (shop_list != null && shop_list.size() <= 1) {
             mLLLauncher.setVisibility(View.GONE);
         }
 
@@ -612,7 +621,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         for (ImagesBean imagesBean : modelGoodsDetailNew.getImages()) {
             imageUrls.add(imagesBean.getImage());
         }
-        if (imageUrls.size()==0){
+        if (imageUrls.size() == 0) {
             imageUrls.add("");
         }
         GoodsDetailPagerAdapter goodsDetailPagerAdapter = new GoodsDetailPagerAdapter(imageUrls);
@@ -658,7 +667,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     }
 
     private void parseGoodsDetailNew(List data) {
-        if (data != null&&data.size()>0) {
+        if (data != null && data.size() > 0) {
             ModelGoodsDetailNew modelGoodsDetailNew = (ModelGoodsDetailNew) data.get(0);
             if (modelGoodsDetailNew != null) {
                 bindData(modelGoodsDetailNew);
@@ -686,10 +695,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     @Override
     public void onBackPressed() {
-        if (dialog!=null && dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
             GoodsDetailActivity.this.finish();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -707,7 +716,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     public void onSuccess(String method, final List datas) {
         switch (method) {
             case SellerConstants.GROUP_BUY_DETAIL_NEW:
-                if (dialog!=null){
+                if (dialog != null) {
                     dialog.dismiss();
                 }
                 parseGoodsDetailNew(datas);
@@ -730,10 +739,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(datas==null||datas.size()<1){
+                        if (datas == null || datas.size() < 1) {
                             return;
                         }
-                        HashMap<String,String> map =(HashMap<String,String>) datas.get(0);
+                        HashMap<String, String> map = (HashMap<String, String>) datas.get(0);
                         String popularity = map.get(UserConstants.POPULARITY);
                         mTvTopHot.setText(popularity);
                     }
@@ -752,6 +761,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 break;
             case ShoppingCartconstants.SHOPPING_CART_ADD:
                 break;
+            case CommonConstants.CREATE_SHARE_RECORD:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                    shareRecordId = bean.getId();
+                }
+                break;
             default:
                 break;
         }
@@ -759,10 +774,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     @Override
     public void onFailue(String responseBody) {
-        if (dialog!=null){
+        if (dialog != null) {
             dialog.dismiss();
         }
-        if (LiveConstants.SHOPPING_CART.equals(responseBody)){
+        if (LiveConstants.SHOPPING_CART.equals(responseBody)) {
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -802,7 +817,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     //收藏
     private void doCollect() {
-        if (TextUtils.isEmpty(App.getInstance().getToken())){
+        if (TextUtils.isEmpty(App.getInstance().getToken())) {
             startActivity(new Intent(App.getApplication(), LoginActivity.class));
             return;
         }
@@ -817,7 +832,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     }
 
+    private String shareRecordId;
+
     private void doShare() {
+        getRecordId();
         if (mShare_info != null) {
             String content = mShare_info.getSummary();
             if (TextUtils.isEmpty(content)) {
@@ -839,12 +857,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             if (TextUtils.isEmpty(clickUrl)) {
                 clickUrl = ServerUrl.SERVER_H5;
             } else {
-                if (!TextUtils.isEmpty(fx_id)) {
-                    clickUrl = clickUrl + "/ref_id/" + fx_id;
-                } else {
-                    clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo()
-                            .getUserInfoNew().getUser_id();
-                }
+                clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
             }
             String title = mShare_info.getTitle();
             if (TextUtils.isEmpty(title)) {
@@ -919,5 +932,12 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     public void goToShopping() {
         Intent intent = new Intent(this, ShopCartActivity.class);
         startActivity(intent);
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(GoodsDetailActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, GoodsId);
     }
 }

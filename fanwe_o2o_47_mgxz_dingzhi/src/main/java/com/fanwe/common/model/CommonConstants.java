@@ -18,6 +18,10 @@ public class CommonConstants {
     /**
      * 取当前用户的分销等级。
      */
-    public static final  String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
+    public static final String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
 
+    /**
+     * 生成分享记录。
+     */
+    public static final String CREATE_SHARE_RECORD = "CreateShareRecord";
 }
