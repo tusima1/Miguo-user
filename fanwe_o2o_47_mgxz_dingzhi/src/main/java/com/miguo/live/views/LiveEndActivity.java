@@ -180,7 +180,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
             //朋友圈
             title = content;
         }
-        UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "index/winnie/id/" +
+        UmengShareManager.share(platform, this, title, content, ServerUrl.getAppH5Url() + "index/winnie/id/" +
                         App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
                 UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
     }

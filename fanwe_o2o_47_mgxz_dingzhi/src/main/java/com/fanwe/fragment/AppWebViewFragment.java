@@ -196,7 +196,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         }
         try {
             if (TextUtils.isEmpty(url)) {
-                url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+                url = ServerUrl.getAppH5Url() + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
                         "/share_record_id/" + shareRecordId;
             } else if (!url.contains("share_record_id")) {
                 url = url + "/share_record_id/" + shareRecordId;

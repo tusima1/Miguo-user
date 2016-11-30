@@ -158,7 +158,7 @@ public class UserHomeActivity extends Activity implements CallbackView2, Callbac
         if (!TextUtils.isEmpty(nick)) {
             title = nick + "的精彩推荐";
         }
-        String clickUrl = ServerUrl.SERVER_H5 + "index/winnie/id/" + id + "/share_record_id/" + shareRecordId;
+        String clickUrl = ServerUrl.getAppH5Url() + "index/winnie/id/" + id + "/share_record_id/" + shareRecordId;
         UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 

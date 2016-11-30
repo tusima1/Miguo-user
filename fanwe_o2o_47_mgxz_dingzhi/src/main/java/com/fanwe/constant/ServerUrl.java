@@ -22,18 +22,11 @@ public class ServerUrl {
         if (!DEBUG)return;
         SERVER_API_USING=api;
     }
-    public static String getServerApi(){
-        return SERVER_API_USING;
-    }
-
     public static void setServerH5Using(String h5api){
         if (!DEBUG)return;
         SERVER_H5_USING =h5api;
     }
 
-    public static String getServerH5Using(){
-        return SERVER_H5_USING;
-    }
     /************* Add End ************/
 
     public static String getAppServerApiUrl() {
