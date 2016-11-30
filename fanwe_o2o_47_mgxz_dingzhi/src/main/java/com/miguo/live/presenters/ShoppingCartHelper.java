@@ -124,9 +124,9 @@ public class ShoppingCartHelper extends OldCallbackHelper {
                     }
                 }else{
                     if(mView!=null) {
-                        mView.onFailue(message);
+                       onFailure2(mView,ShoppingCartconstants.SHOPPING_CART_ADD);
                     }else if (mView2!=null){
-                        mView2.onFailue(ShoppingCartconstants.SHOPPING_CART_ADD);
+                        onFailure2(mView2,ShoppingCartconstants.SHOPPING_CART_ADD);
                     }
                 }
             }
@@ -135,9 +135,9 @@ public class ShoppingCartHelper extends OldCallbackHelper {
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
                 if(mView!=null) {
-                    mView.onFailue(message);
+                    onFailure2(mView,ShoppingCartconstants.SHOPPING_CART_ADD);
                 }else if (mView2!=null){
-                    mView2.onFailue(ShoppingCartconstants.SHOPPING_CART_ADD);
+                    onFailure2(mView2,ShoppingCartconstants.SHOPPING_CART_ADD);
                 }
             }
         });
@@ -174,7 +174,11 @@ public class ShoppingCartHelper extends OldCallbackHelper {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
-                mView.onFailue(message);
+                if(mView!=null) {
+                    onFailure2(mView,ShoppingCartconstants.SHOPPING_CART);
+                }else if (mView2!=null){
+                    onFailure2(mView2,ShoppingCartconstants.SHOPPING_CART);
+                }
             }
         });
     }

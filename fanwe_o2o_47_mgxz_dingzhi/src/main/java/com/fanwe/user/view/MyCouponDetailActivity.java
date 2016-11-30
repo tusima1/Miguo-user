@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.fanwe.BaseActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.customview.MaxHeightListView;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -51,7 +52,7 @@ public class MyCouponDetailActivity extends BaseActivity {
     private ImageView mIvCouponQRCode = null;
 
     private ModelGroupCoupon mModel = null;
-    private ListView mListView;
+    private MaxHeightListView mListView;
     private List<ModelShopInfo2> mShopList;
     private ShopListAdapter mAdapter;
 
@@ -72,7 +73,8 @@ public class MyCouponDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-        mListView = ((ListView) findViewById(R.id.listView));
+        mListView = ((MaxHeightListView) findViewById(R.id.listView));
+        mListView.setFocusable(false);
         mAdapter = new ShopListAdapter(mShopList);
         mListView.setAdapter(mAdapter);
     }

@@ -63,7 +63,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
 
     private HeadTopAdapter mAdapter;
     private LiveHttpHelper liveHttpHelper;
-
+    /**
+     *  是否显示关注按钮。
+     */
+    private boolean ifShow  =true;
     public UserHeadTopView(Context context) {
         this(context, null);
     }
@@ -87,6 +90,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         mMembers = ((TextView) findViewById(R.id.tv_members));
         mUserName = ((TextView) findViewById(R.id.tv_username));
         mFollow = ((TextView) findViewById(R.id.tv_follow));
+
         mUserLocation = ((TextView) findViewById(R.id.tv_user_location));
         mKeywords = ((TextView) findViewById(R.id.tv_keywords));
         mClose = ((ImageView) findViewById(R.id.iv_close));
@@ -106,9 +110,21 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         mFollow.setOnClickListener(this);
         mUserIamge.setOnClickListener(this);
         mClose.setOnClickListener(this);
-
+        hiddenFollowBtn();
         //绑定假数据
         bindData();
+    }
+
+    public void hiddenFollowBtn(){
+        if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id()!=null){
+            if(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id().equals(CurLiveInfo.getHostID())){
+                mFollow.setVisibility(View.GONE);
+                ifShow = false;
+            }else{
+                mFollow.setVisibility(View.VISIBLE);
+                ifShow = true;
+            }
+        }
     }
 
     public void initNeed(Activity activity) {
@@ -233,6 +249,9 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     }
     /*设置已经关注了主播*/
     public void setFocusStatus(boolean isFocus){
+        if(!ifShow){
+            return;
+        }
         if (isFocus){
             mFollow.setVisibility(GONE);
         }else {
@@ -284,19 +303,12 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mFollow.setVisibility(GONE);
+                          setFocusStatus(true);
                         }
                     });
-                } else {
-                    //未关注
-                    MGUIUtil.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mFollow.setVisibility(VISIBLE);
-                        }
-                    });
-
                 }
+
+
             }
         } else if (LiveConstants.USER_FOCUS.equals(method)) {
             //不显示

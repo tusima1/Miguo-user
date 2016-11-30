@@ -144,7 +144,7 @@
                 android:textColor="@color/text_home_recommend"
                 android:textSize="@dimen/text_size_home_recommend_title"
                 />
-            <ListView
+            <com.fanwe.customview.MaxHeightListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
