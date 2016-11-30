@@ -9,39 +9,28 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.MyTuanDetailDialog;
-import com.fanwe.ShopCartActivity;
 import com.fanwe.adapter.DealAttrAdapter;
 import com.fanwe.adapter.DealAttrGroupAdapter;
 import com.fanwe.adapter.TuanDetailCombinedPackagesAdapter;
 import com.fanwe.adapter.TuanDetailCombinedPackagesAdapter.TuanDetailCombinedPackagesAdapterListener;
 import com.fanwe.adapter.TuanDetailCombinedPackagesPageAdapter;
-import com.fanwe.common.CommonInterface;
-import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.TuanDetailAttrsFragment.TuanDetailAttrsFragment_onClickAttrItemListener;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.SDSlidingPlayView;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
 import com.fanwe.library.dialog.SDDialogListView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDNumberUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Deal_attrModel;
 import com.fanwe.model.Deal_attrValueModel;
 import com.fanwe.model.Deal_indexActModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.SDFormatUtil;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.sunday.eventbus.SDEventManager;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,41 +141,7 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
         if (!mapIds.isEmpty()) {
             model.put("deal_attr", mapIds);
         }
-        InterfaceServer.getInstance().requestInterface(model, new SDRequestCallBack<BaseActModel>() {
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                SDDialogManager.dismissProgressDialog();
-                Intent intent;
-                switch (actModel.getStatus()) {
-                    case -1:
-                        intent = new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 0:
-
-                        break;
-                    case 1:
-                        CommonInterface.updateCartNumber();
-                        SDEventManager.post(EnumEventTag.ADD_CART_SUCCESS.ordinal());
-                        intent = new Intent(getActivity(), ShopCartActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-                SDDialogManager.dismissProgressDialog();
-            }
-        });
+      //Delete php
     }
 
     public boolean validateMainGoods() {
@@ -341,9 +296,6 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
         }
 
         mListModel = mDealModel.getListRelateModel();
-        if (!toggleFragmentView(mListModel)) {
-            return false;
-        }
-        return true;
+        return toggleFragmentView(mListModel);
     }
 }

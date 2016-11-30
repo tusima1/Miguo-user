@@ -244,6 +244,11 @@ public class LiveEndActivity extends Activity implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private void getRecordId() {
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(LiveEndActivity.this, this);

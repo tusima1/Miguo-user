@@ -124,6 +124,11 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     public CallbackView getmCallbackView() {
         return mCallbackView;
     }

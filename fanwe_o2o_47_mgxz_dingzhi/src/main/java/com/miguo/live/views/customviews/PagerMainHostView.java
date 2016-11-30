@@ -203,4 +203,9 @@ public class PagerMainHostView extends ScrollView implements View.OnClickListene
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

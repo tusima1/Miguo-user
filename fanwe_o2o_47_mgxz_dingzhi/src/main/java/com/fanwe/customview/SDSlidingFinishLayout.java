@@ -258,11 +258,11 @@ public class SDSlidingFinishLayout extends RelativeLayout
 
 	public interface SDSlidingFinishLayoutListener
 	{
-		public void onFinish();
+		void onFinish();
 
-		public void onScrolling();
+		void onScrolling();
 
-		public void onScrollToStart();
+		void onScrollToStart();
 	}
 
 }

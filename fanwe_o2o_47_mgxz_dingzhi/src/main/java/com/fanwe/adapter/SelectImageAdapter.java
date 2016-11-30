@@ -71,7 +71,7 @@ public class SelectImageAdapter extends SDSimpleBaseAdapter<LocalImageModel>
 
 	public interface SelectImageAdapterListener
 	{
-		public void onClickDelete(int position, View v);
+		void onClickDelete(int position, View v);
 	}
 
 }

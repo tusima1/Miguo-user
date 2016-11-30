@@ -11,7 +11,6 @@ import com.fanwe.fragment.TuanDetailImagePriceFragment;
 import com.fanwe.fragment.TuanDetailMoreDetailFragment;
 import com.fanwe.fragment.TuanDetailOtherMerchantFragment;
 import com.fanwe.fragment.TuanDetailRatingFragment;
-import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
 import com.fanwe.library.dialog.SDDialogManager;
@@ -162,38 +161,6 @@ public class MyTuanDetailDialog extends BaseActivity{
 	 */
 	private void requestDetail()
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("deal");
-		model.put("data_id", mId);
-		model.putUser();
-		model.putLocation();
-		SDRequestCallBack<Deal_indexActModel> handler = new SDRequestCallBack<Deal_indexActModel>()
-		{
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					mGoodsModel = actModel;
-					bindData();
-				}
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-				mScrollView.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
 	protected void bindData()

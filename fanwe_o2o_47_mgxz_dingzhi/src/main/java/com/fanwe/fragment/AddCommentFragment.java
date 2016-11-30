@@ -501,9 +501,9 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     }
 
     public interface AddCommentFragmentListener {
-        public void onCompressFinish(List<File> listFile);
+        void onCompressFinish(List<File> listFile);
 
-        public void onCommendNumberListener(int number);
+        void onCommendNumberListener(int number);
     }
 
     @Override

@@ -127,11 +127,11 @@ public class InputImageCodeDialog extends SDDialogCustom
 
 	public interface InputImageCodeDialogListener
 	{
-		public void onClickCancel(View v, SDDialogCustom dialog);
+		void onClickCancel(View v, SDDialogCustom dialog);
 
-		public void onClickConfirm(String content, View v, SDDialogCustom dialog);
+		void onClickConfirm(String content, View v, SDDialogCustom dialog);
 
-		public void onDismiss(SDDialogCustom dialog);
+		void onDismiss(SDDialogCustom dialog);
 	}
 
 }

@@ -76,12 +76,8 @@ public class LocalImageModel implements Serializable
 			return false;
 		}
 
-		if (!otherPath.equals(path))
-		{
-			return false;
-		}
+		return otherPath.equals(path);
 
-		return true;
 	}
 
 }

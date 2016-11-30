@@ -1,8 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,22 +9,18 @@ import android.widget.ListView;
 
 import com.fanwe.adapter.NoticeListAdapter;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Notice_indexActListModel;
-import com.fanwe.model.Notice_indexActModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 公告列表
@@ -122,37 +115,6 @@ public class NoticeListActivity extends BaseActivity
 
 	private void requestData(final boolean isLoadMore)
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("notice");
-		model.putPage(mPage.getPage());
-		SDRequestCallBack<Notice_indexActModel> handler = new SDRequestCallBack<Notice_indexActModel>()
-		{
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					mPage.update(actModel.getPage());
-					SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
-				}
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-				mPtrlvContent.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-
 	}
 
 }

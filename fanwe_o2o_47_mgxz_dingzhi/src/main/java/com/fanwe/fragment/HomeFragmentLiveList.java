@@ -11,10 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.adapter.barry.MainActivityHomeFragmentLiveListAdapter;
-import com.fanwe.adapter.barry.MainActivityHomeFragmentTuanAdapter;
 import com.fanwe.base.CallbackView;
-import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.HomeLiveFragmentRecyclerView;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
@@ -143,6 +140,11 @@ public class HomeFragmentLiveList extends BaseFragment implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 }

@@ -19,8 +19,6 @@ import com.fanwe.adapter.GoodsListAdapter;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
@@ -32,9 +30,7 @@ import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Brand_listModel;
 import com.fanwe.model.GoodsModel;
-import com.fanwe.model.Goods_indexActModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
@@ -43,7 +39,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
@@ -301,41 +296,6 @@ public class GoodsListFragment extends BaseFragment {
      * @param isLoadMore
      */
     private void requestData(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("goods");
-        model.put("keyword", keyword);
-        model.put("order_type", order_type);
-        model.put("cate_id", cate_id);
-        model.put("bid", bid);
-        model.putPage(mPage.getPage());
-        SDRequestCallBack<Goods_indexActModel> handler = new SDRequestCallBack<Goods_indexActModel>() {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    if (mIsFirstBindCategoryViewData) {
-//                        bindLeftCategoryViewData(actModel.getBcate_list());
-                        bindMiddleCategoryViewData(actModel.getBrand_list());
-//                        bindRightCategoryViewData(actModel.getNavs());
-                        mIsFirstBindCategoryViewData = false;
-                    }
-
-                    if (mIsNeedUpdateBrandList) {
-                        bindMiddleCategoryViewData(actModel.getBrand_list());
-                    }
-
-                    mPage.update(actModel.getPage());
-
-                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                dealFinishRequest();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
 
     }
 

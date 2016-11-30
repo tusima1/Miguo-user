@@ -70,7 +70,7 @@ public class SearchHistoryAdapter extends SDBaseAdapter<HistoryShowBean>
 		
 	public interface OnSearchHistoryListener
 	{
-		public void setOnHistoryData(Bundle bundle);
+		void setOnHistoryData(Bundle bundle);
 	}
 		
 }

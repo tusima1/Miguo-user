@@ -5,15 +5,10 @@ import android.text.TextUtils;
 
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.AppWebViewFragment;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.Notice_detailActModel;
 import com.fanwe.model.Notice_detailResultModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.live.views.customviews.MGToast;
 
 /**
  * 公告内容
@@ -58,35 +53,6 @@ public class NoticeDetailActivity extends BaseActivity
 
 	private void requestData()
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("notice");
-		model.putAct("detail");
-		model.put("id", mNoticeId);
-		SDRequestCallBack<Notice_detailActModel> handler = new SDRequestCallBack<Notice_detailActModel>()
-		{
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					addWebViewFragment(actModel);
-				}
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 
 	}
 

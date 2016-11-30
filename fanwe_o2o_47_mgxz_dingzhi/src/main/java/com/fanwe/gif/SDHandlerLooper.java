@@ -50,7 +50,7 @@ public class SDHandlerLooper
 
 	public interface SDHandlerLooperListener
 	{
-		public void run();
+		void run();
 	}
 
 }

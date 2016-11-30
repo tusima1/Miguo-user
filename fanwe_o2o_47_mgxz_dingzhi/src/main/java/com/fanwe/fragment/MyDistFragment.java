@@ -11,7 +11,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.adapter.MyXiaoMiAdapter;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.customview.SDListViewInScroll;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
@@ -32,7 +32,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyDistFragment extends BaseFragment implements View.OnClickListener, CallbackView2 {
+public class MyDistFragment extends BaseFragment implements View.OnClickListener, CallbackView {
     @ViewInject(R.id.frag_my_xiaomi)
     private PullToRefreshScrollView mPtr_ScrollView;
 
@@ -313,7 +313,7 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     }
 
     public interface OnDialogData {
-        public void setData(int vip1, int num1, int num2, int total, String up_name, String up_id);
+        void setData(int vip1, int num1, int num2, int total, String up_name, String up_id);
     }
 
     @Override

@@ -241,6 +241,11 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private void getRecordId() {
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(getActivity(), this);

@@ -195,12 +195,6 @@
 
 
         <!-- 商品管理 -->
-        <activity
-            android:name="com.fanwe.DistributionCommodityManagementActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- Map上的附近搜索(新) -->
         <activity
             android:name="com.fanwe.MapSearchActivity"
@@ -387,23 +381,8 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 选择配送地址界面 -->
-        <activity
-            android:name="com.fanwe.DeliveryAddressSelectActivty"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 管理配送地址界面 -->
-        <activity
-            android:name="com.fanwe.DeliveryAddressManageActivty"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 添加配送地址界面 -->
-        <activity
-            android:name="com.fanwe.AddDeliveryAddressActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 修改密码界面 -->
         <activity
             android:name="com.fanwe.ModifyPasswordActivity"
@@ -618,12 +597,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 查看分销推荐人 -->
-        <activity
-            android:name="com.fanwe.CheckDistributionRecommendActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 分销小店 -->
         <activity
             android:name="com.fanwe.DistributionStoreWapActivity"

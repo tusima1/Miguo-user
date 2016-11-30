@@ -60,8 +60,8 @@ public class HoltelSearchAdapter extends SDBaseAdapter<Holtel_cityAct>
 	{
 		mListener = listener;
 	}
-	public static interface OnResultSearchListener
+	public interface OnResultSearchListener
 	{
-		public void resultSearch(Bundle bundle);
+		void resultSearch(Bundle bundle);
 	}
 }

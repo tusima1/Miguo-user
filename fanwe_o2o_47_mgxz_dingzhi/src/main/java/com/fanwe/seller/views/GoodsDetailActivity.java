@@ -34,7 +34,6 @@ import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
@@ -83,7 +82,7 @@ import static com.fanwe.o2o.miguo.R.id.tv_buy;
  * created by didikee
  * 2016/10/20
  */
-public class GoodsDetailActivity extends AppCompatActivity implements CallbackView2, CallbackView,
+public class GoodsDetailActivity extends AppCompatActivity implements CallbackView,
         View.OnClickListener {
     /**
      * 商品id (int)
@@ -332,9 +331,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 //状态栏透明度回调
                 final int height = mFLViewpagerHeight - mTitleHeight;
                 if (y <= 0) {   //设置标题的背景颜色
-                    mVGTitle.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-                    mTvTitleMiddle.setTextColor(Color.argb((int) 0, 46, 46, 46));
-                    mStatusBar.setBackgroundColor(Color.argb((int) 0, 204, 204, 204));
+                    mVGTitle.setBackgroundColor(Color.argb(0, 255, 255, 255));
+                    mTvTitleMiddle.setTextColor(Color.argb(0, 46, 46, 46));
+                    mStatusBar.setBackgroundColor(Color.argb(0, 204, 204, 204));
 
                     mIvTitleLeft.setImageResource(R.drawable.ic_arrow_left_white);
                     mIvTitleShare.setImageResource(R.drawable.ic_share_pure);
@@ -348,9 +347,9 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                     mIvTitleLeft.setImageResource(R.drawable.ic_arrow_left_white);
                     mIvTitleShare.setImageResource(R.drawable.ic_share_pure);
                 } else {    //滑动到banner下面设置普通颜色
-                    mVGTitle.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-                    mTvTitleMiddle.setTextColor(Color.argb((int) 255, 46, 46, 46));
-                    mStatusBar.setBackgroundColor(Color.argb((int) 255, 204, 204, 204));
+                    mVGTitle.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    mTvTitleMiddle.setTextColor(Color.argb(255, 46, 46, 46));
+                    mStatusBar.setBackgroundColor(Color.argb(255, 204, 204, 204));
                     mIvTitleLeft.setImageResource(R.drawable.ic_left_arrow_dark);
                     mIvTitleShare.setImageResource(R.drawable.ic_share_dark);
 

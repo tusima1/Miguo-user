@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.TitleType;
@@ -36,7 +35,7 @@ import com.sunday.eventbus.SDBaseEvent;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class ModifyPasswordActivity extends BaseActivity implements CallbackView, CallbackView2 {
+public class ModifyPasswordActivity extends BaseActivity implements CallbackView {
 
     @ViewInject(R.id.svb_validate)
     private SDSendValidateButton mSvb_validate;

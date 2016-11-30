@@ -2,7 +2,6 @@ package com.fanwe.user.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.getAttentionFans.ModelFans;
@@ -132,7 +131,7 @@ public class FansAdapter extends BaseAdapter {
 //        状态：1：未关注 2：已关注 3：互相关注
         if ("1".equals(attention_status)){
             //TODO 关注
-            new UserHttpHelper(null, new CallbackView2() {
+            new UserHttpHelper(null, new CallbackView() {
                 @Override
                 public void onSuccess(String responseBody) {
 
@@ -163,7 +162,7 @@ public class FansAdapter extends BaseAdapter {
         }
         //取消关注
 //        else {
-//            new UserHttpHelper(null, new CallbackView2() {
+//            new UserHttpHelper(null, new CallbackView() {
 //                @Override
 //                public void onSuccess(String responseBody) {
 //

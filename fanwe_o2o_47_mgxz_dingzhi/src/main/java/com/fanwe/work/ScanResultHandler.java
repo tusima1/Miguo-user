@@ -136,7 +136,7 @@ public class ScanResultHandler extends OnActivityResultHandler
 
 	public interface ScanResultDealerListener
 	{
-		public boolean onResult(String result);
+		boolean onResult(String result);
 	}
 
 }

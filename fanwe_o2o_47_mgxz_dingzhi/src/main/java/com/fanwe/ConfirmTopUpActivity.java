@@ -8,12 +8,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.barry.UserUpdateDao;
@@ -60,7 +59,7 @@ import com.unionpay.UPPayAssistEx;
 import java.util.HashMap;
 import java.util.List;
 
-public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler, RefreshCalbackView, CallbackView2 {
+public class ConfirmTopUpActivity extends BaseActivity implements IWXAPIEventHandler, RefreshCalbackView, CallbackView {
     @ViewInject(R.id.tv_money)
     private TextView mTv_money;
 

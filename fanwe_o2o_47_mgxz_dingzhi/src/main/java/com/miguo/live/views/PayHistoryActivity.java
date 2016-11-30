@@ -26,7 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.fanwe.BaseActivity;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
@@ -40,7 +40,7 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PayHistoryActivity extends BaseActivity implements CallbackView2 {
+public class PayHistoryActivity extends BaseActivity implements CallbackView {
     private Context mContext = PayHistoryActivity.this;
     private PullToRefreshPinnedSectionListView mPTR;
     private List<ModelPayHistory> datas = new ArrayList<>();

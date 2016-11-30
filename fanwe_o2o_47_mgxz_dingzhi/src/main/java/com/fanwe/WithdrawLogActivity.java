@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fanwe.adapter.WithdrawLogAdapter;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.PageBean;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
@@ -42,7 +42,7 @@ import java.util.List;
  * @author cxk
  * 
  */
-public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
+public class WithdrawLogActivity extends BaseActivity implements CallbackView {
 
 	@ViewInject(R.id.ptrlv_content)
 	private PullToRefreshScrollView mPtrlv_content;
@@ -89,7 +89,7 @@ public class WithdrawLogActivity extends BaseActivity implements CallbackView2 {
 	}
 
 	private void getMemberRank() {
-		tempHttp = new UserHttpHelper(this, new CallbackView2() {
+		tempHttp = new UserHttpHelper(this, new CallbackView() {
 			@Override
 			public void onSuccess(String responseBody) {
 

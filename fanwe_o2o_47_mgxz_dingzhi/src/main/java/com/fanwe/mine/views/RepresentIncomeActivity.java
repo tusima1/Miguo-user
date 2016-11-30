@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
@@ -33,7 +33,7 @@ import java.util.List;
  * 代言收益
  * Created by qiang.chen on 2016/10/20.
  */
-public class RepresentIncomeActivity extends Activity implements CallbackView2 {
+public class RepresentIncomeActivity extends Activity implements CallbackView {
     private Context mContext = RepresentIncomeActivity.this;
     private PullToRefreshPinnedSectionListView mPTR;
     private TextView tvMoney;

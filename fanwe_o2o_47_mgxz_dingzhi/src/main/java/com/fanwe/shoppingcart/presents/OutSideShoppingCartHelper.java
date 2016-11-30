@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
@@ -39,14 +39,14 @@ public class OutSideShoppingCartHelper extends Presenter {
      * 回调。
      */
     private RefreshCalbackView mCallbackView;
-    private CallbackView2 callbackView2;
+    private CallbackView callbackHH;
 
     public OutSideShoppingCartHelper(RefreshCalbackView mCallbackView) {
         this.mCallbackView = mCallbackView;
     }
 
-    public OutSideShoppingCartHelper(CallbackView2 mCallbackView) {
-        this.callbackView2 = mCallbackView;
+    public OutSideShoppingCartHelper(CallbackView mCallbackView) {
+        this.callbackHH = mCallbackView;
     }
 
 
@@ -345,7 +345,7 @@ public class OutSideShoppingCartHelper extends Presenter {
                 String message = root.getMessage();
                 if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
                     if (root != null && root.getResult() != null && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null) {
-                        ShoppingBody shoppingBody = (ShoppingBody) root.getResult().get(0).getBody().get(0);
+                        ShoppingBody shoppingBody = root.getResult().get(0).getBody().get(0);
                         List<ShoppingBody> datas = new ArrayList<ShoppingBody>();
                         datas.add(shoppingBody);
                         if(mCallbackView == null) {
@@ -401,7 +401,7 @@ public class OutSideShoppingCartHelper extends Presenter {
                 String message = root.getMessage();
                 if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
                     if (root != null && root.getResult() != null && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null) {
-                        ShoppingBody shoppingBody = (ShoppingBody) root.getResult().get(0).getBody().get(0);
+                        ShoppingBody shoppingBody = root.getResult().get(0).getBody().get(0);
                         List<ShoppingBody> datas = new ArrayList<ShoppingBody>();
                         datas.add(shoppingBody);
                         mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_GET, datas);
@@ -587,7 +587,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(callbackView2 == null) {
+                if(callbackHH == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<ModelUserRedPacket>>() {
@@ -598,29 +598,29 @@ public class OutSideShoppingCartHelper extends Presenter {
                 String message = root.getMessage();
                 if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
                     List<ModelUserRedPacket> datas = validateBodyList(root);
-                    callbackView2.onSuccess(ShoppingCartconstants.GET_USERING_REDPACKETS, datas);
+                    callbackHH.onSuccess(ShoppingCartconstants.GET_USERING_REDPACKETS, datas);
                 } else {
-                    callbackView2.onFailue(message);
+                    callbackHH.onFailue(message);
                 }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(callbackView2 == null) {
+                if(callbackHH == null) {
                     return;
                 }
-                callbackView2.onFailue(message);
+                callbackHH.onFailue(message);
             }
 
             @Override
             public void onFinish() {
-                if(callbackView2 == null) {
+                if(callbackHH == null) {
                     return;
                 }
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        callbackView2.onFinish(UserConstants.USER_RED_PACKET_LIST);
+                        callbackHH.onFinish(UserConstants.USER_RED_PACKET_LIST);
                     }
                 });
             }
@@ -679,6 +679,6 @@ public class OutSideShoppingCartHelper extends Presenter {
     @Override
     public void onDestory() {
         mCallbackView = null;
-        callbackView2 = null;
+        callbackHH = null;
     }
 }

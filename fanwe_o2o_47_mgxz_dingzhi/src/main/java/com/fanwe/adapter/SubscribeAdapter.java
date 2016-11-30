@@ -64,7 +64,8 @@ public class SubscribeAdapter extends SDBaseAdapter<GetbrandlistActItemModel>
 
 	public interface SubscribeAdapterListener
 	{
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked, GetbrandlistActItemModel model);
+		void onCheckedChanged(CompoundButton buttonView, boolean isChecked,
+							  GetbrandlistActItemModel model);
 	}
 
 }

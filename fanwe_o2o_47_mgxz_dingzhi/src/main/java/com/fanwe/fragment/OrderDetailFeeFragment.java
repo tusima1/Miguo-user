@@ -168,11 +168,7 @@ public class OrderDetailFeeFragment extends OrderDetailBaseFragment {
         }else{
             if(!TextUtils.isEmpty(orderId)){
                 float oldYueFloat = SDFormatUtil.stringToFloat(mCheckActModel.getAccountmoney());
-                if(oldYueFloat >0){
-                    result =  true;
-                }else{
-                    result = false;
-                }
+                result = oldYueFloat > 0;
             }
         }
         if(result){

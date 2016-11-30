@@ -714,4 +714,9 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView, 
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

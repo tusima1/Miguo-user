@@ -76,8 +76,8 @@ public class SellerFragment extends Fragment {
         titleLayout = (LinearLayout) view.findViewById(R.id.title_layout);
         tvAll = (TextView) view.findViewById(R.id.tv_all_frag_seller);
         tvGroupon = (TextView) view.findViewById(R.id.tv_groupon_frag_seller);
-        viewAll = (View) view.findViewById(R.id.view_all_frag_seller);
-        viewGroupon = (View) view.findViewById(R.id.view_groupon_frag_seller);
+        viewAll = view.findViewById(R.id.view_all_frag_seller);
+        viewGroupon = view.findViewById(R.id.view_groupon_frag_seller);
         ivSearch = (ImageView) view.findViewById(R.id.iv_search_frag_seller);
         ivBack = (ImageView) view.findViewById(R.id.iv_back_frag_seller);
         layoutContent = (FrameLayout) view.findViewById(R.id.layout_content_frag_seller);

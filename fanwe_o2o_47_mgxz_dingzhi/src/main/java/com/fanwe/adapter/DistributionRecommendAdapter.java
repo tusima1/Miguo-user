@@ -75,7 +75,7 @@ public class DistributionRecommendAdapter extends SDBaseAdapter<DistributionReco
 
 	public interface DistributionRecommendAdapterListener
 	{
-		public void onCheckRecommend(DistributionRecommendModel model);
+		void onCheckRecommend(DistributionRecommendModel model);
 	}
 
 }

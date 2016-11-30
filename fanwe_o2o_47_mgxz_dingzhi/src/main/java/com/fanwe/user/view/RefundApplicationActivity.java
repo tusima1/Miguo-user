@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fanwe.BaseActivity;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.library.customview.StickyScrollView;
@@ -34,7 +34,7 @@ import java.util.List;
  *         退款申请
  *
  */
-public class RefundApplicationActivity extends BaseActivity implements CallbackView2 {
+public class RefundApplicationActivity extends BaseActivity implements CallbackView {
 
 	private SDStickyScrollView mPtr;
 	private TextView mTv_order_idNum;

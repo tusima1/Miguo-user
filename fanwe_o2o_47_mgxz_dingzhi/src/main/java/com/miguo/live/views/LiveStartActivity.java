@@ -420,6 +420,11 @@ public class LiveStartActivity extends Activity implements CallbackView {
         MGToast.showToast(responseBody);
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private void getRecordId() {
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(LiveStartActivity.this, this);

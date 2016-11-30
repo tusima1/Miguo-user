@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -29,7 +29,7 @@ import java.util.List;
  * 收藏列表
  * Created by Administrator on 2016/9/12.
  */
-public class CollectListActivity extends Activity implements CallbackView2 {
+public class CollectListActivity extends Activity implements CallbackView {
     private Context mContext = CollectListActivity.this;
     private UserHttpHelper userHttpHelper;
     private PullToRefreshListView ptrl;

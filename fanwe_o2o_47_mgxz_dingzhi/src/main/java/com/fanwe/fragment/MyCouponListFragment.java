@@ -10,9 +10,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.fanwe.base.CallbackView;
 import com.fanwe.user.view.MyCouponDetailActivity;
 import com.fanwe.adapter.MyCouponsListAdapter;
-import com.fanwe.base.CallbackView2;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
@@ -31,7 +31,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyCouponListFragment extends BaseFragment implements CallbackView2 {
+public class MyCouponListFragment extends BaseFragment implements CallbackView {
 
     private UserHttpHelper httpHelper;
     private boolean isLoadMore;

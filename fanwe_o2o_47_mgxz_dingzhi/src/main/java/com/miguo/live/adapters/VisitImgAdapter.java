@@ -34,9 +34,9 @@ public class VisitImgAdapter extends BaseAdapter {
      * 点击加载更多
      */
     public interface AdddMore {
-        public void add();
+        void add();
 
-        public void delete(int position);
+        void delete(int position);
     }
 
     public VisitImgAdapter(Context mContext, LayoutInflater layoutInflater, ArrayList<String> datas) {

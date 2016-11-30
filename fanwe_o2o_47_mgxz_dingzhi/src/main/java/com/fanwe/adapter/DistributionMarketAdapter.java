@@ -181,6 +181,11 @@ public class DistributionMarketAdapter extends SDBaseAdapter<Supplier_fx> implem
     public void onFailue(String responseBody) {
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {

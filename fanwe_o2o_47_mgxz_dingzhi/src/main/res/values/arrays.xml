@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="arrText">
-        <item >我的</item>
-      <!--   <item >市场</item> -->
-    </string-array>
     <string-array name="my_arrText">
         <item >可用红包</item>
         <item >历史红包</item>

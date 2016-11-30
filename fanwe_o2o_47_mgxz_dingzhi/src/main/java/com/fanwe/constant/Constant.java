@@ -41,7 +41,7 @@ public class Constant {
     }
 
     public enum TitleType {
-        TITLE_NONE, TITLE;
+        TITLE_NONE, TITLE
     }
 
     public static final class SearchTypeMap {
@@ -186,7 +186,7 @@ public class Constant {
         /**
          * 已登录,需要验证
          */
-        LOGIN_NEED_VALIDATE;
+        LOGIN_NEED_VALIDATE
     }
 
     public static final class IndexType {

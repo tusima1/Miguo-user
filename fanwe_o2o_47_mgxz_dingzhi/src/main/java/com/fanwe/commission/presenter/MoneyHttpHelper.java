@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.commission.model.CommissionConstance;
@@ -32,9 +32,9 @@ import java.util.TreeMap;
 public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
 
     private Gson gson;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
 
-    public MoneyHttpHelper(CallbackView2 mView2) {
+    public MoneyHttpHelper(CallbackView mView2) {
         this.mView2=mView2;
         this.gson=new Gson();
     }

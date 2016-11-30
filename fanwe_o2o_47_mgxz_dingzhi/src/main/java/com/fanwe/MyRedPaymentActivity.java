@@ -12,20 +12,15 @@ import android.widget.ListView;
 
 import com.fanwe.adapter.MyRedPaymentAdapter;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.RedEnvelopeModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_ecv_indexActModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.JsonUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +87,7 @@ public class MyRedPaymentActivity extends BaseActivity {
 				
 				if(isChecked)
 				{
-					mList.clear();;
+					mList.clear();
 				}else
 				{	mList.clear();
 					mList =mAdapter.getPosition();
@@ -161,29 +156,6 @@ public class MyRedPaymentActivity extends BaseActivity {
 	}
 
 	protected void requestData() {
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_red_packet");
-		model.put("invalid", 0 );
-		InterfaceServer.getInstance().requestInterface(model, new RequestCallBack<String>()
-		{
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				Uc_ecv_indexActModel actModel = JsonUtil.json2Object(responseInfo.result, Uc_ecv_indexActModel.class);
-				if (actModel.getStatus() > 0)
-				{
-					mActModel = actModel;
-					mAdapter.updateData(actModel.getList());
-				}
-			}
-			
-			@Override
-			public void onFinish()
-			{
-				mPtrsv_all.onRefreshComplete();
-				super.onFinish();
-			}
-		});
 	}
 
 	private void initTitle() {

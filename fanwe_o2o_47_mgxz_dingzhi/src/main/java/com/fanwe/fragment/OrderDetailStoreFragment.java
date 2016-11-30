@@ -105,6 +105,6 @@ public class OrderDetailStoreFragment extends StoreConfirmOrderBaseFragment{
 	
 	public interface StoreOrderDetailFragmentListener
 	{
-		public void editMoneyChange(String money);
+		void editMoneyChange(String money);
 	}
 }

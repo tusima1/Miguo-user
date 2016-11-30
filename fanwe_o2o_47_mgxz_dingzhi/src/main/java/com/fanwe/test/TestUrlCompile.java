@@ -27,7 +27,7 @@ public class TestUrlCompile {
 
 
         TestUrlCompile cc = new TestUrlCompile();
-        cc.getCompleteUrl(value1,str2);
+        getCompleteUrl(value1,str2);
 
     }
 

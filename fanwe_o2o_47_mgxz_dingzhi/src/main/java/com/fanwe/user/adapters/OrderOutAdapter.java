@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.views.MaxHeightListView;
 import com.fanwe.ConfirmOrderActivity;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
@@ -167,7 +167,7 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
             @Override
             public void onClickConfirm(View v, SDDialogCustom dialog) {
-                new OrderHttpHelper(new CallbackView2() {
+                new OrderHttpHelper(new CallbackView() {
                     @Override
                     public void onSuccess(String responseBody) {
 
@@ -223,7 +223,7 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
             @Override
             public void onClickConfirm(View v, SDDialogCustom dialog) {
-                new OrderHttpHelper(new CallbackView2() {
+                new OrderHttpHelper(new CallbackView() {
                     @Override
                     public void onSuccess(String responseBody) {
 

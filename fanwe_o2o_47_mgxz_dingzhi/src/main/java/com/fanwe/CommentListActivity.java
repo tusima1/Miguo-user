@@ -325,6 +325,11 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

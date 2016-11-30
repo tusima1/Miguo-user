@@ -102,7 +102,7 @@ public class LocalImageAdapter extends SDBaseAdapter<LocalImageModel>
 
 	public interface LocalImageAdapterListener
 	{
-		public boolean onChecked(SDImageCheckBox checkBox, boolean isChecked);
+		boolean onChecked(SDImageCheckBox checkBox, boolean isChecked);
 	}
 
 }

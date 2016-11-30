@@ -66,7 +66,7 @@ public class CollectListAdapter extends BaseAdapter {
             mHolder.ivIcon = (CircleImageView) convertView.findViewById(R.id.iv_icon_item_collect);
             mHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name_item_collect);
             mHolder.tvNum = (TextView) convertView.findViewById(R.id.tv_num_item_collect);
-            mHolder.viewLine = (View) convertView.findViewById(R.id.view_item_collect);
+            mHolder.viewLine = convertView.findViewById(R.id.view_item_collect);
             mHolder.recyclerView = (RecyclerView) convertView.findViewById(R.id.recyclerview_item_collect);
 
             convertView.setTag(mHolder);

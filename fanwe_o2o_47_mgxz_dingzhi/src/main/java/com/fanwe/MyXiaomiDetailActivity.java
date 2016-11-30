@@ -9,7 +9,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.adapter.MyXiaoMiDetailAdapter;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDListViewInScroll;
 import com.fanwe.library.common.SDActivityManager;
@@ -36,7 +36,7 @@ import java.util.List;
  *
  * @author cxk
  */
-public class MyXiaomiDetailActivity extends BaseActivity implements CallbackView2 {
+public class MyXiaomiDetailActivity extends BaseActivity implements CallbackView {
 
     @ViewInject(R.id.frag_my_detail)
     private PullToRefreshScrollView mPtrsvAll;

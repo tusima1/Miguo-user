@@ -839,6 +839,11 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

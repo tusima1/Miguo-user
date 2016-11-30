@@ -2,10 +2,9 @@ package com.fanwe.user.presents;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -84,12 +83,12 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
     private static final String TAG = UserHttpHelper.class.getSimpleName();
     private Gson gson;
     private UserCurrentInfo userCurrentInfo;
-    private CallbackView2 mView;
+    private CallbackView mView;
     private Context mContext;
 
     public static final String RESULT_OK = "no_body_but_is_ok";
 
-    public UserHttpHelper(Context mContext, CallbackView2 mView) {
+    public UserHttpHelper(Context mContext, CallbackView mView) {
         this.mContext = mContext;
         this.mView = mView;
         gson = new Gson();

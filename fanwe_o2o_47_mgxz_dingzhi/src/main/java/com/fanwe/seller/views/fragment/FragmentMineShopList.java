@@ -64,11 +64,7 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
     protected void init() {
         super.init();
         type = getArguments().getInt("type");
-        if (type == 1) {
-            isNotMine = false;
-        } else {
-            isNotMine = true;
-        }
+        isNotMine = type != 1;
         sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         getData();
         bindDefaultLvData();
@@ -156,6 +152,11 @@ public class FragmentMineShopList extends BaseFragment implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

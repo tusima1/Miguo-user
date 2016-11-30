@@ -18,19 +18,13 @@ import com.fanwe.WithdrawLogActivity;
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
 import com.fanwe.constant.ServerUrl;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
 import com.fanwe.model.Message;
-import com.fanwe.model.MessageCount;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 
@@ -156,35 +150,6 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 	}
 
 	protected void startActivityWithUpdateMessage(final String act, final int object_id) {
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_message");
-		model.putAct("msg_num");
-		SDRequestCallBack<MessageCount> handler = new SDRequestCallBack<MessageCount>() {
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel != null) {
-					MessageHelper.msg_Activity = actModel.getMsg_activity();
-					int msg_normal = actModel.getMsg_normal();
-					MessageHelper.msg_All = MessageHelper.msg_Activity + msg_normal;
-				} else {
-					MessageHelper.msg_Activity = 0;
-					MessageHelper.msg_All = 0;
-				}
-				// 保证消息在首页是有变化的
-				StartActivityByAct(act, object_id);
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg) {
-//				MGToast.showToast("获取消息数量失败!");
-			}
-
-			@Override
-			public void onFinish() {
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 
 	}
 

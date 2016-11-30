@@ -294,6 +294,11 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
         resultMessage = "没有抢到，下回再努力!";
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     public String getRed_packet_key() {
         return red_packet_key;
     }

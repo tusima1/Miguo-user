@@ -14,8 +14,6 @@ import com.miguo.live.adapters.PagerRedPacketAdapter;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
-import java.util.List;
-
 
 /**
  * Created by didik on 2016/7/29.
@@ -35,23 +33,7 @@ public class PagerRedPacketView extends LinearLayout {
         }
     };
 
-    private CallbackView thisCallBack=new CallbackView() {
-        @Override
-        public void onSuccess(String responseBody) {
-            MGToast.showToast(""+responseBody);
-        }
-
-        @Override
-        public void onSuccess(String method, List datas) {
-            MGToast.showToast(""+method);
-        }
-
-        @Override
-        public void onFailue(String responseBody) {
-            MGToast.showToast(""+responseBody);
-        }
-    };
-    public PagerRedPacketView(Context context,CallbackView mCallbackView,PagerRedPacketAdapter mAdapter) {
+    public PagerRedPacketView(Context context, CallbackView mCallbackView, PagerRedPacketAdapter mAdapter) {
         super(context);
         this.mCallbackView  = mCallbackView;
         this.mAdapter = mAdapter;

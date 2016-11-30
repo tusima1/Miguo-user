@@ -397,6 +397,11 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private int isCollect;
     private ModelGroupBuyDetail modelGroupBuyDetail;
     private Share share;

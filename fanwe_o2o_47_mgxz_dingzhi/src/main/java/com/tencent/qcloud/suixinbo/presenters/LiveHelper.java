@@ -178,11 +178,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      * @param isEnable
      */
     private void enableCamera(final int camera, boolean isEnable) {
-        if (isEnable) {
-            isOpenCamera = true;
-        } else {
-            isOpenCamera = false;
-        }
+        isOpenCamera = isEnable;
         SxbLog.i(TAG, "createlive enableCamera camera " + camera + "  isEnable " + isEnable);
         AVVideoCtrl avVideoCtrl = QavsdkControl.getInstance().getAVContext().getVideoCtrl();
         //打开摄像头
@@ -192,11 +188,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 SxbLog.i(TAG, "createlive enableCamera result " + result);
                 if (result == AVError.AV_OK) {//开启成功
 
-                    if (camera == FRONT_CAMERA) {
-                        mIsFrontCamera = true;
-                    } else {
-                        mIsFrontCamera = false;
-                    }
+                    mIsFrontCamera = camera == FRONT_CAMERA;
 
                     //如果是主播直接本地渲染
 //                    if (MySelfInfo.getInstance().getIdStatus() == Constants.HOST)
@@ -218,7 +210,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     public void requestViewList(ArrayList<String> identifiers) {
         SxbLog.i(TAG, "requestViewList " + identifiers);
         if (identifiers.size() == 0) return;
-        AVEndpoint endpoint = ((AVRoomMulti) QavsdkControl.getInstance().getAVContext().getRoom()).getEndpointById(identifiers.get(0));
+        AVEndpoint endpoint = QavsdkControl.getInstance().getAVContext().getRoom().getEndpointById(identifiers.get(0));
         SxbLog.d(TAG, "requestViewList hostIdentifier " + identifiers + " endpoint " + endpoint);
         if (endpoint != null) {
             ArrayList<String> alreadyIds = QavsdkControl.getInstance().getRemoteVideoIds();//已经存在的IDs
@@ -284,7 +276,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
                 public void onSuccess(TIMMessage timMessage) {
                     //发送成回显示消息内容
                     for (int j = 0; j < timMessage.getElementCount(); j++) {
-                        TIMElem elem = (TIMElem) timMessage.getElement(0);
+                        TIMElem elem = timMessage.getElement(0);
                         if (timMessage.isSelf()) {
                             handleTextMessage(elem, MySelfInfo.getInstance().getNickName(), MySelfInfo.getInstance().getAvatar());
                         } else {
@@ -1002,7 +994,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
     private long streamChannelID;
 
     public void pushAction(TIMAvManager.StreamParam mStreamParam) {
-        int roomid = (int) QavsdkControl.getInstance().getAVContext().getRoom().getRoomId();
+        int roomid = QavsdkControl.getInstance().getAVContext().getRoom().getRoomId();
         SxbLog.i(TAG, "Push roomid: " + roomid);
         roomInfo = TIMAvManager.getInstance().new RoomInfo();
         roomInfo.setRoomId(roomid);
@@ -1124,7 +1116,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         SxbLog.d(TAG, " changeAuthority");
         QavsdkControl qavsdk = QavsdkControl.getInstance();
         AVContext avContext = qavsdk.getAVContext();
-        AVRoomMulti room = (AVRoomMulti) avContext.getRoom();
+        AVRoomMulti room = avContext.getRoom();
         if (auth_buffer != null) {
             return room.changeAuthority(auth_bits, auth_buffer, auth_buffer.length, callback);
         } else {
@@ -1139,7 +1131,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
      * @param role 角色名
      */
     public void changeRole(final String role, final boolean leverupper) {
-        ((AVRoomMulti) (QavsdkControl.getInstance().getAvRoomMulti())).changeAVControlRole(role, new AVRoomMulti.ChangeAVControlRoleCompleteCallback() {
+        QavsdkControl.getInstance().getAvRoomMulti().changeAVControlRole(role, new AVRoomMulti.ChangeAVControlRoleCompleteCallback() {
                     @Override
                     public void OnComplete(int arg0) {
                         if (arg0 == AVError.AV_OK) {

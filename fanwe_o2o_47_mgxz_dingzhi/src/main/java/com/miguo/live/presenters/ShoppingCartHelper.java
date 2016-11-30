@@ -6,7 +6,6 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
@@ -25,7 +24,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
 
     public Context mContext;
     private CallbackView mView;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
 
     public ShoppingCartHelper(Context mContext,CallbackView mView){
         this.mContext = mContext;
@@ -33,7 +32,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         this.mView = mView;
     }
 
-    public ShoppingCartHelper(CallbackView2 mView2){
+    public ShoppingCartHelper(CallbackView mView2){
         this.mView2 = mView2;
     }
 

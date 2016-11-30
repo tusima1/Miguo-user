@@ -163,24 +163,24 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
         //商圈
-        if (SDCollectionUtil.isEmpty(App.getInstance().modelBusinessCircleLists)) {
+        if (SDCollectionUtil.isEmpty(App.modelBusinessCircleLists)) {
             sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
         } else {
-            modelBusinessCircleLists = App.getInstance().modelBusinessCircleLists;
+            modelBusinessCircleLists = App.modelBusinessCircleLists;
             bindMiddleCategoryViewData(modelBusinessCircleLists);
         }
         //类别
-        if (SDCollectionUtil.isEmpty(App.getInstance().modelClassifyLists)) {
+        if (SDCollectionUtil.isEmpty(App.modelClassifyLists)) {
             sellerHttpHelper.getClassifyList();
         } else {
-            modelClassifyLists = App.getInstance().modelClassifyLists;
+            modelClassifyLists = App.modelClassifyLists;
             bindLeftCategoryViewData(modelClassifyLists);
         }
         //排序
-        if (SDCollectionUtil.isEmpty(App.getInstance().navs)) {
+        if (SDCollectionUtil.isEmpty(App.navs)) {
             sellerHttpHelper.getOrderByList();
         } else {
-            navs = App.getInstance().navs;
+            navs = App.navs;
             bindRightCategoryViewData(navs);
         }
     }
@@ -594,17 +594,17 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
             //商圈
             modelBusinessCircleLists = datas;
             message.what = 0;
-            App.getInstance().modelBusinessCircleLists = datas;
+            App.modelBusinessCircleLists = datas;
         } else if (SellerConstants.CLASSIFY_LIST.equals(method)) {
             //类别
             modelClassifyLists = datas;
             message.what = 1;
-            App.getInstance().modelClassifyLists = datas;
+            App.modelClassifyLists = datas;
         } else if (SellerConstants.ORDER_BY_LIST.equals(method)) {
             //排序
             navs = datas;
             message.what = 2;
-            App.getInstance().navs = datas;
+            App.navs = datas;
         } else if (SellerConstants.BUSINESS_LIST.equals(method)) {
             //店铺
             itemsModelBusinessListings = datas;
@@ -621,6 +621,11 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
                 mPtrlvContent.onRefreshComplete();
             }
         });
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 
     private Handler mHandler = new Handler() {

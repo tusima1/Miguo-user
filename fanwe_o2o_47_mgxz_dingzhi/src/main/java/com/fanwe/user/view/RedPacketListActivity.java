@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
@@ -24,7 +24,7 @@ import com.miguo.utils.MGUIUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RedPacketListActivity extends MGBaseActivity implements CallbackView2 {
+public class RedPacketListActivity extends MGBaseActivity implements CallbackView {
 
     private PullToRefreshListView mPull2Refresh;
     private LinearLayout mLL_empty;

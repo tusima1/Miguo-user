@@ -1,35 +1,5 @@
 package com.fanwe;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fanwe.common.CommonInterface;
-import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.fragment.StoreOrderAccountPaymentFragment;
-import com.fanwe.fragment.StoreOrderAccountPaymentFragment.StoreOrderAccountPaymentFragmentListener;
-import com.fanwe.fragment.StoreOrderFeeFragment;
-import com.fanwe.fragment.StoreOrderPaymentsFragment;
-import com.fanwe.fragment.StoreOrderPaymentsFragment.StoreOrderPaymentsFragmentListener;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.library.customview.ClearEditText;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.Cart_doneActModel;
-import com.fanwe.model.FeeinfoModel;
-import com.fanwe.model.Payment_listModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Store_ActModel;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.sunday.eventbus.SDEventManager;
-import com.fanwe.o2o.miguo.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,6 +9,26 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.fragment.StoreOrderAccountPaymentFragment;
+import com.fanwe.fragment.StoreOrderAccountPaymentFragment.StoreOrderAccountPaymentFragmentListener;
+import com.fanwe.fragment.StoreOrderFeeFragment;
+import com.fanwe.fragment.StoreOrderPaymentsFragment;
+import com.fanwe.fragment.StoreOrderPaymentsFragment.StoreOrderPaymentsFragmentListener;
+import com.fanwe.library.customview.ClearEditText;
+import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.model.FeeinfoModel;
+import com.fanwe.model.Payment_listModel;
+import com.fanwe.model.Store_ActModel;
+import com.fanwe.o2o.miguo.R;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StoreConfirmOrderActivity extends BaseActivity {
 
@@ -185,36 +175,6 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 	}
 
 	private void requestData() {
-		RequestModel model = new RequestModel();
-		model.putCtl("cart");
-		model.putAct("discount_pay");
-		model.put("store_id", mId);
-		model.putUser();
-		SDRequestCallBack<Store_ActModel> handler = new SDRequestCallBack<Store_ActModel>() {
-
-			@Override
-			public void onStart() {
-				SDDialogManager.showProgressDialog("正在加载");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				dealRequestDataSuccess(actModel);
-				mActModel = actModel;
-				initTitle(actModel);
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg) {
-
-			}
-
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
 	protected void dealRequestDataSuccess(Store_ActModel actModel) {
@@ -536,61 +496,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 	 * 确认支付
 	 */
 	protected void requestDoneOrder() {
-		RequestModel model = new RequestModel();
-		model.putCtl("cart");
-		model.putAct("do_discount_pay");
-		model.putUser();
-		model.put("store_id", mId);
-		model.put("deal_total_price", money);
-		model.put("payment", payId);
-		model.put("all_account_money", select);
-		model.put("deal_other_price", money2);
 
-		SDRequestCallBack<Cart_doneActModel> handler = new SDRequestCallBack<Cart_doneActModel>() {
-
-			@Override
-			public void onStart() {
-				SDDialogManager.showProgressDialog("正在加载");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				dealRequestDoneOrderSuccess(actModel);
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg) {
-
-			}
-
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
-
-	}
-
-	protected void dealRequestDoneOrderSuccess(Cart_doneActModel actModel) {
-		Intent intent;
-		switch (actModel.getStatus()) {
-		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
-			startActivity(intent);
-			finish();
-			break;
-		case 1:
-			CommonInterface.updateCartNumber();
-			SDEventManager.post(EnumEventTag.DONE_CART_SUCCESS.ordinal());
-			intent = new Intent(mActivity, PayActivity.class);
-			intent.putExtra(PayActivity.EXTRA_ORDER_ID, actModel.getOrder_id());
-			startActivity(intent);
-			break;
-
-		default:
-			break;
-		}
 	}
 
 	@Override

@@ -6,10 +6,8 @@ import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
-
 import com.fanwe.GoodsListActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.ScoresListActivity;
@@ -21,6 +19,7 @@ import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.YouHuiListActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.IndexType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
@@ -32,7 +31,6 @@ import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.seller.views.GoodsDetailActivity;
-import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
@@ -122,7 +120,7 @@ public class AppJsHandler extends BaseJsHandler {
                         EnumEventTag.START_SCAN_QRCODE.ordinal());
                 return;
             case IndexType.NEARUSER:
-                intent = new Intent(App.getApplication(), NearbyVipActivity.class);
+                //NearbyVipActivity
                 break;
             case IndexType.DISTRIBUTION_STORE:
                 intent = new Intent(App.getApplication(),
@@ -204,7 +202,7 @@ public class AppJsHandler extends BaseJsHandler {
 
 
 		if (ifLogin) {
-			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
+			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new CallbackView() {
 				@Override
 				public void onSuccess(String responseBody) {
 
@@ -220,11 +218,12 @@ public class AppJsHandler extends BaseJsHandler {
                     SDToast.showToast(responseBody);
 				}
 
-				@Override
-				public void onFailue(String method, String responseBody) {
+                @Override
+                public void onFinish(String method) {
 
-				}
-			});
+                }
+
+            });
 			outSideShoppingCartHelper.addShopCart(
 					userId,
 					App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
@@ -243,11 +242,7 @@ public class AppJsHandler extends BaseJsHandler {
 
 
 	public void checkLogin() {
-		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-			ifLogin = true;
-		} else {
-			ifLogin = false;
-		}
+        ifLogin = !TextUtils.isEmpty(App.getInstance().getToken());
 	}
 
     @JavascriptInterface

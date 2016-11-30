@@ -16,7 +16,7 @@ import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.common.MGDict;
 import com.fanwe.common.model.getMGDict.DictModel;
@@ -53,7 +53,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/9/13.
  */
 public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewClickListener,
-        View.OnClickListener, CallbackView2 {
+        View.OnClickListener, CallbackView {
     private RedDotView mRDV_orderNotPay;//待付款订单
     private RedDotView mRDV_orderNotUse;//待使用
     private RedDotView mRDV_orderNotComment;//待评价

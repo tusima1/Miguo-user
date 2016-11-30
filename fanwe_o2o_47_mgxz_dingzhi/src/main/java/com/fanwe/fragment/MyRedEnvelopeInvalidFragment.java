@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +9,20 @@ import android.widget.ListView;
 
 import com.fanwe.adapter.MyRedEnvelopeAdapter;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RedEnvelopeModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_ecv_indexActModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.JsonUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 失效红包
@@ -110,33 +105,6 @@ public class MyRedEnvelopeInvalidFragment extends BaseFragment
 
 	protected void requestData(final boolean isLoadMore)
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_red_packet");
-		model.put("invalid", n_valid);
-		model.putPage(mPage.getPage());
-		InterfaceServer.getInstance().requestInterface(model, new RequestCallBack<String>()
-		{
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				Uc_ecv_indexActModel actModel = JsonUtil.json2Object(responseInfo.result, Uc_ecv_indexActModel.class);
-				if (actModel.getStatus() > 0)
-				{
-					mActModel = actModel;
-					mPage.update(actModel.getPage());
-					bindData(isLoadMore);
-				}
-			}
-
-			@Override
-			public void onFinish()
-			{
-				mPtrlv_content.onRefreshComplete();
-				SDViewUtil.toggleEmptyMsgByList(mListModel, mLl_empty);
-				super.onFinish();
-			}
-
-		});
 	}
 
 	protected void bindData(boolean isLoadMore)

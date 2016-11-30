@@ -7,14 +7,12 @@ import java.util.List;
  * Created by Administrator on 2016/7/26.
  */
 public interface CallbackView {
-//
-//    void onSuccess(List<Result> responseBody);
-
     void onSuccess(String responseBody);
 
-    void onSuccess(String method,List datas);
+    void onSuccess(String method, List datas);
 
     void onFailue(String responseBody);
 
 
+    void onFinish(String method);
 }

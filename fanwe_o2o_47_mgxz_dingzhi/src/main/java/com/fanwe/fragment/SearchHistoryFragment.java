@@ -52,7 +52,7 @@ public class SearchHistoryFragment extends BaseFragment
 			default:
 				break;
 			}
-		};
+		}
 	};
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -151,7 +151,7 @@ public class SearchHistoryFragment extends BaseFragment
 		}
 		public interface OnSearchHistoryFragmentListener
 		{
-			public void setSearchHistory(Bundle bundle);
+			void setSearchHistory(Bundle bundle);
 		}
 		@Override
 		protected String setUmengAnalyticsTag() {

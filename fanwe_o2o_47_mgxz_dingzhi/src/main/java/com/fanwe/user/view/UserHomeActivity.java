@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
@@ -51,7 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 网红主页
  * Created by Administrator on 2016/9/20.
  */
-public class UserHomeActivity extends Activity implements CallbackView2, CallbackView {
+public class UserHomeActivity extends Activity implements CallbackView {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;

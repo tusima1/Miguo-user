@@ -663,6 +663,12 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
         pay_btn.setClickable(true);
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     public void onFinish(){
         pay_btn.setClickable(true);
     }

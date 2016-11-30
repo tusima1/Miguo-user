@@ -1648,10 +1648,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         if (id.equals(inviteView2.getTag())) {
             return true;
         }
-        if (id.equals(inviteView3.getTag())) {
-            return true;
-        }
-        return false;
+        return id.equals(inviteView3.getTag());
     }
 
     @Override
@@ -2355,15 +2352,16 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 
     /*校验数据*/
     public boolean checkDataIsNull(List datas) {
-        if (datas != null && datas.size() > 0) {
-            return false;//不为空
-        } else {
-            return true;//为null
-        }
+        return !(datas != null && datas.size() > 0);
     }
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

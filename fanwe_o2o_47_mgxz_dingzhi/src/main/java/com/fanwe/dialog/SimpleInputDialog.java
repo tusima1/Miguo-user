@@ -73,7 +73,7 @@ public class SimpleInputDialog extends SDDialogBase
 
 	public interface InputPopListener
 	{
-		public void onClickSend(String content, View v);
+		void onClickSend(String content, View v);
 	}
 
 }

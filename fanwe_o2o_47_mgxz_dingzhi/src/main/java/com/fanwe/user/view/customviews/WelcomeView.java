@@ -78,7 +78,7 @@ public class WelcomeView extends FrameLayout {
     }
 
     public interface OnNextClickListener{
-        public void onClick(View v);
+        void onClick(View v);
     }
 
     public void setOnNextClickListener(OnNextClickListener onNextClickListener){
@@ -86,7 +86,7 @@ public class WelcomeView extends FrameLayout {
     }
 
     public interface OnSkipClickListener{
-        public void onClick(View v);
+        void onClick(View v);
     }
 
     public void setOnSkipClickListener(OnSkipClickListener onSkipClickListener){

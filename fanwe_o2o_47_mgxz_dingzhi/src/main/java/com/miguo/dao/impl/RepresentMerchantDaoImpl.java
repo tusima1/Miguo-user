@@ -46,7 +46,7 @@ public class RepresentMerchantDaoImpl extends BaseDaoImpl implements RepresentMe
                 } else
                 {
                      onErrorResponse(root.getMessage(),root.getStatusCode());
-                };
+                }
                 getListener().onFinish();
             }
 

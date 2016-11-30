@@ -8,7 +8,6 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.SDStickyScrollView;
@@ -62,7 +61,7 @@ import java.util.List;
  *
  * @author js02
  */
-public class StoreDetailActivity extends BaseActivity implements CallbackView, CallbackView2 {
+public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     /**
      * 商家id (int)

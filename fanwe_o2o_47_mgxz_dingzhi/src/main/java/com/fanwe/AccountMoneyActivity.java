@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.library.title.SDTitleItem;
@@ -28,7 +28,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity implements CallbackView2 {
+public class AccountMoneyActivity extends BasePullToRefreshScrollViewActivity implements CallbackView {
 
     @ViewInject(R.id.tv_money)
     private TextView mTv_money;

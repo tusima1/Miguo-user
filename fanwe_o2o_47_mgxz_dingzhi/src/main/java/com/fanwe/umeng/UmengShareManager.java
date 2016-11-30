@@ -5,10 +5,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.RequestModel;
 import com.miguo.live.views.customviews.MGToast;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
@@ -93,28 +89,6 @@ public class UmengShareManager {
             @Override
             public void onResult(SHARE_MEDIA arg0) {
                 if (mTag == 1) {
-                    RequestModel model = new RequestModel();
-                    model.putCtl("cart");
-                    model.putAct("discount_pay_share");
-                    model.put("order_id", mOrder_id);
-                    SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>() {
-
-                        public void onSuccess(com.lidroid.xutils.http.ResponseInfo<String> responseInfo) {
-                            if (actModel.getStatus() == 1) {
-                                if (onSharedListener != null) {
-                                    onSharedListener.doSuccess();
-                                }
-                            } else {
-                                // TODO 分享失败
-                                if (onSharedListener != null) {
-                                    onSharedListener.doFail();
-                                }
-                            }
-                        }
-
-                        ;
-                    };
-                    InterfaceServer.getInstance().requestInterface(model, handler);
                 }
             }
 

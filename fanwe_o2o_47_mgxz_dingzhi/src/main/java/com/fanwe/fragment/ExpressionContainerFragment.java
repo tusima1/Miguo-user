@@ -141,7 +141,7 @@ public class ExpressionContainerFragment extends BaseFragment
 
 	public interface ExpressionContainerOnClickDelete
 	{
-		public void onClick(View v);
+		void onClick(View v);
 	}
 	@Override
 	protected String setUmengAnalyticsTag() {

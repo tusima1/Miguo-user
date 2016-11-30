@@ -113,7 +113,7 @@ public class OrderDetailAccountPaymentFragment extends OrderDetailBaseFragment
 
 	public interface OrderDetailAccountPaymentFragmentListener
 	{
-		public void onPaymentChange(boolean isSelected);
+		void onPaymentChange(boolean isSelected);
 	}
 
 }

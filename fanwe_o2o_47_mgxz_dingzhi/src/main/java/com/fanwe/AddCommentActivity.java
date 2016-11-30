@@ -306,4 +306,9 @@ public class AddCommentActivity extends BaseActivity implements CallbackView {
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

@@ -168,13 +168,13 @@ public class ImageListLoader
 
 	public interface ImageListLoaderListener
 	{
-		public void onStart();
+		void onStart();
 
-		public void onSuccess(String urlSuccess);
+		void onSuccess(String urlSuccess);
 
-		public void onFinish(List<String> listUrlSuccess);
+		void onFinish(List<String> listUrlSuccess);
 
-		public void onTimeOut();
+		void onTimeOut();
 	}
 
 }

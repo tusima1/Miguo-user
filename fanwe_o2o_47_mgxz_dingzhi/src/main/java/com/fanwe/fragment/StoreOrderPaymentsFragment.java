@@ -149,7 +149,7 @@ public class StoreOrderPaymentsFragment extends StoreConfirmOrderBaseFragment{
 
 	public interface StoreOrderPaymentsFragmentListener
 	{
-		public void onPaymentChange(Payment_listModel model);
+		void onPaymentChange(Payment_listModel model);
 	}
 
 }

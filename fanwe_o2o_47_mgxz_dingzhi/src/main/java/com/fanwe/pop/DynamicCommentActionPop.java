@@ -64,9 +64,9 @@ public class DynamicCommentActionPop extends SDPWindowBase
 
 	public interface DynamicCommentActionPopListener
 	{
-		public void onClickFav(View v);
+		void onClickFav(View v);
 
-		public void onClickReply(View v);
+		void onClickReply(View v);
 	}
 
 }

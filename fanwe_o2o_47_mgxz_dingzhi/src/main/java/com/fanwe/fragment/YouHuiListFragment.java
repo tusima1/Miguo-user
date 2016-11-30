@@ -18,34 +18,22 @@ import com.baidu.location.BDLocationListener;
 import com.fanwe.HomeSearchActivity;
 import com.fanwe.MapSearchActivity;
 import com.fanwe.YouHuiDetailActivity;
-import com.fanwe.adapter.CategoryCateLeftAdapter;
-import com.fanwe.adapter.CategoryCateRightAdapter;
-import com.fanwe.adapter.CategoryOrderAdapter;
-import com.fanwe.adapter.CategoryQuanLeftAdapter;
-import com.fanwe.adapter.CategoryQuanRightAdapter;
 import com.fanwe.adapter.YouHuiListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.SearchTypeMap;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.YouhuiModel;
-import com.fanwe.model.Youhuis_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
@@ -54,9 +42,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.ArrayList;
@@ -361,102 +348,7 @@ public class YouHuiListFragment extends BaseFragment {
     }
 
     private void requestData(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("youhuis");
-        model.put("quan_id", qid);
-        model.put("cate_id", cate_id);
-        model.put("tid", tid);
-        model.put("keyword", keyword);
-        model.put("order_type", order_type);
-        model.putPage(mPage.getPage());
-        SDRequestCallBack<Youhuis_indexActModel> handler = new SDRequestCallBack<Youhuis_indexActModel>() {
 
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    if (mIsFirstBindCategoryViewData) {
-//                        bindLeftCategoryViewData(actModel.getBcate_list());
-//                        bindMiddleCategoryViewData(actModel.getQuan_list());
-//                        bindRightCategoryViewData(actModel.getNavs());
-                        mIsFirstBindCategoryViewData = false;
-                    }
-                    mPage.update(actModel.getPage());
-                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                dealFinishRequest();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-
-    }
-
-    protected void dealFinishRequest() {
-        SDDialogManager.dismissProgressDialog();
-        mPtrlvContent.onRefreshComplete();
-        SDViewUtil.toggleEmptyMsgByList(mListModel, mLlEmpty);
-    }
-
-    private void bindLeftCategoryViewData(List<ModelClassifyList> listModel) {
-        if (!SDCollectionUtil.isEmpty(listModel)) {
-            int[] arrIndex = ModelClassifyList.findIndex(cate_id, tid, listModel);
-            int leftIndex = arrIndex[0];
-            int rightIndex = arrIndex[1];
-
-            ModelClassifyList leftModel = listModel.get(leftIndex);
-            List<ModelClassifyList> listRight = leftModel.getBcate_type();
-
-            CategoryCateLeftAdapter adapterLeft = new CategoryCateLeftAdapter(listModel, getActivity());
-            adapterLeft.setmDefaultIndex(leftIndex);
-
-            CategoryCateRightAdapter adapterRight = new CategoryCateRightAdapter(listRight, getActivity());
-            adapterRight.setmDefaultIndex(rightIndex);
-
-            mCvLeft.setLeftAdapter(adapterLeft);
-            mCvLeft.setRightAdapter(adapterRight);
-            mCvLeft.setAdapterFinish();
-        }
-    }
-
-    private void bindMiddleCategoryViewData(List<ModelBusinessCircleList> listModel) {
-        if (!SDCollectionUtil.isEmpty(listModel)) {
-            int[] arrIndex = ModelBusinessCircleList.findIndex(qid, listModel);
-            int leftIndex = arrIndex[0];
-            int rightIndex = arrIndex[1];
-
-            ModelBusinessCircleList leftModel = listModel.get(leftIndex);
-            List<ModelBusinessCircleList> listRight = leftModel.getQuan_sub();
-
-            CategoryQuanLeftAdapter adapterLeft = new CategoryQuanLeftAdapter(listModel, getActivity());
-            adapterLeft.setmDefaultIndex(leftIndex);
-
-            CategoryQuanRightAdapter adapterRight = new CategoryQuanRightAdapter(listRight, getActivity());
-            adapterRight.setmDefaultIndex(rightIndex);
-
-            mCvMiddle.setLeftAdapter(adapterLeft);
-            mCvMiddle.setRightAdapter(adapterRight);
-            mCvMiddle.setAdapterFinish();
-        }
-    }
-
-    private void bindRightCategoryViewData(List<ModelShopListNavs> listOrderModel) {
-        if (!SDCollectionUtil.isEmpty(listOrderModel)) {
-            CategoryOrderAdapter adapter = new CategoryOrderAdapter(listOrderModel, getActivity());
-            mCvRight.setAdapter(adapter);
-        }
     }
 
     private void registeClick() {

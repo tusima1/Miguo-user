@@ -36,7 +36,7 @@ public class ModelCommissionLog {
     private String money_type;
     private String dist_id_from;
     private String id;
-    private String order_id;;
+    private String order_id;
     private String order_sn;
     private String before_money;
     private String jump_id;

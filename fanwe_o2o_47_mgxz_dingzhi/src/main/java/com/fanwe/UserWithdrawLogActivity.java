@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.adapter.UserWithdrawLogAdapter;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.commission.model.getWithdrawLog.ModelWithdrawLog;
 import com.fanwe.commission.model.getWithdrawLog.ResultWithdrawLog;
 import com.fanwe.commission.presenter.MoneyHttpHelper;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class UserWithdrawLogActivity extends BaseActivity implements CallbackView2 {
+public class UserWithdrawLogActivity extends BaseActivity implements CallbackView {
 
     @ViewInject(R.id.ptrlv_content)
     private PullToRefreshListView mPtrlv_content;

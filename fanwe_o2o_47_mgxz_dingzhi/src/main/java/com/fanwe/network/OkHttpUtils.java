@@ -404,8 +404,8 @@ public class OkHttpUtils {
         Iterator<String> sgIt = treeMap.keySet().iterator();
 
         while (sgIt.hasNext()) {
-            String key = (String) sgIt.next();
-            String value = (String) treeMap.get(key);
+            String key = sgIt.next();
+            String value = treeMap.get(key);
             if (value == null) {
                 value = "";
             }

@@ -384,4 +384,9 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

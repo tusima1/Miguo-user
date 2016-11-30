@@ -87,7 +87,7 @@ public class GPSFragment extends BaseFragment
 	}
 	public interface OnGPSLintener
 	{
-		public void setOnGPSLintener(String city);
+		void setOnGPSLintener(String city);
 	}
 	@Override
 	protected String setUmengAnalyticsTag() {

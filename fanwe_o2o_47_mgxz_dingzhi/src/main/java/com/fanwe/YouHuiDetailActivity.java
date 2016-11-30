@@ -1,5 +1,8 @@
 package com.fanwe;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
 import com.fanwe.event.EnumEventTag;
@@ -9,13 +12,8 @@ import com.fanwe.fragment.YouhuiDetailNoticeFragment;
 import com.fanwe.fragment.YouhuiDetailOtherMerchantFragment;
 import com.fanwe.fragment.YouhuiDetailTopFragment;
 import com.fanwe.fragment.YouhuiDetailTopFragment.YouhuiDetailTopFragmentListener;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Youhui_indexActModel;
 import com.fanwe.model.Youhui_infoModel;
 import com.fanwe.o2o.miguo.R;
@@ -23,12 +21,9 @@ import com.fanwe.umeng.UmengShareManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
-
-import android.content.Intent;
-import android.os.Bundle;
 
 public class YouHuiDetailActivity extends BaseActivity
 {
@@ -151,39 +146,6 @@ public class YouHuiDetailActivity extends BaseActivity
 	 */
 	private void requestYouhuiDetail()
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("youhui");
-		model.putUser();
-		model.put("data_id", mId);
-		model.putLocation();
-		model.setmIsNeedCheckLoginState(false);
-		SDRequestCallBack<Youhui_indexActModel> handler = new SDRequestCallBack<Youhui_indexActModel>()
-		{
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					mActModel = actModel;
-					addFragments(actModel);
-				}
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-				mScrollView.onRefreshComplete();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
 	/**

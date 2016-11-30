@@ -304,7 +304,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                     nick = data.get("screen_name");
                 } else if (platform.equals(SHARE_MEDIA.SINA)) {
                     platformType = "3";
-                    String returnData = (String) data.get("result");
+                    String returnData = data.get("result");
                     Gson gson = new Gson();
 
                     HashMap<String, Object> maps = gson.fromJson(returnData, HashMap.class);
@@ -483,6 +483,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     @Override
     public void onFailue(String responseBody) {
         MGToast.showToast(responseBody);
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 
 

@@ -1324,15 +1324,16 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     /*校验数据*/
     public boolean checkDataIsNull(List datas) {
-        if (datas != null && datas.size() > 0) {
-            return false;//不为空
-        } else {
-            return true;//为null
-        }
+        return !(datas != null && datas.size() > 0);
     }
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

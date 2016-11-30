@@ -10,13 +10,11 @@ import android.widget.ImageView.ScaleType;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -27,6 +25,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getBussDictionInfo.ModelBussDictionInfo;
 import com.miguo.live.model.getUpToken.ModelUpToken;
 import com.miguo.live.presenters.LiveHttpHelper;
+import com.miguo.live.views.customviews.MGToast;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.sunday.eventbus.SDEventManager;
@@ -41,7 +40,7 @@ import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;
 
-public class UploadUserHeadActivity extends BaseActivity implements CallbackView2, CallbackView {
+public class UploadUserHeadActivity extends BaseActivity implements CallbackView {
 
     public static final String EXTRA_IMAGE_URL = "EXTRA_IMAGE_URL";
 

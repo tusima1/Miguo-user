@@ -5,7 +5,7 @@ import com.fanwe.base.CallbackView;
 /**
  * Created by Administrator on 2016/8/22.
  */
-public interface RefreshCalbackView extends CallbackView{
+public interface RefreshCalbackView extends CallbackView {
 
 
     /**

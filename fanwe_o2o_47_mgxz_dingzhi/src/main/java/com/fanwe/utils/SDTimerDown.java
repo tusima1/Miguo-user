@@ -57,11 +57,11 @@ public class SDTimerDown {
     }
 
     public interface SDTimerDownListener {
-        public void onStart();
+        void onStart();
 
-        public void onTick();
+        void onTick();
 
-        public void onTickFinish();
+        void onTickFinish();
     }
 
 }

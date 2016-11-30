@@ -157,10 +157,7 @@ public class RequestCallBackProxy extends RequestCallBack<String> {
      * @return true:回调不继续执行，false:回调继续执行
      */
     private boolean beforeOnSuccess(ResponseInfo<String> responseInfo) {
-        if (checkLoginState()) {
-            return true;
-        }
-        return false;
+        return checkLoginState();
     }
 
     private boolean checkLoginState() {

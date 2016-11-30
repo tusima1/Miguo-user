@@ -145,6 +145,11 @@ public class DistributionStoreInActivity extends BaseActivity implements Callbac
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
