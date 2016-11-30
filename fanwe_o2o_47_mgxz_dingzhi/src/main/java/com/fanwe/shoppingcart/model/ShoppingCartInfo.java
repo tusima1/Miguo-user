@@ -71,6 +71,8 @@ public class ShoppingCartInfo implements Serializable {
      */
     private String pro_id;
 
+    private String share_record_id;
+
     public void setNumber(String number){
         this.number = number;
     }
@@ -166,5 +168,13 @@ public class ShoppingCartInfo implements Serializable {
 
     public void setPro_id(String pro_id) {
         this.pro_id = pro_id;
+    }
+
+    public String getShare_record_id() {
+        return share_record_id;
+    }
+
+    public void setShare_record_id(String share_record_id) {
+        this.share_record_id = share_record_id;
     }
 }

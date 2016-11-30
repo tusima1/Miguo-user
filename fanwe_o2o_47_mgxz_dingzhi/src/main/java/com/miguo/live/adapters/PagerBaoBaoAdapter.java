@@ -31,6 +31,7 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
     private Context mContext;
     private List<BaoBaoEntity> mData;
     private ShoppingCartHelper mShoppingCartHelper;
+    private String share_record_id;
 
     /**
      * 构造函数确定填充数据
@@ -130,8 +131,9 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
             String goods_id = entity.getId();
             String cart_type = "1";
             String add_goods_num = "1";
+
             if(mShoppingCartHelper!=null) {
-                mShoppingCartHelper.addToShoppingCart(roomId, fx_user_id, lgn_user_id, goods_id, cart_type, add_goods_num);
+                mShoppingCartHelper.addToShoppingCart(roomId, fx_user_id, lgn_user_id, goods_id, cart_type, add_goods_num,share_record_id);
             }
         }
     }
@@ -153,6 +155,14 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
 
     public void setmShoppingCartHelper(ShoppingCartHelper mShoppingCartHelper) {
         this.mShoppingCartHelper = mShoppingCartHelper;
+    }
+
+    public String getShare_record_id() {
+        return share_record_id;
+    }
+
+    public void setShare_record_id(String share_record_id) {
+        this.share_record_id = share_record_id;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

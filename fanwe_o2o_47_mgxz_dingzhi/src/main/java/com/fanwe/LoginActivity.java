@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -39,8 +40,13 @@ import com.google.gson.Gson;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
+import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
+import com.miguo.utils.ClipboardUtils;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -100,6 +106,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     private ShareUtils su;
 
     LoginHelper mLoginHelper;
+    CommonHttpHelper commonHttpHelper;
     SHARE_MEDIA platform = null;
     /**
      * 头像。
@@ -114,11 +121,17 @@ public class LoginActivity extends BaseActivity implements CallbackView {
      */
     String shareCode="";
 
+    /**
+     * 如果是从领钻码对话框进来的，结束Activity的时候要设置requestcode用于HiHomeActivity接收
+     */
+    boolean isFromDiamond;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_login);
+        commonHttpHelper= new CommonHttpHelper(this,this);
         init();
         //友盟授权登录初始化。
         su = new ShareUtils(this);
@@ -126,7 +139,10 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     }
 
     private void init() {
-
+       String diamondCode = ClipboardUtils.checkCode(this);
+        if(!TextUtils.isEmpty(diamondCode)){
+            commonHttpHelper.getShareIdByCode(diamondCode);
+        }
         getIntentData();
         initTitle();
         changeViewUnLogin();
@@ -156,6 +172,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         if (!mListSelectIndex.contains(mSelectTabIndex)) {
             mSelectTabIndex = 0;
         }
+
+        if(getIntent() != null){
+            isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
+        }
+
     }
 
     private void initTitle() {
@@ -379,11 +400,12 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             intent.putExtra(UserConstants.THIRD_PLATFORM, type);
             intent.putExtra(UserConstants.THIRD_ICON, icon);
             intent.putExtra(UserConstants.THIRD_NICK, nick);
-        }
-        startActivity(intent);
-        finish();
 
+        }
+        intent.putExtra(UserConstants.SHARE_ID, shareCode);
+        goRegisterActivity(intent);
     }
+
 
     protected void startRegisterActivity(boolean third, String type, String icon, String nick) {
 
@@ -393,10 +415,21 @@ public class LoginActivity extends BaseActivity implements CallbackView {
             intent.putExtra(UserConstants.THIRD_PLATFORM, type);
             intent.putExtra(UserConstants.THIRD_ICON, icon);
             intent.putExtra(UserConstants.THIRD_NICK, nick);
-        }
-        startActivity(intent);
-        finish();
 
+        }
+        intent.putExtra(UserConstants.SHARE_ID, shareCode);
+        goRegisterActivity(intent);
+    }
+
+    private void goRegisterActivity(Intent intent){
+        /**
+         * 如果是从领钻码进来的，则跳注册界面的时候不要销毁当前activity，应该注册成功后回调回来再结束，把结果传给HiHomeActivity
+         */
+        if(isFromDiamond){
+            BaseUtils.jumpToNewActivityForResult(this, intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
+            return;
+        }
+        BaseUtils.jumpToNewActivityWithFinish(this, intent);
     }
 
     @Override
@@ -405,14 +438,20 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case LOGIN_SUCCESS:
                 JpushHelper.registerAll();
-                finish();
+                finishActivity();
                 break;
-
             default:
                 break;
         }
     }
 
+    private void finishActivity(){
+        if(isFromDiamond){
+            Intent intent = new Intent(this, HiHomeActivity.class);
+            setResult(ResultCode.RESUTN_OK, intent);
+        }
+        BaseUtils.finishActivity(this);
+    }
 
     protected void dealLoginSuccess(User_infoModel actModel) {
         LocalUserModel.dealLoginSuccess(actModel, true);
@@ -490,5 +529,12 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         su.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == ResultCode.RESUTN_OK){
+            switch (requestCode){
+                case RequestCode.LOGIN_SUCCESS_FOR_DIAMON:
+                    finishActivity();
+                    break;
+            }
+        }
     }
 }

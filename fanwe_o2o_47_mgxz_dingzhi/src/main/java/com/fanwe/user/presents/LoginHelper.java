@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.fanwe.LoginActivity;
+import com.fanwe.RegisterActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
@@ -30,12 +32,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.generateSign.ResultGenerateSign;
 import com.miguo.live.model.generateSign.RootGenerateSign;
 import com.miguo.live.presenters.TencentHttpHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMManager;
@@ -508,10 +512,21 @@ public class LoginHelper extends Presenter {
             return;
         }
 
-        if (lastActivity instanceof HiHomeActivity) {
-            mActivity.finish();
-        } else {
-            mActivity.startActivity(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
+        if(mActivity instanceof RegisterActivity){
+            RegisterActivity activity = (RegisterActivity)mActivity;
+            if(activity.isFromDiamond()){
+                Intent intent = new Intent(activity, LoginActivity.class);
+                activity.setResult(ResultCode.RESUTN_OK, intent);
+                BaseUtils.finishActivity(activity);
+            }else {
+
+                if (lastActivity instanceof HiHomeActivity) {
+                    mActivity.finish();
+                } else {
+                    mActivity.startActivity(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
+                }
+
+            }
         }
 
 

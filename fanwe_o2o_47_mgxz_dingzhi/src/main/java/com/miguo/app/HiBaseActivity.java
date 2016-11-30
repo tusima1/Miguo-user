@@ -12,6 +12,8 @@ import com.fanwe.work.SystemBarTintManager;
 import com.miguo.category.Category;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.utils.ToasUtil;
+import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 
 /**
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
@@ -70,11 +72,14 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         setBar(android.R.color.transparent);
         setActivityParams();
         setContentView();
+        initEventbus();
         initApp();
         category = initCategory();
     }
 
-
+    private void initEventbus(){
+        SDEventManager.register(this);
+    }
 
     private void setBar(int resColor){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -124,6 +129,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -153,7 +159,12 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         if(getCategory() != null){
             getCategory().destory();
         }
+        SDEventManager.unregister(this);
         doOnDestory();
+    }
+
+    public void onEventMainThread(SDBaseEvent event) {
+
     }
 
     protected void doOnResume(){

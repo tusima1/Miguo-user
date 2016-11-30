@@ -45,7 +45,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
      * @param cart_type  商品类型（目前只有团购，给“1”）
      * @param add_goods_num  往购物车里添加的数量，不是指希望购物车达到的数量
      */
-    public void addToShoppingCart(String roomId,String fx_user_id,String lgn_user_id,String goods_id,String cart_type,String add_goods_num){
+    public void addToShoppingCart(String roomId,String fx_user_id,String lgn_user_id,String goods_id,String cart_type,String add_goods_num,String share_record_id){
 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("roomId", roomId);
@@ -53,6 +53,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         params.put("lgn_user_id", lgn_user_id);
         params.put("goods_id", goods_id);
         params.put("cart_type", cart_type);
+        params.put("share_record_id", share_record_id);
         params.put("add_goods_num", add_goods_num);
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SHOPPING_CART);
@@ -95,7 +96,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         });
     }
 
-    public void addToShoppingCart2(String roomId,String fx_user_id,String lgn_user_id,String goods_id,String cart_type,String add_goods_num){
+    public void addToShoppingCart2(String roomId,String fx_user_id,String lgn_user_id,String goods_id,String cart_type,String add_goods_num,String share_record_id){
 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("roomId", roomId);
@@ -103,6 +104,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         params.put("lgn_user_id", lgn_user_id);
         params.put("goods_id", goods_id);
         params.put("cart_type", cart_type);
+        params.put("share_record_id", share_record_id);
         params.put("add_goods_num", add_goods_num);
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SHOPPING_CART);
