@@ -21,7 +21,6 @@ import com.fanwe.seller.model.getBusinessDistributionList.ModelBusinessDistribut
 import com.fanwe.seller.model.getBusinessDistributionList.ResultBusinessDistributionList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.utils.DataFormat;
-import com.github.siyamed.shapeimageview.CircularImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -31,9 +30,11 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DistributionStoreInActivity extends BaseActivity implements CallbackView {
     @ViewInject(R.id.iv_user_avatar)
-    private CircularImageView mIv_avatar;
+    private CircleImageView mIv_avatar;
 
     @ViewInject(R.id.tv_name)
     private TextView mTv_name;

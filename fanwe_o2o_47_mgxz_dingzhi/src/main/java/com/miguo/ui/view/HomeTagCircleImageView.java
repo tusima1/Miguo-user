@@ -2,10 +2,8 @@ package com.miguo.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import com.github.siyamed.shapeimageview.CircularImageView;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/11/2.

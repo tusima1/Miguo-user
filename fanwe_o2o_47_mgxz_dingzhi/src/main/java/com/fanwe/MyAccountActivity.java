@@ -46,7 +46,6 @@ import com.fanwe.user.view.SexActivity;
 import com.fanwe.user.view.SignActivity;
 import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
-import com.github.siyamed.shapeimageview.CircularImageView;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -55,6 +54,8 @@ import com.sunday.eventbus.SDEventManager;
 
 import java.io.File;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 我的账户
@@ -131,7 +132,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     private TextView mTv_cache_size;
 
     @ViewInject(R.id.iv_user_face)
-    private CircularImageView mUserFace;// 头像
+    private CircleImageView mUserFace;// 头像
 
     private LocalUserModel mUser;
 

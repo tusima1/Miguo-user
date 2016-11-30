@@ -48,7 +48,6 @@ dependencies {
 
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':library_PullToRefresh')
-    compile project(':library_androidshapeimageview')
     compile project(':library_sdDialog')
     compile project(':library_umeng_share_project')
     compile project(':library_ZxingDemo')

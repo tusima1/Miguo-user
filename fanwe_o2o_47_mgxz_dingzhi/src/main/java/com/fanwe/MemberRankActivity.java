@@ -27,7 +27,6 @@ import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
-import com.github.siyamed.shapeimageview.CircularImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
@@ -37,9 +36,11 @@ import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MemberRankActivity extends BaseActivity implements CallbackView {
     @ViewInject(R.id.iv_user_avatar)
-    private CircularImageView mIv_avatar;
+    private CircleImageView mIv_avatar;
 
     @ViewInject(R.id.tv_name)
     private TextView mTv_name;
