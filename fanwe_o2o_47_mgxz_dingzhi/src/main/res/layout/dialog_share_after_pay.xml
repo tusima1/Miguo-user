@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="70dp"
-        android:background="@drawable/ic_bg_no_share_normal">
+        android:background="@drawable/ic_bg_yes_share_normal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,8 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout_btn_dialog_share_after_pay"
             android:layout_marginTop="30dp"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -141,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:padding="15dp"
-                    android:src="@drawable/ic_friend_share_normal" />
+                    android:src="@drawable/ic_friend_share_select" />
 
                 <ImageView
                     android:id="@+id/iv_qq_dialog_share_after_pay"
