@@ -10,6 +10,10 @@ import android.view.View;
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
@@ -58,11 +62,11 @@ public class LiveStartActivity extends Activity implements CallbackView {
     private String usersig;
     private String userid;
     private boolean clickEnable = true;
+    private CommonHttpHelper commonHttpHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ActLiveStartBinding binding = DataBindingUtil.setContentView(this, R.layout.act_live_start);
         dataBindingLiveStart = new DataBindingLiveStart();
         binding.setLive(dataBindingLiveStart);
@@ -70,7 +74,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         tencentHttpHelper = new TencentHttpHelper(this);
         CurLiveInfo.modelShop = null;
         init();
-
+        getRecordId();
     }
 
     public void init() {
@@ -160,11 +164,17 @@ public class LiveStartActivity extends Activity implements CallbackView {
                     }
                 }
                 break;
+            case R.id.iv_close_live_start:
+                finish();
+                break;
         }
     }
 
+    private String shareRecordId;
+
     private void startLive() {
         if (dataBindingLiveStart.isLiveRight.get()) {
+            getRecordId();
             SHARE_MEDIA platform = SHARE_MEDIA.QQ;
             //已认证的，去直播
             if (dataBindingLiveStart.mode.get() == dataBindingLiveStart.QQ) {
@@ -210,7 +220,8 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 //朋友圈
                 title = content;
             }
-            UmengShareManager.share(platform, this, title, content, ServerUrl.getAppH5Url() + "share/live/uid/" + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+            UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "share/live/uid/"
+                            + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
                     UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
         } else {
             //未认证的，去认证
@@ -392,11 +403,27 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
     @Override
     public void onSuccess(String method, List datas) {
-
+        switch (method) {
+            case CommonConstants.CREATE_SHARE_RECORD:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                    shareRecordId = bean.getId();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void onFailue(String responseBody) {
         MGToast.showToast(responseBody);
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(LiveStartActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.LIVE, "");
     }
 }

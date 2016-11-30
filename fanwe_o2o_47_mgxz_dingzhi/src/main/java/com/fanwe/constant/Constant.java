@@ -276,7 +276,36 @@ public class Constant {
          */
         public static final int RESERVATION_LIST = 101;
 
-
     }
 
+    public static final class ShareType {
+        /**
+         * 商品详情
+         */
+        public static final String GOODS = "1";
+        /**
+         * 门店详情
+         */
+        public static final String SHOP = "2";
+        /**
+         * 专题详情
+         */
+        public static final String TOPIC = "3";
+        /**
+         * 直播详情
+         */
+        public static final String LIVE = "4";
+        /**
+         * 网站首页
+         */
+        public static final String WEB_HOME = "10";
+        /**
+         * 小店首页（名片）
+         */
+        public static final String SHOP_HOME = "11";
+        /**
+         * 网红主页
+         */
+        public static final String USER_HOME = "12";
+    }
 }

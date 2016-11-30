@@ -13,8 +13,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.fanwe.app.App;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.customview.SharePopHelper;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiShopDetailActivity;
@@ -44,6 +45,18 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
     private LiveActivity mActivity;//直播的引用
     private LiveCommonHelper mLiveCommonHelper;//工具类
     private HeadTopAdapter mAdapter;
+    private CommonHttpHelper commonHttpHelper;
+
+    private String shareRecordId;
+
+    public void setShareRecordId(String shareRecordId) {
+        this.shareRecordId = shareRecordId;
+    }
+
+    public void setCommonHttpHelper(CommonHttpHelper commonHttpHelper) {
+        this.commonHttpHelper = commonHttpHelper;
+    }
+
 
     public HostTopView(Context context) {
         super(context);
@@ -116,7 +129,8 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
                 mLiveCommonHelper.switchCamera();
             }
         } else if (v == iv_share) {
-            SharePopHelper sharePopHelper = new SharePopHelper(mActivity, true);
+            getRecordId();
+            SharePopHelper sharePopHelper = new SharePopHelper(mActivity, true, shareRecordId);
             sharePopHelper.show();
         } else if (v == mTv_location) {
             //去商家店铺
@@ -200,5 +214,11 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
 
     public void setmAdapter(HeadTopAdapter mAdapter) {
         this.mAdapter = mAdapter;
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper != null) {
+            commonHttpHelper.createShareRecord(Constant.ShareType.LIVE,  CurLiveInfo.getRoomNum() + "");
+        }
     }
 }

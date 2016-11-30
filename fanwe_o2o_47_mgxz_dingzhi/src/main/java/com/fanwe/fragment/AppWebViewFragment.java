@@ -12,17 +12,25 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.jshandler.AppJsHandler;
 import com.fanwe.library.fragment.WebViewFragment;
 import com.fanwe.library.title.TitleItemConfig;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
 
-public class AppWebViewFragment extends WebViewFragment {
+import java.util.List;
+
+public class AppWebViewFragment extends WebViewFragment implements CallbackView {
 
     private String mContent;
     private String id;
@@ -30,6 +38,9 @@ public class AppWebViewFragment extends WebViewFragment {
     private String url;
     private String mSummary;
     private String imageUrl;
+
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
 
     @Override
     public void setUrl(String url) {
@@ -79,8 +90,8 @@ public class AppWebViewFragment extends WebViewFragment {
     }
 
     @Override
-    protected View onCreateContentView(LayoutInflater inflater,
-                                       ViewGroup container, Bundle savedInstanceState) {
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getRecordId();
         int resId = getContentViewResId();
         if (resId == 0) {
             resId = R.layout.frag_webview;
@@ -113,7 +124,6 @@ public class AppWebViewFragment extends WebViewFragment {
 
     @Override
     protected void initWebView() {
-
         initSetting();
         //交汇起冲突
         addJavascriptInterface();
@@ -165,6 +175,7 @@ public class AppWebViewFragment extends WebViewFragment {
 
     @Override
     public void onRightClick_SDTitleListener(TitleItemConfig config, int index, View view) {
+        getRecordId();
         if (TextUtils.isEmpty(mSummary)) {
             mSummary = "欢迎来到我的小店";
         }
@@ -183,9 +194,20 @@ public class AppWebViewFragment extends WebViewFragment {
                 imageUrl = MGDictUtil.getShareIcon();
             }
         }
-        if (TextUtils.isEmpty(url)) {
+        try {
+            if (TextUtils.isEmpty(url)) {
+                url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+                        "/share_record_id/" + shareRecordId;
+            } else if (!url.contains("share_record_id")) {
+                url = url + "/share_record_id/" + shareRecordId;
+            } else if (!url.contains(shareRecordId)) {
+                int i = url.indexOf("/share_record_id/");
+                String temp = url.substring(0, i);
+                url = temp + "/share_record_id/" + shareRecordId;
+            }
+        } catch (Exception e) {
             url = ServerUrl.getAppH5Url() + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
-                    "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                    "/share_record_id/" + shareRecordId;
         }
         if (TextUtils.isEmpty(mContent)) {
             mContent = "米果小站";
@@ -197,5 +219,32 @@ public class AppWebViewFragment extends WebViewFragment {
     @Override
     public void setTitle(String title) {
         super.setTitle(title);
+    }
+
+    @Override
+    public void onSuccess(String responseBody) {
+
+    }
+
+    @Override
+    public void onSuccess(String method, List datas) {
+        if (CommonConstants.CREATE_SHARE_RECORD.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                shareRecordId = bean.getId();
+            }
+        }
+    }
+
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(getActivity(), this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.SHOP_HOME, id);
     }
 }
