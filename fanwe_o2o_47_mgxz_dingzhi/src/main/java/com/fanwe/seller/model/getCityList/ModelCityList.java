@@ -1,9 +1,16 @@
 package com.fanwe.seller.model.getCityList;
 
+import android.text.TextUtils;
+
+import com.fanwe.utils.CharacterParser;
+
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/7/30.
  */
-public class ModelCityList {
+public class ModelCityList implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String uname;
 
     private String is_hot;
@@ -21,6 +28,29 @@ public class ModelCityList {
     private String is_default;
 
     private String is_delete;
+
+    private String sortLetters;
+
+    public String getSortLetters() {
+        if (TextUtils.isEmpty(sortLetters)) {
+            findSortLetters();
+        }
+        return sortLetters;
+    }
+
+    private void findSortLetters() {
+        String firstLetters;
+        if (!TextUtils.isEmpty(uname) && uname.length() > 1) {
+            firstLetters = uname.substring(0, 1).toUpperCase();
+        } else {
+            firstLetters = CharacterParser.getFirstLetters(name);
+        }
+
+        if (TextUtils.isEmpty(firstLetters)) {
+            firstLetters = "#";
+        }
+        sortLetters = firstLetters;
+    }
 
     public void setUname(String uname) {
         this.uname = uname;

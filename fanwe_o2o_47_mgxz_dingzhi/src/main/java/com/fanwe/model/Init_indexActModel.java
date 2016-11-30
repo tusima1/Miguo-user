@@ -8,10 +8,6 @@ import java.util.List;
  */
 public class Init_indexActModel extends BaseActModel {
     private int _id;
-
-    private String city_id;
-    private String city_name;
-
     private int region_version;
     private int only_one_delivery;
 
@@ -37,9 +33,6 @@ public class Init_indexActModel extends BaseActModel {
     private int api_wx;
     private String wx_app_key;
     private String wx_app_secret;
-
-    private List<CitylistModel> citylist;
-    private List<CitylistModel> hot_city;
 
     private List<InitActNewslistModel> newslist;
     private List<InitActAddr_tlistModel> addr_tlist;
@@ -68,14 +61,6 @@ public class Init_indexActModel extends BaseActModel {
 
     public void setRegister_rebate(int register_rebate) {
         this.register_rebate = register_rebate;
-    }
-
-    public List<CitylistModel> getHot_city() {
-        return hot_city;
-    }
-
-    public void setHot_city(List<CitylistModel> hot_city) {
-        this.hot_city = hot_city;
     }
 
     public User_infoModel getUser() {
@@ -182,22 +167,6 @@ public class Init_indexActModel extends BaseActModel {
         this.sina_bind_url = sina_bind_url;
     }
 
-    public String getCity_id() {
-        return city_id;
-    }
-
-    public void setCity_id(String city_id) {
-        this.city_id = city_id;
-    }
-
-    public String getCity_name() {
-        return city_name;
-    }
-
-    public void setCity_name(String city_name) {
-        this.city_name = city_name;
-    }
-
     public int getRegion_version() {
         return region_version;
     }
@@ -276,14 +245,6 @@ public class Init_indexActModel extends BaseActModel {
 
     public void setIndex_logo(String index_logo) {
         this.index_logo = index_logo;
-    }
-
-    public List<CitylistModel> getCitylist() {
-        return citylist;
-    }
-
-    public void setCitylist(List<CitylistModel> citylist) {
-        this.citylist = citylist;
     }
 
     public List<InitActNewslistModel> getNewslist() {

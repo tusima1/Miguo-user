@@ -16,17 +16,16 @@ import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.ServerUrl;
-import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
-import com.fanwe.model.CitylistModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
@@ -71,7 +70,6 @@ import com.miguo.view.IMLoginView;
 import com.miguo.view.IMUserInfoView;
 import com.miguo.view.LoginByMobileView;
 import com.miguo.view.TencentSignView;
-import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -293,7 +291,7 @@ public class HiHomeCategory extends Category implements
         }
     }
 
-    public void handlerLoginSuccessFromDiamond(){
+    public void handlerLoginSuccessFromDiamond() {
         checkCode();
     }
 
@@ -488,17 +486,13 @@ public class HiHomeCategory extends Category implements
                 .setmListener(new SDDialogCustom.SDDialogCustomListener() {
                     @Override
                     public void onDismiss(SDDialogCustom dialog) {
-
                     }
 
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
-                        AppRuntimeWorker.setCity_name(location);
-                        CitylistModel tempBean = new CitylistModel();
-                        tempBean.setId(AppRuntimeWorker.getCityIdByCityName(location));
-                        tempBean.setName(location);
-                        tempBean.setPy(AppRuntimeWorker.getCityPyByCityName(location));
-                        updateFromCityChanged(tempBean);
+                        ModelCityList bean = AppRuntimeWorker.getCityByCityName(location);
+                        AppRuntimeWorker.setCityNameByModel(bean);
+                        updateFromCityChanged(bean);
                     }
 
                     @Override
@@ -518,7 +512,7 @@ public class HiHomeCategory extends Category implements
         homeViewPager.setCurrentItem(position);
     }
 
-    public void updateFromCityChanged(CitylistModel model) {
+    public void updateFromCityChanged(ModelCityList model) {
         ((HiHomeFragment) fragments.get(0)).updateFromCityChanged(model);
     }
 

@@ -20,23 +20,22 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SideBar;
 import com.fanwe.customview.SideBar.OnTouchingLetterChangedListener;
-import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
+import com.fanwe.library.utils.SDViewUtil;
+import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
+import com.fanwe.utils.CharacterParser;
+import com.fanwe.work.AppRuntimeWorker;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.CitylistModel;
-import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.CharacterParser;
-import com.fanwe.work.AppRuntimeWorker;
-import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.utils.BaseUtils;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -79,9 +78,9 @@ public class CityListActivity extends BaseActivity {
     @ViewInject(R.id.act_city_list_sb_letters)
     private SideBar mSbLetters;
 
-    private List<CitylistModel> mListModel = new ArrayList<CitylistModel>();
-    private List<CitylistModel> mListModelHotCity;
-    private List<CitylistModel> mListFilterModel = new ArrayList<CitylistModel>();
+    private List<ModelCityList> mListModel = new ArrayList<ModelCityList>();
+    private List<ModelCityList> mListModelHotCity;
+    private List<ModelCityList> mListFilterModel = new ArrayList<ModelCityList>();
 
     private CityListAdapter mAdapter;
 
@@ -114,7 +113,7 @@ public class CityListActivity extends BaseActivity {
         if (!SDCollectionUtil.isEmpty(mListModelHotCity)) {
             SDViewUtil.show(mLl_hot_city);
             mFlow_hot_city.removeAllViews();
-            for (CitylistModel model : mListModelHotCity) {
+            for (ModelCityList model : mListModelHotCity) {
                 View cityView = createHotCityButton(model);
                 if (cityView != null) {
                     mFlow_hot_city.addView(cityView);
@@ -128,7 +127,7 @@ public class CityListActivity extends BaseActivity {
     /**
      * 创建热门城市
      */
-    private TextView createHotCityButton(final CitylistModel model) {
+    private TextView createHotCityButton(final ModelCityList model) {
         TextView btn = null;
         if (model != null) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SDViewUtil.dp2px(50), SDViewUtil.dp2px(40));
@@ -140,16 +139,10 @@ public class CityListActivity extends BaseActivity {
             btn.setTextColor(SDResourcesUtil.getColor(R.color.gray));
             btn.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
             btn.setOnClickListener(new OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
-                    if (AppRuntimeWorker.setCity_name(model.getName())) {
-                        //缓存数据
-                        CurrCityModelDao.insertModel(model);
-                        setActivityResult(model);
-                    } else {
-                        MGToast.showToast("设置失败");
-                    }
+                    AppRuntimeWorker.setCityNameByModel(model);
+                    setActivityResult(model);
                 }
             });
         }
@@ -226,7 +219,7 @@ public class CityListActivity extends BaseActivity {
         if (TextUtils.isEmpty(key)) {
             mListFilterModel.addAll(mListModel);
         } else {
-            for (CitylistModel city : mListModel) {
+            for (ModelCityList city : mListModel) {
                 String name = city.getName();
                 if (name.indexOf(key) != -1 || CharacterParser.convertChs2PinYin(name).startsWith(key)) {
                     mListFilterModel.add(city);
@@ -248,7 +241,7 @@ public class CityListActivity extends BaseActivity {
      * 从数据库取数据
      */
     private void bindDataFromDb() {
-        List<CitylistModel> listDbModel = AppRuntimeWorker.getCitylist();
+        List<ModelCityList> listDbModel = AppRuntimeWorker.getCitylist();
         if (listDbModel != null && listDbModel.size() > 0) {
             mListModel.addAll(listDbModel);
         } else {
@@ -279,37 +272,26 @@ public class CityListActivity extends BaseActivity {
             public void onClick(View v) {
                 if (BaiduMapManager.getInstance().hasLocationSuccess()) {
                     String locationCity = mTv_location.getText().toString();
-                    String cityId = AppRuntimeWorker.getCityIdByCityName(locationCity);
-                    String cityPy = AppRuntimeWorker.getCityPyByCityName(locationCity);
-                    if (TextUtils.isEmpty(cityId)) {
+                    ModelCityList bean = AppRuntimeWorker.getCityByCityName(locationCity);
+                    if (TextUtils.isEmpty(bean.getId())) {
                         MGToast.showToast("不支持当前城市:" + locationCity);
                     } else {
-                        AppRuntimeWorker.setCity_name(locationCity);
-
+                        AppRuntimeWorker.setCityNameByModel(bean);
                         Set<String> tagSet = new LinkedHashSet<String>();
-                        String sArray[] = {"city_" + AppRuntimeWorker.getCityIdByCityName(AppRuntimeWorker.getCity_name())};
+                        String sArray[] = {"city_" + bean.getId()};
                         for (String sTagItme : sArray) {
                             if (isEmpty(sTagItme)) {
-
                                 return;
                             }
                             tagSet.add(sTagItme);
                         }
                         JPushInterface.setTags(getApplicationContext(), tagSet, new TagAliasCallback() {
-
                             @Override
                             public void gotResult(int arg0, String arg1, Set<String> arg2) {
-
-
                             }
                         });
                         //缓存数据
-                        CitylistModel tempBean = new CitylistModel();
-                        tempBean.setId(cityId);
-                        tempBean.setName(locationCity);
-                        tempBean.setPy(cityPy);
-                        CurrCityModelDao.insertModel(tempBean);
-                        setActivityResult(tempBean);
+                        setActivityResult(bean);
                     }
                 } else {
                     locationCity();
@@ -323,7 +305,7 @@ public class CityListActivity extends BaseActivity {
 
     }
 
-    public void setActivityResult(CitylistModel tempBean) {
+    public void setActivityResult(ModelCityList tempBean) {
         Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
         intent.putExtra(IntentKey.RETURN_CITY_DATA, tempBean);
         setResult(ResultCode.RESUTN_OK, intent);

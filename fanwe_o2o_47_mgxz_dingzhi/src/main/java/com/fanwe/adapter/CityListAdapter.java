@@ -9,14 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.CityListActivity;
-import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.utils.PinyinComparator;
 import com.fanwe.work.AppRuntimeWorker;
 
@@ -25,13 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
+public class CityListAdapter extends SDBaseAdapter<ModelCityList> {
 
     private int mTag;
     private Map<Integer, Integer> mMapLettersAsciisFirstPostion = new HashMap<Integer, Integer>();
     private PinyinComparator mComparator = new PinyinComparator();
 
-    public CityListAdapter(List<CitylistModel> listModel, Activity activity, int tag) {
+    public CityListAdapter(List<ModelCityList> listModel, Activity activity, int tag) {
         super(listModel, activity);
         this.mTag = tag;
     }
@@ -46,7 +44,7 @@ public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
         TextView tvName = ViewHolder.get(R.id.item_lv_citylist_tv_city_name, convertView);
         LinearLayout ll_content = ViewHolder.get(R.id.ll_content, convertView);
 
-        final CitylistModel model = getItem(position);
+        final ModelCityList model = getItem(position);
         if (model != null) {
             // 根据position获取分类的首字母的Char ascii值
             int modelFirstLettersAscii = getModelFirstLettersAscii(model);
@@ -63,18 +61,9 @@ public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
                 @Override
                 public void onClick(View v) {
                     if (mTag == 1) {
-                        if (AppRuntimeWorker.setCity_name(model.getName())) {
-                            //缓存数据
-                            CurrCityModelDao.insertModel(model);
-//                            mActivity.setResult(8888);
-//                            mActivity.finish();
-                            getActivity().setActivityResult(model);
-                        } else {
-                            MGToast.showToast("设置城市失败");
-                        }
+                        AppRuntimeWorker.setCityNameByModel(model);
+                        getActivity().setActivityResult(model);
                     } else if (mTag == 2) {
-//                        mActivity.setResult(8888);
-//                        mActivity.finish();
                         getActivity().setActivityResult(model);
                     }
                 }
@@ -86,11 +75,11 @@ public class CityListAdapter extends SDBaseAdapter<CitylistModel> {
         return convertView;
     }
 
-    public CityListActivity getActivity(){
-        return (CityListActivity)mActivity;
+    public CityListActivity getActivity() {
+        return (CityListActivity) mActivity;
     }
 
-    public int getModelFirstLettersAscii(CitylistModel model) {
+    public int getModelFirstLettersAscii(ModelCityList model) {
         if (model != null) {
             String letters = model.getSortLetters();
             if (!TextUtils.isEmpty(letters) && letters.length() > 0) {
