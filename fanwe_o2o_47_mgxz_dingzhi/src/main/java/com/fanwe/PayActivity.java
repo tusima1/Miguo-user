@@ -22,6 +22,11 @@ import android.widget.TextView;
 
 import com.fanwe.adapter.PayorderCodesAdapter;
 import com.fanwe.app.App;
+import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dialog.ShareAfterPaytDialog;
@@ -62,10 +67,10 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.BaseUtils;
-import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -76,7 +81,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PayActivity extends BaseActivity implements RefreshCalbackView {
+public class PayActivity extends BaseActivity implements RefreshCalbackView, CallbackView {
     /**
      * 00:正式，01:测试
      */
@@ -147,12 +152,16 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
     private OutSideShoppingCartHelper outSideShoppingCartHelper;
     private Share_info share_info;
 
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setmTitleType(TitleType.TITLE);
         setContentView(R.layout.act_pay);
         init();
+        getRecordId();
     }
 
     @Override
@@ -173,29 +182,20 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
     private UMShareListener shareResultCallback = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA share_media) {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
             MGToast.showToast("分享成功！现金红包将在验券后到账");
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
             MGToast.showToast(share_media + "分享失败");
-            MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showShareDialog(true);
-                }
-            });
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
             MGToast.showToast(share_media + "分享取消");
-            MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showShareDialog(true);
-                }
-            });
         }
     };
 
@@ -247,7 +247,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         }
         if (PAY_SUCCESS.equals(payStatus)) {
             //支付成功 处理。
-            showShareDialog(false);
+            showShareDialog();
             SDViewUtil.show(mBtnQuan);
             SDEventManager.post(EnumEventTag.PAY_ORDER_SUCCESS.ordinal());
             mHasPay = "all";
@@ -313,10 +313,8 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
 
     /**
      * 分享领红包
-     *
-     * @param flag true 展示分享选项
      */
-    private void showShareDialog(boolean flag) {
+    private void showShareDialog() {
         if (share_info != null) {
             if (TextUtils.isEmpty(share_info.getSalarySum()) || DataFormat.toDouble(share_info.getSalarySum()) == 0) {
                 return;
@@ -324,8 +322,8 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             if (dialog != null && dialog.isShowing()) {
                 return;
             }
-            dialog = new ShareAfterPaytDialog(PayActivity.this, share_info, shareResultCallback, flag);
-//            dialog.setCancelable(false);
+            dialog = new ShareAfterPaytDialog(PayActivity.this, share_info, shareResultCallback);
+            dialog.setCancelable(false);
             dialog.setCloseListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -538,7 +536,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
     public void payFinish() {
         SDViewUtil.show(mBtnQuan);
         SDViewUtil.hide(mBtnPay);
-        showShareDialog(false);
+        showShareDialog();
     }
 
     /**
@@ -830,6 +828,14 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
         if (ShoppingCartconstants.GET_ORDER_INFO.equals(method)) {
             items = datas;
             msg.what = 0;
+        } else if (CommonConstants.CREATE_SHARE_RECORD.equals(method)) {
+            if (!SDCollectionUtil.isEmpty(datas)) {
+                ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                shareRecordId = bean.getId();
+                if (dialog!=null){
+                    dialog.setShareRecordId(shareRecordId);
+                }
+            }
         }
         mHandler.sendMessage(msg);
     }
@@ -888,4 +894,11 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView {
             }
         }
     };
+
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(PayActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.WEB_HOME, "");
+    }
 }

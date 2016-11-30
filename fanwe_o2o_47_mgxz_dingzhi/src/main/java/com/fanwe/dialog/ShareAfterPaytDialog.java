@@ -32,19 +32,22 @@ public class ShareAfterPaytDialog extends BaseDialog {
     Button btnNo, btnYes;
     TextView tvMoney;
     ImageView ivQQ, ivWeixin, ivFriend, ivSina;
-    SHARE_MEDIA platform = SHARE_MEDIA.QQ;
+    SHARE_MEDIA platform = SHARE_MEDIA.WEIXIN_CIRCLE;
     Share_info share_info;
     UMShareListener shareResultCallback;
-    boolean flag;
+    private String shareRecordId;
 
-    public ShareAfterPaytDialog(Context mContext, Share_info share_info, UMShareListener shareResultCallback, boolean flag) {
+    public ShareAfterPaytDialog(Context mContext, Share_info share_info, UMShareListener shareResultCallback) {
         super(mContext, R.style.floag_dialog, Gravity.TOP);
         this.mContext = mContext;
         this.share_info = share_info;
         this.shareResultCallback = shareResultCallback;
-        this.flag = flag;
         preView();
         setListener();
+    }
+
+    public void setShareRecordId(String shareRecordId) {
+        this.shareRecordId = shareRecordId;
     }
 
     private void setListener() {
@@ -60,7 +63,6 @@ public class ShareAfterPaytDialog extends BaseDialog {
                 clearBtn();
                 platform = SHARE_MEDIA.QQ;
                 ivQQ.setImageResource(R.drawable.ic_qq_share_select);
-                doShare();
             }
         });
         ivWeixin.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +71,6 @@ public class ShareAfterPaytDialog extends BaseDialog {
                 clearBtn();
                 platform = SHARE_MEDIA.WEIXIN;
                 ivWeixin.setImageResource(R.drawable.ic_weixin_share_select);
-                doShare();
             }
         });
         ivFriend.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +79,6 @@ public class ShareAfterPaytDialog extends BaseDialog {
                 clearBtn();
                 platform = SHARE_MEDIA.WEIXIN_CIRCLE;
                 ivFriend.setImageResource(R.drawable.ic_friend_share_select);
-                doShare();
             }
         });
         ivSina.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +87,6 @@ public class ShareAfterPaytDialog extends BaseDialog {
                 clearBtn();
                 platform = SHARE_MEDIA.SINA;
                 ivSina.setImageResource(R.drawable.ic_weibo_share_select);
-                doShare();
             }
         });
     }
@@ -100,7 +99,6 @@ public class ShareAfterPaytDialog extends BaseDialog {
     }
 
     private void doShare() {
-        dismiss();
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (!TextUtils.isEmpty(share_info.getImageurl())) {
             imageUrl = share_info.getImageurl();
@@ -115,7 +113,7 @@ public class ShareAfterPaytDialog extends BaseDialog {
         }
         String clickUrl = ServerUrl.SERVER_H5;
         if (!TextUtils.isEmpty(share_info.getClickurl())) {
-            clickUrl = share_info.getClickurl();
+            clickUrl = share_info.getClickurl() + "?share_record_id=" + shareRecordId;
         }
         UmengShareManager.share(platform, (Activity) mContext, title, content, clickUrl, UmengShareManager.getUMImage(mContext, imageUrl), shareResultCallback);
     }
@@ -138,10 +136,7 @@ public class ShareAfterPaytDialog extends BaseDialog {
         if (!TextUtils.isEmpty(share_info.getSalarySum())) {
             SDViewBinder.setTextView(tvMoney, share_info.getSalarySum() + "元");
         } else {
-            SDViewBinder.setTextView(tvMoney, "0元");
-        }
-        if (flag) {
-            selectYes();
+            SDViewBinder.setTextView(tvMoney, "");
         }
     }
 
@@ -160,8 +155,7 @@ public class ShareAfterPaytDialog extends BaseDialog {
         btnYes.setTextColor(Color.parseColor("#C32836"));
         btnNo.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
         btnNo.setTextColor(Color.parseColor("#FFFFFF"));
-        layoutDialog.setBackgroundResource(R.drawable.ic_bg_yes_share_normal);
-        layoutShare.setVisibility(View.VISIBLE);
+        doShare();
     }
 
 }
