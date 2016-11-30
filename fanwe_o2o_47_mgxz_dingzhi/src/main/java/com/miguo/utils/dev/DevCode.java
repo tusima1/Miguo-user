@@ -7,7 +7,6 @@ package com.miguo.utils.dev;
 public class DevCode {
     public static final String API_JAVA="api_java";
     public static final String API_H5="api_h5";
-    public static final String API_DEBUG="api_debug";
 
     public static final String JAVA_API_37="http://192.168.90.37:8080/mgxz.BussRPC/";
     public static final String JAVA_API_36="http://192.168.90.36:8080/mgxz.BussRPC/";
