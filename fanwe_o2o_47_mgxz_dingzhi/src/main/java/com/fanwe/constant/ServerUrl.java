@@ -6,9 +6,11 @@ package com.fanwe.constant;
  * @author Administrator
  */
 public class ServerUrl {
-    /***************************上线需要修改模式****************************/
+    /***************************!!!上线需要修改模式!!!****************************/
+    public static final boolean DEBUG =true;//默认开启debug
 
-    public static boolean DEBUG =true;//默认开启debug
+    /*************************打测试包******************************/
+    public static final boolean TEST=false;//给测试使用请设置为true
 
     /*********************** Do Not Modify ***********************/
     public static final String KEY_AES = "FANWE5LMUQC436IM";

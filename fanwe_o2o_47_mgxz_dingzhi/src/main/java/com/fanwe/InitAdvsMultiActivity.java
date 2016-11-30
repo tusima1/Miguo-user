@@ -143,9 +143,9 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     private void initAppApi() {
         if (ServerUrl.DEBUG){
-            String javaApi = (String) SPUtil.getData(this, DevCode.API_JAVA, DevCode
+            String javaApi = (String) SPUtil.getData(this, DevCode.API_JAVA, ServerUrl.TEST ? DevCode.SERVER_API_JAVA_TEST_URL:DevCode
                     .SERVER_API_JAVA_DEV_URL);
-            String h5Api = (String) SPUtil.getData(this, DevCode.API_H5, DevCode
+            String h5Api = (String) SPUtil.getData(this, DevCode.API_H5, ServerUrl.TEST ? DevCode.SERVER_H5_TEST:DevCode
                     .SERVER_API_JAVA_DEV_URL);
             ServerUrl.setServerApi(javaApi);
             ServerUrl.setServerH5Using(h5Api);
