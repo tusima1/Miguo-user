@@ -1,5 +1,4 @@
 include ':libcommon'
-include ':library_PhotoViewmaster'
 include ':library_PullToRefresh'
 include ':library_ZxingDemo'
 include ':library_androidshapeimageview'
