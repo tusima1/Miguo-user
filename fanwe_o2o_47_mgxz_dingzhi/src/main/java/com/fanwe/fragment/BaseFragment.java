@@ -65,9 +65,7 @@ public abstract class BaseFragment extends SDBaseFragment implements SDTitleSimp
 	}
 
 	protected void init()
-	{	
-		JpushHelper.setTag(AppRuntimeWorker.getCity_id());
-//		tag = setUmengAnalyticsTag();
+	{
 	}
 	
 	protected abstract String setUmengAnalyticsTag();

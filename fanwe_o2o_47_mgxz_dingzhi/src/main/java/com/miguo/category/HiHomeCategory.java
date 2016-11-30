@@ -169,7 +169,7 @@ public class HiHomeCategory extends Category implements
     @Override
     protected void init() {
         checkAppVersion();
-        initJpush();
+
         initUserInfo();
         locationCity();
         initDict();

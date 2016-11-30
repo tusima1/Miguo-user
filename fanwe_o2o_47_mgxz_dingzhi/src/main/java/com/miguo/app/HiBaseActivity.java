@@ -74,6 +74,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         setContentView();
         initEventbus();
         initApp();
+
         category = initCategory();
     }
 

@@ -7,6 +7,7 @@ import com.fanwe.MyCaptureActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.event.EnumEventTag;
+import com.fanwe.jpush.JpushHelper;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
@@ -55,6 +56,7 @@ public class HiHomeActivity extends HiBaseActivity{
     @Override
     protected Category initCategory() {
         setCurrentCityId(AppRuntimeWorker.getCity_id());
+        JpushHelper.initJPushConfig();
         setTwiceKeyDownToCloseActivity(true);
         return new HiHomeCategory(this);
     }
@@ -76,6 +78,9 @@ public class HiHomeActivity extends HiBaseActivity{
         }
 
     }
+
+
+
 
     private void checkIfInMyFragment(){
         getCategory().checkIfInMyFragment();

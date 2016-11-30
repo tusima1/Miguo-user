@@ -700,10 +700,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                     if (mLiveHttphelper != null) {
                         if ("1".equals(is_playback)) {
                             //直播回放，type=1
-                            mLiveHttphelper.enterRoom(room_id, "1", "");
+                            mLiveHttphelper.enterRoom(room_id, "1",App.getInstance().code);
                         } else {
                             //点播回放，type=2
-                            mLiveHttphelper.enterRoom(room_id, "2", "");
+                            mLiveHttphelper.enterRoom(room_id, "2", App.getInstance().code);
                         }
                         mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
                     }
@@ -719,10 +719,10 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
                 if (mLiveHttphelper != null) {
                     if ("1".equals(is_playback)) {
                         //直播回放，type=1
-                        mLiveHttphelper.enterRoom(room_id, "1", "");
+                        mLiveHttphelper.enterRoom(room_id, "1",App.getInstance().code);
                     } else {
                         //点播回放，type=2
-                        mLiveHttphelper.enterRoom(room_id, "2", "");
+                        mLiveHttphelper.enterRoom(room_id, "2",App.getInstance().code);
                     }
                     mLiveHelper.sendGroupMessage(Constants.PALYBACK_ENTERROOM, "进来了");
                 }

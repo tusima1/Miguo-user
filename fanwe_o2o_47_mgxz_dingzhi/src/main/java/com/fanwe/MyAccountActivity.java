@@ -28,6 +28,7 @@ import com.fanwe.dao.SettingModelDao;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -541,6 +542,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void clickLogout(View v) {
+//        JpushHelper.unRegisterJpush();
         mLoginHelper.imLogout();
         App.getInstance().getmUserCurrentInfo().clearData();
         App.getInstance().setImLoginSuccess(false);

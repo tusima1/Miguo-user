@@ -19,7 +19,6 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.LoginFragment;
 import com.fanwe.fragment.LoginPhoneFragment;
-import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDTabItemCorner;
 import com.fanwe.library.customview.SDTabItemCorner.EnumTabPosition;
@@ -437,7 +436,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case LOGIN_SUCCESS:
-                JpushHelper.registerAll();
                 finishActivity();
                 break;
             default:

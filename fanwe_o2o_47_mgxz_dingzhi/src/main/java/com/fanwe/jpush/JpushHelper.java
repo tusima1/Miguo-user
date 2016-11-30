@@ -102,6 +102,22 @@ public class JpushHelper {
 
 	}
 
+	public static void unRegisterJpush(){
+		CommonHelper commonHelper = new CommonHelper(null,null);
+		commonHelper.doRegisterJPushAlias("", new MgCallback(){
+
+			@Override
+			public void onSuccessResponse(String responseBody) {
+			}
+
+			@Override
+			public void onErrorResponse(String message, String errorCode) {
+				Log.e("Jpush", "JpushMG 后台注销失败!"+"\n"+message+errorCode);
+			}
+		});
+
+	}
+
 	private static Set<String> getTag() {
 		Set<String> tagSet = new LinkedHashSet<String>();
 		String city_id = AppRuntimeWorker.getCity_id();

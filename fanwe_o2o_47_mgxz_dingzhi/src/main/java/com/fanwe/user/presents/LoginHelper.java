@@ -13,6 +13,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.fragment.LoginFragment;
+import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
@@ -534,6 +535,7 @@ public class LoginHelper extends Presenter {
 
     protected void dealLoginSuccess(User_infoModel actModel) {
         String token = App.getInstance().getToken();
+        JpushHelper.registerAll();
         if (TextUtils.isEmpty(token)) {
             //不成功也跳转。
             loginSuccess();
