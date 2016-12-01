@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.presenters.CommonHttpHelper;
@@ -138,7 +139,10 @@ public class LoginActivity extends BaseActivity implements CallbackView {
     }
 
     private void init() {
-       String diamondCode = ClipboardUtils.checkCode(this);
+        String diamondCode = App.getInstance().code;
+        if(TextUtils.isEmpty(App.getInstance().code)) {
+             diamondCode = ClipboardUtils.checkCode(this);
+        }
         if(!TextUtils.isEmpty(diamondCode)){
             commonHttpHelper.getShareIdByCode(diamondCode);
         }

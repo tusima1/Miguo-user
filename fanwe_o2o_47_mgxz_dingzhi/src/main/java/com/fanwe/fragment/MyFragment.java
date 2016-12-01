@@ -2,6 +2,7 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -100,6 +101,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         setmTitleType(Constant.TitleType.TITLE_NONE);
         return setContentView(R.layout.frag_mine);
     }
+
 
 
     @Override

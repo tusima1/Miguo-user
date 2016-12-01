@@ -133,121 +133,132 @@ public class AppJsHandler extends BaseJsHandler {
 		 * Intent(App.getApplication(), DistributionManageActivity.class);
 		 * break;
 		 */
-		default:
+            default:
 
-			break;
-		}
-		startActivity(intent);
-	}
-
-
-	@JavascriptInterface
-	public void login() {
-		Activity activity = SDActivityManager.getInstance().getLastActivity();
-		AppHelper.isLogin(activity);
-	}
-
-	@JavascriptInterface
-	public void page_title(String title) {
-	}
-
-	@JavascriptInterface
-	public void promote(String location, String title, String summary,
-			String pic) {
-
-	}
-
-	/**
-	 * 去购物车
-	 */
-	@JavascriptInterface
-	public void goCart() {
-		Intent intent = new Intent(mActivity, ShopCartActivity.class);
-		startActivity(intent);
-	}
-
-	public void goLogin(){
-		Intent intent = new Intent(mActivity, LoginActivity.class);
-		startActivity(intent);
-	}
+                break;
+        }
+        startActivity(intent);
+    }
 
 
-	@JavascriptInterface
-	public void goDeal(int id) {
-		Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
-		intent.putExtra(HiShopDetailActivity.EXTRA_SHOP_ID, id);
-		startActivity(intent);
-	}
+    @JavascriptInterface
+    public void login() {
+        Activity activity = SDActivityManager.getInstance().getLastActivity();
+        AppHelper.isLogin(activity);
+    }
 
-	@JavascriptInterface
-	public void goSupplierLocation(int id) {
-		Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
-		intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
-		startActivity(intent);
+    @JavascriptInterface
+    public void page_title(String title) {
+    }
 
-	}
+    @JavascriptInterface
+    public void promote(String location, String title, String summary,
+                        String pic) {
 
-	/**
-	 * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
-	 * 
-	 * @param productId
-	 * @param userId
-	 */
-	@JavascriptInterface
-	public void addCart(String productId, String userId,String share_record_id ) {
-		// 保存购物车
-		checkLogin();
-		ShoppingCartInfo cartInfo = new ShoppingCartInfo();
-		cartInfo.setNumber("1");
-		cartInfo.setPro_id(productId);
-		cartInfo.setFx_user_id(userId);
+    }
+
+    /**
+     * 去购物车
+     */
+    @JavascriptInterface
+    public void goCart() {
+        Intent intent = new Intent(mActivity, ShopCartActivity.class);
+        startActivity(intent);
+    }
+
+    public void goLogin() {
+        Intent intent = new Intent(mActivity, LoginActivity.class);
+        startActivity(intent);
+    }
 
 
-		if (ifLogin) {
-			OutSideShoppingCartHelper	outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
-				@Override
-				public void onSuccess(String responseBody) {
+    @JavascriptInterface
+    public void goDeal(int id) {
+        Intent intent = new Intent(mActivity, HiShopDetailActivity.class);
+        intent.putExtra(HiShopDetailActivity.EXTRA_SHOP_ID, id);
+        startActivity(intent);
+    }
 
-				}
+    @JavascriptInterface
+    public void goSupplierLocation(int id) {
+        Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
+        intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, id);
+        startActivity(intent);
 
-				@Override
-				public void onSuccess(String method, List datas) {
-					goCart();
-				}
+    }
 
-				@Override
-				public void onFailue(String responseBody) {
+    /**
+     * 活动页添加并跳转购物 车。
+     *
+     * @param goods_id
+     * @param add_goods_num
+     * @param fx_user_id
+     * @param share_record_id
+     */
+    @JavascriptInterface
+    public void addCart(String goods_id, String add_goods_num, String fx_user_id, String share_record_id) {
+        ShoppingCartInfo cartInfo = new ShoppingCartInfo();
+        cartInfo.setNumber(add_goods_num);
+        cartInfo.setPro_id(goods_id);
+        cartInfo.setFx_user_id(fx_user_id);
+        cartInfo.setShare_record_id(share_record_id);
+        checkLogin();
+        if (ifLogin) {
+            OutSideShoppingCartHelper outSideShoppingCartHelper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
+                @Override
+                public void onSuccess(String responseBody) {
+
+                }
+
+                @Override
+                public void onSuccess(String method, List datas) {
+                    goCart();
+                }
+
+                @Override
+                public void onFailue(String responseBody) {
                     SDToast.showToast(responseBody);
-				}
+                }
 
-				@Override
-				public void onFailue(String method, String responseBody) {
+                @Override
+                public void onFailue(String method, String responseBody) {
 
-				}
-			});
-			outSideShoppingCartHelper.addShopCart(
-					userId,
-					App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-					App.getApplication().getToken(),
-					productId,
-					"1",
-					"1", share_record_id);
-		} else {
-			if(LocalShoppingcartDao.insertSingleNum(cartInfo)){
-				goLogin();
-			}
-		}
-	}
+                }
+            });
+            outSideShoppingCartHelper.addShopCart(
+                    fx_user_id,
+                    App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                    App.getApplication().getToken(),"1",                    goods_id,
+
+                    add_goods_num, share_record_id);
+            goCart();
+        } else {
+            if (LocalShoppingcartDao.insertSingleNum(cartInfo)) {
+                goLogin();
+            }
+        }
+
+    }
+
+    /**
+     * 扫我的二维码，先把商品加入购物车，然后 跳转到购物车页面。
+     *
+     * @param productId
+     * @param userId
+     */
+    @JavascriptInterface
+    public void addCart2(String productId, String add_goods_num,String userId, String share_record_id) {
+       addCart(productId,add_goods_num,userId,share_record_id);
+    }
 
 
-
-	public void checkLogin() {
-		if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-			ifLogin = true;
-		} else {
-			ifLogin = false;
-		}
-	}
+    public void checkLogin() {
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            ifLogin = true;
+        } else {
+            ifLogin = false;
+        }
+    }
 
     @JavascriptInterface
     public void close_page() {
@@ -307,8 +318,6 @@ public class AppJsHandler extends BaseJsHandler {
             }
         });
     }
-
-
 
 
 }

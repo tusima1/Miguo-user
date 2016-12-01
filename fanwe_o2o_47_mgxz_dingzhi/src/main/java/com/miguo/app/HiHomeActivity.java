@@ -1,11 +1,17 @@
 package com.miguo.app;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyCaptureActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
+import com.fanwe.app.App;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.model.CitylistModel;
@@ -17,8 +23,10 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.ClipboardUtils;
 import com.sunday.eventbus.SDBaseEvent;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,14 +63,19 @@ public class HiHomeActivity extends HiBaseActivity{
 
     @Override
     protected Category initCategory() {
+
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         JpushHelper.initJPushConfig();
         setTwiceKeyDownToCloseActivity(true);
         return new HiHomeCategory(this);
     }
 
+
+
+
     @Override
     protected void doOnResume() {
+
         if(null != getCategory()){
             getCategory().onRefreshGreeting();
         }

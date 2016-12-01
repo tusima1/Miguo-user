@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -136,13 +137,14 @@ public class HiHomeCategory extends Category implements
     IMUserInfoDao imUserInfoDao;
 
     public HiHomeCategory(HiBaseActivity activity) {
+
         super(activity);
     }
 
     @Override
     protected void initFirst() {
-        clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
 
+        clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
         loginByMobileDao = new LoginByMobileDaoImpl(this);
         getUseReceiveCode = new GetUserReceiveCodeDaoImpl(this);
         tencentSignDao = new TencentSignDaoImpl(this);
@@ -173,6 +175,25 @@ public class HiHomeCategory extends Category implements
         initUserInfo();
         locationCity();
         initDict();
+    }
+
+    public void getIntentData() {
+        // 尝试获取WebApp页面上过来的URL
+        Uri uri = getActivity().getIntent().getData();
+        StringBuffer value = new StringBuffer();
+
+        if (uri != null && "live".equals(uri.getHost())) {
+            List<String> pathSegments = uri.getPathSegments();
+            for (int i = 0; pathSegments != null && i < pathSegments.size(); i++) {
+                value.append("/" + pathSegments.get(i));
+            }
+        }
+        if (value.length() > 0) {
+            if (value.toString().startsWith("/")) {
+                this.code = value.substring(1);
+                App.getInstance().code = this.code;
+            }
+        }
     }
 
     private void initDict() {
@@ -271,11 +292,19 @@ public class HiHomeCategory extends Category implements
         }
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     /**
      * 获取剪切板的领取码
      */
     private void checkCode() {
-        code = ClipboardUtils.checkCode(getActivity());
+        getIntentData();
+        Log.e("miguoxiaozhan",code);
+        if (TextUtils.isEmpty(code)) {
+            code = ClipboardUtils.checkCode(getActivity());
+        }
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */
@@ -293,7 +322,7 @@ public class HiHomeCategory extends Category implements
         }
     }
 
-    public void handlerLoginSuccessFromDiamond(){
+    public void handlerLoginSuccessFromDiamond() {
         checkCode();
     }
 
