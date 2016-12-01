@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.SDFormatUtil;
 import com.miguo.live.interf.IHelper;
@@ -25,6 +26,7 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
     private Dialog dialog;
     private TextView mTv_num;//数字
     private TextView mTv_tag;//折扣券  拼接为 数字+折扣券
+    private TextView mTv_info;//展示的信息
     private String type;
     private String num;
 
@@ -39,11 +41,11 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
      * @param type 类型
      * @param num 数量
      */
-    public void setData(String type,String num){
+    public void setData(String type,String num,String info){
         this.type=type;
         this.num=num;
         if (mRob){
-            setQuan(num,type);
+            setQuan(num,type,info);
         }
     }
 
@@ -69,8 +71,8 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
         FrameLayout container = (FrameLayout) contentView.findViewById(R.id.fr_container);
         container.addView(robView);
         mTv_num = ((TextView) robView.findViewById(R.id.tv_num));
-
         mTv_tag = ((TextView) robView.findViewById(R.id.tv_tag));
+        mTv_info = ((TextView) robView.findViewById(R.id.tv_info));
         robView.findViewById(R.id.tv_enter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +86,7 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
      * @param num
      * @param tag
      */
-    public void setQuan(String num,String tag){
+    public void setQuan(String num,String tag,String info){
         if (mTv_num!=null && mTv_tag!=null && !TextUtils.isEmpty(num) && !TextUtils.isEmpty(tag)){
             mTv_num.setText(SDFormatUtil.formatNumberString(num,2));
             if("1".equals(type)) {
@@ -93,6 +95,7 @@ public class UserRobRedPacketEndDialogHelper implements IHelper {
                 mTv_tag.setText("现金券");
             }
         }
+        SDViewBinder.setTextView(mTv_info,info,"");
     }
 
     public void show() {

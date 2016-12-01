@@ -250,6 +250,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         boolean isRobed;
         String type = "";
         String num = "";
+        String showInfo="";
         if (datas == null || datas.size() < 1) {
             isRobed = false;
         } else {
@@ -258,6 +259,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
                 isRobed = true;
                 type = info.getRed_packet_type();
                 num = info.getRed_packet_amount();
+                showInfo=info.getSpecial_note();
             } else {
                 isRobed = false;
             }
@@ -267,7 +269,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
         //显示抢到界面(两种状态)
         if (isRobed) {
             num = MGStringFormatter.getFloat2(num);
-            userRobRedPacketEndDialogHelper.setData(type, num);
+            userRobRedPacketEndDialogHelper.setData(type, num,showInfo);
         }
         userRobRedPacketEndDialogHelper.show();
 
