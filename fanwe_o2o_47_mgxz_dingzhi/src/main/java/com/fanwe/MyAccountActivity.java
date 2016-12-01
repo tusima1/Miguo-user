@@ -25,7 +25,7 @@ import com.fanwe.common.model.getMGDict.DictModel;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.SettingModelDao;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;

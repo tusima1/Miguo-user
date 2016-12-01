@@ -18,7 +18,7 @@ import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.barry.UserUpdateDao;
 import com.fanwe.dao.barry.impl.UserUpdateInfoDaoImpl;
 import com.fanwe.dao.barry.view.UserUpdateView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.OrderDetailFeeFragment;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
 import com.fanwe.library.alipay.easy.PayResult;

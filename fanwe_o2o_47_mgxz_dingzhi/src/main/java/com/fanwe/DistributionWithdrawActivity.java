@@ -30,7 +30,7 @@ import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getUserBankCardList.ModelUserBankCard;
 import com.fanwe.commission.presenter.MoneyHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;

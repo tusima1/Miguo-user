@@ -15,7 +15,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.SDStickyScrollView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.TuanDetailAttrsFragment;
 import com.fanwe.fragment.TuanDetailBuyNoticelFragment;
 import com.fanwe.fragment.TuanDetailCombinedPackagesFragment;

@@ -16,7 +16,7 @@ import com.fanwe.BaseActivity;
 import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
 import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogConfirm;

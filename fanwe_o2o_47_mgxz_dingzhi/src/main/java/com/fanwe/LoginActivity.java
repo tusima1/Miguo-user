@@ -15,7 +15,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.LoginFragment;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.jpush.JpushHelper;

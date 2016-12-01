@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiHomeActivity;

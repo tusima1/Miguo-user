@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.wxapp.SDWxappPay;
 import com.sunday.eventbus.SDEventManager;

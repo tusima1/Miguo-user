@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.adapter.MyRedEnvelopeAdapter;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.RedEnvelopeModel;

@@ -1,4 +1,4 @@
-package com.fanwe.event;
+package com.fanwe.constant;
 
 public enum EnumEventTag {
     /**

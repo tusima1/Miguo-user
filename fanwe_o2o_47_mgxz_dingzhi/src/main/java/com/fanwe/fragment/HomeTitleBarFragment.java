@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.fanwe.CityListActivity;
 import com.fanwe.HomeSearchActivity;
 import com.fanwe.MyMessageActivity;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;

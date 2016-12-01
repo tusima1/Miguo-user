@@ -14,7 +14,7 @@ import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.dao.SettingModelDao;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.command.SDCommandManager;

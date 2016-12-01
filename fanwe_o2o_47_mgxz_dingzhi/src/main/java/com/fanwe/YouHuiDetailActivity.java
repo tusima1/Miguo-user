@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDStickyScrollView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.YouhuiDetailCommentFragment;
 import com.fanwe.fragment.YouhuiDetailHtmlDetailFragment;
 import com.fanwe.fragment.YouhuiDetailNoticeFragment;

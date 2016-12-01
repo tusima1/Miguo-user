@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;

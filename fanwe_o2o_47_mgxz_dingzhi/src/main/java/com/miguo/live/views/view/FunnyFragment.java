@@ -15,7 +15,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.utils.SDCollectionUtil;

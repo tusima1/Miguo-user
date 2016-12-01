@@ -13,7 +13,7 @@ import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.LocalUserModelDao;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;

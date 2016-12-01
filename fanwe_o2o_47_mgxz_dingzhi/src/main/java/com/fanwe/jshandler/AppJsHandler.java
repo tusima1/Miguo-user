@@ -22,7 +22,7 @@ import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.IndexType;
 import com.fanwe.constant.ServerUrl;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.GoodsListFragment;
 import com.fanwe.fragment.ScoresListFragment;
 import com.fanwe.fragment.StoreListFragment;

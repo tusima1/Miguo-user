@@ -8,7 +8,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.ErrorCodeParse;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.miguo.utils.MGUIUtil;

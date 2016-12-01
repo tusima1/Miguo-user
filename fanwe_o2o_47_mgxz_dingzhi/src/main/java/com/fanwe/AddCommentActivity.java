@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.AddCommentFragment;
 import com.fanwe.fragment.AddCommentFragment.AddCommentFragmentListener;
 import com.fanwe.library.dialog.SDDialogProgress;

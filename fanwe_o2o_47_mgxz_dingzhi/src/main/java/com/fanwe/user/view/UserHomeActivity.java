@@ -22,7 +22,7 @@ import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;

@@ -109,13 +109,6 @@ public class Constant {
         public static final String STORE = "store";
     }
 
-    public static final class JSDetailType {
-        public static final int TUAN = 0;
-        public static final int GOODS = 1;
-        public static final int SUPPLIER = 2;
-        public static final int EVENT = 3;
-        public static final int YOU_HUI = 4;
-    }
 
     public static final class UserLoginState {
         public static final int UN_LOGIN = 0;

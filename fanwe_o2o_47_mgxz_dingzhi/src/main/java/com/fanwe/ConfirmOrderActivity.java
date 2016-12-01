@@ -11,7 +11,7 @@ import android.widget.ScrollView;
 import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.MGProgressDialog;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.MyRedPayMentsFragment;
 import com.fanwe.fragment.MyRedPayMentsFragment.MyredPaymentsFragmentListener;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;

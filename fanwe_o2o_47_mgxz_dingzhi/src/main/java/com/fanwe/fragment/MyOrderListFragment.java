@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.OrderOutAdapter;

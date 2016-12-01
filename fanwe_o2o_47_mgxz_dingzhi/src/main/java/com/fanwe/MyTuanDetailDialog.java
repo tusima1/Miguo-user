@@ -1,7 +1,7 @@
 package com.fanwe;
 
 import com.fanwe.customview.SDStickyScrollView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.TuanDetailAttrsFragment;
 import com.fanwe.fragment.TuanDetailBuyNoticelFragment;
 import com.fanwe.fragment.TuanDetailCombinedPackagesFragment;

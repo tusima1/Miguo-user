@@ -23,7 +23,7 @@ import com.fanwe.adapter.MerchantListAdapter;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;

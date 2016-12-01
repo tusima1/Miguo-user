@@ -11,7 +11,7 @@ import android.widget.ImageView.ScaleType;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;

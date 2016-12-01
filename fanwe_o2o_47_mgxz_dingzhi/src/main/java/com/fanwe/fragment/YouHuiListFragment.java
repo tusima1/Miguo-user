@@ -23,7 +23,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.SearchTypeMap;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;

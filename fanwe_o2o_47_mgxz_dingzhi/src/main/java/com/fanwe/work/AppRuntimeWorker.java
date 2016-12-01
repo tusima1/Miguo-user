@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.dao.InitActModelDao;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;

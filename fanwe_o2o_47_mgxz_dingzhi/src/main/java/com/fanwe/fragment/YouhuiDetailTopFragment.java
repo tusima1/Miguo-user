@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.fanwe.LoginActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.app.AppHelper;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.SDScaleImageView;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
