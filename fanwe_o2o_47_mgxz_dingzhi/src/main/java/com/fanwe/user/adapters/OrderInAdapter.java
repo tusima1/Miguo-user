@@ -151,7 +151,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                 dp_id = 1;
             }
             // 10/28 mStatus_value =5 表示已经"结单",此时没有评价的还可以评价,不能执行其他的操作.
-            if ((mStatus_value == 3 || mStatus_value == 4 ||mStatus_value == 5) && dp_id == 0 && consume_count > 0) {
+            if ("1".equals(can_comment)) {
                 tv_evaluate.setVisibility(View.VISIBLE);
                 tv_order.setText("已消费");
                 tv_evaluate.setOnClickListener(new View.OnClickListener() {
@@ -168,11 +168,12 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
             } else {
                 tv_evaluate.setVisibility(View.GONE);
             }
-//            int cal_temp = number - refunded - refunding;
-//            if ((mStatus_value == 3 || mStatus_value == 4) && cal_temp - consume_count > 0) {
+
             if ("1".equals(can_consume)) {
-                tv_tuikuan.setVisibility(View.VISIBLE);
                 tv_order.setText("待消费");
+            }
+            if("1".equals(can_refund)){
+                tv_tuikuan.setVisibility(View.VISIBLE);
                 tv_tuikuan.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -180,7 +181,7 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                         gotoRefundApplication(tuan_id);
                     }
                 });
-            } else {
+            }else{
                 tv_tuikuan.setVisibility(View.GONE);
             }
             if (dp_id > 0) {
