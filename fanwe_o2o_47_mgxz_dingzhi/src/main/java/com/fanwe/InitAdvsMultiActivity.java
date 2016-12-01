@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -68,13 +67,11 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     private SharedPreferences setting;
     private PermissionsHelper permissionsHelper;
-    private long tempT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_init_advs_multi);
-        tempT = System.currentTimeMillis();
         mStartTime = System.currentTimeMillis();
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
@@ -298,7 +295,6 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
                     //请求城市列表
                     requestInitInterface();
                     startMainActivity();
-                    Log.e("time", "time:" + (System.currentTimeMillis() - tempT));
                     break;
             }
         }
