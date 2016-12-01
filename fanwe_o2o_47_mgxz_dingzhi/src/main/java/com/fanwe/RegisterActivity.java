@@ -25,7 +25,9 @@ import com.fanwe.user.presents.LoginHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 
 import java.lang.reflect.Type;
@@ -252,8 +254,8 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
     public void goLogin() {
         MGToast.showToast("手机号已注册，请直接登录");
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        intent.putExtra(LoginActivity.EXTRA_SELECT_TAG_INDEX, 1);
+        Intent intent = new Intent(RegisterActivity.this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+        intent.putExtra(IntentKey.EXTRA_SELECT_TAG_INDEX, 1);
         intent.putExtra(LoginPhoneFragment.EXTRA_PHONE_NUMBER, userPhone);
         startActivity(intent);
     }

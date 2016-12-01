@@ -30,6 +30,8 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.miguo.app.HiShopDetailActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
@@ -116,7 +118,7 @@ public class MerchantListOrderActivity extends BaseActivity
 	{
 		if (App.getApplication().getmLocalUser() == null)
 		{
-			startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+			startActivity(new Intent(getApplicationContext(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY)));
 		} else
 		{
 			Intent intent = new Intent(getApplicationContext(), MyCaptureActivity.class);

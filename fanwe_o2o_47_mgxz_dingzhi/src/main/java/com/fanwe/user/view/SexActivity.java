@@ -94,7 +94,7 @@ public class SexActivity extends BaseActivity implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         if (UserConstants.USER_INFO_METHOD.equals(method)) {
-            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setSex(strSex);
+            App.getInstance().getCurrentUser().setSex(strSex);
             MGToast.showToast("性别设置成功");
             finish();
         }

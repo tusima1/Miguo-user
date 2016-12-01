@@ -32,7 +32,7 @@ import com.fanwe.seller.model.getShopList.ModelShopListNavs;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
-import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -67,12 +67,12 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
         return LocalUserModelDao.queryModel();
     }
 
-    /**
-     * 当前用户信息。存在于内存中。定义到2016-7-27 by  zhouhy
-     */
-    public UserCurrentInfo mUserCurrentInfo;
     private LinkedList<String> liveRoomIdList;
     protected String imei;
+    /**
+     * 当前用户信息 全局唯一用户 2016-12-01 create by zlh
+     */
+    UserInfoNew currentUser;
 
     /**
      * 自我引用 .
@@ -86,10 +86,6 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
      * 是否初始化AV.
      */
     public boolean isAvStart = false;
-    /**
-     * 当前用户的昵称。
-     */
-    public String nickName;
     /**
      * 用户在当前直播的分享领取码
      */
@@ -167,7 +163,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
         SDCommandManager.getInstance().initialize();
         LogUtil.isDebug = ServerUrl.DEBUG;
 
-        mUserCurrentInfo = UserCurrentInfo.getInstance();
+        currentUser = new UserInfoNew();
 
         ActivityLifeManager.getInstance().init(this);
     }
@@ -203,13 +199,6 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     private void addClassesNotFinishWhenLoginState0() {
         mListClassNotFinishWhenLoginState0.add(HiHomeActivity.class);
     }
-
-//    private void initAppCrashHandler() {
-//        if (!ServerUrl.DEBUG) {
-//            CrashHandler crashHandler = CrashHandler.getInstance();
-//            crashHandler.init(getApplicationContext());
-//        }
-//    }
 
     private void initSettingModel() {
         // 插入成功或者数据库已经存在记录
@@ -303,21 +292,21 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
         return myApplication;
     }
 
-    public UserCurrentInfo getmUserCurrentInfo() {
-        if (mUserCurrentInfo == null) {
-            mUserCurrentInfo = UserCurrentInfo.getInstance();
-        }
-        return mUserCurrentInfo;
-    }
-
-    public void setmUserCurrentInfo(UserCurrentInfo mUserCurrentInfo) {
-        this.mUserCurrentInfo = mUserCurrentInfo;
-    }
-
     public String getToken() {
-        return mUserCurrentInfo==null ? "": mUserCurrentInfo.getToken();
+        return getCurrentUser() == null ?  " ": getCurrentUser().getToken();
     }
 
+    public void setToken(String token){
+        getCurrentUser().setToken(token);
+    }
+
+    public UserInfoNew getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(UserInfoNew currentUser) {
+        this.currentUser = currentUser;
+    }
 
     /**
      * 初始化AVSDK
@@ -338,42 +327,27 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     }
 
     public String getUserSign() {
-
-        String useSign = "";
-        if (this.mUserCurrentInfo != null) {
-
-            if (mUserCurrentInfo.getUserSign() != null) {
-                useSign = mUserCurrentInfo.getUserSign();
-            }
-        }
-//        Log.d("LiveActivity", "mUserCurrentInfo: " + (mUserCurrentInfo == null) + " ,useSign: " + useSign);
-        return useSign;
-
+        return null != getCurrentUser() ? null != getCurrentUser().getUseSign() ? getCurrentUser().getUseSign()  : "" : "";
     }
 
     public void setUserSign(String useSign) {
-//        Log.d("LiveActivity", "setUserSign: " + useSign);
         if (TextUtils.isEmpty(useSign)) {
             return;
         }
-        if (this.mUserCurrentInfo != null) {
-
-            mUserCurrentInfo.setUserSign(useSign);
+        if (null != getCurrentUser()) {
+            getCurrentUser().setUseSign(useSign);
         }
-
-
     }
 
     public String getUserNickName() {
-        if (this.mUserCurrentInfo != null) {
-            if (mUserCurrentInfo.getUserInfoNew() != null) {
-                nickName = mUserCurrentInfo.getUserInfoNew().getNick();
-                if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
-                    nickName = mUserCurrentInfo.getUserInfoNew().getUser_name();
-                }
-                if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
-                    nickName = mUserCurrentInfo.getUserInfoNew().getMobile();
-                }
+        String nickName = "";
+        if (getCurrentUser() != null) {
+            nickName = getCurrentUser().getNick();
+            if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
+                nickName = getCurrentUser().getUser_name();
+            }
+            if (TextUtils.isEmpty(nickName) || "null".equals(nickName.trim())) {
+                nickName = getCurrentUser().getMobile();
             }
         }
         return nickName;
@@ -381,29 +355,19 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     }
 
     public void setUserNickName(String nickName) {
-        if (this.mUserCurrentInfo != null) {
-            if (mUserCurrentInfo.getUserInfoNew() != null) {
-                mUserCurrentInfo.getUserInfoNew().setNick(nickName);
-            }
+        if (getCurrentUser() != null) {
+            getCurrentUser().setNick(nickName);
         }
     }
 
 
     public String getUserIcon() {
-        String icon = "";
-        if (this.mUserCurrentInfo != null) {
-            if (mUserCurrentInfo.getUserInfoNew() != null) {
-                icon = mUserCurrentInfo.getUserInfoNew().getIcon();
-            }
-        }
-        return icon;
+        return null != getCurrentUser() ? null !=getCurrentUser().getIcon() ? getCurrentUser().getIcon() : "" : "" ;
     }
 
     public void setUserIcon(String icon) {
-        if (this.mUserCurrentInfo != null) {
-            if (mUserCurrentInfo.getUserInfoNew() != null) {
-                mUserCurrentInfo.getUserInfoNew().setIcon(icon);
-            }
+        if (getCurrentUser() != null) {
+            getCurrentUser().setIcon(icon);
         }
     }
 
@@ -416,8 +380,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     public void clearAllData() {
         this.imLoginSuccess = false;
         this.isAvStart = false;
-        this.nickName = "";
-        this.mUserCurrentInfo = null;
+        this.currentUser = new UserInfoNew();
 
     }
 

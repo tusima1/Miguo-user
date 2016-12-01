@@ -86,10 +86,10 @@ public class UserHomeActivity extends Activity implements CallbackView2, Callbac
 
 
     private void preView() {
-        if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() == null) {
+        if (App.getInstance().getCurrentUser() == null) {
             return;
         }
-        if (id.equals(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id())) {
+        if (id.equals(App.getInstance().getCurrentUser().getUser_id())) {
             //当前用户
             tvAttentionStatus.setVisibility(View.GONE);
         } else {
@@ -118,7 +118,7 @@ public class UserHomeActivity extends Activity implements CallbackView2, Callbac
     private void getIntentData() {
         id = getIntent().getStringExtra("id");
         if (TextUtils.isEmpty(id)) {
-            id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            id = App.getInstance().getCurrentUser().getUser_id();
         }
         toastContent = getIntent().getStringExtra("toastContent");
         if (!TextUtils.isEmpty(toastContent)) {

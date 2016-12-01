@@ -262,7 +262,7 @@ public class UserRobRedPacketDialogHelper implements IHelper, View.OnClickListen
      */
     private void clickTimeCountDown() {
         if (mLiveHttpHelper != null && ifClickable) {
-            mLiveHttpHelper.getRedPackets(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(), red_packet_key);
+            mLiveHttpHelper.getRedPackets(App.getInstance().getCurrentUser().getUser_id(), red_packet_key);
             ifClickable = false;
         }
     }

@@ -10,6 +10,8 @@ import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.library.fragment.WebViewFragment.EnumProgressMode;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 
 
@@ -32,7 +34,7 @@ public class DistributionStoreWapActivity extends BaseActivity {
         LocalUserModel userModel = AppHelper.getLocalUser();
         if (userModel == null) {
             MGToast.showToast("请先登录");
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             startActivity(intent);
             finish();
         }

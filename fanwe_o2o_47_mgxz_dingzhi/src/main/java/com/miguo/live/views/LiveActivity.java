@@ -29,7 +29,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 
@@ -46,9 +45,10 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.SDDateUtil;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.adapters.HeadTopAdapter;
 import com.miguo.live.adapters.LiveChatMsgListAdapter;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -417,10 +417,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         //直播已经初始化。
         String userid = MySelfInfo.getInstance().getId();
         if (TextUtils.isEmpty(userid)) {
-            UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-            //userCurrentInfo 一定不为null
-            if (userCurrentInfo.getUserInfoNew() != null) {
-                userid = userCurrentInfo.getUserInfoNew().getUser_id();
+            UserInfoNew userCurrentInfo = App.getInstance().getCurrentUser();
+            if (userCurrentInfo != null) {
+                userid = userCurrentInfo.getUser_id();
                 if (TextUtils.isEmpty(userid)) {
                     MySelfInfo.getInstance().setId(userid);
                     goToLoginActivity();
@@ -477,7 +476,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
      * 跳转到登录界面
      */
     public void goToLoginActivity() {
-        Intent intent = new Intent(LiveActivity.this, LoginActivity.class);
+        Intent intent = new Intent(LiveActivity.this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
         startActivity(intent);
         finish();
     }
@@ -719,19 +718,13 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
 //        LogUtil.d("roomId: " + roomId);
         String url = "";
         String title = "米果小站";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo userInfoNew = App.getInstance().getmUserCurrentInfo();
-            if (userInfoNew != null) {
-                UserInfoNew infoNew = userInfoNew.getUserInfoNew();
-                if (infoNew != null) {
-                    if (!TextUtils.isEmpty(infoNew.getIcon())) {
-                        url = infoNew.getIcon();
-                        title = TextUtils.isEmpty(infoNew.getNick()) == true ? infoNew
-                                .getUser_name() : infoNew.getNick();
-                    }
-                }
+        UserInfoNew infoNew = App.getInstance().getCurrentUser();
+        if (infoNew != null) {
+            if (!TextUtils.isEmpty(infoNew.getIcon())) {
+                url = infoNew.getIcon();
+                title = TextUtils.isEmpty(infoNew.getNick()) == true ? infoNew
+                        .getUser_name() : infoNew.getNick();
             }
-
         }
         OKhttpHelper.getInstance().registerRoomInfo(title, url, roomId + "", roomId + "", roomId
                 + "");
@@ -2341,9 +2334,9 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
     @Override
     public void requestSendGift(GiftListBean giftInfo, int num) {
         giftInfo.setNum(num);
-        giftInfo.setUserAvatar(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
-        giftInfo.setUserId(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id());
-        giftInfo.setUserName(App.getApplication().getmUserCurrentInfo().getUserInfoNew().getNick());
+        giftInfo.setUserAvatar(App.getApplication().getCurrentUser().getIcon());
+        giftInfo.setUserId(App.getApplication().getCurrentUser().getUser_id());
+        giftInfo.setUserName(App.getApplication().getCurrentUser().getNick());
         showGift(giftInfo);
         mLiveHelper.sendGift(giftInfo);
     }

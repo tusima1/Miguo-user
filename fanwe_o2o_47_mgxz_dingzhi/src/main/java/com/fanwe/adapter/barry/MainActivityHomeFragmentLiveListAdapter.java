@@ -20,6 +20,8 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.getLiveListNew.ModelHost;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
@@ -233,7 +235,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
 
         private void clickItem() {
             if (TextUtils.isEmpty(App.getInstance().getToken())) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 BaseUtils.jumpToNewActivity(getActivity(), intent);
                 return;
             }

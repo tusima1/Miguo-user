@@ -823,6 +823,14 @@
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 新商家详情 -->
+        <!-- 新登录 -->
+        <activity
+            android:name="com.miguo.app.HiLoginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
+        <!-- 新Login -->
         <activity
             android:name="com.miguo.app.HiWebPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"

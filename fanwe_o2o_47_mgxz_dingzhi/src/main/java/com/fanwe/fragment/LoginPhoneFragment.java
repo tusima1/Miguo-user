@@ -18,11 +18,15 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiLoginActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.util.List;
 
+/**
+ * 快速登录
+ */
 public class LoginPhoneFragment extends LoginBaseFragment implements CallbackView {
 
     public static final String TAG = LoginPhoneFragment.class.getSimpleName();
@@ -179,7 +183,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             return;
         }
         mBtnLogin.setEnabled(false);
-        shareCode = ((LoginActivity)getActivity()).getShareId();
+        shareCode = ((HiLoginActivity)getActivity()).getCategory().getShareCode();
         mLoginHelper.doQuickLogin(mNumberPhone, mStrCode,mBtnLogin,shareCode);
         SDDialogManager.showProgressDialog("请稍候...");
     }

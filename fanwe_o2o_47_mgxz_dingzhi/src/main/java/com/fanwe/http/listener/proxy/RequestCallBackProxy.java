@@ -13,6 +13,8 @@ import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.utils.AESUtil;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDBase64;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.RequestModel;
@@ -191,7 +193,7 @@ public class RequestCallBackProxy extends RequestCallBack<String> {
     private void startLoginActivity() {
         Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
         if (lastActivity != null) {
-            Intent intent = new Intent(lastActivity, LoginActivity.class);
+            Intent intent = new Intent(lastActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             lastActivity.startActivity(intent);
         }
     }

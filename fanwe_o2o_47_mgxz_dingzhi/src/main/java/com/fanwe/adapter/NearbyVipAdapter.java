@@ -26,6 +26,8 @@ import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 
 public class NearbyVipAdapter extends SDBaseAdapter<NearbyuserActItemModel>
 {
@@ -104,7 +106,7 @@ public class NearbyVipAdapter extends SDBaseAdapter<NearbyuserActItemModel>
 			LocalUserModel user = App.getApplication().getmLocalUser();
 			if (user == null)
 			{
-				mActivity.startActivityForResult(new Intent(mActivity, LoginActivity.class), NearbyVipActivity.REQUEST_CODE_LOGIN_FOR_FOLLOW_FANS);
+				mActivity.startActivityForResult(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY)), NearbyVipActivity.REQUEST_CODE_LOGIN_FOR_FOLLOW_FANS);
 			} else
 			{
 				// TODO 请求关注接口

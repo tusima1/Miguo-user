@@ -16,6 +16,8 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -221,7 +223,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 		Intent intent;
 		switch (actModel.getStatus()) {
 		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
+			intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
 			startActivity(intent);
 
 			break;
@@ -576,7 +578,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 		Intent intent;
 		switch (actModel.getStatus()) {
 		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
+			intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
 			startActivity(intent);
 			finish();
 			break;

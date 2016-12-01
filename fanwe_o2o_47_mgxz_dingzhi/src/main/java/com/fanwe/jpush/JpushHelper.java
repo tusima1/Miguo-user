@@ -113,7 +113,7 @@ public class JpushHelper {
 		String alias="";
 		String imei="";
 		try {
-			alias = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+			alias = App.getInstance().getCurrentUser().getUser_id();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

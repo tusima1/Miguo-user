@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.app.App;
@@ -30,6 +29,8 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.sunday.eventbus.SDEventManager;
 
 import java.math.BigDecimal;
@@ -140,7 +141,7 @@ public class EventDetailAdapter extends SDSimpleBaseAdapter<Event_edtailModelLis
 				switch (actModel.getStatus())
 				{
 				case -1:
-					intent = new Intent(mActivity, LoginActivity.class);
+					intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
 					mActivity.startActivity(intent);
 					break;
 				case 0:

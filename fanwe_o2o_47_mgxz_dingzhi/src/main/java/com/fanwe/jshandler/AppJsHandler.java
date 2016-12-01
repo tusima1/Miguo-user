@@ -40,6 +40,8 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 
@@ -167,7 +169,7 @@ public class AppJsHandler extends BaseJsHandler {
 	}
 
 	public void goLogin(){
-		Intent intent = new Intent(mActivity, LoginActivity.class);
+		Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
 		startActivity(intent);
 	}
 
@@ -227,7 +229,7 @@ public class AppJsHandler extends BaseJsHandler {
 			});
 			outSideShoppingCartHelper.addShopCart(
 					userId,
-					App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+					App.getApplication().getCurrentUser().getUser_id(),
 					App.getApplication().getToken(),
 					productId,
 					"1",

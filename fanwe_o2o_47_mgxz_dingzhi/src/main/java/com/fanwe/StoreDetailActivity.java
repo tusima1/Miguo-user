@@ -196,7 +196,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
             if (TextUtils.isEmpty(clickUrl)) {
                 clickUrl = ServerUrl.SERVER_H5;
             } else {
-                clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                clickUrl = clickUrl + "/ref_id/" + App.getApplication().getCurrentUser().getUser_id();
             }
             String title = share.getTitle();
             if (TextUtils.isEmpty(title)) {

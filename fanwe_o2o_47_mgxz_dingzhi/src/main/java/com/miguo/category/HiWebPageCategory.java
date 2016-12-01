@@ -180,7 +180,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     public void addToShoppingCart(String cart_type,String goods_id,String add_goods_num,String fx_user_id,String roomId){
         if(!TextUtils.isEmpty(App.getInstance().getToken())){
-            shoppingCartDao.addToShoppingCart(roomId, fx_user_id, App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(), goods_id, cart_type, add_goods_num);
+            shoppingCartDao.addToShoppingCart(roomId, fx_user_id, App.getInstance().getCurrentUser().getUser_id(), goods_id, cart_type, add_goods_num);
             return;
         }
         addLocalShoppingCart(cart_type, goods_id, add_goods_num, fx_user_id, roomId);

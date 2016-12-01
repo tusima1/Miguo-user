@@ -40,6 +40,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
@@ -457,7 +459,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     private void gotoLogin() {
         Intent intent = new Intent(getActivity(),
-                LoginActivity.class);
+                ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
         getContext().startActivity(intent);
     }
 

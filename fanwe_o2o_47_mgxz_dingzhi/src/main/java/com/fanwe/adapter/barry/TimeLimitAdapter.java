@@ -23,6 +23,8 @@ import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.utils.DisplayUtil;
 
@@ -196,7 +198,7 @@ public class TimeLimitAdapter extends BarryBaseRecyclerAdapter{
         }
 
         public void goLogin(){
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 

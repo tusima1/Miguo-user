@@ -82,7 +82,7 @@ public class SignActivity extends BaseActivity implements CallbackView2 {
     @Override
     public void onSuccess(String method, List datas) {
         if (UserConstants.USER_INFO_METHOD.equals(method)) {
-            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setRemark(strSign);
+            App.getInstance().getCurrentUser().setRemark(strSign);
             MGToast.showToast("个人简介更新成功");
             finish();
         }

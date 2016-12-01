@@ -222,7 +222,7 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
         }
         final String strName = bean.getName();
 
-        if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getToken())) {
+        if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getToken())) {
             if (bean.getAllow_dp() == 1) {
                 mBtnPublish.setVisibility(View.VISIBLE);
             } else {

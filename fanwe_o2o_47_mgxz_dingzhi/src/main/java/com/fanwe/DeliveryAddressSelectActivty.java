@@ -32,6 +32,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 
@@ -205,7 +207,7 @@ public class DeliveryAddressSelectActivty extends BaseActivity
 			InterfaceServer.getInstance().requestInterface(model, handler);
 		} else
 		{
-			startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+			startActivity(new Intent(getApplicationContext(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY)));
 		}
 
 	}

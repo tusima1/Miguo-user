@@ -176,7 +176,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         if(getIntent() != null){
             isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
         }
-
     }
 
     private void initTitle() {
@@ -386,8 +385,6 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
     public  void getShareId(HashMap<String,String> map){
         shareCode = map.get(CommonConstants.SHARE_RECORD_ID);
-
-
     }
     protected void startRegisterActivity(boolean third, ThirdLoginInfo thirdLoginInfo) {
         String openId = thirdLoginInfo.getOpenId();

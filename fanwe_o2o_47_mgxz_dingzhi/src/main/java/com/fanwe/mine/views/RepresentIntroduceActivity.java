@@ -35,7 +35,7 @@ public class RepresentIntroduceActivity extends Activity implements CallbackView
     private WebView mWebView;
     private MemberDetailDao memberDetailDao;
     private UserHttpHelper userHttpHelper;
-    String fxLevel = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getFx_level();
+    String fxLevel = App.getInstance().getCurrentUser().getFx_level();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +127,7 @@ public class RepresentIntroduceActivity extends Activity implements CallbackView
         } else {
             String level = datas.get(0).get("fx_level");
             if (!TextUtils.isEmpty(level)) {
-                App.getInstance().getmUserCurrentInfo().getUserInfoNew().setFx_level(level);
+                App.getInstance().getCurrentUser().setFx_level(level);
                 fxLevel = level;
             }
         }

@@ -238,7 +238,7 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
      * 添加到购物车。
      */
     public void addGoodsToShoppingPacket() {
-        String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        String lgn_user_id = App.getInstance().getCurrentUser().getUser_id();
         String goods_id = mDealModel.getId();
         String cart_type = "1";
         String add_goods_num = "1";

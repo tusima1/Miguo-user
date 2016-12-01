@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.fanwe.app.App;
+import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.work.SystemBarTintManager;
 import com.miguo.category.Category;
 import com.miguo.live.views.utils.BaseUtils;
@@ -72,6 +73,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         setBar(android.R.color.transparent);
         setActivityParams();
         setContentView();
+        SDActivityManager.getInstance().onCreate(this);
         initEventbus();
         initApp();
         category = initCategory();

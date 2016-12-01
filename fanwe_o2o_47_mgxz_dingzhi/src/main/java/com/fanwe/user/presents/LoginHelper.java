@@ -26,7 +26,6 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.ThirdLoginInfo;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -191,7 +190,7 @@ public class LoginHelper extends Presenter {
                     UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
                     if (userInfoNew != null) {
                         if (userInfoNew != null) {
-                            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+                            App.getInstance().setCurrentUser(userInfoNew);
                             User_infoModel model = new User_infoModel();
                             model.setUser_id(userInfoNew.getUser_id());
                             model.setMobile(userInfoNew.getMobile());
@@ -370,34 +369,6 @@ public class LoginHelper extends Presenter {
     }
 
     /**
-     * 退出
-     */
-    public void doLogout() {
-
-
-    }
-
-    public void doImLogin() {
-        String userid = MySelfInfo.getInstance().getId();
-        if (TextUtils.isEmpty(userid)) {
-            userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
-        }
-        String userSign = App.getInstance().getUserSign();
-        mTLoginHelper.imLogin(userid, userSign, new TIMCallBack() {
-            @Override
-            public void onError(int i, String s) {
-                MGToast.showToast("IM 认证失败。");
-                App.getInstance().setImLoginSuccess(false);
-            }
-
-            @Override
-            public void onSuccess() {
-                App.getInstance().setImLoginSuccess(true);
-            }
-        });
-    }
-
-    /**
      * 取sign.
      */
     public void getSign(String token) {
@@ -422,9 +393,9 @@ public class LoginHelper extends Presenter {
                     String userId = MySelfInfo.getInstance().getId();
 
                     if (TextUtils.isEmpty(userId)) {
-                        UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-                        if (currentInfo != null && currentInfo.getUserInfoNew() != null) {
-                            userId = currentInfo.getUserInfoNew().getUser_id();
+                        UserInfoNew currentInfo = App.getInstance().getCurrentUser();
+                        if (currentInfo != null) {
+                            userId = currentInfo.getUser_id();
                         } else {
                             return;
                         }
@@ -453,7 +424,7 @@ public class LoginHelper extends Presenter {
 
         UserInfoNew userInfoNew = (UserInfoNew) validateInfoBody(root);
         if (userInfoNew != null) {
-            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+            App.getInstance().setCurrentUser(userInfoNew);
             User_infoModel model = new User_infoModel();
             model.setUser_id(userInfoNew.getUser_id());
             MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
@@ -515,7 +486,7 @@ public class LoginHelper extends Presenter {
         if(mActivity instanceof RegisterActivity){
             RegisterActivity activity = (RegisterActivity)mActivity;
             if(activity.isFromDiamond()){
-                Intent intent = new Intent(activity, LoginActivity.class);
+                Intent intent = new Intent(activity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 activity.setResult(ResultCode.RESUTN_OK, intent);
                 BaseUtils.finishActivity(activity);
             }else {

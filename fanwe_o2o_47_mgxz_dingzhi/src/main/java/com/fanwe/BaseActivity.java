@@ -30,6 +30,8 @@ import com.fanwe.work.ScanResultHandler;
 import com.fanwe.work.SystemBarTintManager;
 import com.lidroid.xutils.ViewUtils;
 import com.miguo.app.HiHomeActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
@@ -180,7 +182,7 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
                 }
                 break;
             case TOKEN_FAILUE:
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 startActivity(intent);
             default:
                 break;

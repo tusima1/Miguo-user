@@ -64,6 +64,8 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -822,7 +824,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     //收藏
     private void doCollect() {
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            startActivity(new Intent(App.getApplication(), LoginActivity.class));
+            startActivity(new Intent(App.getApplication(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY)));
             return;
         }
         if ("1".equals(isCollected)) {
@@ -902,7 +904,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
      * 添加到购物车。
      */
     public void addGoodsToShoppingPacket(boolean isGoToShoppingCart) {
-        String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        String lgn_user_id = App.getInstance().getCurrentUser().getUser_id();
         String cart_type = "1";
         mNumber = mNumber < 1 ? 1 : mNumber;
         if (mShoppingCartHelper != null) {

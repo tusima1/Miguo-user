@@ -5,6 +5,8 @@ import android.content.Intent;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.model.LocalUserModel;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 
 public class AppHelper {
 
@@ -15,7 +17,7 @@ public class AppHelper {
     public static boolean isLogin(Activity activity) {
         if (getLocalUser() == null) {
             if (activity != null) {
-                Intent intent = new Intent(activity, LoginActivity.class);
+                Intent intent = new Intent(activity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 activity.startActivity(intent);
             }
             return false;

@@ -21,10 +21,11 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveStartBinding;
 import com.fanwe.seller.views.MineShopActivity;
 import com.fanwe.umeng.UmengShareManager;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.MGDictUtil;
 import com.google.gson.Gson;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.DataBindingLiveStart;
 import com.miguo.live.model.applyRoom.ModelApplyRoom;
 import com.miguo.live.model.applyRoom.ResultApplyRoom;
@@ -83,7 +84,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
         } else {
             dataBindingLiveStart.shopName.set("选择你的消费场所");
             dataBindingLiveStart.isLiveRight.set(true);
-            userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            userid = App.getInstance().getCurrentUser().getUser_id();
             usersig = App.getInstance().getUserSign();
             //注册腾讯并申请房间号。
             if (TextUtils.isEmpty(userid)) {
@@ -208,20 +209,20 @@ public class LiveStartActivity extends Activity implements CallbackView {
             clickEnable = false;
 
             String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
-                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getIcon())) {
+                imageUrl = App.getInstance().getCurrentUser().getIcon();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
             String title = "送你钻石，看直播，拿优惠";
-            String nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+            String nick = App.getInstance().getCurrentUser().getNick();
             String content = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]正在直播中";
             if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
                 //朋友圈
                 title = content;
             }
             UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "share/live/uid/"
-                            + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
+                            + App.getInstance().getCurrentUser().getUser_id() + "/share_record_id/" + shareRecordId,
                     UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
         } else {
             //未认证的，去认证
@@ -254,7 +255,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
 
 
     public void goToLoginActivity() {
-        Intent intent = new Intent(LiveStartActivity.this, LoginActivity.class);
+        Intent intent = new Intent(LiveStartActivity.this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
         startActivity(intent);
         finish();
     }
@@ -358,7 +359,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
             App.getInstance().startAVSDK();
 
         }
-        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        UserInfoNew userInfoNew = App.getInstance().getCurrentUser();
         MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
         Intent intent = new Intent(this, LiveActivity.class);
         intent.putExtra(Constants.ID_STATUS, Constants.HOST);
@@ -379,11 +380,9 @@ public class LiveStartActivity extends Activity implements CallbackView {
         CurLiveInfo.setHostName(nickName);
 
         String avatar = "";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo.getUserInfoNew() != null) {
-                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-            }
+        UserInfoNew currentInfo = App.getInstance().getCurrentUser();
+        if (currentInfo != null) {
+            avatar = currentInfo.getIcon();
         }
         MySelfInfo.getInstance().setAvatar(avatar);
         CurLiveInfo.setTitle("直播");

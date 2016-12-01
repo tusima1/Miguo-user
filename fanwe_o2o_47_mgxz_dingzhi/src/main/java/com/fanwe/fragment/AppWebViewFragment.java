@@ -181,22 +181,22 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         }
         if (TextUtils.isEmpty(imageUrl)) {
             imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
-                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getIcon())) {
+                imageUrl = App.getInstance().getCurrentUser().getIcon();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
         } else if (!imageUrl.startsWith("http")) {
             imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
-                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getIcon())) {
+                imageUrl = App.getInstance().getCurrentUser().getIcon();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
         }
         try {
             if (TextUtils.isEmpty(url)) {
-                url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+                url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getCurrentUser().getUser_id() +
                         "/share_record_id/" + shareRecordId;
             } else if (!url.contains("share_record_id")) {
                 url = url + "/share_record_id/" + shareRecordId;
@@ -206,7 +206,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
                 url = temp + "/share_record_id/" + shareRecordId;
             }
         } catch (Exception e) {
-            url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+            url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getCurrentUser().getUser_id() +
                     "/share_record_id/" + shareRecordId;
         }
         if (TextUtils.isEmpty(mContent)) {

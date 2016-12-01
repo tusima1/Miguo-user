@@ -159,7 +159,7 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
     }
 
     private void binData() {
-        mStrMobile = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile();
+        mStrMobile = App.getInstance().getCurrentUser().getMobile();
         MGLog.e("银行卡手机号" + mStrMobile);
         if (modelUserBankCard == null) {
             tv_bank_card_info.setText("");

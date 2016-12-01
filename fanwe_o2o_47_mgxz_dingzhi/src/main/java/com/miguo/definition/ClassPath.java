@@ -38,5 +38,9 @@ public class ClassPath {
      * 扫码页
      */
     public static final String SCAN_QR_CODE = "com.fanwe.MyCaptureActivity";
+    /**
+     * 重构登录
+     */
+    public static final String LOGIN_ACTIVITY = "com.miguo.app.HiLoginActivity";
 
 }

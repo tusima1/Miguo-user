@@ -28,7 +28,6 @@ import com.fanwe.model.PageModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.SellerFragment;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
@@ -319,6 +318,8 @@ public class HiHomeCategory extends Category implements
 
             /**
              * 登录
+             * {@link #loginSuccess(UserInfoNew, String, String)}
+             * {@link #loginError(String)}
              */
             loginByMobileDao.loginByMobile(userid, password);
         }
@@ -334,7 +335,7 @@ public class HiHomeCategory extends Category implements
         getDiamondLoginDialog.setSubmitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 intent.putExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, true);
                 com.miguo.utils.BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
                 getDiamondLoginDialog.dismiss();
@@ -547,9 +548,9 @@ public class HiHomeCategory extends Category implements
          */
         initCode();
         /**
-         * 保存用户信息到本地
+         * 保存用户信息到本地,放到请求实现类里做
          */
-        saveUserToLocal(user, mobile, password);
+//        saveUserToLocal(user, mobile, password);
         /**
          * 获取腾讯sign签名
          */
@@ -558,7 +559,7 @@ public class HiHomeCategory extends Category implements
          * 保存用户信息SharedPreferences
          */
         handlerSaveUser(mobile, password);
-        initJpush();
+//        initJpush();
     }
 
     /**
@@ -568,7 +569,7 @@ public class HiHomeCategory extends Category implements
      * @param password
      */
     private void handlerSaveUser(String mobile, String password) {
-        SharedPreferencesUtils.getInstance(getActivity()).saveUserNameAndUserPassword(mobile, password);
+        SharedPreferencesUtils.getInstance().saveUserNameAndUserPassword(mobile, password);
     }
 
     /**
@@ -579,7 +580,7 @@ public class HiHomeCategory extends Category implements
     private void saveUserToLocal(UserInfoNew user, String mobile, String password) {
         UserInfoNew userInfoNew = user;
         if (userInfoNew != null) {
-            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+            App.getInstance().setCurrentUser(userInfoNew);
             User_infoModel model = new User_infoModel();
             model.setUser_id(userInfoNew.getUser_id());
             MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
@@ -705,9 +706,9 @@ public class HiHomeCategory extends Category implements
         String userId = MySelfInfo.getInstance().getId();
 
         if (TextUtils.isEmpty(userId)) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo != null && currentInfo.getUserInfoNew() != null) {
-                userId = currentInfo.getUserInfoNew().getUser_id();
+            UserInfoNew currentInfo = App.getInstance().getCurrentUser();
+            if (currentInfo != null) {
+                userId = currentInfo.getUser_id();
             } else {
                 return;
             }
@@ -735,8 +736,8 @@ public class HiHomeCategory extends Category implements
     @Override
     public void imLoginSuccess() {
         if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-            imUserInfoDao.updateTencentNickName(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick());
-            imUserInfoDao.updateTencentAvatar(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon());
+            imUserInfoDao.updateTencentNickName(App.getInstance().getCurrentUser().getNick());
+            imUserInfoDao.updateTencentAvatar(App.getInstance().getCurrentUser().getIcon());
         }
         /**
          * 开始直播AVSDK

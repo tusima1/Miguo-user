@@ -28,6 +28,8 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.sunday.eventbus.SDEventManager;
 
 import java.util.List;
@@ -122,7 +124,7 @@ public class HotelListTuanAdapter extends SDSimpleBaseAdapter<GoodsModel>{
 						switch (actModel.getStatus())
 						{
 						case -1:
-							intent = new Intent(mActivity, LoginActivity.class);
+							intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
 							mActivity.startActivity(intent);
 							break;
 						case 0:

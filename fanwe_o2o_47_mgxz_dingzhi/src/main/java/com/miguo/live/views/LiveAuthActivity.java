@@ -80,7 +80,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         tvInterest = (TextView) findViewById(R.id.tv_interest_live_auth);
         dataBindingLiveAuth = new DataBindingLiveAuth();
         binding.setLive(dataBindingLiveAuth);
-        dataBindingLiveAuth.mobile.set(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getMobile());
+        dataBindingLiveAuth.mobile.set(App.getInstance().getCurrentUser().getMobile());
         btnSubmit = (Button) findViewById(R.id.btn_submit_live_auth);
 
         preData();
@@ -355,7 +355,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         } else if (LiveConstants.HOST_INFO.equals(method)) {
             MGToast.showToast("申请认证成功");
             finish();
-            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setIs_host("2");
+            App.getInstance().getCurrentUser().setIs_host("2");
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

@@ -13,7 +13,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.UserConstants;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.model.getAttentionFans.ResultFans;
 import com.fanwe.user.model.getAttentionFans.RootFans;
@@ -83,7 +82,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = UserHttpHelper.class.getSimpleName();
     private Gson gson;
-    private UserCurrentInfo userCurrentInfo;
+    private UserInfoNew userCurrentInfo;
     private CallbackView2 mView;
     private Context mContext;
 
@@ -93,7 +92,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         this.mContext = mContext;
         this.mView = mView;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+        userCurrentInfo = App.getInstance().getCurrentUser();
     }
 
     public String getToken() {

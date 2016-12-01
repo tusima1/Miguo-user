@@ -29,6 +29,8 @@ import com.fanwe.library.dialog.SDDialogListView;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDNumberUtil;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.BaseActModel;
@@ -164,7 +166,7 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
                 Intent intent;
                 switch (actModel.getStatus()) {
                     case -1:
-                        intent = new Intent(getActivity(), LoginActivity.class);
+                        intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                         startActivity(intent);
                         break;
                     case 0:

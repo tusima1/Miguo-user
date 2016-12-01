@@ -10,6 +10,8 @@ import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.NetWorkStateUtil;
 
@@ -153,7 +155,7 @@ public class OkHttpUtils {
                     //TODO login
                     Activity lastActivity = ActivityLifeManager.getInstance().getLastActivity();
                     if (lastActivity!=null){
-                        lastActivity.startActivity(new Intent(App.getApplication(), LoginActivity.class));
+                        lastActivity.startActivity(new Intent(App.getApplication(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY)));
                     }
                 }
             }
