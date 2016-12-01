@@ -26,7 +26,6 @@ import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.utils.DisplayUtil;
-import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
 import java.util.List;

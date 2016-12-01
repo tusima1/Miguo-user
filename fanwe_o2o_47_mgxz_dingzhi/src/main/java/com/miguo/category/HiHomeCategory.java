@@ -2,7 +2,6 @@ package com.miguo.category;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -29,7 +28,6 @@ import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
-import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;

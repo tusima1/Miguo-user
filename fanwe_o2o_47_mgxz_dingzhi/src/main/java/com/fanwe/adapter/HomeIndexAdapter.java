@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.adapter.SDBaseAdapter;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;

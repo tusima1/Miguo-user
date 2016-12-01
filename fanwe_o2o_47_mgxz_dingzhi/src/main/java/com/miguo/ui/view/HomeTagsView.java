@@ -10,8 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.common.ImageLoaderManager;
-import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.category.fragment.HiHomeFragmentCategory;

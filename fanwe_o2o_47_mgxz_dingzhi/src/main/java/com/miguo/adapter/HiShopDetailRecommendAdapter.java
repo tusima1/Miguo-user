@@ -3,7 +3,6 @@ package com.miguo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;

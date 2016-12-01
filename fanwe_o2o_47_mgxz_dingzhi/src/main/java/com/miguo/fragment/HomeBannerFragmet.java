@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.category.fragment.HomeBannerFragmentCategory;
 import com.miguo.entity.AdspaceListBean;
-import com.miguo.fake.HomeBannerFakeData;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/10/17.

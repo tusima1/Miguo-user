@@ -16,7 +16,6 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.handmark.pulltorefresh.library.PinnedSectionListView;
-import com.miguo.definition.IntentKey;
 import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.List;

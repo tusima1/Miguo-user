@@ -15,7 +15,6 @@ import com.fanwe.event.EnumEventTag;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.utils.BaseUtils;
-import com.miguo.utils.DisplayUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDEventManager;
 

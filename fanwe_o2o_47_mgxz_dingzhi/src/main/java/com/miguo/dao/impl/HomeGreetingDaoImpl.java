@@ -2,12 +2,10 @@ package com.miguo.dao.impl;
 
 import android.util.Log;
 
-import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.dao.HomeGreetingDao;
-import com.miguo.entity.HiShopDetailBean;
 import com.miguo.entity.HomeGreetingBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.HomeGreetingView;

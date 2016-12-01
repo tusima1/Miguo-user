@@ -11,7 +11,6 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.event.EnumEventTag;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 

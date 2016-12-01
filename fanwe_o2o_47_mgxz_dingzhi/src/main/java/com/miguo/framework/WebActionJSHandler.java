@@ -5,7 +5,6 @@ import android.webkit.JavascriptInterface;
 
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.miguo.app.HiBaseActivity;
-import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.app.HiWebPageActivity;
 import com.miguo.category.HiWebPageCategory;

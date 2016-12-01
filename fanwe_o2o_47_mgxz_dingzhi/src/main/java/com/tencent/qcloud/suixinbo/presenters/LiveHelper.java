@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.miguo.live.model.GiftDanmuBean;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
-import com.miguo.live.views.customviews.MGToast;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMConversation;
 import com.tencent.TIMConversationType;

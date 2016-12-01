@@ -3,7 +3,6 @@ package com.miguo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.fanwe.user.model.UserInfoNew;
 import com.miguo.definition.SharedPreferencesConfig;
 
 /**

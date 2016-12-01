@@ -11,18 +11,14 @@ import com.fanwe.fragment.TuanDetailImagePriceFragment;
 import com.fanwe.fragment.TuanDetailMoreDetailFragment;
 import com.fanwe.fragment.TuanDetailOtherMerchantFragment;
 import com.fanwe.fragment.TuanDetailRatingFragment;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.customview.StickyScrollView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Deal_indexActModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
