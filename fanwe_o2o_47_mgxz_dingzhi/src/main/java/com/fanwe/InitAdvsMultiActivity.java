@@ -17,8 +17,10 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.cache.CacheUtil;
+import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
+import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
@@ -133,19 +135,17 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
         sellerHttpHelper = new SellerHttpHelper(this, this);
         startStatistics();
         getDeviceId();
+        getCityOldVersion();
         loadCityFile();
     }
 
-    private void setDefaultCity() {
-        if (CacheUtil.getInstance().getCityCurr() == null || TextUtils.isEmpty(CacheUtil.getInstance().getCityCurr().getId())) {
-            //默认城市为嵊州
-            ModelCityList defaultCity = new ModelCityList();
-            defaultCity.setUname("shengzhou");
-            defaultCity.setId("fc9ebab9-7aa1-49d5-8c56-2bddc7d92ded");
-            defaultCity.setName("嵊州");
-            CacheUtil.getInstance().saveCityCurr(defaultCity);
-            AppRuntimeWorker.setCityNameByModel(defaultCity);
-        }
+    private CitylistModel cityOldVersion;
+
+    /**
+     * 获取老版本选择的城市
+     */
+    private void getCityOldVersion() {
+        cityOldVersion = CurrCityModelDao.queryModel();
     }
 
     /**
@@ -327,7 +327,12 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
             if (CacheUtil.getInstance().getCityCurr() != null && !TextUtils.isEmpty(CacheUtil.getInstance().getCityCurr().getId())) {
                 AppRuntimeWorker.setCityNameByModel(CacheUtil.getInstance().getCityCurr());
             } else {
-                AppRuntimeWorker.setCityNameByModel(defaultCity);
+                if (cityOldVersion != null && !TextUtils.isEmpty(cityOldVersion.getName())) {
+                    AppRuntimeWorker.setCityName(cityOldVersion.getName());
+                    CurrCityModelDao.deleteAllModel();
+                } else {
+                    AppRuntimeWorker.setCityNameByModel(defaultCity);
+                }
             }
         }
 
