@@ -1,15 +1,15 @@
 package com.fanwe.common;
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSONObject;
 import com.fanwe.app.AppConfig;
-import com.fanwe.dao.InitActModelDao;
 import com.fanwe.dialog.InputImageCodeDialog;
 import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.http.listener.proxy.SDRequestCallBackProxy;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Cart_indexActModel;
-import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.Mobile_qrcode_indexActModel;
 import com.fanwe.model.RequestModel;
@@ -24,8 +24,6 @@ import com.fanwe.model.Uc_home_showActModel;
 import com.fanwe.model.User_infoModel;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
-
-import android.text.TextUtils;
 
 public class CommonInterface
 {
@@ -423,40 +421,6 @@ public class CommonInterface
 		});
 	}
 
-	/**
-	 * 初始化
-	 * 
-	 * @param listener
-	 */
-	public static void requestInit(SDRequestCallBack<Init_indexActModel> listener)
-	{
-		RequestModel requestModel = new RequestModel();
-		requestModel.putCtl("init");
-		requestModel.putUser();
-		requestModel.put("device_type", "android");
-		requestModel.setmIsNeedShowErrorTip(false);
-		InterfaceServer.getInstance().requestInterface(requestModel, new SDRequestCallBackProxy<Init_indexActModel>(listener)
-		{
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					// TODO:对初始化返回结果进行处理
-					InitActModelDao.insertOrUpdateModel(actModel);
-					LocalUserModel.dealLoginSuccess(actModel.getUser(), false);
-				}
-				super.onSuccess(responseInfo);
-			}
-
-			@Override
-			public void onFinish()
-			{
-				super.onFinish();
-			}
-		});
-	}
 
 	/**
 	 * 请求解释二维码数据

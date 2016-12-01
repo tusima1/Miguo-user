@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,85 +13,70 @@ import com.fanwe.GoodsListActivity;
 import com.fanwe.adapter.GoodsListAdapter;
 import com.fanwe.library.customview.SDGridLinearLayout;
 import com.fanwe.model.GoodsModel;
-import com.fanwe.model.Index_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 首页推荐商品
- * 
+ *
  * @author js02
- * 
  */
-public class HomeRecommendGoodsFragment extends BaseFragment
-{
+public class HomeRecommendGoodsFragment extends BaseFragment {
 
-	@ViewInject(R.id.frag_home_recommend_goods_ll_deals)
-	protected SDGridLinearLayout mLlDeals;
+    @ViewInject(R.id.frag_home_recommend_goods_ll_deals)
+    protected SDGridLinearLayout mLlDeals;
 
-	@ViewInject(R.id.tv_see_all_goods)
-	private TextView mTv_see_all_goods;
+    @ViewInject(R.id.tv_see_all_goods)
+    private TextView mTv_see_all_goods;
 
-	private Index_indexActModel mIndexModel;
-	private boolean isShow=false;
+    private boolean isShow = false;
 
-	private List<GoodsModel> mListModel = new ArrayList<GoodsModel>();
+    private List<GoodsModel> mListModel = new ArrayList<GoodsModel>();
 
-	public void setmIndexModel(Index_indexActModel indexModel)
-	{
-		this.mIndexModel = indexModel;
-		this.mListModel = mIndexModel.getSupplier_deal_list();
-	}
+    @Override
+    protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return setContentView(R.layout.frag_home_recommend_goods);
+    }
 
-	@Override
-	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		return setContentView(R.layout.frag_home_recommend_goods);
-	}
+    @Override
+    protected void init() {
+        super.init();
+        bindData();
+        registeClick();
+    }
 
-	@Override
-	protected void init()
-	{
-		super.init();
-		bindData();
-		registeClick();
-	}
+    private void bindData() {
+        if (!toggleFragmentView(mListModel)) {
+            return;
+        }
 
-	private void bindData()
-	{
-		if (!toggleFragmentView(mListModel))
-		{
-			return;
-		}
+        BaseAdapter adapter = getAdapter();
+        mLlDeals.setAdapter(adapter);
+    }
 
-		BaseAdapter adapter = getAdapter();
-		mLlDeals.setAdapter(adapter);
-	}
+    protected BaseAdapter getAdapter() {
+        return new GoodsListAdapter(mListModel, getActivity());
+    }
 
-	protected BaseAdapter getAdapter()
-	{
-		return new GoodsListAdapter(mListModel, getActivity());
-	}
+    private void registeClick() {
+        mTv_see_all_goods.setOnClickListener(new OnClickListener() {
 
-	private void registeClick()
-	{
-		mTv_see_all_goods.setOnClickListener(new OnClickListener()
-		{
+            @Override
+            public void onClick(View v) {
+                clickSeeAllGoods();
+            }
+        });
+    }
 
-			@Override
-			public void onClick(View v)
-			{
-				clickSeeAllGoods();
-			}
-		});
-	}
+    private void clickSeeAllGoods() {
+        startActivity(new Intent(getActivity(), GoodsListActivity.class));
+    }
 
-	private void clickSeeAllGoods()
-	{
-		startActivity(new Intent(getActivity(), GoodsListActivity.class));
-	}
-	@Override
-	protected String setUmengAnalyticsTag() {
-		return this.getClass().getName().toString();
-	}
+    @Override
+    protected String setUmengAnalyticsTag() {
+        return this.getClass().getName().toString();
+    }
 }

@@ -30,7 +30,6 @@ import com.fanwe.http.InterfaceServer;
 import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDActivityUtil;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
@@ -40,7 +39,6 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.BaseActModel;
 import com.fanwe.model.Discover_indexActModel;
-import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RequestModel;
 import com.fanwe.model.User_infoModel;
@@ -53,7 +51,6 @@ import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.user.view.SexActivity;
 import com.fanwe.user.view.SignActivity;
 import com.fanwe.utils.StringTool;
-import com.fanwe.work.AppRuntimeWorker;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -189,7 +186,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
      */
     private void getServiceNum() {
         List<DictModel> dict = MGDict.getDict();
-        if(dict==null||dict.size()<1){
+        if (dict == null || dict.size() < 1) {
             return;
         }
         for (DictModel data : dict) {
@@ -277,10 +274,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         int isTemp = mUser.getIs_tmp();
         if (isTemp == 1) {
             mEt_email.setEnabled(true);
-            // mEt_username.setEnabled(true);
         } else {
             mEt_email.setEnabled(false);
-            // mEt_username.setEnabled(false);
         }
 
         String mobile = mUser.getUser_mobile();
@@ -292,24 +287,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             mTv_bind_mobile.setText("已绑定手机");
             mTv_mobile.setText(SDOtherUtil.hideMobile(mobile));
         }
-
-        if (AppRuntimeWorker.getIs_plugin_dc() == 1) {
-            SDViewUtil.hide(mLl_delivery_address_dc);
-        } else {
-            SDViewUtil.hide(mLl_delivery_address_dc);
-        }
-
-        Init_indexActModel model = AppRuntimeWorker.getInitActModel();
-        if (model == null) {
-            return;
-        }
-
-        if (model.getMenu_user_withdraw() == 1) {
-            SDViewUtil.hide(mLl_withdraw);
-        } else {
-            SDViewUtil.hide(mLl_withdraw);
-        }
-
+        SDViewUtil.hide(mLl_withdraw);
+        SDViewUtil.hide(mLl_delivery_address_dc);
     }
 
     private void registerClick() {
@@ -409,14 +388,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
      * 关于
      */
     private void clickAbout() {
-        int noticeId = AppRuntimeWorker.getAbout_info();
-        if (noticeId > 0) {
-            Intent intent = new Intent(this, NoticeDetailActivity.class);
-            intent.putExtra(NoticeDetailActivity.EXTRA_NOTICE_ID, noticeId);
-            startActivity(intent);
-        } else {
-            MGToast.showToast("未找到关于我们ID");
-        }
     }
 
 

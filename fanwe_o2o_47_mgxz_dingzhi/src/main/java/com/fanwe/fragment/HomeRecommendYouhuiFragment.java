@@ -1,8 +1,5 @@
 package com.fanwe.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,10 +12,12 @@ import android.widget.TextView;
 import com.fanwe.YouHuiListActivity;
 import com.fanwe.adapter.YouHuiListAdapter;
 import com.fanwe.library.customview.SDGridLinearLayout;
-import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.YouhuiModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 首页推荐优惠券
@@ -37,16 +36,6 @@ public class HomeRecommendYouhuiFragment extends BaseFragment
 
 	private List<YouhuiModel> mListModel = new ArrayList<YouhuiModel>();
 
-	private Index_indexActModel mIndexModel;
-
-	public void setmIndexModel(Index_indexActModel indexModel)
-	{
-		this.mIndexModel = indexModel;
-		if (mIndexModel != null)
-		{
-			mListModel = mIndexModel.getYouhui_list();
-		}
-	}
 
 	@Override
 	protected View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
