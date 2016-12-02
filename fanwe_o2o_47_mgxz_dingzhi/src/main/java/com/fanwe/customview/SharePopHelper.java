@@ -87,9 +87,9 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         btnCancle = (Button) contentView.findViewById(R.id.btn_cancel_pop_share);
         tvTitle = (TextView) contentView.findViewById(R.id.tv_title_pop_share);
         if (isHost) {
-            tvTitle.setText("请他们来陪你");
+            tvTitle.setVisibility(View.GONE);
         } else {
-            tvTitle.setText("朋友本场有消费，你可共享10%钻石和20%老板红包");
+            tvTitle.setText("朋友有消费，你还可以共享本场打赏收入的10%");
         }
 
         layoutWeixin.setOnClickListener(this);
