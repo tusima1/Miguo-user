@@ -9,7 +9,7 @@ android {
     }
     defaultConfig {
         applicationId "com.fanwe.o2o.miguo"
-        minSdkVersion 19
+        minSdkVersion 14
         targetSdkVersion 23
 
         versionCode 2016113001
@@ -90,7 +90,7 @@ dependencies {
     //7牛
     compile 'com.qiniu:happy-dns:0.2.9'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-    compile 'com.didikee:UILibrary:0.8.5'
+    compile 'com.didikee:UILibrary:0.8.6'
     compile 'com.android.support:cardview-v7:23.1.1'
     /**
      * okhttp请求计时器

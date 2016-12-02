@@ -17,7 +17,6 @@ import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.ServerUrl;
-import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -72,7 +71,6 @@ import com.miguo.view.IMLoginView;
 import com.miguo.view.IMUserInfoView;
 import com.miguo.view.LoginByMobileView;
 import com.miguo.view.TencentSignView;
-import com.sunday.eventbus.SDBaseEvent;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 import com.tencent.qcloud.suixinbo.utils.Constants;
@@ -109,7 +107,7 @@ public class HiHomeCategory extends Category implements
      * 领取兑换码
      */
     private ClipboardManager clipboardManager;
-    private String code;
+    private String code="";
 
     /**
      * 接口类
@@ -301,10 +299,10 @@ public class HiHomeCategory extends Category implements
      */
     private void checkCode() {
         getIntentData();
-        Log.e("miguoxiaozhan",code);
         if (TextUtils.isEmpty(code)) {
             code = ClipboardUtils.checkCode(getActivity());
         }
+        Log.e("miguoxiaozhan",code);
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */
