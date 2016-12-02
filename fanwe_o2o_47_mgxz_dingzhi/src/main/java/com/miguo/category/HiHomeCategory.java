@@ -107,7 +107,7 @@ public class HiHomeCategory extends Category implements
      * 领取兑换码
      */
     private ClipboardManager clipboardManager;
-    private String code="";
+    private String code = "";
 
     /**
      * 接口类
@@ -178,19 +178,9 @@ public class HiHomeCategory extends Category implements
     public void getIntentData() {
         // 尝试获取WebApp页面上过来的URL
         Uri uri = getActivity().getIntent().getData();
-        StringBuffer value = new StringBuffer();
-
-        if (uri != null && "live".equals(uri.getHost())) {
-            List<String> pathSegments = uri.getPathSegments();
-            for (int i = 0; pathSegments != null && i < pathSegments.size(); i++) {
-                value.append("/" + pathSegments.get(i));
-            }
-        }
-        if (value.length() > 0) {
-            if (value.toString().startsWith("/")) {
-                this.code = value.substring(1);
-                App.getInstance().code = this.code;
-            }
+        if(uri != null){
+             code = uri.getQueryParameter("code");
+             App.getInstance().code = this.code;
         }
     }
 

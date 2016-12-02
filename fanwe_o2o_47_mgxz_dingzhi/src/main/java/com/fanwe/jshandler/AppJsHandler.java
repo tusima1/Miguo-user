@@ -228,10 +228,8 @@ public class AppJsHandler extends BaseJsHandler {
             outSideShoppingCartHelper.addShopCart(
                     fx_user_id,
                     App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-                    App.getApplication().getToken(),"1",                    goods_id,
+                    App.getApplication().getToken(), goods_id,"1", add_goods_num, share_record_id);
 
-                    add_goods_num, share_record_id);
-            goCart();
         } else {
             if (LocalShoppingcartDao.insertSingleNum(cartInfo)) {
                 goLogin();
