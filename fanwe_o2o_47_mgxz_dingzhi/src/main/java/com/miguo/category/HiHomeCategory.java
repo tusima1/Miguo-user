@@ -302,7 +302,6 @@ public class HiHomeCategory extends Category implements
         if (TextUtils.isEmpty(code)) {
             code = ClipboardUtils.checkCode(getActivity());
         }
-        Log.e("miguoxiaozhan",code);
         /**
          * 如果用户登录了直接调取接口兑换领取码领钻
          */

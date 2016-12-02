@@ -151,7 +151,7 @@ public class WalletActivity extends Activity implements CallbackView2, View.OnCl
         }else if (v==mBtTiXian){
             //提现按钮点击
 //            clickTiXian();
-            MGToast.showToast("系统升级");
+            MGToast.showToast("银行系统升级中，暂停提现");
         }else if (v==mLL_DaiYan){
             //代言
 //            startActivity(WithdrawLogActivity.class);
