@@ -12,6 +12,7 @@ public class ChineseCharClassifier {
 
     /**
      * 使用UnicodeBlock方法判断
+     *
      * @param c
      * @return
      */
@@ -29,12 +30,20 @@ public class ChineseCharClassifier {
 
     /**
      * 根据UnicodeBlock方法判断中文标点符号
+     *
      * @param c
      * @return
      */
     public static boolean isChinesePunctuation(char c) {
         Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            Class<?> clz = Character.UnicodeBlock.class;
+            try {
+                clz.getDeclaredField("VERTICAL_FORMS");
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+                return false;
+            }
             return (ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
                     || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
                     || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
@@ -51,8 +60,7 @@ public class ChineseCharClassifier {
     }
 
     /**
-     *     使用Unicode编码范围来判断汉字；这个方法不准确,因为还有很多汉字不在这个范围之内
-
+     * 使用Unicode编码范围来判断汉字；这个方法不准确,因为还有很多汉字不在这个范围之内
      */
     public static boolean isChineseByRange(String str) {
         if (str == null) {
