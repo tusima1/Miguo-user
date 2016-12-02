@@ -34,7 +34,7 @@ public class ChineseCharClassifier {
      * @param c
      * @return
      */
-    public  static boolean isChinesePunctuation(char c) {
+    public static boolean isChinesePunctuation(char c) {
         Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
         if (ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
                 || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION

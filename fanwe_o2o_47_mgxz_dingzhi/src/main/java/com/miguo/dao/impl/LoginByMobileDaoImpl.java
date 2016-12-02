@@ -12,6 +12,7 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.miguo.dao.LoginByMobileDao;
 import com.miguo.entity.LoginUserBean;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.BaseView;
 import com.miguo.view.LoginByMobileView;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -65,8 +66,10 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                     /**
                      * 登录成功
                      */
-                    getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0), mobile, password);
+                    getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0));
                     saveUserToLocal(userBean.getResult().get(0).getBody().get(0), mobile, password);
+                    handleApplicationCurrentUser(userBean.getResult().get(0).getBody().get(0));
+                    handleSaveUser(mobile, password);
                     initJpush();
                 }else {
                     /**
@@ -81,6 +84,12 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                 getListener().loginError(message);
             }
         });
+    }
+
+    private void handleApplicationCurrentUser(UserInfoNew userInfoNew){
+        if (userInfoNew != null) {
+            App.getInstance().setCurrentUser(userInfoNew);
+        }
     }
 
     /**
@@ -112,7 +121,16 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
         if(!"".equals(mobile)){
 
         }
+    }
 
+    /**
+     * 保存用户信息SharedPreferences
+     *
+     * @param mobile
+     * @param password
+     */
+    private void handleSaveUser(String mobile, String password) {
+        SharedPreferencesUtils.getInstance().saveUserNameAndUserPassword(mobile, password);
     }
 
     /**

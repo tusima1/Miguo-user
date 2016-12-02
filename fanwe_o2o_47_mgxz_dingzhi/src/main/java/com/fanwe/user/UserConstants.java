@@ -274,4 +274,9 @@ public class UserConstants {
 
     public static final String   TID= "tid";
 
+    /**
+     * 发送验证码
+     */
+    public static String SEND_CAPTCHA = "SendCaptcha";
+
 }

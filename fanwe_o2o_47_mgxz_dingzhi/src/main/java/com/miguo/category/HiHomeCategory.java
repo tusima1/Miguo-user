@@ -202,10 +202,10 @@ public class HiHomeCategory extends Category implements
                  * 名字 默认图标 按下后图标 tab id
                  */
                         addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
-                addTab(getString(R.string.funny), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
-                addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
-                addTab(getString(R.string.find), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
-                addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
+                        addTab(getString(R.string.funny), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
+                        addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
+                        addTab(getString(R.string.find), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
+                        addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
                 /**
                  * 设置为默认模式（图标+文字形式）
                  */
@@ -318,7 +318,7 @@ public class HiHomeCategory extends Category implements
 
             /**
              * 登录
-             * {@link #loginSuccess(UserInfoNew, String, String)}
+             * {@link #loginSuccess(UserInfoNew)}
              * {@link #loginError(String)}
              */
             loginByMobileDao.loginByMobile(userid, password);
@@ -541,7 +541,7 @@ public class HiHomeCategory extends Category implements
      * @param user
      */
     @Override
-    public void loginSuccess(UserInfoNew user, String mobile, String password) {
+    public void loginSuccess(UserInfoNew user) {
 
         /**
          * 检查是否有兑换码
@@ -556,47 +556,10 @@ public class HiHomeCategory extends Category implements
          */
         handlerTencentSign(App.getApplication().getToken());
         /**
-         * 保存用户信息SharedPreferences
+         * 保存用户信息SharedPreferences 保存用户信息到本地,放到请求实现类里做
          */
-        handlerSaveUser(mobile, password);
+//        handlerSaveUser(mobile, password);
 //        initJpush();
-    }
-
-    /**
-     * 保存用户信息SharedPreferences
-     *
-     * @param mobile
-     * @param password
-     */
-    private void handlerSaveUser(String mobile, String password) {
-        SharedPreferencesUtils.getInstance().saveUserNameAndUserPassword(mobile, password);
-    }
-
-    /**
-     * 将用户信息保存到本地以及全局
-     *
-     * @param user
-     */
-    private void saveUserToLocal(UserInfoNew user, String mobile, String password) {
-        UserInfoNew userInfoNew = user;
-        if (userInfoNew != null) {
-            App.getInstance().setCurrentUser(userInfoNew);
-            User_infoModel model = new User_infoModel();
-            model.setUser_id(userInfoNew.getUser_id());
-            MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
-            if (!TextUtils.isEmpty(mobile)) {
-                model.setMobile(mobile);
-            }
-            if (!TextUtils.isEmpty(password)) {
-                model.setUser_pwd(password);
-            }
-            if (!TextUtils.isEmpty(userInfoNew.getPwd())) {
-                model.setUser_pwd(userInfoNew.getPwd());
-            }
-            model.setUser_name(userInfoNew.getUser_name());
-
-            LocalUserModel.dealLoginSuccess(model, true);
-        }
     }
 
     /**

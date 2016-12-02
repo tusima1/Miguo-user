@@ -3,6 +3,7 @@ package com.miguo.category;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.fanwe.ModifyPasswordActivity;
 import com.fanwe.RegisterActivity;
 import com.fanwe.app.App;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.common.SDFragmentManager;
@@ -34,19 +36,34 @@ import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiLoginActivity;
 import com.miguo.dao.GetShareIdByCodeDao;
+import com.miguo.dao.IMLoginDao;
+import com.miguo.dao.IMUserInfoDao;
 import com.miguo.dao.LoginByThirdDao;
+import com.miguo.dao.TencentSignDao;
 import com.miguo.dao.impl.GetShareIdByCodeDaoImpl;
+import com.miguo.dao.impl.IMLoginDaoImpl;
+import com.miguo.dao.impl.IMUserInfoDaoImpl;
 import com.miguo.dao.impl.LoginByThirdDaoImpl;
+import com.miguo.dao.impl.TencentSignDaoImpl;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiLoginByMobileFragment;
+import com.miguo.fragment.HiLoginQuickByMobileFragment;
 import com.miguo.listener.HiLoginListener;
+import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.ClipboardUtils;
 import com.miguo.view.GetShareIdByCodeView;
+import com.miguo.view.IMLoginView;
+import com.miguo.view.IMUserInfoView;
 import com.miguo.view.LoginByThirdView;
+import com.miguo.view.TencentSignView;
+import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
+import com.tencent.qcloud.suixinbo.utils.Constants;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
@@ -61,7 +78,7 @@ import simbest.com.sharelib.ShareUtils;
  * Created by zlh on 2016/11/30.
  */
 
-public class HiLoginCategory extends Category implements GetShareIdByCodeView, LoginByThirdView{
+public class HiLoginCategory extends Category implements GetShareIdByCodeView, LoginByThirdView, TencentSignView, IMLoginView, IMUserInfoView {
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
@@ -134,6 +151,21 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
 
     LoginByThirdDao loginByThirdDao;
 
+    /** 以下接口在登录成功后被调用 */
+    /**
+     * 腾讯获取签名
+     */
+    TencentSignDao tencentSignDao;
+    /**
+     * IM登录接口
+     */
+    IMLoginDao imLoginDao;
+    /**
+     * 绑定用户信息到IM接口
+     */
+    IMUserInfoDao imUserInfoDao;
+    /** 以上接口在登录成功后被调用 */
+
     public HiLoginCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -144,6 +176,10 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         mListSelectIndex = new ArrayList<>();
         getShareIdByCodeDao = new GetShareIdByCodeDaoImpl(this);
         loginByThirdDao = new LoginByThirdDaoImpl(this);
+        /** 以下接口在登录成功后被调用 */
+        tencentSignDao = new TencentSignDaoImpl(this);
+        imLoginDao = new IMLoginDaoImpl(this);
+        imUserInfoDao = new IMUserInfoDaoImpl(this);
     }
 
     @Override
@@ -297,7 +333,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      */
     protected void clickLoginPhone() {
         SDViewUtil.hide(mTv_find_password);
-        getSDFragmentManager().toggle(R.id.act_login_fl_content, null, LoginPhoneFragment.class);
+        getSDFragmentManager().toggle(R.id.act_login_fl_content, null, HiLoginQuickByMobileFragment.class);
     }
 
     /**
@@ -366,6 +402,141 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         su.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * 手机号 + 密码登录
+     * 手机号 + 验证码登录
+     * 成功后的回调
+     */
+    public void handleLoginSuccess(UserInfoNew user){
+        /**
+         * 保存用户信息到本地
+         */
+//        saveUserToLocal(user, mobile, password);
+        /**
+         * 获取腾讯sign签名
+         */
+        handlerTencentSign(App.getApplication().getToken());
+        /**
+         * 保存用户信息SharedPreferences
+         */
+//        handlerSaveUser(mobile, password);
+//        initJpush();
+        finishActivity();
+    }
+
+    private void finishActivity(){
+        if(getActivity() instanceof HiLoginActivity){
+            getActivity().finishActivity();
+            return;
+        }
+        BaseUtils.finishActivity(getActivity());
+    }
+
+    /**
+     * 获取腾讯签名
+     *
+     * @param token
+     */
+    private void handlerTencentSign(String token) {
+        if (TextUtils.isEmpty(token)) {
+            Log.d(tag, "handler tencent sign token is null...");
+            return;
+        }
+        /**
+         * {@link #getTencentSignSuccess(ModelGenerateSign)}
+         * {@link #getTencentSignError()}
+         */
+        tencentSignDao.getTencentSign(token);
+    }
+
+    /**
+     * IM登录
+     * @param userId
+     * @param usersig
+     */
+    private void handlerIMLogin(String userId, String usersig) {
+        /**
+         * {@link #imLoginSuccess()}
+         * {@link #imLoginError(String)}
+         */
+        imLoginDao.imLogin(userId, usersig);
+    }
+
+    /**
+     * 获取腾讯签名
+     * 获取成功后需要调用IM登录
+     */
+    @Override
+    public void getTencentSignSuccess(ModelGenerateSign sign) {
+        if (null == sign) {
+            return;
+        }
+        String usersig = sign.getUsersig();
+        App.getInstance().setUserSign(usersig);
+        MySelfInfo.getInstance().setUserSig(usersig);
+        App.getInstance().setUserSign(usersig);
+        String userId = MySelfInfo.getInstance().getId();
+
+        if (TextUtils.isEmpty(userId)) {
+            UserInfoNew currentInfo = App.getInstance().getCurrentUser();
+            if (currentInfo != null) {
+                userId = currentInfo.getUser_id();
+            } else {
+                return;
+            }
+        }
+        handlerIMLogin(userId, usersig);
+    }
+
+    @Override
+    public void getTencentSignError() {
+        Log.d(tag, "get tencent sign error..");
+    }
+
+    /**
+     * IM登陆回调
+     */
+    @Override
+    public void imLoginError(String message) {
+        Log.d(tag, "im login error and the message is: " + message);
+    }
+
+    /**
+     * IM登录成功
+     * 登录成功后要将用户名和头像绑定到IM
+     */
+    @Override
+    public void imLoginSuccess() {
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            /**
+             * 不需要回调
+             */
+            imUserInfoDao.updateTencentNickName(App.getInstance().getCurrentUser().getNick());
+            imUserInfoDao.updateTencentAvatar(App.getInstance().getCurrentUser().getIcon());
+        }
+        /**
+         * 开始直播AVSDK
+         */
+        startAVSDK();
+        App.getInstance().setImLoginSuccess(true);
+    }
+
+    /**
+     * 初始化AVSDK
+     */
+    public void startAVSDK() {
+        String userid = MySelfInfo.getInstance().getId();
+        String userSign = MySelfInfo.getInstance().getUserSig();
+        int appId = Constants.SDK_APPID;
+        int ccType = Constants.ACCOUNT_TYPE;
+        if (ServerUrl.DEBUG) {
+            appId = Constants.SDK_APPID_TEST;
+            ccType = Constants.ACCOUNT_TYPE_Test;
+        }
+        QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
+        QavsdkControl.getInstance().startContext();
     }
 
     /**
@@ -440,6 +611,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
          * 如果是从领钻码进来的，则跳注册界面的时候不要销毁当前activity，应该注册成功后回调回来再结束，把结果传给HiHomeActivity
          */
         if(getActivity().isFromDiamond()){
+            intent.putExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, getActivity().isFromDiamond());
             BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
             return;
         }

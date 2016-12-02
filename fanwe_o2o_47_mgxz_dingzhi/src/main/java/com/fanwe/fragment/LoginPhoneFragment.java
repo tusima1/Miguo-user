@@ -232,6 +232,7 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
             mBtnSendCode.setClickable(false);
             mBtnSendCode.setText(millisUntilFinished / 1000 + "秒");
         }
-
     }
+
+
 }
