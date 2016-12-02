@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp35"
         android:gravity="center"
-        android:text="送朋友20个钻石"
+        android:text="分享给朋友，朋友可以领取观看奖励"
         android:textColor="@color/white"
         android:textSize="@dimen/dp12" />
 
