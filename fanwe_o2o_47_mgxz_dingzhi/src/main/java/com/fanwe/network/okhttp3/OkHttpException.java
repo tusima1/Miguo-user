@@ -8,6 +8,11 @@ public class OkHttpException extends Exception {
     private int errorCode;
     private Object errorMsg;
 
+    public OkHttpException(int errorCode,Object errorMsg){
+        this.errorCode=errorCode;
+        this.errorMsg=errorMsg;
+    }
+
     public int getErrorCode() {
         return errorCode;
     }

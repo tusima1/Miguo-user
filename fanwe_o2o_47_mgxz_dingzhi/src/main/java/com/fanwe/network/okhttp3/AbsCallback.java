@@ -1,5 +1,7 @@
 package com.fanwe.network.okhttp3;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -15,13 +17,20 @@ import okhttp3.Response;
 public abstract class AbsCallback<T> implements Callback {
 
     protected Object tag;
+    protected String method;
+    protected final Gson gson;
     public void setTag(Object tag) {
         this.tag = tag;
+    }
+    public void setMethod(String method){this.method=method;}
+
+    public AbsCallback() {
+        this.gson = new Gson();
     }
 
     @Override
     public void onResponse(Call call, Response response) throws IOException {
-
+        parseResponse(response);
     }
 
     protected abstract void parseResponse(Response response);
