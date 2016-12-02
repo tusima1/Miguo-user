@@ -26,7 +26,7 @@ public class ModelRootLive {
      * page_size : 10
      */
 
-    List<ModelResultLive> result;
+    private List<ModelResultLive> result;
 
     public String getMessage() {
         return message;

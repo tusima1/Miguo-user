@@ -47,12 +47,16 @@
     <color name="rgb_70184153">#46B899</color>
     <color name="rgb_153153153">#999999</color>
     <color name="text_333">#333333</color>
-
+    <color name="c_F1F1F1">#F1F1F1</color>
     <color name="c_F2F2F2">#F2F2F2</color>
     <color name="c_FF443E">#FF443E</color>
     <color name="c_FF3000">#ff3000</color>
+    <color name="c_ECECEC">#ECECEC</color>
+
     <!-- hint 灰色字体 rgb 204,204,204 -->
     <color name="c_CCCCCC">#CCCCCC</color>
+    <color name="c_D9D9D9">#D9D9D9</color>
+    <color name="c_595959">#595959</color>
 
 
     <!--color mgxz-->

@@ -19,5 +19,9 @@ public class CommonConstants {
      * 取当前用户的分销等级。
      */
     public static final  String USERDISTRIBUTIIONLEVEL = "UserDistributionLevel";
+    /**
+     * 取当前系统时间。
+     */
+    public static  final String  SYSNCTIME= "SysncTime";
 
 }

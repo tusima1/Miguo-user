@@ -81,8 +81,12 @@ public abstract class MgCallback<T> implements Callback {
                 int code = Integer.valueOf(statusCode);
                 String message = root.getMessage();
                 String newMessage = ErrorCodeParse.getErrorCodeMap().get(statusCode);
+                Long sysTime = root.getTimestamp();
                 if (newMessage != null && !TextUtils.isEmpty(newMessage) && !"null".equals(newMessage) && !"404".equals(statusCode)) {
                     message = newMessage;
+                }
+                if(sysTime!=0){
+                    App.getInstance().setSysTime(sysTime);
                 }
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。

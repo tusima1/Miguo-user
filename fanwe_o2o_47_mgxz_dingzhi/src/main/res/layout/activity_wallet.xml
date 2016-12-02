@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_activity_gray"
-    android:orientation="vertical"
-    tools:context="com.fanwe.user.view.WalletActivity">
+    android:orientation="vertical">
 
     <include layout="@layout/item_layout_sample_title"/>
 
@@ -86,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp8"
-                android:text="累计佣金"
+                android:text="   "
                 android:textColor="@color/gray_cc"
                 android:textSize="@dimen/sp12"
                 />

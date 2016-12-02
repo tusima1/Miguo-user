@@ -40,7 +40,7 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
 
     @Override
     public int getCount() {
-        return datas.size();
+        return datas==null?0:datas.size();
     }
 
     @Override

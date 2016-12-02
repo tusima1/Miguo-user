@@ -53,7 +53,7 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test","responseBody:"+responseBody);
+
                 final List<ResultCommissionLog> result = gson.fromJson(responseBody, RootCommissionLog
                         .class).getResult();
                 if (result!=null && result.size()>0){
@@ -64,7 +64,8 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
                         }
                     });
                 }else {
-                    mView2.onFailue(CommissionConstance.COMMISSION_LOG);
+                    onFailure2(mView2,CommissionConstance.COMMISSION_LOG);
+
                 }
             }
 
@@ -73,7 +74,7 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView2.onFinish(CommissionConstance.COMMISSION_LOG);
+                        onFinish2(mView2,CommissionConstance.COMMISSION_LOG);
                     }
                 });
 
@@ -100,7 +101,7 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Log.e("test","responseBody:"+responseBody);
+
                 final List<ResultCommissionLog> result = gson.fromJson(responseBody, RootCommissionLog
                         .class).getResult();
                 if (result!=null && result.size()>0){
@@ -111,7 +112,7 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
                         }
                     });
                 }else {
-                    mView2.onFailue(CommissionConstance.USER_COMMISSION_LOG);
+                    onFailure2(mView2,CommissionConstance.USER_COMMISSION_LOG);
                 }
             }
 
@@ -120,7 +121,8 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView2.onFinish(CommissionConstance.USER_COMMISSION_LOG);
+                        onFinish2(mView2,CommissionConstance.USER_COMMISSION_LOG);
+
                     }
                 });
 

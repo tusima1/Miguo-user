@@ -190,21 +190,23 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
     }
 
     /**
-     *  店名称。
-     * @param position
+     * 店名称。
+     *
+     * @param room
      * @return
      */
 
-    private String getShopName(int position){
-        if(getItem(position).getLbs()==null){
+    private String getShopName(ModelRoom room) {
+        if (room.getLbs() == null) {
             return "";
         }
-        try{
-            return null == getItem(position).getLbs().getShop_name() ? "" : getItem(position).getLbs().getShop_name();
-        }catch (NullPointerException e){
+        try {
+            return null == room.getLbs().getShop_name() ? "" : room.getLbs().getShop_name();
+        } catch (NullPointerException e) {
             return "";
         }
     }
+
     @Override
     public ModelRoom getItem(int position) {
         return (ModelRoom) super.getItem(position);

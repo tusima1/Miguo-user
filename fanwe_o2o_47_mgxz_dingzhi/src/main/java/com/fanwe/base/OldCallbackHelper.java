@@ -35,8 +35,8 @@ public class OldCallbackHelper {
         handResult(view2,FAILURE,responseBody,null);
     }
 
-    protected void onFinish2(CallbackView2 view2, String method){
-        handResult(view2,FINISH,method,null);
+    protected void onFinish2(CallbackView2 view2, String responseBody){
+        handResult(view2,FINISH,responseBody,null);
     }
     private void handResult(final Object o, final int who, final String method, final List data){
         if (o==null){
@@ -80,16 +80,16 @@ public class OldCallbackHelper {
                 break;
         }
     }
-    private void dispatchData2(CallbackView2 view2,int who,String method,List data){
+    private void dispatchData2(CallbackView2 view2,int who,String responseBody,List data){
         switch (who){
             case SUCCESS:
-                view2.onSuccess(method,data);
+                view2.onSuccess(responseBody,data);
                 break;
             case FAILURE:
-                view2.onFailue(method);
+                view2.onFailue(responseBody);
                 break;
             case FINISH:
-                view2.onFinish(method);
+                view2.onFinish(responseBody);
                 break;
         }
     }

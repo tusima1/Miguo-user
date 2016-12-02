@@ -9,12 +9,13 @@
         android:id="@+id/tv_title_item_represent_income"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/c_e6e6e6"
+        android:background="@color/dark_text"
         android:gravity="center_vertical"
         android:paddingBottom="@dimen/dp5"
         android:paddingLeft="@dimen/dp15"
         android:paddingTop="@dimen/dp5"
-        android:textColor="@color/gray_text_99"
+
+        android:textColor="@color/white"
         android:textSize="@dimen/dp12" />
 
     <RelativeLayout

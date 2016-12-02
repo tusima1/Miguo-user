@@ -35,6 +35,7 @@ import com.fanwe.user.view.FansActivity;
 import com.fanwe.user.view.MyCouponListActivity;
 import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.user.view.UserHomeActivity;
+import com.fanwe.user.view.WalletNewActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
@@ -281,10 +282,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(MyCouponListActivity.class);
         } else if (v == mWallet) {
             //TODO 测试部分 佣金提现
-//            startActivity(WalletActivity.class);
-            startActivity(TestLiveActivity.class);
-//            startActivity(SuperVideoRecycleViewActivity.class);
-
+            startActivity(WalletNewActivity.class);
         } else if (v == mSuggestion) {
             //建议
             startActivity(AdviceActivity.class);
@@ -430,7 +428,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         }
 
         List<DictModel> dict = MGDict.getDict();
-        if (dict!=null){
+        if (dict != null) {
             for (DictModel data : dict) {
                 String dic_value = data.getDic_value();
                 if ("support_phone".equals(dic_value)) {
@@ -447,7 +445,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     }
 
     private void callKeFu(String tel) {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             Intent intent = SDIntentUtil.getIntentCallPhone(tel);
             SDActivityUtil.startActivity(getActivity(), intent);
         }

@@ -65,9 +65,9 @@ public class LoginFragment extends LoginBaseFragment {
 
     public void doLogin() {
         if (validateParam()) {
-            mTvLogin.setEnabled(false);
+//            mTvLogin.setEnabled(false);
             mLoginHelper.doLogin(mStrUserName, MD5Util.MD5(mStrPassword), 0,mTvLogin);
-            SDDialogManager.showProgressDialog("请稍候...");
+//            SDDialogManager.showProgressDialog("请稍候...");
         }
     }
 

@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +48,7 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
     private LogHttpHelper httpHelper;
     private ResultCommissionLog resultCommissionLog;
     private RepresentIncomeAdapter mRepresentIncomeAdapter;
+    private LinearLayout ll_empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
                 startActivity(new Intent(mContext, RepresentIntroduceActivity.class));
             }
         });
+
+        ll_empty = (LinearLayout) findViewById(R.id.ll_empty);
     }
 
     private PullToRefreshBase.OnRefreshListener2<ListView> mOnRefresherListener2 = new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -97,6 +102,15 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
             getData();
         }
     };
+
+
+    public void showLLEmpty() {
+        if (mRepresentIncomeAdapter.getCount() <= 0) {
+            ll_empty.setVisibility(View.VISIBLE);
+        } else {
+            ll_empty.setVisibility(View.GONE);
+        }
+    }
 
     private void getData() {
         httpHelper.getUserCommissionLog(String.valueOf(pageNum), String.valueOf(pageSize));
@@ -130,6 +144,31 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
     @Override
     public void onSuccess(String responseBody) {
 
+    }
+
+    public void bindData() {
+        if (isRefresh) {
+            mDatas.clear();
+        }
+        items = resultCommissionLog.getList();
+        if (!SDCollectionUtil.isEmpty(items)) {
+            for (ModelCommissionLog bean : items) {
+                String time = DateFormat.format("HH:mm:ss", DataFormat.toLong(bean.getInsert_time())).toString();
+                if (!containDate(bean.getInsert_time())) {
+                    ModelCommissionLog temp = new ModelCommissionLog();
+                    temp.setType(1);
+                    String tempTime = DateFormat.format("yyyy年MM月", DataFormat.toLong(bean.getInsert_time())).toString();
+                    tempTime = yearStr(tempTime);
+                    temp.setInsert_time(tempTime);
+                    mDatas.add(temp);
+                    bean.setInsert_time(time);
+                    mDatas.add(bean);
+                } else {
+                    bean.setInsert_time(time);
+                    mDatas.add(bean);
+                }
+            }
+        }
     }
 
     List<ModelCommissionLog> items;
@@ -172,8 +211,12 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
                 @Override
                 public void run() {
                     mRepresentIncomeAdapter.notifyDataSetChanged();
+                    showLLEmpty();
+
                 }
             });
+
+
         }
     }
 
@@ -184,11 +227,13 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
      * @return
      */
     private boolean containDate(String inTimeInMillis) {
-        String day = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(inTimeInMillis)).toString();
+        String mm = DateFormat.format("yyyy年MM月", DataFormat.toLong(inTimeInMillis)).toString();
+        mm=yearStr(mm);
+
         if (!SDCollectionUtil.isEmpty(mDatas)) {
             for (ModelCommissionLog bean : mDatas) {
                 if (1 == bean.getType()) {
-                    if (day.equals(bean.getInsert_time())) {
+                    if (mm.equals(bean.getInsert_time())) {
                         return true;
                     }
                 }
@@ -196,6 +241,19 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
             return false;
         }
         return false;
+    }
+
+    private String yearStr(String value) {
+        if (TextUtils.isEmpty(value) || value.length() < 4) {
+            return "";
+        }
+        String  valueYear = value.substring(0,4);
+        String sysYear = DateFormat.format("yyyy", App.getInstance().getSysTime()).toString();
+        if (sysYear.equals(valueYear)&&value.length()>5) {
+             return value.substring(5);
+        }else{
+            return value;
+        }
     }
 
     @Override

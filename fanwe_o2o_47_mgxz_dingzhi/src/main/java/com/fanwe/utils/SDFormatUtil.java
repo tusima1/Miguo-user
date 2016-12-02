@@ -77,6 +77,27 @@ public class SDFormatUtil {
         }
     }
 
+    /**
+     * 判断第一个值 是否大于等于第二个值.
+     * @param value1  第一个值
+     * @param value2  第二个值
+     * @return boolean
+     */
+    public static boolean compareNumber(String value1,String value2){
+        if(TextUtils.isEmpty(value1.trim())){
+            value1 = "0";
+        }
+        if(TextUtils.isEmpty(value2.trim())){
+            value2 = "0";
+        }
+        float f1 = Float.valueOf(value1.trim());
+        float f2 = Float.valueOf(value2.trim());
+        if(f1>=f2){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public static String formatNumberDouble(double formatDouble, int number) {
         return formatNumberString(String.valueOf(formatDouble), number);
     }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity_gray"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_layout_sample_title"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_activity_gray"/>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/dp151"
+       android:background="@color/white"
+       android:orientation="vertical">
+
+           <LinearLayout
+               android:layout_marginTop="@dimen/dp36"
+               android:layout_gravity="center"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerInParent="true"
+               >
+           <ImageView
+               android:layout_gravity="center"               android:layout_width="@dimen/dp11"
+               android:layout_height="@dimen/dp11"
+               android:src="@drawable/nulet"/>
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="@dimen/sp16"
+               android:layout_marginLeft="@dimen/dp4"
+               android:textColor="@color/gray_text_59"
+               android:text="果仁余额"/>
+           </LinearLayout>
+
+
+       <TextView
+           android:id="@+id/nutlet_refund"
+           android:layout_width="wrap_content"
+           android:textColor="@color/dark_text"
+           android:textSize="@dimen/sp44"
+           android:layout_gravity="center"
+           android:text="0"
+           android:layout_height="wrap_content" />
+
+
+   </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+
+        android:layout_height="1dp"
+        android:background="@color/bg_activity_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp151"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dp36"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+            <ImageView
+                android:layout_gravity="center"               android:layout_width="@dimen/dp11"
+                android:layout_height="@dimen/dp11"
+                android:src="@drawable/income_gray"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp16"
+                android:layout_marginLeft="@dimen/dp4"
+                android:textColor="@color/gray_text_59"
+                android:text="可兑换收益"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp16"
+                android:layout_marginLeft="@dimen/dp8"
+                android:textColor="@color/gray_text_59"
+                android:text="(元)"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/validate_income"
+            android:layout_width="wrap_content"
+            android:textColor="@color/dark_text"
+            android:textSize="@dimen/sp44"
+            android:layout_gravity="center"
+            android:text="0"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_activity_gray"/>
+
+    <Button
+        android:layout_marginTop="@dimen/dp37"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:layout_marginLeft="@dimen/dp17"
+        android:layout_marginRight="@dimen/dp17"
+        android:background="@drawable/white_50shape"
+        android:text="兑换果钻"
+        android:textColor="@color/c_CCCCCC"
+        android:id="@+id/exchange_diamond" />
+    <Button
+        android:id="@+id/exchange_money"
+        android:layout_marginTop="@dimen/dp25"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50"
+        android:layout_marginLeft="@dimen/dp17"
+        android:layout_marginRight="@dimen/dp17"
+        android:text="兑换收益"
+        android:background="@drawable/white_50shape"
+        android:textColor="@color/c_CCCCCC"/>
+</LinearLayout>

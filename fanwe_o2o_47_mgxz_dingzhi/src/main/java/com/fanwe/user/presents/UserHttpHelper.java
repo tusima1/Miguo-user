@@ -57,6 +57,7 @@ import com.fanwe.user.model.postUserUpgradeOrder.RootPostUserUpgradeOrder;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.model.putAttention.ResultAttention;
 import com.fanwe.user.model.putAttention.RootAttention;
+import com.fanwe.user.model.wallet.WalletResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -191,7 +192,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onFinish(UserConstants.PERSONALHOME);
+                        onFinish2(mView, UserConstants.PERSONALHOME);
                     }
                 });
             }
@@ -851,6 +852,8 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         });
     }
 
+
+
     /**
      * 获取钱包页面数据
      */
@@ -886,7 +889,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onFailue(UserConstants.MY_WALLET);
+                        onFailure2(mView, UserConstants.MY_WALLET);
                     }
                 });
             }
@@ -899,7 +902,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mView.onFinish(UserConstants.MY_WALLET);
+                        onFinish2(mView, UserConstants.MY_WALLET);
                     }
                 });
             }
