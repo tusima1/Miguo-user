@@ -523,7 +523,9 @@ public class LoginActivity extends BaseActivity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-        MGToast.showToast(responseBody);
+        if(!CommonConstants.GETSHAREID.equals(responseBody)){
+            MGToast.showToast(responseBody);
+        }
     }
 
 
