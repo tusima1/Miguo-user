@@ -45,7 +45,6 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
     @ViewInject(R.id.et_userphone)
     private ClearEditText mEtUserphone;
 
-
     /**
      * 验证码。
      */
@@ -135,7 +134,6 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
         if(getIntent() != null){
             isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
         }
-
     }
 
     private void init() {
@@ -202,7 +200,6 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
             } else {
                 mLoginHelper.doRegister(userPhone, mStrPwd, passwordStr,shareId);
             }
-
         }
     }
 
@@ -223,8 +220,7 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                Type type = new TypeToken<Root<HashMap<String, String>>>() {
-                }.getType();
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {}.getType();
                 Gson gson = new Gson();
                 Root<UserInfoNew> root = gson.fromJson(responseBody, type);
                 HashMap<String, String> infoNew = (HashMap<String, String>) validateBody(root);
@@ -262,7 +258,6 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
 
     private void initSDSendValidateButton() {
-
         mBt_send_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

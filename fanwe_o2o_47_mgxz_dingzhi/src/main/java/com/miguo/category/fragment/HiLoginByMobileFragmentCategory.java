@@ -10,6 +10,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserInfoNew;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiLoginActivity;
 import com.miguo.category.HiLoginCategory;
 import com.miguo.dao.LoginByMobileDao;
@@ -69,7 +70,14 @@ public class HiLoginByMobileFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void init() {
+        initUserMobile();
+    }
 
+    /**
+     * 如果是从注册界面过来的要还原手机号码
+     */
+    private void initUserMobile(){
+        mEtEmail.setText(null != getActivity() ? getActivity().getUserMobile() : "");
     }
 
     public void clickLogin(){
@@ -145,10 +153,17 @@ public class HiLoginByMobileFragmentCategory extends FragmentCategory implements
     }
 
     public HiLoginCategory getHiLoginCategory(){
-        if(getActivity() instanceof HiLoginActivity){
-            return ((HiLoginActivity)getActivity()).getCategory();
+        if(getActivity() instanceof HiLoginActivity && null != getActivity()){
+            return getActivity().getCategory();
         }
         return null;
     }
 
+    @Override
+    public HiLoginActivity getActivity() {
+        if(null != super.getActivity() && super.getActivity() instanceof HiLoginActivity){
+            return (HiLoginActivity)super.getActivity();
+        }
+        return null;
+    }
 }

@@ -36,5 +36,6 @@ public class IntentKey {
      * HiLoginActivity
      */
     public static final String EXTRA_SELECT_TAG_INDEX = "extra_select_tag_index";
+    public static final String LOGIN_MOBILE = "extra_login_mobile";
 
 }

@@ -105,7 +105,15 @@ public class HiLoginQuickByMobileFragmentCategory extends FragmentCategory imple
 
     @Override
     protected void init() {
+        initUserMobile();
         initTimer();
+    }
+
+    /**
+     * 如果是从注册界面过来的要还原手机号码
+     */
+    private void initUserMobile(){
+        mEtMobile.setText(null != getActivity() ? getActivity().getUserMobile() : "");
     }
 
     private void initTimer(){
@@ -230,11 +238,18 @@ public class HiLoginQuickByMobileFragmentCategory extends FragmentCategory imple
 
     public HiLoginCategory getHiLoginCategory(){
         if(getActivity() instanceof HiLoginActivity){
-            return ((HiLoginActivity)getActivity()).getCategory();
+            return getActivity().getCategory();
         }
         return null;
     }
 
+    @Override
+    public HiLoginActivity getActivity() {
+        if(null != super.getActivity() && super.getActivity() instanceof HiLoginActivity){
+            return (HiLoginActivity)super.getActivity();
+        }
+        return null;
+    }
 
 
 }

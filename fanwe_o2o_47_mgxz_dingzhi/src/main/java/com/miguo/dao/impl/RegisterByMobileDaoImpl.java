@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.jpush.JpushHelper;
-import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.MD5Util;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
@@ -14,67 +14,67 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.miguo.dao.LoginByMobilleWithSMSDao;
+import com.miguo.dao.RegisterByMobileDao;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.BaseView;
-import com.miguo.view.LoginByMobilleWithSMSView;
+import com.miguo.view.RegisterByMobileView;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.lang.reflect.Type;
 import java.util.TreeMap;
 
 /**
- * Created by Administrator on 2016/12/2.
+ * Created by zlh on 2016/12/3.
  */
 
-public class LoginByMobilleWithSMSDaoImpl extends BaseDaoImpl implements LoginByMobilleWithSMSDao{
+public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMobileDao{
 
-    public LoginByMobilleWithSMSDaoImpl(BaseView baseView) {
+    public RegisterByMobileDaoImpl(BaseView baseView) {
         super(baseView);
     }
 
     @Override
-    public void loginByMobileWithSMS(final String mobile, String smsCode, String shareCode) {
+    public void registerByMobile(final String mobile, String smsCode, String password, String shareCode) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
+        params.put("pwd", MD5Util.MD5(password));
         params.put("captcha", smsCode);
         params.put("share_record_id",shareCode);
-        params.put("method", UserConstants.USER_QUICK_LOGIN);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
-
+        params.put("method", UserConstants.USER_REGISTER);
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Type type = new TypeToken<Root<UserInfoNew>>() {}.getType();
+                Type type = new TypeToken<Root<UserInfoNew>>() {
+                }.getType();
                 Gson gson = new Gson();
                 Root<UserInfoNew> root = gson.fromJson(responseBody, type);
+
                 String status = root.getStatusCode();
                 String message = root.getMessage();
                 /**
                  * 登录成功的返回状态是210
                  */
-                if(!status.equals("210")) {
-                    getListener().loginByMobileWithSMSError(message);
+                if(!status.equals("211")) {
+                    getListener().registerByMobileError(message);
                     return;
                 }
                 if (null == root.getResult() || null == root.getResult().get(0)) {
-                    getListener().loginByMobileWithSMSError("登录失败！");
+                    getListener().registerByMobileError(message);
                     return;
                 }
 
                 if (null == root.getResult().get(0).getBody() || null == root.getResult().get(0).getBody().get(0)) {
-                    getListener().loginByMobileWithSMSError("登录失败！");
+                    getListener().registerByMobileError(message);
                     return;
                 }
 
                 UserInfoNew userInfoNew = root.getResult().get(0).getBody().get(0);
                 if (null == userInfoNew) {
-                    getListener().loginByMobileWithSMSError("登录失败！");
+                    getListener().registerByMobileError(message);
                     return;
                 }
-                /**
-                 * 登录成功
-                 */
-                getListener().loginByMobileWithSMSSuccess(userInfoNew);
+                getListener().registerByMobileSuccess(userInfoNew);
                 saveUserToLocal(userInfoNew, mobile, userInfoNew.getPwd());
                 handleApplicationCurrentUser(userInfoNew);
                 handleSaveUser(mobile, userInfoNew.getPwd());
@@ -83,7 +83,8 @@ public class LoginByMobilleWithSMSDaoImpl extends BaseDaoImpl implements LoginBy
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                getListener().loginByMobileWithSMSError(message);
+
+                MGToast.showToast(message);
             }
         });
     }
@@ -138,8 +139,9 @@ public class LoginByMobilleWithSMSDaoImpl extends BaseDaoImpl implements LoginBy
         JpushHelper.initJPushConfig();
     }
 
+
     @Override
-    public LoginByMobilleWithSMSView getListener() {
-        return (LoginByMobilleWithSMSView)baseView;
+    public RegisterByMobileView getListener() {
+        return (RegisterByMobileView)baseView;
     }
 }

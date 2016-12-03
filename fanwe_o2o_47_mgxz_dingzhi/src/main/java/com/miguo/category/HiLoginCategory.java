@@ -89,9 +89,6 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
     @ViewInject(R.id.back)
     ImageView back;
 
-    @ViewInject(R.id.ll_tabs)
-    private LinearLayout mLl_tabs;
-
     @ViewInject(R.id.tv_find_password)
     private TextView mTv_find_password;
 
@@ -557,17 +554,15 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      */
     @Override
     public void thirdLoginError(String message) {
-
+        showToast(message);
     }
 
     @Override
     public void thirdLoginSuccess(User_infoModel userInfoModel, UserInfoNew userInfoNew) {
-        if(null != userInfoModel){
-            handleThirdLoginSuccess(userInfoModel);
-        }
         if(null != userInfoNew){
             App.getInstance().setCurrentUser(userInfoNew);
         }
+        getActivity().finishActivity();
     }
 
     @Override
@@ -577,34 +572,23 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         }
     }
 
-    protected void handleThirdLoginSuccess(User_infoModel actModel) {
-        Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
-        if (lastActivity instanceof HiHomeActivity) {
-            finish();
-        } else {
-            BaseUtils.jumpToNewActivityWithFinish(getActivity(), new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
-            return;
-        }
-        BaseUtils.jumpToNewActivityWithFinish(getActivity(), new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
-    }
-
     protected void handleThirdLoginUnRegister(boolean third, ThirdLoginInfo thirdLoginInfo) {
         Intent intent = new Intent(getActivity(), RegisterActivity.class);
         String openId = thirdLoginInfo.getOpenId();
         String type = thirdLoginInfo.getPlatformType();
         String icon = thirdLoginInfo.getIcon();
         String nick = thirdLoginInfo.getNick();
+
         if (third && !TextUtils.isEmpty(openId)) {
             intent.putExtra(UserConstants.THIRD_OPENID, openId);
             intent.putExtra(UserConstants.THIRD_PLATFORM, type);
             intent.putExtra(UserConstants.THIRD_ICON, icon);
             intent.putExtra(UserConstants.THIRD_NICK, nick);
-
         }
+
         intent.putExtra(UserConstants.SHARE_ID, getShareCode());
         goRegisterActivity(intent);
     }
-
 
     private void goRegisterActivity(Intent intent){
         /**

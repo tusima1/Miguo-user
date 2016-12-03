@@ -7,7 +7,7 @@ import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiLoginQuickByMobileFragmentCategory;
 
 /**
- * Created by Administrator on 2016/12/1.
+ * Created by zlh on 2016/12/1.
  */
 
 public class HiLoginQuickByMobileFragmentListener extends FragmentListener{

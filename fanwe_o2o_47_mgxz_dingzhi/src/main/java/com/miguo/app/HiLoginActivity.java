@@ -23,6 +23,11 @@ public class HiLoginActivity extends HiBaseActivity {
 
     private int mSelectTabIndex;
 
+    /**
+     * 如果是从注册界面跳转过来的，应该赋值到用户手机号码输入框
+     */
+    String userMobile;
+
     @Override
     protected Category initCategory() {
         return new HiLoginCategory(this);
@@ -38,6 +43,7 @@ public class HiLoginActivity extends HiBaseActivity {
         if(getIntent() != null){
             isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
             mSelectTabIndex = getIntent().getIntExtra(IntentKey.EXTRA_SELECT_TAG_INDEX, 0);
+            setUserMobile(getIntent().getStringExtra(IntentKey.LOGIN_MOBILE));
         }
     }
 
@@ -80,5 +86,13 @@ public class HiLoginActivity extends HiBaseActivity {
 
     public void setmSelectTabIndex(int mSelectTabIndex) {
         this.mSelectTabIndex = mSelectTabIndex;
+    }
+
+    public String getUserMobile() {
+        return userMobile;
+    }
+
+    public void setUserMobile(String userMobile) {
+        this.userMobile = userMobile;
     }
 }
