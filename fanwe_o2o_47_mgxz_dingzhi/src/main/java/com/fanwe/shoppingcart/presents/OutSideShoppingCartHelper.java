@@ -55,11 +55,12 @@ public class OutSideShoppingCartHelper extends Presenter {
      *
      * @param order_id 订单id
      */
-    public void getOrderOperator(String order_id) {
+    public void getOrderOperator(String order_id, String want_salary) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.ORDER_OPERATOR);
         params.put("order_id", order_id);
+        params.put("want_salary", want_salary);
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
@@ -68,7 +69,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Root root = JSON.parseObject(responseBody, Root.class);
@@ -92,7 +93,7 @@ public class OutSideShoppingCartHelper extends Presenter {
      * @param cart_type     商品类型“1” 为团购
      * @param add_goods_num 商品数量。
      */
-    public void addShopCart(String fx_user_id, String lgn_user_id, String token, String goods_id, String cart_type, String add_goods_num,String share_record_id) {
+    public void addShopCart(String fx_user_id, String lgn_user_id, String token, String goods_id, String cart_type, String add_goods_num, String share_record_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("fx_user_id", fx_user_id);
         params.put("lgn_user_id", lgn_user_id);
@@ -107,7 +108,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null){
+                if (mCallbackView == null) {
                     return;
                 }
                 try {
@@ -123,8 +124,8 @@ public class OutSideShoppingCartHelper extends Presenter {
                             mCallbackView.onFailue(message);
                         }
                     }
-                }catch (Exception e){
-                    Log.e("exception",e.getLocalizedMessage());
+                } catch (Exception e) {
+                    Log.e("exception", e.getLocalizedMessage());
                 }
             }
 
@@ -147,7 +148,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<ShoppingCartInfo>>() {
@@ -161,11 +162,11 @@ public class OutSideShoppingCartHelper extends Presenter {
                     if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null && root.getResult().get(0).getBody() != null && root.getResult().get(0).getBody().size() > 0) {
                         listModel = root.getResult().get(0).getBody();
                     }
-                    if(mCallbackView!=null) {
+                    if (mCallbackView != null) {
                         mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_LIST, listModel);
                     }
                 } else {
-                    if(mCallbackView!=null) {
+                    if (mCallbackView != null) {
                         mCallbackView.onFailue(ShoppingCartconstants.SHOPPING_CART_LIST, message);
                     }
                 }
@@ -173,7 +174,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.SHOPPING_CART_LIST, message);
@@ -197,7 +198,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Root root = JSON.parseObject(responseBody, Root.class);
@@ -206,11 +207,11 @@ public class OutSideShoppingCartHelper extends Presenter {
                 if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
                     List<ShoppingCartInfo> datas = new ArrayList<ShoppingCartInfo>();
                     datas.add(model);
-                    if(mCallbackView!=null) {
+                    if (mCallbackView != null) {
                         mCallbackView.onSuccess(ShoppingCartconstants.SHOPPING_CART_DELETE, datas);
                     }
                 } else {
-                    if(mCallbackView!=null) {
+                    if (mCallbackView != null) {
                         mCallbackView.onFailue(message);
                     }
                 }
@@ -225,15 +226,13 @@ public class OutSideShoppingCartHelper extends Presenter {
     }
 
 
-
-
     /**
      * 批量加入购物车。
      *
      * @param datas
-     * @param fromShopCart  是否来自购物车，如果来自购物车的话取goods_id 要取 pro_id.。否则来自本地购物车的话取id
+     * @param fromShopCart 是否来自购物车，如果来自购物车的话取goods_id 要取 pro_id.。否则来自本地购物车的话取id
      */
-    public void multiAddShopCart(List<ShoppingCartInfo> datas,boolean fromShopCart) {
+    public void multiAddShopCart(List<ShoppingCartInfo> datas, boolean fromShopCart) {
         if (datas == null || datas.size() < 1) {
             return;
         }
@@ -246,11 +245,11 @@ public class OutSideShoppingCartHelper extends Presenter {
         for (int i = 0; i < size; i++) {
             ShoppingCartInfo info = datas.get(i);
 
-             String pro_id = "";
-            if(fromShopCart){
+            String pro_id = "";
+            if (fromShopCart) {
                 pro_id = info.getPro_id();
-            }else{
-                pro_id= info.getId();
+            } else {
+                pro_id = info.getId();
             }
             if (TextUtils.isEmpty(pro_id) || TextUtils.isEmpty(info.getNumber())) {
                 continue;
@@ -263,7 +262,7 @@ public class OutSideShoppingCartHelper extends Presenter {
             goods_ids.append(pro_id + ",");
             cart_types.append("1,");
             add_goods_num.append(info.getNumber() + ",");
-            share_record_ids.append(info.getShare_record_id()+",");
+            share_record_ids.append(info.getShare_record_id() + ",");
         }
         String values = goods_ids.toString();
         if (TextUtils.isEmpty(values) || values.length() < 1) {
@@ -284,7 +283,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Root root = JSON.parseObject(responseBody, Root.class);
@@ -292,12 +291,12 @@ public class OutSideShoppingCartHelper extends Presenter {
                 String message = root.getMessage();
                 if (mCallbackView != null) {
                     if (ShoppingCartconstants.RESULT_OK.equals(statusCode)) {
-                        if(mCallbackView==null){
+                        if (mCallbackView == null) {
                             return;
                         }
                         mCallbackView.onSuccess(ShoppingCartconstants.BATCH_SHOPPING_CART, null);
                     } else {
-                        if(mCallbackView==null){
+                        if (mCallbackView == null) {
                             return;
                         }
                         mCallbackView.onFailue(ShoppingCartconstants.BATCH_SHOPPING_CART, message);
@@ -307,10 +306,10 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView==null){
+                if (mCallbackView == null) {
                     return;
                 }
-                    mCallbackView.onFailue(ShoppingCartconstants.BATCH_SHOPPING_CART, message);
+                mCallbackView.onFailue(ShoppingCartconstants.BATCH_SHOPPING_CART, message);
 
             }
         });
@@ -333,7 +332,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<ShoppingBody>>() {
@@ -347,18 +346,18 @@ public class OutSideShoppingCartHelper extends Presenter {
                         ShoppingBody shoppingBody = (ShoppingBody) root.getResult().get(0).getBody().get(0);
                         List<ShoppingBody> datas = new ArrayList<ShoppingBody>();
                         datas.add(shoppingBody);
-                        if(mCallbackView == null) {
+                        if (mCallbackView == null) {
                             return;
                         }
                         mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_GET, datas);
                     } else {
-                        if(mCallbackView == null) {
+                        if (mCallbackView == null) {
                             return;
                         }
                         mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_GET, null);
                     }
                 } else {
-                    if(mCallbackView == null) {
+                    if (mCallbackView == null) {
                         return;
                     }
                     mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET, message);
@@ -367,7 +366,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET, message);
@@ -389,7 +388,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<ShoppingBody>>() {
@@ -414,7 +413,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_GET, message);
@@ -446,7 +445,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
@@ -467,7 +466,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE, message);
@@ -485,7 +484,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
@@ -505,7 +504,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.GET_ORDER_INFO, message);
@@ -531,7 +530,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {
@@ -547,23 +546,23 @@ public class OutSideShoppingCartHelper extends Presenter {
                     if (map != null) {
                         datas.add(map);
                     }
-                    if(mCallbackView == null) {
+                    if (mCallbackView == null) {
                         return;
                     }
-                       mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_POST, datas);
+                    mCallbackView.onSuccess(ShoppingCartconstants.SP_CART_TOORDER_POST, datas);
 
                 } else {
-                    if(mCallbackView == null) {
+                    if (mCallbackView == null) {
                         return;
                     }
-                        mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_POST, message);
+                    mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_POST, message);
 
                 }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.SP_CART_TOORDER_POST, message);
@@ -586,7 +585,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(callbackView2 == null) {
+                if (callbackView2 == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<ModelUserRedPacket>>() {
@@ -605,7 +604,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(callbackView2 == null) {
+                if (callbackView2 == null) {
                     return;
                 }
                 callbackView2.onFailue(message);
@@ -613,7 +612,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onFinish() {
-                if(callbackView2 == null) {
+                if (callbackView2 == null) {
                     return;
                 }
                 MGUIUtil.runOnUiThread(new Runnable() {
@@ -646,7 +645,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<OrderDetailInfo>>() {
@@ -666,7 +665,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(mCallbackView == null) {
+                if (mCallbackView == null) {
                     return;
                 }
                 mCallbackView.onFailue(ShoppingCartconstants.ORDER_INFO_CREATE, message);

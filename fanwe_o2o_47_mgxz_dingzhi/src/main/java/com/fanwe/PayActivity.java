@@ -70,7 +70,6 @@ import com.miguo.utils.BaseUtils;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -81,7 +80,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PayActivity extends BaseActivity implements RefreshCalbackView, CallbackView {
+public class PayActivity extends BaseActivity implements RefreshCalbackView, CallbackView, ShareAfterPaytDialog.GetSalary {
     /**
      * 00:正式，01:测试
      */
@@ -323,19 +322,31 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 return;
             }
             dialog = new ShareAfterPaytDialog(PayActivity.this, share_info, shareResultCallback);
+            dialog.setGetSalary(this);
             dialog.setCancelable(false);
             dialog.setCloseListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //不要佣金
                     if (outSideShoppingCartHelper == null) {
                         outSideShoppingCartHelper = new OutSideShoppingCartHelper(PayActivity.this);
                     }
-                    outSideShoppingCartHelper.getOrderOperator(mOrderId);
+                    outSideShoppingCartHelper.getOrderOperator(mOrderId, "0");
                     dialog.dismiss();
                 }
             });
             dialog.show();
         }
+    }
+
+
+    @Override
+    public void getSalary() {
+        //要佣金
+        if (outSideShoppingCartHelper == null) {
+            outSideShoppingCartHelper = new OutSideShoppingCartHelper(PayActivity.this);
+        }
+        outSideShoppingCartHelper.getOrderOperator(mOrderId, "1");
     }
 
     private void initTitle() {
@@ -832,7 +843,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
             if (!SDCollectionUtil.isEmpty(datas)) {
                 ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
                 shareRecordId = bean.getId();
-                if (dialog!=null){
+                if (dialog != null) {
                     dialog.setShareRecordId(shareRecordId);
                 }
             }
@@ -901,4 +912,5 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         }
         commonHttpHelper.createShareRecord(Constant.ShareType.WEB_HOME, "");
     }
+
 }

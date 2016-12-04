@@ -28,6 +28,12 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
  * 购物后分享得佣金
  */
 public class ShareAfterPaytDialog extends BaseDialog {
+    public interface GetSalary {
+        void getSalary();
+    }
+
+    private GetSalary mGetSalary;
+
     Context mContext;
     RelativeLayout layoutDialog;
     LinearLayout layoutShare;
@@ -48,6 +54,10 @@ public class ShareAfterPaytDialog extends BaseDialog {
         setListener();
     }
 
+    public void setGetSalary(GetSalary mGetSalary) {
+        this.mGetSalary = mGetSalary;
+    }
+
     public void setShareRecordId(String shareRecordId) {
         this.shareRecordId = shareRecordId;
     }
@@ -57,6 +67,9 @@ public class ShareAfterPaytDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 selectYes();
+                if (mGetSalary != null) {
+                    mGetSalary.getSalary();
+                }
             }
         });
         ivQQ.setOnClickListener(new View.OnClickListener() {
