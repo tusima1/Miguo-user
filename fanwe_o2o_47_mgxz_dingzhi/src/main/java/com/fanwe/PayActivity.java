@@ -322,6 +322,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 return;
             }
             dialog = new ShareAfterPaytDialog(PayActivity.this, share_info, shareResultCallback);
+            dialog.setShareRecordId(shareRecordId);
             dialog.setGetSalary(this);
             dialog.setCancelable(false);
             dialog.setCloseListener(new OnClickListener() {
