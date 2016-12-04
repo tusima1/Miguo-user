@@ -18,7 +18,9 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.model.Share_info;
 import com.fanwe.umeng.UmengShareManager;
 import com.miguo.live.views.category.dialog.DialogCategory;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.dialog.BaseDialog;
+import com.miguo.utils.BaseUtils;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -155,7 +157,21 @@ public class ShareAfterPaytDialog extends BaseDialog {
         btnYes.setTextColor(Color.parseColor("#C32836"));
         btnNo.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
         btnNo.setTextColor(Color.parseColor("#FFFFFF"));
-        doShare();
+        if (judgePlatform()) {
+            doShare();
+            dismiss();
+        }
+    }
+
+    private boolean judgePlatform() {
+        //如果选择了微信、朋友圈；判断有没有安装
+        if ((platform == SHARE_MEDIA.WEIXIN) || (platform == SHARE_MEDIA.WEIXIN_CIRCLE)) {
+            if (!BaseUtils.isWeixinAvilible(mContext)) {
+                MGToast.showToast("未安装微信");
+                return false;
+            }
+        }
+        return true;
     }
 
 }
