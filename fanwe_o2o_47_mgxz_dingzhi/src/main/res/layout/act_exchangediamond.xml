@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <!--页面头，返回和TITLE-->
+    <include layout="@layout/item_layout_sample_title" />
+    <!--显示当前总果仁数-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp97"
+        android:layout_marginBottom="@dimen/dp28"
+        android:layout_marginTop="@dimen/dp28"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp11"
+                    android:layout_height="@dimen/dp11"
+                    android:background="@drawable/nulet" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text="果仁余额"
+                    android:textSize="@dimen/sp12"
+                    android:textColor="@color/c_595959" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/self_bean"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp13"
+            android:gravity="center"
+            android:text="1234344444"
+            android:textColor="@color/c_595959"
+            android:textSize="@dimen/sp24"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c_D9D9D9"></View>
+    <!--显示果仁果钻兑换列表-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/exchange_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/c_D9D9D9"
+        android:dividerHeight="1dp"></android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

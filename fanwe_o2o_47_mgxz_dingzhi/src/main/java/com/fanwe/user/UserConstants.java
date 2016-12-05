@@ -231,6 +231,31 @@ public class UserConstants {
      */
     public static final String MY_WALLET = "MyWallet";
     /**
+     * 2.0.1新钱包接口。
+     */
+    public static final String WALLET = "Wallet";
+    /**
+     *2.0.1钱包收益接口。
+     */
+
+    public static final String  WALLET_INCOME= "WalletIncome";
+    public static final String  WALLET_INCOME_GET= "WalletIncomeGet";
+    public static final String  WALLET_INCOME_POST= "WalletIncomePost";
+    public static final String  WALLET_INCOME_PUT= "WalletIncomePut";
+    /**
+     * 2.0.1版我的钱包，收益兑换记录 doGet
+     */
+    public static final String   WALLET_INCOME_CONVERTHISTORY= "WalletIncomeConvertHistory";
+
+    /**
+     * 钱包金额。
+     */
+    public static final String WALLET_BALANCE = "WalletBalance";
+
+
+    public static final String GET_WALLET_BALANCE = "GetWalletBalance";
+    public static final String POST_WALLET_BALANCE = "PostWalletBalance";
+    /**
      * 获取用户关注的人的一览接口
      */
     public static final String ATTENTION_FOCUS = "AttentionFocus";
@@ -257,7 +282,6 @@ public class UserConstants {
     /**
      * 用户分销等级。
      */
-
     public static final String  USER_DISTRIBUTION_LEVEL  ="UserDistributionLevel";
     /**
      * 人气值 。
@@ -271,7 +295,17 @@ public class UserConstants {
      *
      * 商家分类 小类
      */
-
     public static final String   TID= "tid";
-
+    /**
+     米果仁
+     */
+    public static final String  BEAN= "bean";
+    /**
+     米果豆转换人名币
+     */
+    public static final String  BEAN_CONVERT_RMB= "bean_convert_rmb";
+    /**
+     * 兑换结果：0失败，1成功.
+     */
+    public static final String  CONVERT_STATUS= "convert_status";
 }

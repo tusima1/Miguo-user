@@ -27,6 +27,10 @@ public class CommonConstants {
      * 分享ID.
      */
     public static final String   SHARE_RECORD_ID = "share_record_id";
+    /**
+     * 取当前系统时间。
+     */
+    public static  final String  SYSNCTIME= "SysncTime";
 
     /**
      * 生成分享记录。

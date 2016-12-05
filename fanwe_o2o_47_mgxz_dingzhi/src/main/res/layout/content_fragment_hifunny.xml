@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coorddinatorlayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            app:layout_scrollFlags="scroll"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:id="@+id/top_text_layout"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_marginTop="@dimen/dp45"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp40"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="悄悄的今夜相"
+                    android:textSize="@dimen/size_px2sp_60"
+                    />
+                <TextView
+                    android:id="@+id/summary_text"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp40"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray_text_99"
+                    android:text="遇这里，不要向任何人提起"
+                    android:textSize="@dimen/size_px2sp_24"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/title2"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/live2"
+                android:background="@drawable/shape_bg_gray_50"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="17dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black_43"
+                android:text="直播发生在那里"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"/>
+
+            <TextView
+                android:id="@+id/guide2"
+                android:textColor="@color/gray_text_e2"
+                android:background="@drawable/shape_bg_gray_50"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="17dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="银河系装逼指南"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 直播的tab -->
+            <com.miguo.ui.view.SlidingTabLayout
+                android:paddingBottom="10dp"
+                android:paddingTop="25dp"
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- 指南的tab -->
+            <com.miguo.ui.view.SlidingTabLayout
+                android:paddingBottom="10dp"
+                android:paddingTop="25dp"
+                android:id="@+id/tab_layout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:fillViewport="true"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--&gt;-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical"-->
+    <!--android:fillViewport="true"-->
+    <!--&gt;-->
+
+    <com.miguo.ui.view.FunnyViewPager
+        android:id="@+id/funny_viewpager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </com.miguo.ui.view.FunnyViewPager>
+
+    <!--<com.miguo.ui.view.FunnyViewPager-->
+    <!--android:fillViewport="true"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--android:id="@+id/funny_viewpager"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+
+    <!--</com.miguo.ui.view.FunnyViewPager>-->
+
+    <!--</LinearLayout>-->
+    <!--</android.support.v4.widget.NestedScrollView>-->
+
+</android.support.design.widget.CoordinatorLayout>
+

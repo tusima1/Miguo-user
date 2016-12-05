@@ -932,6 +932,7 @@ public class LiveActivity extends BaseActivity implements ShopAndProductView, En
         public void run() {
             mLiveHttphelper.getAudienceList(CurLiveInfo.getRoomNum() + "", "0");
             mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "0");
+            mLiveHttphelper.getAudienceCount(CurLiveInfo.getRoomNum() + "", "1");
         }
     }
 

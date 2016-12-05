@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -181,6 +182,14 @@ public class UserHomeActivity extends Activity implements CallbackView2, Callbac
         layoutShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(UserHomeActivity.this, DistributionStoreWapActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+        gridViewLive.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(UserHomeActivity.this, DistributionStoreWapActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/c_F1F1F1"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp178"
+        android:background="@color/my_main_color"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp44"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left_white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center"
+                android:text="余额（元）" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/dp26"
+            android:id="@+id/balance_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="0.00"
+            android:textSize="@dimen/sp44" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/withdraw_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_100_px2dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/withdraw_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp14"
+            android:layout_marginRight="@dimen/dp7"
+            android:scaleType="centerInside"
+            android:src="@drawable/withdraw" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/withdraw_img"
+            android:gravity="center_vertical"
+            android:text="提现"
+            android:textColor="@color/gray_text_59"
+            android:textSize="@dimen/sp15" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/dp14"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_right_pretty" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c_ECECEC" />
+
+    <RelativeLayout
+        android:id="@+id/moneydetail_ll"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_100_px2dp"
+        android:layout_marginTop="@dimen/dp10"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/detail_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp14"
+            android:layout_marginRight="@dimen/dp7"
+            android:scaleType="centerInside"
+            android:src="@drawable/money_detail" />
+
+        <TextView
+            android:id="@+id/detail_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/detail_img"
+            android:gravity="center_vertical"
+            android:textColor="@color/gray_text_59"
+            android:textSize="@dimen/sp15"
+            android:text="余额来源" />
+
+        <ImageView
+            android:id="@+id/money_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/dp14"
+            android:scaleType="centerInside"
+            android:src="@drawable/down_arrow" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c_ECECEC" />
+    <LinearLayout
+        android:id="@+id/show_detail_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/commission_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_100_px2dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/commission_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp37"
+                android:gravity="center_vertical"
+                android:text="佣金流水"
+                android:textColor="@color/gray_text_59"
+                android:textSize="@dimen/sp15" />
+
+
+            <ImageView
+                android:id="@+id/commission_arrow"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+
+                android:layout_height="match_parent"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/dp14"
+                android:scaleType="centerInside"
+
+                android:src="@drawable/ic_arrow_right_pretty" />
+
+            <TextView
+                android:id="@+id/commission_value"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dp6"
+                android:gravity="center_vertical"
+                android:text="0.00"
+                android:textColor="@color/gray_text_59"
+                android:textSize="@dimen/sp15"
+                android:layout_toStartOf="@+id/commission_arrow" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dp37"
+            android:background="@color/c_ECECEC" />
+
+        <RelativeLayout
+            android:id="@+id/invite_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_100_px2dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/invite_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp37"
+                android:gravity="center_vertical"
+                android:text="分享收益"
+                android:textColor="@color/gray_text_59"
+                android:textSize="@dimen/sp15" />
+
+            <TextView
+                android:id="@+id/invite_value"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dp6"
+                android:gravity="center_vertical"
+                android:text="0.00"
+                android:textColor="@color/gray_text_59"
+                android:textSize="@dimen/sp15"
+                android:layout_toStartOf="@+id/invite_arrow" />
+
+            <ImageView
+                android:id="@+id/invite_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/dp14"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_right_pretty" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dp37"
+            android:background="@color/c_ECECEC" />
+
+        <RelativeLayout
+            android:id="@+id/refund_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_100_px2dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/refund_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp37"
+                android:gravity="center_vertical"
+                android:text="退款记录"
+                android:textColor="@color/gray_text_59"
+                android:textSize="@dimen/sp15" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/dp14"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_right_pretty" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dp37"
+            android:background="@color/c_ECECEC" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/c_ECECEC" />
+
+</LinearLayout>

@@ -119,6 +119,10 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
     //自动登录中
     public static boolean isLoging = false;
+    /**
+     * 当前系统时间。
+     */
+    public static Long sysTime=0l;
 
 
     public void setmLocalUser(LocalUserModel localUser) {
@@ -504,6 +508,15 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
             Log.e("App setCurrentRoomId", currentRoomId + "oldRoomId quiteAVRoom");
         }
         this.currentRoomId = newRoomId;
+    }
+
+
+    public static Long getSysTime() {
+        return sysTime;
+    }
+
+    public static void setSysTime(Long sysTime) {
+        App.sysTime = sysTime;
     }
 
     @Override

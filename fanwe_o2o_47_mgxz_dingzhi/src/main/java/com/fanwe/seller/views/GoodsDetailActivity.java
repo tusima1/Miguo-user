@@ -44,6 +44,7 @@ import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;

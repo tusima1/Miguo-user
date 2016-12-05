@@ -1,7 +1,7 @@
 package com.fanwe.view;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.text.TextUtils;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.SpecialListModel;

@@ -559,7 +559,7 @@ public class StoreListFragment extends BaseFragment implements CallbackView {
         super.onEventMainThread(event);
         switch (EnumEventTag.valueOf(event.getTagInt())) {
             case CITY_CHANGE:
-                if (sellerHttpHelper == null) {
+                if(sellerHttpHelper==null){
                     break;
                 }
                 initData();

@@ -15,6 +15,8 @@ public class Root<T> {
 
     private String token;
 
+    private Long timestamp = 0l;
+
     public void setResult(List<Result<T>> result){
         this.result = result;
     }
@@ -40,5 +42,12 @@ public class Root<T> {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

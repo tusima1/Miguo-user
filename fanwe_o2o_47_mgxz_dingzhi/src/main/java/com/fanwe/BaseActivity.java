@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.event.EnumEventTag;
@@ -180,8 +181,12 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
                 }
                 break;
             case TOKEN_FAILUE:
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                if(ActivityLifeManager.getInstance().getLastActivity().equals(LoginActivity.class)||ActivityLifeManager.getInstance().getLastActivity().equals(RegisterActivity.class)){
+                    return;
+                }else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
             default:
                 break;
         }

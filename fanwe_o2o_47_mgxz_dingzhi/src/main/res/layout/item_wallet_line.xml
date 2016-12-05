@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wallet_line"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/dp72"
+    android:layout_marginTop="@dimen/dp10"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/dp17"
+        android:layout_height="@dimen/dp17"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/dp17" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/dp6"
+
+        android:layout_toRightOf="@+id/icon"
+        android:text="余额"
+        android:textColor="@color/rgb_898989"
+        android:textSize="@dimen/sp17" />
+
+    <TextView
+        android:id="@+id/money_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/unit"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/dp5"
+        android:ellipsize="end"
+        android:text="0"
+        android:textColor="@color/rgb_898989"
+        android:textSize="@dimen/sp17" />
+
+    <TextView
+        android:id="@+id/unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/iv_arrow"
+
+        android:layout_centerInParent="true"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="@dimen/dp6"
+
+
+        android:text="元"
+        android:textColor="@color/rgb_898989"
+        android:textSize="@dimen/sp17" />
+
+    <ImageView
+        android:id="@+id/iv_arrow"
+        android:layout_width="@dimen/dp17"
+        android:layout_height="@dimen/dp17"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/dp23"
+        android:src="@drawable/ic_arrow_right_pretty" />
+
+
+</RelativeLayout>

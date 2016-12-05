@@ -1,56 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="visible">
+
+    <ImageView
+        android:id="@+id/btnPlay"
+        android:layout_width="@dimen/dp30"
+        android:layout_height="@dimen/dp30"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp16"
+        android:background="@drawable/play_start" />
+
+    <TextView
+        android:id="@+id/play_start"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="50dp"
-        android:visibility="visible">
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:text="00:00"
+        android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/btnPlay"
-            android:layout_marginLeft="@dimen/dp12"
-            android:layout_width="@dimen/dp30"
-            android:layout_gravity="center"
-            android:layout_height="@dimen/dp30"
-            android:layout_marginRight="@dimen/dp16"
-            android:background="@drawable/play_start"/>
-        <TextView
-            android:id="@+id/play_start"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:text="00:00"
-            android:textSize="16sp"
-            android:layout_weight="1"/>
-        <SeekBar
-            android:id="@+id/seekbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="18"
+        android:max="0"
+        android:maxHeight="@dimen/dp18"
+        android:minHeight="@dimen/dp18"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:progress="0"
+        android:progressDrawable="@drawable/play_seekbar_progress"
+        android:thumb="@drawable/play_seekbar_icon" />
 
-            android:max="0"
-            android:progress="0"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:progressDrawable="@drawable/play_seekbar_progress"
-            android:thumb="@drawable/play_seekbar_icon"
-            android:layout_weight="18"/>
-        <TextView
-            android:id="@+id/duration"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="@dimen/dp12"
-
-
-            android:text="--:--"
-            android:textSize="16sp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/dp12"
+        android:layout_weight="1"
+        android:text="--:--"
+        android:textSize="16sp" />
 
 </LinearLayout>

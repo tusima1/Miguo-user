@@ -404,7 +404,7 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
         mBtnPlay.setBackgroundResource(R.drawable.play_pause);
         int result = mLivePlayer.startPlay(playUrl, mPlayType); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
         if (result == -2) {
-            showInvalidateToast("非腾讯云链接地址。");
+            showInvalidateToast("链接地址有误");
         }
         if (result != 0) {
             mBtnPlay.setBackgroundResource(R.drawable.play_start);

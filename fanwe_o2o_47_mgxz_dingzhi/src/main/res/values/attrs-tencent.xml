@@ -36,6 +36,6 @@
         <attr name="heart_width" format="dimension" />
         <attr name="heart_height" format="dimension" />
         <attr name="bezierFactor" format="integer" />
-        <attr name="anim_duration" format="integer" />
+        <attr name="anim_durationQQ" format="integer" />
     </declare-styleable>
 </resources>

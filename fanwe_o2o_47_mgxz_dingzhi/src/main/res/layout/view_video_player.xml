@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/layout_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_cover_view_video_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tv_title_view_video_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="喝红酒有几种杯子"
+            android:textColor="#fffefe"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="@dimen/dp17"
+            android:layout_height="@dimen/dp17"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp7"
+            android:layout_toLeftOf="@+id/tv_title_view_video_player"
+            android:src="@drawable/ic_play_view_video" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <com.tencent.rtmp.ui.TXCloudVideoView
+            android:id="@+id/view_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_loading"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/loading_animation"
+            android:visibility="gone" />
+
+        <com.miguo.live.views.customviews.PlayBackSeekBarView
+            android:id="@+id/seekbar_play"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp15" />
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -57,6 +57,30 @@
         android:layout_height="@dimen/dp10"
         android:background="@color/c_F2F2F2" />
 
+
+    <LinearLayout
+        android:id="@+id/ll_empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/list_empty"/>
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:text="您还没有获得佣金，多购买多分享吧~"
+            android:textColor="@color/text_hongbao_title"
+            android:textSize="16sp"/>
+    </LinearLayout>
     <com.handmark.pulltorefresh.library.PullToRefreshPinnedSectionListView
         android:id="@+id/list"
         android:layout_width="match_parent"
