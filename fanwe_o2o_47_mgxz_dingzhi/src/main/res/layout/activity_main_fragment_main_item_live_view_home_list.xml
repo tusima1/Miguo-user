@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_bg_item_live"
@@ -15,19 +14,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/bg_orange"
         android:gravity="center"
         android:padding="5dp"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp12" />
+        android:textSize="11dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"
+        android:layout_alignBottom="@+id/iv_bg_item_live"
+        android:layout_marginLeft="17dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -40,20 +40,13 @@
             android:drawablePadding="3dp"
             android:text="杭州"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp12" />
+            android:textSize="14dp" />
 
         <LinearLayout
             android:id="@+id/layout_tags_item_live_list_home_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp15"
             android:orientation="horizontal" />
 
     </LinearLayout>
-    <com.fanwe.customview.MGGradientView
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        app:gradient_gravity="BOTTOM"
-        android:layout_alignParentBottom="true"
-        />
 </RelativeLayout>
