@@ -19,10 +19,10 @@ public abstract class AbsCallback<T> implements Callback {
     protected Object tag;
     protected String method;
     protected final Gson gson;
-    public void setTag(Object tag) {
+    public void setMethodTag(String method,Object tag) {
         this.tag = tag;
+        this.method=method;
     }
-    public void setMethod(String method){this.method=method;}
 
     public AbsCallback() {
         this.gson = new Gson();

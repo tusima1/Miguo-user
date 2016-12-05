@@ -104,6 +104,8 @@ public abstract class OkCallback<T> extends AbsCallback<T> {
     public void onFailure(Call call, IOException e) {
         if(e.getCause().equals(SocketTimeoutException.class) ) {//超时
             onFailure(method,new OkHttpException(OkHttpCode.NETWORK_TIME_OUT,e.getMessage()));
+        }else {
+            onFailure(method,new OkHttpException(OkHttpCode.OTHER_ERROR,e.getMessage()));
         }
         onAfter(method);
     }
