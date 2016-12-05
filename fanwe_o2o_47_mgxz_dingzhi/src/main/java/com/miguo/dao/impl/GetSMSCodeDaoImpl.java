@@ -11,7 +11,7 @@ import com.miguo.view.GetSMSCodeView;
 import java.util.TreeMap;
 
 /**
- * Created by Administrator on 2016/12/2.
+ * Created by zlh on 2016/12/2.
  */
 
 public class GetSMSCodeDaoImpl extends BaseDaoImpl implements GetSMSCodeDao{

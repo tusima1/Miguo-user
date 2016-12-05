@@ -64,6 +64,7 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
                     UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
                     if (userInfoNew != null) {
                         if (userInfoNew != null) {
+                            userInfoNew.setToken(root.getToken());
                             App.getInstance().setCurrentUser(userInfoNew);
                             User_infoModel model = new User_infoModel();
                             model.setUser_id(userInfoNew.getUser_id());

@@ -66,11 +66,12 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                     /**
                      * 登录成功
                      */
-                    getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0));
                     saveUserToLocal(userBean.getResult().get(0).getBody().get(0), mobile, password);
+                    userBean.getResult().get(0).getBody().get(0).setToken(userBean.getToken());
                     handleApplicationCurrentUser(userBean.getResult().get(0).getBody().get(0));
                     handleSaveUser(mobile, password);
                     initJpush();
+                    getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0));
                 }else {
                     /**
                      * 状态码不是210，登录失败

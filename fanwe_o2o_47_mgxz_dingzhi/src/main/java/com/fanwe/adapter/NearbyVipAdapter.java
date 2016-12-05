@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.NearbyVipActivity;
 import com.fanwe.app.App;
 import com.fanwe.http.InterfaceServer;

@@ -84,9 +84,6 @@ public class HiHomeActivity extends HiBaseActivity{
     @Override
     public void onEventMainThread(SDBaseEvent event) {
         switch (EnumEventTag.valueOf(event.getTagInt())) {
-//            case LOCATION_SUCCESS:
-//                loginSuccessCallback();
-//                break;
             default:
                 break;
         }

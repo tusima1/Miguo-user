@@ -30,7 +30,6 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.didikee.uilibs.views.WaitFinishTextView;
-import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;

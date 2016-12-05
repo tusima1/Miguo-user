@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.jpush.JpushHelper;
-import com.fanwe.library.utils.MD5Util;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
@@ -14,60 +13,73 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.miguo.dao.RegisterByMobileDao;
+import com.miguo.dao.RegisterByThirdDao;
 import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.BaseView;
-import com.miguo.view.RegisterByMobileView;
+import com.miguo.view.RegisterByThirdView;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.lang.reflect.Type;
 import java.util.TreeMap;
 
 /**
- * Created by zlh on 2016/12/3.
+ * Created by zlh on 2016/12/5.
  */
+public class RegisterByThirdDaoImpl extends BaseDaoImpl implements RegisterByThirdDao {
 
-public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMobileDao{
-
-    public RegisterByMobileDaoImpl(BaseView baseView) {
+    public RegisterByThirdDaoImpl(BaseView baseView) {
         super(baseView);
     }
 
     @Override
-    public void registerByMobile(final String mobile, String smsCode, String password, String shareCode) {
+    public void registerByThird(final String mobile, String openId, String smdCode, String icon, String nick, String platform, String shareId) {
+        if (TextUtils.isEmpty(platform) || TextUtils.isEmpty(openId)) {
+            getListener().registerByThirdError("第三方登录失败！");
+        }
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
-        params.put("pwd", MD5Util.MD5(password));
-        params.put("captcha", smsCode);
-        params.put("share_record_id",shareCode);
-        params.put("method", UserConstants.USER_REGISTER);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        params.put("openid", openId);
+        params.put("share_record_id",shareId);
+        params.put("captcha", smdCode);
+        if (!TextUtils.isEmpty(icon)) {
+            params.put("icon", icon);
+        }
+
+        if (!TextUtils.isEmpty(nick)) {
+            params.put("nick", nick);
+        }
+        params.put("platform", platform);
+        params.put("method", UserConstants.THIRD_REGISTER_URL);
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<UserInfoNew>>() {
                 }.getType();
                 Gson gson = new Gson();
                 Root<UserInfoNew> root = gson.fromJson(responseBody, type);
-
                 String status = root.getStatusCode();
                 String message = root.getMessage();
-                if(!status.equals("211")) {
-                    getListener().registerByMobileError(message);
+                /**
+                 * 登录成功的返回状态是210
+                 */
+                if(!status.equals("210")) {
+                    getListener().registerByThirdError(message);
                     return;
                 }
                 if (null == root.getResult() || null == root.getResult().get(0)) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByThirdError(message);
                     return;
                 }
 
                 if (null == root.getResult().get(0).getBody() || null == root.getResult().get(0).getBody().get(0)) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByThirdError(message);
                     return;
                 }
 
                 UserInfoNew userInfoNew = root.getResult().get(0).getBody().get(0);
                 if (null == userInfoNew) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByThirdError(message);
                     return;
                 }
                 userInfoNew.setToken(root.getToken());
@@ -75,12 +87,12 @@ public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMo
                 handleApplicationCurrentUser(userInfoNew);
                 handleSaveUser(mobile, userInfoNew.getPwd());
                 initJpush();
-                getListener().registerByMobileSuccess(userInfoNew);
+                getListener().registerByThirdSuccess(userInfoNew);
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                getListener().registerByMobileError(message);
+                getListener().registerByThirdError(message);
             }
         });
     }
@@ -137,7 +149,7 @@ public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMo
 
 
     @Override
-    public RegisterByMobileView getListener() {
-        return (RegisterByMobileView)baseView;
+    public RegisterByThirdView getListener() {
+        return (RegisterByThirdView)baseView;
     }
 }

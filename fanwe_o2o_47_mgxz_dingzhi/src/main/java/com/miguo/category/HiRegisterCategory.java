@@ -3,18 +3,18 @@ package com.miguo.category;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.base.CommonHelper;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.model.Check_MobActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserInfoNew;
-import com.fanwe.user.presents.LoginHelper;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
@@ -22,27 +22,39 @@ import com.miguo.app.HiRegisterActivity;
 import com.miguo.dao.CheckMobileExistDao;
 import com.miguo.dao.GetSMSCodeDao;
 import com.miguo.dao.RegisterByMobileDao;
+import com.miguo.dao.RegisterByThirdDao;
 import com.miguo.dao.impl.CheckMobileExistDaoImpl;
 import com.miguo.dao.impl.GetSMSCodeDaoImpl;
 import com.miguo.dao.impl.RegisterByMobileDaoImpl;
+import com.miguo.dao.impl.RegisterByThirdDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiRegisterListener;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.presenters.TencentIMBindPresenter;
+import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.utils.BaseUtils;
 import com.miguo.view.CheckMobileExistView;
 import com.miguo.view.GetSMSCodeView;
 import com.miguo.view.RegisterByMobileView;
+import com.miguo.view.RegisterByThirdView;
+import com.miguo.view.TencentIMBindPresenterView;
 
 /**
  * Created by zlh on 2016/12/3.
  * 注册界面
  */
-public class HiRegisterCategory extends Category implements CheckMobileExistView, GetSMSCodeView,RegisterByMobileView{
+public class HiRegisterCategory extends Category implements CheckMobileExistView, GetSMSCodeView,RegisterByMobileView, RegisterByThirdView, TencentIMBindPresenterView{
+
+    @ViewInject(R.id.title_layout)
+    RelativeLayout titleLayout;
 
     @ViewInject(R.id.et_userphone)
     private ClearEditText mEtUserphone;
+
+    @ViewInject(R.id.title)
+    TextView title;
 
     /**
      * 验证码。
@@ -52,15 +64,6 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
 
     @ViewInject(R.id.btn_send_code)
     private Button mBt_send_code;
-
-    @ViewInject(R.id.ch_register)
-    private CheckBox mCh_register;
-
-    @ViewInject(R.id.ll_register_xieyi)
-    private LinearLayout mLl_xieyi;
-
-    @ViewInject(R.id.tv_register)
-    private TextView mTvRegister;
 
     /**
      * 密码。
@@ -75,14 +78,6 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
     @ViewInject(R.id.pwd)
     private ClearEditText pwd;
 
-
-    @ViewInject(R.id.passline1)
-    private LinearLayout passline1;
-    @ViewInject(R.id.passline2)
-    private LinearLayout passline2;
-
-    protected static String EXTRAS_Phone = "extras_phone";
-
     /**
      * 验证码。
      */
@@ -92,9 +87,21 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
      */
     private String passwordStr;
     protected Check_MobActModel mActModel;
-    CommonHelper mFragmentHelper;
-    LoginHelper mLoginHelper;
     private TimeCount time;
+
+    @ViewInject(R.id.passline1)
+    private LinearLayout passline1;
+    @ViewInject(R.id.passline2)
+    private LinearLayout passline2;
+
+    @ViewInject(R.id.ch_register)
+    private CheckBox mCh_register;
+
+    @ViewInject(R.id.ll_register_xieyi)
+    private LinearLayout mLl_xieyi;
+
+    @ViewInject(R.id.tv_register)
+    private TextView mTvRegister;
 
     /**
      * 检查验证码是否存在
@@ -121,6 +128,17 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
      * {@link #registerByMobileError(String)}
      */
     RegisterByMobileDao registerByMobileDao;
+    /**
+     * 第三方登录后绑定手机号码
+     * {@link com.miguo.dao.impl.RegisterByThirdDaoImpl}
+     * {@link com.miguo.view.RegisterByThirdView}
+     * {@link #registerByThirdSuccess(UserInfoNew)}
+     * {@link #registerByThirdError(String)}
+     */
+    RegisterByThirdDao registerByThirdDao;
+
+    TencentIMBindPresenter tencentIMBindPresenter;
+
 
     public HiRegisterCategory(HiBaseActivity activity) {
         super(activity);
@@ -137,6 +155,9 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
         checkMobileExistDao = new CheckMobileExistDaoImpl(this);
         getSMSCodeDao = new GetSMSCodeDaoImpl(this);
         registerByMobileDao = new RegisterByMobileDaoImpl(this);
+        registerByThirdDao = new RegisterByThirdDaoImpl(this);
+        /** 以下接口在登录成功后被调用 */
+        tencentIMBindPresenter = new TencentIMBindPresenterImpl(this);
     }
 
     @Override
@@ -147,27 +168,45 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
     @Override
     protected void setThisListener() {
         mBt_send_code.setOnClickListener(listener);
+        mLl_xieyi.setOnClickListener(listener);
+        mTvRegister.setOnClickListener(listener);
     }
 
     @Override
     protected void init() {
+        initTimer();
+        checkIfFromThirdLogin();
+    }
 
+    private void checkIfFromThirdLogin(){
+       if (!TextUtils.isEmpty(getActivity().getOpenid())) {
+           this.title.setText("绑定手机");
+           passline1.setVisibility(View.INVISIBLE);
+           passline2.setVisibility(View.INVISIBLE);
+       }
     }
 
     @Override
     protected void initViews() {
+        setTitlePadding(titleLayout);
+    }
 
+    private void initTimer(){
+        time = new TimeCount(60000, 1000);//构造CountDownTimer对象
     }
 
     public void clickRegister(){
         if (validateParam()) {
             /**
-             * 第一次使用第三方登录注册
+             * 第一次使用第三方登录后绑定手机注册
              */
             if (!TextUtils.isEmpty(getActivity().getOpenid())) {
                 handleRegisterWithThirdLogin();
                 return;
             }
+            /**
+             * 默认手机号密码注册账号
+             */
             handleRegister();
         }
     }
@@ -195,11 +234,23 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
     }
 
     private void handleRegisterWithThirdLogin(){
-        mLoginHelper.doThirdRegister(userPhone, openid, smsCode, icon, nick, platform,shareId);
+        registerByThirdDao.registerByThird(getUserMobile(), getActivity().getOpenid(),smsCode, getActivity().getIcon(), getActivity().getNick(), getActivity().getPlatform(), getActivity().getShareId());
     }
 
     private void handleRegister(){
+        /**
+         * 通过手机号码注册
+         * {@link com.miguo.dao.impl.RegisterByMobileDaoImpl}
+         * {@link com.miguo.view.RegisterByMobileView}
+         * {@link #registerByMobileSuccess(UserInfoNew)}
+         * {@link #registerByMobileError(String)}
+         * @param mobile 手机号码
+         * @param smsCode 验证码
+         * @param password 密码
+         * @param shareCode 分享id
+         */
         registerByMobileDao.registerByMobile(getUserMobile(), smsCode, passwordStr, getActivity().getShareId());
+        SDDialogManager.showProgressDialog("请稍候...");
     }
 
     /**
@@ -359,13 +410,62 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
 
     @Override
     public void registerByMobileError(String message) {
-
+        showToast(message);
     }
 
     @Override
     public void registerByMobileSuccess(UserInfoNew user) {
-
+        handlerTencentSign();
     }
+
+    @Override
+    public void registerByThirdError(String message) {
+        showToast(message);
+    }
+
+    @Override
+    public void registerByThirdSuccess(UserInfoNew user) {
+        handlerTencentSign();
+    }
+
+    /*** 注册成功后绑定IM操作 **/
+
+    /**
+     * 注册绑定IM成功后调用
+     * 不管绑定成功失败
+     */
+    private void handleTencentIMFinish(){
+        finishActivity();
+    }
+
+    private void finishActivity(){
+        if(getActivity() instanceof HiRegisterActivity){
+            getActivity().finishActivity2();
+            return;
+        }
+        BaseUtils.finishActivity(getActivity());
+    }
+
+    /**
+     * 获取腾讯签名，绑定IM
+     *
+     */
+    private void handlerTencentSign() {
+        /**
+         * {@link com.miguo.presenters.impl.TencentIMBindPresenterImpl}
+         * {@link com.miguo.view.TencentIMBindPresenterView}
+         * {@link #tencentIMBindFinish()}
+         */
+       tencentIMBindPresenter.tencentIMBinding();
+    }
+
+    @Override
+    public void tencentIMBindFinish() {
+        handleTencentIMFinish();
+    }
+
+
+    /*** 注册成功后绑定IM操作 **/
 
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {

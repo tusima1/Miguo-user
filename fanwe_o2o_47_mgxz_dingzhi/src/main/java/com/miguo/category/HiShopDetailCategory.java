@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;

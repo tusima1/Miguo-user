@@ -51,5 +51,10 @@ public class ClassPath {
      * {@link com.miguo.app.HiLoginActivity}
      */
     public static final String LOGIN_ACTIVITY = "com.miguo.app.HiLoginActivity";
+    /**
+     * 重构注册
+     * {@link com.miguo.app.HiRegisterActivity}
+     */
+    public static final String REGISTER_ACTIVITY = "com.miguo.app.HiRegisterActivity";
 
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.app.AppHelper;
 import com.fanwe.event.EnumEventTag;

@@ -3,7 +3,6 @@ package com.miguo.listener;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.miguo.category.Category;

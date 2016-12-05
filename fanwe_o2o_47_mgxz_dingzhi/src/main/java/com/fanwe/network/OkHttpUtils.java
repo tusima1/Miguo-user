@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.TuanDetailActivity;
 import com.fanwe.app.App;

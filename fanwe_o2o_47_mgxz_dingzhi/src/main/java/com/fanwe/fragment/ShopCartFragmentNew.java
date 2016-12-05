@@ -15,7 +15,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.ConfirmOrderActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
 import com.fanwe.app.App;

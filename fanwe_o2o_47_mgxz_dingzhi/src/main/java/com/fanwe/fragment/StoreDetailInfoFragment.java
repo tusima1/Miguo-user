@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.fanwe.AlbumActivity;
 import com.fanwe.CalendarListActivity;
 import com.fanwe.CommentListActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.StoreConfirmOrderActivity;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;

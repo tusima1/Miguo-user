@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.MyTuanDetailDialog;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.adapter.DealAttrAdapter;

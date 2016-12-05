@@ -3,7 +3,6 @@ package com.fanwe.app;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.model.LocalUserModel;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;

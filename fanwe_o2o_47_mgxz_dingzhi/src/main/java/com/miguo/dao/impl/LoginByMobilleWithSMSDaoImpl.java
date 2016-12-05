@@ -71,14 +71,15 @@ public class LoginByMobilleWithSMSDaoImpl extends BaseDaoImpl implements LoginBy
                     getListener().loginByMobileWithSMSError("登录失败！");
                     return;
                 }
+                userInfoNew.setToken(root.getToken());
                 /**
                  * 登录成功
                  */
-                getListener().loginByMobileWithSMSSuccess(userInfoNew);
                 saveUserToLocal(userInfoNew, mobile, userInfoNew.getPwd());
                 handleApplicationCurrentUser(userInfoNew);
                 handleSaveUser(mobile, userInfoNew.getPwd());
                 initJpush();
+                getListener().loginByMobileWithSMSSuccess(userInfoNew);
             }
 
             @Override

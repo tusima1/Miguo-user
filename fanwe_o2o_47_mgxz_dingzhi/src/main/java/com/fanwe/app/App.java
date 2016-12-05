@@ -172,7 +172,6 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     private void initJPush() {
         JPushInterface.init(this);
         JPushInterface.setDebugMode(true);
-        JpushHelper.registerAll();
     }
 
     private void initSDLibrary() {

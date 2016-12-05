@@ -8,7 +8,6 @@ import android.webkit.JavascriptInterface;
 import com.fanwe.DistributionStoreWapActivity;
 
 import com.fanwe.GoodsListActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;

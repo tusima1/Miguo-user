@@ -5,9 +5,11 @@ import android.content.Intent;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.category.Category;
 import com.miguo.category.HiLoginCategory;
+import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 
 /**
@@ -47,10 +49,9 @@ public class HiLoginActivity extends HiBaseActivity {
         }
     }
 
-    @Override
-    public void finishActivity(){
+    public void finishActivity2(){
         if(isFromDiamond){
-            Intent intent = new Intent(this, HiHomeActivity.class);
+            Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
             setResult(ResultCode.RESUTN_OK, intent);
         }
         BaseUtils.finishActivity(this);
@@ -65,7 +66,7 @@ public class HiLoginActivity extends HiBaseActivity {
         if(resultCode == ResultCode.RESUTN_OK){
             switch (requestCode){
                 case RequestCode.LOGIN_SUCCESS_FOR_DIAMON:
-                    finishActivity();
+                    finishActivity2();
                     break;
             }
         }

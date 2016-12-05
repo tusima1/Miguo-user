@@ -1,10 +1,16 @@
 package com.miguo.app;
 
+import android.content.Intent;
+
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.miguo.category.Category;
 import com.miguo.category.HiRegisterCategory;
+import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.ResultCode;
+import com.miguo.factory.ClassNameFactory;
+import com.miguo.utils.BaseUtils;
 
 /**
  * Created by zlh on 2016/12/3.
@@ -46,11 +52,18 @@ public class HiRegisterActivity extends HiBaseActivity {
                 setNick(getIntent().getStringExtra(UserConstants.THIRD_NICK));
             }
             if(getIntent().hasExtra(UserConstants.SHARE_ID)) {
-                shareId = getIntent().getStringExtra(UserConstants.SHARE_ID);
+                setShareId(getIntent().getStringExtra(UserConstants.SHARE_ID));
             }
-
         }
+    }
 
+
+    public void finishActivity2(){
+        if(isFromDiamond){
+            Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+            setResult(ResultCode.RESUTN_OK, intent);
+        }
+        BaseUtils.finishActivity(this);
     }
 
     public boolean isFromDiamond() {
