@@ -21,7 +21,6 @@ import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.model.CitylistModel;
-import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
@@ -74,7 +73,6 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_init_advs_multi);
         mStartTime = System.currentTimeMillis();
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
