@@ -660,9 +660,9 @@ public class BaiduMapManager
 	 */
 	public interface OnGetBusRoutePlanResultListener
 	{
-		public void onResult(TransitRouteResult result, boolean success);
+		void onResult(TransitRouteResult result, boolean success);
 
-		public void onFinish();
+		void onFinish();
 	}
 
 	/**
@@ -673,9 +673,9 @@ public class BaiduMapManager
 	 */
 	public interface OnGetDrivingRoutePlanResultListener
 	{
-		public void onResult(DrivingRouteResult result, boolean success);
+		void onResult(DrivingRouteResult result, boolean success);
 
-		public void onFinish();
+		void onFinish();
 	}
 
 	/**
@@ -686,9 +686,9 @@ public class BaiduMapManager
 	 */
 	public interface OnGetWalkingRoutePlanResultListener
 	{
-		public void onResult(WalkingRouteResult result, boolean success);
+		void onResult(WalkingRouteResult result, boolean success);
 
-		public void onFinish();
+		void onFinish();
 	}
 
 }

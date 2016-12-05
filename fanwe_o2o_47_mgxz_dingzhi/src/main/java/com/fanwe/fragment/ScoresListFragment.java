@@ -11,16 +11,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.adapter.CategoryBrandListAdapter;
-import com.fanwe.adapter.CategoryCateLeftAdapter;
-import com.fanwe.adapter.CategoryCateRightAdapter;
-import com.fanwe.adapter.CategoryOrderAdapter;
 import com.fanwe.adapter.ScoreGoodsListAdapter;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
@@ -29,12 +23,9 @@ import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Brand_listModel;
 import com.fanwe.model.GoodsModel;
-import com.fanwe.model.Goods_indexActModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
 import com.fanwe.seller.model.getShopList.ModelShopListNavs;
@@ -43,7 +34,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.live.views.customviews.MGToast;
@@ -299,84 +289,6 @@ public class ScoresListFragment extends BaseFragment {
      * @param isLoadMore
      */
     private void requestData(final boolean isLoadMore) {
-        RequestModel model = new RequestModel();
-        model.putCtl("scores");
-        model.put("keyword", keyword);
-        model.put("order_type", order_type);
-        model.put("cate_id", cate_id);
-        model.put("bid", bid);
-        model.putPage(mPage.getPage());
-        SDRequestCallBack<Goods_indexActModel> handler = new SDRequestCallBack<Goods_indexActModel>() {
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                if (actModel.getStatus() == 1) {
-                    if (mIsFirstBindCategoryViewData) {
-//                        bindLeftCategoryViewData(actModel.getBcate_list());
-                        bindMiddleCategoryViewData(actModel.getBrand_list());
-//                        bindRightCategoryViewData(actModel.getNavs());
-                        mIsFirstBindCategoryViewData = false;
-                    }
-
-                    if (mIsNeedUpdateBrandList) {
-                        bindMiddleCategoryViewData(actModel.getBrand_list());
-                    }
-
-                    mPage.update(actModel.getPage());
-                    SDViewUtil.updateAdapterByList(mListModel, actModel.getItem(), mAdapter, isLoadMore);
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                dealFinishRequest();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-
-    }
-
-    protected void dealFinishRequest() {
-        mPtrlvContent.onRefreshComplete();
-        SDViewUtil.toggleEmptyMsgByList(mListModel, mLlEmpty);
-    }
-
-    private void bindLeftCategoryViewData(List<ModelClassifyList> listModel) {
-        if (!SDCollectionUtil.isEmpty(listModel)) {
-            int[] arrIndex = ModelClassifyList.findIndex(cate_id, listModel);
-            int leftIndex = arrIndex[0];
-            int rightIndex = arrIndex[1];
-
-            ModelClassifyList leftModel = listModel.get(leftIndex);
-            List<ModelClassifyList> listRight = leftModel.getBcate_type();
-
-            CategoryCateLeftAdapter adapterLeft = new CategoryCateLeftAdapter(listModel, getActivity());
-            adapterLeft.setmDefaultIndex(leftIndex);
-
-            CategoryCateRightAdapter adapterRight = new CategoryCateRightAdapter(listRight, getActivity());
-            adapterRight.setmDefaultIndex(rightIndex);
-
-            mCvLeft.setLeftAdapter(adapterLeft);
-            mCvLeft.setRightAdapter(adapterRight);
-            mCvLeft.setAdapterFinish();
-        }
-    }
-
-    private void bindMiddleCategoryViewData(List<Brand_listModel> listModel) {
-        int index = Brand_listModel.findIndex(bid, listModel);
-
-        CategoryBrandListAdapter adapter = new CategoryBrandListAdapter(listModel, getActivity());
-        adapter.setmDefaultIndex(index);
-
-        mCvMiddle.setAdapter(adapter);
-        mIsNeedUpdateBrandList = false;
-    }
-
-    private void bindRightCategoryViewData(List<ModelShopListNavs> listOrderModel) {
-        if (!SDCollectionUtil.isEmpty(listOrderModel)) {
-            CategoryOrderAdapter adapter = new CategoryOrderAdapter(listOrderModel, getActivity());
-            mCvRight.setAdapter(adapter);
-        }
     }
 
     @Override

@@ -76,13 +76,7 @@ public class SettingModelDao
 	public static boolean hasSettingModel()
 	{
 		SettingModel model = queryModel();
-		if (model != null)
-		{
-			return true;
-		} else
-		{
-			return false;
-		}
+		return model != null;
 	}
 
 	public static boolean updateLoadImageType(int loadImageType)

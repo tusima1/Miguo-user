@@ -1,7 +1,7 @@
 package com.miguo.live.presenters;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -23,9 +23,9 @@ import java.util.TreeMap;
  */
 public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
     private Gson gson;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
 
-    public GiftHttpHelper2(CallbackView2 mView2) {
+    public GiftHttpHelper2(CallbackView mView2) {
         this.gson = new Gson();
         this.mView2 = mView2;
     }

@@ -7,23 +7,15 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.model.Sms_send_sms_codeActModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
-import com.sunday.eventbus.SDEventManager;
 
 /**
  * 绑定手机号
@@ -82,36 +74,6 @@ public class BindMobileActivity extends BaseActivity
 	{
 		if (validateParams())
 		{
-			CommonInterface.requestBindMobile(mStrMobile, mStrCode, new SDRequestCallBack<User_infoModel>()
-			{
-
-				@Override
-				public void onSuccess(ResponseInfo<String> responseInfo)
-				{
-					if (actModel.getStatus() == 1)
-					{
-						SDEventManager.post(EnumEventTag.BIND_MOBILE_SUCCESS.ordinal());
-						finish();
-					}
-				}
-
-				@Override
-				public void onStart()
-				{
-					SDDialogManager.showProgressDialog("请稍候...");
-				}
-
-				@Override
-				public void onFinish()
-				{
-					SDDialogManager.dismissProgressDialog();
-				}
-
-				@Override
-				public void onFailure(HttpException error, String msg)
-				{
-				}
-			});
 		}
 	}
 
@@ -162,43 +124,6 @@ public class BindMobileActivity extends BaseActivity
 			return;
 		}
 
-		CommonInterface.requestValidateCode(mStrMobile, 1, new SDRequestCallBack<Sms_send_sms_codeActModel>()
-		{
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				switch (actModel.getStatus())
-				{
-				case -1:
-					break;
-				case 1:
-					mBtn_send_code.setmDisableTime(actModel.getLesstime());
-					mBtn_send_code.startTickWork();
-					break;
-
-				default:
-					break;
-				}
-			}
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候...");
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg)
-			{
-			}
-		});
 	}
 
 	private void initTitle()

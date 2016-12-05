@@ -6,46 +6,45 @@ package com.fanwe.constant;
  * @author Administrator
  */
 public class ServerUrl {
-    public static final boolean DEBUG = true;
-    public static final String SERVER_API_TEST_URL = "w2.mgxz.com";
+    /***************************!!!上线需要修改模式!!!****************************/
+    public static final boolean DEBUG =true;//默认开启debug,上线改为false即可,其他接口API不要改动
 
-    //开发环境。
-    public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.dev.mgxz.com/";
-    //测试环境。
-//    public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";
-    //H5地址 开发
-    public static final String SERVER_H5 = "http://m.dev.mgxz.com/";
-    //H5地址 测试
-//    public static final String SERVER_H5 = "http://m.test.mgxz.com/";
-    //H5地址 生产
-//    public static final String SERVER_H5 = "http://m.mgxz.com/";
+    /*************************打测试包******************************/
+    public static final boolean TEST=false;//给测试使用请设置为true
 
-
-    /*袁浩*/
-//     public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.37:8080/mgxz.BussRPC/";
-
-//    public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.36:8080/mgxz.BussRPC/";
-
-    // public static final String  SERVER_API_JAVA_TEST_URL ="http://192.168.90.58:8080/mgxz.BussRPC/";
-
-
-    //	public static final String SERVER_API_TEST_URL="pre.mgxz.com";
-    public static final String SERVER_API_URL_MID = "http://mapi.mgxz.com";
-    public static final String SERVER_API_URL_PRE = "http://";
-    public static final String SERVER_API_URL_END = "/mapi/index.php";
-    public static final String URL_PART_MOB = "/mob/main.html?from=app";
-    public static final String URL_PART_WAP = "/wap/index.php";
+    /*********************** Do Not Modify ***********************/
     public static final String KEY_AES = "FANWE5LMUQC436IM";
+    private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
+    private static final String SERVER_H5_ONLINE="http://m.mgxz.com/";//线上
+    /*********************** Do Not Modify ***********************/
+    private static String SERVER_H5_USING =SERVER_H5_ONLINE;
+    private static String SERVER_API_USING=SERVER_API_URL_ONLINE;
 
-    private static final String SERVER_API_URL_ONLINE = SERVER_API_URL_MID + SERVER_API_URL_END;
+    public static void setServerApi(String api){
+        if (!DEBUG)return;
+        SERVER_API_USING=api;
+    }
+    public static void setServerH5Using(String h5api){
+        if (!DEBUG)return;
+        SERVER_H5_USING =h5api;
+    }
 
+    /************* Add End ************/
 
-    public static String getServerApiUrl() {
+    public static String getAppServerApiUrl() {
         if (DEBUG) {
-            return SERVER_API_URL_PRE + SERVER_API_JAVA_TEST_URL + SERVER_API_URL_END;
+            return SERVER_API_USING;
         } else {
             //线上正式
             return SERVER_API_URL_ONLINE;
+        }
+    }
+
+    public static String getAppH5Url(){
+        if (DEBUG){
+            return SERVER_H5_USING;
+        }else {
+            return SERVER_H5_ONLINE;
         }
     }
 }

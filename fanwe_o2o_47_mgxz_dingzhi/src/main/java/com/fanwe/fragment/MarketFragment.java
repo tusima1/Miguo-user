@@ -25,12 +25,11 @@ import com.fanwe.adapter.DistributionMarketCatePageAdapter;
 import com.fanwe.adapter.DistributionMarketCatePageAdapter.OnClickCateItemListener;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.customview.app.DistributionMarketCateView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.PageModel;
@@ -50,7 +49,7 @@ import com.sunday.eventbus.SDBaseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketFragment extends BaseFragment implements CallbackView, CallbackView2 {
+public class MarketFragment extends BaseFragment implements CallbackView {
     /**
      * 要搜索的商品的id (int)
      */

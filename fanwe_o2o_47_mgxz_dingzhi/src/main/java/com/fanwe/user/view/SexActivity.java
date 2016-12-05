@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -20,7 +20,7 @@ import java.util.List;
  * 设置性别
  * Created by qiang.chen on 2016/10/27.
  */
-public class SexActivity extends BaseActivity implements CallbackView2 {
+public class SexActivity extends BaseActivity implements CallbackView {
     private TextView tvSex1, tvSex2;
     private String strSex;
     private UserHttpHelper userHttpHelper;

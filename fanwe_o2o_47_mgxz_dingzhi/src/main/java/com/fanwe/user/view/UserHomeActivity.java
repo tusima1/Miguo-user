@@ -17,14 +17,17 @@ import android.widget.TextView;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -52,7 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 网红主页
  * Created by Administrator on 2016/9/20.
  */
-public class UserHomeActivity extends Activity implements CallbackView2, CallbackView {
+public class UserHomeActivity extends Activity implements CallbackView {
     private Context mContext = UserHomeActivity.this;
     private UserHttpHelper userHttpHelper;
     private String id;
@@ -159,7 +162,7 @@ public class UserHomeActivity extends Activity implements CallbackView2, Callbac
         if (!TextUtils.isEmpty(nick)) {
             title = nick + "的精彩推荐";
         }
-        String clickUrl = ServerUrl.SERVER_H5 + "index/winnie/id/" + id + "/share_record_id/" + shareRecordId;
+        String clickUrl = ServerUrl.getAppH5Url() + "index/winnie/id/" + id + "/share_record_id/" + shareRecordId;
         UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
     }
 

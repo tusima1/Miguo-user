@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.user.model.UserCurrentInfo;
@@ -115,7 +115,7 @@ public class LiveUtil {
      * @return true 是主播
      */
     public static boolean checkIsHost() {
-        return MySelfInfo.getInstance().getIdStatus() == Constants.HOST ? true : false;
+        return MySelfInfo.getInstance().getIdStatus() == Constants.HOST;
     }
 
     private static final String LIVE = "1";
@@ -301,10 +301,7 @@ public class LiveUtil {
      * @return
      */
     private static boolean judgeCurrent(ModelRoom room) {
-        if (room.getId().equals(CurLiveInfo.getRoomNum() + "")) {
-            return true;
-        }
-        return false;
+        return room.getId().equals(CurLiveInfo.getRoomNum() + "");
     }
 
     private static void jumpLive(ModelRoom room, Activity mActivity, String live_type) {

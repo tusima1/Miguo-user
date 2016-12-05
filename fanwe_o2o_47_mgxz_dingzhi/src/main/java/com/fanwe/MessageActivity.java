@@ -1,34 +1,26 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.fanwe.adapter.MyMessageAdapter;
 import com.fanwe.adapter.MyMessageAdapter.OnMessageReadListener;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SDListViewInScroll;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.jpush.MessageHelper;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.Message;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_message_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
+import com.miguo.live.views.customviews.MGToast;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageActivity extends BaseActivity {
 	private PullToRefreshScrollView mPtr;
@@ -108,45 +100,6 @@ public class MessageActivity extends BaseActivity {
 
 	protected void requestData(final boolean isLoadMore) {
 		// "type":0, //0全部消息列表, 5活动消息列表
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_message");
-		model.putAct("index");
-		model.put("type", 5);
-		model.putPage(mPage.getPage());
-		SDRequestCallBack<Uc_message_indexActModel> handler = new SDRequestCallBack<Uc_message_indexActModel>() {
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				if (actModel.getStatus() == 1) {
-					List<Message> list = actModel.getList();
-					if (mPage.getPage() == 1 && list == null) {
-						ll_empty.setVisibility(View.VISIBLE);
-					} else {
-						if (ll_empty.getVisibility() == View.VISIBLE) {
-							ll_empty.setVisibility(View.GONE);
-						}
-					}
-					if (list != null) {
-						mPage.update(actModel.getPage());
-						SDViewUtil.updateAdapterByList(mListModel, list, mAdapter, isLoadMore);
-					}
-
-				}
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg) {
-
-			}
-
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-				mPtr.onRefreshComplete();
-			}
-		};
-
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
 	private void initTitle() {

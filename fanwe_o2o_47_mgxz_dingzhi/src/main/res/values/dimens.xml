@@ -7,10 +7,6 @@
     <dimen name="height_title_bar">46dp</dimen>
     <dimen name="text_size_normal_16sp">16sp</dimen>
     <!-- 分销 -->
-    <dimen name="fenxiao_marginleft">5dp</dimen>
-    <dimen name="fenxiao_margintop">25dp</dimen>
-    <dimen name="fenxiao_text_jiangetop">5dp</dimen>
-    <dimen name="fenxiao_money">5dp</dimen>
     <!-- 首页字体,图标大小配置 -->
     <dimen name="ic_size_home_recommend">23dp</dimen>
     <dimen name="ic_size_hoitel_width">15dp</dimen>
@@ -34,7 +30,6 @@
 
     <!-- 引导页 -->
     <dimen name="size_636_px2dp">318dp</dimen>
-    <dimen name="size_460_px2dp">230dp</dimen>
     <dimen name="size_359_px2dp">180dp</dimen>
     <dimen name="size_386_px2dp">193dp</dimen>
     <dimen name="size_110_px2dp">55dp</dimen>
@@ -46,7 +41,6 @@
     <dimen name="size_40_px2dp">20dp</dimen>
     <dimen name="size_48_px2dp">24dp</dimen>
     <dimen name="size_44_px2dp">22dp</dimen>
-    <dimen name="size_50_px2dp">25dp</dimen>
     <dimen name="size_56_px2dp">28dp</dimen>
     <dimen name="size_20_px2dp">10dp</dimen>
     <dimen name="size_32_px2dp">16dp</dimen>
@@ -56,7 +50,6 @@
     <dimen name="size_px2sp_24">12sp</dimen>
     <dimen name="size_px2sp_30">15sp</dimen>
     <dimen name="size_px2sp_32">16sp</dimen>
-    <dimen name="size_px2sp_40">20sp</dimen>
     <dimen name="size_px2sp_28">14sp</dimen>
     <dimen name="size_px2sp_60">30sp</dimen>
     <dimen name="list_image_size">80dp</dimen>
@@ -256,7 +249,6 @@
     <dimen name="sp25">25sp</dimen>
     <dimen name="dp48">48dp</dimen>
     <dimen name="dp170">170dp</dimen>
-    <dimen name="dp90">90dp</dimen>
     <dimen name="dp207">207dp</dimen>
 
 </resources>

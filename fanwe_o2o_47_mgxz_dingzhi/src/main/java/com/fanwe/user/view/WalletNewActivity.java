@@ -1,13 +1,10 @@
 package com.fanwe.user.view;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -26,7 +23,7 @@ import java.util.List;
  * 新的我的钱包功能。
  * Created by zhouhy on 2016/11/14.
  */
-public class WalletNewActivity extends BaseNewActivity implements CallbackView2 {
+public class WalletNewActivity extends BaseNewActivity implements CallbackView {
 
     private ListView walletListView;
 
@@ -45,8 +42,6 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView2 
         initTitleView("我的钱包");
         walletHttpHelper = new WalletHttpHelper(this);
     }
-
-
 
 
     public void initWalletList() {
@@ -103,7 +98,7 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView2 
                 }
 
             }
-        },walletList);
+        }, walletList);
 //        walletAdapter.setWalletList(walletList);
         walletListView.setAdapter(walletAdapter);
 
@@ -112,7 +107,7 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView2 
     @Override
     protected void onResume() {
         super.onResume();
-         if(progressDialog==null){
+        if (progressDialog == null) {
             progressDialog = new MGProgressDialog(this);
         }
         progressDialog.show();
@@ -175,15 +170,12 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView2 
 
     @Override
     public void onFinish(String method) {
-        if(progressDialog!=null&&progressDialog.isShowing()){
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        progressDialog=null;
+        progressDialog = null;
 
     }
-
-
-
 
 
     @Override

@@ -30,7 +30,7 @@ import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dialog.ShareAfterPaytDialog;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.alipay.easy.PayResult;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -854,6 +854,11 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

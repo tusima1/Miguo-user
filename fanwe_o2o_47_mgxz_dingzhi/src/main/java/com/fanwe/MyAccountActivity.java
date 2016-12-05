@@ -19,19 +19,14 @@ import android.widget.TextView;
 import com.fanwe.app.App;
 import com.fanwe.app.AppConfig;
 import com.fanwe.app.AppHelper;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.common.MGDict;
 import com.fanwe.common.model.getMGDict.DictModel;
 import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.dao.SettingModelDao;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.jpush.JpushHelper;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDActivityUtil;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDIntentUtil;
@@ -39,12 +34,8 @@ import com.fanwe.library.utils.SDOtherUtil;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.Discover_indexActModel;
 import com.fanwe.model.Init_indexActModel;
 import com.fanwe.model.LocalUserModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.module.user.UserFaceModule;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.service.AppUpgradeService;
@@ -55,9 +46,6 @@ import com.fanwe.user.view.SexActivity;
 import com.fanwe.user.view.SignActivity;
 import com.fanwe.utils.StringTool;
 import com.fanwe.work.AppRuntimeWorker;
-import com.github.siyamed.shapeimageview.CircularImageView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -67,12 +55,14 @@ import com.sunday.eventbus.SDEventManager;
 import java.io.File;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * 我的账户
  *
  * @author Administrator
  */
-public class MyAccountActivity extends BaseActivity implements CallbackView2 {
+public class MyAccountActivity extends BaseActivity implements CallbackView {
     // 用户名
     @ViewInject(R.id.et_username)
     private TextView mEt_username;
@@ -126,20 +116,8 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     @ViewInject(R.id.ll_delivery_address_dc)
     private LinearLayout mLl_delivery_address_dc; // 外卖收货地址
 
-    @ViewInject(R.id.ll_third_bind)
-    private LinearLayout mLl_third_bind; // 第三方绑定
-
-    @ViewInject(R.id.ll_bind_qq)
-    private LinearLayout mLl_bind_qq; // 绑定qq
-
-    @ViewInject(R.id.ll_bind_sina)
-    private LinearLayout mLl_bind_sina; // 绑定新浪微博
-
     @ViewInject(R.id.btn_logout)
     private Button mBtn_logout; // 退出当前帐号
-
-    private String mStrUsername;
-    private String mStrEmail;
 
     @ViewInject(R.id.tv_kf_phone)
     private TextView mTv_kf_phone;
@@ -154,7 +132,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
     private TextView mTv_cache_size;
 
     @ViewInject(R.id.iv_user_face)
-    private CircularImageView mUserFace;// 头像
+    private CircleImageView mUserFace;// 头像
 
     private LocalUserModel mUser;
 
@@ -318,8 +296,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         mLl_modify_password.setOnClickListener(this);
         mLl_delivery_address.setOnClickListener(this);
         mLl_delivery_address_dc.setOnClickListener(this);
-        mLl_bind_qq.setOnClickListener(this);
-        mLl_bind_sina.setOnClickListener(this);
         mBtn_logout.setOnClickListener(this);
         mLl_withdraw.setOnClickListener(this);
         mEt_username.setOnClickListener(this);
@@ -354,10 +330,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             MGToast.showToast("此功能已下线,暂不可用.");
         } else if (v == mLl_delivery_address_dc) {
             clickDeliveryAddressDc(v);
-        } else if (v == mLl_bind_qq) {
-            // clickBindQQ(v);
-        } else if (v == mLl_bind_sina) {
-            // clickBindSina(v);
         } else if (v == mBtn_logout) {
             clickLogout(v);
         } else if (v == mLl_withdraw) {
@@ -492,44 +464,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         userHttpHelper.updateUserInfo("nick", name);
     }
 
-    // 修改名字
-    private void updateName(final String name) {
-        RequestModel model = new RequestModel();
-        model.putCtl("user");
-        model.putAct("update");
-        model.put("user_name", name);
-
-        InterfaceServer.getInstance().requestInterface(model,
-                new SDRequestCallBack<Discover_indexActModel>() {
-                    @Override
-                    public void onStart() {
-                        SDDialogManager.showProgressDialog("");
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (actModel.getStatus() == 1) {
-                            mEt_username.setText(name);
-                            mUser.setUser_name(name);
-                            AppHelper.updateLocalUser(mUser);
-
-                            AppConfig.setUserName(name);
-                        }
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        SDDialogManager.dismissProgressDialog();
-                    }
-
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-                        MGToast.showToast("修改失败,请检查网络...");
-                    }
-                });
-    }
-
     private void clickWithdraw(View v) {
         Intent intent = new Intent(this, AccountMoneyActivity.class);
         startActivity(intent);
@@ -570,108 +504,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
             }
         }).start();
     }
-
-    /**
-     * 绑定新浪微博
-     *
-     * @param v
-     */
-    /**
-     * private void clickBindSina(View v) {
-     * UmengSocialManager.doOauthVerify(this, SHARE_MEDIA.SINA, new
-     * UMAuthListener() {
-     *
-     * @Override public void onStart(SHARE_MEDIA arg0) { }
-     * @Override public void onError(SocializeException arg0, SHARE_MEDIA arg1)
-     * { }
-     * @Override public void onComplete(Bundle bundle, SHARE_MEDIA arg1) {
-     * String uid = bundle.getString("uid"); String access_token =
-     * bundle.getString("access_secret"); requestBindSina(uid,
-     * access_token); }
-     * @Override public void onCancel(SHARE_MEDIA arg0) { } }); }
-     **/
-
-    protected void requestBindSina(String uid, String access_token) {
-        RequestModel model = new RequestModel();
-        model.putCtl("syncbind");
-        model.put("login_type", "Sina");
-        model.putUser();
-        model.put("sina_id", uid);
-        model.put("access_token", access_token);
-        SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
-
-    /**
-     * 绑定qq
-     *
-     * @param v
-     */
-    /**
-     * private void clickBindQQ(View v) { UmengSocialManager.doOauthVerify(this,
-     * SHARE_MEDIA.QQ, new UMAuthListener() {
-     *
-     * @Override public void onStart(SHARE_MEDIA arg0) { }
-     * @Override public void onError(SocializeException arg0, SHARE_MEDIA arg1)
-     * { }
-     * @Override public void onComplete(Bundle bundle, SHARE_MEDIA arg1) {
-     * String openId = bundle.getString("openid"); String access_token
-     * = bundle.getString("access_token"); requestBindQQ(openId,
-     * access_token); }
-     * @Override public void onCancel(SHARE_MEDIA arg0) { } }); }
-     **/
-
-    protected void requestBindQQ(String openid, String access_token) {
-        RequestModel model = new RequestModel();
-        model.putCtl("syncbind");
-        model.put("login_type", "Qq");
-        model.putUser();
-        model.put("qqv2_id", openid);
-        model.put("access_token", access_token);
-        SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>() {
-
-            @Override
-            public void onStart() {
-                SDDialogManager.showProgressDialog("请稍候...");
-            }
-
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-            }
-
-            @Override
-            public void onFinish() {
-                SDDialogManager.dismissProgressDialog();
-            }
-        };
-        InterfaceServer.getInstance().requestInterface(model, handler);
-    }
-
-    /**
-     * 配送地址
-     *
-     * @param v
-     */
-    private void clickDeliveryAddress(View v) {
-        Intent intent = new Intent(this, DeliveryAddressManageActivty.class);
-        startActivity(intent);
-    }
-
     /**
      * 修改密码
      *
@@ -695,57 +527,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView2 {
         Intent intent = new Intent(getApplicationContext(),
                 BindMobileActivity.class);
         startActivity(intent);
-    }
-
-    private void clickSubmit() {
-        if (!validateParams()) {
-            return;
-        }
-
-        RequestModel model = new RequestModel();
-        model.putUser();
-        model.putCtl("uc_account");
-        model.putAct("save");
-        model.put("user_name", mStrUsername);
-        model.put("user_email", mStrEmail);
-
-        InterfaceServer.getInstance().requestInterface(model,
-                new SDRequestCallBack<User_infoModel>() {
-
-                    @Override
-                    public void onStart() {
-                        SDDialogManager.showProgressDialog("请稍候");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        SDDialogManager.dismissProgressDialog();
-                    }
-
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (actModel.getStatus() == 1) {
-                            AppConfig.setUserName(actModel.getUser_name());
-                            LocalUserModel.dealLoginSuccess(actModel, false);
-                            initViewState();
-                            initTitle();
-                        }
-                    }
-                });
-    }
-
-    private boolean validateParams() {
-        mStrUsername = mEt_username.getText().toString();
-        if (isEmpty(mStrUsername)) {
-            MGToast.showToast("用户名不能为空");
-            return false;
-        }
-        mStrEmail = mEt_email.getText().toString();
-        if (isEmpty(mStrEmail)) {
-            MGToast.showToast("邮箱不能为空");
-            return false;
-        }
-        return true;
     }
 
     @Override

@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.views.MaxHeightListView;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.customview.SPullToRefreshSScrollView;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.utils.SDViewBinder;
@@ -40,7 +40,7 @@ import java.util.List;
 
 import static com.didikee.uilibs.utils.DisplayUtil.getSystemStatusBarHeight;
 
-public class SpecialTopicActivity extends AppCompatActivity implements View.OnClickListener, CallbackView2, AdapterView.OnItemClickListener {
+public class SpecialTopicActivity extends AppCompatActivity implements View.OnClickListener, CallbackView, AdapterView.OnItemClickListener {
 
     private SPullToRefreshSScrollView mPscrollView;
     private TextView mTv_show;
@@ -172,9 +172,9 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 //状态栏透明度回调
                 final int height = mFLViewpagerHeight - mTitleHeight - getSystemStatusBarHeight(SpecialTopicActivity.this);
                 if (y <= 0) {   //设置标题的背景颜色
-                    mVGTitle.setBackgroundColor(Color.argb((int) 0, 255, 255, 255));
-                    mTvTitleMiddle.setTextColor(Color.argb((int) 0, 46, 46, 46));
-                    mStatusBar.setBackgroundColor(Color.argb((int) 0, 204, 204, 204));
+                    mVGTitle.setBackgroundColor(Color.argb(0, 255, 255, 255));
+                    mTvTitleMiddle.setTextColor(Color.argb(0, 46, 46, 46));
+                    mStatusBar.setBackgroundColor(Color.argb(0, 204, 204, 204));
                     mIv_left.setImageResource(R.drawable.ic_arrow_left_white);
                 } else if (y > 0 && y <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
                     float scale = (float) y / height;
@@ -184,9 +184,9 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                     mStatusBar.setBackgroundColor(Color.argb((int) alpha, 204, 204, 204));
                     mIv_left.setImageResource(R.drawable.ic_arrow_left_white);
                 } else {    //滑动到banner下面设置普通颜色
-                    mVGTitle.setBackgroundColor(Color.argb((int) 255, 255, 255, 255));
-                    mTvTitleMiddle.setTextColor(Color.argb((int) 255, 46, 46, 46));
-                    mStatusBar.setBackgroundColor(Color.argb((int) 255, 204, 204, 204));
+                    mVGTitle.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    mTvTitleMiddle.setTextColor(Color.argb(255, 46, 46, 46));
+                    mStatusBar.setBackgroundColor(Color.argb(255, 204, 204, 204));
                     mIv_left.setImageResource(R.drawable.ic_left_arrow_dark);
                 }
             }

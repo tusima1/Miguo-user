@@ -369,6 +369,11 @@ public class RegisterActivity extends BaseActivity implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
 
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {

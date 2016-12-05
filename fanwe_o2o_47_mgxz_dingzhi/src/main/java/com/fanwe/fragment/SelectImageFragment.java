@@ -358,7 +358,7 @@ public class SelectImageFragment extends BaseFragment
 
 	public interface SelectImageFragment_compressListener
 	{
-		public void onCompressFinish(List<File> listFile);
+		void onCompressFinish(List<File> listFile);
 	}
 	@Override
 	protected String setUmengAnalyticsTag() {

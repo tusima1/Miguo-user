@@ -90,9 +90,11 @@ public class TuanDetailCombinedPackagesAdapter extends SDBaseAdapter<Deal_indexA
 
 	public interface TuanDetailCombinedPackagesAdapterListener
 	{
-		public void onClickSelected(View view, int position, Deal_indexActModel model, TuanDetailCombinedPackagesAdapter adapter);
+		void onClickSelected(View view, int position, Deal_indexActModel model,
+							 TuanDetailCombinedPackagesAdapter adapter);
 
-		public void onClickItem(View view, int position, Deal_indexActModel model, TuanDetailCombinedPackagesAdapter adapter);
+		void onClickItem(View view, int position, Deal_indexActModel model,
+						 TuanDetailCombinedPackagesAdapter adapter);
 
 	}
 

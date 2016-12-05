@@ -51,7 +51,7 @@ public class ShoppingCartInfo implements Serializable {
     private boolean isChecked = false;
 
 
-    private String  is_first;
+    private String is_first;
     /**
      * 首单 优惠价。
      */
@@ -65,60 +65,74 @@ public class ShoppingCartInfo implements Serializable {
     /**
      * 小计总额。
      */
-    private float sumPrice =0.00f;
+    private float sumPrice = 0.00f;
     /**
      * 团购券ID。
      */
     private String pro_id;
+    private String share_record_id;//分享id
 
-    private String share_record_id;
-
-    public void setNumber(String number){
+    public void setNumber(String number) {
         this.number = number;
     }
-    public String getNumber(){
+
+    public String getNumber() {
         return this.number;
     }
-    public void setTuan_price(String tuan_price){
+
+    public void setTuan_price(String tuan_price) {
         this.tuan_price = tuan_price;
     }
-    public String getTuan_price(){
+
+    public String getTuan_price() {
         return this.tuan_price;
     }
-    public void setImg(String img){
+
+    public void setImg(String img) {
         this.img = img;
     }
-    public String getImg(){
+
+    public String getImg() {
         return this.img;
     }
-    public void setBuyFlg(String buyFlg){
+
+    public void setBuyFlg(String buyFlg) {
         this.buyFlg = buyFlg;
     }
-    public String getBuyFlg(){
+
+    public String getBuyFlg() {
         return this.buyFlg;
     }
-    public void setId(String id){
+
+    public void setId(String id) {
         this.id = id;
     }
-    public String getId(){
+
+    public String getId() {
         return this.id;
     }
-    public void setOrigin_price(String origin_price){
+
+    public void setOrigin_price(String origin_price) {
         this.origin_price = origin_price;
     }
-    public String getOrigin_price(){
+
+    public String getOrigin_price() {
         return this.origin_price;
     }
-    public void setTitle(String title){
+
+    public void setTitle(String title) {
         this.title = title;
     }
-    public String getTitle(){
+
+    public String getTitle() {
         return this.title;
     }
-    public void setLimit_num(String limit_num){
+
+    public void setLimit_num(String limit_num) {
         this.limit_num = limit_num;
     }
-    public String getLimit_num(){
+
+    public String getLimit_num() {
         return this.limit_num;
     }
 

@@ -212,6 +212,11 @@ public class LoginPhoneFragment extends LoginBaseFragment implements CallbackVie
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔

@@ -139,10 +139,7 @@ public class TextMoney {
 			if (number.endsWith(".")) {
 				return true;
 			}
-			if (number.length() - number.indexOf(".") >= 4) {
-				return false;
-			}
-			return true;
+			return number.length() - number.indexOf(".") < 4;
 		}
 
 		return true;

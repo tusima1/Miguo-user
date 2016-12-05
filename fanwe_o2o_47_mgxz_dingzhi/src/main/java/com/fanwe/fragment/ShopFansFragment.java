@@ -210,4 +210,9 @@ public class ShopFansFragment extends Fragment implements CallbackView {
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
@@ -43,7 +43,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/7/22.
  * 显示的是主播的数据
  */
-public class UserHeadTopView extends RelativeLayout implements View.OnClickListener, IViewGroup, CallbackView2 {
+public class UserHeadTopView extends RelativeLayout implements View.OnClickListener, IViewGroup, CallbackView {
     private Context mContext;
     private CircleImageView mUserIamge;//头像
     private TextView mMembers;//头像下方人数量

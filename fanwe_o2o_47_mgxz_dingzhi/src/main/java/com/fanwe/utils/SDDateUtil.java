@@ -488,10 +488,7 @@ public class SDDateUtil
 			return true;
 		else if ((year % 4) == 0)
 		{
-			if ((year % 100) == 0)
-				return false;
-			else
-				return true;
+			return (year % 100) != 0;
 		} else
 			return false;
 	}
@@ -755,7 +752,6 @@ public class SDDateUtil
 	{
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		;
 		if (date == null)
 			return false;
 		if (date.length() > 10)

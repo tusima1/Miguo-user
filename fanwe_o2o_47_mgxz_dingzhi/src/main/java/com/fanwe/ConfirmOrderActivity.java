@@ -9,10 +9,9 @@ import android.widget.Button;
 import android.widget.ScrollView;
 
 import com.fanwe.adapter.PaymentAdapter;
-import com.fanwe.common.CommonInterface;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.MGProgressDialog;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.MyRedPayMentsFragment;
 import com.fanwe.fragment.MyRedPayMentsFragment.MyredPaymentsFragmentListener;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
@@ -434,7 +433,6 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     protected void dealRequestDoneOrderSuccess(List datas) {
         if (datas != null && datas.size() > 0) {
             OrderDetailInfo orderDetailInfo = (OrderDetailInfo) datas.get(0);
-            CommonInterface.updateCartNumber();
             SDEventManager.post(EnumEventTag.DONE_CART_SUCCESS.ordinal());
             Intent intent = new Intent(mActivity, PayActivity.class);
             Bundle bundle = new Bundle();
@@ -606,6 +604,11 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 }

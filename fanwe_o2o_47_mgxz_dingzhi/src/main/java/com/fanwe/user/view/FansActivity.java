@@ -7,7 +7,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.FansAdapter;
 import com.fanwe.user.model.getAttentionFans.ModelFans;
@@ -18,7 +18,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FansActivity extends Activity implements CallbackView2 {
+public class FansActivity extends Activity implements CallbackView {
 
     private PullToRefreshListView mPtrlv_content;
 

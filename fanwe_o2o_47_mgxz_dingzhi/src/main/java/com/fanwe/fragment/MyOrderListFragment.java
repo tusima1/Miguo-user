@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.OrderOutAdapter;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author js02
  *
  */
-public class MyOrderListFragment extends BaseFragment implements CallbackView2 {
+public class MyOrderListFragment extends BaseFragment implements CallbackView {
 
     @ViewInject(R.id.ptrlv_content)
     private PullToRefreshListView mPtrlv_content;

@@ -3,7 +3,6 @@ package com.fanwe.shoppingcart.model;
 import android.text.TextUtils;
 
 import com.fanwe.dao.JsonDbModelDaoX;
-import com.fanwe.utils.SDFormatUtil;
 
 import java.util.ArrayList;
 import java.util.List;

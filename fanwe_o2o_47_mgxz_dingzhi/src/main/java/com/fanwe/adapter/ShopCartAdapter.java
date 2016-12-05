@@ -308,7 +308,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 	}
 
 	public interface ShopCartSelectedListener {
-		public void onSelectedListener();
+		void onSelectedListener();
 
 		/**
 		 * 删除状态下的被选择状态。
@@ -316,8 +316,8 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 		 * @param model
 		 * @param isChecked
 		 */
-		public void onDelSelectedListener(CartGoodsModel model,
-				boolean isChecked);
+		void onDelSelectedListener(CartGoodsModel model,
+								   boolean isChecked);
 
 		/**
 		 * 购物车标题栏的数量变化
@@ -325,7 +325,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 		 * @param num
 		 *            变化后的数量
 		 */
-		public void onTitleNumChangeListener(int num);
+		void onTitleNumChangeListener(int num);
 	}
 
 	private void setPrice(TextView tvSinglePrice, TextView tvTotalPrice,
@@ -457,10 +457,7 @@ public class ShopCartAdapter extends SDBaseAdapter<ShoppingCartInfo> {
 	 * @return
 	 */
 	public boolean ineffectiveCheck(ShoppingCartInfo model) {
-		if (!TextUtils.isEmpty(model.getBuyFlg())&&"1".equals(model.getBuyFlg())) {
-			return true;
-		}
-		return false;
+		return !TextUtils.isEmpty(model.getBuyFlg()) && "1".equals(model.getBuyFlg());
 	}
 
 }

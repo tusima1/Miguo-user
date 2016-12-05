@@ -1,7 +1,6 @@
 package com.fanwe.library.utils;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class MD5Util
 {

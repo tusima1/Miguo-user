@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.fanwe.ConfirmTopUpActivity;
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.dao.barry.MemberDetailDao;
 import com.fanwe.dao.barry.impl.MemberDetailDaoImpl;
 import com.fanwe.dao.barry.view.MemberDetailView;
@@ -19,7 +19,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.utils.StringTool;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 
@@ -30,7 +29,7 @@ import java.util.List;
  * 代言殿堂
  * Created by qiang.chen on 2016/10/27.
  */
-public class RepresentIntroduceActivity extends Activity implements CallbackView2 {
+public class RepresentIntroduceActivity extends Activity implements CallbackView {
     private TextView tvUpdate;
     private WebView mWebView;
     private MemberDetailDao memberDetailDao;

@@ -32,8 +32,6 @@ import com.miguo.listener.HiWebPageListener;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.view.ShoppingCartView;
 
-import java.util.List;
-
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/3.
  */

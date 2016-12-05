@@ -126,7 +126,7 @@ public class ShareAfterPaytDialog extends BaseDialog {
         if (!TextUtils.isEmpty(share_info.getSummary())) {
             content = share_info.getSummary();
         }
-        String clickUrl = ServerUrl.SERVER_H5;
+        String clickUrl = ServerUrl.getAppH5Url();
         if (!TextUtils.isEmpty(share_info.getClickurl())) {
             clickUrl = share_info.getClickurl() + "?share_record_id=" + shareRecordId;
         }

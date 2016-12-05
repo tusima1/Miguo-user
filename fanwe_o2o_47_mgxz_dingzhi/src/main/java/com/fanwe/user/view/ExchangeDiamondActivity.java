@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -29,7 +29,7 @@ import java.util.List;
  * Created by zhouhy on 2016/11/23.
  */
 
-public class ExchangeDiamondActivity extends BaseNewActivity implements CallbackView2 {
+public class ExchangeDiamondActivity extends BaseNewActivity implements CallbackView {
 
     MGProgressDialog progressDialog;
     private WalletHttpHelper walletHttpHelper = null;

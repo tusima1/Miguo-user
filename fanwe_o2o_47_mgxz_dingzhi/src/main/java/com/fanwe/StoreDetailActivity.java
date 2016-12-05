@@ -8,11 +8,10 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.SDStickyScrollView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.HoltelDetailFragment;
 import com.fanwe.fragment.StoreDetailBriefFragment;
 import com.fanwe.fragment.StoreDetailCommentFragment;
@@ -62,7 +61,7 @@ import java.util.List;
  *
  * @author js02
  */
-public class StoreDetailActivity extends BaseActivity implements CallbackView, CallbackView2 {
+public class StoreDetailActivity extends BaseActivity implements CallbackView {
 
     /**
      * 商家id (int)
@@ -194,7 +193,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView, C
             }
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
             }

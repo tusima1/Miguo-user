@@ -3,12 +3,9 @@ package com.miguo.listener.fragment;
 import android.content.Intent;
 import android.view.View;
 
-import com.fanwe.CityListActivity;
 import com.fanwe.HomeSearchActivity;
-import com.fanwe.MyCaptureActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.app.HiShopDetailActivity;
 import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiHomeFragmentCategory;
 import com.miguo.definition.ClassPath;

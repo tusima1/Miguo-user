@@ -21,7 +21,6 @@ import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
@@ -452,7 +451,7 @@ public class LoginHelper extends Presenter {
         String status = root.getStatusCode();
         String message = root.getMessage();
 
-        UserInfoNew userInfoNew = (UserInfoNew) validateInfoBody(root);
+        UserInfoNew userInfoNew = validateInfoBody(root);
         if (userInfoNew != null) {
             App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
             User_infoModel model = new User_infoModel();
@@ -554,11 +553,7 @@ public class LoginHelper extends Presenter {
         List<ShoppingCartInfo> list = App.getInstance().getLocalShoppingCartInfo();
         if (list != null && list.size() > 0) {
 
-            final OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new RefreshCalbackView() {
-                @Override
-                public void onFailue(String method, String responseBody) {
-
-                }
+            final OutSideShoppingCartHelper helper = new OutSideShoppingCartHelper(new CallbackView() {
 
                 @Override
                 public void onSuccess(String responseBody) {
@@ -572,6 +567,11 @@ public class LoginHelper extends Presenter {
 
                 @Override
                 public void onFailue(String responseBody) {
+
+                }
+
+                @Override
+                public void onFinish(String method) {
 
                 }
             });

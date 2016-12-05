@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.mine.views.RepresentIncomeActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -18,7 +18,7 @@ import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
-public class WalletActivity extends Activity implements CallbackView2, View.OnClickListener {
+public class WalletActivity extends Activity implements CallbackView, View.OnClickListener {
 
     private ModelMyWallet myWallet;
     private TextView mTvTiXian;//可提现

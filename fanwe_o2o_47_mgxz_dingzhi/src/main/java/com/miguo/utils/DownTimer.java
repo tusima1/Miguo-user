@@ -122,8 +122,8 @@ public class DownTimer {
     }
 
     public interface TimeListener {
-        public void onFinish();
-        public void onInterval(long remainTime);
+        void onFinish();
+        void onInterval(long remainTime);
     }
 
     public void setTimerLiener(TimeListener listener) {

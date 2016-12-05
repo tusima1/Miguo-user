@@ -179,26 +179,26 @@ public class CalendarListActivity extends BaseActivity implements OnDaySelectLis
 		//若以前已经选择了日期，则在进入日历后会显示以选择的日期，该部分作用则是重新点击日历时，清空以前选择的数据（包括背景图案）
 		  if(!"".equals(sp_inday))
 		  {
-          	c1.viewIn.setBackgroundColor(Color.WHITE);
-          	((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#898989"));
-          	((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setGravity(Gravity.CENTER);
-          	((LinearLayout) c1.viewIn.findViewById(R.id.ll_container)).setBackgroundResource(R.color.bg_activity_white);
-          	 SDViewUtil.hide((TextView) c1.viewIn.findViewById(R.id.tv_calendar));
+          	MyCalendar.viewIn.setBackgroundColor(Color.WHITE);
+          	((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#898989"));
+          	((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setGravity(Gravity.CENTER);
+          	MyCalendar.viewIn.findViewById(R.id.ll_container).setBackgroundResource(R.color.bg_activity_white);
+          	 SDViewUtil.hide(MyCalendar.viewIn.findViewById(R.id.tv_calendar));
           	 try {
 				if(simpleDateFormat.parse(sp_inday).getTime() == simpleDateFormat.parse(nowday).getTime())
 				 {
-					((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setText("今天");
-					((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
+					((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setText("今天");
+					((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
 				 }
 				if((simpleDateFormat.parse(sp_inday).getTime() - simpleDateFormat.parse(nowday).getTime())/nd == 1)
 				 {
-					 ((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setText("明天");
-					 ((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
+					 ((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setText("明天");
+					 ((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
 				 }
 				if((simpleDateFormat.parse(sp_inday).getTime() - simpleDateFormat.parse(nowday).getTime())/nd == 2)
 				 {
-					 ((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setText("后天");
-					 ((TextView) c1.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
+					 ((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setText("后天");
+					 ((TextView) MyCalendar.viewIn.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
 				 }
 			} catch (ParseException e) 
           	 {
@@ -207,21 +207,21 @@ public class CalendarListActivity extends BaseActivity implements OnDaySelectLis
           }
           if(!"".equals(sp_outday))
           {
-        	 c1.viewOut.setBackgroundColor(Color.WHITE);
-        	 ((TextView) c1.viewOut.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#898989"));
-        	 ((TextView) c1.viewOut.findViewById(R.id.tv_calendar_day)).setGravity(Gravity.CENTER);
-        	 ((LinearLayout) c1.viewOut.findViewById(R.id.ll_container)).setBackgroundResource(R.color.bg_activity_white);
-            SDViewUtil.hide((TextView) c1.viewOut.findViewById(R.id.tv_calendar));
+        	 MyCalendar.viewOut.setBackgroundColor(Color.WHITE);
+        	 ((TextView) MyCalendar.viewOut.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#898989"));
+        	 ((TextView) MyCalendar.viewOut.findViewById(R.id.tv_calendar_day)).setGravity(Gravity.CENTER);
+        	 MyCalendar.viewOut.findViewById(R.id.ll_container).setBackgroundResource(R.color.bg_activity_white);
+            SDViewUtil.hide(MyCalendar.viewOut.findViewById(R.id.tv_calendar));
             try {
 				if((simpleDateFormat.parse(sp_outday).getTime() - simpleDateFormat.parse(nowday).getTime())/nd == 1)
 				 {
-					 ((TextView) c1.viewOut.findViewById(R.id.tv_calendar_day)).setText("明天");
-					 ((TextView) c1.viewOut.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
+					 ((TextView) MyCalendar.viewOut.findViewById(R.id.tv_calendar_day)).setText("明天");
+					 ((TextView) MyCalendar.viewOut.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
 				 }
 				if((simpleDateFormat.parse(sp_outday).getTime() - simpleDateFormat.parse(nowday).getTime())/nd == 2)
 				 {
-					 ((TextView) c1.viewOut.findViewById(R.id.tv_calendar_day)).setText("后天");
-					 ((TextView) c1.viewOut.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
+					 ((TextView) MyCalendar.viewOut.findViewById(R.id.tv_calendar_day)).setText("后天");
+					 ((TextView) MyCalendar.viewOut.findViewById(R.id.tv_calendar_day)).setTextColor(Color.parseColor("#FF6600"));
 				 }
 				
 			} catch (ParseException e) {

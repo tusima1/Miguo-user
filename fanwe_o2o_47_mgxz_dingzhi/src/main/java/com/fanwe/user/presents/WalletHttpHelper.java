@@ -1,9 +1,7 @@
 package com.fanwe.user.presents;
 
-import android.content.Context;
-
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Result;
 import com.fanwe.base.Root;
@@ -39,10 +37,10 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
     private static final String TAG = UserHttpHelper.class.getSimpleName();
     private Gson gson;
     private UserCurrentInfo userCurrentInfo;
-    private CallbackView2 mView;
+    private CallbackView mView;
 
 
-    public WalletHttpHelper(CallbackView2 mView) {
+    public WalletHttpHelper(CallbackView mView) {
 
         this.mView = mView;
         gson = new Gson();

@@ -71,9 +71,9 @@ public class DynamicCommentDetailAdapter extends SDBaseAdapter<DynamicReplyModel
 
 	public interface DynamicCommentDetailAdapter_onClick
 	{
-		public void onClickComment(DynamicReplyModel model, View v);
+		void onClickComment(DynamicReplyModel model, View v);
 
-		public void onClickCommentUsername(DynamicReplyModel model, View v);
+		void onClickCommentUsername(DynamicReplyModel model, View v);
 	}
 
 }

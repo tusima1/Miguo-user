@@ -393,7 +393,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
             }
             String clickUrl = result.getShare().getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
             }
@@ -739,6 +739,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 }

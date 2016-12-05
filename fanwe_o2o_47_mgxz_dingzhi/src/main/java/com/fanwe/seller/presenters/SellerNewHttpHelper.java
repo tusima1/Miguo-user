@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -28,11 +28,11 @@ import java.util.TreeMap;
  */
 
 public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
-    private CallbackView2 mView2;
+    private CallbackView mView2;
     private Gson gson;
 
 
-    public SellerNewHttpHelper(CallbackView2 mView2) {
+    public SellerNewHttpHelper(CallbackView mView2) {
         this.mView2 = mView2;
         gson = new Gson();
     }
@@ -119,7 +119,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
 
     }
 
-    private void callback2Success(final CallbackView2 mView2, final String method, final List data){
+    private void callback2Success(final CallbackView mView2, final String method, final List data){
         if (mView2!=null){
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
@@ -130,7 +130,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
         }
     }
 
-    private void callback2Failure(final CallbackView2 mView2, final String method){
+    private void callback2Failure(final CallbackView mView2, final String method){
         if (mView2!=null){
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
@@ -140,7 +140,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
             });
         }
     }
-    private void callback2Finish(final CallbackView2 mView2, final String method){
+    private void callback2Finish(final CallbackView mView2, final String method){
         if (mView2!=null){
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override

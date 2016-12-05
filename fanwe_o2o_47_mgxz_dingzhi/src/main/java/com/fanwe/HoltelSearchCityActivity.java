@@ -23,7 +23,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.customview.SideBar;
 import com.fanwe.customview.SideBar.OnTouchingLetterChangedListener;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;

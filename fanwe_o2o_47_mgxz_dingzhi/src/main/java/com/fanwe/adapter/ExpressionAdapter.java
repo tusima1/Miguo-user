@@ -67,7 +67,7 @@ public class ExpressionAdapter extends SDBaseAdapter<ExpressionModel>
 
 	public interface ExpressionAdapterListener
 	{
-		public void onItemClick(ExpressionModel model, int position);
+		void onItemClick(ExpressionModel model, int position);
 	}
 
 }

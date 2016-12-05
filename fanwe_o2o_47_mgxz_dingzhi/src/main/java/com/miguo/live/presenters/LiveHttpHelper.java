@@ -7,11 +7,9 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.common.MGDict;
-import com.fanwe.common.model.CommonConstants;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -112,7 +110,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
     private static final String TAG = LiveHttpHelper.class.getSimpleName();
     private Gson gson;
     private CallbackView mView;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
 
     public static final String RESULT_OK = "no_body_but_is_ok";
 
@@ -121,7 +119,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         gson = new Gson();
     }
 
-    public LiveHttpHelper(Activity mActivity, CallbackView2 mView2, String type) {
+    public LiveHttpHelper(Activity mActivity, CallbackView mView2, String type) {
         this.mView2 = mView2;
         gson = new Gson();
     }

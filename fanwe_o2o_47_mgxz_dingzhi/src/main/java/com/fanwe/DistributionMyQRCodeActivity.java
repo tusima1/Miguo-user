@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.fanwe.app.AppConfig;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.dialog.SDDialogMenu;
@@ -142,7 +142,7 @@ public class DistributionMyQRCodeActivity extends BaseActivity implements OnLong
     }
 
     public void getData() {
-       new  UserHttpHelper(null, new CallbackView2() {
+       new  UserHttpHelper(null, new CallbackView() {
            @Override
            public void onSuccess(String responseBody) {
 

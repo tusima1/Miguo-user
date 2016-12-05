@@ -220,7 +220,7 @@ public class LiveStartActivity extends Activity implements CallbackView {
                 //朋友圈
                 title = content;
             }
-            UmengShareManager.share(platform, this, title, content, ServerUrl.SERVER_H5 + "share/live/uid/"
+            UmengShareManager.share(platform, this, title, content, ServerUrl.getAppH5Url() + "share/live/uid/"
                             + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
                     UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
         } else {
@@ -418,6 +418,11 @@ public class LiveStartActivity extends Activity implements CallbackView {
     @Override
     public void onFailue(String responseBody) {
         MGToast.showToast(responseBody);
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 
     private void getRecordId() {

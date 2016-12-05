@@ -18,7 +18,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.model.CommentModel;
@@ -322,6 +322,11 @@ public class CommentListActivity extends BaseActivity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

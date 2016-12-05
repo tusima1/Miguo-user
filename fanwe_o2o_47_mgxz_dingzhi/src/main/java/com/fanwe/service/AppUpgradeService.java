@@ -282,6 +282,11 @@ public class AppUpgradeService extends Service implements CallbackView {
     }
 
     @Override
+    public void onFinish(String method) {
+
+    }
+
+    @Override
     public void onDestroy() {
         if(dialog!=null&&dialog.isShowing()){
             dialog.dismiss();

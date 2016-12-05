@@ -33,7 +33,7 @@ public class LiveViewPagerItemAdapter extends PagerAdapter {
     private PagerRedPacketAdapter mRedPacketAdapter;
     private PagerBaoBaoAdapter mBaobaoAdapter;
 
-    public LiveViewPagerItemAdapter(ViewPagerItems pages,CallbackView mCallbackview,PagerRedPacketAdapter mRedPacketAdapter,PagerBaoBaoAdapter mBaobaoAdapter) {
+    public LiveViewPagerItemAdapter(ViewPagerItems pages, CallbackView mCallbackview, PagerRedPacketAdapter mRedPacketAdapter, PagerBaoBaoAdapter mBaobaoAdapter) {
         this.mRedPacketAdapter = mRedPacketAdapter;
         this.mCallbackview = mCallbackview;
         this.pages = pages;

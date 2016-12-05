@@ -62,7 +62,6 @@ import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
 import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.utils.ClipboardUtils;

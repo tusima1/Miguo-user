@@ -290,4 +290,9 @@ public class TuanDetailImagePriceFragment extends TuanDetailBaseFragment impleme
         MGToast.showToast(responseBody);
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

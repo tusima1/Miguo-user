@@ -98,7 +98,7 @@ public class TimeFragment extends BaseFragment
 		sd1 = new SimpleDateFormat("yyyy");
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
-		calendar.add(calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动
+		calendar.add(Calendar.DATE,1);//把日期往后增加一天.整数往后推,负数往前移动
 		Date date1=calendar.getTime();
 		int nowMonth = date.getMonth()+1;
 		mTv_inData.setText(getMonth(nowMonth)+"-"+sd.format(date));
@@ -272,7 +272,7 @@ public class TimeFragment extends BaseFragment
 	}
 	public interface OnTimeListener
 	{
-		public void onTimeListener(String begin,String end);
+		void onTimeListener(String begin, String end);
 	}
 	
 	@Override

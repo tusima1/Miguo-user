@@ -38,7 +38,6 @@
                 android:background="@color/stroke" />
 
             <com.fanwe.library.customview.SDLvCategoryView
-                android:id="@+id/lcv_right1"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1" />
@@ -51,7 +50,6 @@
                 android:background="@color/stroke" />
 
             <com.fanwe.library.customview.SDLvCategoryView
-                android:id="@+id/lcv_right2"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1" />

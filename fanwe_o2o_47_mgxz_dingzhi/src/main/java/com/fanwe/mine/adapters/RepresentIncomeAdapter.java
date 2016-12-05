@@ -16,7 +16,6 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.handmark.pulltorefresh.library.PinnedSectionListView;
-import com.miguo.definition.IntentKey;
 import com.miguo.live.views.utils.BaseUtils;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
         if (null == convertView) {
             mHolder = new Holder();
             convertView = inflater.inflate(R.layout.item_represent_income, null);
-            mHolder.viewLine = (View) convertView.findViewById(R.id.view_line);
+            mHolder.viewLine = convertView.findViewById(R.id.view_line);
             mHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_item_represent_income);
             mHolder.layoutItem = (RelativeLayout) convertView.findViewById(R.id.layout_item_represent_income);
             mHolder.tvMoney = (TextView) convertView.findViewById(R.id.tv_money_item_represent_income);

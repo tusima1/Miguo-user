@@ -1,14 +1,12 @@
 package com.fanwe.user.view;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -30,7 +28,7 @@ import java.util.List;
  * Created by zhouhy on 2016/11/16.
  */
 
-public class InviteActivity extends BaseNewActivity implements CallbackView2 {
+public class InviteActivity extends BaseNewActivity implements CallbackView {
 
     private PullToRefreshPinnedSectionListView mPTR;
     private List<String> titleList;
@@ -62,7 +60,7 @@ public class InviteActivity extends BaseNewActivity implements CallbackView2 {
         mAdapter = new InviteAdapter(this, this, mDatas);
         mPTR.setAdapter(mAdapter);
 
-        ll_empty = (LinearLayout)findViewById(R.id.ll_empty);
+        ll_empty = (LinearLayout) findViewById(R.id.ll_empty);
     }
 
     public void requestData() {
@@ -91,7 +89,7 @@ public class InviteActivity extends BaseNewActivity implements CallbackView2 {
     @Override
     protected void onResume() {
         super.onResume();
-        pageNum=1;
+        pageNum = 1;
     }
 
 
@@ -99,13 +97,15 @@ public class InviteActivity extends BaseNewActivity implements CallbackView2 {
     public void onSuccess(String responseBody) {
 
     }
-    public void showLLEmpty(){
-        if(mAdapter.getCount()<=0){
+
+    public void showLLEmpty() {
+        if (mAdapter.getCount() <= 0) {
             ll_empty.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ll_empty.setVisibility(View.GONE);
         }
     }
+
     /**
      * 是否包含当月的title
      *
@@ -118,7 +118,7 @@ public class InviteActivity extends BaseNewActivity implements CallbackView2 {
             titleList = new ArrayList<>();
         }
         String mm = DateFormat.format("yyyy年MM月", DataFormat.toLong(inTimeInMillis)).toString();
-        mm=yearStr(mm);
+        mm = yearStr(mm);
         boolean result = false;
         if (!SDCollectionUtil.isEmpty(titleList)) {
             for (String value : titleList) {
@@ -144,7 +144,7 @@ public class InviteActivity extends BaseNewActivity implements CallbackView2 {
         if (pageNum == 1) {
             titleList = null;
         }
-        if (datas!=null&&datas.size()>0) {
+        if (datas != null && datas.size() > 0) {
             for (InviteModel bean : datas) {
                 String time = DateFormat.format("HH:mm:ss", DataFormat.toLong(bean.getInsert_time())).toString();
                 String month_date = DateFormat.format("MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();

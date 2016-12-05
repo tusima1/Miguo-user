@@ -175,6 +175,11 @@ public class LiveAuthTagActivity extends Activity implements MyItemClickListener
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {

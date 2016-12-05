@@ -41,7 +41,7 @@ public class Constant {
     }
 
     public enum TitleType {
-        TITLE_NONE, TITLE;
+        TITLE_NONE, TITLE
     }
 
     public static final class SearchTypeMap {
@@ -109,13 +109,6 @@ public class Constant {
         public static final String STORE = "store";
     }
 
-    public static final class JSDetailType {
-        public static final int TUAN = 0;
-        public static final int GOODS = 1;
-        public static final int SUPPLIER = 2;
-        public static final int EVENT = 3;
-        public static final int YOU_HUI = 4;
-    }
 
     public static final class UserLoginState {
         public static final int UN_LOGIN = 0;
@@ -186,7 +179,7 @@ public class Constant {
         /**
          * 已登录,需要验证
          */
-        LOGIN_NEED_VALIDATE;
+        LOGIN_NEED_VALIDATE
     }
 
     public static final class IndexType {

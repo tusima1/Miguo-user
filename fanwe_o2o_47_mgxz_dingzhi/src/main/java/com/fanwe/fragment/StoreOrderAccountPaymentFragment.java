@@ -149,7 +149,7 @@ public class StoreOrderAccountPaymentFragment extends StoreConfirmOrderBaseFragm
 
 	public interface StoreOrderAccountPaymentFragmentListener
 	{
-		public void onPaymentChange(boolean isSelected);
+		void onPaymentChange(boolean isSelected);
 	}
 
 }

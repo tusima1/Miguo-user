@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
@@ -29,9 +29,9 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
 
     private String methodName="";
     private Gson gson;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
 
-    public OrderHttpHelper(CallbackView2 view2) {
+    public OrderHttpHelper(CallbackView view2) {
         this.mView2=view2;
         this.gson=new Gson();
     }

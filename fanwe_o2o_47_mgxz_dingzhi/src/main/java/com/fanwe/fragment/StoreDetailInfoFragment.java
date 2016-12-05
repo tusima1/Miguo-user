@@ -349,6 +349,6 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
     }
 
     public interface OnStoreDetailListener {
-        public void setOnHotelNumberDay(int day);
+        void setOnHotelNumberDay(int day);
     }
 }

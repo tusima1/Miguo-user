@@ -129,6 +129,6 @@ public class MyRedPayMentsFragment extends OrderDetailBaseFragment{
 	}
 	public interface MyredPaymentsFragmentListener
 	{
-		public void onRedPaymentChange(String  mRedIds);
+		void onRedPaymentChange(String mRedIds);
 	}
 }

@@ -77,7 +77,7 @@ public class DealAttrAdapter extends SDBaseAdapter<Deal_attrValueModel>
 
 	public interface DealAttrAdapterListener
 	{
-		public void onClickItem(View v, int position, Deal_attrValueModel model, DealAttrAdapter adapter);
+		void onClickItem(View v, int position, Deal_attrValueModel model, DealAttrAdapter adapter);
 	}
 
 }

@@ -414,4 +414,9 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         });
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
 }

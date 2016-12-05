@@ -28,7 +28,7 @@ public class DynamicModel
 		SLOCATIONCOMMENT,
 
 		/** 活动报名分享 */
-		EVENTSUBMIT;
+		EVENTSUBMIT
 	}
 
 	private int id;

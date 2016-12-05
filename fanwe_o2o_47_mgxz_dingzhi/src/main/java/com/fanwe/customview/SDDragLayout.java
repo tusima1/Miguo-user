@@ -112,11 +112,7 @@ public class SDDragLayout extends LinearLayout
 	public boolean onTouchEvent(MotionEvent ev)
 	{
 		mDragHelper.processTouchEvent(ev);
-		if (mDragHelper.isViewUnder(mDragView, (int) ev.getX(), (int) ev.getY()))
-		{
-			return true;
-		}
-		return false;
+		return mDragHelper.isViewUnder(mDragView, (int) ev.getX(), (int) ev.getY());
 	}
 
 	public static abstract class SDDragLayoutListener

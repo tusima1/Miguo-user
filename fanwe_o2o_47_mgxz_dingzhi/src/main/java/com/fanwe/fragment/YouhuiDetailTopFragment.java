@@ -11,19 +11,13 @@ import android.widget.TextView;
 import com.fanwe.LoginActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.app.AppHelper;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.SDScaleImageView;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.model.BaseActModel;
-import com.fanwe.model.RequestModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.SDTimerDown;
 import com.fanwe.utils.SDTimerDown.SDTimerDownListener;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -195,39 +189,6 @@ public class YouhuiDetailTopFragment extends YouhuiDetailBaseFragment
 	 */
 	private void requestBuyYouHui()
 	{
-		RequestModel model = new RequestModel();
-		model.putCtl("youhui");
-		model.putAct("download_youhui");
-		model.putUser();
-		model.put("data_id", mId);
-		SDRequestCallBack<BaseActModel> handler = new SDRequestCallBack<BaseActModel>()
-		{
-
-			@Override
-			public void onStart()
-			{
-				SDDialogManager.showProgressDialog("请稍候");
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo)
-			{
-				if (actModel.getStatus() == 1)
-				{
-					if (mListener != null)
-					{
-						mListener.onRefresh();
-					}
-				}
-			}
-
-			@Override
-			public void onFinish()
-			{
-				SDDialogManager.dismissProgressDialog();
-			}
-		};
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
 
 	@Override
@@ -247,7 +208,7 @@ public class YouhuiDetailTopFragment extends YouhuiDetailBaseFragment
 
 	public interface YouhuiDetailTopFragmentListener
 	{
-		public void onRefresh();
+		void onRefresh();
 	}
 
 }

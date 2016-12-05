@@ -2,11 +2,9 @@ package com.miguo.dao.impl;
 
 import android.util.Log;
 
-import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.miguo.dao.CheckCitySignDao;
-import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.CheckCitySignBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.CheckCityView;

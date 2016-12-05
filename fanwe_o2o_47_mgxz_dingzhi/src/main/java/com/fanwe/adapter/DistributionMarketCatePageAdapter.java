@@ -42,7 +42,7 @@ public class DistributionMarketCatePageAdapter extends SDBasePagerAdapter<List<M
     }
 
     public interface OnClickCateItemListener {
-        public void onClickItem(int position, View view, ModelHomeClassifyList model);
+        void onClickItem(int position, View view, ModelHomeClassifyList model);
     }
 
 }

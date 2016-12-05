@@ -374,6 +374,11 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {

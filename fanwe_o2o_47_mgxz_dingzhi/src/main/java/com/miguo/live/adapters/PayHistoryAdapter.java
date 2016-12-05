@@ -54,7 +54,7 @@ public class PayHistoryAdapter extends BaseAdapter implements PinnedSectionListV
         if (null == convertView) {
             mHolder = new Holder();
             convertView = inflater.inflate(R.layout.item_pay_history, null);
-            mHolder.viewLine = (View) convertView.findViewById(R.id.view_line);
+            mHolder.viewLine = convertView.findViewById(R.id.view_line);
             mHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_item_pay_history);
             mHolder.layoutItem = (RelativeLayout) convertView.findViewById(R.id.layout_item_pay_history);
             mHolder.tvMoney = (TextView) convertView.findViewById(R.id.tv_money_item_pay_history);

@@ -23,12 +23,13 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.model.getGiftInfo.GiftListBean;
 import com.miguo.live.views.base.BaseLinearLayout;
-import com.miguo.live.views.customviews.RoundedImageView;
 import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by zlh on 2016/9/18.
@@ -158,14 +159,16 @@ public class SmallGifView extends BaseLinearLayout{
          */
         int avatarWidth = leftHeight - dip2px(2 * 2);
         int avatarHeight = avatarWidth;
-        RoundedImageView avatar = new RoundedImageView(getContext());
+        CircleImageView avatar = new CircleImageView(getContext());
         RelativeLayout.LayoutParams avatarParams = getRelativeLayoutParams(avatarWidth, avatarHeight);
         avatarParams.addRule(RelativeLayout.CENTER_VERTICAL);
         avatarParams.setMargins(dip2px(2), 0, 0, 0);
         avatar.setLayoutParams(avatarParams);
-        avatar.setBorderWidth((float)dip2px(2));
+//        avatar.setBorderWidth((float)dip2px(2));
+        avatar.setBorderWidth(dip2px(2));
         avatar.setBorderColor(Color.WHITE);
-        avatar.setOval(true);
+        avatar.setBorderOverlay(true);
+//        avatar.setOval(true);
         avatar.setId(AVATAR_ID);
         avatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
         SDViewBinder.setImageView(gift.getUserAvatar(), avatar);

@@ -63,7 +63,7 @@ public class LiveUserPopHelper implements IHelper, View.OnClickListener {
     private ViewPager viewPager;
 
 
-    public LiveUserPopHelper(Activity activity,View rootView,CallbackView mCallbackView,PagerRedPacketAdapter mRedPacketAdapter,PagerBaoBaoAdapter mBaobaoAdapter,int currentPosition) {
+    public LiveUserPopHelper(Activity activity, View rootView, CallbackView mCallbackView, PagerRedPacketAdapter mRedPacketAdapter, PagerBaoBaoAdapter mBaobaoAdapter, int currentPosition) {
         this.mRedPacketAdapter = mRedPacketAdapter;
         this.mActivity=activity;
         this.rootView=rootView;

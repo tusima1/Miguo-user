@@ -20,7 +20,7 @@ import android.widget.EditText;
 import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.activity.SDBaseActivity;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.title.SDTitleSimple;

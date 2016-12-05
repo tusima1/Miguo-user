@@ -24,20 +24,16 @@ import android.widget.TextView;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getUserBankCardList.ModelUserBankCard;
 import com.fanwe.commission.presenter.MoneyHttpHelper;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
-import com.fanwe.library.adapter.SDSimpleTextAdapter;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
-import com.fanwe.library.dialog.SDDialogMenu;
-import com.fanwe.library.dialog.SDDialogMenu.SDDialogMenuListener;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -54,7 +50,6 @@ import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,7 +58,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class DistributionWithdrawActivity extends BaseActivity implements CallbackView2,
+public class DistributionWithdrawActivity extends BaseActivity implements
         CallbackView {
     @ViewInject(R.id.ll_withdraw_type)
     private LinearLayout mLl_withdraw_type;
@@ -436,42 +431,6 @@ public class DistributionWithdrawActivity extends BaseActivity implements Callba
             return false;
         }
         return true;
-    }
-
-    /**
-     * 点击提现类型
-     */
-    private void clickWithDrawType() {
-        // TODO 弹出dialog选择提现类型
-        SDDialogMenu dialog = new SDDialogMenu(this);
-        String[] arrType = new String[]{"银行卡"};
-        final SDSimpleTextAdapter<String> adapter = new SDSimpleTextAdapter<String>(
-                Arrays.asList(arrType), this);
-        dialog.setmListener(new SDDialogMenuListener() {
-
-            @Override
-            public void onItemClick(View v, int index, SDDialogMenu dialog) {
-                switch (index) {
-                    case 0:
-                        mWithdrawType = 1;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            @Override
-            public void onDismiss(SDDialogMenu dialog) {
-
-            }
-
-            @Override
-            public void onCancelClick(View v, SDDialogMenu dialog) {
-            }
-        });
-        dialog.setAdapter(adapter);
-        dialog.showBottom();
     }
 
     @Override

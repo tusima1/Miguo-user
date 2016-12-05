@@ -6,10 +6,8 @@ import android.text.TextUtils;
 import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
-
 import com.fanwe.GoodsListActivity;
 import com.fanwe.LoginActivity;
-import com.fanwe.NearbyVipActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.ScoresListActivity;
@@ -22,8 +20,8 @@ import com.fanwe.YouHuiListActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.Constant.IndexType;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.constant.ServerUrl;
-import com.fanwe.event.EnumEventTag;
 import com.fanwe.fragment.GoodsListFragment;
 import com.fanwe.fragment.ScoresListFragment;
 import com.fanwe.fragment.StoreListFragment;
@@ -122,7 +120,7 @@ public class AppJsHandler extends BaseJsHandler {
                         EnumEventTag.START_SCAN_QRCODE.ordinal());
                 return;
             case IndexType.NEARUSER:
-                intent = new Intent(App.getApplication(), NearbyVipActivity.class);
+                //NearbyVipActivity
                 break;
             case IndexType.DISTRIBUTION_STORE:
                 intent = new Intent(App.getApplication(),
@@ -221,6 +219,11 @@ public class AppJsHandler extends BaseJsHandler {
                 }
 
                 @Override
+                public void onFinish(String method) {
+
+                }
+
+                @Override
                 public void onFailue(String method, String responseBody) {
 
                 }
@@ -228,7 +231,7 @@ public class AppJsHandler extends BaseJsHandler {
             outSideShoppingCartHelper.addShopCart(
                     fx_user_id,
                     App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
-                    App.getApplication().getToken(), goods_id,"1", add_goods_num, share_record_id);
+                    App.getApplication().getToken(), goods_id, "1", add_goods_num, share_record_id);
 
         } else {
             if (LocalShoppingcartDao.insertSingleNum(cartInfo)) {
@@ -245,17 +248,13 @@ public class AppJsHandler extends BaseJsHandler {
      * @param userId
      */
     @JavascriptInterface
-    public void addCart2(String productId, String add_goods_num,String userId, String share_record_id) {
-       addCart(productId,add_goods_num,userId,share_record_id);
+    public void addCart2(String productId, String add_goods_num, String userId, String share_record_id) {
+        addCart(productId, add_goods_num, userId, share_record_id);
     }
 
 
     public void checkLogin() {
-        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-            ifLogin = true;
-        } else {
-            ifLogin = false;
-        }
+        ifLogin = !TextUtils.isEmpty(App.getInstance().getToken());
     }
 
     @JavascriptInterface
@@ -303,7 +302,7 @@ public class AppJsHandler extends BaseJsHandler {
             }
         }
         if (TextUtils.isEmpty(url)) {
-            url = ServerUrl.SERVER_H5;
+            url = ServerUrl.getAppH5Url();
         }
         final String finalTitle = title;
         final String finalSummary = summary;

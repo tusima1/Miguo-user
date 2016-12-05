@@ -162,6 +162,6 @@ public class MySelfInfo {
     }
 
     public void setJoinRoomWay(boolean isCreateRoom) {
-        this.isCreateRoom = isCreateRoom;
+        MySelfInfo.isCreateRoom = isCreateRoom;
     }
 }

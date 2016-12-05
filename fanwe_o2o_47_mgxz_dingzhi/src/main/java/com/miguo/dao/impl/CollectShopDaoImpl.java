@@ -13,9 +13,7 @@ import com.miguo.view.BaseView;
 import com.miguo.view.CollectShopView;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeMap;
 
 /**

@@ -119,11 +119,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     public void checkLogin() {
-        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-            ifLogin = true;
-        } else {
-            ifLogin = false;
-        }
+        ifLogin = !TextUtils.isEmpty(App.getInstance().getToken());
 
     }
 
@@ -622,6 +618,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
                 dismiss();
             }
         });
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 
 

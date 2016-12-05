@@ -40,7 +40,7 @@ public class HashmapToJson {
         for (int i = 0; i < list.size(); i++) {
             if (i != 0)
                 jsonString += ",";
-            jsonString += toJson.hashMapToJson((HashMap) list.get(i));
+            jsonString += hashMapToJson((HashMap) list.get(i));
         }
         jsonString += "]";
        return jsonString;

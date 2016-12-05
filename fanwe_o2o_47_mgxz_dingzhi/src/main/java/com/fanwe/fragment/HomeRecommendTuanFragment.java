@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.fanwe.TuanListActivity;
 import com.fanwe.adapter.TuanListAdapter;
 import com.fanwe.customview.SDListViewInScroll;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.GoodsModel;

@@ -39,7 +39,7 @@ public class StringTool {
 
     public static boolean isLetter(char c) {
         int k = 0x80;
-        return c / k == 0 ? true : false;
+        return c / k == 0;
     }
 
     /**
@@ -49,11 +49,7 @@ public class StringTool {
      * @return
      */
     public static boolean isNull(String str) {
-        if (str == null || str.trim().equals("") || str.trim().equalsIgnoreCase("null")) {
-            return true;
-        } else {
-            return false;
-        }
+        return str == null || str.trim().equals("") || str.trim().equalsIgnoreCase("null");
     }
 
     /**
@@ -113,10 +109,7 @@ public class StringTool {
         if (source != null) {
             Pattern emoji = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]", Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
             Matcher emojiMatcher = emoji.matcher(source);
-            if (emojiMatcher.find()) {
-                return true;
-            }
-            return false;
+            return emojiMatcher.find();
         }
         return false;
     }

@@ -10,7 +10,6 @@
 
     <!-- 活动相关 -->
     <string name="event">活动</string>
-    <string name="event_list">活动列表</string>
 
     <!-- 优惠相关 -->
     <string name="youhui_coupon">优惠</string>
@@ -29,7 +28,6 @@
     <string name="tuan_gou_coupon_detail">团购券详情</string>
     <string name="tuan_gou_coupon_code">团购券二维码</string>
     <string name="nearby_tuan_gou">附近团购</string>
-    <string name="tuan_gou_and_goods">商品</string>
 
     <!-- 门店相关 -->
     <string name="store_detail">门店详情</string>
@@ -41,7 +39,6 @@
     <string name="suppliers_phone_colon">商家电话：</string>
     <string name="suppliers_address_colon">商家地址：</string>
     <string name="suppliers_introduction">商家介绍</string>
-    <string name="please_input_supplier_name">请输入商家名称</string>
     <string name="nearby_store">附近门店</string>
     <string name="store_location">门店位置</string>
 
@@ -49,8 +46,6 @@
     <string name="recommend_supplier">推荐商家</string>
     <string name="recommend_tuan">推荐团购</string>
     <string name="see_all_tuan">查看全部团购</string>
-    <string name="recommend_goods">推荐商品</string>
-    <string name="see_all_goods">查看全部商品</string>
     <string name="recommend_youhui">推荐优惠</string>
     <string name="see_all_youhui">查看全部优惠</string>
 
@@ -67,8 +62,6 @@
     <string name="click_close">点击收回</string>
 
     <!-- 新增 -->
-    <string name="commit">提现</string>
-    <string name="text_fenxiao_tui">推广我的小店</string>
     <string name="action_settings">Settings</string>
     <string name="store_youhui_text">除详询商家、酒水、特价菜不可用</string>
 

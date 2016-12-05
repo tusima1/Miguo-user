@@ -1,14 +1,12 @@
 package com.fanwe.user.view;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -30,7 +28,7 @@ import java.util.List;
  * Created by zhouhy on 2016/11/24.
  */
 
-public class ExchangeHistoryActivity extends BaseNewActivity implements CallbackView2 {
+public class ExchangeHistoryActivity extends BaseNewActivity implements CallbackView {
 
     private PullToRefreshPinnedSectionListView mPTR;
 
@@ -44,6 +42,7 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
 
     private WalletHttpHelper walletHttpHelper = null;
     private LinearLayout ll_empty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,18 +58,19 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
         mPTR.setMode(PullToRefreshBase.Mode.BOTH);
         mPTR.setOnRefreshListener(mOnRefresherListener2);
         mPTR.setRefreshing();
-        mAdapter = new ExchangeHistoryAdapter(this, this,mDatas);
+        mAdapter = new ExchangeHistoryAdapter(this, this, mDatas);
         mPTR.setAdapter(mAdapter);
-        ll_empty = (LinearLayout)findViewById(R.id.ll_empty);
+        ll_empty = (LinearLayout) findViewById(R.id.ll_empty);
     }
 
-    public void showLLEmpty(){
-        if(mAdapter.getCount()<=0){
+    public void showLLEmpty() {
+        if (mAdapter.getCount() <= 0) {
             ll_empty.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ll_empty.setVisibility(View.GONE);
         }
     }
+
     public void requestData() {
         if (walletHttpHelper == null) {
             walletHttpHelper = new WalletHttpHelper(this);
@@ -103,7 +103,6 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
     }
 
 
-
     /**
      * 是否包含当月的title
      *
@@ -121,17 +120,16 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
         if (!SDCollectionUtil.isEmpty(titleList)) {
             for (String value : titleList) {
                 if (mm.equals(value)) {
-                    result= true;
+                    result = true;
                     break;
                 }
             }
         }
-        if(!result){
+        if (!result) {
             titleList.add(mm);
         }
         return result;
     }
-
 
 
     public void parseData(List<ExchangeDiamondHistoryModel> datas) {
@@ -140,7 +138,7 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
             mDatas = null;
         }
         mDatas = new ArrayList<>();
-        if(pageNum==1){
+        if (pageNum == 1) {
             titleList = null;
         }
         if (!SDCollectionUtil.isEmpty(datas)) {
@@ -157,9 +155,9 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
                     temp.setYear_month(tempTime);
                     mDatas.add(temp);
                 }
-                    bean.setMonth_date(month_date);
-                    bean.setTime_str(time);
-                    mDatas.add(bean);
+                bean.setMonth_date(month_date);
+                bean.setTime_str(time);
+                mDatas.add(bean);
             }
         }
 

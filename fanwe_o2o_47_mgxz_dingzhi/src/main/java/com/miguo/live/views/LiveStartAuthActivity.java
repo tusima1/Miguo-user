@@ -131,6 +131,11 @@ public class LiveStartAuthActivity extends Activity implements CallbackView {
 
     }
 
+    @Override
+    public void onFinish(String method) {
+
+    }
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {

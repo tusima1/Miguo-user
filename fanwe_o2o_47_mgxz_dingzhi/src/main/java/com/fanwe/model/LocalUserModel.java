@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import com.fanwe.app.App;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.sunday.eventbus.SDEventManager;
 
 public class LocalUserModel implements Serializable

@@ -148,6 +148,6 @@ public class MyRefundListGoodsAdapter extends SDBaseAdapter<Uc_orderModelParcela
 	}
 	public interface OnPaymentId
 	{
-		public void setPaymentId(int pay);
+		void setPaymentId(int pay);
 	}
 }

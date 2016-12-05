@@ -22,7 +22,7 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -1359,15 +1359,16 @@ public class PlayBackActivity extends BaseActivity implements ITXLivePlayListene
 
     /*校验数据*/
     public boolean checkDataIsNull(List datas) {
-        if (datas != null && datas.size() > 0) {
-            return false;//不为空
-        } else {
-            return true;//为null
-        }
+        return !(datas != null && datas.size() > 0);
     }
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

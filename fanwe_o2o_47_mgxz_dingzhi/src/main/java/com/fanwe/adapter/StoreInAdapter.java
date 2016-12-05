@@ -201,4 +201,9 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
     public void onFailue(String responseBody) {
 
     }
+
+    @Override
+    public void onFinish(String method) {
+
+    }
 }

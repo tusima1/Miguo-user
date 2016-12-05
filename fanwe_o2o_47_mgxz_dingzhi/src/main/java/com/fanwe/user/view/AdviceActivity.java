@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.fanwe.BaseActivity;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/9/12.
  */
-public class AdviceActivity extends BaseActivity implements CallbackView2 {
+public class AdviceActivity extends BaseActivity implements CallbackView {
     private EditText etAdvice;
     private Button btnSubmit;
     private String strAdvice;

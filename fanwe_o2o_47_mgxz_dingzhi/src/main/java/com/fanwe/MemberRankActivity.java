@@ -14,16 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.RequestModel;
 import com.fanwe.model.Uc_DistModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -31,19 +27,20 @@ import com.fanwe.user.model.getDistrInfo.ModelDistrInfo;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
-import com.github.siyamed.shapeimageview.CircularImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 
 import java.util.List;
 
-public class MemberRankActivity extends BaseActivity implements CallbackView2 {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MemberRankActivity extends BaseActivity implements CallbackView {
     @ViewInject(R.id.iv_user_avatar)
-    private CircularImageView mIv_avatar;
+    private CircleImageView mIv_avatar;
 
     @ViewInject(R.id.tv_name)
     private TextView mTv_name;
@@ -128,25 +125,6 @@ public class MemberRankActivity extends BaseActivity implements CallbackView2 {
     }
 
     private void requestWeb() {
-        RequestModel model = new RequestModel();
-        model.putCtl("page");
-        model.putAct("fx_member");
-
-        InterfaceServer.getInstance().requestInterface(model,
-                new SDRequestCallBack<Uc_DistModel>() {
-
-                    @Override
-                    public void onSuccess(ResponseInfo<String> responseInfo) {
-                        if (actModel.getStatus() == 1) {
-                            bindResult(actModel);
-                        }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        mPull_toRefresh.onRefreshComplete();
-                    }
-                });
     }
 
     protected void bindResult(Uc_DistModel actModel) {

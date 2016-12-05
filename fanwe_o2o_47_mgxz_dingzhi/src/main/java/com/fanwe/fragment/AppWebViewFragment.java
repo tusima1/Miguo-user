@@ -196,7 +196,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         }
         try {
             if (TextUtils.isEmpty(url)) {
-                url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+                url = ServerUrl.getAppH5Url() + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
                         "/share_record_id/" + shareRecordId;
             } else if (!url.contains("share_record_id")) {
                 url = url + "/share_record_id/" + shareRecordId;
@@ -206,7 +206,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
                 url = temp + "/share_record_id/" + shareRecordId;
             }
         } catch (Exception e) {
-            url = ServerUrl.SERVER_H5 + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
+            url = ServerUrl.getAppH5Url() + "user/shop/uid/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id() +
                     "/share_record_id/" + shareRecordId;
         }
         if (TextUtils.isEmpty(mContent)) {
@@ -238,6 +238,11 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

@@ -365,6 +365,6 @@ public class MapSearchFragment extends BaseBaiduMapFragment
 
 	public interface MapSearchModelSupplier
 	{
-		public List<MapSearchBaseModel> getListMapSearchModel();
+		List<MapSearchBaseModel> getListMapSearchModel();
 	}
 }

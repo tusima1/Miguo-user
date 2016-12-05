@@ -23,11 +23,8 @@ public class NetWorkStateUtil {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
-        if (info != null && info.isConnected()
-                && ConnectivityManager.TYPE_WIFI == info.getType()) {
-            return true;
-        }
-        return false;
+        return info != null && info.isConnected()
+                && ConnectivityManager.TYPE_WIFI == info.getType();
     }
 
     /**
@@ -40,11 +37,8 @@ public class NetWorkStateUtil {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
-        if (info != null && info.isConnected()
-                && ConnectivityManager.TYPE_MOBILE == info.getType()) {
-            return true;
-        }
-        return false;
+        return info != null && info.isConnected()
+                && ConnectivityManager.TYPE_MOBILE == info.getType();
     }
 
     /**
@@ -57,10 +51,7 @@ public class NetWorkStateUtil {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
-        if (info != null && info.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
+        return info != null && info.isConnectedOrConnecting();
     }
 
     public static final int NETWORK_TYPE_UNAVAILABLE = -1;

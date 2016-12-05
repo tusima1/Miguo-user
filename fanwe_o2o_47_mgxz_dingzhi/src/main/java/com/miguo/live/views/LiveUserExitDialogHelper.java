@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.view.RedPacketListActivity;
@@ -36,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by didik on 2016/7/26.
  * 直播退出界面
  */
-public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, CallbackView2 {
+public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, CallbackView {
 
     private Activity mActivity;
     private CircleImageView civ_user_image;
@@ -50,7 +50,7 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
     private String count = "";
     private List<ModelRoom> datasList = new ArrayList<>();
     private UserExitAdapter mUserExitAdapter;
-    CallbackView2 callbackView2;
+    CallbackView callbackHH;
 
     public LiveUserExitDialogHelper(Activity activity) {
         this.mActivity = activity;
@@ -163,8 +163,8 @@ public class LiveUserExitDialogHelper implements IHelper, View.OnClickListener, 
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (callbackView2 != null) {
-            callbackView2.onSuccess(method, datas);
+        if (callbackHH != null) {
+            callbackHH.onSuccess(method, datas);
         }
         Message message = new Message();
         if (LiveConstants.CHECK_FOCUS.equals(method)) {

@@ -1,33 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fanwe.adapter.MyMessageAdapter;
-import com.fanwe.adapter.MyMessageAdapter.OnMessageReadListener;
-import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.customview.BadgeView;
-import com.fanwe.customview.SDListViewInScroll;
-import com.fanwe.http.InterfaceServer;
-import com.fanwe.http.listener.SDRequestCallBack;
-import com.fanwe.jpush.MessageHelper;
-import com.fanwe.library.dialog.SDDialogManager;
-import com.miguo.live.views.customviews.MGToast;
-import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.Message;
-import com.fanwe.model.Message_Activty;
-import com.fanwe.model.PageModel;
-import com.fanwe.model.RequestModel;
-import com.fanwe.model.Uc_message_indexActModel;
-import com.fanwe.o2o.miguo.R;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.view.annotation.ViewInject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +9,26 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.fanwe.adapter.MyMessageAdapter;
+import com.fanwe.adapter.MyMessageAdapter.OnMessageReadListener;
+import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.customview.BadgeView;
+import com.fanwe.customview.SDListViewInScroll;
+import com.fanwe.jpush.MessageHelper;
+import com.fanwe.model.Message;
+import com.fanwe.model.Message_Activty;
+import com.fanwe.model.PageModel;
+import com.fanwe.o2o.miguo.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * 消息
  */
@@ -45,8 +37,6 @@ public class MyMessageActivity extends BaseActivity {
 	public static String KEY_MESSAGE = "message";
 
 	public static String NOTICE_TYPE = "extras";
-
-	public static Intent MESSAGE_RECEIVED_ACTION;
 
 	public static boolean isForeground = true;
 
@@ -162,62 +152,7 @@ public class MyMessageActivity extends BaseActivity {
 	}
 
 	protected void requestData(final boolean isLoadMore) {
-		// "type":0, //0全部消息列表, 5活动消息列表
-		RequestModel model = new RequestModel();
-		model.putCtl("uc_message");
-		model.putAct("index");
-		model.put("type", 0);
-		model.putPage(mPage.getPage());
-		SDRequestCallBack<Uc_message_indexActModel> handler = new SDRequestCallBack<Uc_message_indexActModel>() {
-
-			@Override
-			public void onSuccess(ResponseInfo<String> responseInfo) {
-				MessageHelper.updateMessageCount();
-				if (actModel.getStatus() == 1) {
-					if (actModel.getList() != null) {
-
-						mPage.update(actModel.getPage());
-						SDViewUtil.updateAdapterByList(mListModel, actModel.getList(), mAdapter, isLoadMore);
-
-					}
-
-					if (actModel.getActivity() != null) {
-						bindActivityData(actModel.getActivity());
-					}
-				}
-			}
-
-			@Override
-			public void onFailure(HttpException error, String msg) {
-
-			}
-
-			@Override
-			public void onFinish() {
-				SDDialogManager.dismissProgressDialog();
-				mTo_message.onRefreshComplete();
-			}
-		};
-
-		InterfaceServer.getInstance().requestInterface(model, handler);
 	}
-	// private ImageView iv_icon1;
-	// private BadgeView redDotBadge1;
-	// private TextView redDotCount1;
-	// private ImageView red_small_big1;
-	// private ImageView red_more1;
-	// private TextView tv_title1;
-	// private TextView tv_message1;
-	// private TextView tv_time1;
-
-	// 'id': '2',
-	// 'type': '5',
-	// 'rel_id': '855', //关联数据ID
-	// 'act': 'deal', //动作
-	// 'content': '消息测试',
-	// 'status': '1', //1未读 2已读
-	// 'create_time': '2016-06-13 08:00',
-	// 'num': 10 //未读数量
 	protected void bindActivityData(Message_Activty activitiy) {
 		iv_icon1.setBackgroundResource(R.drawable.my_activities_photo);
 		if (activitiy == null) {

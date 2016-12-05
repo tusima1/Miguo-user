@@ -133,13 +133,13 @@ public class SDUrlSourceLoader
 
 	public interface SDUrlSourceLoaderListener
 	{
-		public void onStart();
+		void onStart();
 
-		public void onFinish();
+		void onFinish();
 
-		public void onSuccess(ResponseInfo<File> responseInfo, File file);
+		void onSuccess(ResponseInfo<File> responseInfo, File file);
 
-		public void onFailure(HttpException error, String msg);
+		void onFailure(HttpException error, String msg);
 	}
 
 }

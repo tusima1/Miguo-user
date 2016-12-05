@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fanwe.adapter.WithdrawLogAdapter;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.PageBean;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class DistributionWithdrawLogActivity extends BaseActivity implements CallbackView2 {
+public class DistributionWithdrawLogActivity extends BaseActivity implements CallbackView {
 
     @ViewInject(R.id.ptrlv_content)
     private PullToRefreshListView mPtrlv_content;

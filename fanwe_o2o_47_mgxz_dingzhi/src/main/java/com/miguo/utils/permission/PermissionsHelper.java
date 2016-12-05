@@ -174,9 +174,6 @@ public class PermissionsHelper {
      * @return
      */
     public boolean hasDestroy() {
-        if (mActivity == null || mChecker == null || mNeedPermissions == null) {
-            return true;
-        }
-        return false;
+        return mActivity == null || mChecker == null || mNeedPermissions == null;
     }
 }

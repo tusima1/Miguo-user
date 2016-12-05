@@ -12,7 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.MyDistFragment;
 import com.fanwe.fragment.MyDistFragment.OnDialogData;
@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author cxk
  */
-public class DistributionMyXiaoMiActivity extends BaseActivity implements View.OnClickListener, CallbackView2 {
+public class DistributionMyXiaoMiActivity extends BaseActivity implements View.OnClickListener, CallbackView {
 
     @ViewInject(R.id.tv_textOne)
     private TextView mTv_textOne;

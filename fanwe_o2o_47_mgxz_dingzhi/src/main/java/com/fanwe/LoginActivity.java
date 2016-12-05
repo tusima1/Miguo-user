@@ -17,7 +17,7 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant.EnumLoginState;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.LoginFragment;
 import com.fanwe.fragment.LoginPhoneFragment;
 import com.fanwe.library.common.SDActivityManager;
@@ -328,7 +328,7 @@ public class LoginActivity extends BaseActivity implements CallbackView {
                     nick = data.get("screen_name");
                 } else if (platform.equals(SHARE_MEDIA.SINA)) {
                     platformType = "3";
-                    String returnData = (String) data.get("result");
+                    String returnData = data.get("result");
                     Gson gson = new Gson();
 
                     HashMap<String, Object> maps = gson.fromJson(returnData, HashMap.class);
@@ -526,6 +526,11 @@ public class LoginActivity extends BaseActivity implements CallbackView {
         if(!CommonConstants.GETSHAREID.equals(responseBody)){
             MGToast.showToast(responseBody);
         }
+    }
+
+    @Override
+    public void onFinish(String method) {
+
     }
 
 

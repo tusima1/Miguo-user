@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.constant.GiftId;
 import com.fanwe.model.GiftBean;
 import com.fanwe.o2o.miguo.R;
@@ -43,7 +43,7 @@ import static com.tencent.qcloud.suixinbo.model.CurLiveInfo.roomNum;
 /**
  * Created by didik on 2016/9/11.
  */
-public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, CallbackView2 {
+public class UserSendGiftPopHelper implements IHelper, View.OnClickListener, CallbackView {
 
     private Activity mActivity;
     private PopupWindow popupWindow;

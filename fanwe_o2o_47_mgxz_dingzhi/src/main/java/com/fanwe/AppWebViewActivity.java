@@ -2,7 +2,7 @@ package com.fanwe;
 
 import android.content.Intent;
 
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.activity.WebViewActivity;
 import com.fanwe.library.fragment.WebViewFragment;
 import com.fanwe.library.fragment.WebViewFragment.EnumProgressMode;

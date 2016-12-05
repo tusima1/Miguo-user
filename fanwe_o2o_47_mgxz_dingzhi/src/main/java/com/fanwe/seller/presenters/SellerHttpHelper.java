@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant;
@@ -89,7 +88,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
     private Gson gson;
     private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
     private Context mContext;
     private String token;
 
@@ -102,7 +101,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         userCurrentInfo = App.getInstance().getmUserCurrentInfo();
     }
 
-    public SellerHttpHelper(Context mContext, CallbackView2 mView2, String type) {
+    public SellerHttpHelper(Context mContext, CallbackView mView2, String type) {
         this.mContext = mContext;
         this.mView2 = mView2;
         gson = new Gson();

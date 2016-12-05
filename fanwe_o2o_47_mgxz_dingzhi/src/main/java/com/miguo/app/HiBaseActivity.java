@@ -47,7 +47,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isSavedInstanceStateNull = savedInstanceState == null ? true : false;
+        isSavedInstanceStateNull = savedInstanceState == null;
         init();
         init(savedInstanceState);
     }

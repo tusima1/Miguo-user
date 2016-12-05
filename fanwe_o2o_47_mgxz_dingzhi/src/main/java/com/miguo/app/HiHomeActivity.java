@@ -1,18 +1,12 @@
 package com.miguo.app;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
-import android.net.Uri;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.fanwe.DistributionStoreWapActivity;
-import com.fanwe.MyCaptureActivity;
 import com.fanwe.StoreDetailActivity;
 import com.fanwe.TuanDetailActivity;
-import com.fanwe.app.App;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
@@ -23,17 +17,16 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.utils.ClipboardUtils;
+import com.miguo.utils.dev.DevUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
  */
-public class HiHomeActivity extends HiBaseActivity{
+public class HiHomeActivity extends HiBaseActivity {
 
     String currentCityId;
     /**
@@ -56,6 +49,9 @@ public class HiHomeActivity extends HiBaseActivity{
     private final static String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
 
 
+    private DevUtil devUtil;
+
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_hihome_activity);
@@ -67,22 +63,24 @@ public class HiHomeActivity extends HiBaseActivity{
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         JpushHelper.initJPushConfig();
         setTwiceKeyDownToCloseActivity(true);
+        if (ServerUrl.DEBUG) {
+            devUtil = new DevUtil(this);
+            devUtil.registerShakeListener();
+        }
         return new HiHomeCategory(this);
     }
-
-
 
 
     @Override
     protected void doOnResume() {
 
-        if(null != getCategory()){
+        if (null != getCategory()) {
             getCategory().onRefreshGreeting();
         }
-        if(null != getCategory()){
+        if (null != getCategory()) {
             checkIfInMyFragment();
         }
-        if(!AppRuntimeWorker.getCity_id().equals(getCurrentCityId())){
+        if (!AppRuntimeWorker.getCity_id().equals(getCurrentCityId())) {
             CitylistModel tempBean = new CitylistModel();
             tempBean.setId(AppRuntimeWorker.getCity_id());
             tempBean.setName(AppRuntimeWorker.getCity_name());
@@ -92,10 +90,15 @@ public class HiHomeActivity extends HiBaseActivity{
 
     }
 
+    @Override
+    protected void doOnDestory() {
+        super.doOnDestory();
+        if (devUtil != null) {
+            devUtil.unregisterShakeListener();
+        }
+    }
 
-
-
-    private void checkIfInMyFragment(){
+    private void checkIfInMyFragment() {
         getCategory().checkIfInMyFragment();
     }
 
@@ -110,16 +113,16 @@ public class HiHomeActivity extends HiBaseActivity{
         }
     }
 
-    private void handlerLoginSuccessFromDiamond(){
-        if(null != getCategory()){
+    private void handlerLoginSuccessFromDiamond() {
+        if (null != getCategory()) {
             getCategory().handlerLoginSuccessFromDiamond();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
 
                 /**
                  * 城市列表返回回调
@@ -139,14 +142,15 @@ public class HiHomeActivity extends HiBaseActivity{
         /**
          * 扫码
          */
-        if(resultCode == ResultCode.RESULT_CODE_SCAN_SUCCESS){
-            if(data != null){
+        if (resultCode == ResultCode.RESULT_CODE_SCAN_SUCCESS) {
+            if (data != null) {
                 handlerScanQrCode(data.getStringExtra(IntentKey.EXTRA_RESULT_SUCCESS_STRING));
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     /**
      * //获取完整的域名
      *
@@ -163,44 +167,45 @@ public class HiHomeActivity extends HiBaseActivity{
 
     /**
      * 处理扫码
+     *
      * @param extraString
      */
-    private void handlerScanQrCode(String extraString){
-                //他的小店.
-                if (getCompleteUrl(extraString, SHOP_PATTERN)) {
-                    String user_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
-                    Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
-                    intentStore.putExtra("user_id", user_id);
-                    intentStore.putExtra("url", extraString);
-                    startActivity(intentStore);
-                } else if (getCompleteUrl(extraString, SHOP_DETAIL)) {
-                    //门店详情
-                    String extra_merchant_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
-                    Intent intentStore = new Intent(this, StoreDetailActivity.class);
-                    intentStore.putExtra(EXTRA_MERCHANT_ID, extra_merchant_id);
-                    startActivity(intentStore);
-                } else if (getCompleteUrl(extraString, SHOPPING_DETAIL)) {
-                    //团购详情
-                    String mId = extraString.split("\\/")[extraString.split("\\/").length - 1];
-                    Intent intentStore = new Intent(this, TuanDetailActivity.class);
-                    intentStore.putExtra(EXTRA_GOODS_ID, mId);
-                    startActivity(intentStore);
-                } else {
-                    MGToast.showToast("对不起，无法识别。");
-                }
+    private void handlerScanQrCode(String extraString) {
+        //他的小店.
+        if (getCompleteUrl(extraString, SHOP_PATTERN)) {
+            String user_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
+            Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
+            intentStore.putExtra("user_id", user_id);
+            intentStore.putExtra("url", extraString);
+            startActivity(intentStore);
+        } else if (getCompleteUrl(extraString, SHOP_DETAIL)) {
+            //门店详情
+            String extra_merchant_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
+            Intent intentStore = new Intent(this, StoreDetailActivity.class);
+            intentStore.putExtra(EXTRA_MERCHANT_ID, extra_merchant_id);
+            startActivity(intentStore);
+        } else if (getCompleteUrl(extraString, SHOPPING_DETAIL)) {
+            //团购详情
+            String mId = extraString.split("\\/")[extraString.split("\\/").length - 1];
+            Intent intentStore = new Intent(this, TuanDetailActivity.class);
+            intentStore.putExtra(EXTRA_GOODS_ID, mId);
+            startActivity(intentStore);
+        } else {
+            MGToast.showToast("对不起，无法识别。");
+        }
     }
 
-    private void handlerReturnCityId(Intent data){
-        CitylistModel model = (CitylistModel)data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
+    private void handlerReturnCityId(Intent data) {
+        CitylistModel model = (CitylistModel) data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
         handlerReturnCityId(model);
     }
 
-    private void handlerReturnCityId(CitylistModel model){
+    private void handlerReturnCityId(CitylistModel model) {
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         getCategory().updateFromCityChanged(model);
     }
 
-    private void handlerFunnyFragment(){
+    private void handlerFunnyFragment() {
         getCategory().handlerFunnyFragment();
     }
 

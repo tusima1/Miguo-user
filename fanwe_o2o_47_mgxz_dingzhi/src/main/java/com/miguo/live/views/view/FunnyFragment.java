@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -14,11 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fanwe.base.CallbackView;
-import com.fanwe.base.CallbackView2;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.presenters.CommonHttpHelper;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.HomeFragmentLiveList;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -30,8 +27,6 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.PageModel;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.live.views.adapter.LiveSortTypeAdapter;
-import com.miguo.live.views.customviews.SpaceItemDecoration;
 import com.miguo.ui.view.FunnyTypeHorizantalScrollView;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDBaseEvent;
@@ -50,7 +45,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
 /**
  * Created by Administrator on 2016/10/20.
  */
-public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener,CallbackView2, SDEventObserver,CallbackView, FunnyTypeHorizantalScrollView.OnFunnyTypeChangeListener {
+public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScrollView.OnRecyclerScrollViewListener, SDEventObserver,CallbackView, FunnyTypeHorizantalScrollView.OnFunnyTypeChangeListener {
 
 
     PtrFrameLayout ptrFrameLayout;
@@ -315,11 +310,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
         if(!TextUtils.isEmpty(page.getPage())){
             pageNum = Integer.valueOf(page.getPage());
         }
-        if(this.pageNum==1){
-            isRefresh = true;
-        }else{
-            isRefresh = false;
-        }
+        isRefresh = this.pageNum == 1;
 
             pageNum +=1;
             setPageNum(this.pageNum);

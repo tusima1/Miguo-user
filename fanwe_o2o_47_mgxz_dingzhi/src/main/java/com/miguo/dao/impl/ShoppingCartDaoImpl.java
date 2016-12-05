@@ -5,10 +5,8 @@ import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.miguo.dao.ShoppingCartDao;
 import com.miguo.live.model.LiveConstants;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.view.BaseView;
 import com.miguo.view.ShoppingCartView;
 

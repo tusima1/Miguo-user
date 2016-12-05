@@ -29,7 +29,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.SearchTypeMap;
 import com.fanwe.constant.Constant.SearchTypeNormal;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.SD2LvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView;
 import com.fanwe.library.customview.SDLvCategoryView.SDLvCategoryViewListener;
@@ -189,24 +189,24 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
         //商圈
-        if (SDCollectionUtil.isEmpty(App.getInstance().modelBusinessCircleLists)) {
+        if (SDCollectionUtil.isEmpty(App.modelBusinessCircleLists)) {
             sellerHttpHelper.getBusinessCircleList(AppRuntimeWorker.getCity_id());
         } else {
-            modelBusinessCircleLists = App.getInstance().modelBusinessCircleLists;
+            modelBusinessCircleLists = App.modelBusinessCircleLists;
             bindMiddleCategoryViewData(modelBusinessCircleLists);
         }
         //类别
-        if (SDCollectionUtil.isEmpty(App.getInstance().modelClassifyLists)) {
+        if (SDCollectionUtil.isEmpty(App.modelClassifyLists)) {
             sellerHttpHelper.getClassifyList();
         } else {
-            modelClassifyLists = App.getInstance().modelClassifyLists;
+            modelClassifyLists = App.modelClassifyLists;
             bindLeftCategoryViewData(modelClassifyLists);
         }
         //排序
-        if (SDCollectionUtil.isEmpty(App.getInstance().navs)) {
+        if (SDCollectionUtil.isEmpty(App.navs)) {
             sellerHttpHelper.getOrderByList();
         } else {
-            navs = App.getInstance().navs;
+            navs = App.navs;
             bindRightCategoryViewData(navs);
         }
     }
@@ -544,17 +544,17 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
             //商圈
             modelBusinessCircleLists = datas;
             message.what = 0;
-            App.getInstance().modelBusinessCircleLists = datas;
+            App.modelBusinessCircleLists = datas;
         } else if (SellerConstants.CLASSIFY_LIST.equals(method)) {
             //类别
             modelClassifyLists = datas;
             message.what = 1;
-            App.getInstance().modelClassifyLists = datas;
+            App.modelClassifyLists = datas;
         } else if (SellerConstants.ORDER_BY_LIST.equals(method)) {
             //排序
             navs = datas;
             message.what = 2;
-            App.getInstance().navs = datas;
+            App.navs = datas;
         } else if (SellerConstants.GROUP_BUY.equals(method)) {
             //团购
             groupItems = datas;
@@ -565,6 +565,11 @@ public class TuanListFragment extends BaseFragment implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

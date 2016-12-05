@@ -1,7 +1,9 @@
 package com.fanwe.module.user;
 
-import java.io.File;
-import java.util.Arrays;
+import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 import com.fanwe.UploadUserHeadActivity;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
@@ -11,11 +13,8 @@ import com.fanwe.library.handler.PhotoHandler;
 import com.fanwe.library.handler.PhotoHandler.PhotoHandlerListener;
 import com.miguo.live.views.customviews.MGToast;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
+import java.io.File;
+import java.util.Arrays;
 
 public class UserFaceModule {
 	
@@ -29,10 +28,6 @@ public class UserFaceModule {
 		
 	}
 	
-	public UserFaceModule(Fragment frag2) {
-		
-	}
-
 	public void initPhotoHandler() {
 		
 		mPhotoHandler = new PhotoHandler(mFragAct);

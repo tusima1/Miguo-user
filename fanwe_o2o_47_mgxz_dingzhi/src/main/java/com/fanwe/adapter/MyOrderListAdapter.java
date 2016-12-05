@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
@@ -213,7 +213,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut>{
 
             @Override
             public void onClickConfirm(View v, SDDialogCustom dialog) {
-                new OrderHttpHelper(new CallbackView2() {
+                new OrderHttpHelper(new CallbackView() {
                     @Override
                     public void onSuccess(String responseBody) {
 
@@ -269,7 +269,7 @@ public class MyOrderListAdapter extends SDBaseAdapter<ModelOrderItemOut>{
 
             @Override
             public void onClickConfirm(View v, SDDialogCustom dialog) {
-                new OrderHttpHelper(new CallbackView2() {
+                new OrderHttpHelper(new CallbackView() {
                     @Override
                     public void onSuccess(String responseBody) {
 

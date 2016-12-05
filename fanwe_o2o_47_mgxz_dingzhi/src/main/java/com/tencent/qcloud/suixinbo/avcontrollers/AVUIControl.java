@@ -1050,8 +1050,6 @@ public class AVUIControl extends GLViewGroup {
         }
     }
 
-    ;
-
     class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
@@ -1175,8 +1173,6 @@ public class AVUIControl extends GLViewGroup {
         }
     }
 
-    ;
-
     class ScaleGestureListener implements ScaleGestureDetector.OnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
@@ -1207,8 +1203,6 @@ public class AVUIControl extends GLViewGroup {
     enum MoveDistanceLevel {
         e_MoveDistance_Min, e_MoveDistance_Positive, e_MoveDistance_Negative
     }
-
-    ;
 
     int getSmallViewDstPosition(int startPosition, int nStartX, int nStartY, int nEndX, int nEndY) {
         int thresholdX = mContext.getApplicationContext().getResources().getDimensionPixelSize(R.dimen.video_smallview_move_thresholdX);

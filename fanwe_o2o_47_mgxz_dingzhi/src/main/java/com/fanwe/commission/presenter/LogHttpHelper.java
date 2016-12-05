@@ -3,7 +3,7 @@ package com.fanwe.commission.presenter;
 import android.util.Log;
 
 import com.fanwe.app.App;
-import com.fanwe.base.CallbackView2;
+import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
@@ -25,9 +25,9 @@ import java.util.TreeMap;
 public class LogHttpHelper extends OldCallbackHelper implements IHelper{
 
     private Gson gson;
-    private CallbackView2 mView2;
+    private CallbackView mView2;
 
-    public LogHttpHelper(CallbackView2 mView2) {
+    public LogHttpHelper(CallbackView mView2) {
         this.mView2=mView2;
         this.gson=new Gson();
     }

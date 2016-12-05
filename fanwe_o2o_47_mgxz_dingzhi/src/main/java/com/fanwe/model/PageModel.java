@@ -51,13 +51,7 @@ public class PageModel
 	public boolean increment()
 	{
 		page++;
-		if (page > page_total)
-		{
-			return false;
-		} else
-		{
-			return true;
-		}
+		return page <= page_total;
 	}
 
 	public void resetPage()

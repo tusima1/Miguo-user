@@ -15,7 +15,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.SDStickyScrollView;
-import com.fanwe.event.EnumEventTag;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.fragment.TuanDetailAttrsFragment;
 import com.fanwe.fragment.TuanDetailBuyNoticelFragment;
 import com.fanwe.fragment.TuanDetailCombinedPackagesFragment;
@@ -310,7 +310,7 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
             }
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 if (!TextUtils.isEmpty(fx_id)) {
                     clickUrl = clickUrl + "/ref_id/" + fx_id;
@@ -394,6 +394,11 @@ public class TuanDetailActivity extends BaseActivity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
+
+    }
+
+    @Override
+    public void onFinish(String method) {
 
     }
 

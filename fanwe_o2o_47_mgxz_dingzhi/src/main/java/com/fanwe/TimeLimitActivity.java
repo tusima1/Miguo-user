@@ -107,7 +107,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                setCanRefresh( newState == 0 ? true : false);
+                setCanRefresh(newState == 0);
                 Log.d(tag, "new state: " + newState);
                 if(newState == 0){
                     if(isNeedLoadmore()){
@@ -189,7 +189,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
             }
             String clickUrl = share.getClickurl();
             if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.SERVER_H5;
+                clickUrl = ServerUrl.getAppH5Url();
             } else {
                 clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
             }

@@ -1,8 +1,6 @@
 include ':libcommon'
-include ':library_PhotoViewmaster'
 include ':library_PullToRefresh'
 include ':library_ZxingDemo'
-include ':library_androidshapeimageview'
 include ':library_sdDialog'
 include ':library_umeng_share_project'
 include ':library_xml_drawable_o2o'
