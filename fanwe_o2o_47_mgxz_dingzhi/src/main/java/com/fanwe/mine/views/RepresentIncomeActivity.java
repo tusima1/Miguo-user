@@ -49,6 +49,7 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
     private ResultCommissionLog resultCommissionLog;
     private RepresentIncomeAdapter mRepresentIncomeAdapter;
     private LinearLayout ll_empty;
+    private List<String> titleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +158,7 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
                 if (!containDate(bean.getInsert_time())) {
                     ModelCommissionLog temp = new ModelCommissionLog();
                     temp.setType(1);
-                    String tempTime = DateFormat.format("yyyy年MM月", DataFormat.toLong(bean.getInsert_time())).toString();
+                    String tempTime = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();
                     tempTime = yearStr(tempTime);
                     temp.setInsert_time(tempTime);
                     mDatas.add(temp);
@@ -188,17 +189,23 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
             });
             if (isRefresh) {
                 mDatas.clear();
+                if(titleList!=null) {
+                    titleList.clear();
+                }
             }
             items = resultCommissionLog.getList();
             if (!SDCollectionUtil.isEmpty(items)) {
                 for (ModelCommissionLog bean : items) {
                     String time = DateFormat.format("HH:mm:ss", DataFormat.toLong(bean.getInsert_time())).toString();
                     if (!containDate(bean.getInsert_time())) {
+                        //增加头部记录。
                         ModelCommissionLog temp = new ModelCommissionLog();
                         temp.setType(1);
                         String tempTime = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();
+                        tempTime = yearStr(tempTime);
                         temp.setInsert_time(tempTime);
                         mDatas.add(temp);
+
                         bean.setInsert_time(time);
                         mDatas.add(bean);
                     } else {
@@ -227,20 +234,25 @@ public class RepresentIncomeActivity extends Activity implements CallbackView2 {
      * @return
      */
     private boolean containDate(String inTimeInMillis) {
-        String mm = DateFormat.format("yyyy年MM月", DataFormat.toLong(inTimeInMillis)).toString();
-        mm=yearStr(mm);
 
-        if (!SDCollectionUtil.isEmpty(mDatas)) {
-            for (ModelCommissionLog bean : mDatas) {
-                if (1 == bean.getType()) {
-                    if (mm.equals(bean.getInsert_time())) {
-                        return true;
-                    }
+        if (titleList == null) {
+            titleList = new ArrayList<>();
+        }
+        String mm = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(inTimeInMillis)).toString();
+        mm=yearStr(mm);
+        boolean result = false;
+        if (!SDCollectionUtil.isEmpty(titleList)) {
+            for (String value : titleList) {
+                if (mm.equals(value)) {
+                    result = true;
+                    break;
                 }
             }
-            return false;
         }
-        return false;
+        if (!result) {
+            titleList.add(mm);
+        }
+        return result;
     }
 
     private String yearStr(String value) {
