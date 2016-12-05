@@ -15,13 +15,12 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.cache.CacheUtil;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.CurrCityModelDao;
-import com.fanwe.dao.InitActModelDao;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.model.CitylistModel;
-import com.fanwe.model.Init_indexActModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
@@ -32,9 +31,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
-import com.miguo.utils.dev.DevCode;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.dev.DevCode;
 import com.miguo.utils.dev.SPUtil;
 import com.miguo.utils.permission.DangerousPermissions;
 import com.miguo.utils.permission.PermissionsHelper;
@@ -134,22 +133,31 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
     private void init() {
         setting = getSharedPreferences("miguo", Context.MODE_PRIVATE);
         initAppApi();
-        loadCurrCity();
         sellerHttpHelper = new SellerHttpHelper(this, this);
         startStatistics();
         getDeviceId();
+        getCityOldVersion();
         loadCityFile();
     }
 
     private void initAppApi() {
-        if (ServerUrl.DEBUG){
-            String javaApi = (String) SPUtil.getData(this, DevCode.API_JAVA, ServerUrl.TEST ? DevCode.SERVER_API_JAVA_TEST_URL:DevCode
+        if (ServerUrl.DEBUG) {
+            String javaApi = (String) SPUtil.getData(this, DevCode.API_JAVA, ServerUrl.TEST ? DevCode.SERVER_API_JAVA_TEST_URL : DevCode
                     .SERVER_API_JAVA_DEV_URL);
-            String h5Api = (String) SPUtil.getData(this, DevCode.API_H5, ServerUrl.TEST ? DevCode.SERVER_H5_TEST:DevCode
+            String h5Api = (String) SPUtil.getData(this, DevCode.API_H5, ServerUrl.TEST ? DevCode.SERVER_H5_TEST : DevCode
                     .SERVER_API_JAVA_DEV_URL);
             ServerUrl.setServerApi(javaApi);
             ServerUrl.setServerH5Using(h5Api);
         }
+    }
+
+    CitylistModel cityOldVersion;
+
+    /**
+     * 获取老版本选择的城市
+     */
+    private void getCityOldVersion() {
+        cityOldVersion = CurrCityModelDao.queryModel();
     }
 
     /**
@@ -170,8 +178,10 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
                     Type type = new TypeToken<List<ModelCityList>>() {
                     }.getType();
                     Object object = gson.fromJson(city, type);
-                    tempDatas = (ArrayList<ModelCityList>) object;
+                    tempDatasCity = (ArrayList<ModelCityList>) object;
                 }
+                //保存数据
+                saveCityList();
                 Message message = new Message();
                 message.what = 1;
                 mHandler.sendMessage(message);
@@ -202,26 +212,6 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
             e.printStackTrace();
         }
         return buffer.toString();
-    }
-
-    /**
-     * 加载用户选择的城市
-     */
-    private void loadCurrCity() {
-        Init_indexActModel actModel = InitActModelDao.queryModel();
-        if (actModel == null) {
-            actModel = new Init_indexActModel();
-        }
-        //当前选择的城市
-        CitylistModel currCity = CurrCityModelDao.queryModel();
-        if (currCity != null) {
-            String id = currCity.getId();
-            String name = currCity.getName();
-            actModel.setCity_id(id);
-            actModel.setCity_name(name);
-        }
-        InitActModelDao.insertOrUpdateModel(actModel);
-        startMainActivity();
     }
 
     /**
@@ -272,14 +262,7 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
                     }
                 }, waitTime - offset);
             }
-
-
         }
-
-//         Intent intent = new Intent(getApplicationContext(),
-//         GuideActivity.class);
-
-
     }
 
     @Override
@@ -298,14 +281,15 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     }
 
-    private List<CitylistModel> citylist = new ArrayList<>();
-    private List<CitylistModel> hot_city = new ArrayList<>();
-    private ArrayList<ModelCityList> tempDatas;
+    private List<ModelCityList> citylist = new ArrayList<>();
+    private List<ModelCityList> hot_city = new ArrayList<>();
+    private ArrayList<ModelCityList> tempDatasCity;
+    private ModelCityList defaultCity;
 
     @Override
     public void onSuccess(String method, List datas) {
         if (SellerConstants.CITY_LIST.equals(method)) {
-            tempDatas = (ArrayList<ModelCityList>) datas;
+            tempDatasCity = (ArrayList<ModelCityList>) datas;
             Message message = new Message();
             message.what = 0;
             mHandler.sendMessage(message);
@@ -316,41 +300,54 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    saveCityList();
+                    new Thread(new Runnable() {
+                        public void run() {
+                            saveCityList();
+                        }
+                    }).start();
                     break;
                 case 1:
-                    saveCityList();
                     //请求城市列表
                     requestInitInterface();
+                    startMainActivity();
                     break;
             }
         }
     };
 
+    @Override
+    public void onFailue(String responseBody) {
+
+    }
+
     /**
      * 保存城市列表
      */
     private void saveCityList() {
-        if (!SDCollectionUtil.isEmpty(tempDatas)) {
+        if (!SDCollectionUtil.isEmpty(tempDatasCity)) {
+            //获取城市列表、热门城市、默认城市
             generalCityList();
-            Init_indexActModel actModel = InitActModelDao.queryModel();
-            if (actModel == null) {
-                actModel = new Init_indexActModel();
-            }
-            actModel.setCitylist(citylist);
-            actModel.setHot_city(hot_city);
-            if (TextUtils.isEmpty(actModel.getCity_id())) {
+            CacheUtil.getInstance().saveCityList(citylist);
+            CacheUtil.getInstance().saveCityListHot(hot_city);
+            //缓存当前城市
+            if (CacheUtil.getInstance().getCityCurr() == null || TextUtils.isEmpty(CacheUtil.getInstance().getCityCurr().getId())) {
                 if (defaultCity != null) {
-                    actModel.setCity_id(defaultCity.getId());
-                    actModel.setCity_name(defaultCity.getName());
-                    AppRuntimeWorker.setCity_name(defaultCity.getName());
+                    CacheUtil.getInstance().saveCityCurr(defaultCity);
                 }
             }
-            InitActModelDao.insertOrUpdateModel(actModel);
+            if (CacheUtil.getInstance().getCityCurr() != null && !TextUtils.isEmpty(CacheUtil.getInstance().getCityCurr().getId())) {
+                AppRuntimeWorker.setCityNameByModel(CacheUtil.getInstance().getCityCurr());
+            } else {
+                if (cityOldVersion != null && !TextUtils.isEmpty(cityOldVersion.getName())) {
+                    AppRuntimeWorker.setCityName(cityOldVersion.getName());
+                    CurrCityModelDao.deleteAllModel();
+                } else {
+                    AppRuntimeWorker.setCityNameByModel(defaultCity);
+                }
+            }
         }
-    }
 
-    ModelCityList defaultCity;
+    }
 
     /**
      * 生成有效城市
@@ -358,16 +355,16 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
     private void generalCityList() {
         citylist.clear();
         hot_city.clear();
-        for (int i = 0; i < tempDatas.size(); i++) {
-            ModelCityList bean = tempDatas.get(i);
-            CitylistModel city = new CitylistModel();
+        for (int i = 0; i < tempDatasCity.size(); i++) {
+            ModelCityList bean = tempDatasCity.get(i);
+            ModelCityList city = new ModelCityList();
             if (TextUtils.isEmpty(bean.getUname())) {
                 //拼音为空，过滤掉
                 continue;
             } else {
                 city.setId(bean.getId());
                 city.setName(bean.getName());
-                city.setPy(bean.getUname());
+                city.setUname(bean.getUname());
                 citylist.add(city);
                 if ("1".equals(bean.getIs_hot())) {
                     hot_city.add(city);
@@ -380,10 +377,6 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     }
 
-    @Override
-    public void onFailue(String responseBody) {
-
-    }
 
     @Override
     public void onFinish(String method) {

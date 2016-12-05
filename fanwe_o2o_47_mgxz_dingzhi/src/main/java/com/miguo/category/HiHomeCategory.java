@@ -21,12 +21,12 @@ import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
-import com.fanwe.model.CitylistModel;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
@@ -504,17 +504,13 @@ public class HiHomeCategory extends Category implements
                 .setmListener(new SDDialogCustom.SDDialogCustomListener() {
                     @Override
                     public void onDismiss(SDDialogCustom dialog) {
-
                     }
 
                     @Override
                     public void onClickConfirm(View v, SDDialogCustom dialog) {
-                        AppRuntimeWorker.setCity_name(location);
-                        CitylistModel tempBean = new CitylistModel();
-                        tempBean.setId(AppRuntimeWorker.getCityIdByCityName(location));
-                        tempBean.setName(location);
-                        tempBean.setPy(AppRuntimeWorker.getCityPyByCityName(location));
-                        updateFromCityChanged(tempBean);
+                        ModelCityList bean = AppRuntimeWorker.getCityByCityName(location);
+                        AppRuntimeWorker.setCityNameByModel(bean);
+                        updateFromCityChanged(bean);
                     }
 
                     @Override
@@ -534,7 +530,7 @@ public class HiHomeCategory extends Category implements
         homeViewPager.setCurrentItem(position);
     }
 
-    public void updateFromCityChanged(CitylistModel model) {
+    public void updateFromCityChanged(ModelCityList model) {
         ((HiHomeFragment) fragments.get(0)).updateFromCityChanged(model);
     }
 

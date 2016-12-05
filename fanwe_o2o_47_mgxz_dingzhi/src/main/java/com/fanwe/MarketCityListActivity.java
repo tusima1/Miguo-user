@@ -1,11 +1,5 @@
 package com.fanwe;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,17 +27,23 @@ import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
-import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.library.utils.ViewHolder;
-import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.utils.CharacterParser;
 import com.fanwe.utils.PinyinComparator;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.live.views.customviews.MGToast;
 import com.sunday.eventbus.SDBaseEvent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 城市列表
@@ -77,9 +77,9 @@ public class MarketCityListActivity extends BaseActivity {
     private SideBar mSbLetters;
 
 
-    private List<CitylistModel> mListModel = new ArrayList<CitylistModel>();
-    private List<CitylistModel> mListModelHotCity;
-    private List<CitylistModel> mListFilterModel = new ArrayList<CitylistModel>();
+    private List<ModelCityList> mListModel = new ArrayList<ModelCityList>();
+    private List<ModelCityList> mListModelHotCity;
+    private List<ModelCityList> mListFilterModel = new ArrayList<ModelCityList>();
 
 
     private Intent data;
@@ -109,7 +109,7 @@ public class MarketCityListActivity extends BaseActivity {
         if (!SDCollectionUtil.isEmpty(mListModelHotCity)) {
             SDViewUtil.show(mLl_hot_city);
             mFlow_hot_city.removeAllViews();
-            for (CitylistModel model : mListModelHotCity) {
+            for (ModelCityList model : mListModelHotCity) {
                 View cityView = createHotCityButton(model);
                 if (cityView != null) {
                     mFlow_hot_city.addView(cityView);
@@ -120,7 +120,7 @@ public class MarketCityListActivity extends BaseActivity {
         }
     }
 
-    private TextView createHotCityButton(final CitylistModel model) {
+    private TextView createHotCityButton(final ModelCityList model) {
         TextView btn = null;
         if (model != null) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
@@ -214,7 +214,7 @@ public class MarketCityListActivity extends BaseActivity {
         if (TextUtils.isEmpty(key)) {
             mListFilterModel.addAll(mListModel);
         } else {
-            for (CitylistModel city : mListModel) {
+            for (ModelCityList city : mListModel) {
                 String name = city.getName();
                 if (name.indexOf(key) != -1
                         || CharacterParser.convertChs2PinYin(name).startsWith(
@@ -233,7 +233,7 @@ public class MarketCityListActivity extends BaseActivity {
     }
 
     private void bindDataFromDb() {
-        List<CitylistModel> listDbModel = AppRuntimeWorker.getCitylist();
+        List<ModelCityList> listDbModel = AppRuntimeWorker.getCitylist();
         if (listDbModel != null && listDbModel.size() > 0) {
             mListModel.addAll(listDbModel);
         } else {
@@ -314,7 +314,7 @@ public class MarketCityListActivity extends BaseActivity {
         cityData.putString("city", city);
         cityData.putString("cityID", cityID);
         data.putExtras(cityData);
-        AppRuntimeWorker.setCity_name(city);
+        AppRuntimeWorker.setCityName(city);
         setResult(MarketFragment.CITY_RESULT, data);
         finish();
     }
@@ -323,13 +323,13 @@ public class MarketCityListActivity extends BaseActivity {
 
     private OnCityChangeListener listener;
 
-    private class MarketCityListAdapter extends SDBaseAdapter<CitylistModel> {
+    private class MarketCityListAdapter extends SDBaseAdapter<ModelCityList> {
 
         private int mTag;
         private Map<Integer, Integer> mMapLettersAsciisFirstPostion = new HashMap<Integer, Integer>();
         private PinyinComparator mComparator = new PinyinComparator();
 
-        public MarketCityListAdapter(List<CitylistModel> listModel, Activity activity, int tag) {
+        public MarketCityListAdapter(List<ModelCityList> listModel, Activity activity, int tag) {
             super(listModel, activity);
             this.mTag = tag;
         }
@@ -344,7 +344,7 @@ public class MarketCityListActivity extends BaseActivity {
             TextView tvName = ViewHolder.get(convertView, R.id.item_lv_citylist_tv_city_name);
             LinearLayout ll_content = ViewHolder.get(convertView, R.id.ll_content);
 
-            final CitylistModel model = getItem(position);
+            final ModelCityList model = getItem(position);
             if (model != null) {
                 // 根据position获取分类的首字母的Char ascii值
                 int modelFirstLettersAscii = getModelFirstLettersAscii(model);
@@ -388,7 +388,7 @@ public class MarketCityListActivity extends BaseActivity {
             return convertView;
         }
 
-        public int getModelFirstLettersAscii(CitylistModel model) {
+        public int getModelFirstLettersAscii(ModelCityList model) {
             if (model != null) {
                 String letters = model.getSortLetters();
                 if (!TextUtils.isEmpty(letters) && letters.length() > 0) {

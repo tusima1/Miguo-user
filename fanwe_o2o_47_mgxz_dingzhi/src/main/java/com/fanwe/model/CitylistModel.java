@@ -1,12 +1,14 @@
 package com.fanwe.model;
 
-import java.io.Serializable;
-
 import android.text.TextUtils;
 
 import com.fanwe.utils.CharacterParser;
 
-public class CitylistModel implements Serializable {
+/**
+ * Created by Administrator on 2016/12/1.
+ */
+
+public class CitylistModel {
     private static final long serialVersionUID = 1L;
     private String id;
     private String name;
@@ -58,5 +60,4 @@ public class CitylistModel implements Serializable {
         }
         sortLetters = firstLetters;
     }
-
 }

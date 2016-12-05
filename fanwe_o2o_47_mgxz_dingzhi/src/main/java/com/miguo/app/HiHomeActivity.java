@@ -1,6 +1,7 @@
 package com.miguo.app;
 
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.StoreDetailActivity;
@@ -8,8 +9,8 @@ import com.fanwe.TuanDetailActivity;
 import com.fanwe.constant.EnumEventTag;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.jpush.JpushHelper;
-import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
@@ -80,14 +81,11 @@ public class HiHomeActivity extends HiBaseActivity {
         if (null != getCategory()) {
             checkIfInMyFragment();
         }
-        if (!AppRuntimeWorker.getCity_id().equals(getCurrentCityId())) {
-            CitylistModel tempBean = new CitylistModel();
-            tempBean.setId(AppRuntimeWorker.getCity_id());
-            tempBean.setName(AppRuntimeWorker.getCity_name());
-            tempBean.setPy(AppRuntimeWorker.getCityPyByCityName(AppRuntimeWorker.getCity_id()));
-            handlerReturnCityId(tempBean);
+        if (!TextUtils.isEmpty(AppRuntimeWorker.getCity_id())) {
+            if (!AppRuntimeWorker.getCity_id().equals(getCurrentCityId())) {
+                handlerReturnCityId(AppRuntimeWorker.getCityCurr());
+            }
         }
-
     }
 
     @Override
@@ -105,9 +103,6 @@ public class HiHomeActivity extends HiBaseActivity {
     @Override
     public void onEventMainThread(SDBaseEvent event) {
         switch (EnumEventTag.valueOf(event.getTagInt())) {
-//            case LOCATION_SUCCESS:
-//                loginSuccessCallback();
-//                break;
             default:
                 break;
         }
@@ -196,11 +191,11 @@ public class HiHomeActivity extends HiBaseActivity {
     }
 
     private void handlerReturnCityId(Intent data) {
-        CitylistModel model = (CitylistModel) data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
+        ModelCityList model = (ModelCityList) data.getSerializableExtra(IntentKey.RETURN_CITY_DATA);
         handlerReturnCityId(model);
     }
 
-    private void handlerReturnCityId(CitylistModel model) {
+    private void handlerReturnCityId(ModelCityList model) {
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         getCategory().updateFromCityChanged(model);
     }

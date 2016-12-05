@@ -5,14 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.miguo.category.fragment.HiHomeFragmentCategory;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/13.
  */
-public class HiHomeFragment extends HiBaseFragment{
+public class HiHomeFragment extends HiBaseFragment {
 
     @Override
     protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,26 +24,26 @@ public class HiHomeFragment extends HiBaseFragment{
         category = new HiHomeFragmentCategory(cacheView, this);
     }
 
-    public void updateFromCityChanged(CitylistModel model){
-        if(null != getCategory()){
+    public void updateFromCityChanged(ModelCityList model) {
+        if (null != getCategory()) {
             getCategory().updateFromCityChanged(model);
         }
     }
 
-    public void onRefreshGreeting(){
-        if(null != getCategory()) {
+    public void onRefreshGreeting() {
+        if (null != getCategory()) {
             getCategory().onRefreshGreeting();
         }
     }
 
-    public void showTitleAndTab(){
-        if(null != getCategory()){
+    public void showTitleAndTab() {
+        if (null != getCategory()) {
             getCategory().showTitleAndTab();
         }
     }
 
-    public HiHomeFragmentCategory getCategory(){
-        return (HiHomeFragmentCategory)category;
+    public HiHomeFragmentCategory getCategory() {
+        return (HiHomeFragmentCategory) category;
     }
 
 }

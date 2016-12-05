@@ -15,7 +15,6 @@ import com.fanwe.dao.barry.impl.GetSpecialListDaoImpl;
 import com.fanwe.dao.barry.view.GetSpecialListView;
 import com.fanwe.fragment.BaseFragment;
 import com.fanwe.model.EventModel_List;
-import com.fanwe.model.Index_indexActModel;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.HomeTuanTimeLimitView;
@@ -54,10 +53,6 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
         super.init();
         initData();
         onRefresh();
-    }
-
-    public void setmIndexModel(Index_indexActModel indexModel) {
-        this.mListModel = indexModel.getSpecial().getList();
     }
 
     private void initData(){

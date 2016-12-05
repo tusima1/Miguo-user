@@ -10,7 +10,7 @@ public class ServerUrl {
     public static final boolean DEBUG =true;//默认开启debug,上线改为false即可,其他接口API不要改动
 
     /*************************打测试包******************************/
-    public static final boolean TEST=false;//给测试使用请设置为true
+    public static final boolean TEST=true;//给测试使用请设置为true
 
     /*********************** Do Not Modify ***********************/
     public static final String KEY_AES = "FANWE5LMUQC436IM";

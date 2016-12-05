@@ -28,9 +28,9 @@ import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDResourcesUtil;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDViewUtil;
-import com.fanwe.model.CitylistModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.CharacterParser;
 import com.fanwe.work.AppRuntimeWorker;
@@ -65,9 +65,9 @@ public class HoltelSearchCityActivity extends BaseActivity {
 
     public static int result_Code = 675;
 
-    private List<CitylistModel> mListModel = new ArrayList<CitylistModel>();
-    private List<CitylistModel> mListModelHotCity;
-    private List<CitylistModel> mListFilterModel = new ArrayList<CitylistModel>();
+    private List<ModelCityList> mListModel = new ArrayList<ModelCityList>();
+    private List<ModelCityList> mListModelHotCity;
+    private List<ModelCityList> mListFilterModel = new ArrayList<ModelCityList>();
 
     private CityListAdapter mAdapter;
 
@@ -96,7 +96,7 @@ public class HoltelSearchCityActivity extends BaseActivity {
         if (!SDCollectionUtil.isEmpty(mListModelHotCity)) {
             SDViewUtil.show(mLl_hot_city);
             mFlow_hot_city.removeAllViews();
-            for (CitylistModel model : mListModelHotCity) {
+            for (ModelCityList model : mListModelHotCity) {
                 View cityView = createHotCityButton(model);
                 if (cityView != null) {
                     mFlow_hot_city.addView(cityView);
@@ -107,7 +107,7 @@ public class HoltelSearchCityActivity extends BaseActivity {
         }
     }
 
-    private TextView createHotCityButton(final CitylistModel model) {
+    private TextView createHotCityButton(final ModelCityList model) {
         TextView btn = null;
         if (model != null) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SDViewUtil.dp2px(50), SDViewUtil.dp2px(40));
@@ -191,7 +191,7 @@ public class HoltelSearchCityActivity extends BaseActivity {
         if (TextUtils.isEmpty(key)) {
             mListFilterModel.addAll(mListModel);
         } else {
-            for (CitylistModel city : mListModel) {
+            for (ModelCityList city : mListModel) {
                 String name = city.getName();
                 if (name.indexOf(key) != -1 || CharacterParser.convertChs2PinYin(name).startsWith(key)) {
                     mListFilterModel.add(city);
@@ -207,7 +207,7 @@ public class HoltelSearchCityActivity extends BaseActivity {
     }
 
     private void bindDataFromDb() {
-        List<CitylistModel> listDbModel = AppRuntimeWorker.getCitylist();
+        List<ModelCityList> listDbModel = AppRuntimeWorker.getCitylist();
         if (listDbModel != null && listDbModel.size() > 0) {
             mListModel.addAll(listDbModel);
         } else {
