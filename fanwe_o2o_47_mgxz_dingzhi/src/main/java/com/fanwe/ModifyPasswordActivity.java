@@ -12,8 +12,8 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.CommonHelper;
 import com.fanwe.base.Root;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.constant.EnumEventTag;
+import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.SDSendValidateButton;
 import com.fanwe.library.customview.SDSendValidateButton.SDSendValidateButtonListener;
@@ -267,6 +267,10 @@ public class ModifyPasswordActivity extends BaseActivity implements CallbackView
             if (!SDCollectionUtil.isEmpty(roots)) {
                 RootShopComment root = roots.get(0);
                 if (!"212".equals(root.getStatusCode())) {
+                    if ("302".equals(root.getStatusCode())) {
+                        MGToast.showToast("用户不存在");
+                        return;
+                    }
                     //错误
                     MGToast.showToast(root.getMessage());
                     return;
