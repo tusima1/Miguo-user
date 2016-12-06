@@ -51,7 +51,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                      * 如果Result实体为空
                      */
                     if(null == userBean.getResult() || null == userBean.getResult().get(0)){
-                        getListener().loginError(userBean.getMessage());
+                        getListener().loginError("登录失败！");
                         return;
                     }
 
@@ -59,7 +59,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                      * 如果Body实体为空
                      */
                     if(null == userBean.getResult().get(0).getBody() || null == userBean.getResult().get(0).getBody().get(0)){
-                        getListener().loginError(userBean.getMessage());
+                        getListener().loginError("登录失败！");
                         return;
                     }
 
@@ -117,10 +117,6 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
             model.setUser_name(userInfoNew.getUser_name());
 
             LocalUserModel.dealLoginSuccess(model, true);
-        }
-
-        if(!"".equals(mobile)){
-
         }
     }
 

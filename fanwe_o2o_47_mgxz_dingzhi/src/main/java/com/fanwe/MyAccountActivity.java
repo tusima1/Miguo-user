@@ -46,6 +46,7 @@ import com.fanwe.user.view.SignActivity;
 import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
@@ -455,6 +456,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         App.getInstance().setmLocalUser(userModel);
         AppConfig.setRefId("");
         App.getInstance().clearAllData();
+        SharedPreferencesUtils.getInstance().clearUserNameAndUserPassword();
         SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
     }
 

@@ -456,7 +456,7 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
          * {@link com.miguo.view.TencentIMBindPresenterView}
          * {@link #tencentIMBindFinish()}
          */
-       tencentIMBindPresenter.tencentIMBinding();
+       tencentIMBindPresenter.tencentIMBindingWithPushLocalCart();
     }
 
     @Override

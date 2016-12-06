@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
+import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
@@ -15,6 +16,7 @@ import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.dao.LoginByThirdDao;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.BaseView;
 import com.miguo.view.LoginByThirdView;
 import com.tencent.qcloud.suixinbo.model.MySelfInfo;
@@ -60,21 +62,27 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
                 Root<UserInfoNew> root = gson.fromJson(responseBody, type);
                 String statusCode = root.getStatusCode();
                 String message = root.getMessage();
+                /**
+                 * 登录成功
+                 */
                 if ("210".equals(statusCode)) {
                     UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
-                    if (userInfoNew != null) {
-                        if (userInfoNew != null) {
-                            userInfoNew.setToken(root.getToken());
-                            App.getInstance().setCurrentUser(userInfoNew);
-                            User_infoModel model = new User_infoModel();
-                            model.setUser_id(userInfoNew.getUser_id());
-                            model.setMobile(userInfoNew.getMobile());
-                            model.setUser_name(userInfoNew.getUser_name());
-                            model.setUser_pwd(userInfoNew.getPwd());
-                            saveUserToLocal(userInfoNew, userInfoNew.getMobile(), userInfoNew.getPwd());
-                            getListener().thirdLoginSuccess(model, userInfoNew);
-                        }
+                    if(userInfoNew == null){
+                        getListener().thirdLoginError("登录失败！");
+                        return;
                     }
+                    App.getInstance().setCurrentUser(userInfoNew);
+                    User_infoModel model = new User_infoModel();
+                    model.setUser_id(userInfoNew.getUser_id());
+                    model.setMobile(userInfoNew.getMobile());
+                    model.setUser_name(userInfoNew.getUser_name());
+                    model.setUser_pwd(userInfoNew.getPwd());
+                    saveUserToLocal(userInfoNew, userInfoNew.getMobile(), userInfoNew.getPwd());
+                    userInfoNew.setToken(userInfoNew.getToken());
+                    handleApplicationCurrentUser(userInfoNew);
+                    handleSaveUser(userInfoNew.getMobile(), userInfoNew.getPwd());
+                    initJpush();
+                    getListener().thirdLoginSuccess(model, userInfoNew);
                 } else if ("300".equals(statusCode)) {
                     ThirdLoginInfo thirdLoginInfo = new ThirdLoginInfo();
                     thirdLoginInfo.setIcon(icon);
@@ -93,6 +101,13 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
                 SDDialogManager.dismissProgressDialog();
             }
         });
+    }
+
+
+    private void handleApplicationCurrentUser(UserInfoNew userInfoNew){
+        if (userInfoNew != null) {
+            App.getInstance().setCurrentUser(userInfoNew);
+        }
     }
 
     /**
@@ -120,11 +135,23 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
 
             LocalUserModel.dealLoginSuccess(model, true);
         }
+    }
 
-        if(!"".equals(mobile)){
+    /**
+     * 保存用户信息SharedPreferences
+     *
+     * @param mobile
+     * @param password
+     */
+    private void handleSaveUser(String mobile, String password) {
+        SharedPreferencesUtils.getInstance().saveUserNameAndUserPassword(mobile, password);
+    }
 
-        }
-
+    /**
+     * 推送
+     */
+    private void initJpush() {
+        JpushHelper.initJPushConfig();
     }
 
     @Override

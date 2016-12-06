@@ -9,6 +9,7 @@ import com.miguo.definition.SharedPreferencesConfig;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/7.
+ * SharedPreferences单例类
  */
 public class SharedPreferencesUtils {
 
@@ -17,7 +18,7 @@ public class SharedPreferencesUtils {
     private SharedPreferences.Editor editor;
     private Context context;
 
-    String tag = "SharedPreferencesUtils";
+    String tag = getClass().getSimpleName();
 
     /**
      * 防止默认构造器被调用需私有化
@@ -45,7 +46,7 @@ public class SharedPreferencesUtils {
     }
 
     /**
-     *
+     * 登录
      * @param username 手机号
      * @param password 密码 md5
      */
@@ -69,6 +70,15 @@ public class SharedPreferencesUtils {
      */
     public String getPassword(){
         return sp.getString(SharedPreferencesConfig.PASSWORD, "");
+    }
+
+    /**
+     * 退出登录
+     */
+    public void clearUserNameAndUserPassword(){
+        editor.putString(SharedPreferencesConfig.MOBILE, "");
+        editor.putString(SharedPreferencesConfig.PASSWORD, "");
+        editor.commit();
     }
 
     /**

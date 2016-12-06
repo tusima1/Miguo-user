@@ -56,6 +56,7 @@ import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.utils.ClipboardUtils;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.GetUserReceiveCodeView;
 import com.miguo.view.LoginByMobileView;
 import com.miguo.view.TencentIMBindPresenterView;
@@ -294,14 +295,7 @@ public class HiHomeCategory extends Category implements
          * 全局里面没登录信息，未登录
          */
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            LocalUserModel userModel = AppHelper.getLocalUser();
-            if (userModel == null) {
-                showDialogLogin();
-                return;
-            }
-            String userid = userModel.getUser_mobile();
-            String password = userModel.getUser_pwd();
-            if (TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)) {
+            if (!SharedPreferencesUtils.getInstance().hasSave()) {
                 showDialogLogin();
                 return;
             }
@@ -311,7 +305,7 @@ public class HiHomeCategory extends Category implements
              * {@link #loginSuccess(UserInfoNew)}
              * {@link #loginError(String)}
              */
-            loginByMobileDao.loginByMobile(userid, password);
+            loginByMobileDao.loginByMobile(SharedPreferencesUtils.getInstance().getUserName(), SharedPreferencesUtils.getInstance().getPassword());
         }
     }
 

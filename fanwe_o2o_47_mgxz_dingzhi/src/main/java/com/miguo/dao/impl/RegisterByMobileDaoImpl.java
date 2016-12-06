@@ -50,26 +50,28 @@ public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMo
                 Root<UserInfoNew> root = gson.fromJson(responseBody, type);
 
                 String status = root.getStatusCode();
-                String message = root.getMessage();
                 if(!status.equals("211")) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByMobileError("注册失败！");
                     return;
                 }
                 if (null == root.getResult() || null == root.getResult().get(0)) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByMobileError("注册失败！");
                     return;
                 }
 
                 if (null == root.getResult().get(0).getBody() || null == root.getResult().get(0).getBody().get(0)) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByMobileError("注册失败！");
                     return;
                 }
 
                 UserInfoNew userInfoNew = root.getResult().get(0).getBody().get(0);
                 if (null == userInfoNew) {
-                    getListener().registerByMobileError(message);
+                    getListener().registerByMobileError("注册失败！");
                     return;
                 }
+                /**
+                 * 注册成功！
+                 */
                 userInfoNew.setToken(root.getToken());
                 saveUserToLocal(userInfoNew, mobile, userInfoNew.getPwd());
                 handleApplicationCurrentUser(userInfoNew);
