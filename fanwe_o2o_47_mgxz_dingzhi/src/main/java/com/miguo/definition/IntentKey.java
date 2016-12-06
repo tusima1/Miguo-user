@@ -32,5 +32,10 @@ public class IntentKey {
      * 是否是从领钻对话框跳转到登录界面
      */
     public static final String FROM_DIAMOND_TO_LOGIN = "from_diamond_to_login";
+    /**
+     * HiLoginActivity
+     */
+    public static final String EXTRA_SELECT_TAG_INDEX = "extra_select_tag_index";
+    public static final String LOGIN_MOBILE = "extra_login_mobile";
 
 }

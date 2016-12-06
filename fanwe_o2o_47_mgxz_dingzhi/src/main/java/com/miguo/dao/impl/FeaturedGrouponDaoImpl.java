@@ -7,11 +7,11 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.google.gson.Gson;
 import com.miguo.dao.FeaturedGrouponDao;
-import com.miguo.entity.model.GrouponConstants;
-import com.miguo.entity.model.getFeaturedGroupBuy.BodyFeaturedGroupBuy;
-import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
-import com.miguo.entity.model.getFeaturedGroupBuy.ResultFeaturedGroupBuy;
-import com.miguo.entity.model.getFeaturedGroupBuy.RootFeaturedGroupBuy;
+import com.miguo.definition.GrouponConstants;
+import com.miguo.entity.BodyFeaturedGroupBuy;
+import com.miguo.entity.ModelFeaturedGroupBuy;
+import com.miguo.entity.ResultFeaturedGroupBuy;
+import com.miguo.entity.RootFeaturedGroupBuy;
 import com.miguo.view.BaseView;
 import com.miguo.view.FeaturedGrouponView;
 

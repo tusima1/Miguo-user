@@ -3,7 +3,6 @@ package com.fanwe.user.presents;
 import android.text.TextUtils;
 
 import com.fanwe.app.App;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.tencent.TIMCallBack;
 import com.tencent.TIMFriendshipManager;
@@ -20,18 +19,13 @@ public class IMUserInfoHelper {
      */
     public void setMyNickName(String nickName){
         if(TextUtils.isEmpty(nickName)){
-            UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-            if(userCurrentInfo!=null){
-                UserInfoNew user = userCurrentInfo.getUserInfoNew();
-                if(user!=null){
-                    String value = TextUtils.isEmpty(user.getNick())==true?user.getUser_name():user.getNick();
-                    if(TextUtils.isEmpty(value)){
-                        return;
-                    }else{
-                        nickName = value;
-                    }
-                }else{
+            UserInfoNew user = App.getInstance().getCurrentUser();
+            if(user!=null){
+                String value = TextUtils.isEmpty(user.getNick())==true?user.getUser_name():user.getNick();
+                if(TextUtils.isEmpty(value)){
                     return;
+                }else{
+                    nickName = value;
                 }
             }else{
                 return;
@@ -77,18 +71,13 @@ public class IMUserInfoHelper {
     public void setMyAvator(String url){
 
         if(TextUtils.isEmpty(url)){
-            UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
-            if(userCurrentInfo!=null){
-                UserInfoNew user = userCurrentInfo.getUserInfoNew();
-                if(user!=null){
-                    String value = user.getIcon();
-                    if(TextUtils.isEmpty(value)){
-                        return;
-                    }else{
-                        url = value;
-                    }
-                }else{
+            UserInfoNew user = App.getInstance().getCurrentUser();
+            if(user!=null){
+                String value = user.getIcon();
+                if(TextUtils.isEmpty(value)){
                     return;
+                }else{
+                    url = value;
                 }
             }else{
                 return;

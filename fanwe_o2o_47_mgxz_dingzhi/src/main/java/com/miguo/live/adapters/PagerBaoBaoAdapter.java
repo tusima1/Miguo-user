@@ -127,7 +127,7 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
         if(entity!=null){
             String roomId = CurLiveInfo.getRoomNum()+"";
             String fx_user_id = CurLiveInfo.getHostID();
-            String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            String lgn_user_id = App.getInstance().getCurrentUser().getUser_id();
             String goods_id = entity.getId();
             String cart_type = "1";
             String add_goods_num = "1";

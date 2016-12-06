@@ -46,7 +46,7 @@ public class OKhttpHelper {
     private String token;
 
     public String getToken() {
-        token = App.getInstance().getmUserCurrentInfo().getToken();
+        token = App.getInstance().getToken();
         if (!TextUtils.isEmpty(token)) {
             return token;
         } else {

@@ -1,7 +1,7 @@
 package com.miguo.category.fragment;
 
 import com.fanwe.user.UserConstants;
-import com.miguo.dao.BannerTypeModel;
+import com.miguo.entity.BannerTypeModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;

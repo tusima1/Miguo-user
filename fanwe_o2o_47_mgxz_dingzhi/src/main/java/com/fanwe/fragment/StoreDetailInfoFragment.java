@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.fanwe.AlbumActivity;
 import com.fanwe.CalendarListActivity;
 import com.fanwe.CommentListActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.StoreConfirmOrderActivity;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
@@ -25,6 +24,8 @@ import com.fanwe.constant.Constant.CommentType;
 import com.fanwe.library.customview.SDScaleImageView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.library.utils.SDTypeParseUtil;
 import com.fanwe.library.utils.SDViewBinder;
@@ -260,7 +261,7 @@ public class StoreDetailInfoFragment extends StoreDetailBaseFragment {
     private void clickBuy() {
 
         if (!AppHelper.isLogin(getActivity())) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             intent.putExtra(StoreConfirmOrderActivity.EXTRA_ID, mInfoModel.getId());
             startActivity(intent);
         } else {

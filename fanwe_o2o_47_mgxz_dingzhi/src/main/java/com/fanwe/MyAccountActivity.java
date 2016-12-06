@@ -189,9 +189,9 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     private void bindData() {
         String remark = "";
         String sex = "性别";
-        if (App.getInstance().getmUserCurrentInfo() != null && App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
-            remark = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark();
-            sex = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex();
+        if (App.getInstance().getCurrentUser() != null) {
+            remark = App.getInstance().getCurrentUser().getRemark();
+            sex = App.getInstance().getCurrentUser().getSex();
         }
         SDViewBinder.setTextView(tvSign, remark, "个人简介");
         if ("1".equals(sex)) {
@@ -338,7 +338,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
      */
     private void clickSex() {
         Intent intent = new Intent(MyAccountActivity.this, SexActivity.class);
-        intent.putExtra("sex", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getSex());
+        intent.putExtra("sex", App.getInstance().getCurrentUser().getSex());
         startActivity(intent);
     }
 
@@ -347,7 +347,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
      */
     private void clickSign() {
         Intent intent = new Intent(MyAccountActivity.this, SignActivity.class);
-        intent.putExtra("sign", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getRemark());
+        intent.putExtra("sign", App.getInstance().getCurrentUser().getRemark());
         startActivity(intent);
     }
 
@@ -450,7 +450,6 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     private void clickLogout(View v) {
 //        JpushHelper.unRegisterJpush();
         mLoginHelper.imLogout();
-        App.getInstance().getmUserCurrentInfo().clearData();
         App.getInstance().setImLoginSuccess(false);
         LocalUserModel userModel = new LocalUserModel();
         App.getInstance().setmLocalUser(userModel);

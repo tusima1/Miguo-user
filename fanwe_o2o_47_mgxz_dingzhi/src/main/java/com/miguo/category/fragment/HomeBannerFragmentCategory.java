@@ -9,7 +9,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.dao.BannerTypeModel;
+import com.miguo.entity.BannerTypeModel;
 import com.miguo.definition.AdspaceParams;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.fragment.HiBaseFragment;

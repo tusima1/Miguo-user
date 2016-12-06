@@ -32,24 +32,24 @@ public class HotelListTuanAdapter extends SDSimpleBaseAdapter<GoodsModel>{
 	@Override
 	public int getLayoutId(int position, View convertView, ViewGroup parent)
 	{
-		
+
 		return R.layout.item_hotel_list;
 	}
 
 	@Override
 	public void bindData(int position, View convertView, ViewGroup parent,
-			final GoodsModel model)
+						 final GoodsModel model)
 	{
 		TextView tv_title = ViewHolder.get(R.id.tv_title, convertView);
 		TextView tv_time = ViewHolder.get(R.id.tv_time, convertView);
 		TextView tv_money = ViewHolder.get(R.id.tv_money, convertView);
 		Button mTn_confirm = ViewHolder.get(R.id.act_confirm_order_btn_search, convertView);
 		View v_line = ViewHolder.get(R.id.v_line, convertView);
-		
+
 		if(position == mListModel.size()-1)
 		{
 			SDViewUtil.hide(v_line);
-			
+
 		}else
 		{
 			SDViewUtil.show(v_line);
@@ -64,16 +64,16 @@ public class HotelListTuanAdapter extends SDSimpleBaseAdapter<GoodsModel>{
 		SDViewBinder.setTextView(tv_title, model.getSub_name());
 		SDViewBinder.setTextView(tv_money, model.getCurrent_price_format());
 		mTn_confirm.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v)
 			{
 				MGToast.showToast("PHP");
 			}
-			
+
 		});
 		convertView.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(App.getApplication(), GoodsDetailActivity.class);

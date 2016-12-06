@@ -10,10 +10,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
@@ -104,7 +105,7 @@ public class UserHomeLiveImgAdapter extends BaseAdapter {
 
     private void clickItem(int position) {
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            Intent intent = new Intent(mContext, LoginActivity.class);
+            Intent intent = new Intent(mContext, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             BaseUtils.jumpToNewActivity(mContext, intent);
             return;
         }

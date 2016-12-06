@@ -3,6 +3,8 @@ package com.miguo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.fanwe.app.App;
+import com.fanwe.user.model.UserInfoNew;
 import com.miguo.definition.SharedPreferencesConfig;
 
 /**
@@ -30,13 +32,13 @@ public class SharedPreferencesUtils {
         editor = sp.edit();
     }
 
-    public static SharedPreferencesUtils getInstance(Context context){
+    public static SharedPreferencesUtils getInstance(){
         /**
          * 防止异步请求和用户操作同时访问
          */
         synchronized (SharedPreferencesUtils.class){
             if(instance == null){
-                instance = new SharedPreferencesUtils(context);
+                instance = new SharedPreferencesUtils(App.getInstance());
             }
             return instance;
         }
@@ -45,7 +47,7 @@ public class SharedPreferencesUtils {
     /**
      *
      * @param username 手机号
-     * @param password 密码
+     * @param password 密码 md5
      */
     public void saveUserNameAndUserPassword(String username, String password){
         editor.putString(SharedPreferencesConfig.MOBILE, username);

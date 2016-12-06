@@ -67,7 +67,7 @@ import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
-import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -86,7 +86,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = SellerHttpHelper.class.getSimpleName();
     private Gson gson;
-    private UserCurrentInfo userCurrentInfo;
+    private UserInfoNew userCurrentInfo;
     private CallbackView mView;
     private CallbackView mView2;
     private Context mContext;
@@ -98,14 +98,14 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         this.mContext = mContext;
         this.mView = mView;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+        userCurrentInfo = App.getInstance().getCurrentUser();
     }
 
     public SellerHttpHelper(Context mContext, CallbackView mView2, String type) {
         this.mContext = mContext;
         this.mView2 = mView2;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+        userCurrentInfo = App.getInstance().getCurrentUser();
     }
 
     public String getToken() {
@@ -739,8 +739,8 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
     public void getBusinessDistributionList(int pageNum, int pageSize, String ent_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
-        if (userCurrentInfo.getUserInfoNew() != null) {
-            params.put("user_id", userCurrentInfo.getUserInfoNew().getUser_id());
+        if (userCurrentInfo != null) {
+            params.put("user_id", userCurrentInfo.getUser_id());
         } else {
             params.put("user_id", "");
         }

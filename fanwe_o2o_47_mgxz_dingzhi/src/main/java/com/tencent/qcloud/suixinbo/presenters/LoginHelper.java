@@ -312,7 +312,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      * 进入主播页。
      */
     private void goToLive() {
-        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        UserInfoNew userInfoNew = App.getInstance().getCurrentUser();
         MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
         Intent intent = new Intent(mContext, LiveActivity.class);
         intent.putExtra(Constants.ID_STATUS, Constants.HOST);
@@ -426,7 +426,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
      */
     private void createAvRoom() {
 //        如果是自己
-        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        UserInfoNew userInfoNew = App.getInstance().getCurrentUser();
         MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
         Intent intent = new Intent(mContext, LiveActivity.class);
         intent.putExtra(Constants.ID_STATUS, Constants.HOST);

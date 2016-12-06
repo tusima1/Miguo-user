@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.YouHuiDetailActivity;
 import com.fanwe.app.AppHelper;
 import com.fanwe.constant.EnumEventTag;
@@ -19,6 +18,8 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.SDTimerDown;
 import com.fanwe.utils.SDTimerDown.SDTimerDownListener;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.sunday.eventbus.SDBaseEvent;
 
 public class YouhuiDetailTopFragment extends YouhuiDetailBaseFragment
@@ -179,7 +180,7 @@ public class YouhuiDetailTopFragment extends YouhuiDetailBaseFragment
 			requestBuyYouHui();
 		} else
 		{
-			Intent intent = new Intent(getActivity(), LoginActivity.class);
+			Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
 			startActivity(intent);
 		}
 	}

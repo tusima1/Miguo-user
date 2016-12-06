@@ -191,7 +191,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
             if (TextUtils.isEmpty(clickUrl)) {
                 clickUrl = ServerUrl.getAppH5Url();
             } else {
-                clickUrl = clickUrl + "/ref_id/" + App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                clickUrl = clickUrl + "/ref_id/" + App.getApplication().getCurrentUser().getUser_id();
             }
             String title = share.getTitle();
             if (TextUtils.isEmpty(title)) {
@@ -371,7 +371,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     public void addToShoppingCart(String goodsId,String fx_user_id) {
         dialog = new MGProgressDialog(this,R.style.MGProgressDialog).needFinishActivity(this);
         dialog.show();
-            String lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            String lgn_user_id = App.getInstance().getCurrentUser().getUser_id();
             String goods_id = goodsId;
             String cart_type = "1";
             String add_goods_num = "1";

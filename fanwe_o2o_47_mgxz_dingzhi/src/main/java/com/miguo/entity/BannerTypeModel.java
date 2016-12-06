@@ -1,4 +1,4 @@
-package com.miguo.dao;
+package com.miguo.entity;
 
 import java.io.Serializable;
 

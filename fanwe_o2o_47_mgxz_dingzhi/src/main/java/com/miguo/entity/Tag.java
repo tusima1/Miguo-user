@@ -1,4 +1,4 @@
-package com.miguo.entity.model.getFeaturedGroupBuy;
+package com.miguo.entity;
 
 /**
  * Created by Administrator on 2016/10/17.

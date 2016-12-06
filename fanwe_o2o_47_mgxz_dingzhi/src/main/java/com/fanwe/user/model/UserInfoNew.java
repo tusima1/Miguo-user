@@ -162,6 +162,80 @@ public class UserInfoNew extends Body {
 
     private String fx_level;
 
+    /**
+     * 腾讯的签名
+     */
+    private String useSign;
+
+    /**
+     * 用户当前TOKEN.
+     */
+    public String token;
+
+
+    public UserInfoNew() {
+        this.app_type = "";
+        this.born = "";
+        this.browser_type = "";
+        this.browser_ver = "";
+        this.city_id = "";
+        this.employer = "";
+        this.fx_level = "";
+        this.geo_x = "";
+        this.geo_y = "";
+        this.habit = "";
+        this.icon = "";
+        this.imei = "";
+        this.insert_time = "";
+        this.is_fx = "";
+        this.is_host = "";
+        this.is_locked = "";
+        this.is_proxy = "";
+        this.locked_time = "";
+        this.login_ip = "";
+        this.login_port = "";
+        this.login_time = "";
+        this.mobile = "";
+        this.nick = "";
+        this.offer = "";
+        this.os = "";
+        this.personality = "";
+        this.photo = "";
+        this.plitical = "";
+        this.proxy_ip = "";
+        this.pwd = "";
+        this.recommend_id = "";
+        this.remark = "";
+        this.salt = "";
+        this.sex = "";
+        this.token = "";
+        this.user_id = "";
+        this.user_name = "";
+        this.user_type = "";
+        this.useSign = "";
+        this.version = "";
+        this.web_site = "";
+        this.work_add = "";
+        this.work_fax = "";
+        this.work_tel = "";
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getUseSign() {
+        return useSign;
+    }
+
+    public void setUseSign(String useSign) {
+        this.useSign = useSign;
+    }
+
     public String getFx_level() {
         return fx_level;
     }

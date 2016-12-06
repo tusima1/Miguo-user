@@ -8,7 +8,7 @@ import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
-import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.model.wallet.ExchangeDiamondHistoryModel;
 import com.fanwe.user.model.wallet.ExchangeListModel;
 import com.fanwe.user.model.wallet.InviteModel;
@@ -36,7 +36,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = UserHttpHelper.class.getSimpleName();
     private Gson gson;
-    private UserCurrentInfo userCurrentInfo;
+    private UserInfoNew userCurrentInfo;
     private CallbackView mView;
 
 
@@ -44,7 +44,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
 
         this.mView = mView;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+        userCurrentInfo = App.getInstance().getCurrentUser();
     }
 
     /**
@@ -282,7 +282,8 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
 
     /**
      * 兑换记录。
-     * @param page page
+     *
+     * @param page      page
      * @param page_size pagesize
      */
     public void WalletIncomeConvertHistory(String page, String page_size) {
@@ -317,7 +318,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
                         datas.add(pageModel);
                         //数据信息。
                         List<ExchangeDiamondHistoryModel> data = validateBodyList(root);
-                        if(data!=null) {
+                        if (data != null) {
                             datas.addAll(data);
                         }
                         onSuccess(mView, UserConstants.WALLET_INCOME_CONVERTHISTORY, datas);
@@ -342,10 +343,11 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
 
     /**
      * 获取邀请佣金 或者退款记录
+     *
      * @param page_size
      * @param page
      */
-    public void  getRefundList(String page,String page_size){
+    public void getRefundList(String page, String page_size) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         //1：邀请佣金，2：退款记录
@@ -369,7 +371,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
                 String message = root.getMessage();
 
                 if ("200".equals(status)) {
-                    if (root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0) != null) {
+                    if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
                         Result result = root.getResult().get(0);
                         PageModel pageModel = new PageModel();
                         pageModel.setPage(result.getPage());
@@ -379,7 +381,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
                         List<Object> data = new ArrayList<Object>();
                         List<RefundModel> list = validateBodyList(root);
                         data.add(pageModel);
-                        if(list!=null&&list.size()>0) {
+                        if (list != null && list.size() > 0) {
                             data.addAll(list);
                         }
                         onSuccess(mView, UserConstants.POST_WALLET_BALANCE, data);
@@ -400,66 +402,67 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
 
         });
     }
+
     /**
-     *
-     *邀请佣金。
+     * 邀请佣金。
      */
-    public void getInviteList(String page,String page_size){
-            TreeMap<String, String> params = new TreeMap<String, String>();
-            params.put("token", App.getInstance().getToken());
-            //1：邀请佣金，2：退款记录
-            params.put("log_type", "1");
-            params.put("page_size", page_size);
-            params.put("page", page);
-            params.put("method", UserConstants.WALLET_BALANCE);
-            OkHttpUtils.getInstance().post(null, params, new MgCallback() {
-                @Override
-                public void onErrorResponse(String message, String errorCode) {
-                    MGToast.showToast(message);
-                }
+    public void getInviteList(String page, String page_size) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", App.getInstance().getToken());
+        //1：邀请佣金，2：退款记录
+        params.put("log_type", "1");
+        params.put("page_size", page_size);
+        params.put("page", page);
+        params.put("method", UserConstants.WALLET_BALANCE);
+        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
 
-                @Override
-                public void onSuccessResponse(String responseBody) {
-                    Type type = new TypeToken<Root<InviteModel>>() {
-                    }.getType();
-                    Gson gson = new Gson();
-                    Root<InviteModel> root = gson.fromJson(responseBody, type);
-                    String status = root.getStatusCode();
-                    String message = root.getMessage();
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                Type type = new TypeToken<Root<InviteModel>>() {
+                }.getType();
+                Gson gson = new Gson();
+                Root<InviteModel> root = gson.fromJson(responseBody, type);
+                String status = root.getStatusCode();
+                String message = root.getMessage();
 
-                    if ("200".equals(status)) {
-                        if (root.getResult()!=null&&root.getResult().size()>0&&root.getResult().get(0) != null) {
-                            Result result = root.getResult().get(0);
-                            PageModel pageModel = new PageModel();
-                            pageModel.setPage(result.getPage());
-                            pageModel.setPage_count(result.getPage_count());
-                            pageModel.setPage_total(result.getPage_total());
-                            pageModel.setPage_size(result.getPage_size());
-                            List<Object> data = new ArrayList<Object>();
-                            data.add(pageModel);
-                            List<RefundModel> list = validateBodyList(root);
-                            if(list!=null) {
-                                data.addAll(list);
-                            }
-                            onSuccess(mView, UserConstants.POST_WALLET_BALANCE, data);
-                        } else {
-                            onFailure2(mView, message);
+                if ("200".equals(status)) {
+                    if (root.getResult() != null && root.getResult().size() > 0 && root.getResult().get(0) != null) {
+                        Result result = root.getResult().get(0);
+                        PageModel pageModel = new PageModel();
+                        pageModel.setPage(result.getPage());
+                        pageModel.setPage_count(result.getPage_count());
+                        pageModel.setPage_total(result.getPage_total());
+                        pageModel.setPage_size(result.getPage_size());
+                        List<Object> data = new ArrayList<Object>();
+                        data.add(pageModel);
+                        List<RefundModel> list = validateBodyList(root);
+                        if (list != null) {
+                            data.addAll(list);
                         }
+                        onSuccess(mView, UserConstants.POST_WALLET_BALANCE, data);
                     } else {
                         onFailure2(mView, message);
                     }
-
+                } else {
+                    onFailure2(mView, message);
                 }
 
-                @Override
-                public void onFinish() {
-                    onFinish2(mView, UserConstants.POST_WALLET_BALANCE);
-                }
+            }
+
+            @Override
+            public void onFinish() {
+                onFinish2(mView, UserConstants.POST_WALLET_BALANCE);
+            }
 
 
-            });
+        });
 
     }
+
     @Override
     public void onDestroy() {
         if (mView != null) {

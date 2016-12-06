@@ -2,7 +2,7 @@ package com.miguo.view;
 
 
 
-import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+import com.miguo.entity.ModelFeaturedGroupBuy;
 
 import java.util.List;
 

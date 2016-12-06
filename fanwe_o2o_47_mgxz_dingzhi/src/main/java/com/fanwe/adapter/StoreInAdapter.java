@@ -68,8 +68,8 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
         if (model != null) {
             SDViewBinder.setTextView(tv_title, model.getName());
             if ("1".equals(model.getIs_delete())) {
-                if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
-                    fx_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+                if (App.getInstance().getCurrentUser() != null) {
+                    fx_id = App.getInstance().getCurrentUser().getUser_id();
                 } else {
                     fx_id = "";
                 }
@@ -161,8 +161,8 @@ public class StoreInAdapter extends SDBaseAdapter<StoreIn_list> implements Callb
     public void addGoodsToShoppingPacket(int position) {
         StoreIn_list currStoreIn_list = mListModel.get(position);
         String lgn_user_id = "";
-        if (App.getInstance().getmUserCurrentInfo().getUserInfoNew() != null) {
-            lgn_user_id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+        if (App.getInstance().getCurrentUser() != null) {
+            lgn_user_id = App.getInstance().getCurrentUser().getUser_id();
         }
         String goods_id = currStoreIn_list.getId();
         String cart_type = "1";

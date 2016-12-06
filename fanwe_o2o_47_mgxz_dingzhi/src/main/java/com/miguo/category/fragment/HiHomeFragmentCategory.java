@@ -32,7 +32,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
 import com.miguo.adapter.HomePagerAdapter;
-import com.miguo.dao.BannerTypeModel;
+import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;

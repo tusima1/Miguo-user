@@ -146,8 +146,8 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         String title = "送你钻石，看直播，拿优惠";
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
         if (isHost) {
-            if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
-                imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+            if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getIcon())) {
+                imageUrl = App.getInstance().getCurrentUser().getIcon();
             } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
                 imageUrl = MGDictUtil.getShareIcon();
             }
@@ -164,7 +164,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
             title = content;
         }
         String clickUrl = ServerUrl.getAppH5Url() + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/"
-                + App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId;
+                + App.getInstance().getCurrentUser().getUser_id() + "/share_record_id/" + shareRecordId;
         if (isBack) {
             clickUrl = ServerUrl.getAppH5Url() + "index/dianbo/room_id/" + CurLiveInfo.getRoomNum() + "/share_record_id/" + shareRecordId;
         }
@@ -181,7 +181,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         String res = "";
         String nick;
         if (isHost) {
-            nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+            nick = App.getInstance().getCurrentUser().getNick();
         } else {
             nick = CurLiveInfo.getHostName();
         }

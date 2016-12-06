@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.fanwe.LoginActivity;
-import com.fanwe.RegisterActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
-import com.fanwe.fragment.LoginFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.dialog.SDDialogManager;
@@ -26,7 +23,6 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.ThirdLoginInfo;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -59,7 +55,7 @@ import java.util.TreeMap;
 public class LoginHelper extends Presenter {
     private Context mContext;
     private static final String TAG = LoginHelper.class.getSimpleName();
-    private LoginFragment mLoginView;
+//    private LoginFragment mLoginView;
     private Activity mActivity;
     private boolean notClose = false;
     private boolean ifShowToast =true;
@@ -77,22 +73,22 @@ public class LoginHelper extends Presenter {
 
     }
 
-    public LoginHelper(Activity activity, Context context, LoginFragment loginView) {
-        this.mActivity = activity;
+//    public LoginHelper(Activity activity, Context context, LoginFragment loginView) {
+//        this.mActivity = activity;
+//
+//        mLoginView = loginView;
+//        mContext = context;
+//        mTencentHttpHelper = new TencentHttpHelper(mContext);
+//        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
+//    }
 
-        mLoginView = loginView;
-        mContext = context;
-        mTencentHttpHelper = new TencentHttpHelper(mContext);
-        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
-    }
-
-    public LoginHelper(Context context, LoginFragment loginView) {
-
-        mLoginView = loginView;
-        mContext = context;
-        mTencentHttpHelper = new TencentHttpHelper(mContext);
-        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
-    }
+//    public LoginHelper(Context context, LoginFragment loginView) {
+//
+//        mLoginView = loginView;
+//        mContext = context;
+//        mTencentHttpHelper = new TencentHttpHelper(mContext);
+//        mTLoginHelper = new com.tencent.qcloud.suixinbo.presenters.LoginHelper(mContext);
+//    }
 
     public LoginHelper(Activity activity) {
         this.mActivity = activity;
@@ -191,7 +187,7 @@ public class LoginHelper extends Presenter {
                     UserInfoNew userInfoNew = (UserInfoNew) validateBody(root);
                     if (userInfoNew != null) {
                         if (userInfoNew != null) {
-                            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+                            App.getInstance().setCurrentUser(userInfoNew);
                             User_infoModel model = new User_infoModel();
                             model.setUser_id(userInfoNew.getUser_id());
                             model.setMobile(userInfoNew.getMobile());
@@ -370,34 +366,6 @@ public class LoginHelper extends Presenter {
     }
 
     /**
-     * 退出
-     */
-    public void doLogout() {
-
-
-    }
-
-    public void doImLogin() {
-        String userid = MySelfInfo.getInstance().getId();
-        if (TextUtils.isEmpty(userid)) {
-            userid = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
-        }
-        String userSign = App.getInstance().getUserSign();
-        mTLoginHelper.imLogin(userid, userSign, new TIMCallBack() {
-            @Override
-            public void onError(int i, String s) {
-                MGToast.showToast("IM 认证失败。");
-                App.getInstance().setImLoginSuccess(false);
-            }
-
-            @Override
-            public void onSuccess() {
-                App.getInstance().setImLoginSuccess(true);
-            }
-        });
-    }
-
-    /**
      * 取sign.
      */
     public void getSign(String token) {
@@ -422,9 +390,9 @@ public class LoginHelper extends Presenter {
                     String userId = MySelfInfo.getInstance().getId();
 
                     if (TextUtils.isEmpty(userId)) {
-                        UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-                        if (currentInfo != null && currentInfo.getUserInfoNew() != null) {
-                            userId = currentInfo.getUserInfoNew().getUser_id();
+                        UserInfoNew currentInfo = App.getInstance().getCurrentUser();
+                        if (currentInfo != null) {
+                            userId = currentInfo.getUser_id();
                         } else {
                             return;
                         }
@@ -453,7 +421,7 @@ public class LoginHelper extends Presenter {
 
         UserInfoNew userInfoNew = validateInfoBody(root);
         if (userInfoNew != null) {
-            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
+            App.getInstance().setCurrentUser(userInfoNew);
             User_infoModel model = new User_infoModel();
             model.setUser_id(userInfoNew.getUser_id());
             MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
@@ -506,28 +474,28 @@ public class LoginHelper extends Presenter {
 
 
     public void loginSuccess() {
-        Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
-        if (notClose) {
-
-            return;
-        }
-
-        if(mActivity instanceof RegisterActivity){
-            RegisterActivity activity = (RegisterActivity)mActivity;
-            if(activity.isFromDiamond()){
-                Intent intent = new Intent(activity, LoginActivity.class);
-                activity.setResult(ResultCode.RESUTN_OK, intent);
-                BaseUtils.finishActivity(activity);
-            }else {
-
-                if (lastActivity instanceof HiHomeActivity) {
-                    mActivity.finish();
-                } else {
-                    mActivity.startActivity(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
-                }
-
-            }
-        }
+//        Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
+//        if (notClose) {
+//
+//            return;
+//        }
+//
+//        if(mActivity instanceof RegisterActivity){
+//            RegisterActivity activity = (RegisterActivity)mActivity;
+//            if(activity.isFromDiamond()){
+//                Intent intent = new Intent(activity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+//                activity.setResult(ResultCode.RESUTN_OK, intent);
+//                BaseUtils.finishActivity(activity);
+//            }else {
+//
+//                if (lastActivity instanceof HiHomeActivity) {
+//                    mActivity.finish();
+//                } else {
+//                    mActivity.startActivity(new Intent(mActivity, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY)));
+//                }
+//
+//            }
+//        }
 
 
     }
@@ -596,7 +564,7 @@ public class LoginHelper extends Presenter {
 
     @Override
     public void onDestory() {
-        mLoginView = null;
+//        mLoginView = null;
         mContext = null;
         mActivity = null;
     }

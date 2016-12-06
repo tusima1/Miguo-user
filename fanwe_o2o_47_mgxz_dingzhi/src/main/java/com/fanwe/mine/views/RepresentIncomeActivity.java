@@ -122,7 +122,7 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
         httpHelper = new LogHttpHelper(this);
         mRepresentIncomeAdapter = new RepresentIncomeAdapter(mContext, getLayoutInflater(), mDatas);
         mPTR.setAdapter(mRepresentIncomeAdapter);
-        String fxLevel = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getFx_level();
+        String fxLevel = App.getInstance().getCurrentUser().getFx_level();
         if ("2".equals(fxLevel)) {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_2);
         } else if ("3".equals(fxLevel)) {

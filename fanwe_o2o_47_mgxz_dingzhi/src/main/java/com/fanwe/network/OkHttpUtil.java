@@ -168,18 +168,10 @@ public class OkHttpUtil {
             if (isNeedLogin) {
                 String token = App.getInstance().getToken();
                 if (TextUtils.isEmpty(token)) {
-                    //TODO login
-//                        Activity lastActivity = ActivityLifeManager.getInstance().getLastActivity();
-//                        if (lastActivity!=null){
-//                            lastActivity.startActivity(new Intent(App.getApplication(), LoginActivity.class));
-//                        }
                 }
             }
             String serverUrl = doCommonURL(url);
             TreeMap<String, String> finalParams = doCommonParams(params);
-//                if (callback!=null){
-//                    callback.setTag(tag);
-//                }
             switch (method) {
                 case GET:
                     if (serverUrl.endsWith("/")) {

@@ -8,5 +8,5 @@ import com.fanwe.user.model.UserInfoNew;
  */
 public interface LoginByMobileView extends BaseView{
     void loginError(String message);
-    void loginSuccess(UserInfoNew user, String mobile, String password);
+    void loginSuccess(UserInfoNew user);
 }

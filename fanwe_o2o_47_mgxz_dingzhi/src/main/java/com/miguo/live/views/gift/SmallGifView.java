@@ -173,7 +173,7 @@ public class SmallGifView extends BaseLinearLayout{
         avatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
         SDViewBinder.setImageView(gift.getUserAvatar(), avatar);
 
-        String avatarUrl = App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon();
+        String avatarUrl = App.getApplication().getCurrentUser().getIcon();
         if(avatarUrl.equals("") || avatarUrl == null){
             avatar.setImageResource(R.drawable.userlogo);
         }else {

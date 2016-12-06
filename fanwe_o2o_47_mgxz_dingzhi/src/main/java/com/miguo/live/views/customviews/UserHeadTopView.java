@@ -64,9 +64,10 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     private HeadTopAdapter mAdapter;
     private LiveHttpHelper liveHttpHelper;
     /**
-     *  是否显示关注按钮。
+     * 是否显示关注按钮。
      */
-    private boolean ifShow  =true;
+    private boolean ifShow = true;
+
     public UserHeadTopView(Context context) {
         this(context, null);
     }
@@ -115,12 +116,12 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         bindData();
     }
 
-    public void hiddenFollowBtn(){
-        if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id()!=null){
-            if(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id().equals(CurLiveInfo.getHostID())){
+    public void hiddenFollowBtn() {
+        if (App.getInstance().getCurrentUser() != null && !TextUtils.isEmpty(App.getInstance().getCurrentUser().getUser_id())) {
+            if (App.getInstance().getCurrentUser().getUser_id().equals(CurLiveInfo.getHostID())) {
                 mFollow.setVisibility(View.GONE);
                 ifShow = false;
-            }else{
+            } else {
                 mFollow.setVisibility(View.VISIBLE);
                 ifShow = true;
             }
@@ -227,7 +228,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         if (TextUtils.isEmpty(imgurl)) {
             mUserIamge.setImageResource(R.drawable.list_empty);
         } else {
-            imgurl =  DisplayUtil.qiniuUrlExchange(imgurl,60,60);
+            imgurl = DisplayUtil.qiniuUrlExchange(imgurl, 60, 60);
             SDViewBinder.setImageView(imgurl, mUserIamge);
         }
     }
@@ -247,14 +248,15 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
             mUserLocation.setText(location);
         }
     }
+
     /*设置已经关注了主播*/
-    public void setFocusStatus(boolean isFocus){
-        if(!ifShow){
+    public void setFocusStatus(boolean isFocus) {
+        if (!ifShow) {
             return;
         }
-        if (isFocus){
+        if (isFocus) {
             mFollow.setVisibility(GONE);
-        }else {
+        } else {
             mFollow.setVisibility(VISIBLE);
         }
 
@@ -271,7 +273,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
     public void showExitDialog() {
         if (userExitDialogHelper != null && !userExitDialogHelper.isShowing()) {
             userExitDialogHelper.show();
-        }else{
+        } else {
             userExitDialogHelper = new LiveUserExitDialogHelper(mActivity);
             userExitDialogHelper.show();
         }
@@ -303,7 +305,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
                     MGUIUtil.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                          setFocusStatus(true);
+                            setFocusStatus(true);
                         }
                     });
                 }

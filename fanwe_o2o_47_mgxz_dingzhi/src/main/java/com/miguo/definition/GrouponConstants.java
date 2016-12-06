@@ -1,4 +1,4 @@
-package com.miguo.entity.model;
+package com.miguo.definition;
 
 /**
  * Created by Administrator on 2016/8/4.
