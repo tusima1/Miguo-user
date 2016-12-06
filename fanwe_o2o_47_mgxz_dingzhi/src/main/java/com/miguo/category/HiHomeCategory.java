@@ -548,7 +548,7 @@ public class HiHomeCategory extends Category implements
          * {@link com.miguo.view.TencentIMBindPresenterView}
          * {@link #tencentIMBindFinish()}
          */
-        tencentIMBindPresenter.tencentIMBinding();
+        tencentIMBindPresenter.tencentIMBindingWithPushLocalCart();
     }
 
     @Override

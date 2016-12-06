@@ -9,4 +9,5 @@ public interface TencentIMBindPresenter extends BasePresenter{
      * 登录成功后绑定IM获取sign
      */
     void tencentIMBinding();
+    void tencentIMBindingWithPushLocalCart();
 }

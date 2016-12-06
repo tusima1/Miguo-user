@@ -9,11 +9,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.ModifyPasswordActivity;
+import com.fanwe.app.App;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.customview.SDTabItemCorner;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.dialog.SDDialogManager;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
@@ -27,8 +29,10 @@ import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiLoginActivity;
 import com.miguo.dao.GetShareIdByCodeDao;
 import com.miguo.dao.LoginByThirdDao;
+import com.miguo.dao.ShoppingCartMultiAddDao;
 import com.miguo.dao.impl.GetShareIdByCodeDaoImpl;
 import com.miguo.dao.impl.LoginByThirdDaoImpl;
+import com.miguo.dao.impl.ShoppingCartMultiAddDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
@@ -43,6 +47,7 @@ import com.miguo.utils.BaseUtils;
 import com.miguo.utils.ClipboardUtils;
 import com.miguo.view.GetShareIdByCodeView;
 import com.miguo.view.LoginByThirdView;
+import com.miguo.view.ShoppingCartMultiAddView;
 import com.miguo.view.TencentIMBindPresenterView;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -130,6 +135,11 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
 
     TencentIMBindPresenter tencentIMBindPresenter;
 
+    /**
+     * 添加本地购物车到服务端
+     */
+    ShoppingCartMultiAddDao shoppingCartMultiAddDao;
+
     public HiLoginCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -140,7 +150,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         mListSelectIndex = new ArrayList<>();
         getShareIdByCodeDao = new GetShareIdByCodeDaoImpl(this);
         loginByThirdDao = new LoginByThirdDaoImpl(this);
-
+        shoppingCartMultiAddDao = new ShoppingCartMultiAddDaoImpl(this);
         tencentIMBindPresenter = new TencentIMBindPresenterImpl(this);
     }
 
@@ -373,11 +383,12 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      */
     public void handleLoginSuccess(UserInfoNew user){
         /**
+         * 登录成功后要和IM绑定获取腾讯sign签名等
          * {@link com.miguo.presenters.impl.TencentIMBindPresenterImpl}
          * {@link com.miguo.view.TencentIMBindPresenterView}
          * {@link #tencentIMBindFinish()}
          */
-        tencentIMBindPresenter.tencentIMBinding();
+        tencentIMBindPresenter.tencentIMBindingWithPushLocalCart();
     }
 
     @Override

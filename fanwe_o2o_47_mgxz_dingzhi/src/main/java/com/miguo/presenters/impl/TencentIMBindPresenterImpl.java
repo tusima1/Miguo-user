@@ -5,18 +5,22 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.user.model.UserInfoNew;
 import com.miguo.dao.IMLoginDao;
 import com.miguo.dao.IMUserInfoDao;
+import com.miguo.dao.ShoppingCartMultiAddDao;
 import com.miguo.dao.TencentSignDao;
 import com.miguo.dao.impl.IMLoginDaoImpl;
 import com.miguo.dao.impl.IMUserInfoDaoImpl;
+import com.miguo.dao.impl.ShoppingCartMultiAddDaoImpl;
 import com.miguo.dao.impl.TencentSignDaoImpl;
 import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.view.BaseView;
 import com.miguo.view.IMLoginView;
 import com.miguo.view.IMUserInfoView;
+import com.miguo.view.ShoppingCartMultiAddView;
 import com.miguo.view.TencentIMBindPresenterView;
 import com.miguo.view.TencentSignView;
 import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
@@ -27,7 +31,7 @@ import com.tencent.qcloud.suixinbo.utils.Constants;
  * Created by zlh on 2016/12/5.
  */
 
-public class TencentIMBindPresenterImpl extends BasePresenterImpl implements TencentIMBindPresenter, TencentSignView, IMLoginView, IMUserInfoView {
+public class TencentIMBindPresenterImpl extends BasePresenterImpl implements TencentIMBindPresenter, TencentSignView, IMLoginView, IMUserInfoView, ShoppingCartMultiAddView{
 
     /** 以下接口在登录成功后被调用 */
     /**
@@ -44,6 +48,8 @@ public class TencentIMBindPresenterImpl extends BasePresenterImpl implements Ten
     IMUserInfoDao imUserInfoDao;
     /** 以上接口在登录成功后被调用 */
 
+    ShoppingCartMultiAddDao shoppingCartMultiAddDao;
+
     public TencentIMBindPresenterImpl(BaseView baseView) {
         super(baseView);
     }
@@ -55,6 +61,14 @@ public class TencentIMBindPresenterImpl extends BasePresenterImpl implements Ten
         imLoginDao = new IMLoginDaoImpl(this);
         imUserInfoDao = new IMUserInfoDaoImpl(this);
     }
+
+    @Override
+    public void tencentIMBindingWithPushLocalCart() {
+        shoppingCartMultiAddDao = new ShoppingCartMultiAddDaoImpl(this);
+        handleAddLocalCartToServer();
+        tencentIMBinding();
+    }
+
 
     @Override
     public void tencentIMBinding() {
@@ -173,6 +187,36 @@ public class TencentIMBindPresenterImpl extends BasePresenterImpl implements Ten
         QavsdkControl.getInstance().startContext();
     }
 
+    /**
+     * 购物车添加失败
+     */
+    @Override
+    public void multiAddError(String message) {
+
+    }
+
+    /**
+     * 购物车添加成功
+     */
+    @Override
+    public void multiAddSuccess() {
+
+    }
+
+    /**
+     * 添加本地购物车到线上
+     */
+    private void handleAddLocalCartToServer(){
+        if(!SDCollectionUtil.isEmpty(App.getInstance().getLocalShoppingCartInfo())){
+            /**
+             * 添加本地购物车到服务端
+             * {@link com.miguo.dao.impl.ShoppingCartMultiAddDaoImpl}
+             * {@link #multiAddSuccess()}
+             * {@link #multiAddError(String)}
+             */
+            shoppingCartMultiAddDao.multiAddFromOther(App.getInstance().getLocalShoppingCartInfo());
+        }
+    }
 
     @Override
     public TencentIMBindPresenterView getListener() {
