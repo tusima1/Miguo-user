@@ -1,6 +1,7 @@
 package com.fanwe.user.view;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.fanwe.user.adapters.ExchangeDiamondAdapter;
 import com.fanwe.user.model.wallet.Convert_list;
 import com.fanwe.user.model.wallet.ExchangeListModel;
 import com.fanwe.user.presents.WalletHttpHelper;
+import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDFormatUtil;
 import com.miguo.BaseNewActivity;
 import com.miguo.live.views.customviews.MGToast;
@@ -39,6 +41,10 @@ public class ExchangeDiamondActivity extends BaseNewActivity implements Callback
     private RecyclerView mRecyclerView;
     private ExchangeDiamondAdapter.ExchangeListener exchangeListener;
     private MGDialog mgDialog;
+    /**
+     * dialog高度。
+     */
+    private int DIALOG_HEIGHT = 141;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +77,9 @@ public class ExchangeDiamondActivity extends BaseNewActivity implements Callback
         if (mgDialog != null) {
             mgDialog = null;
         }
-        mgDialog = new MGDialog(this)
+        Drawable sureDrawable = getDrawable(R.drawable.shape_cricle_black_solid_radius_big);
+        Drawable cancelDrawable = getDrawable(R.drawable.shape_cricle_black_solid_white_radius_big);
+        mgDialog = new MGDialog(this).setDialogHeight(DIALOG_HEIGHT).setCancelButtonDrawable(cancelDrawable).setSureButtonDrawable(sureDrawable)
                 .setContentText("是否兑换米果钻？")
                 .setOnSureClickListener(new MGDialog.OnSureClickListener() {
                     @Override
@@ -139,7 +147,7 @@ public class ExchangeDiamondActivity extends BaseNewActivity implements Callback
         }
         ExchangeListModel model = (ExchangeListModel) datas.get(0);
         String selfBeanValue = model.getBean();
-        self_bean.setText(SDFormatUtil.formatNumberString(model.getBean(), 2));
+        self_bean.setText(DataFormat.toDoubleTwo(selfBeanValue));
         mDatas = model.getConvert_list();
         if (mDatas == null || mDatas.size() < 1) {
             mAdapter.setmDatas(null);

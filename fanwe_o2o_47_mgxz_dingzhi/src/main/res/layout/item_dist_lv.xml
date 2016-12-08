@@ -75,6 +75,7 @@
                     android:id="@+id/tv_item_momey"
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text=""
                     android:textColor="@color/text_item_title"
                     android:textSize="@dimen/text_size_item_content" />
@@ -87,6 +88,7 @@
                     android:layout_below="@id/tv_item_momey"
                     android:background="@drawable/bg_xiaomi_press"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <TextView

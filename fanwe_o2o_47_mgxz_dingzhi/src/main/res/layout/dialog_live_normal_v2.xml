@@ -5,6 +5,7 @@
     >
 
     <RelativeLayout
+        android:id="@+id/dialog_layout"
         android:layout_gravity="center"
         android:layout_width="@dimen/dp280"
         android:layout_height="@dimen/dp200"

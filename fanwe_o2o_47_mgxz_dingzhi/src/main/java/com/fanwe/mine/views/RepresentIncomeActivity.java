@@ -1,10 +1,8 @@
 package com.fanwe.mine.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.base.PageBean;
 import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
@@ -26,6 +25,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshPinnedSectionListView;
+import com.miguo.BaseNewActivity;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.ArrayList;
@@ -35,13 +35,14 @@ import java.util.List;
  * 代言收益
  * Created by qiang.chen on 2016/10/20.
  */
-public class RepresentIncomeActivity extends Activity implements CallbackView {
+public class RepresentIncomeActivity extends BaseNewActivity implements CallbackView {
     private Context mContext = RepresentIncomeActivity.this;
     private PullToRefreshPinnedSectionListView mPTR;
     private TextView tvMoney;
     private ImageView ivRank;
-    private boolean isRefresh = true;
+
     private int pageNum = 1;
+    private int maxPage = 1;
     private int pageSize = 10;
     private List<ModelCommissionLog> mDatas = new ArrayList<ModelCommissionLog>();
     private int rank = -1;
@@ -55,7 +56,10 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_represent_income);
-        initTitle();
+        //头部初始化。
+        initTitleView("代言人佣金");
+        setLeftDrawable(R.drawable.ic_left_arrow_dark);
+
         preWidget();
         preData();
     }
@@ -89,16 +93,14 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
         @Override
         public void onPullDownToRefresh(
                 PullToRefreshBase<ListView> refreshView) {
-            isRefresh = true;
             pageNum = 1;
             getData();
         }
 
         @Override
         public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-            isRefresh = false;
-            if (!SDCollectionUtil.isEmpty(items)) {
-                pageNum++;
+            if (maxPage >= pageNum) {
+                getData();
             }
             getData();
         }
@@ -132,15 +134,6 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
         }
     }
 
-    private void initTitle() {
-        findViewById(R.id.iv_left).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        ((TextView) findViewById(R.id.tv_middle)).setText("代言收益");
-    }
 
     @Override
     public void onSuccess(String responseBody) {
@@ -148,35 +141,53 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
     }
 
     public void bindData() {
-        if (isRefresh) {
+        if (resultCommissionLog == null) {
+            return;
+        }
+        PageBean pageModel = (PageBean) resultCommissionLog.getPage();
+        if (pageModel != null) {
+            pageNum = Integer.valueOf(pageModel.getPage());
+            maxPage = Integer.valueOf(pageModel.getPage_total());
+        }
+        if (pageNum == 1) {
+            titleList = null;
             mDatas.clear();
         }
         items = resultCommissionLog.getList();
         if (!SDCollectionUtil.isEmpty(items)) {
             for (ModelCommissionLog bean : items) {
                 String time = DateFormat.format("HH:mm:ss", DataFormat.toLong(bean.getInsert_time())).toString();
-                if (!containDate(bean.getInsert_time())) {
+                String month_date = DateFormat.format("MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();
+                if (!containTitle(bean.getInsert_time())) {
+                    //添加TITLE实体。
                     ModelCommissionLog temp = new ModelCommissionLog();
                     temp.setType(1);
-                    String tempTime = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();
+                    String tempTime = DateFormat.format("yyyy年MM月", DataFormat.toLong(bean.getInsert_time())).toString();
                     tempTime = yearStr(tempTime);
-                    temp.setInsert_time(tempTime);
+                    temp.setYear_month(tempTime);
                     mDatas.add(temp);
-                    bean.setInsert_time(time);
-                    mDatas.add(bean);
-                } else {
-                    bean.setInsert_time(time);
-                    mDatas.add(bean);
                 }
+                bean.setMonth_date(month_date);
+                bean.setTime_str(time);
+                mDatas.add(bean);
             }
         }
+
+        if (pageNum == 1) {
+            mRepresentIncomeAdapter.setmDatas(mDatas);
+        } else {
+            mRepresentIncomeAdapter.addMoreMDatas(mDatas);
+        }
+        showLLEmpty();
+        mRepresentIncomeAdapter.notifyDataSetChanged();
+        pageNum++;
     }
 
     List<ModelCommissionLog> items;
 
     @Override
     public void onSuccess(String method, List datas) {
-        if (CommissionConstance.USER_COMMISSION_LOG.endsWith(method)) {
+        if (CommissionConstance.USER_COMMISSION_LOG.equals(method)) {
             if (SDCollectionUtil.isEmpty(datas)) {
                 return;
             }
@@ -185,61 +196,25 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
                 @Override
                 public void run() {
                     SDViewBinder.setTextView(tvMoney, resultCommissionLog.getSalary_total(), "0");
+                    bindData();
                 }
             });
-            if (isRefresh) {
-                mDatas.clear();
-                if(titleList!=null) {
-                    titleList.clear();
-                }
-            }
-            items = resultCommissionLog.getList();
-            if (!SDCollectionUtil.isEmpty(items)) {
-                for (ModelCommissionLog bean : items) {
-                    String time = DateFormat.format("HH:mm:ss", DataFormat.toLong(bean.getInsert_time())).toString();
-                    if (!containDate(bean.getInsert_time())) {
-                        //增加头部记录。
-                        ModelCommissionLog temp = new ModelCommissionLog();
-                        temp.setType(1);
-                        String tempTime = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();
-                        tempTime = yearStr(tempTime);
-                        temp.setInsert_time(tempTime);
-                        mDatas.add(temp);
-
-                        bean.setInsert_time(time);
-                        mDatas.add(bean);
-                    } else {
-                        bean.setInsert_time(time);
-                        mDatas.add(bean);
-                    }
-                }
-            }
-            MGUIUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mRepresentIncomeAdapter.notifyDataSetChanged();
-                    showLLEmpty();
-
-                }
-            });
-
-
         }
     }
 
     /**
-     * 是否包含当天的title
+     * 是否包含当月的title
      *
      * @param inTimeInMillis
      * @return
      */
-    private boolean containDate(String inTimeInMillis) {
+    private boolean containTitle(String inTimeInMillis) {
 
         if (titleList == null) {
             titleList = new ArrayList<>();
         }
-        String mm = DateFormat.format("yyyy-MM-dd", DataFormat.toLong(inTimeInMillis)).toString();
-        mm=yearStr(mm);
+        String mm = DateFormat.format("yyyy年MM月", DataFormat.toLong(inTimeInMillis)).toString();
+        mm = yearStr(mm);
         boolean result = false;
         if (!SDCollectionUtil.isEmpty(titleList)) {
             for (String value : titleList) {
@@ -255,18 +230,6 @@ public class RepresentIncomeActivity extends Activity implements CallbackView {
         return result;
     }
 
-    private String yearStr(String value) {
-        if (TextUtils.isEmpty(value) || value.length() < 4) {
-            return "";
-        }
-        String  valueYear = value.substring(0,4);
-        String sysYear = DateFormat.format("yyyy", App.getInstance().getSysTime()).toString();
-        if (sysYear.equals(valueYear)&&value.length()>5) {
-             return value.substring(5);
-        }else{
-            return value;
-        }
-    }
 
     @Override
     public void onFailue(String responseBody) {
