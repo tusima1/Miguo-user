@@ -100,6 +100,14 @@ public class RecyclerBounceScrollView extends ScrollView{
         return endLayout;
     }
 
+    public void showLoadingLayout(){
+        endLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoadingLayout(){
+        endLayout.setVisibility(View.INVISIBLE);
+    }
+
     private void startRefreshAnimation(){
         int count = 1000;
         RotateAnimation animation = new RotateAnimation(0, 360f * count, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
