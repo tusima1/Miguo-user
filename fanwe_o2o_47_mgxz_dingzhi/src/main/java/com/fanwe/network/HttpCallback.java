@@ -8,7 +8,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDOtherUtil;
-import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.miguo.utils.MGUIUtil;
 
 import java.io.IOException;
@@ -67,7 +67,7 @@ public abstract class HttpCallback<T> implements Callback {
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
                     if (!TextUtils.isEmpty(token) && !"null".equals(token)) {
-                        UserCurrentInfo userCurrentInfo = App.getApplication().getmUserCurrentInfo();
+                        UserInfoNew userCurrentInfo = App.getApplication().getCurrentUser();
                         userCurrentInfo.setToken(token);
                     }
                     dispatch(RequestCode.SUCCESS,body);

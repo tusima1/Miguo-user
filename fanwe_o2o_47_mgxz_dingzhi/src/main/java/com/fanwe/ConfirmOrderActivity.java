@@ -10,8 +10,8 @@ import android.widget.ScrollView;
 
 import com.fanwe.adapter.PaymentAdapter;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.constant.EnumEventTag;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.fragment.MyRedPayMentsFragment;
 import com.fanwe.fragment.MyRedPayMentsFragment.MyredPaymentsFragmentListener;
 import com.fanwe.fragment.OrderDetailAccountPaymentFragment;
@@ -20,6 +20,7 @@ import com.fanwe.fragment.OrderDetailFeeFragment;
 import com.fanwe.fragment.OrderDetailGoodsFragment;
 import com.fanwe.fragment.OrderDetailParamsFragment;
 import com.fanwe.fragment.OrderDetailPaymentsFragment;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
@@ -186,20 +187,20 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         getSDFragmentManager().replace(R.id.act_confirm_order_fl_fees, mFragFees);
     }
 
-    private PaymentAdapter.PaymentTypeChangeListener payTypeListener=new PaymentAdapter.PaymentTypeChangeListener() {
+    private PaymentAdapter.PaymentTypeChangeListener payTypeListener = new PaymentAdapter.PaymentTypeChangeListener() {
 
 
         @Override
         public void onPaymentChange(PaymentTypeInfo model) {
-            if(model==null){
+            if (model == null) {
                 return;
             }
-            if(model.isChecked()) {
+            if (model.isChecked()) {
                 //微信支付
                 currentPayType = model;
-            }else{
+            } else {
                 //支付宝
-                currentPayType =null;
+                currentPayType = null;
             }
             changePayType(1, false);
         }
@@ -263,7 +264,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      * @param isChecked 是否选择余额支付。
      */
     public void changePayType(int type, boolean isChecked) {
-        if(mCheckActModel==null){
+        if (mCheckActModel == null) {
             return;
         }
         //总金额。
@@ -325,9 +326,20 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
 
     }
 
+    int buyItem;
+
     protected void bindData() {
         if (mCheckActModel == null) {
             return;
+        }
+        if (!SDCollectionUtil.isEmpty(mCheckActModel.getDeals())) {
+            if (mCheckActModel.getDeals().size() > 1) {
+                buyItem = mCheckActModel.getDeals().size();
+            } else {
+                if (mCheckActModel.getDeals().get(0) != null && !SDCollectionUtil.isEmpty(mCheckActModel.getDeals().get(0).getBuyItem())) {
+                    buyItem = mCheckActModel.getDeals().get(0).getBuyItem().size();
+                }
+            }
         }
 
         // 绑定商品数据
@@ -337,7 +349,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragParams.setmCheckActModel(mCheckActModel);
 
         // 支付方式列表
-       // mFragPayments.setmCheckActModel(mCheckActModel);
+        // mFragPayments.setmCheckActModel(mCheckActModel);
 
         // 余额支付
         mFragAccountPayment.setmCheckActModel(mCheckActModel);
@@ -346,8 +358,8 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
         mFragMyRed.setmCheckActModel(mCheckActModel);
 
         mFragFees.setmCheckActModel(mCheckActModel);
-        if(!TextUtils.isEmpty(orderId)){
-          mFragFees.setOrderId(orderId);
+        if (!TextUtils.isEmpty(orderId)) {
+            mFragFees.setOrderId(orderId);
         }
 
         if (!TextUtils.isEmpty(orderId)) {
@@ -366,11 +378,11 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
      */
     private void bindPayment(List<PaymentTypeInfo> datas) {
         if (datas != null && datas.size() > 0) {
-            for(int i = 0 ; i < datas.size() ; i++){
+            for (int i = 0; i < datas.size(); i++) {
                 PaymentTypeInfo paymentTypeInfo = datas.get(i);
-                if(paymentTypeInfo!=null&&"1".equals(paymentTypeInfo.getDefault_pay())){
+                if (paymentTypeInfo != null && "1".equals(paymentTypeInfo.getDefault_pay())) {
                     paymentTypeInfo.setChecked(true);
-                    this.mDefaultPayTypeInfo=paymentTypeInfo;
+                    this.mDefaultPayTypeInfo = paymentTypeInfo;
                 }
             }
             mFragPayments.setListPayment(datas);
@@ -438,6 +450,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             Bundle bundle = new Bundle();
             bundle.putSerializable(PayActivity.ORDER_ENTITY, orderDetailInfo);
             bundle.putString(PayActivity.EXTRA_ORDER_ID, orderDetailInfo.getOrder_info().getOrder_id());
+            bundle.putInt(PayActivity.BUY_ITEM, buyItem);
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
@@ -484,7 +497,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (outSideShoppingCartHelper!=null){
+        if (outSideShoppingCartHelper != null) {
             outSideShoppingCartHelper.onDestory();
         }
     }
@@ -517,7 +530,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialog!=null){
+                        if (dialog != null) {
                             dialog.dismiss();
                         }
                         onError(message);
@@ -557,7 +570,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialog!=null){
+                        if (dialog != null) {
                             dialog.dismiss();
                         }
                         dealRequestDoneOrderSuccess(datas);

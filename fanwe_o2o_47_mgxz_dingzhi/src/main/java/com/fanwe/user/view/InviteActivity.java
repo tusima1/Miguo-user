@@ -47,7 +47,7 @@ public class InviteActivity extends BaseNewActivity implements CallbackView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_invite);
-        initTitleView("邀请奖金");
+        initTitleView("分享收益");
         setLeftDrawable(R.drawable.ic_left_arrow_dark);
         initView();
     }

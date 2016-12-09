@@ -37,7 +37,7 @@
         android:layout_marginRight="@dimen/dp5"
         android:ellipsize="end"
         android:text="0"
-        android:textColor="@color/rgb_898989"
+        android:textColor="@color/rgb_153153153"
         android:textSize="@dimen/sp17" />
 
     <TextView
@@ -52,7 +52,7 @@
 
 
         android:text="元"
-        android:textColor="@color/rgb_898989"
+        android:textColor="@color/rgb_153153153"
         android:textSize="@dimen/sp17" />
 
     <ImageView

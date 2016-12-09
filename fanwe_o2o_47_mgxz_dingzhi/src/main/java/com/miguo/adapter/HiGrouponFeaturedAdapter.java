@@ -25,8 +25,8 @@ import com.fanwe.utils.StringTool;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.definition.ClassPath;
-import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
-import com.miguo.entity.model.getFeaturedGroupBuy.Tag;
+import com.miguo.entity.ModelFeaturedGroupBuy;
+import com.miguo.entity.Tag;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 

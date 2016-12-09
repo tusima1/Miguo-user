@@ -308,4 +308,9 @@ public class UserConstants {
      * 兑换结果：0失败，1成功.
      */
     public static final String  CONVERT_STATUS= "convert_status";
+    /**
+     * 发送验证码
+     */
+    public static String SEND_CAPTCHA = "SendCaptcha";
+
 }

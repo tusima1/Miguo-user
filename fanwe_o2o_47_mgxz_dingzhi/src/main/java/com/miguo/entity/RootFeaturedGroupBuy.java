@@ -1,4 +1,4 @@
-package com.miguo.entity.model.getFeaturedGroupBuy;
+package com.miguo.entity;
 
 
 import java.io.Serializable;

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.fanwe.commission.model.getCommissionLog.ModelCommissionLog;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.user.model.wallet.RefundModel;
 import com.handmark.pulltorefresh.library.PinnedSectionListView;
 import com.miguo.live.views.utils.BaseUtils;
 
@@ -57,14 +59,16 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
         Holder mHolder = null;
         if (null == convertView) {
             mHolder = new Holder();
-            convertView = inflater.inflate(R.layout.item_represent_income, null);
-            mHolder.viewLine = convertView.findViewById(R.id.view_line);
-            mHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title_item_represent_income);
-            mHolder.layoutItem = (RelativeLayout) convertView.findViewById(R.id.layout_item_represent_income);
-            mHolder.tvMoney = (TextView) convertView.findViewById(R.id.tv_money_item_represent_income);
-            mHolder.tvOrder = (TextView) convertView.findViewById(R.id.tv_order_item_represent_income);
-            mHolder.tvTime = (TextView) convertView.findViewById(R.id.tv_time_item_represent_income);
-            mHolder.tvType = (TextView) convertView.findViewById(R.id.tv_type_item_represent_income);
+            convertView = inflater.inflate(R.layout.item_refund, null);
+            mHolder.title_line = (LinearLayout) convertView.findViewById(R.id.title_line);
+            mHolder.month_text = (TextView) convertView.findViewById(R.id.month_text);
+            mHolder.data_line = (LinearLayout) convertView.findViewById(R.id.data_line);
+            mHolder.time_txt = (TextView) convertView.findViewById(R.id.time_txt);
+            mHolder.month_date = (TextView) convertView.findViewById(R.id.month_date);
+            mHolder.value_txt = (TextView) convertView.findViewById(R.id.value_txt);
+            mHolder.order_str = (TextView) convertView.findViewById(R.id.order_str);
+            mHolder.order_id = (TextView) convertView.findViewById(R.id.order_id);
+            mHolder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
 
             convertView.setTag(mHolder);
         } else {
@@ -98,26 +102,32 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
 
         currModle = datas.get(position);
         if (TITLE == currModle.getType()) {
-            mHolder.tvTitle.setVisibility(View.VISIBLE);
-            mHolder.layoutItem.setVisibility(View.GONE);
-            mHolder.viewLine.setVisibility(View.GONE);
+            mHolder.title_line.setVisibility(View.VISIBLE);
 
-            mHolder.tvTitle.setText(currModle.getInsert_time());
+            String value=currModle.getYear_month();
+            mHolder.month_text.setText(value);
+            mHolder.data_line.setVisibility(View.GONE);
+
+
         } else {
-            mHolder.tvTitle.setVisibility(View.GONE);
-            mHolder.layoutItem.setVisibility(View.VISIBLE);
-            mHolder.viewLine.setVisibility(View.VISIBLE);
+            mHolder.title_line.setVisibility(View.GONE);
+            mHolder.data_line.setVisibility(View.VISIBLE);
+            mHolder.time_txt.setText(currModle.getTime_str());
+            mHolder.month_date.setText(currModle.getMonth_date());
             if (!TextUtils.isEmpty(currModle.getMoney())) {
-                SDViewBinder.setTextView(mHolder.tvMoney, currModle.getMoney() + "元");
+                SDViewBinder.setTextView(mHolder.value_txt, currModle.getMoney() );
             } else {
-                SDViewBinder.setTextView(mHolder.tvMoney, "");
+                SDViewBinder.setTextView(mHolder.value_txt, "");
             }
-            if (!TextUtils.isEmpty(currModle.getOrder_sn())) {
-                SDViewBinder.setTextView(mHolder.tvOrder, "订单号：" + currModle.getOrder_sn());
-            } else {
-                SDViewBinder.setTextView(mHolder.tvOrder, "");
+            if(!TextUtils.isEmpty(currModle.getOrder_sn())) {
+                mHolder.order_id.setText(currModle.getOrder_sn());
+                mHolder.order_str.setVisibility(View.VISIBLE);
+            }else{
+                mHolder.order_id.setText("");
+                mHolder.order_str.setVisibility(View.GONE);
             }
-            SDViewBinder.setTextView(mHolder.tvTime, currModle.getInsert_time(), "");
+
+            SDViewBinder.setTextView(mHolder.month_text, currModle.getInsert_time(), "");
             String comeFrom = "";
             String mobile = currModle.getMobile();
             String money_type = currModle.getMoney_type();
@@ -126,7 +136,17 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             }else {
                 comeFrom=money_type+"       "+mobile;
             }
-            SDViewBinder.setTextView(mHolder.tvType, comeFrom, "");
+            mHolder.tv_desc.setText(comeFrom);
+        }
+    }
+
+    public void setmDatas(List<ModelCommissionLog> mDatas) {
+        this.datas = mDatas;
+    }
+
+    public void addMoreMDatas(List<ModelCommissionLog> mDatas) {
+        if (mDatas != null&&this.datas!=null) {
+            this.datas.addAll(mDatas);
         }
     }
 
@@ -146,10 +166,17 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
         return viewType == TITLE;
     }
 
-    private static class Holder {
-        TextView tvTitle, tvMoney, tvType, tvOrder, tvTime;
-        RelativeLayout layoutItem;
-        View viewLine;
+
+    public static  class Holder {
+        LinearLayout title_line;
+        TextView month_text;
+        LinearLayout data_line;
+        TextView time_txt;
+        TextView month_date;
+        TextView value_txt;
+        TextView order_str;
+        TextView order_id;
+        TextView tv_desc;
     }
 
 }

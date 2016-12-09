@@ -21,7 +21,9 @@ public abstract class XXCallbackView implements ICallbackView {
     public void onFailure(String method, OkHttpException error) {
 
     }
-    protected void onBefore(String method, Object tag){}
+    protected void onBefore(String method, Object tag){
+
+    }
     protected void onSuccess(String method,Object bean,Object tag){}
     protected void onFailure(String method,OkHttpException error,Object tag){}
     protected void onAfter(String method,Object tag){}

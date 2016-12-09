@@ -12,11 +12,9 @@ import android.view.View;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
 import com.fanwe.baidumap.BaiduMapManager;
-import com.fanwe.constant.ServerUrl;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
@@ -24,11 +22,9 @@ import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.PageModel;
-import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.views.SellerFragment;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
@@ -37,15 +33,9 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.dao.GetUserReceiveCodeDao;
-import com.miguo.dao.IMLoginDao;
-import com.miguo.dao.IMUserInfoDao;
 import com.miguo.dao.LoginByMobileDao;
-import com.miguo.dao.TencentSignDao;
 import com.miguo.dao.impl.GetUserReceiveCodeDaoImpl;
-import com.miguo.dao.impl.IMLoginDaoImpl;
-import com.miguo.dao.impl.IMUserInfoDaoImpl;
 import com.miguo.dao.impl.LoginByMobileDaoImpl;
-import com.miguo.dao.impl.TencentSignDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.HomePageState;
 import com.miguo.definition.IntentKey;
@@ -55,25 +45,21 @@ import com.miguo.fragment.HiFunnyFragment;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
-import com.miguo.live.model.generateSign.ModelGenerateSign;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.presenters.TencentIMBindPresenter;
+import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.utils.ClipboardUtils;
 import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.GetUserReceiveCodeView;
-import com.miguo.view.IMLoginView;
-import com.miguo.view.IMUserInfoView;
 import com.miguo.view.LoginByMobileView;
-import com.miguo.view.TencentSignView;
-import com.tencent.qcloud.suixinbo.avcontrollers.QavsdkControl;
-import com.tencent.qcloud.suixinbo.model.MySelfInfo;
-import com.tencent.qcloud.suixinbo.utils.Constants;
+import com.miguo.view.TencentIMBindPresenterView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +68,7 @@ import java.util.List;
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
  */
 public class HiHomeCategory extends Category implements
-        LoginByMobileView, GetUserReceiveCodeView, TencentSignView, IMLoginView, IMUserInfoView {
+        LoginByMobileView, GetUserReceiveCodeView, TencentIMBindPresenterView {
 
 
     /**
@@ -120,19 +106,8 @@ public class HiHomeCategory extends Category implements
      * 根据领取码领钻
      */
     GetUserReceiveCodeDao getUseReceiveCode;
-    /**
-     * 腾讯获取签名
-     */
-    TencentSignDao tencentSignDao;
-    /**
-     * IM登录接口
-     */
-    IMLoginDao imLoginDao;
 
-    /**
-     * 绑定用户信息到IM接口
-     */
-    IMUserInfoDao imUserInfoDao;
+    TencentIMBindPresenter tencentIMBindPresenter;
 
     public HiHomeCategory(HiBaseActivity activity) {
 
@@ -145,9 +120,8 @@ public class HiHomeCategory extends Category implements
         clipboardManager = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
         loginByMobileDao = new LoginByMobileDaoImpl(this);
         getUseReceiveCode = new GetUserReceiveCodeDaoImpl(this);
-        tencentSignDao = new TencentSignDaoImpl(this);
-        imLoginDao = new IMLoginDaoImpl(this);
-        imUserInfoDao = new IMUserInfoDaoImpl(this);
+
+        tencentIMBindPresenter = new TencentIMBindPresenterImpl(this);
 
     }
 
@@ -321,22 +295,17 @@ public class HiHomeCategory extends Category implements
          * 全局里面没登录信息，未登录
          */
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            LocalUserModel userModel = AppHelper.getLocalUser();
-            if (userModel == null) {
-                showDialogLogin();
-                return;
-            }
-            String userid = userModel.getUser_mobile();
-            String password = userModel.getUser_pwd();
-            if (TextUtils.isEmpty(userid) || TextUtils.isEmpty(password)) {
+            if (!SharedPreferencesUtils.getInstance().hasSave()) {
                 showDialogLogin();
                 return;
             }
 
             /**
              * 登录
+             * {@link #loginSuccess(UserInfoNew)}
+             * {@link #loginError(String)}
              */
-            loginByMobileDao.loginByMobile(userid, password);
+            loginByMobileDao.loginByMobile(SharedPreferencesUtils.getInstance().getUserName(), SharedPreferencesUtils.getInstance().getPassword());
         }
     }
 
@@ -350,7 +319,7 @@ public class HiHomeCategory extends Category implements
         getDiamondLoginDialog.setSubmitListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 intent.putExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, true);
                 com.miguo.utils.BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
                 getDiamondLoginDialog.dismiss();
@@ -413,7 +382,7 @@ public class HiHomeCategory extends Category implements
      * 推送
      */
     private void initJpush() {
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
     }
 
     /**
@@ -552,79 +521,33 @@ public class HiHomeCategory extends Category implements
      * @param user
      */
     @Override
-    public void loginSuccess(UserInfoNew user, String mobile, String password) {
+    public void loginSuccess(UserInfoNew user) {
 
         /**
          * 检查是否有兑换码
          */
         initCode();
         /**
-         * 保存用户信息到本地
-         */
-        saveUserToLocal(user, mobile, password);
-        /**
          * 获取腾讯sign签名
          */
-        handlerTencentSign(App.getApplication().getToken());
-        /**
-         * 保存用户信息SharedPreferences
-         */
-        handlerSaveUser(mobile, password);
-        initJpush();
-    }
-
-    /**
-     * 保存用户信息SharedPreferences
-     *
-     * @param mobile
-     * @param password
-     */
-    private void handlerSaveUser(String mobile, String password) {
-        SharedPreferencesUtils.getInstance(getActivity()).saveUserNameAndUserPassword(mobile, password);
-    }
-
-    /**
-     * 将用户信息保存到本地以及全局
-     *
-     * @param user
-     */
-    private void saveUserToLocal(UserInfoNew user, String mobile, String password) {
-        UserInfoNew userInfoNew = user;
-        if (userInfoNew != null) {
-            App.getInstance().getmUserCurrentInfo().setUserInfoNew(userInfoNew);
-            User_infoModel model = new User_infoModel();
-            model.setUser_id(userInfoNew.getUser_id());
-            MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
-            if (!TextUtils.isEmpty(mobile)) {
-                model.setMobile(mobile);
-            }
-            if (!TextUtils.isEmpty(password)) {
-                model.setUser_pwd(password);
-            }
-            if (!TextUtils.isEmpty(userInfoNew.getPwd())) {
-                model.setUser_pwd(userInfoNew.getPwd());
-            }
-            model.setUser_name(userInfoNew.getUser_name());
-
-            LocalUserModel.dealLoginSuccess(model, true);
-        }
+        handlerTencentSign();
     }
 
     /**
      * 获取腾讯签名
-     *
-     * @param token
      */
-    private void handlerTencentSign(String token) {
-        if (TextUtils.isEmpty(token)) {
-            Log.d(tag, "handler tencent sign token is null...");
-            return;
-        }
-        tencentSignDao.getTencentSign(token);
+    private void handlerTencentSign() {
+        /**
+         * {@link com.miguo.presenters.impl.TencentIMBindPresenterImpl}
+         * {@link com.miguo.view.TencentIMBindPresenterView}
+         * {@link #tencentIMBindFinish()}
+         */
+        tencentIMBindPresenter.tencentIMBindingWithPushLocalCart();
     }
 
-    private void handlerIMLogin(String userId, String usersig) {
-        imLoginDao.imLogin(userId, usersig);
+    @Override
+    public void tencentIMBindFinish() {
+
     }
 
     private final String LIVE = "1";
@@ -701,78 +624,6 @@ public class HiHomeCategory extends Category implements
 
     }
 
-    /**
-     * 获取腾讯签名
-     * 获取成功后需要调用IM登录
-     */
-    @Override
-    public void getTencentSignSuccess(ModelGenerateSign sign) {
-        if (null == sign) {
-            return;
-        }
-        String usersig = sign.getUsersig();
-        App.getInstance().setUserSign(usersig);
-        MySelfInfo.getInstance().setUserSig(usersig);
-        App.getInstance().setUserSign(usersig);
-        String userId = MySelfInfo.getInstance().getId();
-
-        if (TextUtils.isEmpty(userId)) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo != null && currentInfo.getUserInfoNew() != null) {
-                userId = currentInfo.getUserInfoNew().getUser_id();
-            } else {
-                return;
-            }
-        }
-        handlerIMLogin(userId, usersig);
-    }
-
-    @Override
-    public void getTencentSignError() {
-        Log.d(tag, "get tencent sign error..");
-    }
-
-    /**
-     * IM登陆回调
-     */
-    @Override
-    public void imLoginError(String message) {
-        Log.d(tag, "im login error and the message is: " + message);
-    }
-
-    /**
-     * IM登录成功
-     * 登录成功后要将用户名和头像绑定到IM
-     */
-    @Override
-    public void imLoginSuccess() {
-        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
-            imUserInfoDao.updateTencentNickName(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick());
-            imUserInfoDao.updateTencentAvatar(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon());
-        }
-        /**
-         * 开始直播AVSDK
-         */
-        startAVSDK();
-        App.getInstance().setImLoginSuccess(true);
-    }
-
-    /**
-     * 初始化AVSDK
-     */
-    public void startAVSDK() {
-        String userid = MySelfInfo.getInstance().getId();
-        String userSign = MySelfInfo.getInstance().getUserSig();
-        int appId = Constants.SDK_APPID;
-        int ccType = Constants.ACCOUNT_TYPE;
-        if (ServerUrl.DEBUG) {
-            appId = Constants.SDK_APPID_TEST;
-            ccType = Constants.ACCOUNT_TYPE_Test;
-        }
-        QavsdkControl.getInstance().setAvConfig(appId, ccType + "", userid, userSign);
-        QavsdkControl.getInstance().startContext();
-
-    }
 
     public HiHomeFragment getHomeFragment() {
         return null != fragments && fragments.size() > 0 ? (HiHomeFragment) fragments.get(0) : null;

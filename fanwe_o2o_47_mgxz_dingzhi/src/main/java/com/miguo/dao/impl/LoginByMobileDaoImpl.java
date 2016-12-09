@@ -1,12 +1,21 @@
 package com.miguo.dao.impl;
 
+import android.text.TextUtils;
+
+import com.fanwe.app.App;
+import com.fanwe.jpush.JpushHelper;
+import com.fanwe.model.LocalUserModel;
+import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.model.UserInfoNew;
 import com.miguo.dao.LoginByMobileDao;
 import com.miguo.entity.LoginUserBean;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.BaseView;
 import com.miguo.view.LoginByMobileView;
+import com.tencent.qcloud.suixinbo.model.MySelfInfo;
 
 import java.util.TreeMap;
 
@@ -42,7 +51,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                      * 如果Result实体为空
                      */
                     if(null == userBean.getResult() || null == userBean.getResult().get(0)){
-                        getListener().loginError(userBean.getMessage());
+                        getListener().loginError("登录失败！");
                         return;
                     }
 
@@ -50,14 +59,19 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                      * 如果Body实体为空
                      */
                     if(null == userBean.getResult().get(0).getBody() || null == userBean.getResult().get(0).getBody().get(0)){
-                        getListener().loginError(userBean.getMessage());
+                        getListener().loginError("登录失败！");
                         return;
                     }
 
                     /**
                      * 登录成功
                      */
-                    getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0), mobile, password);
+                    saveUserToLocal(userBean.getResult().get(0).getBody().get(0), mobile, password);
+                    userBean.getResult().get(0).getBody().get(0).setToken(userBean.getToken());
+                    handleApplicationCurrentUser(userBean.getResult().get(0).getBody().get(0));
+                    handleSaveUser(mobile, password);
+                    initJpush();
+                    getListener().loginSuccess(userBean.getResult().get(0).getBody().get(0));
                 }else {
                     /**
                      * 状态码不是210，登录失败
@@ -71,6 +85,56 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
                 getListener().loginError(message);
             }
         });
-
     }
+
+    private void handleApplicationCurrentUser(UserInfoNew userInfoNew){
+        if (userInfoNew != null) {
+            App.getInstance().setCurrentUser(userInfoNew);
+        }
+    }
+
+    /**
+     * 将用户信息保存到本地以及全局
+     *
+     * @param user
+     */
+    private void saveUserToLocal(UserInfoNew user, String mobile, String password) {
+        UserInfoNew userInfoNew = user;
+        if (userInfoNew != null) {
+            App.getInstance().setCurrentUser(userInfoNew);
+            User_infoModel model = new User_infoModel();
+            model.setUser_id(userInfoNew.getUser_id());
+            MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
+            if (!TextUtils.isEmpty(mobile)) {
+                model.setMobile(mobile);
+            }
+            if (!TextUtils.isEmpty(password)) {
+                model.setUser_pwd(password);
+            }
+            if (!TextUtils.isEmpty(userInfoNew.getPwd())) {
+                model.setUser_pwd(userInfoNew.getPwd());
+            }
+            model.setUser_name(userInfoNew.getUser_name());
+
+            LocalUserModel.dealLoginSuccess(model, true);
+        }
+    }
+
+    /**
+     * 保存用户信息SharedPreferences
+     *
+     * @param mobile
+     * @param password
+     */
+    private void handleSaveUser(String mobile, String password) {
+        SharedPreferencesUtils.getInstance().saveUserNameAndUserPassword(mobile, password);
+    }
+
+    /**
+     * 推送
+     */
+    private void initJpush() {
+        JpushHelper.initJPushConfig();
+    }
+
 }

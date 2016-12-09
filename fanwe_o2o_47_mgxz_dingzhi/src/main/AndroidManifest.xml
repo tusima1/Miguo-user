@@ -198,7 +198,8 @@
 
         <!-- 注册界面 -->
         <activity
-            android:name="com.fanwe.RegisterActivity"
+            android:name="com.miguo.app.HiRegisterActivity"
+            android:theme="@style/Transparent_title_area"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -206,18 +207,6 @@
         <!-- 注册协议界面 -->
         <activity
             android:name="com.fanwe.RegisterAgreementActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 附近的会员界面 -->
-        <activity
-            android:name="com.fanwe.NearbyVipActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 我的更多 -->
-        <activity
-            android:name="com.fanwe.MoreSecondActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
@@ -240,34 +229,13 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name="com.fanwe.HoltelListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 积分商城 -->
         <activity
             android:name="com.fanwe.ScoresListActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 登录界面new -->
-        <activity
-            android:name="com.fanwe.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 活动 -->
-        <!-- 我的活动 -->
-        <activity
-            android:name="com.fanwe.MyEventListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 活动详情 -->
         <!-- 商家 -->
         <activity
             android:name="com.fanwe.StoreListActivity"
@@ -301,20 +269,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 酒店搜索列表 -->
-        <activity
-            android:name="com.fanwe.SearchListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 酒店列表 -->
-        <activity
-            android:name="com.fanwe.HoltelSearchListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="standard"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 团购详情界面 -->
         <activity
             android:name="com.fanwe.TuanDetailActivity"
@@ -395,12 +349,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 我的优惠券界面 -->
-        <activity
-            android:name="com.fanwe.MyYouhuiListActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 会员升级界面 -->
         <activity
@@ -416,12 +364,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 消息提醒界面 -->
-        <!-- 订单详情界面 -->
-        <activity
-            android:name="com.fanwe.OrderDetailActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 团购卷详情界面 -->
         <activity
@@ -451,12 +393,6 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        <!-- 商家列表界面（可以自主下单的商家列表） -->
-        <activity
-            android:name="com.fanwe.MerchantListOrderActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 商品发表评论界面 -->
         <activity
@@ -521,36 +457,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 我的抽奖 -->
-        <activity
-            android:name="com.fanwe.MyLotteryActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 我的点评 -->
-        <activity
-            android:name="com.fanwe.MyCommentActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 商品申请退款 -->
-        <activity
-            android:name="com.fanwe.RefundGoodsActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 团购申请退款 -->
-        <activity
-            android:name="com.fanwe.RefundTuanActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 商品没收到货 -->
-        <activity
-            android:name="com.fanwe.RefuseDeliveryActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 会员资料更新 -->
         <activity
             android:name="com.fanwe.MyAccountActivity"
@@ -598,13 +504,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 分销小店 -->
-        <activity
-            android:name="com.fanwe.DistributionStoreActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 分销店铺 -->
         <activity
             android:name="com.fanwe.DistributionStoreInActivity"
@@ -624,19 +523,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 更多 -->
-        <activity
-            android:name="com.fanwe.MoreActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 发表动态 -->
-        <activity
-            android:name="com.fanwe.AddDynamicActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait">
-
-            <!-- android:windowSoftInputMode="adjustResize" -->
-        </activity>
 
         <!-- 我的红包 -->
         <activity
@@ -650,18 +536,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 提现 -->
-        <activity
-            android:name="com.fanwe.WithdrawActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 绑定银行卡 -->
-        <activity
-            android:name="com.fanwe.BindBankCardActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 提现明细(日志) -->
         <activity
             android:name="com.fanwe.WithdrawLogActivity"
@@ -671,12 +545,6 @@
         <!-- 余额提现明细(日志) -->
         <activity
             android:name="com.fanwe.UserWithdrawLogActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 提现详情 -->
-        <activity
-            android:name="com.fanwe.WithdrawDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
@@ -693,11 +561,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 手机号注册界面 -->
-        <activity
-            android:name="com.fanwe.RegisterMobileActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 我的红包详细信息 -->
         <activity
             android:name="com.fanwe.MyRedEnvelopDetailActivity"
@@ -717,19 +580,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Translucent"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 域名变更界面 -->
-        <activity
-            android:name="com.fanwe.test.InputSiteActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 设置密码 -->
-        <activity
-            android:name="com.fanwe.SetPwActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 银联支付界面 -->
         <activity android:name="com.unionpay.uppay.PayActivity"/>
@@ -765,13 +615,6 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 待消费订单new -->
-        <activity
-            android:name="com.fanwe.OrderWait2UseActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
-
         <!-- 限时特惠 -->
         <activity
             android:name="com.fanwe.TimeLimitActivity"
@@ -790,6 +633,14 @@
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
         <!-- 新商家详情 -->
+        <!-- 新登录 -->
+        <activity
+            android:name="com.miguo.app.HiLoginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
+        <!-- 新Login -->
         <activity
             android:name="com.miguo.app.HiWebPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"

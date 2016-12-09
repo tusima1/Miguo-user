@@ -8,7 +8,6 @@ import com.fanwe.base.Presenter;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.google.gson.Gson;
 import com.miguo.live.model.RedPacketInfo;
 
@@ -25,7 +24,6 @@ public class RedPacketHelper extends Presenter {
 
     private static final String TAG = RedPacketHelper.class.getSimpleName();
     private Gson gson;
-    private UserCurrentInfo userCurrentInfo;
     private CallbackView mView;
     private Context mContext;
     private String token;

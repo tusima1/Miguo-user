@@ -21,7 +21,7 @@ import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
-import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -42,7 +42,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
 
     private static final String TAG = CommonHttpHelper.class.getSimpleName();
     private Gson gson;
-    private UserCurrentInfo userCurrentInfo;
+    private UserInfoNew userCurrentInfo;
     private CallbackView mView;
     private Context mContext;
     private String token;
@@ -53,7 +53,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         this.mContext = mContext;
         this.mView = mView;
         gson = new Gson();
-        userCurrentInfo = App.getInstance().getmUserCurrentInfo();
+        userCurrentInfo = App.getInstance().getCurrentUser();
     }
 
     public String getToken() {
@@ -241,7 +241,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
      */
     public void createShareRecord(String content_type, String content_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("lgn_user_id", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        params.put("lgn_user_id", App.getInstance().getCurrentUser().getUser_id());
         params.put("content_type", content_type);
         params.put("content_id", content_id);
         params.put("method", CommonConstants.CREATE_SHARE_RECORD);

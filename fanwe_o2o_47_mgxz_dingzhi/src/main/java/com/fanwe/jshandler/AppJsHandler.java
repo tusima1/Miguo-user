@@ -7,7 +7,6 @@ import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.GoodsListActivity;
-import com.fanwe.LoginActivity;
 import com.fanwe.NoticeDetailActivity;
 import com.fanwe.NoticeListActivity;
 import com.fanwe.ScoresListActivity;
@@ -38,6 +37,8 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.MGDictUtil;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
 
@@ -164,10 +165,10 @@ public class AppJsHandler extends BaseJsHandler {
         startActivity(intent);
     }
 
-    public void goLogin() {
-        Intent intent = new Intent(mActivity, LoginActivity.class);
-        startActivity(intent);
-    }
+	public void goLogin(){
+		Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+		startActivity(intent);
+	}
 
 
     @JavascriptInterface
@@ -230,7 +231,7 @@ public class AppJsHandler extends BaseJsHandler {
             });
             outSideShoppingCartHelper.addShopCart(
                     fx_user_id,
-                    App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                    App.getApplication().getCurrentUser().getUser_id(),
                     App.getApplication().getToken(), goods_id, "1", add_goods_num, share_record_id);
 
         } else {

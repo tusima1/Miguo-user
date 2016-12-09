@@ -13,6 +13,15 @@ public class LoginUserBean implements Serializable{
     List<Result> result;
     int statusCode;
     String message;
+    String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public List<Result> getResult() {
         return result;

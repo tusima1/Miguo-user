@@ -42,6 +42,9 @@ public class ModelCommissionLog {
     private String jump_id;
     private String order_id_item;
     private int jump_type;
+    private String year_month;
+    private String month_date;
+    private String time_str;
 
     public boolean isJumpToGoodsDetail(){
         return getJump_type() == 1;
@@ -167,4 +170,27 @@ public class ModelCommissionLog {
         this.order_id = order_id;
     }
 
+    public String getYear_month() {
+        return year_month;
+    }
+
+    public void setYear_month(String year_month) {
+        this.year_month = year_month;
+    }
+
+    public String getMonth_date() {
+        return month_date;
+    }
+
+    public void setMonth_date(String month_date) {
+        this.month_date = month_date;
+    }
+
+    public String getTime_str() {
+        return time_str;
+    }
+
+    public void setTime_str(String time_str) {
+        this.time_str = time_str;
+    }
 }

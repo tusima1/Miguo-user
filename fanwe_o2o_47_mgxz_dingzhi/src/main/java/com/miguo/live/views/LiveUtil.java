@@ -7,13 +7,14 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.fanwe.LoginActivity;
+
 import com.fanwe.app.App;
 import com.fanwe.constant.EnumEventTag;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
-import com.fanwe.user.model.UserCurrentInfo;
 import com.fanwe.utils.DataFormat;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.getLiveListNew.ModelHost;
 import com.miguo.live.model.getLiveListNew.ModelRecordFile;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
@@ -172,7 +173,7 @@ public class LiveUtil {
             return;
         }
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            Intent intent = new Intent(mActivity, LoginActivity.class);
+            Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             BaseUtils.jumpToNewActivity(mActivity, intent);
             return;
         }
@@ -359,11 +360,8 @@ public class LiveUtil {
         ModelHost host = room.getHost();
         String nickName = host.getNickname();
         String avatar = "";
-        if (App.getInstance().getmUserCurrentInfo() != null) {
-            UserCurrentInfo currentInfo = App.getInstance().getmUserCurrentInfo();
-            if (currentInfo.getUserInfoNew() != null) {
-                avatar = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
-            }
+        if(App.getInstance().getCurrentUser() != null){
+            avatar = App.getInstance().getCurrentUser().getIcon();
         }
         MySelfInfo.getInstance().setAvatar(avatar);
         MySelfInfo.getInstance().setNickName(App.getInstance().getUserNickName());

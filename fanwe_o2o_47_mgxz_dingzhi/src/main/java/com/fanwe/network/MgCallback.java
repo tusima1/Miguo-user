@@ -9,7 +9,7 @@ import com.fanwe.base.ErrorCodeParse;
 import com.fanwe.base.Root;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.constant.EnumEventTag;
-import com.fanwe.user.model.UserCurrentInfo;
+import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.miguo.utils.MGUIUtil;
 import com.sunday.eventbus.SDEventManager;
@@ -89,13 +89,11 @@ public abstract class MgCallback<T> implements Callback {
                 }
                 if (code >= 200 && code <= 400) {
                     //保存每个接口返回的token值 到缓存中。
-                    UserCurrentInfo userCurrentInfo = App.getInstance().getmUserCurrentInfo();
                     if (!TextUtils.isEmpty(token) && !"null".equals(token)) {
-                        userCurrentInfo.setToken(token);
+                        App.getInstance().setToken(token);
                     }
                     if (code == 320 || code == 321) {
-//                        MGToast.showToast(message);
-                        userCurrentInfo.setToken("");
+                        App.getInstance().setToken("");
                         SDEventManager.post(EnumEventTag.TOKEN_FAILUE.ordinal());
                     } else {
                         if(clz != Root.class){

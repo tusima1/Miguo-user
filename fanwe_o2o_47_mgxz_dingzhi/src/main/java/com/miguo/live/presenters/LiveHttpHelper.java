@@ -1019,7 +1019,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("room_id", room_id);
         params.put("live_type", live_type);
-        params.put("user_id", App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        params.put("user_id", App.getInstance().getCurrentUser().getUser_id());
 
         params.put("method", LiveConstants.RECEIVE_CODE);
 

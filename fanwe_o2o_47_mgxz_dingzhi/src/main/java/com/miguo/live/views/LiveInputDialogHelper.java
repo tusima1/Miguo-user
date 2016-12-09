@@ -191,7 +191,7 @@ public class LiveInputDialogHelper {
     }
 
     private void sendDanmu(String danmu){
-        mLiveControlHelper.sendDanmuMessage(danmu, App.getApplication().getUserNickName(), App.getApplication().getmUserCurrentInfo().getUserInfoNew().getUser_id(), App.getApplication().getmUserCurrentInfo().getUserInfoNew().getIcon());
+        mLiveControlHelper.sendDanmuMessage(danmu, App.getApplication().getUserNickName(), App.getApplication().getCurrentUser().getUser_id(), App.getApplication().getCurrentUser().getIcon());
     }
 
     /*展示 代替dialog的show*/

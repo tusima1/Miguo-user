@@ -141,7 +141,6 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
         if (!mapIds.isEmpty()) {
             model.put("deal_attr", mapIds);
         }
-      //Delete php
     }
 
     public boolean validateMainGoods() {
@@ -296,6 +295,9 @@ public class TuanDetailCombinedPackagesFragment extends TuanDetailBaseFragment {
         }
 
         mListModel = mDealModel.getListRelateModel();
-        return toggleFragmentView(mListModel);
+        if (!toggleFragmentView(mListModel)) {
+            return false;
+        }
+        return true;
     }
 }

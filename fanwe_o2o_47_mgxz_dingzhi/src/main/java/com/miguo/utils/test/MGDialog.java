@@ -2,13 +2,17 @@ package com.miguo.utils.test;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.utils.DisplayUtil;
 
 /**
  * Created by didik on 2016/9/12.
@@ -16,10 +20,14 @@ import com.fanwe.o2o.miguo.R;
 public class MGDialog extends Dialog implements View.OnClickListener {
 
     private Context mContext;
+    private RelativeLayout dialog_layout;
     private TextView mTv_title;
     private TextView mTv_Content;
+
     private Button mBt_cancel;
     private Button mBt_sure;
+    private Drawable sureBtndrawable;
+    private Drawable cancelBtndrawable;
     private String mTitle;
     private int mTitleDrawableId;
     private String mSureText;
@@ -28,6 +36,18 @@ public class MGDialog extends Dialog implements View.OnClickListener {
     private String mContentText;
     private OnCancelClickListener mCancelListener;
     private OnSureClickListener mSureListener;
+    /**
+     *  没有title时候的高度。
+     */
+    private int WITHOUTTITLEHEIGHT=282;
+    /**
+     * dialog高度。
+     */
+    private int height=280;
+    /**
+     * 是否显示标题，默认显示。
+     */
+    private boolean showTitle = true;
 
     public MGDialog(Context context) {
         super(context,R.style.floag_dialog);
@@ -41,7 +61,7 @@ public class MGDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_live_normal_v2);
-
+        dialog_layout = (RelativeLayout)findViewById(R.id.dialog_layout) ;
         mTv_title = (TextView) findViewById(R.id.tv_title);
         mTv_Content = (TextView) findViewById(R.id.tv_content);
         mBt_cancel = (Button) findViewById(R.id.cancel_action);
@@ -49,14 +69,61 @@ public class MGDialog extends Dialog implements View.OnClickListener {
 
         mBt_cancel.setOnClickListener(this);
         mBt_sure.setOnClickListener(this);
-
-
+        setCancelButtonDrawable(cancelBtndrawable);
+        setSureButtonDrawable(sureBtndrawable);
         setCancelActionText(mCancelText);
         setSureActionText(mSureText);
         setContentText(mContentText);
         setMGTitle(mTitleObj);
+        setDialogHeight(height);
     }
 
+    public MGDialog setDialogHeight(int height){
+        if(height>0){
+            this.height =height;
+        }
+        if(dialog_layout==null){
+            return this;
+        }
+        if(!showTitle){
+            height = this.WITHOUTTITLEHEIGHT;
+        }
+        android.view.ViewGroup.LayoutParams pp =dialog_layout.getLayoutParams();
+         pp.height = DisplayUtil.dp2px(mContext,(float)height);
+         dialog_layout.setLayoutParams(pp);
+        return this;
+    }
+    public void showTitle(boolean show){
+        if(!show){
+            mTv_title.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置取消按扭背景色。
+     * @param drawable
+     * @return
+     */
+    public MGDialog setCancelButtonDrawable(Drawable drawable){
+        this.cancelBtndrawable = drawable;
+        if(mBt_cancel!=null ) {
+            mBt_cancel.setBackground(drawable);
+        }
+        return this;
+    }
+
+    /**
+     * 设置确认按钮背景色。
+     * @param drawable
+     * @return
+     */
+    public MGDialog setSureButtonDrawable(Drawable drawable){
+        this.sureBtndrawable = drawable;
+        if(mBt_sure!=null ) {
+            mBt_sure.setBackground(drawable);
+        }
+        return this;
+    }
     public MGDialog setSureActionText(String sure){
         this.mSureText=sure;
         if (!TextUtils.isEmpty(mSureText) && mBt_sure!=null) {
@@ -95,8 +162,7 @@ public class MGDialog extends Dialog implements View.OnClickListener {
         }else if (mTitleDrawableId!=0){
             mTv_title.setBackgroundResource(mTitleDrawableId);
         }else {
-            mTitle="标题";
-            mTv_title.setText(mTitle);
+            mTv_title.setVisibility(View.GONE);
         }
         return this;
     }

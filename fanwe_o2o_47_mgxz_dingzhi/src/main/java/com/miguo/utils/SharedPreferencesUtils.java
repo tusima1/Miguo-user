@@ -3,10 +3,13 @@ package com.miguo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.fanwe.app.App;
+import com.fanwe.user.model.UserInfoNew;
 import com.miguo.definition.SharedPreferencesConfig;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/7.
+ * SharedPreferences单例类
  */
 public class SharedPreferencesUtils {
 
@@ -15,7 +18,7 @@ public class SharedPreferencesUtils {
     private SharedPreferences.Editor editor;
     private Context context;
 
-    String tag = "SharedPreferencesUtils";
+    String tag = getClass().getSimpleName();
 
     /**
      * 防止默认构造器被调用需私有化
@@ -30,22 +33,22 @@ public class SharedPreferencesUtils {
         editor = sp.edit();
     }
 
-    public static SharedPreferencesUtils getInstance(Context context){
+    public static SharedPreferencesUtils getInstance(){
         /**
          * 防止异步请求和用户操作同时访问
          */
         synchronized (SharedPreferencesUtils.class){
             if(instance == null){
-                instance = new SharedPreferencesUtils(context);
+                instance = new SharedPreferencesUtils(App.getInstance());
             }
             return instance;
         }
     }
 
     /**
-     *
+     * 登录
      * @param username 手机号
-     * @param password 密码
+     * @param password 密码 md5
      */
     public void saveUserNameAndUserPassword(String username, String password){
         editor.putString(SharedPreferencesConfig.MOBILE, username);
@@ -67,6 +70,15 @@ public class SharedPreferencesUtils {
      */
     public String getPassword(){
         return sp.getString(SharedPreferencesConfig.PASSWORD, "");
+    }
+
+    /**
+     * 退出登录
+     */
+    public void clearUserNameAndUserPassword(){
+        editor.putString(SharedPreferencesConfig.MOBILE, "");
+        editor.putString(SharedPreferencesConfig.PASSWORD, "");
+        editor.commit();
     }
 
     /**

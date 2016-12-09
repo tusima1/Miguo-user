@@ -192,7 +192,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
         if (liveHttpHelper == null) {
             liveHttpHelper = new LiveHttpHelper(mContext, HostBottomToolView.this);
         }
-        liveHttpHelper.getHandOutRedPacket(CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id());
+        liveHttpHelper.getHandOutRedPacket(CurLiveInfo.modelShop.getId(), App.getInstance().getCurrentUser().getUser_id());
 
 
 //        RedPacketDialog redPacketDialog = new RedPacketDialog(getContext());
@@ -221,7 +221,7 @@ public class HostBottomToolView extends LinearLayout implements IViewGroup, View
                         if (dialogSendRedPacket != null) {
                             dialogSendRedPacket.dismiss();
                         }
-                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id(),
+                        liveHttpHelper.postHandOutRedPacket(CurLiveInfo.getRoomNum() + "", CurLiveInfo.modelShop.getId(), App.getInstance().getCurrentUser().getUser_id(),
                                 currModelHandOutRedPacket.getRed_packet_type(), sendPacketCount + "", currModelHandOutRedPacket.getRed_packet_amount());
                     }
                     dialogSendRedPacket.dismiss();

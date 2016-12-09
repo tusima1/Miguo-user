@@ -173,7 +173,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
         String name=item.getSenderName();
         //先显示电话
 //        if (TextUtils.isEmpty(name)||"null".equals(name)){
-//            UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+//            UserInfoNew userInfoNew = App.getInstance().getCurrentUser();
 //            String user_name = userInfoNew
 //                    .getUser_name();
 //            String work_tel = userInfoNew.getWork_tel();

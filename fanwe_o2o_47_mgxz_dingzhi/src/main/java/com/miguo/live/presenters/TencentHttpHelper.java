@@ -50,7 +50,7 @@ public class TencentHttpHelper implements ITencentResult {
     }
 
     private void initUser2Myinfo() {
-        UserInfoNew userInfoNew = App.getInstance().getmUserCurrentInfo().getUserInfoNew();
+        UserInfoNew userInfoNew = App.getInstance().getCurrentUser();
         if (userInfoNew!=null && !TextUtils.isEmpty(userInfoNew.getUser_id())){
             MySelfInfo.getInstance().setId(userInfoNew.getUser_id());
         }else {
@@ -90,7 +90,7 @@ public class TencentHttpHelper implements ITencentResult {
      * 直播登录，返回用户直播签名  GenerateSign
      */
     public void generateSign() {
-        String token = App.getInstance().getmUserCurrentInfo().getToken();
+        String token = App.getInstance().getToken();
         final Gson gson=new Gson();
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", token);

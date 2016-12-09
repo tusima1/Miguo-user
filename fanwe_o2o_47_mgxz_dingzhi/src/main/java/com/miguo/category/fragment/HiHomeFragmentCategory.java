@@ -32,7 +32,7 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
 import com.miguo.adapter.HomePagerAdapter;
-import com.miguo.dao.BannerTypeModel;
+import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetMenuListDao;
@@ -275,6 +275,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     private void checkCitySign() {
+        /**
+         * {@link com.miguo.dao.impl.CheckCitySignDaoImpl}
+         * {@link #checkCitySignSuccess()}
+         * {@link #checkCitySignError()}
+         */
         checkCitySignDao.checkCitySign(AppRuntimeWorker.getCity_id());
     }
 
@@ -746,6 +751,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void checkCitySignSuccess() {
+        scrollView.showLoadingLayout();
         setHasSeeler(true);
         nodata.setVisibility(View.GONE);
         homeAdView2SpaceLayout.setVisibility(View.VISIBLE);
@@ -754,6 +760,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void checkCitySignError() {
+        scrollView.hideLoadingLayout();
         clearPage();
         setTitleAlpha(titleLayout, 1);
         currentT = 0;

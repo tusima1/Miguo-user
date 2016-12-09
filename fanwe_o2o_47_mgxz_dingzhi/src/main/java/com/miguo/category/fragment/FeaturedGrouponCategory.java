@@ -16,7 +16,7 @@ import com.miguo.adapter.HiGrouponFeaturedAdapter;
 import com.miguo.dao.FeaturedGrouponDao;
 import com.miguo.dao.impl.FeaturedGrouponDaoImpl;
 import com.miguo.definition.PageSize;
-import com.miguo.entity.model.getFeaturedGroupBuy.ModelFeaturedGroupBuy;
+import com.miguo.entity.ModelFeaturedGroupBuy;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.view.FeaturedGrouponView;

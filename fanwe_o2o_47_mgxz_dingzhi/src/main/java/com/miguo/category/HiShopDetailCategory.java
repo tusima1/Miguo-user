@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
@@ -50,7 +49,9 @@ import com.miguo.dao.RepresentMerchantDao;
 import com.miguo.dao.impl.CollectShopDaoImpl;
 import com.miguo.dao.impl.HiShopDetailDaoImpl;
 import com.miguo.dao.impl.RepresentMerchantDaoImpl;
+import com.miguo.definition.ClassPath;
 import com.miguo.entity.HiShopDetailBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.ShopDetailPagerItemFragmet;
 import com.miguo.listener.HiShopDetailListener;
 import com.miguo.live.views.customviews.MGToast;
@@ -348,7 +349,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      */
     public void clickRepresent() {
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             BaseUtils.jumpToNewActivity(getActivity(), intent);
             return;
         }
@@ -450,7 +451,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      */
     public void clickCollect() {
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             BaseUtils.jumpToNewActivity(getActivity(), intent);
             return;
         }

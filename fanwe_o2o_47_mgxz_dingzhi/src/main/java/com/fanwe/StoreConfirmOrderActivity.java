@@ -50,7 +50,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 
 	@ViewInject(R.id.ll_no_youhui)
 	private LinearLayout mLl_no_youhui;
-	
+
 	@ViewInject(R.id.v_count_bot)
 	private View v_bot;
 	@ViewInject(R.id.v_count_top)
@@ -58,7 +58,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 
 	@ViewInject(R.id.ll_count)
 	private LinearLayout ll_count;
-	
+
 	@ViewInject(R.id.act_store_et_money)
 	private ClearEditText mEt_NoYouhui;// 不参与优惠的金额
 
@@ -177,22 +177,6 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 	private void requestData() {
 	}
 
-	protected void dealRequestDataSuccess(Store_ActModel actModel) {
-		Intent intent;
-		switch (actModel.getStatus()) {
-		case -1:
-			intent = new Intent(mActivity, LoginActivity.class);
-			startActivity(intent);
-
-			break;
-		case 1:
-			bindData(actModel);
-			break;
-
-		default:
-			break;
-		}
-	}
 
 	protected void bindData(final Store_ActModel mActModel) {
 		if (mActModel == null) {
@@ -203,18 +187,18 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 			SDViewUtil.hide(v_bot);
 			SDViewUtil.hide(v_top);
 			SDViewUtil.hide(ll_count);
-			
+
 		}
 		BigDecimal bd2 = new BigDecimal(
 				(100 - mActModel.getDiscount_pay()) / 10.0);
 		bd2 = bd2.setScale(1, BigDecimal.ROUND_HALF_UP);
 		SDViewBinder.setTextView(mTv_discount, bd2 + "折");
-		
+
 		mEt_money.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+									  int count) {
 				String number = s.toString();
 				if (number.equals("")) {
 					SDViewUtil.hide(mTv_code);
@@ -236,13 +220,13 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 					}else {
 						culcalatePay();
 					}
-					
+
 				}
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+										  int after) {
 				if (start == 0) {
 					SDViewUtil.hide(mTv_code);
 					SDViewBinder.setTextView(mTv_discountMoney, "");
@@ -282,7 +266,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 						SDViewBinder.setTextView(mTv_discountMoney,
 								String.valueOf(bd4) + "元");
 						onlyUseOnlinePayOrYuePay(bd3.floatValue());
-						
+
 					}
 
 				}
@@ -294,7 +278,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+									  int count) {
 				String number = s.toString();
 				if (number.equals("")) {
 					if (money > 0) {
@@ -328,7 +312,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 					}else {
 						culcalatePay();
 					}
-					
+
 //					culcalatePay();
 				}
 
@@ -336,7 +320,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+										  int after) {
 
 				if (start == 0) {
 					if (money > 0) {
@@ -394,7 +378,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 						SDViewBinder.setTextView(mTv_discountMoney, bd3+"元");
 
 						onlyUseOnlinePayOrYuePay(bd3.floatValue());
-						
+
 					}
 				}
 			}
@@ -461,7 +445,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 			arrValue[2] = bd0 + "元";
 			arrValue[3] = bd1 + "元";
 			BigDecimal bd3 = new BigDecimal(
-					 Float.parseFloat(bd1 + ""));
+					Float.parseFloat(bd1 + ""));
 			bd3 = bd3.setScale(2, BigDecimal.ROUND_HALF_UP);
 			arrValue[4] = bd3 + "元";
 		} else if (payId != 0 && select == 0) {
@@ -478,7 +462,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 			bd1 = bd1.setScale(2, BigDecimal.ROUND_HALF_UP);
 			arrValue[2] = bd1 + "元";
 			arrValue[3] = bd1 + "元";
-			
+
 		}
 
 		for (int i = 0; i < arrPay.length; i++) {
@@ -526,7 +510,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 						v.setBackgroundResource(R.drawable.layer_main_color_corner_press);
 						v.setClickable(false);
 						//60s可点
-						
+
 					}else{
 						v.setBackgroundResource(R.drawable.layer_main_color_corner_normal);
 						v.setClickable(true);
@@ -559,7 +543,7 @@ public class StoreConfirmOrderActivity extends BaseActivity {
 
 	/** 不参与优惠的金额应该小于 消费总额 **/
 	private boolean yue_noYouHui_juglement(float yue, float noYouHui,
-			boolean showToast) {
+										   boolean showToast) {
 		if (yue < noYouHui) {
 			// 不参与优惠的金额变红
 			mEt_NoYouhui.setTextColor(getResources().getColor(

@@ -168,20 +168,20 @@ public class LiveEndActivity extends Activity implements CallbackView {
         clickEnable = false;
 
         String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-        if (!TextUtils.isEmpty(App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon())) {
-            imageUrl = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIcon();
+        if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getIcon())) {
+            imageUrl = App.getInstance().getCurrentUser().getIcon();
         } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
             imageUrl = MGDictUtil.getShareIcon();
         }
         String title = "刚送了一个亿的福袋、钻石和优惠券";
-        String nick = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getNick();
+        String nick = App.getInstance().getCurrentUser().getNick();
         String content = "我刚通过米果直播送出各种钻石、红包和优惠，数不清啊数不清，下次直播再约你，[" + nick + "]邀请你关注";
         if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
             //朋友圈
             title = content;
         }
         UmengShareManager.share(platform, this, title, content, ServerUrl.getAppH5Url() + "index/winnie/id/" +
-                        App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id() + "/share_record_id/" + shareRecordId,
+                        App.getInstance().getCurrentUser().getUser_id() + "/share_record_id/" + shareRecordId,
                 UmengShareManager.getUMImage(this, imageUrl), shareResultCallback);
     }
 

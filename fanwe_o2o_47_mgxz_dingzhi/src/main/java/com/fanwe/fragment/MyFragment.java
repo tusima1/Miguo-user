@@ -270,8 +270,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             /*我的小店*/
             Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
             String id="";
-            if(App.getInstance().getmUserCurrentInfo()!=null&&App.getInstance().getmUserCurrentInfo().getUserInfoNew()!=null) {
-                id = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getUser_id();
+            if(App.getInstance().getCurrentUser() != null) {
+                id = App.getInstance().getCurrentUser().getUser_id();
             }
             intent.putExtra("id", id);
             startActivity(intent);
@@ -354,13 +354,13 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         }
         SDViewBinder.setTextView(mUserName2, MGStringFormatter.getLimitedString(sign, 10));
         if (!TextUtils.isEmpty(modelPersonalHome.getPersonality())) {
-            App.getInstance().getmUserCurrentInfo().getUserInfoNew().setRemark(modelPersonalHome.getPersonality());
+            App.getInstance().getCurrentUser().setRemark(modelPersonalHome.getPersonality());
         }
         mUserFaceString = modelPersonalHome.getIcon();
         SDViewBinder.setImageView(mUserFaceString, mIvUserFace);
 
         String fx_level = modelPersonalHome.getFx_level();
-        App.getInstance().getmUserCurrentInfo().getUserInfoNew().setFx_level(fx_level);
+        App.getInstance().getCurrentUser().setFx_level(fx_level);
         //粉丝
         String value = modelPersonalHome.getFans_count();
 

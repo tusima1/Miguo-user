@@ -9,8 +9,7 @@
     <!--显示当前总果仁数-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp97"
-        android:layout_marginBottom="@dimen/dp28"
+        android:layout_height="@dimen/dp94"
         android:layout_marginTop="@dimen/dp28"
         android:orientation="vertical">
 
@@ -47,17 +46,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp13"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="1234344444"
             android:textColor="@color/c_595959"
             android:textSize="@dimen/sp24"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.7dp"
         android:background="@color/c_D9D9D9"></View>
     <!--显示果仁果钻兑换列表-->
     <android.support.v7.widget.RecyclerView

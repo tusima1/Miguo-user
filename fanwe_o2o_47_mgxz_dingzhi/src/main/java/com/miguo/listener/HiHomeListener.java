@@ -3,11 +3,12 @@ package com.miguo.listener;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.fanwe.LoginActivity;
 import com.fanwe.app.App;
 import com.fanwe.umeng.UmengEventStatistics;
 import com.miguo.category.Category;
 import com.miguo.category.HiHomeCategory;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.views.LiveStartActivity;
 import com.miguo.live.views.LiveStartAuthActivity;
@@ -74,9 +75,9 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
 
         if (TextUtils.isEmpty(App.getInstance().getToken()))// 未登录 以后加入是不是主播的判断。
         {
-            BaseUtils.jumpToNewActivity(getActivity(), new Intent(getActivity(), LoginActivity.class));
+            BaseUtils.jumpToNewActivity(getActivity(), new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY)));
         } else {
-            String is_host = App.getInstance().getmUserCurrentInfo().getUserInfoNew().getIs_host();
+            String is_host = App.getInstance().getCurrentUser().getIs_host();
             if ("0".equals(is_host)) {
                 //未认证
                 Intent intent = new Intent(getActivity(), LiveStartAuthActivity.class);
@@ -105,7 +106,7 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
     }
 
     private void clickLogin(){
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
