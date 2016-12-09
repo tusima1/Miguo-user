@@ -9,7 +9,7 @@ import com.miguo.category.HiShopDetailCategory;
 /**
  * Created by Administrator on 2016/10/21.
  */
-public class HiShopDetailListener extends Listener{
+public class HiShopDetailListener extends Listener {
 
     public HiShopDetailListener(Category category) {
         super(category);
@@ -17,7 +17,7 @@ public class HiShopDetailListener extends Listener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.call:
                 clickCall();
                 break;
@@ -38,30 +38,37 @@ public class HiShopDetailListener extends Listener{
             case R.id.represent:
                 clickRepresent();
                 break;
+            case R.id.btn_represent:
+                clickRepresentBtn();
+                break;
         }
     }
 
-    private void clickRepresent(){
+    private void clickRepresent() {
         getCategory().clickRepresent();
     }
 
-    private void clickBack(){
+    private void clickRepresentBtn() {
+        getCategory().clickRepresentBtn();
+    }
+
+    private void clickBack() {
         getCategory().clickBack();
     }
 
-    private void clickShare(){
+    private void clickShare() {
         getCategory().clickShare();
     }
 
-    private void clickCall(){
+    private void clickCall() {
         getCategory().clickCall();
     }
 
-    private void clickLocation(){
+    private void clickLocation() {
         getCategory().clickLocation();
     }
 
-    private void clickCollect(){
+    private void clickCollect() {
         getCategory().clickCollect();
     }
 

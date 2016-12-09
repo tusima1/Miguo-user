@@ -1,17 +1,23 @@
 package com.miguo.category;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.StoreLocationActivity;
@@ -203,6 +209,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     RelativeLayout layoutBottom;
     @ViewInject(R.id.mode_top_layout)
     LinearLayout modeTopLayout;
+    @ViewInject(R.id.btn_represent)
+    Button btnRepresent;
 
     HiShopDetailDao shopDetailDao;
     HiShopDetailBean.Result result;
@@ -243,6 +251,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
 
     @Override
     protected void setThisListener() {
+        btnRepresent.setOnClickListener(listener);
         call.setOnClickListener(listener);
         location.setOnClickListener(listener);
         collect.setOnClickListener(listener);
@@ -342,6 +351,57 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     @Override
     public void showSomething() {
         scrollView.smoothScrollTo(0, (modeTopLayout.getMeasuredHeight() - BaseUtils.dip2px(15)));
+    }
+
+    boolean scrollAlready;
+
+    /**
+     * 点击求代言
+     */
+    public void clickRepresentBtn() {
+        //1、如果未代言，展开条幅
+        btnRepresent.setText("展开条幅");
+        //2、下滑到屏幕底部(延时1s)
+        if (!scrollAlready) {
+            scrollAlready = true;
+            btnAnim();
+        }
+        //3、下滑过程，同时把页面滚动的底部
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+    }
+
+    /**
+     * 延时1s，给条幅展示的时间
+     */
+    private void btnAnim() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                float curTranslationY = btnRepresent.getTranslationY();
+                ObjectAnimator animator = ObjectAnimator.ofFloat(btnRepresent, "translationY", curTranslationY, 500f);
+                animator.setDuration(1000);
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                        //收起条幅
+                        btnRepresent.setText("求代言");
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        //展开条幅
+                        btnRepresent.setText("展开条幅");
+                    }
+
+                });
+                animator.start();
+            }
+        }, 1000);
     }
 
     /**
