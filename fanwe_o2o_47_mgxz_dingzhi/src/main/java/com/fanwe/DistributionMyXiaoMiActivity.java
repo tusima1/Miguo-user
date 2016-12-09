@@ -100,11 +100,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
     private void initgetIntent() {
         isShow = getIntent().getBooleanExtra("yes", false);
         money = getIntent().getStringExtra("money");
-//		up_name = getIntent().getStringExtra("up_name");
         up_id = getIntent().getStringExtra("up_id");
-//		if(up_id == -1){
-//			up_name= "无";
-//		}
     }
 
     private void initClick() {

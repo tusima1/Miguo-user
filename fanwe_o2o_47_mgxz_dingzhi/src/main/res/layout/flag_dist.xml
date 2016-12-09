@@ -47,7 +47,7 @@
                     android:id="@+id/tv_textVip1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="普通"
+                    android:text="初级代言人"
                     android:textColor="@color/text_fenxiao"
                     android:textSize="@dimen/text_size_title" />
 
@@ -80,7 +80,7 @@
                     android:id="@+id/tv_textVip2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="白金"
+                    android:text="高级代言人"
                     android:textColor="@color/text_fenxiao"
                     android:textSize="@dimen/text_size_title" />
 
@@ -93,38 +93,6 @@
                     android:textSize="@dimen/text_size_title" />
             </LinearLayout>
 
-            <View
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/stroke" />
-
-            <LinearLayout
-                android:id="@+id/ll_vip3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/bg_text_color"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/tv_textVip3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="钻石"
-                    android:textColor="@color/text_fenxiao"
-                    android:textSize="@dimen/text_size_title" />
-
-                <TextView
-                    android:id="@+id/tv_vip3Number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/text_46b899"
-                    android:textSize="@dimen/text_size_title" />
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

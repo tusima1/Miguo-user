@@ -60,15 +60,6 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     @ViewInject(R.id.tv_vip2Number)
     private TextView mTv_vip2Number;
 
-    @ViewInject(R.id.ll_vip3)
-    private LinearLayout mLl_vip3;
-
-    @ViewInject(R.id.tv_textVip3)
-    private TextView mTv_textVip3;
-
-    @ViewInject(R.id.tv_vip3Number)
-    private TextView mTv_vip3Number;
-
     private MyXiaoMiAdapter mAdapter;
     private PageModel mPage = new PageModel();
     private List<Member> listModel = new ArrayList<Member>();
@@ -109,10 +100,8 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         isRefresh = true;
         mLl_vip1.setEnabled(true);
         mLl_vip2.setEnabled(true);
-        mLl_vip3.setEnabled(true);
         mTv_textVip1.setTextColor(getResources().getColor(R.color.text_fenxiao));
         mTv_textVip2.setTextColor(getResources().getColor(R.color.text_fenxiao));
-        mTv_textVip3.setTextColor(getResources().getColor(R.color.text_fenxiao));
     }
 
     private void getData() {
@@ -130,7 +119,6 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         if (currResultMyDistributionCorps != null) {
             SDViewBinder.setTextView(mTv_vip1Number, "（" + currResultMyDistributionCorps.getLevel1() + "）");
             SDViewBinder.setTextView(mTv_vip2Number, "（" + currResultMyDistributionCorps.getLevel2() + "）");
-            SDViewBinder.setTextView(mTv_vip3Number, "（" + currResultMyDistributionCorps.getLevel3() + "）");
             convertList();
         }
     }
@@ -160,7 +148,6 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     private void initClick() {
         mLl_vip1.setOnClickListener(this);
         mLl_vip2.setOnClickListener(this);
-        mLl_vip3.setOnClickListener(this);
     }
 
     @Override
@@ -173,27 +160,9 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
             case R.id.ll_vip2:
                 clickVip2();
                 break;
-            case R.id.ll_vip3:
-                clickVip3();
-                break;
             default:
                 break;
         }
-    }
-
-    private void clickVip3() {
-        mRank = "3";
-        isRefresh = true;
-        pageNum = 1;
-        mLl_vip1.setEnabled(true);
-        mLl_vip2.setEnabled(true);
-        mLl_vip3.setEnabled(false);
-        mTv_textVip1
-                .setTextColor(getResources().getColor(R.color.text_fenxiao));
-        mTv_textVip2
-                .setTextColor(getResources().getColor(R.color.text_fenxiao));
-        mTv_textVip3.setTextColor(getResources().getColor(R.color.main_color));
-        getData();
     }
 
     private void clickVip2() {
@@ -202,10 +171,7 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         pageNum = 1;
         mLl_vip1.setEnabled(true);
         mLl_vip2.setEnabled(false);
-        mLl_vip3.setEnabled(true);
         mTv_textVip1
-                .setTextColor(getResources().getColor(R.color.text_fenxiao));
-        mTv_textVip3
                 .setTextColor(getResources().getColor(R.color.text_fenxiao));
         mTv_textVip2.setTextColor(getResources().getColor(R.color.main_color));
         getData();
@@ -217,11 +183,8 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         pageNum = 1;
         mLl_vip1.setEnabled(false);
         mLl_vip2.setEnabled(true);
-        mLl_vip3.setEnabled(true);
         mTv_textVip1.setTextColor(getResources().getColor(R.color.main_color));
         mTv_textVip2
-                .setTextColor(getResources().getColor(R.color.text_fenxiao));
-        mTv_textVip3
                 .setTextColor(getResources().getColor(R.color.text_fenxiao));
         getData();
     }
@@ -237,12 +200,9 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
                         pageNum = 1;
                         mLl_vip1.setEnabled(true);
                         mLl_vip2.setEnabled(true);
-                        mLl_vip3.setEnabled(true);
                         mTv_textVip1.setTextColor(getResources().getColor(
                                 R.color.text_fenxiao));
                         mTv_textVip2.setTextColor(getResources().getColor(
-                                R.color.text_fenxiao));
-                        mTv_textVip3.setTextColor(getResources().getColor(
                                 R.color.text_fenxiao));
                         getData();
                     }

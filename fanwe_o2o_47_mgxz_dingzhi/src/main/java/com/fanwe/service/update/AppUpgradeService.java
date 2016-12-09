@@ -1,4 +1,4 @@
-package com.fanwe.service;
+package com.fanwe.service.update;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -41,11 +41,9 @@ import java.util.List;
  * @author yhz
  */
 public class AppUpgradeService extends Service implements CallbackView {
-    public static final String EXTRA_SERVICE_START_TYPE = "extra_service_start_type";
-    public static final int mNotificationId = 100;
-    private static final int DEFAULT_START_TYPE = 0;
-    private String localFileName="米果小站";
-    private int mStartType = DEFAULT_START_TYPE; // 0代表启动app时候程序自己检测，1代表用户手动检测版本
+    private static final int mNotificationId = 100;
+    private String apk_name ="米果小站";
+    private int mStartType = UpdateCode.AUTO; // 0代表启动app时候程序自己检测，1代表用户手动检测版本
     private NotificationManager mNotificationManager;
     private Notification mNotification;
     private PendingIntent mPendingIntent;
@@ -70,7 +68,7 @@ public class AppUpgradeService extends Service implements CallbackView {
 
     private void getIntentData(Intent intent) {
         if (intent != null) {
-            mStartType = intent.getIntExtra(EXTRA_SERVICE_START_TYPE, DEFAULT_START_TYPE);
+            mStartType = intent.getIntExtra(UpdateCode.START_TYPE, UpdateCode.AUTO);
         }
     }
 
@@ -114,7 +112,7 @@ public class AppUpgradeService extends Service implements CallbackView {
             stopSelf();
             return;
         }
-         dialog = new SDDialogConfirm();
+        dialog = new SDDialogConfirm();
         if ("1".equals(modelVersion.getForced_upgrade())) {
             dialog.setTextCancel(null).setCancelable(false);
         }
@@ -150,7 +148,7 @@ public class AppUpgradeService extends Service implements CallbackView {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotification = new Notification();
         mNotification.icon = R.drawable.app_icon;
-        mNotification.tickerText = localFileName + "正在下载中";
+        mNotification.tickerText = apk_name + "正在下载中";
         mNotification.contentView = new RemoteViews(getApplication().getPackageName(), R.layout
                 .service_download_view);
 
@@ -162,7 +160,7 @@ public class AppUpgradeService extends Service implements CallbackView {
                 completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotification.contentIntent = mPendingIntent;
 
-        mNotification.contentView.setTextViewText(R.id.upgradeService_tv_appname, localFileName);
+        mNotification.contentView.setTextViewText(R.id.upgradeService_tv_appname, apk_name);
         mNotification.contentView.setTextViewText(R.id.upgradeService_tv_status, "下载中");
         mNotification.contentView.setProgressBar(R.id.upgradeService_pb, 100, 0, false);
         mNotification.contentView.setTextViewText(R.id.upgradeService_tv, "0%");
@@ -176,7 +174,7 @@ public class AppUpgradeService extends Service implements CallbackView {
     }
 
     private void startDownload() {
-        final String target = OtherUtils.getDiskCacheDir(getApplicationContext(), "") + localFileName;
+        final String target = OtherUtils.getDiskCacheDir(getApplicationContext(), "") + apk_name;
         deleteOldApk();
         //mModel.getFilename()
         HttpManagerX.getHttpUtils().configHttpRedirectHandler(new NoHttpRedirectHandler(urlApk)).download(urlApk, target, true, new
@@ -267,7 +265,7 @@ public class AppUpgradeService extends Service implements CallbackView {
         if (CommonConstants.UPGRADE_VERSION.equals(method)) {
             if (datas != null) {
                 modelVersion = (ModelVersion) datas.get(0);
-                localFileName="米果小站_"+modelVersion.getServer_version();
+                apk_name ="米果小站_"+modelVersion.getServer_version();
                 dealResult();
             } else {
                 MGLog.e("更新数据错误!");

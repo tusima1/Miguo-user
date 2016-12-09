@@ -799,7 +799,7 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 升级服务 -->
-        <service android:name="com.fanwe.service.AppUpgradeService"/>
+        <service android:name="com.fanwe.service.update.AppUpgradeService"/>
 
         <!-- 监听手机网络变化 -->
         <receiver android:name="com.ta.util.netstate.TANetworkStateReceiver">

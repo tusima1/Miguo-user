@@ -17,7 +17,7 @@ public class ClassPath {
     /**
      * App升级服务
      */
-    public static final String APP_UPGRADE_SERVICE = "com.fanwe.service.AppUpgradeService";
+    public static final String APP_UPGRADE_SERVICE = "com.fanwe.service.update.AppUpgradeService";
     /**
      * 城市列表
      */

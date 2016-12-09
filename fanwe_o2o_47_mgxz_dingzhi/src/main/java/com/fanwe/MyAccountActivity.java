@@ -37,7 +37,8 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.module.user.UserFaceModule;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.service.AppUpgradeService;
+import com.fanwe.service.update.AppUpgradeService;
+import com.fanwe.service.update.UpdateCode;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.presents.LoginHelper;
 import com.fanwe.user.presents.UserHttpHelper;
@@ -288,10 +289,10 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         layoutSex.setOnClickListener(this);
     }
 
-    private void clickTestUpgrade() {
+    private void clickUpgrade() {
         Intent intent = new Intent(App.getApplication(),
                 AppUpgradeService.class);
-        intent.putExtra(AppUpgradeService.EXTRA_SERVICE_START_TYPE, 1);
+        intent.putExtra(UpdateCode.START_TYPE, UpdateCode.MANUAL);
         startService(intent);
     }
 
@@ -323,7 +324,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
         } else if (v == mRl_about_us) {
             clickAbout();
         } else if (v == mRlUpgrade) {
-            clickTestUpgrade();
+            clickUpgrade();
         } else if (v == mUserFace) {
             clickUserFace();
         } else if (v == layoutSign) {

@@ -13,7 +13,6 @@ public class Test {
         new OkCallback<MenuPopupWindow.MenuDropDownListView>() {
             @Override
             protected void onSuccess(String method, MenuPopupWindow.MenuDropDownListView bean) {
-
             }
 
         };

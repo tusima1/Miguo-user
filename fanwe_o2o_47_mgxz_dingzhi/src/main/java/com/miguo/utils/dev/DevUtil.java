@@ -6,9 +6,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
 
+import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.library.utils.SDActivityUtil;
 
 /**
@@ -19,25 +21,35 @@ public class DevUtil {
     private SensorManager sensorManager;
     private Vibrator vibrator;
     private Activity activity;
-    private static final int SENSOR_SHAKE = 60;
-    private long first=0;
+    private static final float SENSOR_SHAKE = 19.5f;
+    private float testMaxValueX = 0f;
+    private float testMaxValueY = 0f;
+    private float testMaxValueZ = 0f;
+    private float middleValue;
 
     public DevUtil(Activity activity) {
-        if (activity==null)return;
-        this.activity=activity;
+        if (activity == null) return;
+        this.activity = activity;
+        Log.d("Test", "型号: " + Build.MODEL);
+        Log.d("Test", "品牌: " + Build.BRAND);
         sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-
-    }
-
-    public void registerShakeListener(){
-        if (sensorManager!=null){
-            sensorManager.registerListener(sensorEventListener,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
+        if (Build.BRAND.equalsIgnoreCase("samsung")){
+            middleValue=70f;
+        }else {
+            middleValue=SENSOR_SHAKE;
         }
     }
 
-    public void unregisterShakeListener(){
-        if (sensorManager!=null){
+    public void registerShakeListener() {
+        if (sensorManager != null) {
+            sensorManager.registerListener(sensorEventListener, sensorManager.getDefaultSensor
+                    (Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    public void unregisterShakeListener() {
+        if (sensorManager != null) {
             sensorManager.unregisterListener(sensorEventListener);
         }
     }
@@ -54,15 +66,28 @@ public class DevUtil {
             float x = values[0]; // x轴方向的重力加速度，向右为正
             float y = values[1]; // y轴方向的重力加速度，向前为正
             float z = values[2]; // z轴方向的重力加速度，向上为正
-            Log.i("Test", "x轴方向的重力加速度" + x +  "；y轴方向的重力加速度" + y +  "；z轴方向的重力加速度" + z);
-            // 一般在这三个方向的重力加速度达到40就达到了摇晃手机的状态。
-            int medumValue = SENSOR_SHAKE;// 如果不敏感请自行调低该数值,低于10的话就不行了,因为z轴上的加速度本身就已经达到10了
-            if (Math.abs(x) > medumValue || Math.abs(y) > medumValue || Math.abs(z) > medumValue) {
+            Log.v("Test", "x轴方向的重力加速度" + x + "y轴方向的重力加速度" + y + "；z轴方向的重力加速度" + z);
+            float absX = Math.abs(x);
+            float absY = Math.abs(y);
+            float absZ = Math.abs(z);
+            if (absX > testMaxValueX) {
+                testMaxValueX = absX;
+                Log.d("Test", "x轴 max: " + testMaxValueX);
+            }
+            if (absY > testMaxValueY) {
+                testMaxValueY = absY;
+                Log.d("Test", "y轴 max: " + testMaxValueY);
+            }
+            if (absZ > testMaxValueZ) {
+                testMaxValueZ = absZ;
+                Log.d("Test", "z轴 max: " + testMaxValueZ);
+            }
+            if (absX > middleValue || absY > middleValue || absZ > middleValue) {
                 vibrator.vibrate(200);
-                long currentTimeMillis = System.currentTimeMillis();
-                if (currentTimeMillis-first>200){
-                    first=currentTimeMillis;
+                Activity lastActivity = ActivityLifeManager.getInstance().getLastActivity();
+                if (!(lastActivity instanceof DevActivity)) {
                     SDActivityUtil.startActivity(activity, DevActivity.class);
+
                 }
             }
         }
