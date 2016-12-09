@@ -59,6 +59,7 @@ public class GuideLiveFragment extends BaseFragment {
             return;
         }
         fm = getChildFragmentManager();
+        getActivity().getSupportFragmentManager()
         if(null != null){
             pagerAdapter = new SimpleFragmentPagerAdapter(fm);
             viewPager.setAdapter(pagerAdapter);
