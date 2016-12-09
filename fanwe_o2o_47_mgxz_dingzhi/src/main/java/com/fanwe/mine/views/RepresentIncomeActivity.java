@@ -127,9 +127,9 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
         String fxLevel = App.getInstance().getCurrentUser().getFx_level();
         if ("2".equals(fxLevel)) {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_2);
-        } else if ("3".equals(fxLevel)) {
-            ivRank.setImageResource(R.drawable.ic_represent_incom_rank_3);
-        } else {
+        } else if ("1".equals(fxLevel)) {
+            ivRank.setImageResource(R.drawable.ic_represent_incom_rank_1);
+        }else {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_1);
         }
     }
