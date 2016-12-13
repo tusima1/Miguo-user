@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -26,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
@@ -37,16 +39,12 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.common.model.CommonConstants;
-import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
-import com.fanwe.common.presenters.CommonHttpHelper;
-import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.utils.SDCollectionUtil;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
 import com.fanwe.seller.adapters.GoodsDetailShopListAdapter;
@@ -191,7 +189,16 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             mShoppingCartHelper = new ShoppingCartHelper(this);
             requestData();
         }
+    }
 
+    private void showTipPopupWindow(){
+        int rightMargin = DisplayUtil.dp2px(this, 24);
+        int topMargin = DisplayUtil.dp2px(this, 10);
+        View popLayout = LayoutInflater.from(this).inflate(R.layout.layout_pop_share_show, null,
+                false);
+        PopupWindow popupWindow=new PopupWindow(popLayout,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(mIvTitleShare,-rightMargin, -topMargin);
     }
 
     private void requestData() {
@@ -314,6 +321,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                     animatorAll(mShopListLayout, mDefaultHeight, offset);
                     rotateView(mIvShopArrow, 0f, 180f, true);
                 }
+            }
+        });
+        mIvTitleShare.post(new Runnable() {
+            @Override
+            public void run() {
+                if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
+                    showTipPopupWindow();
+                }
+
             }
         });
     }

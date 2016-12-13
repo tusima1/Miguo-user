@@ -1,7 +1,6 @@
 package com.fanwe.app;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
@@ -11,11 +10,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.common.ImageLoaderManager;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.dao.SettingModelDao;
-import com.fanwe.constant.EnumEventTag;
-import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.command.SDCommandManager;
 import com.fanwe.library.common.SDActivityManager;
@@ -124,13 +122,6 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     public void setmLocalUser(LocalUserModel localUser) {
         if (localUser != null) {
             LocalUserModelDao.insertModel(localUser);
-        }
-    }
-    public class MultiDexApplication extends Application {
-        @Override
-        protected void attachBaseContext(Context base) {
-            super.attachBaseContext(base);
-            MultiDex.install(this);
         }
     }
 

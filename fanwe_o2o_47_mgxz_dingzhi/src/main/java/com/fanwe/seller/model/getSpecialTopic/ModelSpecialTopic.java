@@ -1,5 +1,7 @@
 package com.fanwe.seller.model.getSpecialTopic;
 
+import com.fanwe.seller.model.getShopInfo.Share;
+
 import java.util.List;
 
 /**
@@ -13,6 +15,17 @@ public class ModelSpecialTopic {
     private PageBean page;
 
     private List<DetailListBean> detail_list;
+
+    /**********12-12*********/
+    private Share share;
+
+    public Share getShare() {
+        return share;
+    }
+
+    public void setShare(Share share) {
+        this.share = share;
+    }
 
     public TopicBean getTopic() {
         return topic;
@@ -29,6 +42,7 @@ public class ModelSpecialTopic {
     public void setPage(PageBean page) {
         this.page = page;
     }
+
 
     public List<DetailListBean> getDetail_list() {
         return detail_list;

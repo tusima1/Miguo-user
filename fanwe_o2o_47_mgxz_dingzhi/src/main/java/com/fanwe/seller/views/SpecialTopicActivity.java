@@ -6,30 +6,44 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.didikee.uilibs.utils.DisplayUtil;
 import com.didikee.uilibs.views.MaxHeightListView;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
+import com.fanwe.common.presenters.CommonHttpHelper;
+import com.fanwe.constant.Constant;
+import com.fanwe.constant.ServerUrl;
+import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.SPullToRefreshSScrollView;
 import com.fanwe.customview.SScrollView;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.SpecialTopicAdapter;
 import com.fanwe.seller.model.SellerConstants;
+import com.fanwe.seller.model.getShopInfo.Share;
 import com.fanwe.seller.model.getSpecialTopic.DetailListBean;
 import com.fanwe.seller.model.getSpecialTopic.ModelSpecialTopic;
 import com.fanwe.seller.model.getSpecialTopic.PageBean;
 import com.fanwe.seller.model.getSpecialTopic.TopicBean;
 import com.fanwe.seller.presenters.SellerNewHttpHelper;
+import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGDictUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.definition.IntentKey;
@@ -48,6 +62,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
     private TextView mTvTitleMiddle;
     private ImageView mIv_img;
     private ImageView mIv_left;
+    private ImageView mIv_share;
     private View mVGTitle;
     private View mStatusBar;
     private MaxHeightListView mMaxListView;
@@ -56,12 +71,14 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
 
     private boolean isLoadMore=false;
     private SpecialTopicAdapter adapter;
-//    private String id="c0d21dfd-86d7-48ac-8c8c-085759df1243";//请求id
     private String id="";//请求id
     private PageBean page;
     private List<DetailListBean> temp_list;
     private int mTitleHeight;
     private int mFLViewpagerHeight;
+    private CommonHttpHelper commonHttpHelper;
+    private String shareRecordId="";
+    private Share mShare_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +99,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
     private void init() {
         initView();
         httpHelper = new SellerNewHttpHelper(this);
+        getRecordId();
         getIntentData();
     }
 
@@ -103,6 +121,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
         fl_top_img = findViewById(R.id.fl_top_img);
 
         mIv_left = ((ImageView) findViewById(R.id.iv_left));
+        mIv_share = ((ImageView) findViewById(R.id.iv_share));
         mVGTitle = findViewById(R.id.fr_top_title);
         mStatusBar = findViewById(R.id.status_bar);
         mTvTitleMiddle = (TextView) findViewById(R.id.tv_middle);
@@ -111,6 +130,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
 
 
         mIv_left.setOnClickListener(this);
+        mIv_share.setOnClickListener(this);
 
         mPscrollView.setMode(PullToRefreshBase.Mode.BOTH);
         mPscrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
@@ -160,6 +180,14 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 setTitleAction();
             }
         });
+        mIv_share.post(new Runnable() {
+            @Override
+            public void run() {
+                if (TipPopCode.checkDate(SpecialTopicActivity.this,TipPopCode.Topic)){
+                    showTipPopupWindow();
+                }
+            }
+        });
     }
     private void setTitleAction() {
         if (mFLViewpagerHeight <= 0) {
@@ -193,13 +221,67 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
+    private void showTipPopupWindow(){
+        int rightMargin = DisplayUtil.dp2px(this, 24);
+        int topMargin = DisplayUtil.dp2px(this, 10);
+        View popLayout = LayoutInflater.from(this).inflate(R.layout.layout_pop_share_show, null,
+                false);
+        PopupWindow popupWindow=new PopupWindow(popLayout, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(mIv_share,-rightMargin, -topMargin);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_left:
                 onBackPressed();
                 break;
+            case R.id.iv_share:
+                doShare();
+                break;
         }
+    }
+    private void doShare() {
+        getRecordId();
+        if (mShare_info != null) {
+            String content = mShare_info.getSummary();
+            if (TextUtils.isEmpty(content)) {
+                content = "欢迎来到米果小站";
+            }
+            String imageUrl = mShare_info.getImageurl();
+            if (TextUtils.isEmpty(imageUrl)) {
+                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                    imageUrl = MGDictUtil.getShareIcon();
+                }
+            } else if (!imageUrl.startsWith("http")) {
+                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                    imageUrl = MGDictUtil.getShareIcon();
+                }
+            }
+            String clickUrl = mShare_info.getClickurl();
+            if (TextUtils.isEmpty(clickUrl)) {
+                clickUrl = ServerUrl.getAppH5Url();
+            } else {
+                clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
+            }
+            String title = mShare_info.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                title = "米果小站";
+            }
+            UmengShareManager.share(this, title, content.trim(), clickUrl, UmengShareManager.getUMImage
+                    (this, imageUrl), null);
+        } else {
+            MGToast.showToast("无分享内容");
+        }
+    }
+    private void getRecordId() {
+        if (commonHttpHelper == null) {
+            commonHttpHelper = new CommonHttpHelper(SpecialTopicActivity.this, this);
+        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.TOPIC, id);
     }
 
     @Override
@@ -212,7 +294,12 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
             case SellerConstants.SPECIAL_TOPIC:
                 BindData(datas);
                 break;
-
+            case CommonConstants.CREATE_SHARE_RECORD:
+                if (!SDCollectionUtil.isEmpty(datas)) {
+                    ModelCreateShareRecord bean = (ModelCreateShareRecord) datas.get(0);
+                    shareRecordId = bean.getId();
+                }
+                break;
         }
     }
 
@@ -224,6 +311,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 return;
             }
+            mShare_info = modelSpecialTopic.getShare();
 
             if (isLoadMore){
                 //TODO update data

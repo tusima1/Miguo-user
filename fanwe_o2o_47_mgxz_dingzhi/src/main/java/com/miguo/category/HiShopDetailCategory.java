@@ -8,12 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
@@ -23,6 +27,7 @@ import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.constant.TipPopCode;
 import com.fanwe.fragment.ShopFansFragment;
 import com.fanwe.fragment.StoreLocationFragment;
 import com.fanwe.library.utils.SDActivityUtil;
@@ -253,6 +258,14 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         represent.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
         recommendAdapter.setOnItemDataChangedListener(this);
+        share.post(new Runnable() {
+            @Override
+            public void run() {
+                if (TipPopCode.checkDate(getActivity(),TipPopCode.Shops)){
+                    showTipPopupWindow();
+                }
+            }
+        });
     }
 
     @Override
@@ -414,6 +427,15 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
             commonHttpHelper = new CommonHttpHelper(getActivity(), this);
         }
         commonHttpHelper.createShareRecord(Constant.ShareType.SHOP, merchantID);
+    }
+    private void showTipPopupWindow(){
+        int rightMargin = DisplayUtil.dp2px(getActivity(), 24);
+        int topMargin = DisplayUtil.dp2px(getActivity(), 10);
+        View popLayout = LayoutInflater.from(getActivity()).inflate(R.layout.layout_pop_share_show, null,
+                false);
+        PopupWindow popupWindow=new PopupWindow(popLayout, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(share,-rightMargin, -topMargin);
     }
 
     /**

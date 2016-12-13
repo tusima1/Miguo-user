@@ -111,6 +111,16 @@
                 android:textSize="@dimen/sp16"
                 android:ellipsize="end"
                 />
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="@dimen/dp48"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_share_pure"
+                android:layout_gravity="right"
+                android:scaleType="centerInside"
+                android:background="@drawable/md_ripple_unbound_gray"
+                android:clickable="true"
+                />
 
         </FrameLayout>
     </LinearLayout>

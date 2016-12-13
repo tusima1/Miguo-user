@@ -33,7 +33,7 @@ public class SPUtil {
             editor.putLong(key, (Long)data);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     /**

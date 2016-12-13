@@ -963,6 +963,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
             />
     </application>
 
