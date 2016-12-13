@@ -2,7 +2,6 @@ package com.fanwe.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,9 +21,11 @@ import com.fanwe.common.ImageLoaderManager;
 import com.fanwe.common.MGDict;
 import com.fanwe.common.model.getMGDict.DictModel;
 import com.fanwe.constant.Constant;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
+import com.fanwe.mine.views.LotteryActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
@@ -42,7 +43,6 @@ import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.miguo.live.views.TestLiveActivity;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 
@@ -51,7 +51,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- *
  * Created by didik on 2016/9/13.
  */
 public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewClickListener,
@@ -70,6 +69,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     private View mKefu;
     private View mStar;
     private View mCollect;
+    private View mLottery;
     /**
      * 设置。
      */
@@ -102,7 +102,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         setmTitleType(Constant.TitleType.TITLE_NONE);
         return setContentView(R.layout.frag_mine);
     }
-
 
 
     @Override
@@ -177,6 +176,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mSuggestion = findViewById(R.id.ll_suggestion);
         mErWeiMa = findViewById(R.id.ll_erweima);
         mKefu = findViewById(R.id.ll_kefu);
+        mLottery = findViewById(R.id.ll_lottery);
 
         mTvRedShopCart = ((TextView) findViewById(R.id.tv_red_shopcart));
         mTvRedFriends = ((TextView) findViewById(R.id.tv_red_friends));
@@ -190,7 +190,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mSuggestion.setOnClickListener(this);
         mErWeiMa.setOnClickListener(this);
         mKefu.setOnClickListener(this);
-
+        mLottery.setOnClickListener(this);
     }
 
     private void initMyOrders() {
@@ -269,8 +269,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mShop) {
             /*我的小店*/
             Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
-            String id="";
-            if(App.getInstance().getCurrentUser() != null) {
+            String id = "";
+            if (App.getInstance().getCurrentUser() != null) {
                 id = App.getInstance().getCurrentUser().getUser_id();
             }
             intent.putExtra("id", id);
@@ -278,7 +278,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mFriends) {
             /*分销战队*/
             startActivity(DistributionMyXiaoMiActivity.class);
-
         } else if (v == mQuan) {
             /*消费券*/
             startActivity(MyCouponListActivity.class);
@@ -308,8 +307,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {
-            //个人主页。
-//            startActivity(UserHomeActivity.class);
             //跳转至网红主页
             startActivity(UserHomeActivity.class);
         } else if (v == mKefu) {
@@ -323,6 +320,12 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             Bundle userData = new Bundle();
             userData.putString("user_face", mUserFaceString);
             intent.putExtras(userData);
+            startActivity(intent);
+        } else if (v == mLottery) {
+            //我的奖品
+            Intent intent = new Intent(getActivity(), LotteryActivity.class);
+            intent.putExtra("url", ServerUrl.getAppH5Url() + "activity/list");
+            intent.putExtra("id", "lotteryList");
             startActivity(intent);
         }
 

@@ -169,6 +169,11 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
             mTitle.addItemRight_TEXT("推广");
         } else {
             mTitle.removeAllRightItems();
+            if ("lottery".equals(id)) {
+                mTitle.setMiddleTextTop("幸运大抽奖");
+            } else if ("lotteryList".equals(id)) {
+                mTitle.setMiddleTextTop("我的奖品");
+            }
         }
     }
 
@@ -219,6 +224,13 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
     @Override
     public void setTitle(String title) {
         super.setTitle(title);
+    }
+
+    public void setMiddleText(String text) {
+        if (mTitle != null) {
+            mTitle.removeAllRightItems();
+            mTitle.setMiddleTextTop(text);
+        }
     }
 
     @Override

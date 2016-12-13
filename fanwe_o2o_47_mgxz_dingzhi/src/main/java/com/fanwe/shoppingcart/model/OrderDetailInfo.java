@@ -18,6 +18,15 @@ public class OrderDetailInfo implements Serializable {
     private HashMap<String, String> config;
 
     private String share_url;
+    private String campaign_info;
+
+    public String getCampaign_info() {
+        return campaign_info;
+    }
+
+    public void setCampaign_info(String campaign_info) {
+        this.campaign_info = campaign_info;
+    }
 
     public void setOrder_info(Order_info order_info) {
         this.order_info = order_info;

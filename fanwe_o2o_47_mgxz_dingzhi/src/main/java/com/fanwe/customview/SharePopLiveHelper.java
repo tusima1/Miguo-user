@@ -2,6 +2,7 @@ package com.fanwe.customview;
 
 import android.app.Activity;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,35 +12,45 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.utils.MGDictUtil;
 import com.miguo.live.interf.IHelper;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
- * 普通分享
+ * 直播分享
  */
-public class SharePopHelper implements IHelper, View.OnClickListener {
+public class SharePopLiveHelper implements IHelper, View.OnClickListener {
 
     private Activity mActivity;
     private PopupWindow popupWindow;
-    private ShareInfoBean shareInfoBean;
-    private String type;
+    private boolean isHost;
+    private String shareRecordId;
+    private boolean isBack;
 
-    public SharePopHelper(Activity mActivity) {
+    public SharePopLiveHelper(Activity mActivity, boolean isHost) {
         this.mActivity = mActivity;
+        this.isHost = isHost;
         createPopWindow();
     }
 
-    public SharePopHelper(Activity mActivity, String type) {
+    public SharePopLiveHelper(Activity mActivity, boolean isHost, String shareRecordId) {
+        this.shareRecordId = shareRecordId;
         this.mActivity = mActivity;
-        this.type = type;
+        this.isHost = isHost;
         createPopWindow();
     }
 
-    public void setShareInfoBean(ShareInfoBean shareInfoBean) {
-        this.shareInfoBean = shareInfoBean;
+    public SharePopLiveHelper(Activity mActivity, boolean isHost, String shareRecordId, boolean isBack) {
+        this.isBack = isBack;
+        this.shareRecordId = shareRecordId;
+        this.mActivity = mActivity;
+        this.isHost = isHost;
+        createPopWindow();
     }
 
     @Override
@@ -65,7 +76,7 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     private LinearLayout layoutWeixin, layoutFriends, layoutQQ, layoutQQZone, layoutSina;
     private Button btnCancle;
-    private TextView tvTitleUp, tvTitleDown;
+    private TextView tvTitle;
 
     private void initContentView(View contentView) {
         layoutWeixin = ((LinearLayout) contentView.findViewById(R.id.layout_weixin_pop_share));
@@ -74,15 +85,11 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
         layoutQQZone = ((LinearLayout) contentView.findViewById(R.id.layout_qqzone_pop_share));
         layoutSina = ((LinearLayout) contentView.findViewById(R.id.layout_sina_pop_share));
         btnCancle = (Button) contentView.findViewById(R.id.btn_cancel_pop_share);
-        tvTitleUp = (TextView) contentView.findViewById(R.id.tv_title_up_pop_share);
-        tvTitleDown = (TextView) contentView.findViewById(R.id.tv_title_pop_share);
-        tvTitleUp.setVisibility(View.GONE);
-        tvTitleDown.setVisibility(View.GONE);
-        if ("SpecialTopic".equals(type) || "Goods".equals(type) || "Shop".equals(type)) {
-            tvTitleUp.setVisibility(View.VISIBLE);
-            tvTitleUp.setText("分享给朋友，朋友购买后大家都能领现金");
-            tvTitleDown.setVisibility(View.VISIBLE);
-            tvTitleDown.setText("（朋友得80%，你得20%）");
+        tvTitle = (TextView) contentView.findViewById(R.id.tv_title_pop_share);
+        if (isHost) {
+            tvTitle.setVisibility(View.GONE);
+        } else {
+            tvTitle.setText("朋友有消费，你还可以共享本场打赏收入的10%");
         }
 
         layoutWeixin.setOnClickListener(this);
@@ -95,6 +102,9 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
 
     /*显示*/
     public void show() {
+        /**
+         * 进去的时候选择哪个界面,tab与viewpager 需要保持一致
+         */
         if (popupWindow != null) {
             ViewGroup contentView = (ViewGroup) mActivity.findViewById(android.R.id.content);
             popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
@@ -132,9 +142,54 @@ public class SharePopHelper implements IHelper, View.OnClickListener {
     }
 
     public void share() {
-        if (shareInfoBean == null) {
-            return;
+        String content;
+        String title = "送你钻石，看直播，拿优惠";
+        String imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+        if (isHost) {
+            if (!TextUtils.isEmpty(App.getInstance().getCurrentUser().getIcon())) {
+                imageUrl = App.getInstance().getCurrentUser().getIcon();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
+            }
+        } else {
+            if (!TextUtils.isEmpty(CurLiveInfo.getHostAvator())) {
+                imageUrl = CurLiveInfo.getHostAvator();
+            } else if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                imageUrl = MGDictUtil.getShareIcon();
+            }
         }
-        UmengShareManager.share(platform, mActivity, shareInfoBean.getTitle(), shareInfoBean.getSummary(), shareInfoBean.getClickurl(), UmengShareManager.getUMImage(mActivity, shareInfoBean.getImageurl()), null);
+        content = getShareContent();
+        if (platform == SHARE_MEDIA.WEIXIN_CIRCLE) {
+            //朋友圈
+            title = content;
+        }
+        String clickUrl = ServerUrl.getAppH5Url() + "share/live/rid/" + CurLiveInfo.getRoomNum() + "/uid/"
+                + App.getInstance().getCurrentUser().getUser_id() + "/share_record_id/" + shareRecordId;
+        if (isBack) {
+            clickUrl = ServerUrl.getAppH5Url() + "index/dianbo/room_id/" + CurLiveInfo.getRoomNum() + "/share_record_id/" + shareRecordId;
+        }
+
+        UmengShareManager.share(platform, mActivity, title, content, clickUrl, UmengShareManager.getUMImage(mActivity, imageUrl), null);
+    }
+
+    /**
+     * 获取分享内容
+     *
+     * @return
+     */
+    private String getShareContent() {
+        String res = "";
+        String nick;
+        if (isHost) {
+            nick = App.getInstance().getCurrentUser().getNick();
+        } else {
+            nick = CurLiveInfo.getHostName();
+        }
+        if ("1".equals(CurLiveInfo.getLive_type())) {
+            res = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]正在直播中";
+        } else {
+            res = "钻石、红包免费拿，吃喝玩乐优惠领不停，米果小站，分享你身边的精彩生活，来陪我吧[" + nick + "]的精彩记录片";
+        }
+        return res;
     }
 }

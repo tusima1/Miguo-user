@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.fanwe.app.App;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.customview.SharePopHelper;
+import com.fanwe.customview.SharePopLiveHelper;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.live.adapters.HeadTopAdapter;
@@ -130,7 +130,7 @@ public class HostTopView extends RelativeLayout implements IViewGroup, View.OnCl
             }
         } else if (v == iv_share) {
             getRecordId();
-            SharePopHelper sharePopHelper = new SharePopHelper(mActivity, true, shareRecordId);
+            SharePopLiveHelper sharePopHelper = new SharePopLiveHelper(mActivity, true, shareRecordId);
             sharePopHelper.show();
         } else if (v == mTv_location) {
             //去商家店铺

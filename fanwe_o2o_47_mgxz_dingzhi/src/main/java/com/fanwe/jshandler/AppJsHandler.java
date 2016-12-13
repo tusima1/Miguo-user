@@ -34,13 +34,21 @@ import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.MGDictUtil;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
+import com.miguo.dao.LoginByMobileDao;
+import com.miguo.dao.impl.LoginByMobileDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.presenters.TencentIMBindPresenter;
+import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.view.LoginByMobileView;
+import com.miguo.view.TencentIMBindPresenterView;
 import com.sunday.eventbus.SDEventManager;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
 
@@ -146,6 +154,39 @@ public class AppJsHandler extends BaseJsHandler {
         AppHelper.isLogin(activity);
     }
 
+    /**
+     * @param name 用户名
+     * @param pwd  密码 md5
+     */
+    @JavascriptInterface
+    public void goToLogin(String name, String pwd) {
+        LoginByMobileDao loginByMobileDao = new LoginByMobileDaoImpl(new LoginByMobileView() {
+            @Override
+            public void loginError(String message) {
+                //登录完成并且绑定完成，不论成功或者失败
+            }
+
+            @Override
+            public void loginSuccess(UserInfoNew user) {
+                handleLoginSuccess();
+            }
+        });
+        loginByMobileDao.loginByMobile(name, pwd);
+    }
+
+    /**
+     * 登录成功后IM、本地购物车相关操作
+     */
+    private void handleLoginSuccess() {
+        TencentIMBindPresenter tencentIMBindPresenter = new TencentIMBindPresenterImpl(new TencentIMBindPresenterView() {
+            @Override
+            public void tencentIMBindFinish() {
+                //登录完成并且绑定完成，不论成功或者失败
+            }
+        });
+        tencentIMBindPresenter.tencentIMBindingWithPushLocalCart();
+    }
+
     @JavascriptInterface
     public void page_title(String title) {
     }
@@ -165,10 +206,10 @@ public class AppJsHandler extends BaseJsHandler {
         startActivity(intent);
     }
 
-	public void goLogin(){
-		Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
-		startActivity(intent);
-	}
+    public void goLogin() {
+        Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+        startActivity(intent);
+    }
 
 
     @JavascriptInterface
@@ -187,7 +228,7 @@ public class AppJsHandler extends BaseJsHandler {
     }
 
     /**
-     * 活动页添加并跳转购物 车。
+     * 活动页添加并跳转购物车。
      *
      * @param goods_id
      * @param add_goods_num
@@ -317,5 +358,55 @@ public class AppJsHandler extends BaseJsHandler {
         });
     }
 
+
+    @JavascriptInterface
+    public void shareByPlatform(String platform, String url, String title, String summary, String pic) {
+        if (TextUtils.isEmpty(title)) {
+            title = "米果小站";
+        }
+        if (TextUtils.isEmpty(summary)) {
+            summary = "欢迎来到米果小站";
+        }
+        if (TextUtils.isEmpty(pic)) {
+            pic = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                pic = MGDictUtil.getShareIcon();
+            }
+        } else if (!pic.startsWith("http")) {
+            pic = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
+            if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
+                pic = MGDictUtil.getShareIcon();
+            }
+        }
+        if (TextUtils.isEmpty(url)) {
+            url = ServerUrl.getAppH5Url();
+        }
+        final String finalTitle = title;
+        final String finalSummary = summary;
+        final String finalUrl = url;
+        final String finalPic = pic;
+        final SHARE_MEDIA platformShare;
+
+        if ("WEIXIN".equals(platform)) {
+            platformShare = SHARE_MEDIA.WEIXIN;
+        } else if ("WEIXIN_CIRCLE".equals(platform)) {
+            platformShare = SHARE_MEDIA.WEIXIN_CIRCLE;
+        } else if ("QQ".equals(platform)) {
+            platformShare = SHARE_MEDIA.QQ;
+        } else if ("QZONE".equals(platform)) {
+            platformShare = SHARE_MEDIA.QZONE;
+        } else if ("SINA".equals(platform)) {
+            platformShare = SHARE_MEDIA.SINA;
+        } else {
+            platformShare = SHARE_MEDIA.WEIXIN_CIRCLE;
+        }
+
+        MGUIUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                UmengShareManager.share(platformShare, mActivity, finalTitle, finalSummary, finalUrl, UmengShareManager.getUMImage(mActivity, finalPic), null);
+            }
+        });
+    }
 
 }

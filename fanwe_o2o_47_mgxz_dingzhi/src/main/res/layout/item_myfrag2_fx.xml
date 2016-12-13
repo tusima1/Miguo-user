@@ -42,7 +42,6 @@ android:orientation="vertical">
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp10"
     android:text="分销"
     android:textColor="@color/gray_text_59"
     android:textSize="@dimen/sp13"/>

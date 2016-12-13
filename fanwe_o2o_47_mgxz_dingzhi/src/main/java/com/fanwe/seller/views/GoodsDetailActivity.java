@@ -44,6 +44,7 @@ import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
+import com.fanwe.customview.SharePopHelper;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
@@ -61,10 +62,9 @@ import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengEventStatistics;
-import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
-import com.fanwe.utils.MGDictUtil;
 import com.fanwe.utils.MGStringFormatter;
+import com.fanwe.utils.ShareUtil;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.LiveConstants;
@@ -229,7 +229,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         GoodsId = intent.getStringExtra(EXTRA_GOODS_ID);
         mNumber = intent.getIntExtra(EXTRA_HOTEL_NUM, 1);
         fx_id = intent.getStringExtra(EXTRA_FX_ID);
-        if(intent.hasExtra(CommonConstants.SHARE_RECORD_ID)) {
+        if (intent.hasExtra(CommonConstants.SHARE_RECORD_ID)) {
             share_record_id = intent.getStringExtra(CommonConstants.SHARE_RECORD_ID);
         }
         if (TextUtils.isEmpty(GoodsId)) {
@@ -816,6 +816,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     public void onFinish(String method) {
     }
 
+    SharePopHelper sharePopHelper;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -861,38 +863,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     private void doShare() {
         getRecordId();
-        if (mShare_info != null) {
-            String content = mShare_info.getSummary();
-            if (TextUtils.isEmpty(content)) {
-                content = "欢迎来到米果小站";
-            }
-            String imageUrl = mShare_info.getImageurl();
-            if (TextUtils.isEmpty(imageUrl)) {
-                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
-                    imageUrl = MGDictUtil.getShareIcon();
-                }
-            } else if (!imageUrl.startsWith("http")) {
-                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
-                    imageUrl = MGDictUtil.getShareIcon();
-                }
-            }
-            String clickUrl = mShare_info.getClickurl();
-            if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.getAppH5Url();
-            } else {
-                clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
-            }
-            String title = mShare_info.getTitle();
-            if (TextUtils.isEmpty(title)) {
-                title = "米果小站";
-            }
-            UmengShareManager.share(this, title, content.trim(), clickUrl, UmengShareManager.getUMImage
-                    (this, imageUrl), null);
-        } else {
-            MGToast.showToast("无分享内容");
-        }
+        ShareUtil.share(GoodsDetailActivity.this, mShare_info, shareRecordId, "Goods");
     }
 
     //立即购买
@@ -929,10 +900,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         if (mShoppingCartHelper != null) {
             if (isGoToShoppingCart) {
                 mShoppingCartHelper.addToShoppingCart("", fx_id, lgn_user_id, GoodsId, cart_type,
-                        mNumber + "",share_record_id);
+                        mNumber + "", share_record_id);
             } else {
                 mShoppingCartHelper.addToShoppingCart2("", fx_id, lgn_user_id, GoodsId,
-                        cart_type, mNumber + "",share_record_id);
+                        cart_type, mNumber + "", share_record_id);
             }
         }
     }

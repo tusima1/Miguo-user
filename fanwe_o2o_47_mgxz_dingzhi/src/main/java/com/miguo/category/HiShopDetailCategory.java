@@ -26,7 +26,7 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.constant.ServerUrl;
+import com.fanwe.customview.SharePopHelper;
 import com.fanwe.constant.TipPopCode;
 import com.fanwe.fragment.ShopFansFragment;
 import com.fanwe.fragment.StoreLocationFragment;
@@ -35,10 +35,9 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.utils.MGDictUtil;
+import com.fanwe.utils.ShareUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.fanwe.view.RecyclerScrollView;
 import com.lidroid.xutils.ViewUtils;
@@ -59,7 +58,6 @@ import com.miguo.entity.HiShopDetailBean;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.ShopDetailPagerItemFragmet;
 import com.miguo.listener.HiShopDetailListener;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.ShopDetailTagView;
 import com.miguo.ui.view.ShopDetailViewPager;
@@ -382,43 +380,15 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     }
 
     private String shareRecordId;
+    private SharePopHelper sharePopHelper;
 
     /**
      * 点击分享
      */
     public void clickShare() {
         getRecordId();
-        if (result != null && result.getShare() != null) {
-            String content = result.getShare().getSummary();
-            if (TextUtils.isEmpty(content)) {
-                content = "欢迎来到米果小站";
-            }
-            String imageUrl = result.getShare().getImageurl();
-            if (TextUtils.isEmpty(imageUrl)) {
-                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
-                    imageUrl = MGDictUtil.getShareIcon();
-                }
-            } else if (!imageUrl.startsWith("http")) {
-                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
-                    imageUrl = MGDictUtil.getShareIcon();
-                }
-            }
-            String clickUrl = result.getShare().getClickurl();
-            if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.getAppH5Url();
-            } else {
-                clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
-            }
-            String title = result.getShare().getTitle();
-            if (TextUtils.isEmpty(title)) {
-                title = "米果小站";
-            }
-
-            UmengShareManager.share(getActivity(), title, content.trim(), clickUrl, UmengShareManager.getUMImage(getActivity(), imageUrl), null);
-        } else {
-            MGToast.showToast("无分享内容");
+        if (result != null) {
+            ShareUtil.share(getActivity(), result.getShare(), shareRecordId, "Shop");
         }
     }
 

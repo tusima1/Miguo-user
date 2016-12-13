@@ -53,14 +53,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="@dimen/dp50" />
+            android:layout_marginBottom="55dp" />
 
         <!--点播底部工具栏目-->
         <com.miguo.live.views.customviews.PlayBackBottomToolView
             android:id="@+id/normal_user_bottom_tool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/dp15" />
 
     </FrameLayout>
 

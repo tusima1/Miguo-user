@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.customview.SharePopHelper;
+import com.fanwe.customview.SharePopLiveHelper;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.fanwe.utils.MGStringFormatter;
@@ -196,7 +196,7 @@ public class UserBottomToolView extends LinearLayout implements IViewGroup, View
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false, shareRecordId);
+        SharePopLiveHelper sharePopHelper = new SharePopLiveHelper(mAct, false, shareRecordId);
         sharePopHelper.show();
     }
 
