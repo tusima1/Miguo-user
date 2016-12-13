@@ -1,6 +1,7 @@
 package com.fanwe.seller.model.getShopInfo;
 
 import com.fanwe.seller.model.ModelComment;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 
 import java.util.List;
 
@@ -14,13 +15,13 @@ public class ResultShopInfo {
     private List<GoodsModelShopInfo> tuan_list;
     private List<StoreModelShopInfo> other_supplier_location;
     private List<ModelComment> dp_list;
-    private Share share;
+    private ShareInfoBean share;
 
-    public Share getShare() {
+    public ShareInfoBean getShare() {
         return share;
     }
 
-    public void setShare(Share share) {
+    public void setShare(ShareInfoBean share) {
         this.share = share;
     }
 

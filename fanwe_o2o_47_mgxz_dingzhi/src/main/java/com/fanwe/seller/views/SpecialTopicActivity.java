@@ -26,7 +26,6 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.constant.ServerUrl;
 import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.SPullToRefreshSScrollView;
 import com.fanwe.customview.SScrollView;
@@ -35,15 +34,14 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.SpecialTopicAdapter;
 import com.fanwe.seller.model.SellerConstants;
-import com.fanwe.seller.model.getShopInfo.Share;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.seller.model.getSpecialTopic.DetailListBean;
 import com.fanwe.seller.model.getSpecialTopic.ModelSpecialTopic;
 import com.fanwe.seller.model.getSpecialTopic.PageBean;
 import com.fanwe.seller.model.getSpecialTopic.TopicBean;
 import com.fanwe.seller.presenters.SellerNewHttpHelper;
-import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.utils.MGDictUtil;
+import com.fanwe.utils.ShareUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.definition.IntentKey;
@@ -78,7 +76,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
     private int mFLViewpagerHeight;
     private CommonHttpHelper commonHttpHelper;
     private String shareRecordId="";
-    private Share mShare_info;
+    private ShareInfoBean mShare_info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,38 +242,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
     }
     private void doShare() {
         getRecordId();
-        if (mShare_info != null) {
-            String content = mShare_info.getSummary();
-            if (TextUtils.isEmpty(content)) {
-                content = "欢迎来到米果小站";
-            }
-            String imageUrl = mShare_info.getImageurl();
-            if (TextUtils.isEmpty(imageUrl)) {
-                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
-                    imageUrl = MGDictUtil.getShareIcon();
-                }
-            } else if (!imageUrl.startsWith("http")) {
-                imageUrl = "http://www.mgxz.com/pcApp/Common/images/logo2.png";
-                if (!TextUtils.isEmpty(MGDictUtil.getShareIcon())) {
-                    imageUrl = MGDictUtil.getShareIcon();
-                }
-            }
-            String clickUrl = mShare_info.getClickurl();
-            if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.getAppH5Url();
-            } else {
-                clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
-            }
-            String title = mShare_info.getTitle();
-            if (TextUtils.isEmpty(title)) {
-                title = "米果小站";
-            }
-            UmengShareManager.share(this, title, content.trim(), clickUrl, UmengShareManager.getUMImage
-                    (this, imageUrl), null);
-        } else {
-            MGToast.showToast("无分享内容");
-        }
+        ShareUtil.share(this,mShare_info,shareRecordId,"SpecialTopic");
     }
     private void getRecordId() {
         if (commonHttpHelper == null) {
@@ -307,7 +274,6 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
         if (datas!=null && datas.size()>0){
             ModelSpecialTopic modelSpecialTopic = (ModelSpecialTopic) datas.get(0);
             if (modelSpecialTopic==null){
-                MGToast.showToast("数据错误!");
                 finish();
                 return;
             }

@@ -24,7 +24,7 @@ import com.fanwe.dao.barry.view.ShappingCartDaoView;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getShopInfo.Share;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
@@ -44,7 +44,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  */
 public class TimeLimitActivity extends BaseActivity implements GetSpecialListView, PtrHandler, LoadMoreRecyclerView.OnRefreshEndListener ,ShappingCartDaoView, TimeLimitAdapter.OnTimeLimitClickListener{
 
-    private Share share;
+    private ShareInfoBean share;
 
     String tag = "TimeLimitActivity";
 

@@ -37,9 +37,9 @@ import com.fanwe.seller.model.ModelDisplayComment;
 import com.fanwe.seller.model.ModelImage;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.checkShopCollect.ModelCheckShopCollect;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.seller.model.getShopInfo.GoodsModelShopInfo;
 import com.fanwe.seller.model.getShopInfo.ResultShopInfo;
-import com.fanwe.seller.model.getShopInfo.Share;
 import com.fanwe.seller.model.getShopInfo.StoreModelShopInfo;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.umeng.UmengShareManager;
@@ -433,7 +433,7 @@ public class StoreDetailActivity extends BaseActivity implements CallbackView {
     private List<GoodsModelShopInfo> tuan_list;
     private List<StoreModelShopInfo> other_supplier_location;
     private List<ModelComment> dp_list;
-    private Share share;
+    private ShareInfoBean share;
 
     private void setView() {
         StoreActModel actModel = new StoreActModel();
