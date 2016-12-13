@@ -1,7 +1,5 @@
 package com.miguo.category;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,7 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -209,8 +206,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     RelativeLayout layoutBottom;
     @ViewInject(R.id.mode_top_layout)
     LinearLayout modeTopLayout;
-    @ViewInject(R.id.btn_represent)
-    Button btnRepresent;
+    @ViewInject(R.id.iv_represent)
+    ImageView ivRepresent;
 
     HiShopDetailDao shopDetailDao;
     HiShopDetailBean.Result result;
@@ -251,7 +248,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
 
     @Override
     protected void setThisListener() {
-        btnRepresent.setOnClickListener(listener);
+        ivRepresent.setOnClickListener(listener);
         call.setOnClickListener(listener);
         location.setOnClickListener(listener);
         collect.setOnClickListener(listener);
@@ -359,49 +356,44 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      * 点击求代言
      */
     public void clickRepresentBtn() {
-        //1、如果未代言，展开条幅
-        btnRepresent.setText("展开条幅");
-        //2、下滑到屏幕底部(延时1s)
         if (!scrollAlready) {
+            //1、如果未代言，展开条幅
+            ivRepresent.setImageResource(R.drawable.ic_represent_open);
+            //2、下滑到屏幕底部(延时1s)
             scrollAlready = true;
-            btnAnim();
+            representAnim();
+        } else {
+            //页面滚动到底部
+            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
-        //3、下滑过程，同时把页面滚动的底部
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
     }
 
     /**
-     * 延时1s，给条幅展示的时间
+     * 延时1.5s，给条幅展示的时间
      */
-    private void btnAnim() {
+    private void representAnim() {
+        int time = 0;
+        //还未代言，有延时
+        if (!isRepresent) {
+            time = 1500;
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                float curTranslationY = btnRepresent.getTranslationY();
-                ObjectAnimator animator = ObjectAnimator.ofFloat(btnRepresent, "translationY", curTranslationY, 500f);
-                animator.setDuration(1000);
-                animator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                        //收起条幅
-                        btnRepresent.setText("求代言");
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        //展开条幅
-                        btnRepresent.setText("展开条幅");
-                    }
-
-                });
+                //收起条幅
+                if (isRepresent) {
+                    ivRepresent.setImageResource(R.drawable.ic_represent_already);
+                } else {
+                    ivRepresent.setImageResource(R.drawable.ic_represent_do);
+                }
+                float curTranslationY = ivRepresent.getTranslationY();
+                ObjectAnimator animator = ObjectAnimator.ofFloat(ivRepresent, "translationY", curTranslationY, 500f);
+                animator.setDuration(500);
                 animator.start();
+                //页面滚动到底部
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
-        }, 1000);
+        }, time);
     }
 
     /**
@@ -684,12 +676,21 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         updateRepresent();
     }
 
+    private boolean isRepresent;
+
     public void updateRepresent() {
+        isRepresent = result.isEndorsement();
         /**
          * 是否已代言
          */
-        represent.setVisibility(result.isEndorsement() ? View.GONE : View.VISIBLE);
-        representMessage.setText(result.isEndorsement() ? "您已是这家店的代言人，快带领亲朋好友走上人生巅峰" : "建议消费过后，再申请代言人资格");
+        represent.setVisibility(isRepresent ? View.GONE : View.VISIBLE);
+        representMessage.setText(isRepresent ? "您已是这家店的代言人，快带领亲朋好友走上人生巅峰" : "建议消费过后，再申请代言人资格");
+        //求代言按钮
+        if (isRepresent) {
+            ivRepresent.setImageResource(R.drawable.ic_represent_already);
+        } else {
+            ivRepresent.setImageResource(R.drawable.ic_represent_do);
+        }
     }
 
     private String getCrowdPeopleText(final HiShopDetailBean.Result result) {

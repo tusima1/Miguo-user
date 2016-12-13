@@ -38,7 +38,7 @@ public class HiShopDetailListener extends Listener {
             case R.id.represent:
                 clickRepresent();
                 break;
-            case R.id.btn_represent:
+            case R.id.iv_represent:
                 clickRepresentBtn();
                 break;
         }
