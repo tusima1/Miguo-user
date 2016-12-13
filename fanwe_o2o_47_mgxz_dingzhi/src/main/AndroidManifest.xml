@@ -648,6 +648,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
+        <!-- 新代言殿堂 -->
+        <activity
+            android:name="com.miguo.app.HiRepresentIntroduceActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 升级服务 -->
         <service android:name="com.fanwe.service.AppUpgradeService"/>

@@ -7,11 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.fanwe.app.App;
+import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.listener.Listener;
 import com.miguo.live.views.utils.BaseUtils;
@@ -28,7 +30,7 @@ public abstract class Category implements BaseView {
     protected Listener listener;
     protected HiBaseActivity activity;
     protected App app;
-//    protected ImageView back;
+    protected ImageView back;
     protected String tag = this.getClass().getSimpleName();
 
     protected View view;
@@ -40,7 +42,7 @@ public abstract class Category implements BaseView {
      * View
      * @param category
      */
-//    protected RelativeLayout top;
+    protected RelativeLayout top;
 
     public Category(Category category){
         this(category.getActivity());
@@ -89,8 +91,8 @@ public abstract class Category implements BaseView {
      * 绑定View
      */
     protected void findViews(){
-//        top = findViewById(R.id.title_layout);
-//        back = findViewById(R.id.back);
+        top = findViewById(R.id.title_layout);
+        back = findViewById(R.id.back);
         findCategoryViews();
     }
 
@@ -105,9 +107,9 @@ public abstract class Category implements BaseView {
      * 设置监听时间(Controller)
      */
     protected  void setListener(){
-//        if(back!=null){
-//            back.setOnClickListener(listener);
-//        }
+        if(back!=null){
+            back.setOnClickListener(listener);
+        }
         setThisListener();
     }
 
@@ -135,6 +137,9 @@ public abstract class Category implements BaseView {
     protected void setTitlePadding() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return;
+        }
+        if (top != null) {
+            top.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
         }
     }
 

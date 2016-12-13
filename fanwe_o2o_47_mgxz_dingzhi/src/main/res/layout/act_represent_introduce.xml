@@ -11,6 +11,7 @@
         <include layout="@layout/item_layout_sample_title" />
 
         <ImageView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -19,30 +20,185 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_represent_intro_rank" />
 
+        <LinearLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/text_base_color"
+                android:layout_marginTop="@dimen/dp15"
+                android:layout_marginLeft="@dimen/dp17"
+                android:textSize="16sp"
+                android:text="初级代言人"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:paddingBottom="15dp"
+                    android:paddingTop="@dimen/dp20"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@drawable/ic_consumption"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:text="收益可消费"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_base_color_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingBottom="15dp"
+                    android:paddingTop="@dimen/dp20"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@drawable/ic_can_speak"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:text="可代言0家店铺"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_base_color_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/text_line" />
-
-        <WebView
-            android:id="@+id/webView_introduce"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp25"
-            android:background="@color/bg_activity_white"
-            android:scrollbars="none" />
+            android:layout_height="10dp" />
 
         <LinearLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/text_base_color"
+                android:layout_marginTop="@dimen/dp15"
+                android:layout_marginLeft="@dimen/dp17"
+                android:textSize="16sp"
+                android:text="高级代言人"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:paddingTop="@dimen/dp20"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@drawable/ic_consumption"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:text="收益可消费"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_base_color_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:paddingTop="@dimen/dp20"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@drawable/ic_can_speak"
+                        android:layout_width="43dp"
+                        android:layout_height="43dp" />
+
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:text="可代言0家店铺"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_base_color_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingBottom="15dp"
+            android:paddingTop="25dp"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp15"
-            android:layout_marginRight="@dimen/dp15"
-            android:layout_marginTop="@dimen/dp10"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="注："
@@ -53,7 +209,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/dp1"
-                android:text="黄金代言人，会员费18元，从佣金自动扣除，佣金不足时也可以在线充值。"
+                android:text="注：年费18年，可佣金抵扣、预扣、在线支付。"
                 android:textColor="@color/gray_text_99"
                 android:textSize="@dimen/dp11" />
         </LinearLayout>

@@ -56,5 +56,10 @@ public class ClassPath {
      * {@link com.miguo.app.HiRegisterActivity}
      */
     public static final String REGISTER_ACTIVITY = "com.miguo.app.HiRegisterActivity";
+    /**
+     * 重构代言殿堂
+     * {@link com.miguo.app.HiRepresentIntroduceActivity}
+     */
+    public static final String REPRESENT_INTRODUCE_ACTIVITY = "com.miguo.app.HiRepresentIntroduceActivity";
 
 }

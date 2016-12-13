@@ -312,5 +312,9 @@ public class UserConstants {
      * 发送验证码
      */
     public static String SEND_CAPTCHA = "SendCaptcha";
+    /**
+     * 获取代言权限
+     */
+    public static String MEMBERINTEREST = "MemberInterest";
 
 }
