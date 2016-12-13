@@ -15,8 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp40"
-            android:text="支付成功 分享返现"
+            android:layout_marginTop="@dimen/dp30"
+            android:text="老板娘送你"
             android:textColor="#ffe62f"
             android:textSize="@dimen/dp18" />
 
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="78dp"
+            android:layout_marginTop="60dp"
             android:text="10.23元"
             android:textColor="@color/white"
             android:textSize="@dimen/dp30" />
@@ -36,7 +36,7 @@
             android:layout_below="@+id/tv_money_dialog_share_after_pay"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp13"
-            android:text="店老板送来分享佣金，可提现可消费"
+            android:text="可提现可消费，分享后到账"
             android:textColor="@color/white"
             android:textSize="@dimen/dp12" />
 
@@ -71,66 +71,34 @@
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
+        <View
+            android:id="@+id/line_dialog_share_after_pay"
+            android:layout_width="250dp"
+            android:layout_height="1px"
+            android:layout_below="@+id/layout_btn_dialog_share_after_pay"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:background="@color/ff_66" />
+
         <LinearLayout
             android:id="@+id/layout_share_dialog_share_after_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_btn_dialog_share_after_pay"
-            android:layout_marginTop="30dp"
+            android:layout_below="@+id/line_dialog_share_after_pay"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="1px"
-                    android:layout_centerVertical="true"
-                    android:background="@color/ff_66" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:text="分享给朋友，立得现金红包"
-                    android:textColor="#99ffffff"
-                    android:textSize="13dp" />
-
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="1px"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/ff_66" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/iv_sina_dialog_share_after_pay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_weibo_share_normal" />
 
                 <ImageView
                     android:id="@+id/iv_weixin_dialog_share_after_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:padding="15dp"
                     android:src="@drawable/ic_weixin_share_normal" />
 
@@ -146,11 +114,36 @@
                     android:id="@+id/iv_qq_dialog_share_after_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="1dp"
+                    android:layout_marginLeft="10dp"
                     android:padding="15dp"
                     android:src="@drawable/ic_qq_share_normal" />
 
+                <ImageView
+                    android:id="@+id/iv_sina_dialog_share_after_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_weibo_share_normal" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:text="朋友通过你的分享购买商品"
+                android:textColor="#99ffffff"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:text="双方都可得现金"
+                android:textColor="#99ffffff"
+                android:textSize="12dp" />
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

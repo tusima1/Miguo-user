@@ -30,6 +30,7 @@ import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.EnumEventTag;
+import com.fanwe.dialog.LotteryDialog;
 import com.fanwe.dialog.ShareAfterPaytDialog;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
 import com.fanwe.library.alipay.easy.PayResult;
@@ -186,16 +187,19 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 dialog.dismiss();
             }
             MGToast.showToast("分享成功！现金红包将在验券后到账");
+            judgeLottery();
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
             MGToast.showToast(share_media + "分享失败");
+            judgeLottery();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
             MGToast.showToast(share_media + "分享取消");
+            judgeLottery();
         }
     };
 
@@ -239,6 +243,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
     }
 
     String payStatus;
+    String campaign_info;
 
     private void bindData() {
         SDViewBinder.setTextView(mTvOrderSn, orderDetailInfo.getOrder_info().getOrder_sn());
@@ -305,6 +310,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         }
         payStatus = orderDetailInfo.getOrder_info().getOrder_status();
         share_info = orderDetailInfo.getShare_info();
+        campaign_info = orderDetailInfo.getCampaign_info();
         if (!PAY_SUCCESS.equals(payStatus)) {
             if (TextUtils.isEmpty(mOrderId)) {
                 MGToast.showToast("id为空");
@@ -336,14 +342,34 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 @Override
                 public void onClick(View v) {
                     //不要佣金
-                    if (outSideShoppingCartHelper == null) {
-                        outSideShoppingCartHelper = new OutSideShoppingCartHelper(PayActivity.this);
-                    }
-                    outSideShoppingCartHelper.getOrderOperator(mOrderId, "0");
                     dialog.dismiss();
+                    //判断是否显示抽奖弹窗
+                    judgeLottery();
                 }
             });
             dialog.show();
+        } else {
+            judgeLottery();
+        }
+    }
+
+    /**
+     * 是否显示抽奖弹窗
+     */
+    private void judgeLottery() {
+        if (!TextUtils.isEmpty(campaign_info)) {
+            showLotteryDialog();
+        }
+    }
+
+    LotteryDialog lotteryDialog;
+
+    private void showLotteryDialog() {
+        if (lotteryDialog == null) {
+            lotteryDialog = new LotteryDialog(PayActivity.this);
+            lotteryDialog.setCancelable(false);
+            lotteryDialog.setUrl(campaign_info);
+            lotteryDialog.show();
         }
     }
 
@@ -923,9 +949,9 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         if (commonHttpHelper == null) {
             commonHttpHelper = new CommonHttpHelper(PayActivity.this, this);
         }
-        if (buyItem>1){
+        if (buyItem > 1) {
             commonHttpHelper.createShareRecord(Constant.ShareType.WEB_HOME, "");
-        }else{
+        } else {
             commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, "");
         }
     }

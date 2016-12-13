@@ -1,5 +1,6 @@
 package com.miguo.entity;
 
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
 import com.fanwe.utils.StringTool;
@@ -55,7 +56,7 @@ public class HiShopDetailBean implements Serializable{
         private String is_endorsement; //是否代言标识  1已代言 0未代言
         private String ref_avg_price; //人均消费
         private String mobile_brief;
-        private Share share; //分享信息
+        private ShareInfoBean share; //分享信息
         private List<ShopImage> shop_images; //轮播图
         private ShopTags shop_tags;
         private CrowdTags crowd_tags; //门店适合人群id
@@ -206,11 +207,11 @@ public class HiShopDetailBean implements Serializable{
             this.mobile_brief = mobile_brief;
         }
 
-        public Share getShare() {
+        public ShareInfoBean getShare() {
             return share;
         }
 
-        public void setShare(Share share) {
+        public void setShare(ShareInfoBean share) {
             this.share = share;
         }
 
@@ -252,48 +253,6 @@ public class HiShopDetailBean implements Serializable{
 
         public void setLive_list(List<ModelRoom> live_list) {
             this.live_list = live_list;
-        }
-
-        public class Share implements Serializable{
-            private String clickurl;
-
-            private String summary;
-
-            private String imageurl;
-
-            private String title;
-
-            public String getClickurl() {
-                return clickurl;
-            }
-
-            public void setClickurl(String clickurl) {
-                this.clickurl = clickurl;
-            }
-
-            public String getSummary() {
-                return summary;
-            }
-
-            public void setSummary(String summary) {
-                this.summary = summary;
-            }
-
-            public String getImageurl() {
-                return imageurl;
-            }
-
-            public void setImageurl(String imageurl) {
-                this.imageurl = imageurl;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
         }
 
         public class ShopTags implements Serializable{

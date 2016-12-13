@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.customview.SharePopHelper;
+import com.fanwe.customview.SharePopLiveHelper;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerDetailInfo;
 import com.miguo.live.adapters.PagerBaoBaoAdapter;
@@ -137,7 +137,7 @@ public class PlayBackBottomToolView extends LinearLayout implements IViewGroup, 
      * 分享
      */
     private void clickShare() {
-        SharePopHelper sharePopHelper = new SharePopHelper(mAct, false, shareRecordId, true);
+        SharePopLiveHelper sharePopHelper = new SharePopLiveHelper(mAct, false, shareRecordId, true);
         sharePopHelper.show();
     }
 
