@@ -64,7 +64,7 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
             walletList.add(modelWalletNew3);
             ModelWalletNew modelWalletNew4 = new ModelWalletNew();
             modelWalletNew4.setIcon(R.drawable.gift);
-            modelWalletNew4.setTitle("礼包");
+            modelWalletNew4.setTitle("红包");
             modelWalletNew4.setUnit("张优惠券");
             walletList.add(modelWalletNew4);
         }
