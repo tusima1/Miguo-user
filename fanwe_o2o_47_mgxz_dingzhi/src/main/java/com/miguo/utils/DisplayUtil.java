@@ -72,11 +72,15 @@ public class DisplayUtil {
         if(width<50){
             width = 50;
         }
+
         if(height <50){
             height = 50;
         }
+        width = width*2;
+        height = height*2;
         if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
-            url =url+"?imageView2/5/w/"+width+"/h/"+height;
+            url =url+"?imageView2/5/w/"+width+"/h/"+height+"/format/jpg/q/100";
+
             result = url;
         }
         return result;
