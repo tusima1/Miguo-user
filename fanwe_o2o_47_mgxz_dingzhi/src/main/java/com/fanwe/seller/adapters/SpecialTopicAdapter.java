@@ -18,6 +18,7 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getSpecialTopic.DetailListBean;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDDistanceUtil;
 
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class SpecialTopicAdapter extends BaseAdapter {
             holder.tv_type= (TextView) convertView.findViewById(R.id.tv_type);
             holder.tv_price_tuan= (TextView) convertView.findViewById(R.id.tv_price_tuan);
             holder.tv_price_original= (TextView) convertView.findViewById(R.id.tv_price_original);
+            holder.tv_salary= (TextView) convertView.findViewById(R.id.tv_salary_item_featured_groupon);
             holder.layout_tags= (LinearLayout) convertView.findViewById(R.id.layout_tags);
             convertView.setTag(holder);
         }
@@ -94,6 +96,16 @@ public class SpecialTopicAdapter extends BaseAdapter {
             holder.tv_name.setText(detailListBean.getTitle());
             holder.tv_price_original.setText(detailListBean.getOrigin_price()+"元");
             holder.tv_price_original.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
+
+
+            String float2 = MGStringFormatter.getFloat2(detailListBean.getSalary());
+            float aFloat = MGStringFormatter.getFloat(float2);
+            if (aFloat <=0){
+                holder.tv_salary.setVisibility(View.GONE);
+            }else {
+                holder.tv_salary.setVisibility(View.VISIBLE);
+                holder.tv_salary.setText(float2+"元佣金");
+            }
 
             holder.tv_price_tuan.setText(detailListBean.getTuan_price_with_unit());
 
@@ -171,6 +183,7 @@ public class SpecialTopicAdapter extends BaseAdapter {
         public TextView tv_type;//类型
         public TextView tv_price_tuan;//团购价
         public TextView tv_price_original;//原价
+        public TextView tv_salary;//佣金
         public LinearLayout layout_tags;//tags
     }
 }
