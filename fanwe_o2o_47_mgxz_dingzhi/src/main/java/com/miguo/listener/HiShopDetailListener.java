@@ -33,15 +33,23 @@ public class HiShopDetailListener extends Listener {
                 break;
             case R.id.share:
             case R.id.share_bg:
+            case R.id.tv_share:
                 clickShare();
                 break;
-            case R.id.represent:
+            case R.id.tv_represent:
                 clickRepresent();
                 break;
             case R.id.iv_represent:
                 clickRepresentBtn();
                 break;
+            case R.id.tv_mine_shop:
+                clickMineShopBtn();
+                break;
         }
+    }
+
+    private void clickMineShopBtn() {
+        getCategory().clickMineShopBtn();
     }
 
     private void clickRepresent() {

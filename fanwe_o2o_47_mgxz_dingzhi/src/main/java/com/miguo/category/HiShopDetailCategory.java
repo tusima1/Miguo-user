@@ -35,6 +35,7 @@ import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.MGDictUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
@@ -64,6 +65,7 @@ import com.miguo.ui.view.ShopDetailViewPager;
 import com.miguo.view.CollectShopView;
 import com.miguo.view.HiShopDetailView;
 import com.miguo.view.RepresentMerchantView;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,10 +192,14 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     /**
      * 是否已代言
      */
-    @ViewInject(R.id.represent_message)
+    @ViewInject(R.id.tv_represent_message)
     TextView representMessage;
-    @ViewInject(R.id.represent)
-    TextView represent;
+    @ViewInject(R.id.tv_represent)
+    TextView tvRepresent;
+    @ViewInject(R.id.tv_mine_shop)
+    TextView tvMineShop;
+    @ViewInject(R.id.tv_share)
+    TextView tvShare;
     @ViewInject(R.id.layout_recmmend)
     LinearLayout layoutRecmmend;
     @ViewInject(R.id.layout_people)
@@ -256,7 +262,9 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         share.setOnClickListener(listener);
         backBg.setOnClickListener(listener);
         shareBg.setOnClickListener(listener);
-        represent.setOnClickListener(listener);
+        tvRepresent.setOnClickListener(listener);
+        tvMineShop.setOnClickListener(listener);
+        tvShare.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
         recommendAdapter.setOnItemDataChangedListener(this);
     }
@@ -387,7 +395,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
                     ivRepresent.setImageResource(R.drawable.ic_represent_do);
                 }
                 float curTranslationY = ivRepresent.getTranslationY();
-                ObjectAnimator animator = ObjectAnimator.ofFloat(ivRepresent, "translationY", curTranslationY, 500f);
+                ObjectAnimator animator = ObjectAnimator.ofFloat(ivRepresent, "translationY", curTranslationY,
+                        (int) (BaseUtils.getHeight(getActivity()) * 0.5 - BaseUtils.dip2px(85)));
                 animator.setDuration(500);
                 animator.start();
                 //页面滚动到底部
@@ -408,7 +417,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         if (result == null) {
             return;
         }
-        represent.setClickable(false);
+        tvRepresent.setClickable(false);
         representMerchantDao.getRepresentMerchant(result.getEnt_id(), result.getId());
 
     }
@@ -421,6 +430,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     }
 
     private String shareRecordId;
+
+    /**
+     * 跳转到我的小店
+     */
+    public void clickMineShopBtn() {
+        getActivity().startActivity(new Intent(getActivity(), UserHomeActivity.class));
+    }
 
     /**
      * 点击分享
@@ -683,8 +699,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         /**
          * 是否已代言
          */
-        represent.setVisibility(isRepresent ? View.GONE : View.VISIBLE);
-        representMessage.setText(isRepresent ? "您已是这家店的代言人，快带领亲朋好友走上人生巅峰" : "建议消费过后，再申请代言人资格");
+        tvRepresent.setVisibility(isRepresent ? View.GONE : View.VISIBLE);
+        tvMineShop.setVisibility(isRepresent ? View.VISIBLE : View.GONE);
+        tvShare.setVisibility(isRepresent ? View.VISIBLE : View.GONE);
+        representMessage.setText(isRepresent ? "你已代言，分享可赚钱" : "赚人气，赚代言费，与朋友分享自己的生活");
         //求代言按钮
         if (isRepresent) {
             ivRepresent.setImageResource(R.drawable.ic_represent_already);
@@ -776,7 +794,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
 
     @Override
     public void onFinish() {
-        represent.setClickable(true);
+        tvRepresent.setClickable(true);
     }
 
     @Override
@@ -808,4 +826,5 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     public void onFinish(String method) {
 
     }
+
 }
