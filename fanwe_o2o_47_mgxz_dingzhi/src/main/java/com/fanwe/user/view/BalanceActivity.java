@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.AccountMoneyActivity;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.mine.views.RepresentIncomeActivity;
@@ -18,7 +19,13 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.wallet.WalletBalance;
 import com.fanwe.user.presents.WalletHttpHelper;
 import com.fanwe.utils.DataFormat;
+import com.miguo.dao.GetUserLevelDao;
+import com.miguo.dao.impl.GetUserLevelDaoImpl;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.view.GetUserLevelView;
 
 import java.util.List;
 
@@ -70,12 +77,18 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
 
     MGProgressDialog progressDialog;
 
+    /**
+     * 获取用户等级
+     */
+    GetUserLevelDao getUserLevelDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_balance);
         initView();
         walletHttpHelper = new WalletHttpHelper(this);
+        initUserLevel();
     }
 
     @Override
@@ -86,6 +99,26 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         }
         progressDialog.show();
         walletHttpHelper.getWalletBalance();
+    }
+
+    /**
+     * 获取用户等级
+     */
+    private void initUserLevel(){
+        getUserLevelDao = new GetUserLevelDaoImpl(new GetUserLevelView() {
+            @Override
+            public void getUserLevelSuccess(String level) {
+                handleGetUserLevelSuccess(level);
+            }
+
+            @Override
+            public void getUserLevelError(String message) {}
+        });
+        getUserLevelDao.getUserLevel();
+    }
+
+    private void handleGetUserLevelSuccess(String level){
+        App.getInstance().getCurrentUser().setFx_level(level);
     }
 
     public void initView() {
@@ -123,6 +156,13 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
     @Override
     public void onClick(View v) {
         if (v == withdraw_ll) {
+            /**
+             * 初级代言人
+             */
+            if(getUserLevel() == 1){
+                BaseUtils.jumpToNewActivity(this, new Intent(this, ClassNameFactory.getClass(ClassPath.WITHDRAWAL_CONDITIONS_ACTIVITY)));
+                return;
+            }
             startActivity(AccountMoneyActivity.class);
         } else if (v == moneydetail_ll) {
             show_detail_ll();
@@ -196,6 +236,14 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         }
         progressDialog = null;
 
+    }
+
+    private int getUserLevel(){
+        try{
+            return Integer.parseInt(App.getInstance().getCurrentUser().getFx_level());
+        }catch (Exception e){
+            return 1;
+        }
     }
 
     public void startActivity(Class clazz) {

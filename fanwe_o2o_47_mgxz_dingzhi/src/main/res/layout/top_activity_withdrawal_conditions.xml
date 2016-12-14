@@ -20,7 +20,7 @@
             android:layout_height="match_parent" />
 
         <TextView
-            android:text="代言殿堂"
+            android:text="提现条件"
             android:id="@+id/title"
             android:layout_centerInParent="true"
             android:textColor="@color/text_base_color"

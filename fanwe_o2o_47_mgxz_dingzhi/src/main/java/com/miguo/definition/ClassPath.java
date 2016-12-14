@@ -61,5 +61,15 @@ public class ClassPath {
      * {@link com.miguo.app.HiRepresentIntroduceActivity}
      */
     public static final String REPRESENT_INTRODUCE_ACTIVITY = "com.miguo.app.HiRepresentIntroduceActivity";
+    /**
+     * 提现条件
+     * {@link com.miguo.app.HiWithdrawalConditionsActivity}
+     */
+    public static final String WITHDRAWAL_CONDITIONS_ACTIVITY = "com.miguo.app.HiWithdrawalConditionsActivity";
+    /**
+     * 一键升级
+     * {@link com.miguo.app.HiUpdateUserActivity}
+     */
+    public static final String UPDATE_USER_ACTIVITY = "com.miguo.app.HiUpdateUserActivity";
 
 }

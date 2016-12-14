@@ -3,6 +3,7 @@ package com.miguo.category;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.app.App;
@@ -122,6 +123,7 @@ public class HiRepresentIntroduceCategory extends Category {
         memberInterestDao = new MemberInterestDaoImpl(new MemberInterestView() {
             @Override
             public void getMemberInterestSuccess(List<MemberInterestBean.Result.Body> body) {
+                handleHideUpdateTextView();
                 handlegetMemberInterestSuccess(body);
             }
 
@@ -150,6 +152,10 @@ public class HiRepresentIntroduceCategory extends Category {
         String count = "可代言" + getOringeText(body.getRepresent_num()) + "店铺";
         levelRepresentCount.setText(count);
         setRepresentTextSpan(levelRepresentCount, 0, getOringeText(body.getRepresent_num()).length());
+    }
+
+    private void handleHideUpdateTextView(){
+        update.setVisibility(getUserLevel() == 2 ? View.GONE : View.VISIBLE);
     }
 
     private void handleInitWithdraw(){

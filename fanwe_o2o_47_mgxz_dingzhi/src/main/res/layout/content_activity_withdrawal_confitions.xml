@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginTop="34dp"
+        android:textSize="14sp"
+        android:textColor="@color/gray_cc"
+        android:text="初级代言人不可提现"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="11dp"
+        android:textSize="18sp"
+        android:textColor="@color/gray_59"
+        android:text="升级高级代言人，才可以提现哦"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_marginTop="45dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:background="@drawable/ic_withdraw"
+                android:layout_width="43dp"
+                android:layout_height="43dp" />
+
+            <TextView
+                android:layout_marginTop="12.5dp"
+                android:textColor="@color/gray_text_99"
+                android:text="激活提现功能"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_marginTop="6.5dp"
+                android:textColor="@color/main_color_press"
+                android:text="可提现"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="51dp"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:background="@drawable/ic_can_speak"
+                android:layout_width="43dp"
+                android:layout_height="43dp" />
+
+            <TextView
+                android:layout_marginTop="12.5dp"
+                android:textColor="@color/gray_text_99"
+                android:text="代言店铺增加至"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/can_speak"
+                android:textStyle="bold"
+                android:layout_marginTop="6.5dp"
+                android:textColor="@color/main_color_press"
+                android:text="至0家"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_update_introduce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="53dp"
+        android:background="@drawable/bg_yellow"
+        android:gravity="center"
+        android:paddingLeft="58dp"
+        android:paddingRight="58dp"
+        android:paddingBottom="@dimen/dp14"
+        android:paddingTop="@dimen/dp14"
+        android:text="升级，升级，升级"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp17" />
+
+</LinearLayout>

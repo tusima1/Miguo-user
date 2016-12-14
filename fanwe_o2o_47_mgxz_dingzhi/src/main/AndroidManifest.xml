@@ -656,6 +656,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
+        <!-- 一键升级 -->
+        <activity
+            android:name="com.miguo.app.HiUpdateUserActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
+        <!-- 提现条件 -->
+        <activity
+            android:name="com.miguo.app.HiWithdrawalConditionsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 升级服务 -->
         <service android:name="com.fanwe.service.AppUpgradeService"/>
