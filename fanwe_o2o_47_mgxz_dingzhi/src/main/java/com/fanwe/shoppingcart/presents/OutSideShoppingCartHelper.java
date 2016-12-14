@@ -18,6 +18,7 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getUserRedpackets.ModelUserRedPacket;
 import com.fanwe.utils.SDFormatUtil;
+import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.views.customviews.MGToast;
@@ -86,15 +87,15 @@ public class OutSideShoppingCartHelper extends Presenter {
     /**
      * 添加到购物车。
      *
-     * @param fx_user_id    分销用户id（可不给）
-     * @param lgn_user_id   用户id
-     * @param token         用户授权令牌
-     * @param goods_id      商品ID
-     * @param cart_type     商品类型“1” 为团购
-     * @param add_goods_num 商品数量。
-     * @param share_record_id  分享id
+     * @param fx_user_id      分销用户id（可不给）
+     * @param lgn_user_id     用户id
+     * @param token           用户授权令牌
+     * @param goods_id        商品ID
+     * @param cart_type       商品类型“1” 为团购
+     * @param add_goods_num   商品数量。
+     * @param share_record_id 分享id
      */
-    public void addShopCart(String fx_user_id, String lgn_user_id, String token, String goods_id, String cart_type, String add_goods_num,String share_record_id) {
+    public void addShopCart(String fx_user_id, String lgn_user_id, String token, String goods_id, String cart_type, String add_goods_num, String share_record_id) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("fx_user_id", fx_user_id);
         params.put("lgn_user_id", lgn_user_id);
@@ -231,7 +232,6 @@ public class OutSideShoppingCartHelper extends Presenter {
      *
      * @param datas
      * @param fromShopCart 是否来自购物车，如果来自购物车的话取goods_id 要取 pro_id.。否则来自本地购物车的话取id
-     *
      */
     public void multiAddShopCart(List<ShoppingCartInfo> datas, boolean fromShopCart) {
         if (datas == null || datas.size() < 1) {
@@ -263,7 +263,7 @@ public class OutSideShoppingCartHelper extends Presenter {
             goods_ids.append(pro_id + ",");
             cart_types.append("1,");
             add_goods_num.append(info.getNumber() + ",");
-            share_record_ids.append(info.getShare_record_id()+",");
+            share_record_ids.append(info.getShare_record_id() + ",");
         }
         String values = goods_ids.toString();
         if (TextUtils.isEmpty(values) || values.length() < 1) {
@@ -440,6 +440,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("red_packet_ids", red_packet_ids);
         params.put("payment", payment);
         params.put("content", content);
+        params.put("city", AppRuntimeWorker.getCity_id());
         params.put("method", ShoppingCartconstants.ORDER_INFO);
 
         OkHttpUtils.getInstance().put(null, params, new MgCallback() {
@@ -479,6 +480,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("id", id);
+        params.put("city", AppRuntimeWorker.getCity_id());
         params.put("method", ShoppingCartconstants.GET_ORDER_INFO);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {
@@ -586,7 +588,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-                if(callbackHH == null) {
+                if (callbackHH == null) {
                     return;
                 }
                 Type type = new TypeToken<Root<ModelUserRedPacket>>() {
@@ -605,7 +607,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                if(callbackHH == null) {
+                if (callbackHH == null) {
                     return;
                 }
                 callbackHH.onFailue(message);
@@ -613,7 +615,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
             @Override
             public void onFinish() {
-                if(callbackHH == null) {
+                if (callbackHH == null) {
                     return;
                 }
                 MGUIUtil.runOnUiThread(new Runnable() {
@@ -640,6 +642,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("order_id", order_id);
         params.put("is_use_account_money", is_use_account_money);
         params.put("payment", payment);
+        params.put("city", AppRuntimeWorker.getCity_id());
         params.put("method", ShoppingCartconstants.ORDER_INFO);
 
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {

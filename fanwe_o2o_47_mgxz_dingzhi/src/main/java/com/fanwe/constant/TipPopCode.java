@@ -1,10 +1,10 @@
 package com.fanwe.constant;
 
 import android.content.Context;
-import android.icu.text.SimpleDateFormat;
 
 import com.miguo.utils.dev.SPUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
