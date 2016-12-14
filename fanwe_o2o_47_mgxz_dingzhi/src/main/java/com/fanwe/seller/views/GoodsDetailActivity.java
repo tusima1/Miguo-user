@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -39,8 +40,6 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.constant.ServerUrl;
-import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
@@ -197,6 +196,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         View popLayout = LayoutInflater.from(this).inflate(R.layout.layout_pop_share_show, null,
                 false);
         PopupWindow popupWindow=new PopupWindow(popLayout,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(mIvTitleShare,-rightMargin, -topMargin);
     }
@@ -323,15 +323,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 }
             }
         });
-        mIvTitleShare.post(new Runnable() {
-            @Override
-            public void run() {
-                if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
-                    showTipPopupWindow();
-                }
-
-            }
-        });
+//        mIvTitleShare.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
+//                    showTipPopupWindow();
+//                }
+//
+//            }
+//        });
     }
 
     //底部的购买等
@@ -823,7 +823,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         switch (v.getId()) {
             case R.id.iv_share:
                 //分享
-                doShare();
+//                doShare();
+                showTipPopupWindow();
                 break;
             case R.id.iv_collect:
             case R.id.ib_collect:

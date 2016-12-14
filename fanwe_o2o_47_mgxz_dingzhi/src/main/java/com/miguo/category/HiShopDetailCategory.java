@@ -3,6 +3,8 @@ package com.miguo.category;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -402,6 +404,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         View popLayout = LayoutInflater.from(getActivity()).inflate(R.layout.layout_pop_share_show, null,
                 false);
         PopupWindow popupWindow=new PopupWindow(popLayout, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(share,-rightMargin, -topMargin);
     }
