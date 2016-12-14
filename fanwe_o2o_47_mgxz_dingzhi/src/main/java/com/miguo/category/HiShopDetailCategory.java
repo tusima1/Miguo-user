@@ -26,7 +26,6 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.customview.SharePopHelper;
 import com.fanwe.constant.TipPopCode;
 import com.fanwe.fragment.ShopFansFragment;
 import com.fanwe.fragment.StoreLocationFragment;
@@ -380,7 +379,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     }
 
     private String shareRecordId;
-    private SharePopHelper sharePopHelper;
 
     /**
      * 点击分享
