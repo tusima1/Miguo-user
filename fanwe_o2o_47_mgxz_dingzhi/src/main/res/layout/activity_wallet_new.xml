@@ -12,7 +12,5 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@color/c_CCCCCC"
-        android:dividerHeight="1px"
         android:id="@+id/wallet_listview"/>
     </LinearLayout>

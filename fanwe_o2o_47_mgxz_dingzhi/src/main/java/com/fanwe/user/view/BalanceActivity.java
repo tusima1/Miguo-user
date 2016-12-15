@@ -114,7 +114,6 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onFinish("");
 
         this.finish();
     }
@@ -195,7 +194,6 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
             progressDialog.dismiss();
         }
         progressDialog = null;
-
     }
 
     public void startActivity(Class clazz) {
@@ -205,6 +203,7 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        onFinish("");
         progressDialog = null;
         walletHttpHelper = null;
     }

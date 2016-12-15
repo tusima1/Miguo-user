@@ -484,12 +484,14 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onFinish(String method) {
+        mPtrsvAll.onRefreshComplete();
         switch (method) {
             case UserConstants.PERSONALHOME:
                 mPtrsvAll.onRefreshComplete();
                 break;
         }
     }
+
 
     //--------------http end----------------
     @Override
