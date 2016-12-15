@@ -270,7 +270,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         /**
          * 大王和小伙伴
          */
-        initShopMember(merchantID);
+//        initShopMember(merchantID);
     }
 
     private String merchantID;
