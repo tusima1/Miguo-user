@@ -1,5 +1,6 @@
 package com.fanwe.fragment;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -131,6 +132,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         mWeb.setWebChromeClient(getWebChromeClient());
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initSetting() {
         WebSettings webSettings = mWeb.getSettings();
         webSettings.setSavePassword(false);

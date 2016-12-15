@@ -2,7 +2,6 @@ package com.fanwe.dialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -166,10 +165,6 @@ public class ShareAfterPaytDialog extends BaseDialog {
     }
 
     private void selectYes() {
-        btnYes.setBackgroundResource(R.drawable.ic_btn_yes_share_normal);
-        btnYes.setTextColor(Color.parseColor("#C32836"));
-        btnNo.setBackgroundResource(R.drawable.ic_btn_no_share_normal);
-        btnNo.setTextColor(Color.parseColor("#FFFFFF"));
         if (judgePlatform()) {
             doShare();
             dismiss();

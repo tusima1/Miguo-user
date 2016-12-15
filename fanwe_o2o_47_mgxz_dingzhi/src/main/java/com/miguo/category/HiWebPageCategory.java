@@ -35,7 +35,7 @@ import com.miguo.view.ShoppingCartView;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/3.
  */
-public class HiWebPageCategory extends Category implements ShoppingCartView{
+public class HiWebPageCategory extends Category implements ShoppingCartView {
 
     @ViewInject(R.id.webView)
     WebView webView;
@@ -103,21 +103,21 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         setTitlePadding(titleLayout);
     }
 
-    public void updateTitle(String title){
+    public void updateTitle(String title) {
         this.title.setText(title);
     }
 
-    private void initWebView(){
+    private void initWebView() {
         String url = getActivity().getUrl();
-        if(TextUtils.isEmpty(url)){
+        if (TextUtils.isEmpty(url)) {
             return;
         }
         LocalUserModel userModel = AppHelper.getLocalUser();
-        if(userModel != null){
+        if (userModel != null) {
             String userid = userModel.getUser_mobile();
             String password = userModel.getUser_pwd();
-            if(!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)){
-                url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password : url;
+            if (!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
+                url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password + "&from=app" : url;
             }
         }
 
@@ -132,7 +132,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -156,18 +156,18 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         webView.addJavascriptInterface(handler, "mgxz");
     }
 
-    public void start(){
+    public void start() {
         webView.setVisibility(View.VISIBLE);
         loadingFail.setVisibility(View.GONE);
     }
 
-    public void loaddingFail(){
+    public void loaddingFail() {
         webView.setVisibility(View.GONE);
         webView.clearView();
         loadingFail.setVisibility(View.VISIBLE);
     }
 
-    public void refresh(){
+    public void refresh() {
         initWebView();
     }
 
@@ -176,8 +176,8 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         return (HiWebPageActivity) super.getActivity();
     }
 
-    public void addToShoppingCart(String cart_type,String goods_id,String add_goods_num,String fx_user_id,String roomId){
-        if(!TextUtils.isEmpty(App.getInstance().getToken())){
+    public void addToShoppingCart(String cart_type, String goods_id, String add_goods_num, String fx_user_id, String roomId) {
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             shoppingCartDao.addToShoppingCart(roomId, fx_user_id, App.getInstance().getCurrentUser().getUser_id(), goods_id, cart_type, add_goods_num);
             return;
         }
@@ -185,7 +185,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
 
     }
 
-    private void addLocalShoppingCart(String cart_type,String goods_id,String add_goods_num,String fx_user_id,String roomId){
+    private void addLocalShoppingCart(String cart_type, String goods_id, String add_goods_num, String fx_user_id, String roomId) {
         mShoppingCartInfo = new ShoppingCartInfo();
         mShoppingCartInfo.setId(goods_id);
         mShoppingCartInfo.setFx_user_id(fx_user_id);//TODO fx_id 没登陆都是空

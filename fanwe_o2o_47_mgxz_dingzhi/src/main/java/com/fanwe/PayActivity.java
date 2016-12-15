@@ -187,19 +187,16 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 dialog.dismiss();
             }
             MGToast.showToast("分享成功！现金红包将在验券后到账");
-            judgeLottery();
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
             MGToast.showToast(share_media + "分享失败");
-            judgeLottery();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
             MGToast.showToast(share_media + "分享取消");
-            judgeLottery();
         }
     };
 
@@ -358,6 +355,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
      */
     private void judgeLottery() {
         if (!TextUtils.isEmpty(campaign_info)) {
+            showLotteryAlready = true;
             showLotteryDialog();
         }
     }
@@ -763,10 +761,20 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         payer.pay(orderSpec, sign, signType);
     }
 
+    private boolean showLotteryAlready, isPause;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isPause = true;
+    }
+
     @Override
     protected void onResume() {
-        // requestPayOrder();
-
+        if (!showLotteryAlready && isPause) {
+            showLotteryAlready = true;
+            judgeLottery();
+        }
         if (pop != null) {
             pop.dismiss();
             pop = null;

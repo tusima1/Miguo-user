@@ -64,10 +64,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp35"
                 android:layout_marginLeft="@dimen/dp18"
-                android:background="@drawable/ic_btn_no_share_normal"
+                android:background="@drawable/ic_btn_yes_share_normal"
                 android:gravity="center"
                 android:text="我 要"
-                android:textColor="@color/white"
+                android:textColor="#C32836"
                 android:textSize="@dimen/dp14" />
         </LinearLayout>
 
