@@ -69,6 +69,7 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             mHolder.order_str = (TextView) convertView.findViewById(R.id.order_str);
             mHolder.order_id = (TextView) convertView.findViewById(R.id.order_id);
             mHolder.tv_desc = (TextView) convertView.findViewById(R.id.tv_desc);
+            mHolder.order_line =(RelativeLayout)convertView.findViewById(R.id.order_line);
 
             convertView.setTag(mHolder);
         } else {
@@ -108,7 +109,6 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             mHolder.month_text.setText(value);
             mHolder.data_line.setVisibility(View.GONE);
 
-
         } else {
             mHolder.title_line.setVisibility(View.GONE);
             mHolder.data_line.setVisibility(View.VISIBLE);
@@ -124,19 +124,12 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
                 mHolder.order_str.setVisibility(View.VISIBLE);
             }else{
                 mHolder.order_id.setText("");
-                mHolder.order_str.setVisibility(View.GONE);
+                mHolder.order_line.setVisibility(View.GONE);
             }
 
             SDViewBinder.setTextView(mHolder.month_text, currModle.getInsert_time(), "");
-            String comeFrom = "";
-            String mobile = currModle.getMobile();
-            String money_type = currModle.getMoney_type();
-            if (TextUtils.isEmpty(money_type)){
-                comeFrom+=mobile;
-            }else {
-                comeFrom=money_type+"       "+mobile;
-            }
-            mHolder.tv_desc.setText(comeFrom);
+
+            mHolder.tv_desc.setText(currModle.getDescription());
         }
     }
 
@@ -177,6 +170,7 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
         TextView order_str;
         TextView order_id;
         TextView tv_desc;
+        RelativeLayout order_line;
     }
 
 }
