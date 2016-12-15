@@ -17,7 +17,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.wallet.WalletBalance;
 import com.fanwe.user.presents.WalletHttpHelper;
-import com.fanwe.utils.DataFormat;
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
@@ -109,8 +109,6 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         invite_value = (TextView) findViewById(R.id.invite_value);
     }
 
-    ;
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -161,9 +159,9 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
             return;
         }
         WalletBalance balance = (WalletBalance) datas.get(0);
-        balance_value.setText(DataFormat.toDoubleTwo(balance.getBalance()));
-        commission_value.setText(DataFormat.toDoubleTwo(balance.getCommission_total()) + " 元");
-        invite_value.setText(DataFormat.toDoubleTwo(balance.getShare_total()) + " 元");
+        balance_value.setText(MGStringFormatter.getFloat2(balance.getBalance()));
+        commission_value.setText(MGStringFormatter.getFloat2(balance.getCommission_total()) + " 元");
+        invite_value.setText(MGStringFormatter.getFloat2(balance.getShare_total()) + " 元");
     }
 
     @Override
