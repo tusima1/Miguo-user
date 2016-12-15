@@ -67,9 +67,14 @@ public class ClassPath {
      */
     public static final String WITHDRAWAL_CONDITIONS_ACTIVITY = "com.miguo.app.HiWithdrawalConditionsActivity";
     /**
-     * 一键升级
+     * 预扣费升级/第三方支付升级
      * {@link com.miguo.app.HiUpdateUserActivity}
      */
     public static final String UPDATE_USER_ACTIVITY = "com.miguo.app.HiUpdateUserActivity";
+    /**
+     * 预扣费升级/第三方支付升级
+     * {@link com.miguo.app.HiUpdateUserWithEnoughMoneyActivity}
+     */
+    public static final String UPDATE_USER_WITH_ENOUGH_MONEY_ACTIVITY = "com.miguo.app.HiUpdateUserWithEnoughMoneyActivity";
 
 }

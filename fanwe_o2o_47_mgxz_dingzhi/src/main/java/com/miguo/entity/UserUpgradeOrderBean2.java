@@ -80,6 +80,9 @@ public class UserUpgradeOrderBean2 implements Serializable{
             }
 
             public class Config implements Serializable{
+                /**
+                 * Alipay
+                 */
                 String payment_type;
                 String out_trade_no;
                 String partner;
@@ -91,6 +94,40 @@ public class UserUpgradeOrderBean2 implements Serializable{
                 String notify_url;
                 String sign_type;
                 String seller_id;
+                /**
+                 * 签名和签名内容。未加入的串
+                 */
+                private String textHtml;
+
+
+                /**
+                 * Wechat
+                 */
+                private String appid;
+                private String nonce_str;
+                private String package_value;
+                private String prepay_id;
+                private String time_stamp;
+//                private String sign;
+//                private String subject;
+//                private String body;
+//                private String total_fee;
+                private String total_fee_format;
+//                private String out_trade_no;
+//                private String notify_url;
+                private String pay_code;
+                private String key;
+                private String secret;
+                private String trade_type;
+                private String mch_id;
+
+                public String getTextHtml() {
+                    return textHtml;
+                }
+
+                public void setTextHtml(String textHtml) {
+                    this.textHtml = textHtml;
+                }
 
                 public String getBody() {
                     return body;
@@ -178,6 +215,97 @@ public class UserUpgradeOrderBean2 implements Serializable{
 
                 public void setTotal_fee(String total_fee) {
                     this.total_fee = total_fee;
+                }
+
+                /**
+                 * Wechat
+                 */
+                public String getAppid() {
+                    return appid;
+                }
+
+                public void setAppid(String appid) {
+                    this.appid = appid;
+                }
+
+                public String getKey() {
+                    return key;
+                }
+
+                public void setKey(String key) {
+                    this.key = key;
+                }
+
+                public String getMch_id() {
+                    return mch_id;
+                }
+
+                public void setMch_id(String mch_id) {
+                    this.mch_id = mch_id;
+                }
+
+                public String getNonce_str() {
+                    return nonce_str;
+                }
+
+                public void setNonce_str(String nonce_str) {
+                    this.nonce_str = nonce_str;
+                }
+
+                public String getPackage_value() {
+                    return package_value;
+                }
+
+                public void setPackage_value(String package_value) {
+                    this.package_value = package_value;
+                }
+
+                public String getPay_code() {
+                    return pay_code;
+                }
+
+                public void setPay_code(String pay_code) {
+                    this.pay_code = pay_code;
+                }
+
+                public String getPrepay_id() {
+                    return prepay_id;
+                }
+
+                public void setPrepay_id(String prepay_id) {
+                    this.prepay_id = prepay_id;
+                }
+
+                public String getSecret() {
+                    return secret;
+                }
+
+                public void setSecret(String secret) {
+                    this.secret = secret;
+                }
+
+                public String getTime_stamp() {
+                    return time_stamp;
+                }
+
+                public void setTime_stamp(String time_stamp) {
+                    this.time_stamp = time_stamp;
+                }
+
+                public String getTotal_fee_format() {
+                    return total_fee_format;
+                }
+
+                public void setTotal_fee_format(String total_fee_format) {
+                    this.total_fee_format = total_fee_format;
+                }
+
+                public String getTrade_type() {
+                    return trade_type;
+                }
+
+                public void setTrade_type(String trade_type) {
+                    this.trade_type = trade_type;
                 }
             }
 

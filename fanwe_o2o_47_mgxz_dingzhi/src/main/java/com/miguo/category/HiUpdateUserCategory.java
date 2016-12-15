@@ -1,13 +1,19 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.widget.TextView;
 
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiUpdateUserActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.ResultCode;
+import com.miguo.definition.WechatPayStatus;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiUpdateUserListener;
 import com.miguo.presenters.UserUpgradePresenter;
 import com.miguo.presenters.impl.UserUpgradePresenterImpl;
@@ -49,6 +55,11 @@ public class HiUpdateUserCategory extends Category implements UserUpgradePresent
      */
     UserUpgradePresenter userUpgradePresenter;
 
+    /**
+     * 访问网络时候的Dialog
+     */
+    MGProgressDialog dialog;
+
     public HiUpdateUserCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -77,7 +88,7 @@ public class HiUpdateUserCategory extends Category implements UserUpgradePresent
 
     @Override
     protected void init() {
-
+        WechatPayStatus.reset();
     }
 
     @Override
@@ -93,6 +104,7 @@ public class HiUpdateUserCategory extends Category implements UserUpgradePresent
      * 这里不会涉及到全额支付，全额支付是一键升级
      */
     public void clickUpdateByWithholding(){
+        showDialog();
         /**
          * {@link com.miguo.presenters.impl.UserUpgradePresenterImpl}
          * {@link #userUpgradeSuccess(String)}
@@ -105,6 +117,7 @@ public class HiUpdateUserCategory extends Category implements UserUpgradePresent
      * 微信支付
      */
     public void clickUpdateByWechat(){
+        showDialog();
         /**
          * {@link com.miguo.presenters.impl.UserUpgradePresenterImpl}
          * {@link #userUpgradeSuccess(String)}
@@ -117,6 +130,7 @@ public class HiUpdateUserCategory extends Category implements UserUpgradePresent
      * 支付宝支付
      */
     public void clickByUpdateByAlipay(){
+        showDialog();
         /**
          * {@link com.miguo.presenters.impl.UserUpgradePresenterImpl}
          * {@link #userUpgradeSuccess(String)}
@@ -128,12 +142,36 @@ public class HiUpdateUserCategory extends Category implements UserUpgradePresent
     @Override
     public void userUpgradeError(String message) {
         showToast(message);
+        userUpgradeError();
+    }
+
+    public void userUpgradeError(){
+        hideDialog();
     }
 
     @Override
     public void userUpgradeSuccess(String message) {
+        hideDialog();
         showToast(message);
+        userUpgradeSuccess();
+    }
+
+    public void userUpgradeSuccess(){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.WITHDRAWAL_CONDITIONS_ACTIVITY));
+        getActivity().setResult(ResultCode.RESUTN_OK, intent);
         BaseUtils.finishActivity(getActivity());
+    }
+
+    private void showDialog(){
+        dialog = new MGProgressDialog(getActivity(),R.style.MGProgressDialog);
+        dialog.show();
+    }
+
+    private void hideDialog(){
+        if(dialog == null){
+            return;
+        }
+        dialog.dismiss();
     }
 
     @Override

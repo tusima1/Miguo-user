@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="loading">加载中</string>
+    <string name="loading">请稍后</string>
     <string name="has_sold">已售</string>
     <string name="evaluation">评价</string>
     <string name="i_want_comment">我要点评</string>

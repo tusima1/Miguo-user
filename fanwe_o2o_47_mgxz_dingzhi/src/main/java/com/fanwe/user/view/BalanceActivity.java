@@ -23,6 +23,7 @@ import com.miguo.dao.GetUserLevelDao;
 import com.miguo.dao.impl.GetUserLevelDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.view.GetUserLevelView;
@@ -88,7 +89,6 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         setContentView(R.layout.act_balance);
         initView();
         walletHttpHelper = new WalletHttpHelper(this);
-        initUserLevel();
     }
 
     @Override
@@ -99,22 +99,6 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         }
         progressDialog.show();
         walletHttpHelper.getWalletBalance();
-    }
-
-    /**
-     * 获取用户等级
-     */
-    private void initUserLevel(){
-        getUserLevelDao = new GetUserLevelDaoImpl(new GetUserLevelView() {
-            @Override
-            public void getUserLevelSuccess(String level) {
-                handleGetUserLevelSuccess(level);
-            }
-
-            @Override
-            public void getUserLevelError(String message) {}
-        });
-        getUserLevelDao.getUserLevel();
     }
 
     private void handleGetUserLevelSuccess(String level){
@@ -156,14 +140,7 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
     @Override
     public void onClick(View v) {
         if (v == withdraw_ll) {
-            /**
-             * 初级代言人
-             */
-            if(getUserLevel() == 1){
-                BaseUtils.jumpToNewActivity(this, new Intent(this, ClassNameFactory.getClass(ClassPath.WITHDRAWAL_CONDITIONS_ACTIVITY)));
-                return;
-            }
-            startActivity(AccountMoneyActivity.class);
+            clickWithdraw();
         } else if (v == moneydetail_ll) {
             show_detail_ll();
         } else if (v == commission_ll) {
@@ -180,7 +157,28 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         } else {
             return;
         }
+    }
 
+    private void clickWithdraw(){
+        getUserLevelDao = new GetUserLevelDaoImpl(new GetUserLevelView() {
+            @Override
+            public void getUserLevelSuccess(String level) {
+                handleGetUserLevelSuccess(level);
+                /**
+                 * 初级代言人
+                 */
+                if(getUserLevel() == 1){
+                    BaseUtils.jumpToNewActivity(BalanceActivity.this, new Intent(BalanceActivity.this, ClassNameFactory.getClass(ClassPath.WITHDRAWAL_CONDITIONS_ACTIVITY)));
+                    return;
+                }
+                startActivity(AccountMoneyActivity.class);
+            }
+            @Override
+            public void getUserLevelError(String message) {
+                MGToast.showToast(message);
+            }
+        });
+        getUserLevelDao.getUserLevel();
     }
 
     /**

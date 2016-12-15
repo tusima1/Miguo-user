@@ -23,6 +23,9 @@ public class UserUpgradeOrderDaoImpl extends BaseDaoImpl implements UserUpgradeO
         super(baseView);
     }
 
+    /**
+     * 获取用户升级信息
+     */
     @Override
     public void getUserUpgradeInfo() {
         TreeMap<String , String> params = new TreeMap<>();
@@ -63,7 +66,7 @@ public class UserUpgradeOrderDaoImpl extends BaseDaoImpl implements UserUpgradeO
         params.put("token", App.getInstance().getToken());
         params.put("payment_id", payment_id);
         params.put("method", "UserUpgradeOrder");
-        OkHttpUtils.getInstance().post("", params, new MgCallback(UserUpgradeOrderBean2.class) {
+        OkHttpUtils.getInstance().post(null, params, new MgCallback(UserUpgradeOrderBean2.class) {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 getListener2().userUpgradeError(message);

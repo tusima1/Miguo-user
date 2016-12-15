@@ -1,5 +1,6 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -7,18 +8,28 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.app.App;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.dao.GetUserLevelDao;
 import com.miguo.dao.MemberInterestDao;
+import com.miguo.dao.UserUpgradeOrderDao;
 import com.miguo.dao.impl.GetUserLevelDaoImpl;
 import com.miguo.dao.impl.MemberInterestDaoImpl;
+import com.miguo.dao.impl.UserUpgradeOrderDaoImpl;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
 import com.miguo.entity.MemberInterestBean;
+import com.miguo.entity.UserUpgradeOrderBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiRepresentIntroduceListener;
+import com.miguo.utils.BaseUtils;
 import com.miguo.view.GetUserLevelView;
 import com.miguo.view.MemberInterestView;
+import com.miguo.view.UserUpgradeOrderView;
 
 import java.util.List;
 
@@ -54,6 +65,17 @@ public class HiRepresentIntroduceCategory extends Category {
      * 获取代言权限
      */
     MemberInterestDao memberInterestDao;
+
+    /**
+     * 获取用户代言升级能否一键升级
+     */
+    UserUpgradeOrderDao userUpgradeOrderDao;
+
+    /**
+     * 访问网络时候的Dialog
+     */
+    MGProgressDialog dialog;
+
 
     public HiRepresentIntroduceCategory(HiBaseActivity activity) {
         super(activity);
@@ -93,27 +115,89 @@ public class HiRepresentIntroduceCategory extends Category {
      * 点击会员升级
      */
     public void clickUpdate(){
+        userUpgradeOrderDao = new UserUpgradeOrderDaoImpl(new UserUpgradeOrderView() {
+            @Override
+            public void getUserUpgradeInfoSuccess(UserUpgradeOrderBean.Result.Body body) {
+                /**
+                 * 无法一键升级
+                 */
+                if(!body.canUpdate()){
+                    handleUpdate(body);
+                    return;
+                }
+                /**
+                 * 一键升级
+                 */
+                handleUpadteEnoughMoney(body);
+            }
 
+            @Override
+            public void getUserUpgradeInfoError(String message) {
+                showToast(message);
+            }
+        });
+        userUpgradeOrderDao.getUserUpgradeInfo();
+    }
+
+    private void showDialog(){
+        dialog = new MGProgressDialog(getActivity(),R.style.MGProgressDialog);
+        dialog.show();
+    }
+
+    private void hideDialog(){
+        if(dialog == null){
+            return;
+        }
+        dialog.dismiss();
+    }
+
+    /**
+     * 付费升级
+     * @param body
+     */
+    private void handleUpdate(UserUpgradeOrderBean.Result.Body body){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.UPDATE_USER_ACTIVITY));
+        intent.putExtra(IntentKey.USER_ACCOUNT, body.getUser_account_money());
+        intent.putExtra(IntentKey.UPDATE_ACCOUNT, body.getTotal_price());
+        BaseUtils.jumpToNewActivityForResult(getActivity(),intent, RequestCode.UPDATE_USER_GO_WITHDRAW_CONDITION);
+
+    }
+
+    /**
+     * 一键升级
+     * @param body
+     */
+    private void handleUpadteEnoughMoney(UserUpgradeOrderBean.Result.Body body){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.UPDATE_USER_WITH_ENOUGH_MONEY_ACTIVITY));
+        intent.putExtra(IntentKey.USER_ACCOUNT, body.getUser_account_money());
+        intent.putExtra(IntentKey.UPDATE_ACCOUNT, body.getTotal_price());
+        BaseUtils.jumpToNewActivityForResult(getActivity(),intent, RequestCode.UPDATE_USER_GO_WITHDRAW_CONDITION);
     }
 
     /**
      * 获取用户等级
      */
     private void initUserLevel(){
+        showDialog();
         getUserLevelDao = new GetUserLevelDaoImpl(new GetUserLevelView() {
             @Override
             public void getUserLevelSuccess(String level) {
+                hideDialog();
                 handleGetUserLevelSuccess(level);
             }
 
             @Override
-            public void getUserLevelError(String message) {}
+            public void getUserLevelError(String message) {
+                showToast(message);
+                hideDialog();
+            }
         });
         getUserLevelDao.getUserLevel();
     }
 
     private void handleGetUserLevelSuccess(String level){
         App.getInstance().getCurrentUser().setFx_level(level);
+        handleHideUpdateTextView();
     }
 
     /**
@@ -123,7 +207,6 @@ public class HiRepresentIntroduceCategory extends Category {
         memberInterestDao = new MemberInterestDaoImpl(new MemberInterestView() {
             @Override
             public void getMemberInterestSuccess(List<MemberInterestBean.Result.Body> body) {
-                handleHideUpdateTextView();
                 handlegetMemberInterestSuccess(body);
             }
 

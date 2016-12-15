@@ -7,24 +7,19 @@ import com.miguo.dao.UserUpgradeOrderDao;
 import com.miguo.dao.impl.UserUpgradeOrderDaoImpl;
 import com.miguo.entity.UserUpgradeOrderBean;
 import com.miguo.entity.UserUpgradeOrderBean2;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.presenters.UserUpgradePresenter;
 import com.miguo.view.BaseView;
 import com.miguo.view.UserUpgradeOrderView;
 import com.miguo.view.UserUpgradeOrderView2;
 import com.miguo.view.UserUpgradePresenterView;
-import com.tencent.mm.sdk.constants.ConstantsAPI;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 
 /**
  * Created by zlh on 2016/12/14.
  * 获取用户升级信息
  * 用户升级（全额支付、预扣费支付、微信支付、支付宝支付）
  */
-public class UserUpgradePresenterImpl extends BasePresenterImpl implements IWXAPIEventHandler,UserUpgradePresenter, UserUpgradeOrderView, UserUpgradeOrderView2{
+public class UserUpgradePresenterImpl extends BasePresenterImpl implements UserUpgradePresenter, UserUpgradeOrderView, UserUpgradeOrderView2{
 
     /**
      * 获取用户升级信息
@@ -138,60 +133,60 @@ public class UserUpgradePresenterImpl extends BasePresenterImpl implements IWXAP
      */
     @Override
     public void userUpgradeByWechatSuccess(UserUpgradeOrderBean2.Result.Body.Config config) {
-//        String appId = config.getAppid();
-//        if (TextUtils.isEmpty(appId)) {
-//            getListener().userUpgradeError("appId为空");
-//            return;
-//        }
+        String appId = config.getAppid();
+        if (TextUtils.isEmpty(appId)) {
+            getListener().userUpgradeError("appId为空");
+            return;
+        }
 
-//        String partnerId = config.getMch_id();
-//        if (TextUtils.isEmpty(partnerId)) {
-//            getListener().userUpgradeError("partnerId为空");
-//            return;
-//        }
+        String partnerId = config.getMch_id();
+        if (TextUtils.isEmpty(partnerId)) {
+            getListener().userUpgradeError("partnerId为空");
+            return;
+        }
 
-//        String prepayId = config.getPrepay_id();
-//        if (TextUtils.isEmpty(prepayId)) {
-//            getListener().userUpgradeError("prepayId为空");
-//            return;
-//        }
+        String prepayId = config.getPrepay_id();
+        if (TextUtils.isEmpty(prepayId)) {
+            getListener().userUpgradeError("prepayId为空");
+            return;
+        }
 
-//        String nonceStr = config.getNonce_str();
-//        if (TextUtils.isEmpty(nonceStr)) {
-//            getListener().userUpgradeError("nonceStr为空");
-//            return;
-//        }
+        String nonceStr = config.getNonce_str();
+        if (TextUtils.isEmpty(nonceStr)) {
+            getListener().userUpgradeError("nonceStr为空");
+            return;
+        }
 
-//        String timeStamp = config.getTime_stamp();
-//        if (TextUtils.isEmpty(timeStamp)) {
-//            getListener().userUpgradeError("timeStamp为空");
-//            return;
-//        }
+        String timeStamp = config.getTime_stamp();
+        if (TextUtils.isEmpty(timeStamp)) {
+            getListener().userUpgradeError("timeStamp为空");
+            return;
+        }
 
-//        String packageValue = config.getPackage_value();
-//        if (TextUtils.isEmpty(packageValue)) {
-//            getListener().userUpgradeError("packageValue为空");
-//            return;
-//        }
+        String packageValue = config.getPackage_value();
+        if (TextUtils.isEmpty(packageValue)) {
+            getListener().userUpgradeError("packageValue为空");
+            return;
+        }
 
-//        String sign = config.getSign();
-//        if (TextUtils.isEmpty(sign)) {
-//            getListener().userUpgradeError("sign为空");
-//            return;
-//        }
+        String sign = config.getSign();
+        if (TextUtils.isEmpty(sign)) {
+            getListener().userUpgradeError("sign为空");
+            return;
+        }
 
-//        SDWxappPay.getInstance().setAppId(appId);
+        SDWxappPay.getInstance().setAppId(appId);
 
-//        PayReq req = new PayReq();
-//        req.appId = appId;
-//        req.partnerId = partnerId;
-//        req.prepayId = prepayId;
-//        req.nonceStr = nonceStr;
-//        req.timeStamp = timeStamp;
-//        req.packageValue = packageValue;
-//        req.sign = sign;
+        PayReq req = new PayReq();
+        req.appId = appId;
+        req.partnerId = partnerId;
+        req.prepayId = prepayId;
+        req.nonceStr = nonceStr;
+        req.timeStamp = timeStamp;
+        req.packageValue = packageValue;
+        req.sign = sign;
 
-//        SDWxappPay.getInstance().pay(req);
+        SDWxappPay.getInstance().pay(req);
     }
 
     /**
@@ -208,8 +203,7 @@ public class UserUpgradePresenterImpl extends BasePresenterImpl implements IWXAP
             return;
         }
 
-//        String orderSpec = config.getTextHtml();
-        String orderSpec = "";
+        String orderSpec = config.getTextHtml();
 
         String sign = config.getSign();
 
@@ -285,40 +279,6 @@ public class UserUpgradePresenterImpl extends BasePresenterImpl implements IWXAP
         getListener().userUpgradeError(message);
     }
     /** 获取用户升级信息回调 / 各种支付方式支付回调 **/
-
-
-    @Override
-    public void onResp(BaseResp resp) {
-        int respType = resp.getType();
-        switch (respType) {
-            case ConstantsAPI.COMMAND_PAY_BY_WX:
-                String content = null;
-                switch (resp.errCode) {
-                    case 0: // 成功
-                        getListener().userUpgradeSuccess("支付成功！");
-                        break;
-                    case -1: // 可能的原因：签名错误、未注册APPID、项目设置APPID不正确、注册的APPID与设置的不匹配、其他异常等。
-                        getListener().userUpgradeError("支付失败！");
-                        break;
-                    case -2: // 无需处理。发生场景：用户不支付了，点击取消，返回APP。
-                        getListener().userUpgradeError("取消支付！");
-                        break;
-
-                    default:
-                        break;
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
-
-
-    @Override
-    public void onReq(BaseReq baseReq) {
-
-    }
 
     @Override
     public UserUpgradePresenterView getListener() {

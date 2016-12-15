@@ -10,7 +10,7 @@ public class DevCode {
 
     public static final String JAVA_API_37="http://192.168.90.37:8080/mgxz.BussRPC/";
     public static final String JAVA_API_36="http://192.168.90.36:8080/mgxz.BussRPC/";
-    public static final String JAVA_API_58="http://192.168.90.58:8080/mgxz.BussRPC/";
+    public static final String JAVA_API_32="http://192.168.90.32:8080/mgxz.BussRPC/";
 
     public static final String SERVER_API_ONLINE_URL = "http://mapi.mgxz.com";
     public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";

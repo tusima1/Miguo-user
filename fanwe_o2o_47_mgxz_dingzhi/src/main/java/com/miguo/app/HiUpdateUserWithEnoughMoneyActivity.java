@@ -1,17 +1,14 @@
 package com.miguo.app;
 
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.utils.DataFormat;
 import com.miguo.category.Category;
-import com.miguo.category.HiUpdateUserCategory;
+import com.miguo.category.HiUpdateUserWithEnoughMoneyCategory;
 import com.miguo.definition.IntentKey;
-import com.miguo.definition.WechatPayStatus;
 
 /**
- * Created by zlh on 2016/12/14.
- * 余额不足：升级代言人
+ * Created by zlh on 2016/12/15.
  */
-public class HiUpdateUserActivity extends HiBaseActivity {
+public class HiUpdateUserWithEnoughMoneyActivity extends HiBaseActivity {
 
     /**
      * 用户余额
@@ -25,34 +22,17 @@ public class HiUpdateUserActivity extends HiBaseActivity {
     @Override
     protected Category initCategory() {
         getIntentData();
-        return new HiUpdateUserCategory(this);
+        return new HiUpdateUserWithEnoughMoneyCategory(this);
     }
 
     @Override
     protected void setContentView() {
-        setContentView(R.layout.activity_update_user);
+        setContentView(R.layout.activity_update_user_with_enough_money);
     }
 
     private void getIntentData(){
         setUserAccount(getIntent().getDoubleExtra(IntentKey.USER_ACCOUNT, 0));
         setUpdateAccount(getIntent().getDoubleExtra(IntentKey.UPDATE_ACCOUNT, -1));
-    }
-
-    @Override
-    protected void doOnResume() {
-        if(WechatPayStatus.isSuccess()){
-            getCategory().userUpgradeSuccess();
-            WechatPayStatus.reset();
-        }
-        if(WechatPayStatus.isERROR()){
-            getCategory().userUpgradeError();
-            WechatPayStatus.reset();
-        }
-    }
-
-    @Override
-    public HiUpdateUserCategory getCategory() {
-        return (HiUpdateUserCategory)super.getCategory();
     }
 
     public double getUpdateAccount() {
@@ -70,4 +50,5 @@ public class HiUpdateUserActivity extends HiBaseActivity {
     public void setUserAccount(double userAccount) {
         this.userAccount = userAccount;
     }
+
 }

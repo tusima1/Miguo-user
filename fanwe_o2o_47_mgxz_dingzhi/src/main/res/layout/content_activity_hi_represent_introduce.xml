@@ -202,7 +202,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp1"
-            android:text="注：年费18年，可佣金抵扣、预扣、在线支付。"
+            android:text="注：年费18元，可佣金抵扣、预扣、在线支付。"
             android:textColor="@color/gray_cc"
             android:textSize="@dimen/dp11" />
     </LinearLayout>

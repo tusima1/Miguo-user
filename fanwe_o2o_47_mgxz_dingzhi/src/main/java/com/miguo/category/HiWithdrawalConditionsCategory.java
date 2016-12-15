@@ -15,6 +15,7 @@ import com.miguo.dao.impl.MemberInterestDaoImpl;
 import com.miguo.dao.impl.UserUpgradeOrderDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
 import com.miguo.entity.MemberInterestBean;
 import com.miguo.entity.UserUpgradeOrderBean;
 import com.miguo.factory.ClassNameFactory;
@@ -118,22 +119,25 @@ public class HiWithdrawalConditionsCategory extends Category {
     }
 
     public void clickUpdate(){
-        if(TextUtils.isEmpty(App.getInstance().getToken())){
-
-        }
         userUpgradeOrderDao = new UserUpgradeOrderDaoImpl(new UserUpgradeOrderView() {
             @Override
             public void getUserUpgradeInfoSuccess(UserUpgradeOrderBean.Result.Body body) {
+                /**
+                 * 无法一键升级
+                 */
                 if(!body.canUpdate()){
                     handleUpdate(body);
                     return;
                 }
-                handleUpadteEnoughMoney();
+                /**
+                 * 一键升级
+                 */
+                handleUpadteEnoughMoney(body);
             }
 
             @Override
             public void getUserUpgradeInfoError(String message) {
-
+                showToast(message);
             }
         });
         userUpgradeOrderDao.getUserUpgradeInfo();
@@ -147,11 +151,19 @@ public class HiWithdrawalConditionsCategory extends Category {
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.UPDATE_USER_ACTIVITY));
         intent.putExtra(IntentKey.USER_ACCOUNT, body.getUser_account_money());
         intent.putExtra(IntentKey.UPDATE_ACCOUNT, body.getTotal_price());
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+        BaseUtils.jumpToNewActivityForResult(getActivity(),intent, RequestCode.UPDATE_USER_GO_WITHDRAW_CONDITION);
+
     }
 
-    private void handleUpadteEnoughMoney(){
-
+    /**
+     * 一键升级
+     * @param body
+     */
+    private void handleUpadteEnoughMoney(UserUpgradeOrderBean.Result.Body body){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.UPDATE_USER_WITH_ENOUGH_MONEY_ACTIVITY));
+        intent.putExtra(IntentKey.USER_ACCOUNT, body.getUser_account_money());
+        intent.putExtra(IntentKey.UPDATE_ACCOUNT, body.getTotal_price());
+        BaseUtils.jumpToNewActivityForResult(getActivity(),intent, RequestCode.UPDATE_USER_GO_WITHDRAW_CONDITION);
     }
 
 }

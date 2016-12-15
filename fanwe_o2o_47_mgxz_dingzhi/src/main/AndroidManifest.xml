@@ -656,6 +656,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
+        <!--  一键升级 -->
+        <activity
+            android:name="com.miguo.app.HiUpdateUserWithEnoughMoneyActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 一键升级 -->
         <activity
             android:name="com.miguo.app.HiUpdateUserActivity"
