@@ -77,7 +77,7 @@
             <TextView
                 android:layout_marginTop="12.5dp"
                 android:textColor="@color/gray_text_99"
-                android:text="代言店铺增加至"
+                android:text="代言店铺增加"
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
