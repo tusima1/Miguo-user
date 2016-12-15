@@ -41,6 +41,7 @@ import com.miguo.app.HiShopDetailActivity;
 import com.miguo.dao.LoginByMobileDao;
 import com.miguo.dao.impl.LoginByMobileDaoImpl;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
@@ -407,6 +408,13 @@ public class AppJsHandler extends BaseJsHandler {
                 UmengShareManager.share(platformShare, mActivity, finalTitle, finalSummary, finalUrl, UmengShareManager.getUMImage(mActivity, finalPic), null);
             }
         });
+    }
+
+    @JavascriptInterface
+    public void goTopic(String topic_id) {
+        Intent intent = new Intent(App.getApplication(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
+        intent.putExtra(IntentKey.SPECIAL_TOPIC_ID, topic_id);
+        startActivity(intent);
     }
 
 }
