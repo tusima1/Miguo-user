@@ -47,7 +47,9 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
     public void setUrl(String url) {
         this.mStrUrl = url;
     }
-
+    public void setPostData(String postData){
+        this.postData = postData;
+    }
 
     public void setUserId(String id) {
         this.id = id;

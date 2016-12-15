@@ -27,6 +27,8 @@ import com.fanwe.library.title.TitleItemConfig;
 import com.fanwe.library.utils.SDOtherUtil;
 import com.fanwe.library.utils.SDViewUtil;
 
+import org.apache.http.util.EncodingUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +61,10 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 	protected WebViewFragmentListener mListener;
 	protected SDTitle mTitle;
 	protected TextView mTvClose;
+	/**
+	 * P0ST 请求。
+	 */
+	protected String postData;
 
 	public void setmListener(WebViewFragmentListener mListener)
 	{
@@ -287,7 +293,9 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 
 	protected boolean shouldOverrideUrlLoading_WebViewClient(WebView view, String url)
 	{
-		loadUrl(url, view);
+		//edit by zhouhy 删除重新加载。
+		view.loadUrl(url);
+//		loadUrl(url, view);
 		return true;
 	}
 
@@ -407,7 +415,12 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 					webView.loadUrl(url, mapHeader);
 				} else
 				{
-					webView.loadUrl(url);
+					if(!TextUtils.isEmpty(postData)){
+						webView.postUrl(url, EncodingUtils.getBytes(postData, "base64"));
+						shouldLoad = false;
+					}else {
+						webView.loadUrl(url);
+					}
 				}
 			}
 		}
