@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.fanwe.app.App;
-import com.fanwe.user.model.UserInfoNew;
 import com.miguo.definition.SharedPreferencesConfig;
 
 /**
@@ -24,7 +23,6 @@ public class SharedPreferencesUtils {
      * 防止默认构造器被调用需私有化
      */
     private SharedPreferencesUtils(){
-
     }
 
     private SharedPreferencesUtils(Context context){

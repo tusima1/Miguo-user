@@ -1,5 +1,6 @@
 package com.miguo.category;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -107,6 +108,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView{
         this.title.setText(title);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView(){
         String url = getActivity().getUrl();
         if(TextUtils.isEmpty(url)){

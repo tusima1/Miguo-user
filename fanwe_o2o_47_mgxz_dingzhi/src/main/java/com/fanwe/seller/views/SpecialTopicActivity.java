@@ -203,6 +203,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                     mTvTitleMiddle.setTextColor(Color.argb(0, 46, 46, 46));
                     mStatusBar.setBackgroundColor(Color.argb(0, 204, 204, 204));
                     mIv_left.setImageResource(R.drawable.ic_arrow_left_white);
+                    mIv_share.setImageResource(R.drawable.ic_share_pure);
                 } else if (y > 0 && y <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
                     float scale = (float) y / height;
                     float alpha = (255 * scale);
@@ -210,11 +211,13 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                     mVGTitle.setBackgroundColor(Color.argb((int) alpha, 255, 255, 255));
                     mStatusBar.setBackgroundColor(Color.argb((int) alpha, 204, 204, 204));
                     mIv_left.setImageResource(R.drawable.ic_arrow_left_white);
+                    mIv_share.setImageResource(R.drawable.ic_share_pure);
                 } else {    //滑动到banner下面设置普通颜色
                     mVGTitle.setBackgroundColor(Color.argb(255, 255, 255, 255));
                     mTvTitleMiddle.setTextColor(Color.argb(255, 46, 46, 46));
                     mStatusBar.setBackgroundColor(Color.argb(255, 204, 204, 204));
                     mIv_left.setImageResource(R.drawable.ic_left_arrow_dark);
+                    mIv_share.setImageResource(R.drawable.ic_share_dark);
                 }
             }
         });

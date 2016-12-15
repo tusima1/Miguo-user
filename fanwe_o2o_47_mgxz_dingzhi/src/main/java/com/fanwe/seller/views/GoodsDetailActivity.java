@@ -40,6 +40,7 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
+import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.customview.SScrollView;
@@ -323,15 +324,15 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                 }
             }
         });
-//        mIvTitleShare.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
-//                    showTipPopupWindow();
-//                }
-//
-//            }
-//        });
+        mIvTitleShare.post(new Runnable() {
+            @Override
+            public void run() {
+                if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
+                    showTipPopupWindow();
+                }
+
+            }
+        });
     }
 
     //底部的购买等
@@ -823,8 +824,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         switch (v.getId()) {
             case R.id.iv_share:
                 //分享
-//                doShare();
-                showTipPopupWindow();
+                doShare();
                 break;
             case R.id.iv_collect:
             case R.id.ib_collect:

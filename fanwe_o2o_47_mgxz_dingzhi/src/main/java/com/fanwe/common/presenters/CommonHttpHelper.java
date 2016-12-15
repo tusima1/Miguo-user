@@ -229,9 +229,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-//                MGLog.e(CommonConstants.GETSHAREID + " :" + message + errorCode);
                 onFailure2(mView,CommonConstants.GETSHAREID);
-
             }
         });
     }
