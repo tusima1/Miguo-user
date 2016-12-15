@@ -21,16 +21,13 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
-import com.fanwe.common.model.CommonConstants;
-import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
-import com.fanwe.common.presenters.CommonHttpHelper;
-import com.fanwe.constant.Constant;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.customview.MyGridView;
-import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.adapters.ImageAdapter;
@@ -41,6 +38,7 @@ import com.fanwe.user.model.getUserAttention.ModelUserAttention;
 import com.fanwe.user.model.putAttention.ModelAttention;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.fanwe.utils.MGDictUtil;
+import com.fanwe.utils.ShareUtil;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.customviews.MGToast;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -162,8 +160,13 @@ public class UserHomeActivity extends Activity implements CallbackView {
         if (!TextUtils.isEmpty(nick)) {
             title = nick + "的精彩推荐";
         }
-        String clickUrl = ServerUrl.getAppH5Url() + "index/winnie/id/" + id + "/share_record_id/" + shareRecordId;
-        UmengShareManager.share(this, title, "跟随我，过更好的生活~ ", clickUrl, UmengShareManager.getUMImage(this, imageUrl), null);
+        String clickUrl = ServerUrl.getAppH5Url() + "index/winnie/id/" + id ;
+        ShareInfoBean shareInfoBean = new ShareInfoBean();
+        shareInfoBean.setClickurl(clickUrl);
+        shareInfoBean.setTitle(title);
+        shareInfoBean.setImageurl(imageUrl);
+        shareInfoBean.setSummary("跟随我，过更好的生活~ ");
+        ShareUtil.share(this, shareInfoBean, shareRecordId, "");
     }
 
     ImageAdapter adapterShop;

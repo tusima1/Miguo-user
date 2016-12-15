@@ -26,8 +26,9 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.umeng.UmengShareManager;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.utils.MGDictUtil;
+import com.fanwe.utils.ShareUtil;
 
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
     public void setUrl(String url) {
         this.mStrUrl = url;
     }
-    public void setPostData(String postData){
+
+    public void setPostData(String postData) {
         this.postData = postData;
     }
 
@@ -223,7 +225,12 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
             mContent = "米果小站";
         }
 
-        UmengShareManager.share(getActivity(), mContent, mSummary, url, UmengShareManager.getUMImage(getActivity(), imageUrl), null);
+        ShareInfoBean shareInfoBean = new ShareInfoBean();
+        shareInfoBean.setClickurl(url);
+        shareInfoBean.setTitle(mContent);
+        shareInfoBean.setImageurl(imageUrl);
+        shareInfoBean.setSummary(mSummary);
+        ShareUtil.share(getActivity(), shareInfoBean, "", "");
     }
 
     @Override

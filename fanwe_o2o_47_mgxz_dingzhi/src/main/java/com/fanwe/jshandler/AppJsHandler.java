@@ -28,6 +28,7 @@ import com.fanwe.fragment.TuanListFragment;
 import com.fanwe.fragment.YouHuiListFragment;
 import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.utils.SDToast;
+import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
@@ -36,6 +37,7 @@ import com.fanwe.shoppingcart.presents.OutSideShoppingCartHelper;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.utils.MGDictUtil;
+import com.fanwe.utils.ShareUtil;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.dao.LoginByMobileDao;
@@ -347,14 +349,16 @@ public class AppJsHandler extends BaseJsHandler {
         if (TextUtils.isEmpty(url)) {
             url = ServerUrl.getAppH5Url();
         }
-        final String finalTitle = title;
-        final String finalSummary = summary;
-        final String finalUrl = url;
-        final String finalPic = pic;
+        final ShareInfoBean shareInfoBean = new ShareInfoBean();
+        shareInfoBean.setClickurl(url);
+        shareInfoBean.setTitle(title);
+        shareInfoBean.setImageurl(pic);
+        shareInfoBean.setSummary(summary);
+
         MGUIUtil.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                UmengShareManager.share(mActivity, finalTitle, finalSummary, finalUrl, UmengShareManager.getUMImage(mActivity, finalPic), null);
+                ShareUtil.share(mActivity, shareInfoBean, "", "");
             }
         });
     }

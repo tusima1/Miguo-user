@@ -102,7 +102,7 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
             if (maxPage >= pageNum) {
                 getData();
             }
-            getData();
+
         }
     };
 
@@ -154,7 +154,9 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
             mDatas.clear();
         }
         items = resultCommissionLog.getList();
+        List<ModelCommissionLog> newDatas = new ArrayList<ModelCommissionLog>();
         if (!SDCollectionUtil.isEmpty(items)) {
+
             for (ModelCommissionLog bean : items) {
                 String time = DateFormat.format("HH:mm:ss", DataFormat.toLong(bean.getInsert_time())).toString();
                 String month_date = DateFormat.format("MM-dd", DataFormat.toLong(bean.getInsert_time())).toString();
@@ -165,18 +167,20 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
                     String tempTime = DateFormat.format("yyyy年MM月", DataFormat.toLong(bean.getInsert_time())).toString();
                     tempTime = yearStr(tempTime);
                     temp.setYear_month(tempTime);
-                    mDatas.add(temp);
+                    newDatas.add(temp);
                 }
                 bean.setMonth_date(month_date);
                 bean.setTime_str(time);
-                mDatas.add(bean);
+                newDatas.add(bean);
             }
+        }else{
+
         }
 
         if (pageNum == 1) {
-            mRepresentIncomeAdapter.setmDatas(mDatas);
+            mRepresentIncomeAdapter.setmDatas(newDatas);
         } else {
-            mRepresentIncomeAdapter.addMoreMDatas(mDatas);
+            mRepresentIncomeAdapter.addMoreMDatas(newDatas);
         }
         showLLEmpty();
         mRepresentIncomeAdapter.notifyDataSetChanged();

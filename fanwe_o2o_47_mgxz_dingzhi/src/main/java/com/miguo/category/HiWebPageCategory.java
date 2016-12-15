@@ -109,7 +109,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void initWebView(){
+    private void initWebView() {
         String url = getActivity().getUrl();
         if (TextUtils.isEmpty(url)) {
             return;
@@ -121,10 +121,10 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
             if (!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
                 url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password + "&from=app" : url;
             } else {
-                url = url + "?from=app";
+                url = url + "?name=&pwd=&from=app";
             }
         } else {
-            url = url + "?from=app";
+            url = url + "?name=&pwd=&from=app";
         }
 
         WebSettings webSettings = webView.getSettings();

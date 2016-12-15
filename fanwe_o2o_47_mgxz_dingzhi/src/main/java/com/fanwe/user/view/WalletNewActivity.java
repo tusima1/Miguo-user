@@ -40,6 +40,7 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
         setContentView(R.layout.activity_wallet_new);
         initView();
         initTitleView("我的钱包");
+        setLeftDrawable(R.drawable.ic_left_arrow_dark);
         walletHttpHelper = new WalletHttpHelper(this);
     }
 
