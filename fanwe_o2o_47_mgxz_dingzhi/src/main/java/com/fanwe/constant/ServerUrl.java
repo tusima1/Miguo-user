@@ -33,6 +33,7 @@ public class ServerUrl {
 
     public static String getAppServerApiUrl() {
         if (DEBUG) {
+
             return SERVER_API_USING;
         } else {
             //线上正式
