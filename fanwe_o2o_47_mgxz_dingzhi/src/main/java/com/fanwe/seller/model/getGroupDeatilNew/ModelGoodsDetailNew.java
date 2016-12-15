@@ -50,6 +50,16 @@ public class ModelGoodsDetailNew {
     private List<ShopListBean> shop_list;
     private List<TagBean> tag_list;
 
+    private String salary;
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
     public String getTime_status() {
         return time_status;
     }

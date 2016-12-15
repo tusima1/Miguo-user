@@ -2,24 +2,19 @@ package com.fanwe.seller.views;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.didikee.uilibs.utils.DisplayUtil;
 import com.didikee.uilibs.views.MaxHeightListView;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
@@ -28,6 +23,7 @@ import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.TipPopCode;
+import com.fanwe.customview.PopTipShare;
 import com.fanwe.customview.SPullToRefreshSScrollView;
 import com.fanwe.customview.SScrollView;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -48,6 +44,7 @@ import com.miguo.app.HiShopDetailActivity;
 import com.miguo.definition.IntentKey;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -179,14 +176,6 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 setTitleAction();
             }
         });
-        mIv_share.post(new Runnable() {
-            @Override
-            public void run() {
-                if (TipPopCode.checkDate(SpecialTopicActivity.this,TipPopCode.Topic)){
-                    showTipPopupWindow();
-                }
-            }
-        });
     }
     private void setTitleAction() {
         if (mFLViewpagerHeight <= 0) {
@@ -223,15 +212,22 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    private void showTipPopupWindow(){
-        int rightMargin = DisplayUtil.dp2px(this, 24);
-        int topMargin = DisplayUtil.dp2px(this, 10);
-        View popLayout = LayoutInflater.from(this).inflate(R.layout.layout_pop_share_show, null,
-                false);
-        PopupWindow popupWindow=new PopupWindow(popLayout, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.showAsDropDown(mIv_share,-rightMargin, -topMargin);
+    private PopTipShare popTipShare;
+    private void showShareTipPop(){
+        popTipShare = new PopTipShare(this,mIv_share);
+        if (TipPopCode.checkDate(SpecialTopicActivity.this,TipPopCode.Topic)){
+            MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    popTipShare.show();
+                }
+            },300);
+        }
+    }
+    private void dismissShareTipPop(){
+        if (popTipShare!=null && popTipShare.isShowing()){
+            popTipShare.dismiss();
+        }
     }
 
     @Override
@@ -246,6 +242,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
         }
     }
     private void doShare() {
+        dismissShareTipPop();
         getRecordId();
         ShareUtil.share(this,mShare_info,shareRecordId,"SpecialTopic");
     }
@@ -312,6 +309,8 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 temp_list = modelSpecialTopic.getDetail_list();
                 adapter.setData(temp_list);
 
+                //show tip
+                showShareTipPop();
             }
         }
     }

@@ -8,14 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -28,7 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
@@ -43,8 +40,8 @@ import com.fanwe.constant.Constant;
 import com.fanwe.constant.TipPopCode;
 import com.fanwe.customview.ListViewForScrollView;
 import com.fanwe.customview.MGProgressDialog;
+import com.fanwe.customview.PopTipShare;
 import com.fanwe.customview.SScrollView;
-import com.fanwe.customview.SharePopHelper;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.GoodsDetailPagerAdapter;
@@ -160,6 +157,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private boolean isBottom;
     private MGProgressDialog dialog;
     private String share_record_id;
+    private TextView mTvSalary;
     private CommonHttpHelper commonHttpHelper;
 
     @Override
@@ -191,15 +189,22 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         }
     }
 
-    private void showTipPopupWindow(){
-        int rightMargin = DisplayUtil.dp2px(this, 24);
-        int topMargin = DisplayUtil.dp2px(this, 10);
-        View popLayout = LayoutInflater.from(this).inflate(R.layout.layout_pop_share_show, null,
-                false);
-        PopupWindow popupWindow=new PopupWindow(popLayout,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.showAsDropDown(mIvTitleShare,-rightMargin, -topMargin);
+    private PopTipShare popTipShare;
+    private void showShareTipPop(){
+        popTipShare = new PopTipShare(this,mIvTitleShare);
+        if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
+            MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    popTipShare.show();
+                }
+            },300);
+        }
+    }
+    private void dismissShareTipPop(){
+        if (popTipShare!=null && popTipShare.isShowing()){
+            popTipShare.dismiss();
+        }
     }
 
     private void requestData() {
@@ -322,15 +327,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
                     animatorAll(mShopListLayout, mDefaultHeight, offset);
                     rotateView(mIvShopArrow, 0f, 180f, true);
                 }
-            }
-        });
-        mIvTitleShare.post(new Runnable() {
-            @Override
-            public void run() {
-                if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
-                    showTipPopupWindow();
-                }
-
             }
         });
     }
@@ -458,6 +454,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mTvTopYouHui = ((TextView) findViewById(R.id.tv_top_youhui));
         mTvTopQuan = ((TextView) findViewById(R.id.tv_top_quan));
         mTvTopHot = ((TextView) findViewById(R.id.tv_hot));
+        mTvSalary = ((TextView) findViewById(R.id.tv_salary));
         mIbCollect = ((ImageButton) findViewById(R.id.ib_collect));
         mIbCollect.setOnClickListener(this);
     }
@@ -575,6 +572,18 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             popularity = "0";
         }
         mTvTopHot.setText(popularity);//人气值
+        //专属优惠与佣金的切换
+        String float2 = MGStringFormatter.getFloat2(modelGoodsDetailNew.getSalary());
+        float aFloat = MGStringFormatter.getFloat(float2);
+        if (aFloat <=0){
+            mTvSalary.setBackgroundResource(R.drawable.shape_cricle_stroke_dark_solid_white_radius_small);
+            mTvSalary.setText("专属优惠");
+            mTvSalary.setTextColor(getColor(R.color.dark_text));
+        }else {
+            mTvSalary.setText(float2+"元佣金");
+            mTvSalary.setBackgroundResource(R.drawable.shape_salary_bg);
+            mTvSalary.setTextColor(Color.WHITE);
+        }
 
         String origin_price = modelGoodsDetailNew.getOrigin_price();//原价
         String tuan_price = modelGoodsDetailNew.getTuan_price();//团购价
@@ -656,6 +665,8 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         mCirIndictor.setViewPager(mViewpager);
         goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
 
+        //最后展示pop提示
+        showShareTipPop();
         //--end bind data
     }
 
@@ -817,7 +828,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     public void onFinish(String method) {
     }
 
-    SharePopHelper sharePopHelper;
 
     @Override
     public void onClick(View v) {
@@ -863,6 +873,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private String shareRecordId;
 
     private void doShare() {
+        dismissShareTipPop();
         getRecordId();
         ShareUtil.share(GoodsDetailActivity.this, mShare_info, shareRecordId, "Goods");
     }

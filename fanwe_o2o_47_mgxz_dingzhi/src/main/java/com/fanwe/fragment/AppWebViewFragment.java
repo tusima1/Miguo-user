@@ -60,6 +60,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         imageUrl = pic;
     }
 
+    @SuppressLint("AddJavascriptInterface")
     @Override
     protected void addJavascriptInterface() {
         // 详情回调处理

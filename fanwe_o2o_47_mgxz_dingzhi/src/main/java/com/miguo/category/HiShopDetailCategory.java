@@ -3,23 +3,17 @@ package com.miguo.category;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.StoreLocationActivity;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
@@ -29,6 +23,7 @@ import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.TipPopCode;
+import com.fanwe.customview.PopTipShare;
 import com.fanwe.fragment.ShopFansFragment;
 import com.fanwe.fragment.StoreLocationFragment;
 import com.fanwe.library.utils.SDActivityUtil;
@@ -62,6 +57,7 @@ import com.miguo.listener.HiShopDetailListener;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.ShopDetailTagView;
 import com.miguo.ui.view.ShopDetailViewPager;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.view.CollectShopView;
 import com.miguo.view.HiShopDetailView;
 import com.miguo.view.RepresentMerchantView;
@@ -257,14 +253,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         represent.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
         recommendAdapter.setOnItemDataChangedListener(this);
-        share.post(new Runnable() {
-            @Override
-            public void run() {
-                if (TipPopCode.checkDate(getActivity(),TipPopCode.Shops)){
-                    showTipPopupWindow();
-                }
-            }
-        });
     }
 
     @Override
@@ -386,6 +374,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      * 点击分享
      */
     public void clickShare() {
+        dismissShareTipPop();
         getRecordId();
         if (result != null) {
             ShareUtil.share(getActivity(), result.getShare(), shareRecordId, "Shop");
@@ -398,17 +387,23 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         }
         commonHttpHelper.createShareRecord(Constant.ShareType.SHOP, merchantID);
     }
-    private void showTipPopupWindow(){
-        int rightMargin = DisplayUtil.dp2px(getActivity(), 24);
-        int topMargin = DisplayUtil.dp2px(getActivity(), 10);
-        View popLayout = LayoutInflater.from(getActivity()).inflate(R.layout.layout_pop_share_show, null,
-                false);
-        PopupWindow popupWindow=new PopupWindow(popLayout, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.showAsDropDown(share,-rightMargin, -topMargin);
+    private PopTipShare popTipShare;
+    private void showShareTipPop(){
+        popTipShare = new PopTipShare(getActivity(),share);
+        if (TipPopCode.checkDate(getActivity(),TipPopCode.Shops)){
+            MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    popTipShare.show();
+                }
+            },300);
+        }
     }
-
+    private void dismissShareTipPop(){
+        if (popTipShare!=null && popTipShare.isShowing()){
+            popTipShare.dismiss();
+        }
+    }
     /**
      * 点击位置
      */
@@ -615,6 +610,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
          * 是否已代言
          */
         updateRepresent();
+
+        showShareTipPop();
     }
 
     public void updateRepresent() {
