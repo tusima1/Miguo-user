@@ -49,14 +49,17 @@ public class DistributionStoreWapActivity extends BaseActivity {
         } else {
         }
         //9月23日添加  &from=app
-        url = ServerUrl.getAppH5Url() + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app";
+        url = ServerUrl.getAppH5Url() + "user/applogin?from=app";
+        String postData ="name=" + name + "&pwd=" + pwd ;
+        frag.setPostData(postData);
         frag.setUrl(url);
         frag.setmProgressMode(EnumProgressMode.NONE);
         getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
-        Log.e("Test",url);
+
     }
 
     private void getIntentData() {
+        String postData="";
         Intent intent = getIntent();
         if (intent.hasExtra("user_id") && intent.hasExtra("url")) {
             //进别人的小店。
@@ -68,16 +71,17 @@ public class DistributionStoreWapActivity extends BaseActivity {
             if (userModel != null) {
                 String name = userModel.getUser_mobile();
                 String pwd = userModel.getUser_pwd();
-                url = url + "/name/" + name + "/pwd/" + pwd;
+                postData ="name=" + name + "&pwd=" + pwd ;
             }
 
             AppWebViewFragment frag = new AppWebViewFragment();
             frag.setShowTitle(true);
             frag.setUrl(url);
+            frag.setPostData(postData);
             frag.setUserId(user_id);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
-        //    Log.e("Test",url);
+         Log.e("Test",url);
         } else if (intent.hasExtra("id")) {
             //进别人的小店。
             String id = intent.getStringExtra("id");
@@ -89,11 +93,13 @@ public class DistributionStoreWapActivity extends BaseActivity {
             if (userModel != null) {
                 String name = userModel.getUser_mobile();
                 String pwd = userModel.getUser_pwd();
-                url = ServerUrl.getAppH5Url() + "user/applogin?name=" + name + "&pwd=" + pwd + "&from=app&uid="+id ;
+                url = ServerUrl.getAppH5Url() + "user/applogin?from=app&uid="+id ;
+                postData ="name=" + name + "&pwd=" + pwd ;
             } else {
                 url = ServerUrl.getAppH5Url() + "user/shop/from/app/uid/" + id+"/";
             }
             frag.setUrl(url);
+            frag.setPostData(postData);
             frag.setmProgressMode(EnumProgressMode.NONE);
             getSDFragmentManager().replace(R.id.act_distribution_store_wap_fl_all, frag);
             Log.e("Test",url);

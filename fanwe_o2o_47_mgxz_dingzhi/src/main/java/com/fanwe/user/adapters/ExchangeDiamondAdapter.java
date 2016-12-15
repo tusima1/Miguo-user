@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.wallet.Convert_list;
-import com.fanwe.user.model.wallet.ExchangeListModel;
 
 import java.util.List;
 
