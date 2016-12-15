@@ -118,7 +118,11 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
             String password = userModel.getUser_pwd();
             if (!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
                 url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password + "&from=app" : url;
+            } else {
+                url = url + "?from=app";
             }
+        } else {
+            url = url + "?from=app";
         }
 
         WebSettings webSettings = webView.getSettings();
