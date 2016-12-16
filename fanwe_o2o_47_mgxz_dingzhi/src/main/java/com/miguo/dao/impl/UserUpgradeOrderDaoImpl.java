@@ -7,6 +7,7 @@ import com.miguo.dao.UserUpgradeOrderDao;
 import com.miguo.definition.PaymentId;
 import com.miguo.entity.UserUpgradeOrderBean;
 import com.miguo.entity.UserUpgradeOrderBean2;
+import com.miguo.utils.BaseUtils;
 import com.miguo.view.BaseView;
 import com.miguo.view.UserUpgradeOrderView;
 import com.miguo.view.UserUpgradeOrderView2;
@@ -150,7 +151,11 @@ public class UserUpgradeOrderDaoImpl extends BaseDaoImpl implements UserUpgradeO
      */
     @Override
     public void userUpgradeByWechat() {
-        userUpdategrade(PaymentId.WECHAT);
+        if (BaseUtils.isWeixinAvilible()){
+            userUpdategrade(PaymentId.WECHAT);
+            return;
+        }
+        getListener2().userUpgradeError("未安装微信");
     }
 
     /**

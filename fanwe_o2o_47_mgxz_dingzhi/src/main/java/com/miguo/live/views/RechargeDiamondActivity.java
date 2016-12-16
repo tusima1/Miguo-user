@@ -412,10 +412,10 @@ public class RechargeDiamondActivity extends BaseActivity implements RefreshCalb
                 payMalipay();
             } else if (Constant.PaymentType.WXAPP.equals(className)) // 微信
             {
-               if(BaseUtils.isWeixinAvilible(RechargeDiamondActivity.this)){
+               if(BaseUtils.isWeixinAvilible()){
                    payWxapp();
                }else{
-                   MGToast.showToast("未安装微信客户端。");
+                   MGToast.showToast("未安装微信");
                }
 
             }

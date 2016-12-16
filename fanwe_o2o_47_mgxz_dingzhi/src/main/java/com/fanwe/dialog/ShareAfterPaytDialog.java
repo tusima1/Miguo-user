@@ -174,7 +174,7 @@ public class ShareAfterPaytDialog extends BaseDialog {
     private boolean judgePlatform() {
         //如果选择了微信、朋友圈；判断有没有安装
         if ((platform == SHARE_MEDIA.WEIXIN) || (platform == SHARE_MEDIA.WEIXIN_CIRCLE)) {
-            if (!BaseUtils.isWeixinAvilible(mContext)) {
+            if (!BaseUtils.isWeixinAvilible()) {
                 MGToast.showToast("未安装微信");
                 return false;
             }

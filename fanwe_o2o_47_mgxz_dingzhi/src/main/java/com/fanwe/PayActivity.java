@@ -560,7 +560,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 payMalipay();
             } else if (PaymentType.WXAPP.equals(className)) {
                 // 微信
-                if (!BaseUtils.isWeixinAvilible(this)) {
+                if (!BaseUtils.isWeixinAvilible()) {
                     MGToast.showToast("未安装微信");
                     return;
                 }

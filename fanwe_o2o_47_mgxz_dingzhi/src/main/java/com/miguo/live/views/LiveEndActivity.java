@@ -138,19 +138,19 @@ public class LiveEndActivity extends Activity implements CallbackView {
         SHARE_MEDIA platform = SHARE_MEDIA.QQ;
         //已认证的，去直播
         if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQ) {
-            if (!BaseUtils.isQQClientAvailable(this)) {
+            if (!BaseUtils.isQQClientAvailable()) {
                 MGToast.showToast("未安装QQ");
                 return;
             }
             platform = SHARE_MEDIA.QQ;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.WEIXIN) {
-            if (!BaseUtils.isWeixinAvilible(this)) {
+            if (!BaseUtils.isWeixinAvilible()) {
                 MGToast.showToast("未安装微信");
                 return;
             }
             platform = SHARE_MEDIA.WEIXIN;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.FRIEND) {
-            if (!BaseUtils.isWeixinAvilible(this)) {
+            if (!BaseUtils.isWeixinAvilible()) {
                 MGToast.showToast("未安装微信");
                 return;
             }
@@ -158,7 +158,7 @@ public class LiveEndActivity extends Activity implements CallbackView {
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.SINA) {
             platform = SHARE_MEDIA.SINA;
         } else if (dataBindingLiveEnd.mode.get() == dataBindingLiveEnd.QQZONE) {
-            if (!BaseUtils.isQQClientAvailable(this)) {
+            if (!BaseUtils.isQQClientAvailable()) {
                 MGToast.showToast("未安装QQ");
                 return;
             }
