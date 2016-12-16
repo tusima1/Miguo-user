@@ -17,12 +17,19 @@ public class HiWebPageListener extends Listener {
     }
 
     @Override
-    protected void onClickThis(View v) {
+    public void onClick(View v) {
         switch (v.getId()){
             case R.id.refresh:
                 clickRefresh();
                 break;
+            case R.id.back:
+                clickBack();
+                break;
         }
+    }
+
+    private void clickBack(){
+        getCategory().clickBack();
     }
 
     private void clickRefresh(){

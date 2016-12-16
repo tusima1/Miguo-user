@@ -81,16 +81,14 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
     @Override
     protected void initThisListener() {
         listener = new HiWebPageListener(this);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (webView!=null && webView.canGoBack()){
-                    webView.goBack();
-                }else {
-                    BaseUtils.finishActivity(getActivity());
-                }
-            }
-        });
+    }
+
+    public void clickBack(){
+        if (webView!=null && webView.canGoBack()){
+            webView.goBack();
+        }else {
+            BaseUtils.finishActivity(getActivity());
+        }
     }
 
     @Override
