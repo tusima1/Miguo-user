@@ -158,6 +158,7 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
 
     @Override
     public void onSuccess(String method, List datas) {
+        onFinish(method);
         if (method.equals(UserConstants.WALLET)) {
             dealWithWalletData(datas);
         }
@@ -166,7 +167,7 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
 
     @Override
     public void onFailue(String responseBody) {
-
+        onFinish(responseBody);
     }
 
     @Override

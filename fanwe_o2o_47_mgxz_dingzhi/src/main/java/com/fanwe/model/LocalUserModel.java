@@ -42,7 +42,6 @@ public class LocalUserModel implements Serializable
 			localModel.setUser_email(model.getEmail());
 			localModel.setUser_mobile(model.getMobile());
 			localModel.setIs_tmp(model.getIs_tmp());
-
 			dealLoginSuccess(localModel, postEvent);
 		}
 	}

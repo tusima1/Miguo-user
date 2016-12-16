@@ -191,6 +191,7 @@ public class ExchangeHistoryActivity extends BaseNewActivity implements Callback
 
     @Override
     public void onSuccess(String method, final List datas) {
+        onFinish(method);
         switch (method) {
             case UserConstants.WALLET_INCOME_CONVERTHISTORY:
 
