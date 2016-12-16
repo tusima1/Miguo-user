@@ -14,7 +14,7 @@ public class ServerUrl {
     /*************************
      * 打测试包
      ******************************/
-    public static final boolean TEST = false;//给测试使用请设置为true
+    public static final boolean TEST = true;//给测试使用请设置为true
 
     /***********************
      * Do Not Modify
