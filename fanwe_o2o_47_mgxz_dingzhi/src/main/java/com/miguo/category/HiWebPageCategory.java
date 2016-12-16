@@ -106,8 +106,13 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
         setTitlePadding(titleLayout);
     }
 
-    public void updateTitle(String title) {
-        this.title.setText(title);
+    public void updateTitle( final String title) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                HiWebPageCategory.this.title.setText(title);
+            }
+        });
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})

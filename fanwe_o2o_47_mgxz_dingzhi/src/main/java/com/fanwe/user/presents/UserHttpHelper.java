@@ -59,6 +59,7 @@ import com.fanwe.user.model.wallet.WalletResult;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
+import com.miguo.live.model.PageModel;
 import com.miguo.live.model.getLiveListNew.ModelResultLive;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.model.getLiveListNew.ModelRootLive;
@@ -68,6 +69,7 @@ import com.miguo.live.model.getWallet.RootMyWallet;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.tencent.openqq.protocol.imsdk.im_common;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -216,7 +218,13 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
             public void onSuccessResponse(String responseBody) {
                 RootMyDistributionCorps root = gson.fromJson(responseBody,
                         RootMyDistributionCorps.class);
+                if(root ==null){
+                    onFailure2(mView,UserConstants.MY_DISTRIBUTION_CROPS);
+                    return;
+                }
+
                 List<ResultMyDistributionCorps> result = root.getResult();
+
                 if (SDCollectionUtil.isEmpty(result)) {
                     onSuccess(mView, UserConstants.MY_DISTRIBUTION_CROPS, null);
                     return;

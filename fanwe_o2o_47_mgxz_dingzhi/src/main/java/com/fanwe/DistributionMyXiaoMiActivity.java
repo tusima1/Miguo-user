@@ -3,8 +3,6 @@ package com.fanwe;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +14,6 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.fragment.MyDistFragment;
 import com.fanwe.fragment.MyDistFragment.OnDialogData;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.o2o.miguo.R;
@@ -24,6 +21,7 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.presents.UserHttpHelper;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -151,7 +149,7 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
         });
         mDist.setPageType(pageType);
         getSDFragmentManager().toggle(R.id.act_my_xiaomi_fl, null, mDist);
-        userHttpHelper.getMyDistributionCorps(pageType + "", "", 1, 10, "");
+//        userHttpHelper.getMyDistributionCorps(pageType + "", "", 1, 10, "");
     }
 
     private void initTitle() {
@@ -164,40 +162,36 @@ public class DistributionMyXiaoMiActivity extends BaseActivity implements View.O
 
     }
 
-    List<ResultMyDistributionCorps> results;
-    ResultMyDistributionCorps currResult;
 
     @Override
-    public void onSuccess(String method, List datas) {
-        Message msg = new Message();
-        if (UserConstants.MY_DISTRIBUTION_CROPS.equals(method)) {
-            results = datas;
-            msg.what = 0;
+    public void onSuccess(String method, final List datas) {
+       if(mDist!=null){
+           mDist.finishRefresh();
+       }
+        switch (method){
+            case UserConstants.MY_DISTRIBUTION_CROPS:
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mDist!=null) {
+                            mDist.setResultMyDistributionCorps((ResultMyDistributionCorps) datas.get(0));
+                        }
+                    }
+                });
+                break;
+            default:
+                break;
+
         }
-        mHandler.sendMessage(msg);
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    if (!SDCollectionUtil.isEmpty(results)) {
-                        currResult = results.get(0);
-                        up_id = currResult.getUp_id();
-                        mTv_number.setText(currResult.getTotal());
-                        mTv_stationName.setText(currResult.getUp_name());
-                        mDist.setResultMyDistributionCorps(currResult);
-                    }
-                    break;
-            }
-        }
-    };
+
 
     @Override
     public void onFailue(String responseBody) {
-
+        if(mDist!=null){
+            mDist.finishRefresh();
+        }
     }
 
     @Override

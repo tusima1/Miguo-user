@@ -1,15 +1,22 @@
 package com.fanwe.dialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fanwe.mine.views.LotteryActivity;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.category.dialog.DialogCategory;
 import com.miguo.live.views.dialog.BaseDialog;
+import com.miguo.live.views.utils.BaseUtils;
 
 /**
  * 购物后分享得佣金
@@ -37,10 +44,11 @@ public class LotteryDialog extends BaseDialog {
             @Override
             public void onClick(View view) {
                 dismiss();
-                Intent intent = new Intent(mContext, LotteryActivity.class);
-                intent.putExtra("url", url);
-                intent.putExtra("id", "lottery");
-                mContext.startActivity(intent);
+                Intent intent = new Intent(mContext, ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
+                Bundle bundle = new Bundle();
+                bundle.putString(IntentKey.HOME_BANNER_WEB_PAGE, url);
+                intent.putExtras(bundle);
+                BaseUtils.jumpToNewActivityForResult((Activity)mContext, intent, RequestCode.HOME_WEB_PAGE);
             }
         });
     }

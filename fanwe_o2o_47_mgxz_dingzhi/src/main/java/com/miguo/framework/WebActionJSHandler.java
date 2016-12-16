@@ -29,6 +29,7 @@ public class WebActionJSHandler extends AppJsHandler {
 
     public WebActionJSHandler(Activity activity) {
         super(activity);
+        this.baseActivity = (HiBaseActivity)activity;
     }
 
     /**

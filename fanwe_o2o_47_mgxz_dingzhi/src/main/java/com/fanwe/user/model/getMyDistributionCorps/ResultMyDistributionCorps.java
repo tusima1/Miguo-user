@@ -1,5 +1,7 @@
 package com.fanwe.user.model.getMyDistributionCorps;
 
+import com.miguo.live.model.PageModel;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public class ResultMyDistributionCorps {
     private String up_id;
 
     private String level1;
-
+    private PageModel page;
     private List<ModelMyDistributionCorps> list;
 
     private String level3;
@@ -94,5 +96,13 @@ public class ResultMyDistributionCorps {
 
     public String getLevel2() {
         return this.level2;
+    }
+
+    public PageModel getPage() {
+        return page;
+    }
+
+    public void setPage(PageModel page) {
+        this.page = page;
     }
 }

@@ -75,7 +75,7 @@ public class AdspaceTypeFactory {
      * @param context
      * @param type_id
      */
-    private static void goWebAction(AppCompatActivity context, String type_id){
+    private static void goWebAction(Activity context, String type_id){
         Intent intent = new Intent(context, ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
         Bundle bundle = new Bundle();
         bundle.putString(IntentKey.HOME_BANNER_WEB_PAGE, type_id);

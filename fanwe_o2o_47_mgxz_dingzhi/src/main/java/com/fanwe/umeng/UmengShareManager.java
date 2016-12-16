@@ -36,7 +36,7 @@ public class UmengShareManager {
     public static void initConfig() {
         // 初始化qq与qq空间分享
         PlatformConfig.setQQZone(qqAppKey, qqAppSecret);
-        // 初始化 微信 appid appsecret
+        // 初始化 微信 appid appsecretA
         PlatformConfig.setWeixin(wxAppKey, wxAppSecret);
         PlatformConfig.setSinaWeibo(sinaAppKey, sinaAppSecret);
 

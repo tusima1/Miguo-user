@@ -102,7 +102,7 @@ public class BaseUtils {
     /**
      * 跳转到新到activity
      */
-    public static void jumpToNewActivityForResult(AppCompatActivity activity, Intent intent, int requestCode) {
+    public static void jumpToNewActivityForResult(Activity activity, Intent intent, int requestCode) {
         activity.startActivityForResult(intent, requestCode);
 //        activity.startActivity();
 //        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
