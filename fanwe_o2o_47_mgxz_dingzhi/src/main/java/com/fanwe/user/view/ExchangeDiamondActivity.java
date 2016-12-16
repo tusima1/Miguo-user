@@ -175,11 +175,13 @@ public class ExchangeDiamondActivity extends BaseNewActivity implements Callback
             if (!TextUtils.isEmpty(convert_status) && "1".equals(convert_status)) {
                 self_bean.setText(SDFormatUtil.formatNumberString(bean, 2));
                 MGToast.showToast("兑换成功");
+
             } else {
                 MGToast.showToast("兑换失败");
             }
 
         }
+        onResume();
     }
 
     @Override

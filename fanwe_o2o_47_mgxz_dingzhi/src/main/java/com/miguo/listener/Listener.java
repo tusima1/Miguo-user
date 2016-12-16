@@ -11,8 +11,10 @@ import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
 import com.fanwe.app.App;
+import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.category.Category;
+import com.miguo.utils.BaseUtils;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -54,9 +56,9 @@ public abstract class Listener implements
 
     @Override
     public void onClick(View v) {
-//        if(v.getId() == R.id.back){
-//            BaseUtils.finishActivity(getActivity());
-//        }
+        if(v.getId() == R.id.back){
+            BaseUtils.finishActivity(getActivity());
+        }
         onClickThis(v);
     }
 

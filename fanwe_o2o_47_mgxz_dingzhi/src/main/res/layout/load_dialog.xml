@@ -20,11 +20,12 @@
     </RelativeLayout>
 
     <TextView
+        android:layout_marginTop="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/loading"
-        android:textColor="#9a9b98"
+        android:textColor="@color/gray_ee"
         android:textSize="12sp"/>
 
 </LinearLayout>

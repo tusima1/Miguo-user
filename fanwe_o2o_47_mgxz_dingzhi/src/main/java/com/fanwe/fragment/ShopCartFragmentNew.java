@@ -432,7 +432,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void clickSettleAccounts() {
         currentGoTo = 1;
-        if (ifLogin) {
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             if (dialog == null) {
                 dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
             }

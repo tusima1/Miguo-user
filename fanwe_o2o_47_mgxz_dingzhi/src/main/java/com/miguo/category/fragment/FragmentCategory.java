@@ -139,7 +139,7 @@ public abstract class FragmentCategory {
      * @param msg
      */
     public void showToast(String msg){
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(App.getInstance().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
 //    public BaseUser getCurrentUser(){

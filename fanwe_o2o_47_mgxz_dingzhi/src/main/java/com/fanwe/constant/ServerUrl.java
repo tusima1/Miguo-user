@@ -14,13 +14,14 @@ public class ServerUrl {
     /*************************
      * 打测试包
      ******************************/
-    public static final boolean TEST = true;//给测试使用请设置为true
+    public static final boolean TEST = false;//给测试使用请设置为true
 
     /***********************
      * Do Not Modify
      ***********************/
     public static final String KEY_AES = "FANWE5LMUQC436IM";
-    private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
+//    private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
+    private static final String SERVER_API_URL_ONLINE = "http://dev.mgxz.com";
     private static final String SERVER_H5_ONLINE = "http://m.mgxz.com/";//线上
     /***********************
      * Do Not Modify

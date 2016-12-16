@@ -56,5 +56,25 @@ public class ClassPath {
      * {@link com.miguo.app.HiRegisterActivity}
      */
     public static final String REGISTER_ACTIVITY = "com.miguo.app.HiRegisterActivity";
+    /**
+     * 重构代言殿堂
+     * {@link com.miguo.app.HiRepresentIntroduceActivity}
+     */
+    public static final String REPRESENT_INTRODUCE_ACTIVITY = "com.miguo.app.HiRepresentIntroduceActivity";
+    /**
+     * 提现条件
+     * {@link com.miguo.app.HiWithdrawalConditionsActivity}
+     */
+    public static final String WITHDRAWAL_CONDITIONS_ACTIVITY = "com.miguo.app.HiWithdrawalConditionsActivity";
+    /**
+     * 预扣费升级/第三方支付升级
+     * {@link com.miguo.app.HiUpdateUserActivity}
+     */
+    public static final String UPDATE_USER_ACTIVITY = "com.miguo.app.HiUpdateUserActivity";
+    /**
+     * 预扣费升级/第三方支付升级
+     * {@link com.miguo.app.HiUpdateUserWithEnoughMoneyActivity}
+     */
+    public static final String UPDATE_USER_WITH_ENOUGH_MONEY_ACTIVITY = "com.miguo.app.HiUpdateUserWithEnoughMoneyActivity";
 
 }
