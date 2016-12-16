@@ -208,7 +208,8 @@ public class RefundHistoryActivity extends BaseNewActivity implements CallbackVi
 
     @Override
     public void onFailue(String responseBody) {
-        MGToast.showToast(responseBody);
+//        MGToast.showToast(responseBody);
+        onFinish(responseBody);
     }
 
 

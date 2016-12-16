@@ -6,6 +6,7 @@ import android.util.Log;
 import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.shoppingcart.model.LocalShoppingcartDao;
 import com.fanwe.user.model.UserInfoNew;
 import com.miguo.dao.IMLoginDao;
 import com.miguo.dao.IMUserInfoDao;
@@ -192,7 +193,7 @@ public class TencentIMBindPresenterImpl extends BasePresenterImpl implements Ten
      */
     @Override
     public void multiAddError(String message) {
-
+        LocalShoppingcartDao.deleteAllModel();
     }
 
     /**
@@ -200,7 +201,7 @@ public class TencentIMBindPresenterImpl extends BasePresenterImpl implements Ten
      */
     @Override
     public void multiAddSuccess() {
-
+        LocalShoppingcartDao.deleteAllModel();
     }
 
     /**

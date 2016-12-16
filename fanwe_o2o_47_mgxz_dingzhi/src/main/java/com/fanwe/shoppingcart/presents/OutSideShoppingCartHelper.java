@@ -267,7 +267,9 @@ public class OutSideShoppingCartHelper extends Presenter {
         }
         String values = goods_ids.toString();
         if (TextUtils.isEmpty(values) || values.length() < 1) {
+            mCallbackView.onFailue(ShoppingCartconstants.BATCH_SHOPPING_CART,"");
             return;
+
         }
 
         TreeMap<String, String> params = new TreeMap<String, String>();

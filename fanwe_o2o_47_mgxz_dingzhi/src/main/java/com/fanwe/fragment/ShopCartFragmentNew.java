@@ -93,7 +93,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      * 当前操作，是返回，还是结算 进入下一步，默认是结算 1 ，返回2
      */
     private int currentGoTo = 1;
-    private boolean ifLogin = false;
+//    private boolean ifLogin = false;
     /**
      * 准备结算 的数量。
      */
@@ -120,7 +120,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     public void checkLogin() {
-        ifLogin = !TextUtils.isEmpty(App.getInstance().getToken());
+        ;
 
     }
 
@@ -157,9 +157,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             mBt_account.setClickable(false);
             mTv_sum.setText("￥0.00");
             // 初始化adapter.
+
             mAdapter = new ShopCartAdapter(listModel, getActivity(), this);
+
             mLvCartGoods.setAdapter(mAdapter);
             getmAdapterListener();
+
         } catch (Exception e) {
 
         }
@@ -182,7 +185,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             public void onClick(View arg0) {
                 boolean isChecked = mCb_xuanze.isChecked();
                 BigDecimal bd = checkListModelStateAndSumMoney(isChecked);
-                mTv_sum.setText("￥"+ DataFormat.toDoubleTwo(String.valueOf(bd)));
+                mTv_sum.setText("￥" + DataFormat.toDoubleTwo(String.valueOf(bd)));
                 if (isChecked && count > 0) {
                     mBt_account.setText("结算" + "（" + count + "）");
                     mBt_account.setBackgroundColor(getResources().getColor(
@@ -252,7 +255,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     public void updateSumMoneyAndCount() {
         BigDecimal sumMoney = getSumMoney();
         int count = getSumSeleted();
-        mTv_sum.setText("￥"+DataFormat.toDoubleTwo(String.valueOf(sumMoney)));
+        mTv_sum.setText("￥" + DataFormat.toDoubleTwo(String.valueOf(sumMoney)));
         if (count > 0) {
             mBt_account.setText("结算" + "（" + count + "）");
             mBt_account.setBackgroundColor(getResources().getColor(
@@ -394,7 +397,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             @Override
             public void onDelSelectedListener(CartGoodsModel model,
                                               boolean isChecked) {
-                if(model==null){
+                if (model == null) {
                     return;
                 }
                 // 非编辑状态
@@ -419,8 +422,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void returnToLastActivity() {
         currentGoTo = 2;
-        if (ifLogin) {
-            outSideShoppingCartHelper.multiAddShopCart(listModel,true);
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
+            outSideShoppingCartHelper.multiAddShopCart(listModel, true);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
         }
@@ -438,7 +441,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             }
             dialog.show();
             //添加购物车调用接口
-            outSideShoppingCartHelper.multiAddShopCart(listModel,true);
+            outSideShoppingCartHelper.multiAddShopCart(listModel, true);
         } else {
             LocalShoppingcartDao.insertModel(listModel);
             gotoLogin();
@@ -465,7 +468,6 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         if (listModel != null && listModel.size() > 0) {
             String mSeletedGoods = getSumSeletedIds();
 
-
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
             Bundle bundle = new Bundle();
@@ -478,11 +480,11 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     }
 
     private void requestData() {
-        if (ifLogin) {
+        if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             if (outSideShoppingCartHelper == null) {
                 outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
             }
-            if (dialog == null&&getActivity()!=null) {
+            if (dialog == null && getActivity() != null) {
                 dialog = new MGProgressDialog(getActivity(), R.style.MGProgressDialog).needFinishActivity(getActivity());
             }
             dialog.show();
