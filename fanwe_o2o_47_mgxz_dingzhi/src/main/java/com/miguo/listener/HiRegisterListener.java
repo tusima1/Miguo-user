@@ -20,7 +20,7 @@ public class HiRegisterListener extends Listener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClickThis(View v) {
         switch (v.getId()){
             case R.id.tv_register:
                 clickRegister();
