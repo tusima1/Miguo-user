@@ -115,9 +115,11 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             mHolder.time_txt.setText(currModle.getTime_str());
             mHolder.month_date.setText(currModle.getMonth_date());
             if (!TextUtils.isEmpty(currModle.getMoney())) {
-                SDViewBinder.setTextView(mHolder.value_txt, currModle.getMoney() );
+                if(Float.valueOf(currModle.getMoney())>0) {
+                    mHolder.value_txt.setText("+" +currModle.getMoney());
+                }
             } else {
-                SDViewBinder.setTextView(mHolder.value_txt, "");
+                mHolder.value_txt.setText("");
             }
             if(!TextUtils.isEmpty(currModle.getOrder_sn())) {
                 mHolder.order_id.setText(currModle.getOrder_sn());

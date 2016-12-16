@@ -124,6 +124,10 @@ public class HiLoginQuickByMobileFragmentCategory extends FragmentCategory imple
             MGToast.showToast("请输入手机号码!");
             return;
         }
+        if (mNumberPhone.length() != 11) {
+            MGToast.showToast("请输入正确的手机号码");
+            return;
+        }
         /**
          * {@link com.miguo.dao.impl.CheckMobileExistDaoImpl}
          * {@link com.miguo.view.CheckMobileExistView}
@@ -185,7 +189,7 @@ public class HiLoginQuickByMobileFragmentCategory extends FragmentCategory imple
 
     @Override
     public void mobileDoesNotExist(String message) {
-        showToast(message);
+        showToast("手机号不存在");
         SDDialogManager.dismissProgressDialog();
     }
 

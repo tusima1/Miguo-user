@@ -411,6 +411,7 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
     @Override
     public void registerByMobileError(String message) {
         showToast(message);
+        SDDialogManager.dismissProgressDialog();
     }
 
     @Override
@@ -421,6 +422,7 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
     @Override
     public void registerByThirdError(String message) {
         showToast(message);
+        SDDialogManager.dismissProgressDialog();
     }
 
     @Override
