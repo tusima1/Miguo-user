@@ -31,7 +31,6 @@ import java.util.List;
  */
 public class RepresentIntroduceActivity extends Activity implements CallbackView {
     private TextView tvUpdate;
-    private WebView mWebView;
     private MemberDetailDao memberDetailDao;
     private UserHttpHelper userHttpHelper;
     String fxLevel = App.getInstance().getCurrentUser().getFx_level();
@@ -42,8 +41,6 @@ public class RepresentIntroduceActivity extends Activity implements CallbackView
         setContentView(R.layout.act_represent_introduce);
         initTitle();
         preWidget();
-        initWeb();
-        preData();
     }
 
     @Override
@@ -55,38 +52,8 @@ public class RepresentIntroduceActivity extends Activity implements CallbackView
         userHttpHelper.getUserLevel();
     }
 
-    private void initWeb() {
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setSavePassword(false);
-        webSettings.setSaveFormData(true);
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setSupportZoom(false);
-//        mWebView.setBackgroundColor(Color.parseColor("#ffffff"));
-    }
-
-    private void preData() {
-        memberDetailDao = new MemberDetailDaoImpl(new MemberDetailView() {
-            @Override
-            public void getMemberDetailSuccess(final String html) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
-                    }
-                });
-            }
-
-            @Override
-            public void getMemberDetailError(String msg) {
-
-            }
-        });
-        memberDetailDao.getMerberDetail("1");
-    }
-
     private void preWidget() {
         tvUpdate = (TextView) findViewById(R.id.tv_update_introduce);
-        mWebView = (WebView) findViewById(R.id.webView_introduce);
         tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

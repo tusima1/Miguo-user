@@ -30,7 +30,7 @@ public class DevActivity extends AppCompatActivity {
             DevCode.SERVER_API_ONLINE_URL,
             DevCode.JAVA_API_36,
             DevCode.JAVA_API_37,
-            DevCode.JAVA_API_58
+            DevCode.JAVA_API_32
     };
 
     @Override
@@ -93,7 +93,7 @@ public class DevActivity extends AppCompatActivity {
                         api_java=DevCode.JAVA_API_37;
                         break;
                     case 5:
-                        api_java=DevCode.JAVA_API_58;
+                        api_java=DevCode.JAVA_API_32;
                         break;
                     default:
                         api_java=DevCode.SERVER_API_JAVA_DEV_URL;

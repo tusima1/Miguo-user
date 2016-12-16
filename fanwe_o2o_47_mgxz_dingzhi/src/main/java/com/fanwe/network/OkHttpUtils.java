@@ -293,6 +293,7 @@ public class OkHttpUtils {
                 .build();
         if (ServerUrl.DEBUG) {
             String method = params.get("method");
+            Log.e(TAG, "method :+=" + method + " POST:" + url);
             Log.e(TAG, "method :+=" + method + " put:" + requestStr.toString());
         }
         client.newCall(requestPut).enqueue(mCallback);

@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.view.WindowManager;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 
 import java.text.DecimalFormat;
@@ -171,11 +172,10 @@ public class BaseUtils {
     /**
      * 判断微信是否安装
      *
-     * @param context
      * @return
      */
-    public static boolean isWeixinAvilible(Context context) {
-        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+    public static boolean isWeixinAvilible() {
+        final PackageManager packageManager = App.getApplication().getPackageManager();// 获取packagemanager
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
         if (pinfo != null) {
             for (int i = 0; i < pinfo.size(); i++) {
@@ -191,11 +191,10 @@ public class BaseUtils {
     /**
      * 判断qq是否可用
      *
-     * @param context
      * @return
      */
-    public static boolean isQQClientAvailable(Context context) {
-        final PackageManager packageManager = context.getPackageManager();
+    public static boolean isQQClientAvailable() {
+        final PackageManager packageManager = App.getApplication().getPackageManager();
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
         if (pinfo != null) {
             for (int i = 0; i < pinfo.size(); i++) {

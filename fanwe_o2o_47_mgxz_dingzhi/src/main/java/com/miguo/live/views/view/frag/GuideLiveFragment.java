@@ -43,6 +43,11 @@ public class GuideLiveFragment extends BaseFragment {
         //empty
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
     public void setViewPagerTags(List<HiFunnyTabBean.Result.Body> tags){
         this.tags=tags;
         bindDataView();
@@ -53,12 +58,14 @@ public class GuideLiveFragment extends BaseFragment {
             Log.e("GuideLiveFragment","父类传来的tag为null");
             return;
         }
-        fm = getActivity().getSupportFragmentManager();
-        pagerAdapter = new SimpleFragmentPagerAdapter(fm);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setOffscreenPageLimit(1);
-        if (mListener!=null){
-            mListener.onGuideLivePagerInit(viewPager,tags.size());
+        fm = getChildFragmentManager();
+        if(null != null){
+            pagerAdapter = new SimpleFragmentPagerAdapter(fm);
+            viewPager.setAdapter(pagerAdapter);
+            viewPager.setOffscreenPageLimit(1);
+            if (mListener!=null){
+                mListener.onGuideLivePagerInit(viewPager,tags.size());
+            }
         }
     }
 

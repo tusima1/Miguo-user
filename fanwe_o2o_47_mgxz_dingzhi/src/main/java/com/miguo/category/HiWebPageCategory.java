@@ -84,7 +84,11 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BaseUtils.finishActivity(getActivity());
+                if (webView!=null && webView.canGoBack()){
+                    webView.goBack();
+                }else {
+                    BaseUtils.finishActivity(getActivity());
+                }
             }
         });
     }
@@ -108,7 +112,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
         this.title.setText(title);
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void initWebView() {
         String url = getActivity().getUrl();
         if (TextUtils.isEmpty(url)) {
