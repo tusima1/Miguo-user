@@ -78,7 +78,7 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
                     model.setUser_name(userInfoNew.getUser_name());
                     model.setUser_pwd(userInfoNew.getPwd());
                     saveUserToLocal(userInfoNew, userInfoNew.getMobile(), userInfoNew.getPwd());
-                    userInfoNew.setToken(userInfoNew.getToken());
+                    userInfoNew.setToken(root.getToken());
                     handleApplicationCurrentUser(userInfoNew);
                     handleSaveUser(userInfoNew.getMobile(), userInfoNew.getPwd());
                     initJpush();
