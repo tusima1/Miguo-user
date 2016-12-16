@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * Created by barry/ on 2016/10/24.
+ * Created by barry on 2016/10/24.
  */
 public class RepresentMerchantDaoImpl extends BaseDaoImpl implements RepresentMerchantDao{
 
@@ -43,8 +43,7 @@ public class RepresentMerchantDaoImpl extends BaseDaoImpl implements RepresentMe
                     List<RootRepresentMerchant> roots = new ArrayList<RootRepresentMerchant>();
                     roots.add(root);
                     getListener().getRepresentMerchantSuccess();
-                } else
-                {
+                } else {
                      onErrorResponse(root.getMessage(),root.getStatusCode());
                 }
                 getListener().onFinish();

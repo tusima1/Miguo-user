@@ -38,4 +38,12 @@ public class IntentKey {
     public static final String EXTRA_SELECT_TAG_INDEX = "extra_select_tag_index";
     public static final String LOGIN_MOBILE = "extra_login_mobile";
 
+    /**
+     * 提现时需要的参数
+     * USER_ACCOUNT：用户可用余额
+     * UPDATE_ACCOUNT：升级所需费用
+     */
+    public static final String USER_ACCOUNT = "user_account";
+    public static final String UPDATE_ACCOUNT = "update_account";
+
 }

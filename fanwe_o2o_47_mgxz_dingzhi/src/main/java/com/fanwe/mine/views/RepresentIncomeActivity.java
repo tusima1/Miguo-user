@@ -26,6 +26,8 @@ import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshPinnedSectionListView;
 import com.miguo.BaseNewActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.ArrayList;
@@ -82,7 +84,7 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
         ivRank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext, RepresentIntroduceActivity.class));
+                startActivity(new Intent(mContext, ClassNameFactory.getClass(ClassPath.REPRESENT_INTRODUCE_ACTIVITY)));
             }
         });
 
@@ -127,9 +129,9 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
         String fxLevel = App.getInstance().getCurrentUser().getFx_level();
         if ("2".equals(fxLevel)) {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_2);
-        } else if ("3".equals(fxLevel)) {
-            ivRank.setImageResource(R.drawable.ic_represent_incom_rank_3);
-        } else {
+        } else if ("1".equals(fxLevel)) {
+            ivRank.setImageResource(R.drawable.ic_represent_incom_rank_1);
+        }else {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_1);
         }
     }
