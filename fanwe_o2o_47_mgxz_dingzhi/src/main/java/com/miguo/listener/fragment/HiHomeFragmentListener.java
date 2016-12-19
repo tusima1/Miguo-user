@@ -45,7 +45,14 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
             case R.id.city_sayhi:
                 clickCity();
                 break;
+            case R.id.refresh:
+                clickRefresh();
+                break;
         }
+    }
+
+    private void clickRefresh(){
+        getCategory().clickRefresh();
     }
 
     /**

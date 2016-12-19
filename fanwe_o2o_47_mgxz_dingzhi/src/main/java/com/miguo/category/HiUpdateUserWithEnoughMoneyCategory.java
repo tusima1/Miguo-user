@@ -3,8 +3,10 @@ package com.miguo.category;
 import android.content.Intent;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
@@ -106,6 +108,12 @@ public class HiUpdateUserWithEnoughMoneyCategory extends Category implements Use
         hideDialog();
         showToast(message);
         userUpgradeSuccess();
+        handleUpdateUserFixLevel();
+    }
+
+    private void handleUpdateUserFixLevel(){
+        int userLevel = DataFormat.toInt(App.getInstance().getCurrentUser().getFx_level());
+        App.getInstance().getCurrentUser().setFx_level((userLevel + 1)  + "");
     }
 
     public void userUpgradeSuccess(){

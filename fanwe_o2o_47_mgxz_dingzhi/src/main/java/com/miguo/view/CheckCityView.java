@@ -6,4 +6,5 @@ package com.miguo.view;
 public interface CheckCityView extends BaseView{
     void checkCitySignSuccess();
     void checkCitySignError();
+    void networkError();
 }

@@ -63,7 +63,6 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
         setLeftDrawable(R.drawable.ic_left_arrow_dark);
 
         preWidget();
-        preData();
     }
 
     private void preWidget() {
@@ -136,6 +135,12 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        preData();
+        getData();
+    }
 
     @Override
     public void onSuccess(String responseBody) {
