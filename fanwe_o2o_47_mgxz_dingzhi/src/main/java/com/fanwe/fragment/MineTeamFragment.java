@@ -29,6 +29,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 我的战队fragment
+ */
 public class MineTeamFragment extends BaseFragment implements View.OnClickListener, CallbackView {
     private PullToRefreshScrollView mPtr_ScrollView;
     private SDListViewInScroll mListView;
@@ -89,6 +92,9 @@ public class MineTeamFragment extends BaseFragment implements View.OnClickListen
         userHttpHelper.getMyDistributionCorps(mType + "", mRank, pageNum, pageSize, "");
     }
 
+    /**
+     * 获取数据并清空选项
+     */
     public void getDataWithClear() {
         clearBtn();
         if (userHttpHelper == null) {
@@ -127,6 +133,9 @@ public class MineTeamFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    /**
+     * 高级代言人
+     */
     private void clickVip2() {
         mRank = "2";
         isRefresh = true;
@@ -138,6 +147,9 @@ public class MineTeamFragment extends BaseFragment implements View.OnClickListen
         getData();
     }
 
+    /**
+     * 初级代言人
+     */
     private void clickVip1() {
         mRank = "1";
         isRefresh = true;
@@ -215,6 +227,7 @@ public class MineTeamFragment extends BaseFragment implements View.OnClickListen
                     if (!SDCollectionUtil.isEmpty(results)) {
                         currModel = results.get(0);
                         if (currModel != null) {
+                            //人数
                             SDViewBinder.setTextView(mTv_vip1Number, "（" + currModel.getLevel1() + "）");
                             SDViewBinder.setTextView(mTv_vip2Number, "（" + currModel.getLevel2() + "）");
                             if (!SDCollectionUtil.isEmpty(currModel.getList())) {
@@ -222,6 +235,7 @@ public class MineTeamFragment extends BaseFragment implements View.OnClickListen
                             }
                         }
                     }
+                    //刷新列表
                     mAdapter.notifyDataSetChanged();
                     mPtr_ScrollView.onRefreshComplete();
                     break;

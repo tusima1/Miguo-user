@@ -48,6 +48,9 @@ public class MineTeamActivity extends FragmentActivity implements CallbackView {
 
     MineTeamFragment fragment;
 
+    /**
+     * Fragment初始化
+     */
     private void initFragment() {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -68,6 +71,7 @@ public class MineTeamActivity extends FragmentActivity implements CallbackView {
                 finish();
             }
         });
+        //上级的小店
         tvUpName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +80,7 @@ public class MineTeamActivity extends FragmentActivity implements CallbackView {
                 }
             }
         });
+        //大掌柜
         tvOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +91,7 @@ public class MineTeamActivity extends FragmentActivity implements CallbackView {
                 clickTab(PAGE_ONE);
             }
         });
+        //店小二
         tvTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -163,12 +169,14 @@ public class MineTeamActivity extends FragmentActivity implements CallbackView {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    //显示战队人数、上级名称
                     if (!SDCollectionUtil.isEmpty(results)) {
                         currResult = results.get(0);
                         up_id = currResult.getUp_id();
                         tvNumber.setText(currResult.getTotal());
                         tvUpName.setText(currResult.getUp_name());
                     }
+                    //请求列表数据
                     if (fragment != null) {
                         fragment.getDataWithClear();
                     }
