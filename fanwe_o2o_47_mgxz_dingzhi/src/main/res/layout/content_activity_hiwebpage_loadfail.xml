@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/gray_text_f3"
-    android:visibility="gone"
+    android:background="@color/white"
+    android:visibility="visible"
     android:id="@+id/loading_fail"
     android:gravity="center_horizontal"
     android:layout_height="match_parent">
