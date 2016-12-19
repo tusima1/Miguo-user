@@ -18,7 +18,7 @@ import com.fanwe.o2o.miguo.R;
  * 所有的布局文件 自己加入
  * <include layout="@layout/item_layout_sample_title"/>
  * 功能：基本的 返回  +title +  textView/imageView
- * Created by zhouhy on 2016/11/24.
+ * Created by zhy on 2016/11/24.
  */
 
 public abstract class BaseNewActivity extends Activity {
