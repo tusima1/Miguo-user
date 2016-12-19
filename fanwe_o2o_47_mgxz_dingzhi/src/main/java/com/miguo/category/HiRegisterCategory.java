@@ -302,8 +302,22 @@ public class HiRegisterCategory extends Category implements CheckMobileExistView
         return true;
     }
 
+    /**
+     * 手机号不存在
+     * @param message
+     */
     @Override
     public void mobileDoesNotExist(String message) {
+        /**
+         * 手机号不存在，并且是从第三方登录成功后条转过来绑定账号
+         */
+        if(!TextUtils.isEmpty(getActivity().getOpenid())){
+            handleSendSMSCodeForThirdLoginBindMobile();
+            return;
+        }
+        /**
+         * 手机号不存在，直接注册
+         */
         handleSendSMSCodeForRegister();
     }
 
