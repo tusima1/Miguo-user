@@ -10,60 +10,42 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fanwe.adapter.MyXiaoMiAdapter;
+import com.fanwe.adapter.MineTeamAdapter;
 import com.fanwe.base.CallbackView;
 import com.fanwe.customview.SDListViewInScroll;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.model.Member;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getMyDistributionCorps.ModelMyDistributionCorps;
 import com.fanwe.user.model.getMyDistributionCorps.ResultMyDistributionCorps;
 import com.fanwe.user.presents.UserHttpHelper;
-import com.fanwe.utils.DataFormat;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyDistFragment extends BaseFragment implements View.OnClickListener, CallbackView {
-    @ViewInject(R.id.frag_my_xiaomi)
+/**
+ * 我的战队fragment
+ */
+public class MineTeamFragment extends BaseFragment implements View.OnClickListener, CallbackView {
     private PullToRefreshScrollView mPtr_ScrollView;
-
-    @ViewInject(R.id.listView_xiaomi)
     private SDListViewInScroll mListView;
-
-    @ViewInject(R.id.ll_empty)
     private LinearLayout mLl_empty;
-
-    @ViewInject(R.id.ll_vip1)
     private LinearLayout mLl_vip1;
-
-    @ViewInject(R.id.tv_textVip1)
     private TextView mTv_textVip1;
-
-    @ViewInject(R.id.tv_vip1Number)
     private TextView mTv_vip1Number;
-
-    @ViewInject(R.id.ll_vip2)
     private LinearLayout mLl_vip2;
-
-    @ViewInject(R.id.tv_textVip2)
     private TextView mTv_textVip2;
-
-    @ViewInject(R.id.tv_vip2Number)
     private TextView mTv_vip2Number;
 
-    private MyXiaoMiAdapter mAdapter;
+    private MineTeamAdapter mAdapter;
     private PageModel mPage = new PageModel();
-    private List<Member> listModel = new ArrayList<Member>();
-    protected OnDialogData mListener;
+    private List<ModelMyDistributionCorps> listData = new ArrayList<>();
 
     private int mType;
     private String mRank;
@@ -71,10 +53,6 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     private int pageSize = 10;
     private UserHttpHelper userHttpHelper;
     private boolean isRefresh = true;
-
-    public void setmListener(OnDialogData listener) {
-        this.mListener = listener;
-    }
 
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
@@ -85,23 +63,26 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void init() {
         super.init();
+        preWidget();
         bindData();
         initClick();
         initPullToScrollView();
     }
 
-    public void setPageType(int pageType) {
-        this.mType = pageType;
+    private void preWidget() {
+        mPtr_ScrollView = (PullToRefreshScrollView) findViewById(R.id.frag_my_xiaomi);
+        mListView = (SDListViewInScroll) findViewById(R.id.listView_xiaomi);
+        mLl_empty = (LinearLayout) findViewById(R.id.ll_empty);
+        mLl_vip1 = (LinearLayout) findViewById(R.id.ll_vip1);
+        mLl_vip2 = (LinearLayout) findViewById(R.id.ll_vip2);
+        mTv_textVip1 = (TextView) findViewById(R.id.tv_textVip1);
+        mTv_vip1Number = (TextView) findViewById(R.id.tv_vip1Number);
+        mTv_textVip2 = (TextView) findViewById(R.id.tv_textVip2);
+        mTv_vip2Number = (TextView) findViewById(R.id.tv_vip2Number);
     }
 
-    public void clearBtn() {
-        mRank = "";
-        pageNum = 1;
-        isRefresh = true;
-        mLl_vip1.setEnabled(true);
-        mLl_vip2.setEnabled(true);
-        mTv_textVip1.setTextColor(getResources().getColor(R.color.text_fenxiao));
-        mTv_textVip2.setTextColor(getResources().getColor(R.color.text_fenxiao));
+    public void setPageType(int pageType) {
+        this.mType = pageType;
     }
 
     private void getData() {
@@ -111,39 +92,25 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         userHttpHelper.getMyDistributionCorps(mType + "", mRank, pageNum, pageSize, "");
     }
 
-    private ResultMyDistributionCorps currResultMyDistributionCorps;
-
-    public void setResultMyDistributionCorps(ResultMyDistributionCorps bean) {
-        this.currResultMyDistributionCorps = bean;
-        this.results.add(bean);
+    /**
+     * 获取数据并清空选项
+     */
+    public void getDataWithClear() {
         clearBtn();
-        if (currResultMyDistributionCorps != null) {
-            SDViewBinder.setTextView(mTv_vip1Number, "（" + currResultMyDistributionCorps.getLevel1() + "）");
-            SDViewBinder.setTextView(mTv_vip2Number, "（" + currResultMyDistributionCorps.getLevel2() + "）");
-            convertList();
+        if (userHttpHelper == null) {
+            userHttpHelper = new UserHttpHelper(getActivity(), this);
         }
+        userHttpHelper.getMyDistributionCorps(mType + "", mRank, pageNum, pageSize, "");
     }
 
-    private void convertList() {
-        if (isRefresh)
-            listModel.clear();
-        if (!SDCollectionUtil.isEmpty(currResultMyDistributionCorps.getList())) {
-            for (ModelMyDistributionCorps bean : currResultMyDistributionCorps.getList()) {
-                Member member = new Member();
-                member.setId(bean.getUser_id());
-                member.setUid(bean.getUser_id());
-                member.setAvatar(bean.getIcon());
-                member.setCreate_time(bean.getFx_time());
-                member.setMobile(bean.getMobile());
-                member.setRank(DataFormat.toInt(bean.getFx_level()));
-                member.setSalary(bean.getFx_total_commission());
-                member.setUser_name(bean.getNick());
-                member.setUser_num(DataFormat.toInt(bean.getUser_num()));
-
-                listModel.add(member);
-            }
-        }
-        mAdapter.notifyDataSetChanged();
+    private void clearBtn() {
+        mRank = "";
+        pageNum = 1;
+        isRefresh = true;
+        mLl_vip1.setEnabled(true);
+        mLl_vip2.setEnabled(true);
+        mTv_textVip1.setTextColor(getResources().getColor(R.color.text_fenxiao));
+        mTv_textVip2.setTextColor(getResources().getColor(R.color.text_fenxiao));
     }
 
     private void initClick() {
@@ -166,18 +133,23 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    /**
+     * 高级代言人
+     */
     private void clickVip2() {
         mRank = "2";
         isRefresh = true;
         pageNum = 1;
         mLl_vip1.setEnabled(true);
         mLl_vip2.setEnabled(false);
-        mTv_textVip1
-                .setTextColor(getResources().getColor(R.color.text_fenxiao));
+        mTv_textVip1.setTextColor(getResources().getColor(R.color.text_fenxiao));
         mTv_textVip2.setTextColor(getResources().getColor(R.color.main_color));
         getData();
     }
 
+    /**
+     * 初级代言人
+     */
     private void clickVip1() {
         mRank = "1";
         isRefresh = true;
@@ -185,8 +157,7 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
         mLl_vip1.setEnabled(false);
         mLl_vip2.setEnabled(true);
         mTv_textVip1.setTextColor(getResources().getColor(R.color.main_color));
-        mTv_textVip2
-                .setTextColor(getResources().getColor(R.color.text_fenxiao));
+        mTv_textVip2.setTextColor(getResources().getColor(R.color.text_fenxiao));
         getData();
     }
 
@@ -218,11 +189,10 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
                         getData();
                     }
                 });
-//        mPtr_ScrollView.setRefreshing();
     }
 
     private void bindData() {
-        mAdapter = new MyXiaoMiAdapter(listModel, getActivity(), mType);
+        mAdapter = new MineTeamAdapter(listData, getActivity());
         mListView.setAdapter(mAdapter);
         mListView.setEmptyView(mLl_empty);
     }
@@ -232,8 +202,8 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    List<ResultMyDistributionCorps> results=new ArrayList<>();
-    ResultMyDistributionCorps currResult;
+    private List<ResultMyDistributionCorps> results = new ArrayList<>();
+    private ResultMyDistributionCorps currModel;
 
     @Override
     public void onSuccess(String method, List datas) {
@@ -251,12 +221,23 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    if (!SDCollectionUtil.isEmpty(results)) {
-                        currResult = results.get(0);
-                        currResultMyDistributionCorps = currResult;
-                        convertList();
-                        mPtr_ScrollView.onRefreshComplete();
+                    if (isRefresh) {
+                        listData.clear();
                     }
+                    if (!SDCollectionUtil.isEmpty(results)) {
+                        currModel = results.get(0);
+                        if (currModel != null) {
+                            //人数
+                            SDViewBinder.setTextView(mTv_vip1Number, "（" + currModel.getLevel1() + "）");
+                            SDViewBinder.setTextView(mTv_vip2Number, "（" + currModel.getLevel2() + "）");
+                            if (!SDCollectionUtil.isEmpty(currModel.getList())) {
+                                listData.addAll(currModel.getList());
+                            }
+                        }
+                    }
+                    //刷新列表
+                    mAdapter.notifyDataSetChanged();
+                    mPtr_ScrollView.onRefreshComplete();
                     break;
             }
         }
@@ -271,10 +252,6 @@ public class MyDistFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onFinish(String method) {
 
-    }
-
-    public interface OnDialogData {
-        void setData(int vip1, int num1, int num2, int total, String up_name, String up_id);
     }
 
     @Override

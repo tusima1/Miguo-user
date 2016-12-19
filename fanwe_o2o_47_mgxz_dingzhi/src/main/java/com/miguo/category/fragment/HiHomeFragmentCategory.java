@@ -144,6 +144,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     CircleIndicator circleIndicator;
 
     /**
+     * 网络请求失败的显示界面
+     */
+    @ViewInject(R.id.loading_fail)
+    LinearLayout loadingFail;
+    @ViewInject(R.id.refresh)
+    TextView refresh;
+
+    /**
      * 有商家回家的标志
      */
     boolean hasSeeler = false;
@@ -219,6 +227,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void setFragmentListener() {
+
+        refresh.setOnClickListener(listener);
         messageLayout.setOnClickListener(listener);
         areaLayout.setOnClickListener(listener);
         searchLayout.setOnClickListener(listener);
@@ -269,6 +279,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefreshMenus();
         startTabShowAnimation();
     }
+
+    public void clickRefresh(){
+        onRefresh();
+    }
+
 
     public void onRefresh() {
         checkCitySign();
@@ -397,6 +412,29 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
     }
 
+    /**
+     * 城市已开通，并且请求成功
+     */
+    public void showLoadingSuccessWithCity(){
+        loadingFail.setVisibility(View.GONE);
+        nodata.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示网络加载失败！
+     */
+    public void showLoadingFailed(){
+        loadingFail.setVisibility(View.VISIBLE);
+        nodata.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示城市未开通
+     */
+    public void showNoCity(){
+        loadingFail.setVisibility(View.GONE);
+        nodata.setVisibility(View.VISIBLE);
+    }
 
     public void loadComplete() {
         ptrFrameLayout.refreshComplete();
@@ -753,7 +791,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void checkCitySignSuccess() {
         scrollView.showLoadingLayout();
         setHasSeeler(true);
-        nodata.setVisibility(View.GONE);
+        showLoadingSuccessWithCity();
         homeAdView2SpaceLayout.setVisibility(View.VISIBLE);
         onRefreshAfter();
     }
@@ -772,7 +810,26 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         } catch (Exception e) {
 
         }
-        nodata.setVisibility(View.VISIBLE);
+        showNoCity();
+        setHasSeeler(false);
+        loadComplete();
+    }
+
+    @Override
+    public void networkError() {
+        scrollView.hideLoadingLayout();
+        clearPage();
+        setTitleAlpha(titleLayout, 1);
+        currentT = 0;
+        sayHiLayout.setVisibility(View.VISIBLE);
+        space.setVisibility(View.VISIBLE);
+        homeAdView2SpaceLayout.setVisibility(View.GONE);
+        try {
+            topSayHi.setVisibility(View.GONE);
+        } catch (Exception e) {
+
+        }
+        showLoadingFailed();
         setHasSeeler(false);
         loadComplete();
     }

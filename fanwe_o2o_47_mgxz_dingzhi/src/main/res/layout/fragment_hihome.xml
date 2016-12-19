@@ -212,6 +212,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <include layout="@layout/content_activity_hiwebpage_loadfail"/>
+
             </LinearLayout>
 
         </com.miguo.ui.view.RecyclerBounceScrollView>

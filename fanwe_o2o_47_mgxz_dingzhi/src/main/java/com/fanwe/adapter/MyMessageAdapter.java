@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fanwe.DaiYanStoreWapActivity;
-import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.MemberRankActivity;
 import com.fanwe.MyRedEnvelopeActivity;
 import com.fanwe.WithdrawLogActivity;
@@ -22,6 +21,7 @@ import com.fanwe.jpush.MessageHelper;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.ViewHolder;
+import com.fanwe.mine.views.MineTeamActivity;
 import com.fanwe.model.Message;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.views.GoodsDetailActivity;
@@ -109,7 +109,7 @@ public class MyMessageAdapter extends SDBaseAdapter<Message> {
 
 					} else if ("2".equals(model.getType())) {
 
-						mActivity.startActivity(new Intent(mActivity, DistributionMyXiaoMiActivity.class));
+						mActivity.startActivity(new Intent(mActivity, MineTeamActivity.class));
 
 					} else if ("3".equals(model.getType())) {
 

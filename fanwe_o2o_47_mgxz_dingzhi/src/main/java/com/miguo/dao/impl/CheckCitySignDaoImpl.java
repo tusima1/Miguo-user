@@ -9,7 +9,10 @@ import com.miguo.entity.CheckCitySignBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.CheckCityView;
 
+import java.io.IOException;
 import java.util.TreeMap;
+
+import okhttp3.Call;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/9.
@@ -45,22 +48,29 @@ public class CheckCitySignDaoImpl extends BaseDaoImpl implements CheckCitySignDa
                         try{
                             if(bean.getResult().get(0).getBody().get(0).getIs_sign() == 1){
                                 getListener().checkCitySignSuccess();
-                            }else {
+                                return;
+                            }
+                            if(bean.getResult().get(0).getBody().get(0).getIs_sign() == 0){
                                 getListener().checkCitySignError();
+                                return;
                             }
                         }catch (Exception e){
-                            getListener().checkCitySignError();
+                            getListener().networkError();
                         }
                     }else {
-                        getListener().checkCitySignError();
+                        getListener().networkError();
                     }
                 }
             }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
-                getListener().checkCitySignError();
-                Log.d(tag, "onErrorResponse : " + message);
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
+                getListener().networkError();
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getListener().networkError();
             }
 
         });

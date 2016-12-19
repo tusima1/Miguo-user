@@ -10,7 +10,10 @@ import com.miguo.entity.AdspaceListBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetAdspaceListView;
 
+import java.io.IOException;
 import java.util.TreeMap;
+
+import okhttp3.Call;
 
 /**
  * Created by Administrator on 2016/10/27.
@@ -55,8 +58,13 @@ public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceList
             }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
-                Log.d(tag, "onErrorResponse : " + message);
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
+                getListener().getAdspaceListError();
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getListener().getAdspaceListError();
             }
 
         });

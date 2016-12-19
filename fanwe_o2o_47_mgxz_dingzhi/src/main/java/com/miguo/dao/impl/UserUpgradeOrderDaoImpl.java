@@ -118,6 +118,7 @@ public class UserUpgradeOrderDaoImpl extends BaseDaoImpl implements UserUpgradeO
             case PaymentId.WITHHOLDING:
                 if(config.getOrder_info().getOrder_status() >= 3) {
                     getListener2().userUpgradeByWithholdingSuccess();
+                    return;
                 }
                 getListener2().userUpgradeError("升级失败！");
                 break;

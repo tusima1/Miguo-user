@@ -10,7 +10,10 @@ import com.miguo.entity.MenuBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetMenuListView;
 
+import java.io.IOException;
 import java.util.TreeMap;
+
+import okhttp3.Call;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/10/28.
@@ -52,10 +55,14 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
                     }
                 }
             }
+            @Override
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
+                getListener().getMenuListError();
+            }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
-                Log.d(tag, "onErrorResponse : " + message);
+            public void onFailure(Call call, IOException e) {
+                 getListener().getMenuListError();
             }
 
         });
