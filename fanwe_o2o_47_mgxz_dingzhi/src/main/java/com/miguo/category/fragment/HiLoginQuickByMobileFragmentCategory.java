@@ -187,10 +187,15 @@ public class HiLoginQuickByMobileFragmentCategory extends FragmentCategory imple
         return ((HiLoginActivity)getActivity()).getCategory().getShareCode();
     }
 
+    /**
+     * 不管手机号存不存在，都要注册
+     * @param message
+     */
     @Override
     public void mobileDoesNotExist(String message) {
-        showToast("手机号不存在");
+//        showToast("手机号不存在");
         SDDialogManager.dismissProgressDialog();
+        mobileExist();
     }
 
     @Override
