@@ -10,7 +10,10 @@ import com.miguo.entity.HomeGreetingBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.HomeGreetingView;
 
+import java.io.IOException;
 import java.util.TreeMap;
+
+import okhttp3.Call;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/10/26.
@@ -49,8 +52,13 @@ public class HomeGreetingDaoImpl extends BaseDaoImpl implements HomeGreetingDao{
             }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
-                Log.d(tag, "onErrorResponse : " + message);
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
+                getListener().getHomeGreetingError();
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getListener().getHomeGreetingError();
             }
 
         });

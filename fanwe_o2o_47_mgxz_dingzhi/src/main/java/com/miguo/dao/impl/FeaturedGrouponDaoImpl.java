@@ -15,8 +15,11 @@ import com.miguo.entity.RootFeaturedGroupBuy;
 import com.miguo.view.BaseView;
 import com.miguo.view.FeaturedGrouponView;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.TreeMap;
+
+import okhttp3.Call;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/10/28.
@@ -82,8 +85,8 @@ public class FeaturedGrouponDaoImpl extends BaseDaoImpl implements FeaturedGroup
             }
 
             @Override
-            public void onFinishResponse() {
-                super.onFinishResponse();
+            public void onFailure(Call call, IOException e) {
+                getListener().getFeaturedGrouponError("");
             }
         });
     }
