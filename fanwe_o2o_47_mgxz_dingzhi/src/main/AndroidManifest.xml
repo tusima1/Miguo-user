@@ -324,9 +324,9 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <!-- 我的小米 -->
+        <!-- 我的战队 -->
         <activity
-            android:name="com.fanwe.DistributionMyXiaoMiActivity"
+            android:name="com.fanwe.mine.views.MineTeamActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
@@ -551,11 +551,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- 我的小米的详情页面 -->
-        <activity
-            android:name="com.fanwe.MyXiaomiDetailActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
         <!-- 绑定手机号 -->
         <activity
             android:name="com.fanwe.BindMobileActivity"
