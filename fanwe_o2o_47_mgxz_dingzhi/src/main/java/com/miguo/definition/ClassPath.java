@@ -40,7 +40,8 @@ public class ClassPath {
      * 活动页
      * {@link com.miguo.app.HiWebPageActivity}
      */
-    public static final String WEB_PAGE_ACTIVITY = "com.miguo.app.HiWebPageActivity";
+//    public static final String WEB_PAGE_ACTIVITY = "com.miguo.app.HiWebPageActivity";
+    public static final String WEB_PAGE_ACTIVITY = "com.miguo.web.TestWebActivity";
     /**
      * 扫码页
      * {@link com.fanwe.MyCaptureActivity}

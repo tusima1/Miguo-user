@@ -3,6 +3,7 @@ package com.fanwe.jshandler;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 import com.fanwe.DistributionStoreWapActivity;
@@ -419,6 +420,11 @@ public class AppJsHandler extends BaseJsHandler {
         Intent intent = new Intent(App.getApplication(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
         intent.putExtra(IntentKey.SPECIAL_TOPIC_ID, topic_id);
         startActivity(intent);
+    }
+
+    @JavascriptInterface
+    public void setTitle(String title) {
+        Log.e("testjs","title: "+title);
     }
 
 }
