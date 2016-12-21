@@ -28,7 +28,7 @@ public class AutoBanner extends BaseRelativeLayout implements ViewPager.OnPageCh
      * 轮播间隔时间
      */
     private final static long LOOP_DURATION = 3000;
-    private final static long IGNORE_PEROID = 5000;
+    private final static long IGNORE_PEROID = 3000;
     private boolean isAuto = true;
     private boolean isPause;
     private boolean autoPaging;
@@ -145,7 +145,7 @@ public class AutoBanner extends BaseRelativeLayout implements ViewPager.OnPageCh
             curIdx = count - 1;
         }
         if (count > 0) {
-            setPointSelected(curIdx, true);
+//            setPointSelected(curIdx, true);
             resumeAuto();
         }else {
             pauseAuto();
