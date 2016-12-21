@@ -81,9 +81,11 @@ public class UserConstants {
     public static final String USER_PASSWORD = "pwd";
 
     /**
-     * 当前 DEMO 应用的 APP_KEY，第三方应用应该使用自己的 APP_KEY 替换该 APP_KEY
+     * 新浪微博的 APP_KEY，第三方应用应该使用自己的 APP_KEY 替换该 APP_KEY
      */
     public static final String APP_KEY = "3061230415";
+
+    public static final String sinaAppSecret = "b5fe7acf5dc0eecaf23344a0f84b26e6";
 
     /**
      * 当前 DEMO 应用的回调页，第三方应用可以使用自己的回调页。
@@ -94,7 +96,7 @@ public class UserConstants {
      * 建议使用默认回调页：https://api.weibo.com/oauth2/default.html
      * </p>
      */
-    public static final String REDIRECT_URL = "sns.whalecloud.com";
+    public static final String REDIRECT_URL = "http://m.mgxz.com/";
 
     /**
      * Scope 是 OAuth2.0 授权机制中 authorize 接口的一个参数。通过 Scope，平台将开放更多的微博
@@ -235,17 +237,17 @@ public class UserConstants {
      */
     public static final String WALLET = "Wallet";
     /**
-     *2.0.1钱包收益接口。
+     * 2.0.1钱包收益接口。
      */
 
-    public static final String  WALLET_INCOME= "WalletIncome";
-    public static final String  WALLET_INCOME_GET= "WalletIncomeGet";
-    public static final String  WALLET_INCOME_POST= "WalletIncomePost";
-    public static final String  WALLET_INCOME_PUT= "WalletIncomePut";
+    public static final String WALLET_INCOME = "WalletIncome";
+    public static final String WALLET_INCOME_GET = "WalletIncomeGet";
+    public static final String WALLET_INCOME_POST = "WalletIncomePost";
+    public static final String WALLET_INCOME_PUT = "WalletIncomePut";
     /**
      * 2.0.1版我的钱包，收益兑换记录 doGet
      */
-    public static final String   WALLET_INCOME_CONVERTHISTORY= "WalletIncomeConvertHistory";
+    public static final String WALLET_INCOME_CONVERTHISTORY = "WalletIncomeConvertHistory";
 
     /**
      * 钱包金额。
@@ -282,32 +284,31 @@ public class UserConstants {
     /**
      * 用户分销等级。
      */
-    public static final String  USER_DISTRIBUTION_LEVEL  ="UserDistributionLevel";
+    public static final String USER_DISTRIBUTION_LEVEL = "UserDistributionLevel";
     /**
      * 人气值 。
      */
-    public static final String   POPULARITY= "popularity";
+    public static final String POPULARITY = "popularity";
     /**
      * 商家分类 大类
      */
-    public static final String   CATE_ID= "cate_id";
+    public static final String CATE_ID = "cate_id";
     /**
-     *
      * 商家分类 小类
      */
-    public static final String   TID= "tid";
+    public static final String TID = "tid";
     /**
-     米果仁
+     * 米果仁
      */
-    public static final String  BEAN= "bean";
+    public static final String BEAN = "bean";
     /**
-     米果豆转换人名币
+     * 米果豆转换人名币
      */
-    public static final String  BEAN_CONVERT_RMB= "bean_convert_rmb";
+    public static final String BEAN_CONVERT_RMB = "bean_convert_rmb";
     /**
      * 兑换结果：0失败，1成功.
      */
-    public static final String  CONVERT_STATUS= "convert_status";
+    public static final String CONVERT_STATUS = "convert_status";
     /**
      * 发送验证码
      */

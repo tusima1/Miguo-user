@@ -329,7 +329,7 @@ public class HiHomeCategory extends Category implements
                 getDiamondLoginDialog.dismiss();
             }
         });
-        getDiamondLoginDialog.show();
+//        getDiamondLoginDialog.show();
     }
 
 
