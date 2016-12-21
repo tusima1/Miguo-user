@@ -79,7 +79,7 @@ public class AutoBanner extends BaseRelativeLayout implements ViewPager.OnPageCh
         barHight = dip2px(8);
         pager = new LoopViewPager(getContext());
         pager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        pager.setId(0x123456);
+        pager.setId(R.id.aaaaaa);
         pager.setOnPageChangeListener(this);
         addView(pager);
 
