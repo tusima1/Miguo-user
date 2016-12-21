@@ -1,20 +1,17 @@
 package com.miguo.ui.view;
 
-import android.graphics.Color;
-import android.support.v4.view.LoopViewPager;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.widget.RelativeLayout;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.support.v4.view.LoopViewPager;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.base.BaseRelativeLayout;
@@ -79,7 +76,7 @@ public class AutoBanner extends BaseRelativeLayout implements ViewPager.OnPageCh
         barHight = dip2px(8);
         pager = new LoopViewPager(getContext());
         pager.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        pager.setId(0x123456);
+        pager.setId(R.id.aaaaaa);
         pager.setOnPageChangeListener(this);
         addView(pager);
 
