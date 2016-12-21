@@ -67,6 +67,7 @@ import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.ui.view.AutoBanner;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
@@ -93,8 +94,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     public static final String EXTRA_DETAIL_ID = "detail_id";
     public static final String EXTRA_FX_ID = "fx_id";
 
-    private ViewPager mViewpager;
-    private CircleIndicator mCirIndictor;
+    private AutoBanner mViewpager;
     private ImageView mIvTitleLeft;
     private ImageView mIvTitleShare;//标题分享
     private ImageView mIvTitleCollect;//标题收藏
@@ -444,9 +444,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     private void initTopLayout() {
         mLayoutTop = findViewById(R.id.layout_top);//顶部layout
-        mViewpager = ((ViewPager) findViewById(R.id.viewpager));
-
-        mCirIndictor = ((CircleIndicator) findViewById(R.id.indicator_circle));
+        mViewpager = ((AutoBanner) findViewById(R.id.viewpager));
 
         mFlViewpager = findViewById(R.id.fl_viewpager);
 
@@ -661,10 +659,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         }
         GoodsDetailPagerAdapter goodsDetailPagerAdapter = new GoodsDetailPagerAdapter(imageUrls);
         mViewpager.setAdapter(goodsDetailPagerAdapter);
-
-        mCirIndictor.setViewPager(mViewpager);
-        goodsDetailPagerAdapter.registerDataSetObserver(mCirIndictor.getDataSetObserver());
-
         //最后展示pop提示
         showShareTipPop();
         //--end bind data

@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiBaseActivity;
+
 /**
  * Created by Administrator on 2016/11/2.
  */
@@ -31,6 +34,7 @@ public class HomeBannerImageView extends ImageView{
     public boolean onTouchEvent(MotionEvent event) {
         Log.d(tag, "parent is viewpager: " +  (getParent() instanceof ViewPager));
         Log.d(tag, "parent's parent is viewpager: " +  (getParent().getParent() instanceof ViewPager));
+        if(getHomeViewPager() == null) return false;
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 getHomeViewPager().handlerActionDown(event);
@@ -53,8 +57,12 @@ public class HomeBannerImageView extends ImageView{
      * 所以获取ViewPager只需要获取两次parent就可以了
      * @return
      */
-    public HomeBannerViewPager getHomeViewPager(){
-        return (HomeBannerViewPager)getParent().getParent();
+    public HomeLooperViewPager getHomeViewPager(){
+        return (HomeLooperViewPager)getActivity().findViewById(R.id.home_fragemnt_view_pager);
+    }
+
+    public HiBaseActivity getActivity(){
+        return (HiBaseActivity)getContext();
     }
 
 }

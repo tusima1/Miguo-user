@@ -1,7 +1,7 @@
 package com.miguo.ui.view;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
+import android.support.v4.view.LoopViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -11,20 +11,22 @@ import com.fanwe.view.RecyclerScrollView;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
- * Created by zlh/Barry/狗蛋哥 on 16/8/19.
+ * Created by zlh on 2016/12/20.
  */
-public class HomeBannerViewPager extends ViewPager {
+
+public class HomeLooperViewPager extends AutoBanner {
+
 
     RecyclerScrollView recyclerScrollView;
     ViewGroup ptrFrameLayout;
     String tag = HomeBannerViewPager.class.getSimpleName();
     HomeBannerViewPagerOnTouchListener homeBannerViewPagerOnTouchListener;
 
-    public HomeBannerViewPager(Context context) {
+    public HomeLooperViewPager(Context context) {
         super(context);
     }
 
-    public HomeBannerViewPager(Context context, AttributeSet attrs) {
+    public HomeLooperViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -129,4 +131,5 @@ public class HomeBannerViewPager extends ViewPager {
     public void setPtrFrameLayout(PtrFrameLayout ptrFrameLayout) {
         this.ptrFrameLayout = ptrFrameLayout;
     }
+
 }
