@@ -1,12 +1,16 @@
 package com.fanwe.user.view;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.adapters.WelcomePagerAdapter;
 import com.fanwe.user.view.customviews.WelcomeView;
@@ -18,7 +22,7 @@ import java.util.List;
 
 public class WelcomeActivity extends Activity {
 
-    List<WelcomeView> mWelList=new ArrayList<>();
+    List<WelcomeView> mWelList = new ArrayList<>();
 
     private ViewPager mViewpager;
 //    private CircleIndicator mCIndictor;
@@ -29,6 +33,7 @@ public class WelcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         initFirstWelcomeViewPager();
     }
+
     private void initFirstWelcomeViewPager() {
         mViewpager = ((ViewPager) findViewById(R.id.viewpager));
 //        mCIndictor = ((CircleIndicator) findViewById(indicator));
@@ -37,9 +42,9 @@ public class WelcomeActivity extends Activity {
         TypedArray typedArray = getResources().obtainTypedArray(R.array.first_welcome);
         int indexCount = typedArray.length();
         for (int i = 0; i < indexCount; i++) {
-            WelcomeView view=new WelcomeView(this);
-            view.setImageRes(typedArray.getResourceId(i,0));
-            if (i==indexCount-1){
+            WelcomeView view = new WelcomeView(this);
+            view.setImageRes(typedArray.getResourceId(i, 0));
+            if (i == indexCount - 1) {
                 view.setNextVisiable();
                 view.setOnNextClickListener(new WelcomeView.OnNextClickListener() {
                     @Override
@@ -56,7 +61,7 @@ public class WelcomeActivity extends Activity {
             });
             mWelList.add(view);
         }
-        WelcomePagerAdapter welcomePagerAdapter=new WelcomePagerAdapter();
+        WelcomePagerAdapter welcomePagerAdapter = new WelcomePagerAdapter();
         welcomePagerAdapter.setData(mWelList);
 
         mViewpager.setAdapter(welcomePagerAdapter);
@@ -64,7 +69,22 @@ public class WelcomeActivity extends Activity {
 //        welcomePagerAdapter.registerDataSetObserver(mCIndictor.getDataSetObserver());
     }
 
+    /**
+     * 修改是否第一次的显示数据。
+     */
+    private void settingChange() {
+        SharedPreferences setting = getSharedPreferences("miguo", Context.MODE_PRIVATE);
+
+        PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
+        String versionCode = String.valueOf(info.versionCode);
+
+        setting.edit().putBoolean("FIRST", false).commit();
+        setting.edit().putString("version", versionCode).commit();
+
+    }
+
     private void gotoMainActivity() {
+        settingChange();
         Intent intent = new Intent(WelcomeActivity.this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
         startActivity(intent);
         finish();
