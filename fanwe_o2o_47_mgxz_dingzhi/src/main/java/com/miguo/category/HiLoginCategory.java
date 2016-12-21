@@ -1,6 +1,7 @@
 package com.miguo.category;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -9,13 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.ModifyPasswordActivity;
-import com.fanwe.app.App;
 import com.fanwe.library.common.SDFragmentManager;
 import com.fanwe.library.customview.SDTabItemCorner;
 import com.fanwe.library.customview.SDViewBase;
 import com.fanwe.library.customview.SDViewNavigatorManager;
 import com.fanwe.library.dialog.SDDialogManager;
-import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.o2o.miguo.R;
@@ -45,11 +44,20 @@ import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.ClipboardUtils;
+import com.miguo.third.SinaUsersAPI;
 import com.miguo.view.GetShareIdByCodeView;
 import com.miguo.view.LoginByThirdView;
-import com.miguo.view.ShoppingCartMultiAddView;
 import com.miguo.view.TencentIMBindPresenterView;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.RequestListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +71,7 @@ import simbest.com.sharelib.ShareUtils;
  * Created by zlh on 2016/11/30.
  */
 
-public class HiLoginCategory extends Category implements GetShareIdByCodeView, LoginByThirdView,TencentIMBindPresenterView{
+public class HiLoginCategory extends Category implements GetShareIdByCodeView, LoginByThirdView, TencentIMBindPresenterView {
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
@@ -197,14 +205,14 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         }
     }
 
-    private void initFragmentManager(){
+    private void initFragmentManager() {
         fragmentManager = new SDFragmentManager(getActivity().getSupportFragmentManager());
     }
 
     /**
      * 初始化umeng
      */
-    private void initUmeng(){
+    private void initUmeng() {
         su = new ShareUtils(getActivity());
     }
 
@@ -214,10 +222,10 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      * {@link com.miguo.view.GetShareIdByCodeView}
      * {@link }
      */
-    private void initShareId(){
+    private void initShareId() {
         shareCode = "";
         String diamondCode = ClipboardUtils.checkCode(getActivity());
-        if(!TextUtils.isEmpty(diamondCode)){
+        if (!TextUtils.isEmpty(diamondCode)) {
             getShareIdByCodeDao.getShareIdByCode(diamondCode);
         }
     }
@@ -255,7 +263,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
     /**
      * 找回密码
      */
-    public void clickFindPassword(){
+    public void clickFindPassword() {
         Intent intent = new Intent(getActivity(), ModifyPasswordActivity.class);
         intent.putExtra("pageType", "forget");
         BaseUtils.jumpToNewActivity(getActivity(), intent);
@@ -264,32 +272,89 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
     /**
      * 点击返回
      */
-    public void clickBack(){
+    public void clickBack() {
         BaseUtils.finishActivity(getActivity());
     }
 
     /**
      * 点击注册
      */
-    public void clickRegister(){
+    public void clickRegister() {
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.REGISTER_ACTIVITY));
         intent.putExtra(UserConstants.SHARE_ID, getShareCode());
         goRegisterActivity(intent);
     }
 
-    public void clickQQLogin(){
+    public void clickQQLogin() {
         platform = SHARE_MEDIA.QQ;
         goToAuth(platform);
     }
 
-    public void clickWeiboLogin(){
+    public void clickWeiboLogin() {
         platform = SHARE_MEDIA.SINA;
+        platformType = "3";
+        loginBySina();
+    }
+
+    public void clickWechatLogin() {
+        platform = SHARE_MEDIA.WEIXIN;
         goToAuth(platform);
     }
 
-    public void clickWechatLogin(){
-        platform = SHARE_MEDIA.WEIXIN;
-        goToAuth(platform);
+    private SsoHandler mSsoHandler;
+
+    /**
+     * 新浪微博登录
+     */
+    private void loginBySina() {
+        // 创建授权认证信息
+        AuthInfo mAuthInfo = new AuthInfo(getActivity(), UserConstants.APP_KEY, UserConstants.REDIRECT_URL, UserConstants.SCOPE);
+        mSsoHandler = new SsoHandler(getActivity(), mAuthInfo);
+        //all In one先调用客户端，如果没有客户端就调用web
+        mSsoHandler.authorize(new AuthListener());
+    }
+
+    /**
+     * 新浪微博登录监听器，接收授权结果。
+     */
+    private class AuthListener implements WeiboAuthListener {
+        @Override
+        public void onComplete(Bundle values) {
+            Oauth2AccessToken accessToken = Oauth2AccessToken.parseAccessToken(values);
+            if (accessToken != null && accessToken.isSessionValid()) {
+                //通过uid访问新浪接口，获取用户信息
+                SinaUsersAPI usersAPI = new SinaUsersAPI(getActivity(), UserConstants.APP_KEY, accessToken);
+                usersAPI.show(Long.valueOf(accessToken.getUid()), new SinaRequestListener());
+            }
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+        }
+
+        @Override
+        public void onCancel() {
+        }
+    }
+
+    //新浪微博请求接口
+    private class SinaRequestListener implements RequestListener {
+        @Override
+        public void onComplete(String response) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                String id = jsonObject.getString("idstr");// 唯一标识符(uid)
+                String name = jsonObject.getString("name");// 名字
+                String icon = jsonObject.getString("avatar_hd");// 头像
+                loginByThird(id, platformType, icon, name);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+        }
     }
 
     /**
@@ -337,7 +402,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
                     HashMap<String, Object> maps = gson.fromJson(returnData, HashMap.class);
                     if (maps.get("id") != null) {
 
-                        openId= maps.get("idstr").toString();
+                        openId = maps.get("idstr").toString();
                     }
                     if (maps.get("profile_image_url") != null) {
                         icon = maps.get("profile_image_url").toString();
@@ -357,7 +422,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
                 } else {
                     time = System.currentTimeMillis();
                 }
-                loginByThirdDao.thirdLogin(openId, platformType, icon, nick);
+                loginByThird(openId, platformType, icon, nick);
             }
 
             @Override
@@ -372,8 +437,15 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         });
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    private void loginByThird(String openId,String platformType,String icon,String nick){
+        loginByThirdDao.thirdLogin(openId, platformType, icon, nick);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         su.onActivityResult(requestCode, resultCode, data);
+        if (mSsoHandler != null) {
+            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
     }
 
     /**
@@ -381,7 +453,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      * 手机号 + 验证码登录
      * 成功后的回调
      */
-    public void handleLoginSuccess(UserInfoNew user){
+    public void handleLoginSuccess(UserInfoNew user) {
         /**
          * 登录成功后要和IM绑定获取腾讯sign签名等
          * {@link com.miguo.presenters.impl.TencentIMBindPresenterImpl}
@@ -400,12 +472,12 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      * 注册绑定IM成功后调用
      * 不管绑定成功失败
      */
-    private void handleTencentIMFinish(){
+    private void handleTencentIMFinish() {
         finishActivity();
     }
 
-    private void finishActivity(){
-        if(getActivity() instanceof HiLoginActivity){
+    private void finishActivity() {
+        if (getActivity() instanceof HiLoginActivity) {
             getActivity().finishActivity2();
             return;
         }
@@ -427,6 +499,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
 
     /**
      * 第三方登录回调
+     *
      * @return
      */
     @Override
@@ -441,7 +514,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
 
     @Override
     public void thirdLoginUnRegister(ThirdLoginInfo thirdLoginInfo) {
-        if(null != thirdLoginInfo){
+        if (null != thirdLoginInfo) {
             handleThirdLoginUnRegister(true, thirdLoginInfo);
         }
     }
@@ -464,11 +537,11 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         goRegisterActivity(intent);
     }
 
-    private void goRegisterActivity(Intent intent){
+    private void goRegisterActivity(Intent intent) {
         /**
          * 如果是从领钻码进来的，则跳注册界面的时候不要销毁当前activity，应该注册成功后回调回来再结束，把结果传给HiHomeActivity
          */
-        if(getActivity().isFromDiamond()){
+        if (getActivity().isFromDiamond()) {
             intent.putExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, getActivity().isFromDiamond());
             BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
             return;
@@ -476,11 +549,11 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         BaseUtils.jumpToNewActivityWithFinish(getActivity(), intent);
     }
 
-    public SDFragmentManager getSDFragmentManager(){
+    public SDFragmentManager getSDFragmentManager() {
         return fragmentManager;
     }
 
-    public Intent getIntent(){
+    public Intent getIntent() {
         return getActivity().getIntent();
     }
 

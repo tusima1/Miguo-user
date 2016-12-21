@@ -12,7 +12,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.DistributionMyQRCodeActivity;
-import com.fanwe.DistributionMyXiaoMiActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
@@ -27,6 +26,7 @@ import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.mine.views.LotteryActivity;
+import com.fanwe.mine.views.MineTeamActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
@@ -282,8 +282,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             intent.putExtra("id", id);
             startActivity(intent);
         } else if (v == mFriends) {
-            /*分销战队*/
-            startActivity(DistributionMyXiaoMiActivity.class);
+            /*我的战队*/
+            startActivity(MineTeamActivity.class);
         } else if (v == mQuan) {
             /*消费券*/
             startActivity(MyCouponListActivity.class);
