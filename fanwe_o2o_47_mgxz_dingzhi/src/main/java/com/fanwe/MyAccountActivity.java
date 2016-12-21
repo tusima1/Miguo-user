@@ -1,12 +1,15 @@
 package com.fanwe;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -453,12 +456,22 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
 //        JpushHelper.unRegisterJpush();
         mLoginHelper.imLogout();
         App.getInstance().setImLoginSuccess(false);
+        removeCookie();
         LocalUserModel userModel = new LocalUserModel();
         App.getInstance().setmLocalUser(userModel);
         AppConfig.setRefId("");
         App.getInstance().clearAllData();
         SharedPreferencesUtils.getInstance().clearUserNameAndUserPassword();
         SDEventManager.post(EnumEventTag.LOGOUT.ordinal());
+    }
+
+
+    /**
+     * 同步一下cookie
+     */
+    public static void removeCookie() {
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
     }
 
     /**

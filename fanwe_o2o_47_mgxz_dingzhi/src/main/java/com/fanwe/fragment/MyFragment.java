@@ -1,5 +1,6 @@
 package com.fanwe.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,7 +44,12 @@ import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.RequestCode;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -323,10 +329,11 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(intent);
         } else if (v == mLottery) {
             //我的奖品
-            Intent intent = new Intent(getActivity(), LotteryActivity.class);
-            intent.putExtra("url", ServerUrl.getAppH5Url() + "activity/list");
-            intent.putExtra("id", "lotteryList");
-            startActivity(intent);
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
+            Bundle bundle = new Bundle();
+            bundle.putString(IntentKey.HOME_BANNER_WEB_PAGE, ServerUrl.getAppH5Url() + "activity/list");
+            intent.putExtras(bundle);
+            BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.HOME_WEB_PAGE);
         }
 
     }

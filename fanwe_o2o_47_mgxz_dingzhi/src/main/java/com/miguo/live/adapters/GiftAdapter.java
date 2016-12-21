@@ -48,8 +48,8 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
         /*bind data*/
         GiftListBean info = mData.get(position);
 
-        String  url = DisplayUtil.qiniuUrlExchange(info.getIcon(),60,60);
-        SDViewBinder.setImageView(url,holder.iv_img);
+//        String  url = DisplayUtil.qiniuUrlExchange(info.getIcon(),60,60);
+        SDViewBinder.setImageView(info.getIcon(),holder.iv_img);
         holder.tv_name.setText(info.getName());
         holder.tv_price.setText(info.getPrice()+"米果钻");
 

@@ -117,6 +117,9 @@ public class RepresentIncomeAdapter extends BaseAdapter implements PinnedSection
             if (!TextUtils.isEmpty(currModle.getMoney())) {
                 if(Float.valueOf(currModle.getMoney())>0) {
                     mHolder.value_txt.setText("+" +currModle.getMoney());
+                }else{
+                    mHolder.value_txt.setText(currModle.getMoney());
+
                 }
             } else {
                 mHolder.value_txt.setText("");

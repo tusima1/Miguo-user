@@ -1,6 +1,7 @@
 package com.fanwe.common.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
@@ -247,15 +248,19 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                RootCreateShareRecord root = gson.fromJson(responseBody, RootCreateShareRecord.class);
-                List<ResultCreateShareRecord> result = root.getResult();
-                if (SDCollectionUtil.isEmpty(result) || !"200".equals(root.getStatusCode())) {
-                    onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, null);
-                    return;
+                try {
+                    RootCreateShareRecord root = gson.fromJson(responseBody, RootCreateShareRecord.class);
+                    List<ResultCreateShareRecord> result = root.getResult();
+                    if (SDCollectionUtil.isEmpty(result) || !"200".equals(root.getStatusCode())) {
+                        onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, null);
+                        return;
+                    }
+                    List<ModelCreateShareRecord> items = new ArrayList<>();
+                    items.add(result.get(0).getBody());
+                    onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, items);
+                }catch (Exception e){
+                    Log.e("json",e.getMessage());
                 }
-                List<ModelCreateShareRecord> items = new ArrayList<>();
-                items.add(result.get(0).getBody());
-                onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, items);
             }
 
             @Override
