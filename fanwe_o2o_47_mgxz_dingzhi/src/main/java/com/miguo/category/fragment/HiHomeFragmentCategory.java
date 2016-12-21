@@ -46,6 +46,7 @@ import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.MenuParams;
 import com.miguo.entity.AdspaceListBean;
+import com.miguo.entity.CheckCitySignBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.fragment.HiBaseFragment;
@@ -206,6 +207,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.nodata)
     ImageView nodata;
 
+    /**
+
+     * 城市已开通的信息
+     */
+    CheckCitySignBean.Result.Body citySign;
+
     public HiHomeFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
     }
@@ -231,7 +238,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void setFragmentListener() {
-
+        nodata.setOnClickListener(listener);
         refresh.setOnClickListener(listener);
         messageLayout.setOnClickListener(listener);
         areaLayout.setOnClickListener(listener);
@@ -801,7 +808,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     @Override
-    public void checkCitySignError() {
+    public void checkCitySignError(CheckCitySignBean.Result.Body citySign) {
+        setCitySign(citySign);
         scrollView.hideLoadingLayout();
         clearPage();
         setTitleAlpha(titleLayout, 1);
@@ -821,6 +829,16 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void networkError() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                handleNetWorkError();
+            }
+        });
+
+    }
+
+    private void handleNetWorkError(){
         scrollView.hideLoadingLayout();
         clearPage();
         setTitleAlpha(titleLayout, 1);
@@ -1083,6 +1101,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     public void setHasSeeler(boolean hasSeeler) {
         this.hasSeeler = hasSeeler;
+    }
+
+    public CheckCitySignBean.Result.Body getCitySign() {
+
+        return citySign;
+    }
+
+    public void setCitySign(CheckCitySignBean.Result.Body citySign) {
+        this.citySign = citySign;
     }
 
 }
