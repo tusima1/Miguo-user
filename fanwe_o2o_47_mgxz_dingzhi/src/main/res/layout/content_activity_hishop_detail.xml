@@ -30,17 +30,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"></com.miguo.ui.view.ShopDetailViewPager>
 
-                <me.relex.circleindicator.CircleIndicator
-                    android:id="@+id/indicator_circle"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_alignBottom="@+id/shopdetail_viewpager"
-                    android:layout_gravity="bottom"
-                    android:gravity="center"
-                    app:ci_drawable="@drawable/black_radius_square"
-                    app:ci_height="5dp"
-                    app:ci_margin="5dp"
-                    app:ci_width="5dp" />
             </RelativeLayout>
             <!--android:text="醉青蟹泰式餐厅"-->
             <TextView

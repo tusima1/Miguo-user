@@ -3,6 +3,7 @@ package com.miguo.category.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.LoopViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -51,10 +52,12 @@ import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.ui.view.AutoBanner;
 import com.miguo.ui.view.AutofitTextView;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeBannerViewPager;
+import com.miguo.ui.view.HomeLooperViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.ui.view.RecyclerBounceScrollView;
@@ -78,7 +81,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         PtrHandler,
         RecyclerBounceScrollView.OnRecyclerScrollViewListener,
         RecyclerBounceScrollView.RecyclerScrollViewOnTouchListener,
-        HomeBannerViewPager.HomeBannerViewPagerOnTouchListener,
+        HomeLooperViewPager.HomeBannerViewPagerOnTouchListener,
         HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
         HomeGreetingView,
@@ -133,8 +136,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     /**
      * 轮播ViewPager
      */
-    @ViewInject(R.id.home_view_pager)
-    HomeBannerViewPager homeViewPager;
+    @ViewInject(R.id.home_fragemnt_view_pager)
+    AutoBanner homeViewPager;
+//    HomeBannerViewPager homeViewPager;
 
     @ViewInject(R.id.banner_layout)
     RelativeLayout bannerLayout;
@@ -237,7 +241,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener) listener);
         homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener) listener);
         scrollView.setRecyclerScrollViewOnTouchListener(this);
-        homeViewPager.setHomeBannerViewPagerOnTouchListener(this);
+//        homeViewPager.setHomeBannerViewPagerOnTouchListener(this);
         homeTuanTimeLimitView.setTimeLimitedOnTouchListener(this);
     }
 
@@ -330,8 +334,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         }
         homeBannerAdapter = new HomeBannerAdapter(fragment.getChildFragmentManager(), fragmets);
         homeViewPager.setAdapter(homeBannerAdapter);
-        circleIndicator.setViewPager(homeViewPager);
-        homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
+//        circleIndicator.setViewPager(homeViewPager);
+//        homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
     }
 
     private void initFeaturedGrouponCategory() {

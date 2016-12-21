@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 /**
  * Created by Administrator on 2016/10/19.
  */
-public class ShopDetailViewPager extends ViewPager{
+public class ShopDetailViewPager extends AutoBanner{
 
     public ShopDetailViewPager(Context context) {
         super(context);
