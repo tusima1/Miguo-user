@@ -11,12 +11,20 @@ import android.webkit.JavascriptInterface;
 
 public class JsHandler {
 
+//    private final Activity activity;
+//
+//    public JsHandler(Activity activity) {
+//        this.activity = activity;
+//    }
+
     @JavascriptInterface
     public void goTopic(String topic_id) {
 //        Intent intent = new Intent(App.getApplication(), ClassNameFactory.getClass(ClassPath.SPECIAL_TOPIC_ACTIVITY));
 //        intent.putExtra(IntentKey.SPECIAL_TOPIC_ID, topic_id);
-//        startActivity(intent);
+//        activity.startActivity(intent);
         Log.e("testjs","topic_id: "+topic_id);
+//        Toast.makeText(context, topic_id, Toast.LENGTH_SHORT).show();
+        
     }
 
     @JavascriptInterface

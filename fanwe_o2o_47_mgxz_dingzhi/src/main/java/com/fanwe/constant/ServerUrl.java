@@ -6,9 +6,7 @@ package com.fanwe.constant;
  * @author Administrator
  */
 public class ServerUrl {
-    /***************************
-     * !!!上线需要修改模式!!!
-     ****************************/
+    /**************************** !!!上线需要修改模式!!!****************************/
     public static final boolean DEBUG = true;//默认开启debug,上线改为false即可,其他接口API不要改动
 
     /*************************
@@ -20,8 +18,7 @@ public class ServerUrl {
      * Do Not Modify
      ***********************/
     public static final String KEY_AES = "FANWE5LMUQC436IM";
-//    private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
-    private static final String SERVER_API_URL_ONLINE = "http://dev.mgxz.com";
+    private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
     private static final String SERVER_H5_ONLINE = "http://m.mgxz.com/";//线上
     /***********************
      * Do Not Modify

@@ -997,13 +997,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.miguo.web.TestWebActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation"
-                  android:launchMode="standard"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/Transparent_title_area"
-                  android:windowSoftInputMode="adjustPan"
-            >
+        <activity
+            android:name="com.miguo.web.TestWebActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity android:name="com.miguo.web.testMain.TestMain22Activity">
         </activity>
     </application>
 

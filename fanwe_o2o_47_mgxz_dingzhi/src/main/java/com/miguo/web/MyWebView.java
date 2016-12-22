@@ -42,7 +42,7 @@ public class MyWebView extends WebView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
+        initWebViewParams();
     }
 
     @Override
