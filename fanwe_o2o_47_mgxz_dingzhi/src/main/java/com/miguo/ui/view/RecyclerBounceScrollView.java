@@ -1,5 +1,6 @@
 package com.miguo.ui.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -118,12 +119,17 @@ public class RecyclerBounceScrollView extends ScrollView{
         refreshView.startAnimation(animation);
     }
 
-    private void setRefreshText(String text){
-        notice.setText(text);
-        LinearLayout.LayoutParams params = getLineaLayoutParams(wrapContent(), wrapContent());
-        params.setMargins(dip2px(5), 0, 0, 0);
-        notice.setLayoutParams(params);
-        endLayout.invalidate();
+    private void setRefreshText(final String text){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notice.setText(text);
+                LinearLayout.LayoutParams params = getLineaLayoutParams(wrapContent(), wrapContent());
+                params.setMargins(dip2px(5), 0, 0, 0);
+                notice.setLayoutParams(params);
+                endLayout.invalidate();
+            }
+        });
     }
 
     @Override
@@ -398,5 +404,9 @@ public class RecyclerBounceScrollView extends ScrollView{
 
     public void setRecyclerScrollViewOnTouchListener(RecyclerScrollViewOnTouchListener recyclerScrollViewOnTouchListener) {
         this.recyclerScrollViewOnTouchListener = recyclerScrollViewOnTouchListener;
+    }
+
+    public Activity getActivity(){
+        return (Activity)getContext();
     }
 }

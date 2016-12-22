@@ -180,7 +180,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     private void updateFeaturedGrouponViewHeight(){
         int height = adapter.getItemHeight();
         LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-        params.setMargins(0, dip2px(15), 0, 0);
         recyclerView.setLayoutParams(params);
     }
 

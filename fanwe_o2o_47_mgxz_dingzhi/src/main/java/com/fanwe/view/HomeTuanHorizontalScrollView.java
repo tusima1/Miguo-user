@@ -79,13 +79,13 @@ public class HomeTuanHorizontalScrollView extends BaseHorizantalScrollView imple
 
         int screenWidth = getScreenWidth();
         int margionSpaceFirst = dip2px(17);
-        int margionSpace = dip2px(7);
-        int width = (int)((screenWidth - margionSpace * 3) / (float)2.5);
-        int height = width * 2 / 3;
+        int margionSpace = dip2px(5);
+        int width = (int)((screenWidth - margionSpace * 3) / (float)2.8);
+        int height = width * 65 / 100;
         for(int i = 0; i< datas.size(); i++){
             RoundImageView img = new RoundImageView(getContext());
             LinearLayout.LayoutParams imgParams = getLinearLayoutParams(width, height);
-            imgParams.setMargins(i == 0 ? margionSpaceFirst : margionSpace, 0, i == datas.size() - 1 ? margionSpaceFirst : 0, 0);
+            imgParams.setMargins(margionSpace, 0, i == datas.size() - 1 ? margionSpace : 0, 0);
             img.setLayoutParams(imgParams);
             img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             String url=getImagePath(i);

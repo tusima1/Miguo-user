@@ -73,7 +73,6 @@ import java.util.List;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.MaterialHeader;
-import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by by zlh/Barry/狗蛋哥 on 2016/10/13.
@@ -139,14 +138,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @ViewInject(R.id.home_fragemnt_view_pager)
     AutoBanner homeViewPager;
-//    HomeBannerViewPager homeViewPager;
 
     @ViewInject(R.id.banner_layout)
     RelativeLayout bannerLayout;
 
     HomeBannerAdapter homeBannerAdapter;
-    @ViewInject(R.id.indicator_circle)
-    CircleIndicator circleIndicator;
 
     /**
      * 网络请求失败的显示界面
@@ -341,8 +337,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         }
         homeBannerAdapter = new HomeBannerAdapter(fragment.getChildFragmentManager(), fragmets);
         homeViewPager.setAdapter(homeBannerAdapter);
-//        circleIndicator.setViewPager(homeViewPager);
-//        homeBannerAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
     }
 
     private void initFeaturedGrouponCategory() {

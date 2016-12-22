@@ -43,11 +43,16 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
     List<Boolean> lines;
     public static final int SINGLE_LINE_HEIGHT = 35;
-    public static final int DOUBBLE_LINE_HEIGHT = 60;
+    public static final int DOUBBLE_LINE_HEIGHT = 45;
     OnItemDataChangedListener onItemDataChangedListener;
+
+    int doubleLineHeight;
+    int singleLineHeight;
 
     public HiGrouponFeaturedAdapter(Activity activity, List datas) {
         super(activity, datas);
+        setDoubleLineHeight(0);
+        setSingleLineHeight(0);
         lines = new ArrayList<>();
     }
 
@@ -84,18 +89,19 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
 
     private void handlerTextViewLines(final RecyclerView.ViewHolder holder, final int position){
+        getHolder(holder).tvName.setMaxLines(2);
         getHolder(holder).tvName.post(new Runnable() {
             @Override
             public void run() {
-                Log.d(tag, "tvName line count: " + getHolder(holder).tvName.getLineCount());
+                Log.d(tag, "tvName line count: " + getHolder(holder).tvName.getLineCount() + " height: " + getHolder(holder).tvName.getMeasuredHeight());
+                handleSetLineHeight(holder);
                 if(getHolder(holder).tvName.getLineCount() > 1){
                     lines.set(position, true);
-                    getHolder(holder).tvName.setMaxLines(2);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(matchParent(), dip2px(DOUBBLE_LINE_HEIGHT));
-                    params.setMargins(dip2px(12), 0, dip2px(12), 0);
-                    getHolder(holder).tvName.setLayoutParams(params);
-                    getHolder(holder).tvName.setGravity(Gravity.CENTER_VERTICAL);
-                    Log.d(tag, "two lines..." + lines.get(position));
+//                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(matchParent(), dip2px(DOUBBLE_LINE_HEIGHT));
+//                    params.setMargins(dip2px(12), 0, dip2px(12), 0);
+//                    getHolder(holder).tvName.setLayoutParams(params);
+//                    getHolder(holder).tvName.setGravity(Gravity.TOP);
+//                    Log.d(tag, "two lines..." + lines.get(position));
                     if(onItemDataChangedListener != null){
                         onItemDataChangedListener.onItemChanged();
                     }
@@ -104,6 +110,17 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         });
     }
 
+    private void handleSetLineHeight(RecyclerView.ViewHolder holder){
+        if(getHolder(holder).tvName.getLineCount() > 1){
+            if(getSingleLineHeight() == 0){
+                setSingleLineHeight(getHolder(holder).tvName.getMeasuredHeight());
+            }
+            return;
+        }
+        if(getDoubleLineHeight() == 0){
+            setDoubleLineHeight(getHolder(holder).tvName.getMeasuredHeight());
+        }
+    }
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
@@ -128,15 +145,15 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         StringBuffer strLocation = new StringBuffer("");
         if (!TextUtils.isEmpty(getItem(position).getArea_name())) {
             String str = getItem(position).getArea_name();
-            strLocation.append(StringTool.getStringFixed(str, 6, "")+" |");
+            strLocation.append(StringTool.getStringFixed(str, 6, "")+"  |  ");
         }else{
-            strLocation.append(".. | ");
+            strLocation.append("..  |  ");
         }
         if (!TextUtils.isEmpty(getItem(position).getDistance())) {
             double distanceValue = Double.valueOf(getItem(position).getDistance());
-            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+" | ");
+            strLocation.append(SDDistanceUtil.getMGDistance(distanceValue)+"  |  ");
         }else{
-            strLocation.append(".. | ");
+            strLocation.append("..  |  ");
         }
         if (!TextUtils.isEmpty(getItem(position).getCate_name())) {
             strLocation.append(getItem(position).getCate_name());
@@ -224,11 +241,12 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
     public int getItemHeight(){
         int allHeight = 0;
         for(int i = 0; i<getItemCount(); i++){
-            int imageHeight = dip2px(196);
-            int tagHeight = dip2px(35);
-            int addressHeight = dip2px(25);
-            int titleHeight = lines.get(i) ? dip2px(DOUBBLE_LINE_HEIGHT) : dip2px(SINGLE_LINE_HEIGHT);
-            int spaceHeight = dip2px(30);
+            int imageHeight = dip2px(180);
+            int tagHeight = dip2px(30);
+            int addressHeight = dip2px(15);
+            int titleHeight = lines.get(i) ? dip2px(getDoubleLineHeight()) : dip2px(getSingleLineHeight());
+            titleHeight = titleHeight + dip2px(5); //margin top
+            int spaceHeight = dip2px(10);
             int itemHeight = imageHeight + titleHeight + addressHeight + tagHeight + spaceHeight;
             allHeight += itemHeight;
             Log.d(tag, "get item height: " + allHeight + " ,is two lines : " + lines.get(i));
@@ -328,4 +346,19 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
     }
 
+    public int getDoubleLineHeight() {
+        return doubleLineHeight;
+    }
+
+    public void setDoubleLineHeight(int doubleLineHeight) {
+        this.doubleLineHeight = doubleLineHeight;
+    }
+
+    public int getSingleLineHeight() {
+        return singleLineHeight;
+    }
+
+    public void setSingleLineHeight(int singleLineHeight) {
+        this.singleLineHeight = singleLineHeight;
+    }
 }

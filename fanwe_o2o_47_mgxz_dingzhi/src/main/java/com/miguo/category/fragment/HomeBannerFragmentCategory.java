@@ -54,7 +54,8 @@ public class HomeBannerFragmentCategory extends FragmentCategory{
 
     private void setBannerParams(){
         int width = getScreenWidth();
-        int height = width * 420 / 750;
+//        int height = width * 420 / 750;
+        int height = dip2px(210);
         LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
         image.setLayoutParams(params);
         String url = getFragment().getBanner().getIcon();

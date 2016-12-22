@@ -62,14 +62,18 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             return ;
         }
         this.list = tags;
-        int iconWidth = getScreenWidth() / 8;
+        int iconWidth = (int)(getScreenWidth() / 12.5);
         int iconHeight = iconWidth;
+
+        int gourpWidth = (int)(getScreenWidth() / 7.7);
+
         for(int i = 0; i < tags.size(); i++){
             LinearLayout group = new LinearLayout(getContext());
-            LinearLayout.LayoutParams grouParams = getLinearLayoutParams(wrapContent(), wrapContent());
+            LinearLayout.LayoutParams grouParams = getLinearLayoutParams(gourpWidth, wrapContent());
             group.setLayoutParams(grouParams);
+            grouParams.setMargins(dip2px(i == 0 ? 10 : 20), dip2px(10), dip2px(i == tags.size() - 1 ? 10 : 0), dip2px(10));
             group.setGravity(Gravity.CENTER);
-            group.setPadding(dip2px(18), dip2px(18), dip2px(18), dip2px(18));
+//            group.setPadding(i == 0 ? dip2px(10) : dip2px(20), dip2px(15), i == tags.size() - 1 ? dip2px(10) : 0, dip2px(15));
             group.setOrientation(LinearLayout.VERTICAL);
             group.setOnClickListener(new HomeTagsViewListener(i));
 
@@ -82,12 +86,13 @@ public class HomeTagsView extends BaseHorizantalScrollView{
             SDViewBinder.setImageView(getItem(i).getIcon(), icon);
             group.addView(icon);
 
-            TextView title = new TextView(getContext());
+            AutofitTextView title = new AutofitTextView(getContext());
             LinearLayout.LayoutParams titleParams = getLinearLayoutParams(wrapContent(), wrapContent());
-            titleParams.setMargins(0, dip2px(3), 0, 0);
+            titleParams.setMargins(0, dip2px(5), 0, 0);
             title.setLayoutParams(titleParams);
-            title.setTextColor(getColor(R.color.text_base_color));
+            title.setLines(1);
             title.setTextSize(12);
+            title.setTextColor(getColor(R.color.dark_text));
             title.setText(getItem(i).getTitle());
             group.addView(title);
             content.addView(group);

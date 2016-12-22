@@ -134,7 +134,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     protected void init(){
         homeTuanHorizontalScrollView = new HomeTuanHorizontalScrollView(getContext());
         RelativeLayout.LayoutParams params = getRelativeLayoutParams(matchParent(), wrapContent());
-        params.setMargins(0, dip2px(10), 0, 0);
+        params.setMargins(0, dip2px(5), 0, 0);
         params.addRule(RelativeLayout.BELOW, TOP_ID);
         homeTuanHorizontalScrollView.setLayoutParams(params);
         homeTuanHorizontalScrollView.setHomeTuanTimeLimitView(this);
@@ -164,7 +164,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
         LinearLayout.LayoutParams titleParams = getLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         title.setLayoutParams(titleParams);
         title.setText("限时特惠");
-        title.setTextSize(16);
+        title.setTextSize(15);
         title.setTextColor(getColor(R.color.text_base_color));
         top.addView(title);
 
