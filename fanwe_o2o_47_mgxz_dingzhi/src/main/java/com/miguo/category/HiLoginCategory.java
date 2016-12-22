@@ -97,19 +97,19 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
      * qqq登录。
      */
     @ViewInject(R.id.qq_login)
-    private Button qq_login;
+    private ImageView qq_login;
     /**
      * 微博登录
      */
 
     @ViewInject(R.id.weibo_login)
-    private Button weibo_login;
+    private ImageView weibo_login;
     /**
      * 微信登录
      */
 
     @ViewInject(R.id.weixin_login)
-    private Button weixin_login;
+    private ImageView weixin_login;
 
     private String openId;
 

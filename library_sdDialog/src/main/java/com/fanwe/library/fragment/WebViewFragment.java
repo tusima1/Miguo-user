@@ -296,7 +296,7 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		//edit by zhouhy 删除重新加载。
 		view.loadUrl(url);
 //		loadUrl(url, view);
-		return true;
+		return false;
 	}
 
 	protected void onPageFinished_WebViewClient(WebView view, String url)
