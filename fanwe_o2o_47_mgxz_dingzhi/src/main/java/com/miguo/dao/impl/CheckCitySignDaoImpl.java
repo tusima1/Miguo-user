@@ -51,7 +51,7 @@ public class CheckCitySignDaoImpl extends BaseDaoImpl implements CheckCitySignDa
                                 return;
                             }
                             if(bean.getResult().get(0).getBody().get(0).getIs_sign() == 0){
-                                getListener().checkCitySignError();
+                                getListener().checkCitySignError(bean.getResult().get(0).getBody().get(0));
                                 return;
                             }
                         }catch (Exception e){

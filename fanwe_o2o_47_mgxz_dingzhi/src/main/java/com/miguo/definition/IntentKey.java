@@ -9,8 +9,10 @@ public class IntentKey {
      * 首页banner活动页URL
      */
     public static final String HOME_BANNER_WEB_PAGE = "action_url";
+    public static final String HOME_WEB_PAGE_TITLE = "web_page_title";
 
     public static final String HOME_BANNER_WEB_TITLE = "web_title";
+
 
     /**
      * 首页banner传过去的banner数据

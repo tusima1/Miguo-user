@@ -10,22 +10,21 @@
         android:id="@+id/fl_viewpager"
         android:layout_width="match_parent"
         android:layout_height="235dp">
-        <android.support.v4.view.ViewPager
+        <!--<android.support.v4.view.ViewPager-->
+            <!--android:id="@+id/viewpager"-->
+            <!--android:background="@color/white"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+        <com.miguo.ui.view.AutoBanner
             android:id="@+id/viewpager"
             android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content">
 
-        <me.relex.circleindicator.CircleIndicator
-            android:id="@+id/indicator_circle"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            app:ci_drawable="@drawable/black_radius_square"
-            app:ci_height="5dp"
-            app:ci_margin="5dp"
-            app:ci_width="5dp"/>
+
+        </com.miguo.ui.view.AutoBanner>
+
     </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"

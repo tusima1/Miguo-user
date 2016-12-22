@@ -21,7 +21,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.ThirdLoginInfo;
 import com.fanwe.user.model.UserInfoNew;
-import com.google.gson.Gson;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
@@ -42,9 +41,9 @@ import com.miguo.listener.HiLoginListener;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
+import com.miguo.third.SinaUsersAPI;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.ClipboardUtils;
-import com.miguo.third.SinaUsersAPI;
 import com.miguo.view.GetShareIdByCodeView;
 import com.miguo.view.LoginByThirdView;
 import com.miguo.view.TencentIMBindPresenterView;
@@ -60,7 +59,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -383,7 +381,6 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
             @Override
             public void onSuccess(Map<String, String> data) {
                 SDDialogManager.showProgressDialog("正在登录,请稍候...");
-//                   printData(data);
                 if (platform.equals(SHARE_MEDIA.WEIXIN)) {
                     platformType = "2";
                     openId = data.get("unionid");
@@ -394,23 +391,6 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
                     openId = data.get("openid");
                     icon = data.get("profile_image_url");
                     nick = data.get("screen_name");
-                } else if (platform.equals(SHARE_MEDIA.SINA)) {
-                    platformType = "3";
-                    String returnData = data.get("result");
-                    Gson gson = new Gson();
-
-                    HashMap<String, Object> maps = gson.fromJson(returnData, HashMap.class);
-                    if (maps.get("id") != null) {
-
-                        openId = maps.get("idstr").toString();
-                    }
-                    if (maps.get("profile_image_url") != null) {
-                        icon = maps.get("profile_image_url").toString();
-                    }
-                    if (maps.get("screen_name") != null) {
-                        nick = maps.get("screen_name").toString();
-                    }
-
                 }
                 if (TextUtils.isEmpty(openId)) {
                     MGToast.showToast("登录失败");
@@ -437,7 +417,7 @@ public class HiLoginCategory extends Category implements GetShareIdByCodeView, L
         });
     }
 
-    private void loginByThird(String openId,String platformType,String icon,String nick){
+    private void loginByThird(String openId, String platformType, String icon, String nick) {
         loginByThirdDao.thirdLogin(openId, platformType, icon, nick);
     }
 

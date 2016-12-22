@@ -1,6 +1,8 @@
 package com.miguo.listener.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.fanwe.HomeSearchActivity;
@@ -9,6 +11,7 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiHomeFragmentCategory;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
@@ -48,7 +51,22 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
             case R.id.refresh:
                 clickRefresh();
                 break;
+            case R.id.nodata:
+                clickNodata();
+                break;
         }
+    }
+
+    private void clickNodata(){
+        if(null == getCategory().getCitySign() || TextUtils.isEmpty(getCategory().getCitySign().getCity_image_link())){
+        return;
+        }
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
+        Bundle bundle = new Bundle();
+        bundle.putString(IntentKey.HOME_BANNER_WEB_PAGE, getCategory().getCitySign().getCity_image_link());
+        bundle.putString(IntentKey.HOME_WEB_PAGE_TITLE, getCategory().getCitySign().getCity_image_title());
+        intent.putExtras(bundle);
+        BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.HOME_WEB_PAGE);
     }
 
     private void clickRefresh(){

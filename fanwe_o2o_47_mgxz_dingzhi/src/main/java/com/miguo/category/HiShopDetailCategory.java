@@ -107,8 +107,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     ShopDetailViewPager viewPager;
 
     ShopDetailPagerAdapter viewpagerAdapter;
-    @ViewInject(R.id.indicator_circle)
-    CircleIndicator indicator;
 
     /**
      * 标题
@@ -313,8 +311,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         }
         viewpagerAdapter = new ShopDetailPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
         viewPager.setAdapter(viewpagerAdapter);
-        indicator.setViewPager(viewPager);
-        viewpagerAdapter.registerDataSetObserver(indicator.getDataSetObserver());
     }
 
     private void initRecommendRecyclerView() {

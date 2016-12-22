@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="10dp"
-            android:src="@drawable/ic_share" />
+            android:src="@drawable/ic_share_play" />
     </LinearLayout>
 
     <TextView

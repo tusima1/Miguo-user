@@ -132,7 +132,7 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
         setting = getSharedPreferences("miguo", Context.MODE_PRIVATE);
         initAppApi();
         sellerHttpHelper = new SellerHttpHelper(this, this);
-        startStatistics();
+//        startStatistics();
         getDeviceId();
         getCityOldVersion();
         loadCityFile();
@@ -222,16 +222,7 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
         App.getInstance().setImei(telephonyManager.getDeviceId());
     }
 
-    private void startStatistics() {
-        Boolean user_first = setting.getBoolean("FIRST", true);
-        String version = setting.getString("version", -1 + "");
-        PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
-        String versionCode = String.valueOf(info.versionCode);
-        if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {// 第一次
-            setting.edit().putBoolean("FIRST", false).commit();
-            setting.edit().putString("version", versionCode);
-        }
-    }
+
 
     private void requestInitInterface() {
         //请求城市列表
@@ -240,7 +231,11 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     private void startMainActivity() {
         Boolean user_first = setting.getBoolean("FIRST", true);
-        if (user_first) {
+        String version = setting.getString("version",-1+"");
+        PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
+        String versionCode = String.valueOf(info.versionCode);
+
+        if(user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
             finish();

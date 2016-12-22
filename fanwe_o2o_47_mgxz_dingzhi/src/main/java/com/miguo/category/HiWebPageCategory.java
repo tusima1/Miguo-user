@@ -99,6 +99,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
     @Override
     protected void init() {
         initWebView();
+        initTitle();
     }
 
     @Override
@@ -113,6 +114,12 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
                 HiWebPageCategory.this.title.setText(title);
             }
         });
+    }
+
+    private void initTitle(){
+        if(!TextUtils.isEmpty(getActivity().getUnSignCityTitle())){
+            title.setText(getActivity().getUnSignCityTitle());
+        }
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
@@ -156,7 +163,7 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                 view.loadUrl(url);
-                return true;
+                return false;
             }
 
             @Override
@@ -183,6 +190,19 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
     public void refresh() {
         initWebView();
     }
+
+    public void onPause(){
+        if(null != webView){
+            webView.onPause();
+        }
+    }
+
+    public void onDestory(){
+        if(null != webView){
+            webView.loadUrl("about:blank");
+        }
+    }
+
 
     @Override
     public HiWebPageActivity getActivity() {
