@@ -72,7 +72,7 @@ public class HomeADView2 extends BaseHorizantalScrollView{
              * 遮罩
              */
             View view = new View(getContext());
-            view.setBackgroundColor(Color.argb(150, 0, 0, 0));
+            view.setBackgroundColor(Color.argb(64, 0, 0, 0));
 
             /**
              * 标题
@@ -80,7 +80,7 @@ public class HomeADView2 extends BaseHorizantalScrollView{
             TextView title = new TextView(getContext());
             title.setText(getItem(i).getTitle());
             title.setTextSize(16);
-            title.setTextColor(Color.argb(255, 220, 222, 223));
+            title.setTextColor(Color.argb(255, 220, 220, 220));
             title.setLineSpacing(0, 1.3f);
             title.setPadding(dip2px(50), dip2px(30), dip2px(50), dip2px(30));
             title.setGravity(Gravity.CENTER);
