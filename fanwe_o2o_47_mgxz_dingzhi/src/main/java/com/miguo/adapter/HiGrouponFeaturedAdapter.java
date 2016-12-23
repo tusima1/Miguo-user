@@ -42,8 +42,6 @@ import java.util.List;
 public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
     List<Boolean> lines;
-    public static final int SINGLE_LINE_HEIGHT = 35;
-    public static final int DOUBBLE_LINE_HEIGHT = 45;
     OnItemDataChangedListener onItemDataChangedListener;
 
     int doubleLineHeight;
@@ -97,14 +95,6 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
                 handleSetLineHeight(holder);
                 if(getHolder(holder).tvName.getLineCount() > 1){
                     lines.set(position, true);
-//                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(matchParent(), dip2px(DOUBBLE_LINE_HEIGHT));
-//                    params.setMargins(dip2px(12), 0, dip2px(12), 0);
-//                    getHolder(holder).tvName.setLayoutParams(params);
-//                    getHolder(holder).tvName.setGravity(Gravity.TOP);
-//                    Log.d(tag, "two lines..." + lines.get(position));
-                    if(onItemDataChangedListener != null){
-                        onItemDataChangedListener.onItemChanged();
-                    }
                 }
             }
         });
@@ -236,22 +226,6 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         lp.setMargins(0, 0, BaseUtils.dip2px(activity, 5), 0);
         view.setLayoutParams(lp);
         return view;
-    }
-
-    public int getItemHeight(){
-        int allHeight = 0;
-        for(int i = 0; i<getItemCount(); i++){
-            int imageHeight = dip2px(180);
-            int tagHeight = dip2px(30);
-            int addressHeight = dip2px(15);
-            int titleHeight = lines.get(i) ? dip2px(getDoubleLineHeight()) : dip2px(getSingleLineHeight());
-            titleHeight = titleHeight + dip2px(5); //margin top
-            int spaceHeight = dip2px(10);
-            int itemHeight = imageHeight + titleHeight + addressHeight + tagHeight + spaceHeight;
-            allHeight += itemHeight;
-            Log.d(tag, "get item height: " + allHeight + " ,is two lines : " + lines.get(i));
-        }
-        return allHeight;
     }
 
 

@@ -61,6 +61,7 @@ import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeLooperViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
+import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.RecyclerBounceScrollView;
 import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
@@ -79,8 +80,8 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  */
 public class HiHomeFragmentCategory extends FragmentCategory implements
         PtrHandler,
-        RecyclerBounceScrollView.OnRecyclerScrollViewListener,
-        RecyclerBounceScrollView.RecyclerScrollViewOnTouchListener,
+        RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener,
+        RecyclerBounceNestedScrollView.RecyclerScrollViewOnTouchListener,
         HomeLooperViewPager.HomeBannerViewPagerOnTouchListener,
         HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
@@ -113,7 +114,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     FixRequestDisallowTouchEventPtrFrameLayout ptrFrameLayout;
 
     @ViewInject(R.id.recycler_scrollview)
-    RecyclerBounceScrollView scrollView;
+    RecyclerBounceNestedScrollView scrollView;
 
     /**
      * 狗蛋哥早安部分

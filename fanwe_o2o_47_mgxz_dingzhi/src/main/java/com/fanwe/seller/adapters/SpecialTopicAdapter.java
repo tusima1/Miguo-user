@@ -75,15 +75,14 @@ public class SpecialTopicAdapter extends BaseAdapter {
         STViewHolder holder;
         if (convertView==null){
             holder=new STViewHolder();
-            convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_specail_topic_listview,null);
-            holder.iv_img= (ImageView) convertView.findViewById(R.id.iv_img);
-            holder.tv_name= (TextView) convertView.findViewById(R.id.tv_name);
-            holder.tv_location= (TextView) convertView.findViewById(R.id.tv_location);
-            holder.tv_type= (TextView) convertView.findViewById(R.id.tv_type);
-            holder.tv_price_tuan= (TextView) convertView.findViewById(R.id.tv_price_tuan);
-            holder.tv_price_original= (TextView) convertView.findViewById(R.id.tv_price_original);
+            convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_featured_groupon,null);
+            holder.iv_img= (ImageView) convertView.findViewById(R.id.iv_img_item_featured_groupon);
+            holder.tv_name= (TextView) convertView.findViewById(R.id.tv_name_item_featured_groupon);
+            holder.tv_location= (TextView) convertView.findViewById(R.id.tv_location_item_featured_groupon);
+            holder.tv_price_tuan= (TextView) convertView.findViewById(R.id.tv_price_tuan_item_featured_groupon);
+            holder.tv_price_original= (TextView) convertView.findViewById(R.id.tv_price_original_item_featured_groupon);
             holder.tv_salary= (TextView) convertView.findViewById(R.id.tv_salary_item_featured_groupon);
-            holder.layout_tags= (LinearLayout) convertView.findViewById(R.id.layout_tags);
+            holder.layout_tags= (LinearLayout) convertView.findViewById(R.id.layout_tags_item_featured_groupon);
             convertView.setTag(holder);
         }
         holder= (STViewHolder) convertView.getTag();
@@ -118,9 +117,9 @@ public class SpecialTopicAdapter extends BaseAdapter {
                 for (int i = 0; i < size; i++) {
                     DetailListBean.TagListBean tagListBean = tag_list.get(i);
                     TextView item=new TextView(parent.getContext());
-                    item.setBackgroundResource(R.drawable.shape_solid_f5b830_cricle_small);
-                    item.setTextColor(Color.WHITE);
-                    item.setTextSize(12);
+                    item.setBackgroundResource(R.drawable.bg_small_f5b830);
+                    item.setTextColor(Color.parseColor("#f5b830"));
+                    item.setTextSize(10);
                     item.setGravity(Gravity.CENTER);
                     item.setText(tagListBean.getTitle());
                     item.setPadding(margin,padding,margin,padding);

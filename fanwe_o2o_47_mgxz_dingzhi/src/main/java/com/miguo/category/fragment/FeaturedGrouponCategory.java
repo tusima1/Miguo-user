@@ -77,6 +77,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     public void onRefresh() {
@@ -178,14 +179,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
      * 更新推荐商品列表高度
      */
     private void updateFeaturedGrouponViewHeight() {
-        int height = adapter.getItemHeight();
-<<<<<<< HEAD
-        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-=======
-        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height + BaseUtils.dip2px(45));
-        params.setMargins(0, dip2px(15), 0, 0);
->>>>>>> c09356e3d311c207a30396388290a3e5d061b410
-        recyclerView.setLayoutParams(params);
+//        int height = adapter.getItemHeight();
+//<<<<<<< HEAD
+//        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
+//=======
+//        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height + BaseUtils.dip2px(45));
+//        params.setMargins(0, dip2px(15), 0, 0);
+//>>>>>>> c09356e3d311c207a30396388290a3e5d061b410
+//        recyclerView.setLayoutParams(params);
     }
 
     public int getPageNum() {

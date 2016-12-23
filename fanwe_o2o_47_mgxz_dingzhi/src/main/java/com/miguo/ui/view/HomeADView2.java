@@ -72,7 +72,7 @@ public class HomeADView2 extends BaseHorizantalScrollView{
              * 遮罩
              */
             View view = new View(getContext());
-            view.setBackgroundColor(Color.argb(160, 0, 0, 0));
+            view.setBackgroundColor(Color.argb(150, 0, 0, 0));
 
             /**
              * 标题

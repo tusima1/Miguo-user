@@ -34,13 +34,15 @@ import java.util.List;
 public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
     List<Boolean> lines;
-    public static final int SINGLE_LINE_HEIGHT = 35;
-    public static final int DOUBBLE_LINE_HEIGHT = 60;
 
-    OnItemDataChangedListener onItemDataChangedListener;
+    int doubleLineHeight;
+    int singleLineHeight;
+
 
     public HiShopDetailRecommendAdapter(Activity activity, List datas) {
         super(activity, datas);
+        setDoubleLineHeight(0);
+        setSingleLineHeight(0);
         lines = new ArrayList<>();
     }
 
@@ -51,7 +53,7 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
 
     @Override
     protected View inflatView(ViewGroup parent, int viewType) {
-        return inflater.inflate(R.layout.activity_hishop_detail_recommend_item_featured_groupon, parent, false);
+        return inflater.inflate(R.layout.item_featured_groupon, parent, false);
     }
 
     @Override
@@ -88,19 +90,26 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
         getHolder(holder).title.post(new Runnable() {
             @Override
             public void run() {
+                handleSetLineHeight(holder);
                 if(getHolder(holder).title.getLineCount() > 1){
                     lines.set(position, true);
                     getHolder(holder).title.setMaxLines(2);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(matchParent(), dip2px(DOUBBLE_LINE_HEIGHT));
-                    params.setMargins(dip2px(12), 0, dip2px(12), 0);
-                    getHolder(holder).title.setLayoutParams(params);
-                    getHolder(holder).title.setGravity(Gravity.CENTER_VERTICAL);
-                    if(onItemDataChangedListener != null){
-                        onItemDataChangedListener.onItemChanged();
-                    }
+
                 }
             }
         });
+    }
+
+    private void handleSetLineHeight(RecyclerView.ViewHolder holder){
+        if(getHolder(holder).title.getLineCount() > 1){
+            if(getSingleLineHeight() == 0){
+                setSingleLineHeight(getHolder(holder).title.getMeasuredHeight());
+            }
+            return;
+        }
+        if(getDoubleLineHeight() == 0){
+            setDoubleLineHeight(getHolder(holder).title.getMeasuredHeight());
+        }
     }
 
     @Override
@@ -160,7 +169,7 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
     private View generalTag(String tag) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        View view = activity.getLayoutInflater().inflate(R.layout.activity_hishop_detail_recommend_tv_tag_item_featured_groupon, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.tv_tag_item_featured_groupon, null);
         TextView tvTag = (TextView) view.findViewById(R.id.tv_describe_tag_featured_groupon);
         tvTag.setText(tag);
         lp.setMargins(0, 0, BaseUtils.dip2px(activity, 5), 0);
@@ -171,28 +180,6 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
     @Override
     public HiShopDetailBean.Result.Tuan getItem(int position) {
         return (HiShopDetailBean.Result.Tuan)super.getItem(position);
-    }
-
-    public int getItemHeight(){
-        int allHeight = 0;
-        for(int i = 0; i<getItemCount(); i++){
-            int imageHeight = dip2px(196);
-            int titleHeight = dip2px(35);
-            int addressHeight = dip2px(25);
-            int tagHeight = lines.get(i) ? dip2px(DOUBBLE_LINE_HEIGHT) : dip2px(SINGLE_LINE_HEIGHT);
-            int spaceHeight = dip2px(30);
-            int itemHeight = imageHeight + titleHeight + addressHeight + tagHeight + spaceHeight;
-            allHeight += itemHeight;
-        }
-        return allHeight;
-    }
-
-    public interface OnItemDataChangedListener{
-        void onItemChanged();
-    }
-
-    public void setOnItemDataChangedListener(OnItemDataChangedListener onItemDataChangedListener) {
-        this.onItemDataChangedListener = onItemDataChangedListener;
     }
 
     @Override
@@ -223,7 +210,7 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
         ImageView image;
 
         /**
-         * 标签
+         * 标题
          */
         @ViewInject(R.id.tv_name_item_featured_groupon)
         TextView title;
@@ -287,6 +274,22 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 
+    }
+
+    public int getDoubleLineHeight() {
+        return doubleLineHeight;
+    }
+
+    public void setDoubleLineHeight(int doubleLineHeight) {
+        this.doubleLineHeight = doubleLineHeight;
+    }
+
+    public int getSingleLineHeight() {
+        return singleLineHeight;
+    }
+
+    public void setSingleLineHeight(int singleLineHeight) {
+        this.singleLineHeight = singleLineHeight;
     }
 
 }
