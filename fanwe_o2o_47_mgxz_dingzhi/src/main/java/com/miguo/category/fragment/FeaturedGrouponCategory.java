@@ -28,7 +28,7 @@ import java.util.List;
  * Created by zlh/狗蛋哥/Barry on 2016/10/28.
  * 首页精选推荐列表
  */
-public class FeaturedGrouponCategory extends FragmentCategory implements FeaturedGrouponView, HiGrouponFeaturedAdapter.OnItemDataChangedListener {
+public class FeaturedGrouponCategory extends FragmentCategory implements FeaturedGrouponView{
 
 
     @ViewInject(R.id.featured_title_layout)
@@ -65,7 +65,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     @Override
     protected void setFragmentListener() {
-        adapter.setOnItemDataChangedListener(this);
     }
 
     @Override
@@ -130,7 +129,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
-                updateFeaturedGrouponViewHeight();
                 getCategory().loadCompleteWithLoadmore();
             }
         });
@@ -152,15 +150,9 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 } else {
                     adapter.notifyDataSetChangedLoadmore(list);
                     getCategory().loadCompleteWithLoadmore();
-                    updateFeaturedGrouponViewHeight();
                 }
             }
         });
-    }
-
-    @Override
-    public void onItemChanged() {
-        updateFeaturedGrouponViewHeight();
     }
 
     @Override
@@ -175,19 +167,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
         });
     }
 
-    /**
-     * 更新推荐商品列表高度
-     */
-    private void updateFeaturedGrouponViewHeight() {
-//        int height = adapter.getItemHeight();
-//<<<<<<< HEAD
-//        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-//=======
-//        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height + BaseUtils.dip2px(45));
-//        params.setMargins(0, dip2px(15), 0, 0);
-//>>>>>>> c09356e3d311c207a30396388290a3e5d061b410
-//        recyclerView.setLayoutParams(params);
-    }
 
     public int getPageNum() {
         return pageNum;

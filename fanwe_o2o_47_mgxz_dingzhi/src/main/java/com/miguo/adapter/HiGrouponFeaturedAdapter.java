@@ -42,7 +42,6 @@ import java.util.List;
 public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
     List<Boolean> lines;
-    OnItemDataChangedListener onItemDataChangedListener;
 
     int doubleLineHeight;
     int singleLineHeight;
@@ -289,13 +288,6 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
 
     }
 
-    public interface OnItemDataChangedListener{
-        void onItemChanged();
-    }
-
-    public void setOnItemDataChangedListener(OnItemDataChangedListener onItemDataChangedListener) {
-        this.onItemDataChangedListener = onItemDataChangedListener;
-    }
 
     class GrouponFeaturedAdapterListener extends BarryListener{
 
