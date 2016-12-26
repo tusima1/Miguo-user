@@ -55,6 +55,7 @@ import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.ShopDetailPagerItemFragmet;
 import com.miguo.listener.HiShopDetailListener;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.ShopDetailTagView;
 import com.miguo.ui.view.ShopDetailViewPager;
 import com.miguo.utils.MGUIUtil;
@@ -73,13 +74,12 @@ import me.relex.circleindicator.CircleIndicator;
  */
 public class HiShopDetailCategory extends Category implements HiShopDetailView,
         CollectShopView, RepresentMerchantView,
-        RecyclerScrollView.OnRecyclerScrollViewListener,
-        HiShopDetailRecommendAdapter.OnItemDataChangedListener,
+        RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener,
         ShopFansFragment.ShowListener,
         CallbackView {
 
     @ViewInject(R.id.recycler_scrollview)
-    RecyclerScrollView scrollView;
+    RecyclerBounceNestedScrollView scrollView;
 
     @ViewInject(R.id.title_layout)
     RelativeLayout titleLayout;
@@ -250,7 +250,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         shareBg.setOnClickListener(listener);
         represent.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
-        recommendAdapter.setOnItemDataChangedListener(this);
+        scrollView.hideLoadingLayout();
+
     }
 
     @Override
@@ -316,7 +317,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     private void initRecommendRecyclerView() {
         recommend.setLayoutManager(new LinearLayoutManager(getActivity()));
         recommend.setAdapter(recommendAdapter);
-        updateRecommendRecyclerViewHeight();
     }
 
     private void initLiveRecyclerView() {
@@ -468,16 +468,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     }
 
     /**
-     * 更新推荐商品列表高度
-     */
-    private void updateRecommendRecyclerViewHeight() {
-        int height = recommendAdapter.getItemHeight();
-        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-        params.setMargins(0, dip2px(15), 0, 0);
-        recommend.setLayoutParams(params);
-    }
-
-    /**
      * 更新在现场 直播列表高度
      */
     private void updateLiveRecycleViewrHeight() {
@@ -564,7 +554,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
          */
         if (result.getTuan_list() != null && result.getTuan_list().size() > 0) {
             recommendAdapter.notifyDataSetChanged(result.getTuan_list());
-            updateRecommendRecyclerViewHeight();
         } else {
             layoutRecmmend.setVisibility(View.GONE);
         }
@@ -702,11 +691,6 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     @Override
     public void onFinish() {
         represent.setClickable(true);
-    }
-
-    @Override
-    public void onItemChanged() {
-        updateRecommendRecyclerViewHeight();
     }
 
     @Override

@@ -7,7 +7,7 @@ package com.fanwe.constant;
  */
 public class ServerUrl {
     /**************************** !!!上线需要修改模式!!!****************************/
-    public static final boolean DEBUG = true;//默认开启debug,上线改为false即可,其他接口API不要改动
+    public static final boolean DEBUG = false;//默认开启debug,上线改为false即可,其他接口API不要改动
 
     /*************************
      * 打测试包

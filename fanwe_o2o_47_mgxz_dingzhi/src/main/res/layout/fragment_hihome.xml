@@ -13,7 +13,7 @@
         app:ptr_keep_header_when_refresh="true"
         app:ptr_pull_to_fresh="true">
 
-        <com.miguo.ui.view.RecyclerBounceScrollView
+        <com.miguo.ui.view.RecyclerBounceNestedScrollView
             android:id="@+id/recycler_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -25,8 +25,6 @@
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
                 android:paddingBottom="10dp">
-
-
 
 
                 <RelativeLayout
@@ -46,17 +44,17 @@
                         xmlns:autofit="http://schemas.android.com/apk/res-auto"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="206dp">
+                        android:layout_height="164dp">
 
                         <com.miguo.ui.view.AutofitTextView
-                            android:layout_marginTop="40dp"
+                            android:layout_marginTop="30dp"
                             android:layout_marginLeft="17dp"
                             android:layout_marginRight="40dp"
                             android:singleLine="true"
                             android:id="@+id/sayhi"
                             android:textColor="@color/black"
                             autofit:minTextSize="8sp"
-                            android:textSize="50sp"
+                            android:textSize="36dp"
                             android:text="神秘人，你好！"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -64,10 +62,13 @@
 
 
                         <TextView
-                            android:padding="17dp"
+                            android:paddingLeft="17dp"
+                            android:paddingTop="10dp"
+                            android:paddingRight="17dp"
+                            android:paddingBottom="17dp"
                             android:textColor="@color/text_base_color_2"
                             android:text="Migoo"
-                            android:textSize="12sp"
+                            android:textSize="10sp"
                             android:id="@+id/city_sayhi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -89,56 +90,7 @@
 
                     </com.miguo.ui.view.HomeLooperViewPager>
 
-                    <!--<com.miguo.ui.view.HomeBannerViewPager-->
-                        <!--android:background="@color/gray"-->
-                        <!--android:id="@+id/home_view_pager"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
-
-                    <!--</com.miguo.ui.view.HomeBannerViewPager>-->
-
-
-                    <me.relex.circleindicator.CircleIndicator
-                        android:id="@+id/indicator_circle"
-                        android:layout_alignBottom="@+id/home_view_pager"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_gravity="bottom"
-                        android:gravity="center"
-                        app:ci_drawable="@drawable/black_radius_square"
-                        app:ci_height="5dp"
-                        app:ci_margin="5dp"
-                        app:ci_width="5dp"/>
-
                 </RelativeLayout>
-
-                <com.fanwe.view.HomeTuanTimeLimitView
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="15dp"
-                    android:id="@+id/home_tuan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </com.fanwe.view.HomeTuanTimeLimitView>
-
-                <LinearLayout
-                    android:id="@+id/home_tuan_limit_bottom_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="#21000000" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        android:background="@color/c_F2F2F2" />
-
-                </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/home_tags_view_layout"
@@ -155,6 +107,35 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/home_tuan_limit_bottom_layout"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#21000000" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:background="@color/c_F2F2F2" />
+
+                </LinearLayout>
+
+                <com.fanwe.view.HomeTuanTimeLimitView
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="6dp"
+                    android:id="@+id/home_tuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </com.fanwe.view.HomeTuanTimeLimitView>
+
+
+
+                <LinearLayout
                     android:id="@+id/home_ad_view_2_space_layout"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -167,7 +148,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="10dp"
+                        android:layout_height="5dp"
                         android:background="@color/c_F2F2F2" />
 
                 </LinearLayout>
@@ -190,17 +171,18 @@
                     android:layout_height="wrap_content">
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="10dp"
+                        android:layout_height="5dp"
                         android:background="@color/c_F2F2F2" />
 
                     <TextView
-                        android:paddingTop="15dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="5dp"
                         android:gravity="center"
                         android:text="今日精选"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textColor="@color/text_base_color"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp" />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
 
@@ -208,7 +190,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview_frag_featured_groupon"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
+                    android:layout_height="wrap_content"
                     android:scrollbars="none" />
 
 
@@ -223,7 +205,7 @@
 
             </LinearLayout>
 
-        </com.miguo.ui.view.RecyclerBounceScrollView>
+        </com.miguo.ui.view.RecyclerBounceNestedScrollView>
 
     </com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout>
 

@@ -2,6 +2,7 @@ package com.miguo.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Created by zlh/狗蛋哥/Barry on 16/8/18.
  * 首页banner
  */
-public class HomeBannerAdapter extends FragmentStatePagerAdapter {
+public class HomeBannerAdapter extends FragmentPagerAdapter {
 
     ArrayList<Fragment> fragments;
     int itemCount = 0;

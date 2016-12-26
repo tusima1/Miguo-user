@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.fanwe.baidumap.BaiduMapManager;
-
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.work.AppRuntimeWorker;
@@ -19,6 +18,7 @@ import com.miguo.definition.PageSize;
 import com.miguo.entity.ModelFeaturedGroupBuy;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiHomeFragment;
+import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.view.FeaturedGrouponView;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
  * Created by zlh/狗蛋哥/Barry on 2016/10/28.
  * 首页精选推荐列表
  */
-public class FeaturedGrouponCategory extends FragmentCategory implements FeaturedGrouponView, HiGrouponFeaturedAdapter.OnItemDataChangedListener{
+public class FeaturedGrouponCategory extends FragmentCategory implements FeaturedGrouponView{
 
 
     @ViewInject(R.id.featured_title_layout)
@@ -43,8 +43,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     boolean nodata = false;
 
-    public FeaturedGrouponCategory(View view, HiBaseFragment fragment){
-        super(view ,fragment);
+    public FeaturedGrouponCategory(View view, HiBaseFragment fragment) {
+        super(view, fragment);
     }
 
     @Override
@@ -65,7 +65,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     @Override
     protected void setFragmentListener() {
-        adapter.setOnItemDataChangedListener(this);
     }
 
     @Override
@@ -74,12 +73,13 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     }
 
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
-    public void onRefresh(){
+    public void onRefresh() {
         setPageNum(PageSize.BASE_NUMBER_ONE);
         setNodata(false);
         featuredGrouponDao.getFeaturedGroupBuy(
@@ -91,8 +91,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 BaiduMapManager.getInstance().getLatitude() + "");
     }
 
-    public void clearPage(){
-        if(recyclerView == null || adapter == null){
+    public void clearPage() {
+        if (recyclerView == null || adapter == null) {
             return;
         }
         adapter.notifyDataSetChanged(new ArrayList());
@@ -100,14 +100,14 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
         featuredTitleLayout.setVisibility(View.GONE);
     }
 
-    public void showPage(){
+    public void showPage() {
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    public void onLoadMore(){
-        if(isNodata()){
+    public void onLoadMore() {
+        if (isNodata()) {
             getCategory().loadCompleteWithNoData();
-           return;
+            return;
         }
         featuredGrouponDao.getFeaturedGroupBuy(
                 AppRuntimeWorker.getCity_id(),
@@ -120,7 +120,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     @Override
     public void getFeaturedGrouponSuccess(final List<ModelFeaturedGroupBuy> list) {
-        if(list != null && list.size() != 0){
+        if (list != null && list.size() != 0) {
             setPageNum(getPageNum() + 1);
         }
         getActivity().runOnUiThread(new Runnable() {
@@ -129,7 +129,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
                 featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
                 adapter.notifyDataSetChanged(list);
-                updateFeaturedGrouponViewHeight();
                 getCategory().loadCompleteWithLoadmore();
             }
         });
@@ -137,7 +136,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
 
     @Override
     public void getFeaturedGrouponLoadmoreSuccess(final List<ModelFeaturedGroupBuy> list) {
-        if(list != null && list.size() != 0){
+        if (list != null && list.size() != 0) {
             setPageNum(getPageNum() + 1);
         }
         getActivity().runOnUiThread(new Runnable() {
@@ -145,21 +144,15 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             public void run() {
                 featuredTitleLayout.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.VISIBLE);
-                if(SDCollectionUtil.isEmpty(list)){
+                if (SDCollectionUtil.isEmpty(list)) {
                     getCategory().loadCompleteWithNoData();
                     setNodata(true);
-                }else {
+                } else {
                     adapter.notifyDataSetChangedLoadmore(list);
                     getCategory().loadCompleteWithLoadmore();
-                    updateFeaturedGrouponViewHeight();
                 }
             }
         });
-    }
-
-    @Override
-    public void onItemChanged() {
-        updateFeaturedGrouponViewHeight();
     }
 
     @Override
@@ -174,15 +167,6 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
         });
     }
 
-    /**
-     * 更新推荐商品列表高度
-     */
-    private void updateFeaturedGrouponViewHeight(){
-        int height = adapter.getItemHeight();
-        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-        params.setMargins(0, dip2px(15), 0, 0);
-        recyclerView.setLayoutParams(params);
-    }
 
     public int getPageNum() {
         return pageNum;
@@ -200,8 +184,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
         this.nodata = nodata;
     }
 
-    public HiHomeFragmentCategory getCategory(){
-        return ((HiHomeFragment)fragment).getCategory();
+    public HiHomeFragmentCategory getCategory() {
+        return ((HiHomeFragment) fragment).getCategory();
     }
 
 }

@@ -24,7 +24,7 @@ import com.miguo.live.views.utils.BaseUtils;
 /**
  * Created by 狗蛋哥/zlh on 16/4/13.
  */
-public class RecyclerBounceScrollView extends ScrollView{
+public class RecyclerBounceNestedScrollView extends ScrollView{
 
     ImageView refreshView;
     TextView notice;
@@ -55,11 +55,11 @@ public class RecyclerBounceScrollView extends ScrollView{
     int screenHeight = 0;
     String tag = this.getClass().getSimpleName();
 
-    public RecyclerBounceScrollView(Context context) {
+    public RecyclerBounceNestedScrollView(Context context) {
         super(context);
     }
 
-    public RecyclerBounceScrollView(Context context, AttributeSet attrs) {
+    public RecyclerBounceNestedScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 //        this.halfScreenHeight = BaseUtils.getHeight(getContext()) / 2;
@@ -106,7 +106,7 @@ public class RecyclerBounceScrollView extends ScrollView{
     }
 
     public void hideLoadingLayout(){
-        endLayout.setVisibility(View.INVISIBLE);
+        endLayout.setVisibility(View.GONE);
     }
 
     private void startRefreshAnimation(){

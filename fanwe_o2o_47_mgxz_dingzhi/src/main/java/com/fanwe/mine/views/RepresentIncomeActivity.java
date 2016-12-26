@@ -130,7 +130,7 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_2);
         } else if ("1".equals(fxLevel)) {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_1);
-        }else {
+        } else {
             ivRank.setImageResource(R.drawable.ic_represent_incom_rank_1);
         }
     }
@@ -138,6 +138,7 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
     @Override
     protected void onResume() {
         super.onResume();
+        pageNum = 1;
         preData();
         getData();
     }
@@ -180,7 +181,7 @@ public class RepresentIncomeActivity extends BaseNewActivity implements Callback
                 bean.setTime_str(time);
                 newDatas.add(bean);
             }
-        }else{
+        } else {
 
         }
 

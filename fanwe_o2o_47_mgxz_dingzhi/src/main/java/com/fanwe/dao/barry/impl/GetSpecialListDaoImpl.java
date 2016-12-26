@@ -52,14 +52,10 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
             }
 
             @Override
-            public void onErrorResponse(String message, String errorCode) {
+            public void onErrorResponseOnMainThread(String message, String errorCode) {
                 getListener().getSpecialListError(message);
             }
 
-            @Override
-            public void onFinish() {
-                getListener().getSpecialListError("获取数据失败!");
-            }
         });
     }
 

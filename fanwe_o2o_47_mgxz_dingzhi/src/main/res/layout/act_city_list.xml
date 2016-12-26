@@ -66,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="热门城市：" />
+                    android:text="已开通城市：" />
 
                 <com.fanwe.library.customview.FlowLayout
                     xmlns:f="http://schemas.android.com/apk/res-auto"

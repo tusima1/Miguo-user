@@ -67,21 +67,23 @@ public class HomeADView2 extends BaseHorizantalScrollView{
         int index = 3;
 
         for(int i = 0; i < ads.size(); i++){
+
+            /**
+             * 遮罩
+             */
+            View view = new View(getContext());
+            view.setBackgroundColor(Color.argb(64, 0, 0, 0));
+
             /**
              * 标题
              */
             TextView title = new TextView(getContext());
             title.setText(getItem(i).getTitle());
             title.setTextSize(16);
-            title.setTextColor(Color.WHITE);
-            title.setPadding(dip2px(30), dip2px(30), dip2px(30), dip2px(30));
+            title.setTextColor(Color.argb(255, 220, 220, 220));
+            title.setLineSpacing(0, 1.3f);
+            title.setPadding(dip2px(50), dip2px(30), dip2px(50), dip2px(30));
             title.setGravity(Gravity.CENTER);
-
-            /**
-             * 遮罩
-             */
-            View view = new View(getContext());
-            view.setBackgroundColor(getColor(R.color.gray_text_99_trans_46));
 
             /**
              * 背景图
@@ -105,7 +107,10 @@ public class HomeADView2 extends BaseHorizantalScrollView{
                 }
             }
 
-            imgParams.setMargins((i % 2 == 0 && i != 0) ? dip2px(10) : 0, i == 1 ? dip2px(10) : 0 , 0, 0);
+            /**
+             * 设置图片间距
+             */
+            imgParams.setMargins((i % 2 == 0 && i != 0) ? dip2px(5) : 0, i == 1 ? dip2px(5) : 0 , 0, 0);
 
             /**
              * 第一张为1

@@ -49,7 +49,7 @@ public class MyIncomeActivity extends BaseNewActivity implements CallbackView, V
         exchange_money.setClickable(false);
 
 
-        initTitleView("我的收益");
+        initTitleView("果仁");
     }
 
     @Override
