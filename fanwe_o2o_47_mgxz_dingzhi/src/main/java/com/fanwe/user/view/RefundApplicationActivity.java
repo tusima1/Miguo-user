@@ -23,6 +23,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.NetWorkStateUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -196,12 +197,9 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		return b.setScale(2,BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 	private void getIntentData() {
-//		mOrderItemID= getIntent().getExtras().getInt(RefundGoodsActivity.EXTRA_ID,-1);
 		Bundle extras = getIntent().getExtras();
 		mOrder_id= extras.getString("extra_order_id", "");
 		mTuan_id= extras.getString("extra_tuan_id", "");
-//		mTuan_id="fb9e5ee2-1518-458d-ad68-d811a8c3ea9b";
-//		mOrder_id="4591be94-7366-4d0c-9334-eb7f629e3334";
 	}
 
 	
@@ -238,6 +236,10 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 
 	
 	private void submit(){
+		if (!NetWorkStateUtil.isConnected(this)){
+			MGToast.showToast("网络异常");
+			return;
+		}
 		if (mNum < 1 || mNum >mGoodsTotalNum) {
 			return;
 		}
