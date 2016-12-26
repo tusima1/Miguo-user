@@ -438,6 +438,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 显示城市未开通
      */
     public void showNoCity(){
+        showTitleAndTab();
         loadingFail.setVisibility(View.GONE);
         nodata.setVisibility(View.VISIBLE);
     }
