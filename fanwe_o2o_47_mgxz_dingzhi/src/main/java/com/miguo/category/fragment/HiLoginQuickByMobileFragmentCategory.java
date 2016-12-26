@@ -23,6 +23,7 @@ import com.miguo.dao.impl.LoginByMobilleWithSMSDaoImpl;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.HiLoginQuickByMobileFragmentListener;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.NetWorkStateUtil;
 import com.miguo.view.CheckMobileExistView;
 import com.miguo.view.GetSMSCodeView;
 import com.miguo.view.LoginByMobilleWithSMSView;
@@ -139,6 +140,10 @@ public class HiLoginQuickByMobileFragmentCategory extends FragmentCategory imple
     }
 
     public void clickLogin(){
+        if (!NetWorkStateUtil.isConnected(getActivity())){
+            MGToast.showToast("网络异常");
+            return;
+        }
         mNumberPhone = mEtMobile.getText().toString();
         if (TextUtils.isEmpty(mNumberPhone)) {
             MGToast.showToast("请输入手机号码!");

@@ -3,6 +3,7 @@ package com.miguo.category.fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.library.utils.MD5Util;
@@ -10,7 +11,6 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.model.UserInfoNew;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiLoginActivity;
 import com.miguo.category.HiLoginCategory;
 import com.miguo.dao.LoginByMobileDao;
@@ -18,6 +18,7 @@ import com.miguo.dao.impl.LoginByMobileDaoImpl;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.HiLoginByMobileFragmentListener;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.NetWorkStateUtil;
 import com.miguo.view.LoginByMobileView;
 
 /**
@@ -81,6 +82,10 @@ public class HiLoginByMobileFragmentCategory extends FragmentCategory implements
     }
 
     public void clickLogin(){
+        if (!NetWorkStateUtil.isConnected(getActivity())){
+            MGToast.showToast("网络异常");
+            return;
+        }
         if (validateParam()) {
             mTvLogin.setEnabled(false);
             /**
