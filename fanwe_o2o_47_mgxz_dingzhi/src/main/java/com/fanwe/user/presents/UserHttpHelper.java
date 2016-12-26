@@ -174,6 +174,8 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
                                     onSuccess(mView, UserConstants.PERSONALHOME, body);
                                 }
                             });
+                        }else{
+                            onFailure2(mView, UserConstants.PERSONALHOME);
                         }
                     }
                 } else {

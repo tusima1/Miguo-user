@@ -576,7 +576,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         if (aFloat <=0){
             mTvSalary.setBackgroundResource(R.drawable.shape_cricle_stroke_dark_solid_white_radius_small);
             mTvSalary.setText("专属优惠");
-            mTvSalary.setTextColor(getColor(R.color.dark_text));
+            mTvSalary.setTextColor(this.getResources().getColor(R.color.dark_text));
         }else {
             mTvSalary.setText(float2+"元佣金");
             mTvSalary.setBackgroundResource(R.drawable.shape_salary_bg);

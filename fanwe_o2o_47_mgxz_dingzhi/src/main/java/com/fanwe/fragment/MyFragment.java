@@ -471,6 +471,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onSuccess(String method, List datas) {
+        onFinish(method);
         switch (method) {
             case UserConstants.PERSONALHOME:
                 modelPersonalHome = (ModelPersonalHome) datas.get(0);
@@ -482,6 +483,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onFailue(String responseBody) {
+        onFinish(responseBody);
         switch (responseBody) {
             case UserConstants.PERSONALHOME:
                 mPtrsvAll.onRefreshComplete();
