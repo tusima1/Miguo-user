@@ -82,6 +82,7 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
      * 获取用户等级
      */
     GetUserLevelDao getUserLevelDao;
+    private MGProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +125,8 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
         refund_ll.setOnClickListener(this);
         commission_value = (TextView) findViewById(R.id.commission_value);
         invite_value = (TextView) findViewById(R.id.invite_value);
+
+        moneydetail_ll.performClick();
     }
 
     @Override
@@ -157,6 +160,10 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
     }
 
     private void clickWithdraw(){
+        if (dialog==null){
+            dialog = new MGProgressDialog(this).needFinishActivity(this);
+        }
+        dialog.show();
         getUserLevelDao = new GetUserLevelDaoImpl(new GetUserLevelView() {
             @Override
             public void getUserLevelSuccess(String level) {
@@ -169,10 +176,12 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
                     return;
                 }
                 startActivity(AccountMoneyActivity.class);
+                dialog.dismiss();
             }
             @Override
             public void getUserLevelError(String message) {
                 MGToast.showToast(message);
+                dialog.dismiss();
             }
         });
         getUserLevelDao.getUserLevel();

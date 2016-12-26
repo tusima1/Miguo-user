@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_toEndOf="@+id/detail_img"
+            android:layout_toRightOf="@+id/detail_img"
             android:gravity="center_vertical"
             android:text="余额来源"
             android:textColor="@color/gray_text_59"
