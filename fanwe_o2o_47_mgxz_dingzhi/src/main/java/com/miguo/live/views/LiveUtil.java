@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 
-
 import com.fanwe.app.App;
 import com.fanwe.constant.EnumEventTag;
 import com.fanwe.o2o.miguo.R;
@@ -167,10 +166,12 @@ public class LiveUtil {
 
     private static long timeTemp;
 
-    public static void clickRoom(ModelRoom room, Activity mActivity) {
+    public static synchronized void clickRoom(ModelRoom room, Activity mActivity) {
         //过滤快速点击
         if ((System.currentTimeMillis() - timeTemp) < 2000) {
             return;
+        } else {
+            timeTemp = System.currentTimeMillis();
         }
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
             Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
@@ -360,7 +361,7 @@ public class LiveUtil {
         ModelHost host = room.getHost();
         String nickName = host.getNickname();
         String avatar = "";
-        if(App.getInstance().getCurrentUser() != null){
+        if (App.getInstance().getCurrentUser() != null) {
             avatar = App.getInstance().getCurrentUser().getIcon();
         }
         MySelfInfo.getInstance().setAvatar(avatar);

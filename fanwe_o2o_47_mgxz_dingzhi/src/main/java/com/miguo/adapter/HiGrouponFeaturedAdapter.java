@@ -197,7 +197,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
         if ((!SDCollectionUtil.isEmpty(getItem(position).getTag_list()))) {
             getHolder(holder).layoutTags.setVisibility(View.VISIBLE);
             for (int i = 0; i < getItem(position).getTag_list().size(); i++) {
-                if (i == 5) {
+                if (i == 3) {
                     break;
                 }
                 Tag tag = getItem(position).getTag_list().get(i);
