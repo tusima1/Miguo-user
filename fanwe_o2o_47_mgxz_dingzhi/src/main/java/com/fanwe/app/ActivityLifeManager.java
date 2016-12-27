@@ -3,7 +3,11 @@ package com.fanwe.app;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.fanwe.utils.ActivityNameUtil;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.Stack;
 
@@ -30,49 +34,59 @@ public class ActivityLifeManager {
         private static final ActivityLifeManager alm = new ActivityLifeManager();
     }
 
+
     private Application.ActivityLifecycleCallbacks lifecycleCallbacks = new Application
             .ActivityLifecycleCallbacks() {
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            Log.d(TAG, "onActivityCreated");
+            String pageName = ActivityNameUtil.getInstance().getPageName(activity.getLocalClassName());
+            if (!TextUtils.isEmpty(pageName)) {
+                Log.d(TAG, "onActivityCreated:" + pageName);
+                MobclickAgent.onPageStart(pageName);
+            } else {
+                Log.d(TAG, "onActivityCreated:unknownPage");
+            }
             addActivity(activity);
         }
 
         @Override
         public void onActivityStarted(Activity activity) {
-            Log.d(TAG, "onActivityStarted");
         }
 
         @Override
         public void onActivityResumed(Activity activity) {
-            Log.d(TAG, "onActivityResumed");
             addActivity(activity);
         }
 
         @Override
         public void onActivityPaused(Activity activity) {
-            Log.d(TAG, "onActivityPaused");
         }
 
         @Override
         public void onActivityStopped(Activity activity) {
-            Log.d(TAG, "onActivityStopped");
         }
 
         @Override
         public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-            Log.d(TAG, "onActivitySaveInstanceState");
         }
 
         @Override
         public void onActivityDestroyed(Activity activity) {
-            Log.d(TAG, "onActivityDestroyed");
+            String pageName = ActivityNameUtil.getInstance().getPageName(activity.getLocalClassName());
+            if (!TextUtils.isEmpty(pageName)) {
+                Log.d(TAG, "onActivityDestroyed:" + pageName);
+                MobclickAgent.onPageEnd(pageName);
+            } else {
+                Log.d(TAG, "onActivityDestroyed:unknownPage");
+            }
             removeActivity(activity);
         }
     };
 
 
-    /*********************** Activity Manager Tools ***********************/
+    /***********************
+     * Activity Manager Tools
+     ***********************/
     public Activity getLastActivity() {
         Activity activity = mStackActivity.lastElement();
         return activity;
