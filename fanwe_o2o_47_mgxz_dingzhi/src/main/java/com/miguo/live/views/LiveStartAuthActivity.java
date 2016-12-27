@@ -27,6 +27,7 @@ import com.miguo.live.views.customviews.MGToast;
 import java.util.List;
 
 /**
+ * 直播前提醒前往认证
  * Created by Administrator on 2016/8/8.
  */
 public class LiveStartAuthActivity extends Activity implements CallbackView {

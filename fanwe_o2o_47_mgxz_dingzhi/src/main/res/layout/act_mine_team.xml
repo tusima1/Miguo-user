@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxEms="6"
+            android:maxEms="11"
             android:maxLines="1"
             android:text=""
             android:textColor="@color/text_fenxiao"

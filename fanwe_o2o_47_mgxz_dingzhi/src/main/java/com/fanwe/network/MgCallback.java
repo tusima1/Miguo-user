@@ -63,10 +63,15 @@ public abstract class MgCallback<T> implements Callback {
     }
 
     @Override
-    public void onResponse(Call call, Response response) throws IOException {
+    public void onResponse(final Call call, Response response) throws IOException {
         onStart();
         if (response == null || response.body() == null) {
-            onFailure(call, new IOException());
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onFailure(call,new IOException());
+                }
+            });
         } else {
             String body = response.body().string();
 
@@ -107,7 +112,12 @@ public abstract class MgCallback<T> implements Callback {
                     onErrorResponseOnMainThread(message, statusCode);
                 }
             } catch (Exception e) {
-                onFailure(call,null);
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onFailure(call,null);
+                    }
+                });
             }
         }
         onFinishResponse();
