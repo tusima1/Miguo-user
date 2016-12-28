@@ -58,7 +58,7 @@ public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceList
             }
 
             @Override
-            public void onErrorResponseOnMainThread(String message, String errorCode) {
+            public void onErrorResponse(String message, String errorCode) {
                 getListener().getAdspaceListError();
             }
 
