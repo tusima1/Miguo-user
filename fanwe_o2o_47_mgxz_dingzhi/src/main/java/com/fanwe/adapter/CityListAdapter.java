@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.CityListActivity;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.library.utils.SDViewUtil;
@@ -17,6 +18,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.utils.PinyinComparator;
 import com.fanwe.work.AppRuntimeWorker;
+import com.sunday.eventbus.SDEventManager;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,10 +30,15 @@ public class CityListAdapter extends SDBaseAdapter<ModelCityList> {
     private int mTag;
     private Map<Integer, Integer> mMapLettersAsciisFirstPostion = new HashMap<Integer, Integer>();
     private PinyinComparator mComparator = new PinyinComparator();
+    private boolean fromAuth;
 
     public CityListAdapter(List<ModelCityList> listModel, Activity activity, int tag) {
         super(listModel, activity);
         this.mTag = tag;
+    }
+
+    public void setFromAuth(boolean fromAuth) {
+        this.fromAuth = fromAuth;
     }
 
     @Override
@@ -60,11 +67,16 @@ public class CityListAdapter extends SDBaseAdapter<ModelCityList> {
             ll_content.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTag == 1) {
-                        AppRuntimeWorker.setCityNameByModel(model);
-                        getActivity().setActivityResult(model);
-                    } else if (mTag == 2) {
-                        getActivity().setActivityResult(model);
+                    if (!fromAuth) {
+                        if (mTag == 1) {
+                            AppRuntimeWorker.setCityNameByModel(model);
+                            getActivity().setActivityResult(model);
+                        } else if (mTag == 2) {
+                            getActivity().setActivityResult(model);
+                        }
+                    } else {
+                        SDEventManager.post(model, EnumEventTag.CITY_RESIDENT.ordinal());
+                        getActivity().finish();
                     }
                 }
             });
