@@ -64,7 +64,7 @@ public class CheckCitySignDaoImpl extends BaseDaoImpl implements CheckCitySignDa
             }
 
             @Override
-            public void onErrorResponseOnMainThread(String message, String errorCode) {
+            public void onErrorResponse(String message, String errorCode) {
                 getListener().networkError();
             }
 

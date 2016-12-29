@@ -422,6 +422,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 城市已开通，并且请求成功
      */
     public void showLoadingSuccessWithCity(){
+        showTitleAndTab();
         loadingFail.setVisibility(View.GONE);
         nodata.setVisibility(View.GONE);
     }
@@ -430,6 +431,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 显示网络加载失败！
      */
     public void showLoadingFailed(){
+        showTitleAndTab();
         loadingFail.setVisibility(View.VISIBLE);
         nodata.setVisibility(View.GONE);
     }
@@ -804,23 +806,29 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     @Override
-    public void checkCitySignError(CheckCitySignBean.Result.Body citySign) {
-        setCitySign(citySign);
-        scrollView.hideLoadingLayout();
-        clearPage();
-        setTitleAlpha(titleLayout, 1);
-        currentT = 0;
-        sayHiLayout.setVisibility(View.VISIBLE);
-        space.setVisibility(View.VISIBLE);
-        homeAdView2SpaceLayout.setVisibility(View.GONE);
-        try {
-            topSayHi.setVisibility(View.GONE);
-        } catch (Exception e) {
+    public void checkCitySignError(final CheckCitySignBean.Result.Body citySign) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setCitySign(citySign);
+                scrollView.hideLoadingLayout();
+                clearPage();
+                setTitleAlpha(titleLayout, 1);
+                currentT = 0;
+                sayHiLayout.setVisibility(View.VISIBLE);
+                space.setVisibility(View.VISIBLE);
+                homeAdView2SpaceLayout.setVisibility(View.GONE);
+                try {
+                    topSayHi.setVisibility(View.GONE);
+                } catch (Exception e) {
 
-        }
-        showNoCity();
-        setHasSeeler(false);
-        loadComplete();
+                }
+                showNoCity();
+                setHasSeeler(false);
+                loadComplete();
+            }
+        });
+
     }
 
     @Override
@@ -882,8 +890,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getSpecialListError(String msg) {
-        homeTuanLimitBottomLayout.setVisibility(View.GONE);
-        loadComplete();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                homeTuanLimitBottomLayout.setVisibility(View.GONE);
+                loadComplete();
+            }
+        });
+
     }
 
     @Override
@@ -934,8 +948,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getAdspaceListError() {
-        homeADView2.setVisibility(View.GONE);
-        loadComplete();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                homeADView2.setVisibility(View.GONE);
+                loadComplete();
+            }
+        });
+
     }
 
     /**
@@ -955,8 +975,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getHomeGreetingError() {
-        getHomeGreetingSuccess("神秘人，你好！");
-        loadComplete();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getHomeGreetingSuccess("神秘人，你好！");
+                loadComplete();
+            }
+        });
+
     }
 
     /**
@@ -970,7 +996,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     public void getMenuListError() {
-        loadComplete();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadComplete();
+            }
+        });
+
     }
 
     /**

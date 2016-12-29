@@ -56,7 +56,7 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
                 }
             }
             @Override
-            public void onErrorResponseOnMainThread(String message, String errorCode) {
+            public void onErrorResponse(String message, String errorCode) {
                 getListener().getMenuListError();
             }
 
