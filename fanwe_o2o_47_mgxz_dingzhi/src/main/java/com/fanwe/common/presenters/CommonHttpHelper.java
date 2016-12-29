@@ -23,6 +23,7 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.model.UserInfoNew;
+import com.fanwe.utils.ReleaseUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -129,7 +130,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
     public void getUpgradeAPK() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("dev_type", "android");
-        params.put("version", SDPackageUtil.getCurrentPackageInfo().versionName);
+        params.put("version", ReleaseUtil.doVersionName(SDPackageUtil.getCurrentPackageInfo().versionName));
         params.put("method", CommonConstants.UPGRADE_VERSION);
 
         OkHttpUtils.getInstance().get(null, params, new MgCallback() {

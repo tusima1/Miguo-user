@@ -170,7 +170,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		mHasPay=info.getPay_amount();
 
 		mUnitPrice=info.getRefund_unit_price();
-		float refundMoney = getCalculateRefundMoney(mUnitPrice, 1);
+		float refundMoney = getCalculateRefundMoney(mUnitPrice, mNum);
 		mTv_refund_money.setText(""+refundMoney);
 
 		//可退款商品总数 商品数量- 已使用 - 已退款 - 退款中;
