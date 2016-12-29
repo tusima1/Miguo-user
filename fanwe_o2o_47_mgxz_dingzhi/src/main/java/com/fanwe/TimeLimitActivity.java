@@ -122,13 +122,13 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     private void onRefresh(){
         try{
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList("",
                     AppRuntimeWorker.getCity_id(),
                     BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
                     BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
                     "1");
         }catch (Exception e){
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList("",
                     "",
                     "",
                     "",
@@ -218,7 +218,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     }
 
     @Override
-    public void getSpecialListSuccess(final SpecialListModel.Result result) {
+    public void getSpecialListSuccess(String httpUuid,final SpecialListModel.Result result) {
         if(result != null && result.getBody() != null && result.getBody().size() > 0){
             runOnUiThread(new Runnable() {
                 @Override
@@ -236,7 +236,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     }
 
     @Override
-    public void getSpecialListLoadmoreSuccess(final SpecialListModel.Result result) {
+    public void getSpecialListLoadmoreSuccess(String httpUuid,final SpecialListModel.Result result) {
         if(result != null && result.getBody() != null && result.getBody().size() > 0){
             runOnUiThread(new Runnable() {
                 @Override
@@ -251,7 +251,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     }
 
     @Override
-    public void getSpecialListError(String msg) {
+    public void getSpecialListError(String httpUuid,String msg) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -261,8 +261,8 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     }
 
     @Override
-    public void getSpecialListNoData(String msg) {
-        getSpecialListError(msg);
+    public void getSpecialListNoData(String httpUuid,String msg) {
+        getSpecialListError(httpUuid, msg);
     }
 
 
@@ -314,7 +314,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
     public void onLoadmore() {
         if(isCanRefresh()){
             setNeedLoadmore(false);
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList("",
                     AppRuntimeWorker.getCity_id(),
                     BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
                     BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",

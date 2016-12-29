@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface FeaturedGrouponView extends BaseView{
 
-    void getFeaturedGrouponSuccess(List<ModelFeaturedGroupBuy> list);
-    void getFeaturedGrouponLoadmoreSuccess(List<ModelFeaturedGroupBuy> list);
-    void getFeaturedGrouponError(String message);
+    void getFeaturedGrouponSuccess(String httpUuid,List<ModelFeaturedGroupBuy> list);
+    void getFeaturedGrouponLoadmoreSuccess(String httpUuid,List<ModelFeaturedGroupBuy> list);
+    void getFeaturedGrouponError(String httpUuid,String message);
 
 }

@@ -43,6 +43,10 @@ public abstract class Category implements BaseView {
      * @param category
      */
     protected RelativeLayout top;
+    /**
+     * 当前请求的uuid
+     */
+    protected String currentHttpUuid;
 
     public Category(Category category){
         this(category.getActivity());
@@ -278,6 +282,18 @@ public abstract class Category implements BaseView {
 
     public LayoutInflater getInflater(){
         return getActivity().getLayoutInflater();
+    }
+
+    public boolean isCurrentHttp(String uuid){
+        return uuid.equals(currentHttpUuid);
+    }
+
+    public String getCurrentHttpUuid() {
+        return currentHttpUuid;
+    }
+
+    public void setCurrentHttpUuid(String currentHttpUuid) {
+        this.currentHttpUuid = currentHttpUuid;
     }
 
     protected abstract void initFirst();

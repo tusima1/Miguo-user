@@ -6,6 +6,6 @@ package com.miguo.dao;
  */
 public interface GetMenuListDao extends BaseDao{
 
-    void getMenuList(String terminal_type, String menu_type);
+    void getMenuList(String httpUuid, String terminal_type, String menu_type);
 
 }

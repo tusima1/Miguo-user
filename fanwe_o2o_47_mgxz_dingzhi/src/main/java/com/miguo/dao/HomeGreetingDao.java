@@ -5,5 +5,5 @@ package com.miguo.dao;
  * 首页问候语接口
  */
 public interface HomeGreetingDao extends BaseDao{
-    void getTodayGreeting(String token);
+    void getTodayGreeting(String httpUuid, String token);
 }

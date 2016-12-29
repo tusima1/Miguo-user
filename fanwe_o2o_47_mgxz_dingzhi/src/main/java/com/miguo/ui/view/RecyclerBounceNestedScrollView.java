@@ -3,6 +3,7 @@ package com.miguo.ui.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -24,7 +25,7 @@ import com.miguo.live.views.utils.BaseUtils;
 /**
  * Created by 狗蛋哥/zlh on 16/4/13.
  */
-public class RecyclerBounceNestedScrollView extends ScrollView{
+public class RecyclerBounceNestedScrollView extends NestedScrollView{
 
     ImageView refreshView;
     TextView notice;

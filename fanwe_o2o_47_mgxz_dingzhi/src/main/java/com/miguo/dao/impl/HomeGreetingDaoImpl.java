@@ -31,7 +31,7 @@ public class HomeGreetingDaoImpl extends BaseDaoImpl implements HomeGreetingDao{
     }
 
     @Override
-    public void getTodayGreeting(String token) {
+    public void getTodayGreeting(final String httpUuid, String token) {
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "GetCurGreeting");
         if(token != null && !token.equals("")){
@@ -44,21 +44,21 @@ public class HomeGreetingDaoImpl extends BaseDaoImpl implements HomeGreetingDao{
                 HomeGreetingBean bean = new Gson().fromJson(responseBody, HomeGreetingBean.class);
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
-                        getListener().getHomeGreetingSuccess(bean.getResult().get(0).getBody().get(0).getGreetings());
+                        getListener().getHomeGreetingSuccess(httpUuid, bean.getResult().get(0).getBody().get(0).getGreetings());
                     }else {
-                        getListener().getHomeGreetingError();
+                        getListener().getHomeGreetingError(httpUuid);
                     }
                 }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                getListener().getHomeGreetingError();
+                getListener().getHomeGreetingError(httpUuid);
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                getListener().getHomeGreetingError();
+                getListener().getHomeGreetingError(httpUuid);
             }
 
         });

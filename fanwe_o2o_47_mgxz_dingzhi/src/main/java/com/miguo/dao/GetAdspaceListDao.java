@@ -6,6 +6,6 @@ package com.miguo.dao;
  */
 public interface GetAdspaceListDao extends BaseDao{
 
-    void getAdspaceList(String city_id,String type, String terminal_type);
+    void getAdspaceList(String httpUuid, String city_id,String type, String terminal_type);
 
 }

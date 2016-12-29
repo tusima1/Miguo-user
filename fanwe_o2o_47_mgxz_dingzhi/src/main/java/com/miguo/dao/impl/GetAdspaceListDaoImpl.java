@@ -31,7 +31,7 @@ public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceList
     }
 
     @Override
-    public void getAdspaceList(String city_id, final String type, String terminal_type) {
+    public void getAdspaceList(final String httpUuid, String city_id, final String type, String terminal_type) {
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "GetAdspaceList");
         map.put("city_id", city_id);
@@ -50,21 +50,21 @@ public class GetAdspaceListDaoImpl extends BaseDaoImpl implements GetAdspaceList
                 AdspaceListBean bean = (AdspaceListBean)responseBody;
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
-                        getListener().getAdspaceListSuccess(bean.getResult().get(0).getBody(), type);
+                        getListener().getAdspaceListSuccess(httpUuid,bean.getResult().get(0).getBody(), type);
                     }else {
-                        getListener().getAdspaceListError();
+                        getListener().getAdspaceListError(httpUuid);
                     }
                 }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                getListener().getAdspaceListError();
+                getListener().getAdspaceListError(httpUuid);
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                getListener().getAdspaceListError();
+                getListener().getAdspaceListError(httpUuid);
             }
 
         });

@@ -31,7 +31,7 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
     }
 
     @Override
-    public void getMenuList(String terminal_type, String menu_type) {
+    public void getMenuList(final String httpUuid, String terminal_type, String menu_type) {
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "GetMenuList");
         map.put("city_id", AppRuntimeWorker.getCity_id());
@@ -49,20 +49,20 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
                 MenuBean bean = (MenuBean)responseBody;
                 if(bean != null){
                     if(bean.getStatusCode() == 200){
-                        getListener().getMenuListSuccess(bean.getResult().get(0).getBody());
+                        getListener().getMenuListSuccess(httpUuid,bean.getResult().get(0).getBody());
                     }else {
-                        getListener().getMenuListError();
+                        getListener().getMenuListError(httpUuid);
                     }
                 }
             }
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                getListener().getMenuListError();
+                getListener().getMenuListError(httpUuid);
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                 getListener().getMenuListError();
+                 getListener().getMenuListError(httpUuid);
             }
 
         });

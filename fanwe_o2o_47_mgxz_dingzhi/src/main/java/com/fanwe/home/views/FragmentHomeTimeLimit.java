@@ -61,13 +61,13 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
 
     public void onRefresh(){
         try{
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList("",
                     AppRuntimeWorker.getCity_id(),
                     BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
                     BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
                     "0");
         }catch (Exception e){
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList("",
                     "",
                     "",
                     "",
@@ -77,7 +77,7 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
 
 
     @Override
-    public void getSpecialListSuccess(final SpecialListModel.Result result) {
+    public void getSpecialListSuccess(String httpUuid,final SpecialListModel.Result result) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -97,17 +97,17 @@ public class FragmentHomeTimeLimit extends BaseFragment implements GetSpecialLis
     }
 
     @Override
-    public void getSpecialListLoadmoreSuccess(SpecialListModel.Result result) {
+    public void getSpecialListLoadmoreSuccess(String httpUuid,SpecialListModel.Result result) {
 
     }
 
     @Override
-    public void getSpecialListError(String msg) {
+    public void getSpecialListError(String httpUuid,String msg) {
         Log.d(tag, msg);
     }
 
     @Override
-    public void getSpecialListNoData(String msg) {
+    public void getSpecialListNoData(String httpUuid,String msg) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

@@ -37,7 +37,7 @@ public class FeaturedGrouponDaoImpl extends BaseDaoImpl implements FeaturedGroup
     }
 
     @Override
-    public void getFeaturedGroupBuy(String cityId, final String pageNum, String pageSize, String keyword, String m_longitude, String m_latitude) {
+    public void getFeaturedGroupBuy(final String httpUuid, String cityId, final String pageNum, String pageSize, String keyword, String m_longitude, String m_latitude) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("city_id", cityId);
         params.put("page", pageNum);
@@ -55,38 +55,38 @@ public class FeaturedGrouponDaoImpl extends BaseDaoImpl implements FeaturedGroup
                 //过滤错误请求
                 if (!"200".equals(root.getStatusCode())) {
                     if (!TextUtils.isEmpty(root.getMessage())) {
-                        getListener().getFeaturedGrouponError(root.getMessage());
+                        getListener().getFeaturedGrouponError(httpUuid, root.getMessage());
                     } else {
-                        getListener().getFeaturedGrouponError("getFeaturedGroupBuy error");
+                        getListener().getFeaturedGrouponError(httpUuid, "getFeaturedGroupBuy error");
                     }
                     return;
                 }
                 List<ResultFeaturedGroupBuy> result = root.getResult();
                 if (SDCollectionUtil.isEmpty(result)) {
-                    getListener().getFeaturedGrouponError("getFeaturedGroupBuy error");
+                    getListener().getFeaturedGrouponError(httpUuid, "getFeaturedGroupBuy error");
                     return;
                 }
                 List<BodyFeaturedGroupBuy> body = result.get(0).getBody();
                 if (SDCollectionUtil.isEmpty(body)) {
-                    getListener().getFeaturedGrouponError("getFeaturedGroupBuy error");
+                    getListener().getFeaturedGrouponError(httpUuid, "getFeaturedGroupBuy error");
                     return;
                 }
                 List<ModelFeaturedGroupBuy> items = body.get(0).getTuan_list();
                 if(pageNum.equals("1")){
-                    getListener().getFeaturedGrouponSuccess(items);
+                    getListener().getFeaturedGrouponSuccess(httpUuid,items);
                 }else {
-                    getListener().getFeaturedGrouponLoadmoreSuccess(items);
+                    getListener().getFeaturedGrouponLoadmoreSuccess(httpUuid, items);
                 }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                getListener().getFeaturedGrouponError(message);
+                getListener().getFeaturedGrouponError(httpUuid, message);
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                getListener().getFeaturedGrouponError("");
+                getListener().getFeaturedGrouponError(httpUuid, "");
             }
         });
     }
