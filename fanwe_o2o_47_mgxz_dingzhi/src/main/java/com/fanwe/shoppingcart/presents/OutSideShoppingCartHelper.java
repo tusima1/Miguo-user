@@ -181,6 +181,14 @@ public class OutSideShoppingCartHelper extends Presenter {
                 mCallbackView.onFailue(ShoppingCartconstants.SHOPPING_CART_LIST, message);
 
             }
+
+            @Override
+            public void onFinish() {
+                if (mCallbackView == null) {
+                    return;
+                }
+                mCallbackView.onFinish(ShoppingCartconstants.SHOPPING_CART_LIST);
+            }
         });
 
     }

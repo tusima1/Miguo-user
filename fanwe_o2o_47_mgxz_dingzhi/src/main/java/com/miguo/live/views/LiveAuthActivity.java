@@ -21,16 +21,16 @@ import android.widget.TextView;
 import com.fanwe.CityListActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.customview.BottomDialog;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.o2o.miguo.databinding.ActLiveAuthBinding;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.utils.Bimp;
 import com.fanwe.utils.StringTool;
 import com.fanwe.utils.UriUtil;
-import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.definition.RequestCode;
-import com.miguo.definition.ResultCode;
 import com.miguo.live.adapters.VisitImgAdapter;
 import com.miguo.live.model.DataBindingLiveAuth;
 import com.miguo.live.model.LiveConstants;
@@ -42,6 +42,8 @@ import com.miguo.utils.MGUIUtil;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,6 +87,26 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
 
         preData();
         setListener();
+
+        SDEventManager.register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SDEventManager.unregister(this);
+    }
+
+    public void onEventMainThread(SDBaseEvent event) {
+        switch (EnumEventTag.valueOf(event.getTagInt())) {
+            case CITY_RESIDENT:
+                ModelCityList bean = (ModelCityList) event.getData();
+                dataBindingLiveAuth.city.set(bean.getName());
+                cityId = bean.getId();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -106,6 +128,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         switch (id) {
             case R.id.layout_city_live_auth:
                 intent = new Intent(mContext, CityListActivity.class);
+                intent.putExtra("fromAuth", true);
                 startActivityForResult(intent, RequestCode.RESUTN_CITY_ID);
                 break;
             case R.id.iv_arrow_left_bar:
@@ -234,11 +257,6 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RequestCode.RESUTN_CITY_ID && resultCode == ResultCode.RESUTN_OK) {
-            dataBindingLiveAuth.city.set(AppRuntimeWorker.getCity_name());
-            cityId = AppRuntimeWorker.getCity_id();
-            return;
-        }
         if (requestCode == 200 && resultCode == 8888) {
             dataBindingLiveAuth.interest.set(data.getStringExtra("tags"));
             tvInterest.setText(StringTool.getStringFixed(dataBindingLiveAuth.interest.get(), 15, ""));

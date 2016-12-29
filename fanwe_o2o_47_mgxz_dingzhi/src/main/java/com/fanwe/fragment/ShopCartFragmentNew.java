@@ -111,18 +111,14 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     @Override
     protected void init() {
         super.init();
-        checkLogin();
         outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
         initTitle();
         registeClick();
         resetInitData();
-        initPull2RefreshSrcollView();
+//        initPull2RefreshSrcollView();
     }
 
-    public void checkLogin() {
-        ;
 
-    }
 
     @Override
     public void onResume() {
@@ -564,6 +560,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     @Override
     public void onSuccess(String method, final List datas) {
+        dismiss();
         switch (method) {
             case ShoppingCartconstants.SHOPPING_CART_LIST:
                 this.listModel = datas;
@@ -625,7 +622,8 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     @Override
     public void onFinish(String method) {
-
+        mContentPtr.onRefreshComplete();
+        dismiss();
     }
 
 

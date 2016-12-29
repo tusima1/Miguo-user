@@ -238,7 +238,7 @@ public class UserHeadTopView extends RelativeLayout implements View.OnClickListe
         if (!TextUtils.isEmpty(name)) {
             mUserName.setText(name);
         } else {
-            mUserName.setText("主播");
+            mUserName.setText("");
         }
     }
 

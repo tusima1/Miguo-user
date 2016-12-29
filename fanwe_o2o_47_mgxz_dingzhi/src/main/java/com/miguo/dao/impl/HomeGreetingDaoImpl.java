@@ -52,7 +52,7 @@ public class HomeGreetingDaoImpl extends BaseDaoImpl implements HomeGreetingDao{
             }
 
             @Override
-            public void onErrorResponseOnMainThread(String message, String errorCode) {
+            public void onErrorResponse(String message, String errorCode) {
                 getListener().getHomeGreetingError();
             }
 

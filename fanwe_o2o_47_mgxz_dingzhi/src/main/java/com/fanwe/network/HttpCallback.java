@@ -49,10 +49,15 @@ public abstract class HttpCallback<T> implements Callback {
     }
 
     @Override
-    public void onResponse(Call call, Response response) throws IOException {
+    public void onResponse(final Call call, Response response) throws IOException {
         dispatch(RequestCode.START);
         if (response == null || response.body() == null) {
-            onFailure(call, new IOException());
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    onFailure(call,new IOException());
+                }
+            });
         } else {
             String body = response.body().string();
 

@@ -7,6 +7,7 @@ import com.fanwe.app.App;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
 import java.io.IOException;
@@ -163,7 +164,7 @@ public class OkHttpUtil {
         httpHandle(THIRD_GET, url, params, mCallback, false, tag);
     }
 
-    private void httpHandle(int method, String url, TreeMap<String, String> params, HttpCallback callback, boolean isNeedLogin, Object tag) {
+    private void httpHandle(int method, String url, TreeMap<String, String> params, final HttpCallback callback, boolean isNeedLogin, Object tag) {
         if (NetWorkStateUtil.isConnected(App.getInstance())) {
             if (isNeedLogin) {
                 String token = App.getInstance().getToken();
@@ -194,8 +195,13 @@ public class OkHttpUtil {
             }
         } else {
             if (callback != null) {
-                callback.onFailure(null, null);
-                callback.onFinish();
+                MGUIUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFailure(null,new IOException());
+                        callback.onFinish();
+                    }
+                });
             }
             MGToast.showToast("没有网络,请检测网络环境!");
         }
