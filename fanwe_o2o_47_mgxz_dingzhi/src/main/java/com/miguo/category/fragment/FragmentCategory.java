@@ -26,6 +26,10 @@ public abstract class FragmentCategory {
     protected HiBaseFragment fragment;
     protected FragmentListener listener;
     String tag = this.getClass().getSimpleName();
+    /**
+     * 当前请求的uuid
+     */
+    protected String currentHttpUuid;
 
     public FragmentCategory(View view, HiBaseFragment fragment){
         this.view = view;
@@ -191,5 +195,16 @@ public abstract class FragmentCategory {
         return new LinearLayout.LayoutParams(width, height);
     }
 
+    public boolean isCurrentHttp(String uuid){
+        return uuid.equals(currentHttpUuid);
+    }
+
+    public String getCurrentHttpUuid() {
+        return currentHttpUuid;
+    }
+
+    public void setCurrentHttpUuid(String currentHttpUuid) {
+        this.currentHttpUuid = currentHttpUuid;
+    }
 
 }

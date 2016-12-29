@@ -23,7 +23,7 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
     }
 
     @Override
-    public void getSpecialList(String city_id, String cur_geo_x, String cur_geo_y, final String page) {
+    public void getSpecialList(final String httpUuid,String city_id, String cur_geo_x, String cur_geo_y, final String page) {
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SPECIAL_LIST);
@@ -42,18 +42,18 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
                         }
                     }
                     if(page.equals("0") || page.equals("1")){
-                        listener.getSpecialListSuccess(bean.getResult().get(0));
+                        listener.getSpecialListSuccess(httpUuid,bean.getResult().get(0));
                     }else {
-                        listener.getSpecialListLoadmoreSuccess(bean.getResult().get(0));
+                        listener.getSpecialListLoadmoreSuccess(httpUuid, bean.getResult().get(0));
                     }
                 }else {
-                    listener.getSpecialListNoData(bean.getMessage());
+                    listener.getSpecialListNoData(httpUuid, bean.getMessage());
                 }
             }
 
             @Override
             public void onErrorResponseOnMainThread(String message, String errorCode) {
-                getListener().getSpecialListError(message);
+                getListener().getSpecialListError(httpUuid, message);
             }
 
         });

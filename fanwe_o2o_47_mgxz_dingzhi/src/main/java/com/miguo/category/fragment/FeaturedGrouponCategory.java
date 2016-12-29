@@ -82,7 +82,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     public void onRefresh() {
         setPageNum(PageSize.BASE_NUMBER_ONE);
         setNodata(false);
-        featuredGrouponDao.getFeaturedGroupBuy(
+        featuredGrouponDao.getFeaturedGroupBuy(getCategory().getCurrentHttpUuid(),
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
                 String.valueOf(PageSize.BASE_PAGE_SIZE),
@@ -109,7 +109,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             getCategory().loadCompleteWithNoData();
             return;
         }
-        featuredGrouponDao.getFeaturedGroupBuy(
+        featuredGrouponDao.getFeaturedGroupBuy(getCategory().currentHttpUuid,
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
                 String.valueOf(PageSize.BASE_PAGE_SIZE),
@@ -119,50 +119,65 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
     }
 
     @Override
-    public void getFeaturedGrouponSuccess(final List<ModelFeaturedGroupBuy> list) {
-        if (list != null && list.size() != 0) {
-            setPageNum(getPageNum() + 1);
-        }
+    public void getFeaturedGrouponSuccess(final String httpUuid,final List<ModelFeaturedGroupBuy> list) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
-                recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
-                adapter.notifyDataSetChanged(list);
-                getCategory().loadCompleteWithLoadmore();
-            }
-        });
-    }
-
-    @Override
-    public void getFeaturedGrouponLoadmoreSuccess(final List<ModelFeaturedGroupBuy> list) {
-        if (list != null && list.size() != 0) {
-            setPageNum(getPageNum() + 1);
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                featuredTitleLayout.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.VISIBLE);
-                if (SDCollectionUtil.isEmpty(list)) {
-                    getCategory().loadCompleteWithNoData();
-                    setNodata(true);
-                } else {
-                    adapter.notifyDataSetChangedLoadmore(list);
+                if(getCategory().isCurrentHttp(httpUuid)){
+                    if (list != null && list.size() != 0) {
+                        setPageNum(getPageNum() + 1);
+                    }
+                    featuredTitleLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+                    recyclerView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
+                    adapter.notifyDataSetChanged(list);
                     getCategory().loadCompleteWithLoadmore();
+                    return;
                 }
+                getCategory().loadComplete();
             }
+
         });
     }
 
     @Override
-    public void getFeaturedGrouponError(String message) {
+    public void getFeaturedGrouponLoadmoreSuccess(final String httpUuid, final List<ModelFeaturedGroupBuy> list) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                featuredTitleLayout.setVisibility(View.GONE);
-                clearPage();
-                getCategory().loadCompleteWithError();
+                if(getCategory().isCurrentHttp(httpUuid)){
+                    if (list != null && list.size() != 0) {
+                        setPageNum(getPageNum() + 1);
+                    }
+                    featuredTitleLayout.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    if (SDCollectionUtil.isEmpty(list)) {
+                        getCategory().loadCompleteWithNoData();
+                        setNodata(true);
+                    } else {
+                        adapter.notifyDataSetChangedLoadmore(list);
+                        getCategory().loadCompleteWithLoadmore();
+                    }
+                    return;
+                }
+                getCategory().loadComplete();
+
+            }
+        });
+
+    }
+
+    @Override
+    public void getFeaturedGrouponError(final String httpUuid, String message) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(getCategory().isCurrentHttp(httpUuid)){
+                    featuredTitleLayout.setVisibility(View.GONE);
+                    clearPage();
+                    getCategory().loadCompleteWithError();
+                    return;
+                }
+                getCategory().loadComplete();
             }
         });
     }

@@ -5,7 +5,7 @@ package com.miguo.view;
  */
 public interface HomeGreetingView extends BaseView{
 
-    void getHomeGreetingSuccess(String greeting);
-    void getHomeGreetingError();
+    void getHomeGreetingSuccess(String httpUuid,String greeting);
+    void getHomeGreetingError(String httpUuid);
 
 }

@@ -70,6 +70,7 @@ import com.miguo.view.HomeGreetingView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -285,7 +286,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
         onRefreshMenus();
-        startTabShowAnimation();
+//        startTabShowAnimation();
     }
 
     public void clickRefresh(){
@@ -294,6 +295,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
 
     public void onRefresh() {
+        setCurrentHttpUuid(UUID.randomUUID().toString());
         checkCitySign();
     }
 
@@ -375,13 +377,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     public void onRefreshTimeLimit() {
         try {
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList(getCurrentHttpUuid(),
                     AppRuntimeWorker.getCity_id(),
                     BaiduMapManager.getInstance().getLongitude() + "",
                     BaiduMapManager.getInstance().getLatitude() + "",
                     "0");
         } catch (Exception e) {
-            getSpecialListDao.getSpecialList(
+            getSpecialListDao.getSpecialList(getCurrentHttpUuid(),
                     "fc9ebab9-7aa1-49d5-8c56-2bddc7d92ded",
                     "",
                     "",
@@ -397,15 +399,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void onRefreshMenus() {
-        getMenuListDao.getMenuList(MenuParams.TERMINAL_TYPE, MenuParams.MENU_TYPE_INDEX);
+        getMenuListDao.getMenuList(getCurrentHttpUuid(),MenuParams.TERMINAL_TYPE, MenuParams.MENU_TYPE_INDEX);
     }
 
     /**
      * 刷新广告
      * banners + topics
      */
-    public void onRefreshAdspaceList() {
-        getAdspaceListDao.getAdspaceList(AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_INDEX, AdspaceParams.TERMINAL_TYPE);
+    public void onRefreshAdspaceList(){
+        getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_INDEX, AdspaceParams.TERMINAL_TYPE);
     }
 
     /**
@@ -415,14 +417,16 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         if (!isHasSeeler()) {
             return;
         }
-        homeGreetingDao.getTodayGreeting(App.getApplication().getToken());
+        homeGreetingDao.getTodayGreeting(getCurrentHttpUuid(), App.getApplication().getToken());
     }
 
     /**
      * 城市已开通，并且请求成功
      */
     public void showLoadingSuccessWithCity(){
-        showTitleAndTab();
+        if(!isHasTop()){
+            showTitleAndTab();
+        }
         loadingFail.setVisibility(View.GONE);
         nodata.setVisibility(View.GONE);
     }
@@ -628,6 +632,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void startTitleShowAnimation() {
         if (titleLayout.getAlpha() > 0) {
+            setTitleAlpha(titleLayout, 1);
+            setTitleVisibility(View.VISIBLE);
             return;
         }
         setTitleAlpha(titleLayout, 1);
@@ -864,7 +870,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 获取限时特惠数据回调
      */
     @Override
-    public void getSpecialListSuccess(final SpecialListModel.Result result) {
+    public void getSpecialListSuccess(String httpUuid,final SpecialListModel.Result result) {
+        if(!isCurrentHttp(httpUuid)){
+            loadComplete();
+            return;
+        }
         if (getActivity() == null) {
             return;
         }
@@ -884,16 +894,18 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     @Override
-    public void getSpecialListLoadmoreSuccess(SpecialListModel.Result result) {
+    public void getSpecialListLoadmoreSuccess(String httpUuid,SpecialListModel.Result result) {
         loadComplete();
     }
 
     @Override
-    public void getSpecialListError(String msg) {
+    public void getSpecialListError(final String httpUuid,String msg) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                homeTuanLimitBottomLayout.setVisibility(View.GONE);
+                if(isCurrentHttp(httpUuid)){
+                    homeTuanLimitBottomLayout.setVisibility(View.GONE);
+                }
                 loadComplete();
             }
         });
@@ -901,9 +913,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     @Override
-    public void getSpecialListNoData(String msg) {
-        homeTuanLimitBottomLayout.setVisibility(View.GONE);
-        homeTuanTimeLimitView.setVisibility(View.GONE);
+    public void getSpecialListNoData(String httpUuid,String msg) {
+        if(isCurrentHttp(httpUuid)){
+            homeTuanLimitBottomLayout.setVisibility(View.GONE);
+            homeTuanTimeLimitView.setVisibility(View.GONE);
+        }
         loadComplete();
     }
     /** 获取限时特惠数据回调 end*/
@@ -927,8 +941,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @param body
      */
     @Override
-    public void getAdspaceListSuccess(final List<AdspaceListBean.Result.Body> body, final String type) {
-        updateAdspaceViews(body, type);
+    public void getAdspaceListSuccess(String httpUuid,final List<AdspaceListBean.Result.Body> body, final String type) {
+        if(isCurrentHttp(httpUuid)){
+            updateAdspaceViews(body, type);
+        }
         loadComplete();
     }
 
@@ -947,11 +963,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     @Override
-    public void getAdspaceListError() {
+    public void getAdspaceListError(final String httpUuid) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                homeADView2.setVisibility(View.GONE);
+                if(isCurrentHttp(httpUuid)){
+                    homeADView2.setVisibility(View.GONE);
+                }
                 loadComplete();
             }
         });
@@ -964,7 +982,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * @param greeting
      */
     @Override
-    public void getHomeGreetingSuccess(final String greeting) {
+    public void getHomeGreetingSuccess(String httpUuid,final String greeting) {
+        if(!isCurrentHttp(httpUuid)){
+            return;
+        }
         sayHiLayout.setVisibility(View.VISIBLE);
         try {
             sayhi.setText(greeting);
@@ -974,11 +995,14 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     @Override
-    public void getHomeGreetingError() {
+    public void getHomeGreetingError(final String httpUuid) {
+        if(!isCurrentHttp(httpUuid)){
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                getHomeGreetingSuccess("神秘人，你好！");
+                getHomeGreetingSuccess(httpUuid,"神秘人，你好！");
                 loadComplete();
             }
         });
@@ -989,13 +1013,15 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页菜单
      */
     @Override
-    public void getMenuListSuccess(final List<MenuBean.Result.Body> list) {
-        initHomeMenuView(list);
+    public void getMenuListSuccess(final String httpUuid ,List<MenuBean.Result.Body> list) {
+        if(!isCurrentHttp(httpUuid)){
+            initHomeMenuView(list);
+        }
         loadComplete();
     }
 
     @Override
-    public void getMenuListError() {
+    public void getMenuListError(final String httpUuid) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1132,12 +1158,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public CheckCitySignBean.Result.Body getCitySign() {
-
         return citySign;
     }
 
     public void setCitySign(CheckCitySignBean.Result.Body citySign) {
         this.citySign = citySign;
     }
-
 }

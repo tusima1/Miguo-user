@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface GetMenuListView extends BaseView{
 
-    void getMenuListSuccess(List<MenuBean.Result.Body> list);
-    void getMenuListError();
+    void getMenuListSuccess(String httpUuid, List<MenuBean.Result.Body> list);
+    void getMenuListError(String httpUuid);
 
 }

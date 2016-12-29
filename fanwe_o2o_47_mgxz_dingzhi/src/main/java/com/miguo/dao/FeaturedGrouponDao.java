@@ -6,6 +6,6 @@ package com.miguo.dao;
  */
 public interface FeaturedGrouponDao extends BaseDao{
 
-    void getFeaturedGroupBuy(String cityId, String pageNum, String pageSize, String keyword, String m_longitude, String m_latitude);
+    void getFeaturedGroupBuy(String httpUuid, String cityId, String pageNum, String pageSize, String keyword, String m_longitude, String m_latitude);
 
 }
