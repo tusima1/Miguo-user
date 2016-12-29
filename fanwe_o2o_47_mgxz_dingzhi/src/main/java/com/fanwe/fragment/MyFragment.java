@@ -1,6 +1,5 @@
 package com.fanwe.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
-import com.fanwe.mine.views.LotteryActivity;
 import com.fanwe.mine.views.MineTeamActivity;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
@@ -471,11 +469,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onSuccess(String method, List datas) {
-        onFinish(method);
+        mPtrsvAll.onRefreshComplete();
         switch (method) {
             case UserConstants.PERSONALHOME:
                 modelPersonalHome = (ModelPersonalHome) datas.get(0);
-                mPtrsvAll.onRefreshComplete();
                 bindData();
                 break;
         }
@@ -483,10 +480,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onFailue(String responseBody) {
-        onFinish(responseBody);
+        mPtrsvAll.onRefreshComplete();
         switch (responseBody) {
             case UserConstants.PERSONALHOME:
-                mPtrsvAll.onRefreshComplete();
                 break;
         }
     }
@@ -496,7 +492,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mPtrsvAll.onRefreshComplete();
         switch (method) {
             case UserConstants.PERSONALHOME:
-                mPtrsvAll.onRefreshComplete();
                 break;
         }
     }

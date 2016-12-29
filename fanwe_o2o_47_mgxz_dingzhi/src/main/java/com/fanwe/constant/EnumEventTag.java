@@ -164,7 +164,11 @@ public enum EnumEventTag {
     /**
      * 关闭点播
      */
-    CLOSE_PLAY;
+    CLOSE_PLAY,
+    /**
+     * 选择常驻城市
+     */
+    CITY_RESIDENT;
 
     public static EnumEventTag valueOf(int index) {
         if (index >= 0 && index < values().length) {

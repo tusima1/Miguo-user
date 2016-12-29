@@ -64,6 +64,7 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 	private EditText mEt;
 	private View mRootView;
 	private OrderHttpHelper httpHelper;
+	private String mHasPay;
 
 	private String mOrder_id;
 	private String mTuan_id;
@@ -166,9 +167,10 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		mRefunding = MGStringFormatter.getInt(refunding);
 		mTv_refunding.setText(refunding);
 		mTv_payed.setText("  ,  已支付:"+info.getPay_amount());
-		
+		mHasPay=info.getPay_amount();
+
 		mUnitPrice=info.getRefund_unit_price();
-		float refundMoney = getCalculateRefundMoney(mUnitPrice, 1);
+		float refundMoney = getCalculateRefundMoney(mUnitPrice, mNum);
 		mTv_refund_money.setText(""+refundMoney);
 
 		//可退款商品总数 商品数量- 已使用 - 已退款 - 退款中;
@@ -231,7 +233,11 @@ public class RefundApplicationActivity extends BaseActivity implements CallbackV
 		}
 		mNum++;
 		mTv_refund_num.setText(""+mNum);
-		mTv_refund_money.setText(""+getCalculateRefundMoney(mUnitPrice, mNum));
+		if (mNum == mGoodsTotalNum){
+			mTv_refund_money.setText(mHasPay);
+		}else {
+			mTv_refund_money.setText(""+getCalculateRefundMoney(mUnitPrice, mNum));
+		}
 	}
 
 	

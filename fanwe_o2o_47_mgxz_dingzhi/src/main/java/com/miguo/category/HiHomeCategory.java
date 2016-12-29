@@ -23,6 +23,7 @@ import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.views.SellerFragment;
+import com.fanwe.service.update.AppUpgradeService;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
@@ -243,7 +244,7 @@ public class HiHomeCategory extends Category implements
      * 检查app版本
      */
     private void checkAppVersion() {
-        getActivity().startService(new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.APP_UPGRADE_SERVICE)));
+        getActivity().startService(new Intent(getActivity(), AppUpgradeService.class));
     }
 
     public void onRefreshGreeting() {

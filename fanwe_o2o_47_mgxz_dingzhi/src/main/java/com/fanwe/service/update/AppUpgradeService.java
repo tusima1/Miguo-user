@@ -13,13 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.HttpManagerX;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.getUpgradeVersion.ModelVersion;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.common.update.NoHttpRedirectHandler;
-import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
 import com.fanwe.library.dialog.SDDialogCustom.SDDialogCustomListener;
@@ -107,12 +107,12 @@ public class AppUpgradeService extends Service implements CallbackView {
         if (dialog != null && dialog.isShowing()) {
             return;
         }
-        Activity lastActivity = SDActivityManager.getInstance().getLastActivity();
+        Activity lastActivity = ActivityLifeManager.getInstance().getLastActivity();
         if (lastActivity==null){
             stopSelf();
             return;
         }
-        dialog = new SDDialogConfirm();
+        dialog = new SDDialogConfirm(lastActivity);
         if ("1".equals(modelVersion.getForced_upgrade())) {
             dialog.setTextCancel(null).setCancelable(false);
         }
@@ -211,6 +211,8 @@ public class AppUpgradeService extends Service implements CallbackView {
                             }
                         }
                         MGToast.showToast("下载失败");
+                        mNotificationManager.cancel(mNotificationId);
+                        stopSelf();
                     }
 
                 });

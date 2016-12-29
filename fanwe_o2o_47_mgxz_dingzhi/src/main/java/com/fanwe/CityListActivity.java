@@ -18,9 +18,9 @@ import com.baidu.location.BDLocationListener;
 import com.fanwe.adapter.CityListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.customview.SideBar;
 import com.fanwe.customview.SideBar.OnTouchingLetterChangedListener;
-import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -38,6 +38,7 @@ import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
 import com.sunday.eventbus.SDBaseEvent;
+import com.sunday.eventbus.SDEventManager;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -83,7 +84,7 @@ public class CityListActivity extends BaseActivity {
     private List<ModelCityList> mListFilterModel = new ArrayList<ModelCityList>();
 
     private CityListAdapter mAdapter;
-
+    private boolean fromAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,16 @@ public class CityListActivity extends BaseActivity {
         initCurrentLocation();
         registeEtSearchListener();
         registeClick();
+        preData();
+    }
+
+    private void preData() {
+        if (getIntent() != null) {
+            fromAuth = getIntent().getBooleanExtra("fromAuth", false);
+        }
+        if (mAdapter != null) {
+            mAdapter.setFromAuth(fromAuth);
+        }
     }
 
     /**
@@ -141,8 +152,13 @@ public class CityListActivity extends BaseActivity {
             btn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppRuntimeWorker.setCityNameByModel(model);
-                    setActivityResult(model);
+                    if (!fromAuth) {
+                        AppRuntimeWorker.setCityNameByModel(model);
+                        setActivityResult(model);
+                    } else {
+                        SDEventManager.post(model, EnumEventTag.CITY_RESIDENT.ordinal());
+                        finish();
+                    }
                 }
             });
         }
@@ -291,7 +307,12 @@ public class CityListActivity extends BaseActivity {
                             }
                         });
                         //缓存数据
-                        setActivityResult(bean);
+                        if (!fromAuth) {
+                            setActivityResult(bean);
+                        } else {
+                            SDEventManager.post(bean, EnumEventTag.CITY_RESIDENT.ordinal());
+                            finish();
+                        }
                     }
                 } else {
                     locationCity();
