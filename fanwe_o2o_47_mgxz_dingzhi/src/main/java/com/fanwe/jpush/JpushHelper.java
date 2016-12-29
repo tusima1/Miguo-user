@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.base.CommonHelper;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
 import com.fanwe.network.MgCallback;
 import com.fanwe.work.AppRuntimeWorker;
@@ -75,8 +76,20 @@ public class JpushHelper {
 		return true;
 	}
 
+	/**
+	 * 正式环境 "city_" + MD5("product" + 城市id)
+	 * 测试环境 "city_" + MD5("test" + 城市id)
+	 * 其他环境 "city_" + MD5("dev" + 城市id)
+	 * @return String
+	 */
 	private static String doCityId(String originalCity){
-		return "city_"+MD5Util.MD5(originalCity);
+		String platform;
+		if (ServerUrl.DEBUG){
+			platform = ServerUrl.TEST ? "test" : "dev";
+		}else {
+			platform="product";
+		}
+		return "city_"+MD5Util.MD5(platform + originalCity);
 	}
 	/**
 	 * 往服务器注册
@@ -119,6 +132,7 @@ public class JpushHelper {
 	}
 
 	private static Set<String> getTag() {
+
 		Set<String> tagSet = new LinkedHashSet<String>();
 		String city_id = AppRuntimeWorker.getCity_id();
 		tagSet.add(doCityId(city_id));

@@ -646,7 +646,8 @@
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity
             android:name="com.fanwe.mine.views.LotteryActivity"
             android:screenOrientation="portrait" />
