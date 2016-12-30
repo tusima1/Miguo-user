@@ -50,6 +50,7 @@ import com.miguo.utils.SharedPreferencesUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.util.List;
@@ -449,7 +450,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     }
 
     private void clickLogout(View v) {
-//        JpushHelper.unRegisterJpush();
+        MobclickAgent.onEvent(MyAccountActivity.this, "logout");
         mLoginHelper.imLogout();
         App.getInstance().setImLoginSuccess(false);
         LocalUserModel userModel = new LocalUserModel();
@@ -477,6 +478,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
             }
         }).start();
     }
+
     /**
      * 修改密码
      *

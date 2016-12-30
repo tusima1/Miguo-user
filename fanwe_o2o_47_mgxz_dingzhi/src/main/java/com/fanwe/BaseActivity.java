@@ -30,6 +30,7 @@ import com.fanwe.work.SystemBarTintManager;
 import com.lidroid.xutils.ViewUtils;
 import com.miguo.app.HiHomeActivity;
 import com.sunday.eventbus.SDBaseEvent;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 
 public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListener {
@@ -131,7 +132,7 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
 //        if (!TextUtils.isEmpty(umengTag)) {
 //            MobclickAgent.onPageEnd(umengTag);
 //        }
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -140,7 +141,7 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
 //        if (!TextUtils.isEmpty(umengTag)) {
 //            MobclickAgent.onPageStart(umengTag);
 //        }
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     @Override

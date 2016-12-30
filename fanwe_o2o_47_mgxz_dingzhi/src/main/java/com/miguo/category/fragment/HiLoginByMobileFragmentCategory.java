@@ -19,6 +19,7 @@ import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.HiLoginByMobileFragmentListener;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.view.LoginByMobileView;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by zlh on 2016/12/1.
@@ -91,6 +92,7 @@ public class HiLoginByMobileFragmentCategory extends FragmentCategory implements
              */
             loginByMobileDao.loginByMobile(mStrUserName, MD5Util.MD5(mStrPassword));
             SDDialogManager.showProgressDialog("请稍候...");
+            MobclickAgent.onEvent(getActivity(), "login");
         }
     }
 

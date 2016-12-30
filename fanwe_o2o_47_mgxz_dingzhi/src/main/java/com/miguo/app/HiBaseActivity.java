@@ -15,6 +15,7 @@ import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.utils.ToasUtil;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
@@ -39,7 +40,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     protected long mExitTime;
 
     /**
-     *  全局Application
+     * 全局Application
      */
     protected App app;
 
@@ -53,17 +54,17 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         init(savedInstanceState);
     }
 
-    protected void init(Bundle savedInstanceState){
+    protected void init(Bundle savedInstanceState) {
         setContentView(savedInstanceState);
     }
 
-    protected void setContentView(Bundle savedInstanceState){
+    protected void setContentView(Bundle savedInstanceState) {
     }
 
     /**
      * Activity初始化操作
      */
-    protected void init(){
+    protected void init() {
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 //            this.requestWindowFeature(Window.N);
@@ -80,11 +81,11 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         category = initCategory();
     }
 
-    private void initEventbus(){
+    private void initEventbus() {
         SDEventManager.register(this);
     }
 
-    private void setBar(int resColor){
+    private void setBar(int resColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
         }
@@ -119,7 +120,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     /**
      * Activity初始化前的一些基础参数
      */
-    protected void setActivityParams(){
+    protected void setActivityParams() {
         BaseUtils.setScreenPortrait(this);
     }
 
@@ -127,10 +128,9 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     /**
      * 引用Application对象
      */
-    private void initApp(){
+    private void initApp() {
         this.app = (App) getApplicationContext();
     }
-
 
 
     @Override
@@ -138,6 +138,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         super.onResume();
 //        UmengUtils.onResume(this);
         doOnResume();
+        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -145,8 +146,8 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         super.onPause();
 //        UmengUtils.onPause(this);
         doOnPause();
+        MobclickAgent.onPause(this);
     }
-
 
 
     @Override
@@ -159,7 +160,7 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         System.gc();
-        if(getCategory() != null){
+        if (getCategory() != null) {
             getCategory().destory();
         }
         SDEventManager.unregister(this);
@@ -170,37 +171,39 @@ public abstract class HiBaseActivity extends AppCompatActivity {
 
     }
 
-    protected void doOnResume(){
-
-    }
-    protected void doOnPause(){
+    protected void doOnResume() {
 
     }
 
-    protected void doOnStop(){
+    protected void doOnPause() {
 
     }
 
-    protected void doOnDestory(){
+    protected void doOnStop() {
+
+    }
+
+    protected void doOnDestory() {
 
     }
 
     /**
      * 监听设备返回键,按两次后退出程序
+     *
      * @param keyCode
      * @param event
      * @return
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             /**按两次后退出程序*/
-            if(keyDownToCloseActivity){
+            if (keyDownToCloseActivity) {
                 keyDown2CloseApplication();
                 return true;
             }
             /**按一次后退出Activity*/
-            if(!keyDownToCloseActivity){
+            if (!keyDownToCloseActivity) {
                 finishActivity();
             }
         }
@@ -211,12 +214,12 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     /**
      * 判断点击两次退出Activity
      */
-    private void keyDown2CloseApplication(){
+    private void keyDown2CloseApplication() {
         /**第一次点击返回||两次间隔时间 > DOUBLE_TIME*/
-        if(System.currentTimeMillis() - mExitTime > DOUBLE_TIME){
+        if (System.currentTimeMillis() - mExitTime > DOUBLE_TIME) {
             mExitTime = System.currentTimeMillis();
             showToastWithShortTime("再按一次退出程序!");
-        }else{
+        } else {
 //            finishActivity();
             System.exit(0);
         }
@@ -226,38 +229,41 @@ public abstract class HiBaseActivity extends AppCompatActivity {
     /**
      * 退出Activity
      */
-    protected void finishActivity(){
+    protected void finishActivity() {
         BaseUtils.finishActivity(this);
     }
 
     /**
      * 获取BaseApplication对象
+     *
      * @return
      */
-    public App getApp(){
+    public App getApp() {
         return app;
     }
 
     /**
      * 获取Category
      */
-    public Category getCategory(){
+    public Category getCategory() {
         return category;
     }
 
     /**
      * 通过设置这个参数来调控是否点击返回键两次后退出Activity
+     *
      * @param onKeyDownToCloseActivity
      */
-    protected void setTwiceKeyDownToCloseActivity(boolean onKeyDownToCloseActivity){
+    protected void setTwiceKeyDownToCloseActivity(boolean onKeyDownToCloseActivity) {
         this.keyDownToCloseActivity = onKeyDownToCloseActivity;
     }
 
     /**
      * show toast 时间为short
+     *
      * @param msg
      */
-    public void showToastWithShortTime(String msg){
+    public void showToastWithShortTime(String msg) {
         ToasUtil.showToastWithShortTime(this, msg);
     }
 
