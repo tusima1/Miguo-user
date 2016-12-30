@@ -130,6 +130,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
     @Override
     public void onResume() {
         super.onResume();
+        setInterestingStr("");
     }
 
     /**
@@ -246,6 +247,7 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      * @param interestingStr
      */
     public void setInterestingStr(String interestingStr) {
+        interestingStr ="琴声何在，生死难猜，用一声去等待";
         if (interestingStr == null || interestingStr.length() < 1) {
             return;
         } else {
@@ -262,9 +264,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
                 } else {
                     titleStr = interestingStr.substring(0, 6);
                     summaryStr = interestingStr.substring(6, interestingStr.length());
-                }
-                if (summaryStr.endsWith(",") ||  ChineseCharClassifier.isChinesePunctuation(chars[summaryStr.length()-1])) {
-                    summaryStr = summaryStr.substring(0, summaryStr.length() - 1);
                 }
             }
             titleText.setText(titleStr);
