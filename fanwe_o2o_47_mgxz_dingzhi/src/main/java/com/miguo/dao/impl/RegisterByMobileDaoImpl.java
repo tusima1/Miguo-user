@@ -134,7 +134,7 @@ public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMo
      * 推送
      */
     private void initJpush() {
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
     }
 
 

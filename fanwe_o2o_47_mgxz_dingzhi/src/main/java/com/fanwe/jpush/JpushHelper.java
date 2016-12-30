@@ -20,10 +20,10 @@ public class JpushHelper {
 
 	public static void registerAll() {
 		initJPushConfig();
-		initJpushRegister();
+		initJPushJavaRegister();
 	}
 
-	public static void initJPushConfig() {
+	private static void initJPushConfig() {
 		Set<String> tagSet = getTag();
 		String alias =getAlias();
 		if (TextUtils.isEmpty(alias)|| tagSet == null) {
@@ -94,7 +94,7 @@ public class JpushHelper {
 	/**
 	 * 往服务器注册
 	 */
-	public static void initJpushRegister() {
+	private static void initJPushJavaRegister() {
 		String user_id =getAlias();
 		if (TextUtils.isEmpty(user_id)) {
 			return;
@@ -104,7 +104,7 @@ public class JpushHelper {
 
 			@Override
 			public void onSuccessResponse(String responseBody) {
-
+				Log.e("Jpush", "JpushMG "+responseBody);
 			}
 
 			@Override
@@ -115,7 +115,17 @@ public class JpushHelper {
 
 	}
 
-	public static void unRegisterJpush(){
+	public static void unRegisterAll(){
+		JPushInterface.setAlias(App.getApplication(), "", new TagAliasCallback() {
+			@Override
+			public void gotResult(int i, String s, Set<String> set) {
+				if (i==0){
+					Log.e("JPush","极光用户退出成功!");
+				}else {
+					Log.e("JPush","极光用户退出失败!");
+				}
+			}
+		});
 		CommonHelper commonHelper = new CommonHelper(null,null);
 		commonHelper.doRegisterJPushAlias("", new MgCallback(){
 

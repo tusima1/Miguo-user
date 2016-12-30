@@ -1,7 +1,6 @@
 package com.fanwe;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -29,6 +27,7 @@ import com.fanwe.constant.Constant.LoadImageType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.EnumEventTag;
 import com.fanwe.dao.SettingModelDao;
+import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.utils.SDActivityUtil;
 import com.fanwe.library.utils.SDFileUtil;
 import com.fanwe.library.utils.SDHandlerUtil;
@@ -453,7 +452,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     }
 
     private void clickLogout(View v) {
-//        JpushHelper.unRegisterJpush();
+        JpushHelper.unRegisterAll();
         mLoginHelper.imLogout();
         App.getInstance().setImLoginSuccess(false);
         removeCookie();

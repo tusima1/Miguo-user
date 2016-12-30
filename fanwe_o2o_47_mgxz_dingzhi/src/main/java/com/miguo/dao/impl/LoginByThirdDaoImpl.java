@@ -151,7 +151,7 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
      * 推送
      */
     private void initJpush() {
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
     }
 
     @Override

@@ -134,7 +134,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
      * 推送
      */
     private void initJpush() {
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
     }
 
 }
