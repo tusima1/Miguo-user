@@ -109,7 +109,7 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             getCategory().loadCompleteWithNoData();
             return;
         }
-        featuredGrouponDao.getFeaturedGroupBuy(getCategory().currentHttpUuid,
+        featuredGrouponDao.getFeaturedGroupBuy(getCategory().getCurrentHttpUuid(),
                 AppRuntimeWorker.getCity_id(),
                 String.valueOf(getPageNum()),
                 String.valueOf(PageSize.BASE_PAGE_SIZE),
@@ -172,8 +172,8 @@ public class FeaturedGrouponCategory extends FragmentCategory implements Feature
             @Override
             public void run() {
                 if(getCategory().isCurrentHttp(httpUuid)){
-                    featuredTitleLayout.setVisibility(View.GONE);
-                    clearPage();
+//                    featuredTitleLayout.setVisibility(View.GONE);
+//                    clearPage();
                     getCategory().loadCompleteWithError();
                     return;
                 }

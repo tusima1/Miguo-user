@@ -1014,7 +1014,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void getMenuListSuccess(final String httpUuid ,List<MenuBean.Result.Body> list) {
-        if(!isCurrentHttp(httpUuid)){
+        if(isCurrentHttp(httpUuid)){
             initHomeMenuView(list);
         }
         loadComplete();

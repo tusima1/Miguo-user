@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,8 +64,8 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
     public RecyclerBounceNestedScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-//        this.halfScreenHeight = BaseUtils.getHeight(getContext()) / 2;
-        this.halfScreenHeight = 0;
+        this.halfScreenHeight = BaseUtils.getHeight(getContext()) / 4;
+//        this.halfScreenHeight = 0;
         this.screenHeight = BaseUtils.getHeight(getContext());
         setVerticalScrollBarEnabled(false);
     }
@@ -298,7 +299,8 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
             /**
              * 判断滑动距离是否需要加载更多
              */
-            if((t + 0 + getMeasuredHeight()) > getChildAt(0).getMeasuredHeight()){
+            Log.d(tag, "t: " + t + " ,get messure height: " + getMeasuredHeight() + " child 0 messure height: " + getChildAt(0).getMeasuredHeight());
+            if((t + 0 + getMeasuredHeight()) +  endLayout.getMeasuredHeight() > getChildAt(0).getMeasuredHeight()){
                 onScrollToEnd();
             }
         }
