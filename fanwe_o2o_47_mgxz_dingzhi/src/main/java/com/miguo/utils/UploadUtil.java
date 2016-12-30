@@ -11,7 +11,6 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
