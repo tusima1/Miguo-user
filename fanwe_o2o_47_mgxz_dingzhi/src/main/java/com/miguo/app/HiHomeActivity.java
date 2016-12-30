@@ -62,7 +62,7 @@ public class HiHomeActivity extends HiBaseActivity {
     protected Category initCategory() {
 
         setCurrentCityId(AppRuntimeWorker.getCity_id());
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
         setTwiceKeyDownToCloseActivity(true);
         if (ServerUrl.DEBUG) {
             devUtil = new DevUtil(this);

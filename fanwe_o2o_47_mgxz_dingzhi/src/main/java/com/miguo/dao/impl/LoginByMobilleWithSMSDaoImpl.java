@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.jpush.JpushHelper;
-import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
@@ -136,7 +135,7 @@ public class LoginByMobilleWithSMSDaoImpl extends BaseDaoImpl implements LoginBy
      * 推送
      */
     private void initJpush() {
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
     }
 
     @Override

@@ -147,7 +147,7 @@ public class RegisterByThirdDaoImpl extends BaseDaoImpl implements RegisterByThi
      * 推送
      */
     private void initJpush() {
-        JpushHelper.initJPushConfig();
+        JpushHelper.registerAll();
     }
 
 
