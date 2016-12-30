@@ -178,6 +178,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
                 // 手指松开
                 if (isNeedAnimation()) {
                     animation();
+                    onScrollToEnd();
                     isCount = false;
                 }
                 break;
@@ -210,12 +211,6 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
                     // 移动布局
                     child.layout(child.getLeft(), child.getTop() - deltaY / 2,
                             child.getRight(), child.getBottom() - deltaY / 2);
-
-//                    LogUtil.d(tag, "distance: " + distance);
-
-                    if(Math.abs(distance) > dip2px(30) && (getCurrentTop() + 0 + getMeasuredHeight()) > getChildAt(0).getMeasuredHeight()){
-                        onScrollToEnd();
-                    }
                 }
                 isCount = true;
                 break;
