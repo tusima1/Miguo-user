@@ -32,6 +32,7 @@ import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomeBannerAdapter;
+import com.miguo.adapter.HomeBannerAdapter2;
 import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
@@ -338,7 +339,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
             fragmet.setArguments(bundle);
             fragmets.add(fragmet);
         }
+
         homeBannerAdapter = new HomeBannerAdapter(fragment.getChildFragmentManager(), fragmets);
+//        homeBannerAdapter = new HomeBannerAdapter2(fragment.getChildFragmentManager(), bodys);
         homeViewPager.setAdapter(homeBannerAdapter);
     }
 
