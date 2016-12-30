@@ -3,7 +3,6 @@ package com.miguo.category.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.LoopViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -31,9 +30,9 @@ import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.adapter.HomeBannerAdapter;
-import com.miguo.adapter.HomeBannerAdapter2;
 import com.miguo.adapter.HomePagerAdapter;
+import com.miguo.adapter.HomebannerPagerAdapter;
+import com.miguo.definition.IntentKey;
 import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
@@ -44,26 +43,22 @@ import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetMenuListDaoImpl;
 import com.miguo.dao.impl.HomeGreetingDaoImpl;
 import com.miguo.definition.AdspaceParams;
-import com.miguo.definition.IntentKey;
 import com.miguo.definition.MenuParams;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.CheckCitySignBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.fragment.HiBaseFragment;
-import com.miguo.fragment.HomeBannerFragmet;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.AutoBanner;
 import com.miguo.ui.view.AutofitTextView;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeADView2;
-import com.miguo.ui.view.HomeBannerViewPager;
 import com.miguo.ui.view.HomeLooperViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
-import com.miguo.ui.view.RecyclerBounceScrollView;
 import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
@@ -145,7 +140,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.banner_layout)
     RelativeLayout bannerLayout;
 
-    HomeBannerAdapter homeBannerAdapter;
+//    HomeBannerAdapter homeBannerAdapter;
+    HomebannerPagerAdapter homeBannerAdapter;
 
     /**
      * 网络请求失败的显示界面
@@ -326,22 +322,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     private void initBanner(List<AdspaceListBean.Result.Body> bodys) {
         bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
         RelativeLayout.LayoutParams bannerParams = getRelativeLayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(200));
+                RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(210));
         homeViewPager.setLayoutParams(bannerParams);
-
         bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
-
-        ArrayList<Fragment> fragmets = new ArrayList<>();
-        for (int i = 0; i < bodys.size(); i++) {
-            HomeBannerFragmet fragmet = new HomeBannerFragmet();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(IntentKey.HOME_BANNER_IMAGE, bodys.get(i));
-            fragmet.setArguments(bundle);
-            fragmets.add(fragmet);
-        }
-
-        homeBannerAdapter = new HomeBannerAdapter(fragment.getChildFragmentManager(), fragmets);
-//        homeBannerAdapter = new HomeBannerAdapter2(fragment.getChildFragmentManager(), bodys);
+        homeBannerAdapter = new HomebannerPagerAdapter(this, bodys);
         homeViewPager.setAdapter(homeBannerAdapter);
     }
 
