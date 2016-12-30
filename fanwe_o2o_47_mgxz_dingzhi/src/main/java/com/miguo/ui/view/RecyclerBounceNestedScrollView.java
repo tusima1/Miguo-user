@@ -56,6 +56,10 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
     int halfScreenHeight = 0;
     int screenHeight = 0;
     String tag = this.getClass().getSimpleName();
+    /**
+     * 记录按下的时间（防止到底部判断是否要移动的时候按下就移动了）
+     */
+    long downTime;
 
     public RecyclerBounceNestedScrollView(Context context) {
         super(context);
@@ -173,12 +177,12 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
         int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                this.downTime = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_UP:
                 // 手指松开
                 if (isNeedAnimation()) {
                     animation();
-                    onScrollToEnd();
                     isCount = false;
                 }
                 break;
@@ -257,6 +261,22 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
         child.layout(normal.left, normal.top, normal.right, normal.bottom);
 
         normal.setEmpty();
+        ta.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                onScrollToEnd();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
     }
 
