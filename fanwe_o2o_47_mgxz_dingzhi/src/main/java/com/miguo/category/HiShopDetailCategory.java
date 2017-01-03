@@ -577,7 +577,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         }
         //layoutBottom
         if (SDCollectionUtil.isEmpty(result.getTuan_list()) && SDCollectionUtil.isEmpty(result.getLive_list()) && TextUtils.isEmpty(tagPeople)) {
-            layoutBottom.post(new Runnable() {
+            scrollView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     int hTotal = BaseUtils.getHeight(getActivity());
@@ -589,7 +589,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
                         layoutBottom.setLayoutParams(lp);
                     }
                 }
-            });
+            }, 1000);
         }
         /**
          * 是否已代言

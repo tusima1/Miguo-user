@@ -3,6 +3,7 @@ package com.fanwe.dao.barry.impl;
 import com.fanwe.app.App;
 import com.fanwe.dao.barry.GetSpecialListDao;
 import com.fanwe.dao.barry.view.GetSpecialListView;
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtils;
@@ -43,9 +44,13 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
                     }
                     if(page.equals("0") || page.equals("1")){
                         listener.getSpecialListSuccess(httpUuid,bean.getResult().get(0));
-                    }else {
-                        listener.getSpecialListLoadmoreSuccess(httpUuid, bean.getResult().get(0));
+                        return;
                     }
+                    if(SDCollectionUtil.isEmpty(bean.getResult().get(0).getBody())){
+                        listener.getSpecialListNoData(httpUuid, bean.getMessage());
+                        return;
+                    }
+                    listener.getSpecialListLoadmoreSuccess(httpUuid, bean.getResult().get(0));
                 }else {
                     listener.getSpecialListNoData(httpUuid, bean.getMessage());
                 }

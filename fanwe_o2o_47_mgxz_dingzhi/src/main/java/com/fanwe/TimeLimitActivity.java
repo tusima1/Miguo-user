@@ -67,8 +67,6 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     CountDown timer;
 
-    boolean canRefresh = true;
-    boolean needLoadmore = false;
     MGProgressDialog dialog;
 
     @Override
@@ -104,19 +102,6 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
          */
         ptrFrameLayout.setPtrHandler(this);
         recyclerView.setOnRefreshEndListener(this);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                setCanRefresh(newState == 0);
-                Log.d(tag, "new state: " + newState);
-                if(newState == 0){
-                    if(isNeedLoadmore()){
-                        setNeedLoadmore(false);
-                        onLoadmore();
-                    }
-                }
-            }
-        });
     }
 
 
@@ -232,7 +217,10 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
                     loadComplete();
                 }
             });
+            return;
         }
+        getSpecialListError(httpUuid, "没有更多数据！");
+
     }
 
     @Override
@@ -247,7 +235,9 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
                     loadComplete();
                 }
             });
+            return;
         }
+        getSpecialListError(httpUuid, "没有更多数据！");
     }
 
     @Override
@@ -312,16 +302,11 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     @Override
     public void onLoadmore() {
-        if(isCanRefresh()){
-            setNeedLoadmore(false);
-            getSpecialListDao.getSpecialList("",
-                    AppRuntimeWorker.getCity_id(),
-                    BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
-                    BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
-                    Integer.parseInt(getPage()) + 1 + "");
-        }else {
-            setNeedLoadmore(true);
-        }
+        getSpecialListDao.getSpecialList("",
+                AppRuntimeWorker.getCity_id(),
+                BaiduMapManager.getInstance().getBDLocation().getLongitude() + "",
+                BaiduMapManager.getInstance().getBDLocation().getLatitude() + "",
+                Integer.parseInt(getPage()) + 1 + "");
 
     }
 
@@ -332,7 +317,7 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return recyclerView.isRefreshAble() && isCanRefresh();
+        return recyclerView.isRefreshAble();
     }
 
     @Override
@@ -346,22 +331,6 @@ public class TimeLimitActivity extends BaseActivity implements GetSpecialListVie
 
     public void setPage(String page) {
         this.page = page;
-    }
-
-    public boolean isCanRefresh() {
-        return canRefresh;
-    }
-
-    public void setCanRefresh(boolean canRefresh) {
-        this.canRefresh = canRefresh;
-    }
-
-    public boolean isNeedLoadmore() {
-        return needLoadmore;
-    }
-
-    public void setNeedLoadmore(boolean needLoadmore) {
-        this.needLoadmore = needLoadmore;
     }
 
     /**
