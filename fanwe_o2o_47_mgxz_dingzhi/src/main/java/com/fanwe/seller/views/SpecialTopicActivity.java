@@ -216,7 +216,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
     private void showShareTipPop(){
         popTipShare = new PopTipShare(this,mIv_share);
         if (TipPopCode.checkDate(SpecialTopicActivity.this,TipPopCode.Topic)){
-            MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+            mPscrollView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     popTipShare.show();
