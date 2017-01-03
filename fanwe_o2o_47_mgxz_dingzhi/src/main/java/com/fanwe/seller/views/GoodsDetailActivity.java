@@ -201,7 +201,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         }
     }
     private void dismissShareTipPop(){
-        if (popTipShare!=null && popTipShare.isShowing()){
+        if (popTipShare!=null && popTipShare.isShowing() && !GoodsDetailActivity.this.isFinishing()){
             popTipShare.dismiss();
         }
     }
