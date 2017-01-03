@@ -209,14 +209,14 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
 
     private void requestData() {
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
-        mStatusBar.post(new Runnable() {
+        mSScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 dialog = new MGProgressDialog(GoodsDetailActivity.this, R.style.MGProgressDialog);
                 dialog.needFinishActivity(GoodsDetailActivity.this);
                 dialog.show();
             }
-        });
+        }, 1000);
     }
 
     @Override

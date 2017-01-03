@@ -60,7 +60,6 @@ public class LoadMoreRecyclerView extends RecyclerView {
             onRecyclerViewScrollListener.onScrolled(dx, dy);
         }
         if (!isLoading) {
-//        if (isLoading) {
             if (getLayoutManager() instanceof LinearLayoutManager) {
                 linearLayoutScrolled(dy);
             } else if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
@@ -145,11 +144,12 @@ public class LoadMoreRecyclerView extends RecyclerView {
     }
 
     public boolean isRefreshAble(){
-        return firstVisibleItem == 0 && top == 0 && isLoading();
+        Log.d("loadm1", "firstVisibleItem: " + firstVisibleItem + " top: " + top + " ,isloading: " + isLoading());
+        return firstVisibleItem == 0 && top == 0 && !isLoading();
     }
 
     public void loadComplete(){
-        setLoading(true);
+        setLoading(false);
     }
 
 

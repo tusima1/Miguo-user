@@ -221,7 +221,7 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 public void run() {
                     popTipShare.show();
                 }
-            },300);
+            },1000);
         }
     }
     private void dismissShareTipPop(){
