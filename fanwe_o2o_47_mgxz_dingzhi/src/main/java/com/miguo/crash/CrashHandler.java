@@ -1,14 +1,20 @@
 package com.miguo.crash;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.miguo.live.views.customviews.MGToast;
+import com.fanwe.InitAdvsMultiActivity;
+import com.fanwe.app.App;
 import com.miguo.utils.SharedPreferencesUtils;
 
 import java.io.File;
@@ -51,12 +57,34 @@ public class CrashHandler implements UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        MGToast.showToast("很抱歉，程序遭遇异常，即将退出！");
+        // 使用Toast来显示异常信息
+        showCrashToast();
         //将一些信息保存到SDcard中
         savaInfoToSD(mContext, ex);
+
+        Intent intent = new Intent(App.getInstance().getApplicationContext(), InitAdvsMultiActivity.class);
+        PendingIntent restartIntent = PendingIntent.getActivity(App.getInstance().getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        //重启应用
+        AlarmManager mgr = (AlarmManager) App.getInstance().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent); // 重启应用
         //退出程序
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
+    }
+
+    private void showCrashToast() {
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                Toast.makeText(App.getInstance().getApplicationContext(), "很抱歉,程序出现异常,即将重启", Toast.LENGTH_LONG).show();
+                Looper.loop();
+            }
+        }.start();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+        }
     }
 
     /**
