@@ -394,7 +394,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         }
     }
     private void dismissShareTipPop(){
-        if (popTipShare!=null && popTipShare.isShowing() && !getActivity().isFinishing()){
+        if (popTipShare!=null && popTipShare.isShowing()){
             popTipShare.dismiss();
         }
     }
