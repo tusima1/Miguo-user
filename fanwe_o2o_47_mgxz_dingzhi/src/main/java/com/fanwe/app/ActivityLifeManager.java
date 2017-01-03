@@ -56,10 +56,12 @@ public class ActivityLifeManager {
         @Override
         public void onActivityResumed(Activity activity) {
             addActivity(activity);
+            MobclickAgent.onResume(activity);
         }
 
         @Override
         public void onActivityPaused(Activity activity) {
+            MobclickAgent.onPause(activity);
         }
 
         @Override
