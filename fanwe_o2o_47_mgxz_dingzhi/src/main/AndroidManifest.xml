@@ -81,6 +81,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <data
+                android:host="live"
+                android:scheme="miguoxiaozhan" />
         </activity>
         <activity
             android:name="com.fanwe.mine.views.RepresentIncomeActivity"
@@ -182,9 +185,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="live"
-                    android:scheme="miguoxiaozhan" />
+
             </intent-filter>
         </activity>
 
