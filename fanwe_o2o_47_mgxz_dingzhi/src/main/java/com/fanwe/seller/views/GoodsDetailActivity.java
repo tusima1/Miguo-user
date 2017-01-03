@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -75,8 +74,6 @@ import com.miguo.utils.NetWorkStateUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import me.relex.circleindicator.CircleIndicator;
 
 import static com.fanwe.o2o.miguo.R.id.tv_buy;
 
@@ -193,30 +190,32 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     private void showShareTipPop(){
         popTipShare = new PopTipShare(this,mIvTitleShare);
         if (TipPopCode.checkDate(GoodsDetailActivity.this,TipPopCode.Goods)){
-            MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+            mSScrollView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    popTipShare.show();
+                    if (!GoodsDetailActivity.this.isFinishing()){
+                        popTipShare.show();
+                    }
                 }
-            },300);
+            },1000);
         }
     }
     private void dismissShareTipPop(){
-        if (popTipShare!=null && popTipShare.isShowing()){
+        if (popTipShare!=null && popTipShare.isShowing() && !GoodsDetailActivity.this.isFinishing()){
             popTipShare.dismiss();
         }
     }
 
     private void requestData() {
         mHttpHelper.getGroupBuyDetailNew(GoodsId);
-        mSScrollView.postDelayed(new Runnable() {
+        mSScrollView.post(new Runnable() {
             @Override
             public void run() {
                 dialog = new MGProgressDialog(GoodsDetailActivity.this, R.style.MGProgressDialog);
                 dialog.needFinishActivity(GoodsDetailActivity.this);
                 dialog.show();
             }
-        }, 1000);
+        });
     }
 
     @Override
@@ -942,5 +941,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             commonHttpHelper = new CommonHttpHelper(GoodsDetailActivity.this, this);
         }
         commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, GoodsId);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissShareTipPop();
     }
 }

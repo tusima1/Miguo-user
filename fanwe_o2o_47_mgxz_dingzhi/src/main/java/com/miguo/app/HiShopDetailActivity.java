@@ -22,4 +22,14 @@ HiShopDetailActivity extends HiBaseActivity{
     protected Category initCategory() {
         return new HiShopDetailCategory(this);
     }
+
+    @Override
+    protected void doOnDestory() {
+        getCategory().destory();
+    }
+
+    @Override
+    public HiShopDetailCategory getCategory() {
+        return (HiShopDetailCategory)super.getCategory();
+    }
 }

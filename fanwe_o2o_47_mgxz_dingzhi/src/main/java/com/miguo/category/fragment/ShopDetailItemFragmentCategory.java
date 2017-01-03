@@ -51,7 +51,6 @@ public class ShopDetailItemFragmentCategory extends FragmentCategory{
             int height = width * 420 / 750;
             LinearLayout.LayoutParams params = getLineaLayoutParams(width, height);
             image.setLayoutParams(params);
-            image.setImageResource(R.drawable.nullpic);
             if(TextUtils.isEmpty(getFragment().getBanner().getImage_url())){
                 return;
             }
