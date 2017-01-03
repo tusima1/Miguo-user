@@ -54,7 +54,7 @@ public class UserUpgradeOrderBean implements Serializable{
             double user_account_money;
 
             public boolean canUpdate(){
-                return getUser_account_money() > getTotal_price();
+                return getUser_account_money() >= getTotal_price();
             }
 
             public double getTotal_price() {
