@@ -13,6 +13,7 @@ import com.fanwe.work.SystemBarTintManager;
 import com.miguo.category.Category;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.live.views.utils.ToasUtil;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 
@@ -162,6 +163,8 @@ public abstract class HiBaseActivity extends AppCompatActivity {
         if(getCategory() != null){
             getCategory().destory();
         }
+        ImageLoader.getInstance().clearMemoryCache();
+        System.gc();
         SDEventManager.unregister(this);
         doOnDestory();
     }
