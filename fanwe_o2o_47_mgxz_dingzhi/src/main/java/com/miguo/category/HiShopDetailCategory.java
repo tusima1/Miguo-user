@@ -35,7 +35,6 @@ import com.fanwe.user.UserConstants;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.ShareUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
-import com.fanwe.view.RecyclerScrollView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiShopDetailLiveAdapter;
@@ -58,7 +57,6 @@ import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.ShopDetailTagView;
 import com.miguo.ui.view.ShopDetailViewPager;
-import com.miguo.utils.MGUIUtil;
 import com.miguo.view.CollectShopView;
 import com.miguo.view.HiShopDetailView;
 import com.miguo.view.RepresentMerchantView;
@@ -66,8 +64,6 @@ import com.miguo.view.RepresentMerchantView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/19.
@@ -387,12 +383,14 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     private void showShareTipPop(){
         popTipShare = new PopTipShare(getActivity(),share);
         if (TipPopCode.checkDate(getActivity(),TipPopCode.Shops)){
-            MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+            scrollView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    popTipShare.show();
+                    if (!getActivity().isFinishing()){
+                        popTipShare.show();
+                    }
                 }
-            },300);
+            },1000);
         }
     }
     private void dismissShareTipPop(){
@@ -577,7 +575,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         }
         //layoutBottom
         if (SDCollectionUtil.isEmpty(result.getTuan_list()) && SDCollectionUtil.isEmpty(result.getLive_list()) && TextUtils.isEmpty(tagPeople)) {
-            scrollView.postDelayed(new Runnable() {
+            layoutBottom.post(new Runnable() {
                 @Override
                 public void run() {
                     int hTotal = BaseUtils.getHeight(getActivity());
@@ -589,7 +587,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
                         layoutBottom.setLayoutParams(lp);
                     }
                 }
-            }, 1000);
+            });
         }
         /**
          * 是否已代言
@@ -717,4 +715,9 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     public void onFinish(String method) {
 
     }
+
+    public void destory(){
+        dismissShareTipPop();
+    }
+
 }

@@ -44,7 +44,6 @@ import com.miguo.app.HiShopDetailActivity;
 import com.miguo.definition.IntentKey;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGLog;
-import com.miguo.utils.MGUIUtil;
 
 import java.util.List;
 
@@ -219,7 +218,9 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
             mPscrollView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    popTipShare.show();
+                    if (!SpecialTopicActivity.this.isFinishing()){
+                        popTipShare.show();
+                    }
                 }
             },1000);
         }
@@ -352,5 +353,11 @@ public class SpecialTopicActivity extends AppCompatActivity implements View.OnCl
                 MGLog.e("专题跳转异常!");
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissShareTipPop();
     }
 }
