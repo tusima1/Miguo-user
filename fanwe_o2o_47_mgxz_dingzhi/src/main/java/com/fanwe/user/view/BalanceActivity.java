@@ -212,6 +212,7 @@ public class BalanceActivity extends Activity implements CallbackView, View.OnCl
 
     @Override
     public void onSuccess(String method, final List datas) {
+        onFinish(method);
         switch (method) {
             case UserConstants.GET_WALLET_BALANCE:
                 MGUIUtil.runOnUiThread(new Runnable() {
