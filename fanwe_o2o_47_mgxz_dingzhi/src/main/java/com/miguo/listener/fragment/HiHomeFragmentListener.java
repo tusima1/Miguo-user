@@ -16,6 +16,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.groupon.views.SearchActivity;
 import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeTagsView;
@@ -84,7 +85,7 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
      * 点击搜索
      */
     private void clickSearch() {
-        Intent intent = new Intent(getActivity(), HomeSearchActivity.class);
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
