@@ -112,6 +112,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             e.printStackTrace();
         }
 
+        map.put("APP", "米果小站");
         map.put("用户名", SharedPreferencesUtils.getInstance().getUserName());
         map.put("品牌", "" + Build.BRAND);
         map.put("型号", "" + Build.MODEL);
