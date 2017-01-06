@@ -10,11 +10,11 @@ import java.util.ArrayList;
 /**
  * Created by zlh/Barry/狗蛋哥 on 16/8/18.
  */
-public class HiRepresentFragmentAdapter extends FragmentPagerAdapter {
+public class HiRepresentBannerFragmentAdapter extends FragmentPagerAdapter {
 
     ArrayList<Fragment> fragments;
 
-    public HiRepresentFragmentAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
+    public HiRepresentBannerFragmentAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;
     }

@@ -48,4 +48,6 @@ public class IntentKey {
     public static final String USER_ACCOUNT = "user_account";
     public static final String UPDATE_ACCOUNT = "update_account";
 
+    public static final String REPRESENT_CATEGORYS = "represent_categories";
+
 }

@@ -14,10 +14,8 @@ import com.miguo.category.fragment.HiRepresentFragmentCategory;
 
 public class HiRepresentFragment extends HiBaseFragment {
 
-
-
     @Override
-    protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_hihome_fragment_hirepresent, container, false);
     }
 

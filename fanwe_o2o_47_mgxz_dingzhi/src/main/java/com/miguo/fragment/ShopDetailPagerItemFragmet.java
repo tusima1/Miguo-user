@@ -17,7 +17,7 @@ public class ShopDetailPagerItemFragmet extends HiBaseFragment{
     HiShopDetailBean.Result.ShopImage banner;
 
     @Override
-    protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_hishop_detail_banner, container, false);
     }
 

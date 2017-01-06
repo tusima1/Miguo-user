@@ -11,48 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="43dp">
 
-        <LinearLayout
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/frag_home_title_bar_ll_earn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="17dp"
-                android:paddingRight="16dp">
-
-                <TextView
-                    android:id="@+id/frag_home_title_bar_tv_earn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Migoo"
-                    android:textColor="@color/text_base_color"
-                    android:textSize="15dp" />
-
-                <ImageView
-                    android:visibility="gone"
-                    android:id="@+id/frag_home_title_bar_iv_earn_arrow"
-                    android:layout_width="15dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_location_home" />
-            </LinearLayout>
 
             <RelativeLayout
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
                 android:id="@+id/frag_home_title_bar_ll_search"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="23dp"
                 android:layout_gravity="center_vertical"
                 android:layout_toRightOf="@+id/frag_home_title_bar_ll_earn"
-                android:layout_weight="1"
                 android:background="@drawable/shape_cricle_white_cc_solid_white_stoke_black">
 
                 <ImageView
@@ -74,37 +42,8 @@
                     android:textColor="@color/c_CCCCCC"
                     android:textSize="12dp" />
 
-                <ImageView
-                    android:visibility="visible"
-                    android:id="@+id/frag_home_title_bar_ll_saoyisao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/ic_qr_home_title" />
 
             </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/frag_home_title_bar_ll_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="14dp"
-                android:paddingRight="17dp">
-
-                <ImageView
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:gravity="center"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_message_home_title_v2" />
-            </LinearLayout>
-        </LinearLayout>
 
         <View
             android:layout_alignParentBottom="true"

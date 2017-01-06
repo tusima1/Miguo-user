@@ -43,7 +43,7 @@ public abstract class HiBaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(cacheView == null) {
-            cacheView = craetView(inflater, container, savedInstanceState);
+            cacheView = createView(inflater, container, savedInstanceState);
         }else {
             //缓存的rootView需要判断是否已经被加过parent， 如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
             ViewGroup parent = (ViewGroup) cacheView.getParent();
@@ -55,7 +55,7 @@ public abstract class HiBaseFragment extends Fragment {
         return cacheView;
     }
 
-    protected abstract View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+    protected abstract View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
 
     protected abstract void initFragmentCategory();

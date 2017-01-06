@@ -15,7 +15,7 @@ import com.miguo.category.fragment.HiLoginQuickByMobileFragmentCategory;
 public class HiLoginQuickByMobileFragment extends HiBaseFragment {
 
     @Override
-    protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.frag_phone_login, container, false);
     }
 
