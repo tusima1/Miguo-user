@@ -2,9 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/item_layout_sample_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_goods_frag_groupon_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="商品"
+            android:textColor="@color/c_CCCCCC"
+            android:textSize="@dimen/dp14" />
+
+        <TextView
+            android:id="@+id/tv_shop_frag_groupon_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="商家"
+            android:textColor="@color/black_2e"
+            android:textSize="@dimen/dp14" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:background="#CCCCCC" />
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp15" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="筛选栏预留"
+        android:textColor="@color/black_2e"
+        android:textSize="@dimen/dp14" />
 
     <FrameLayout
         android:id="@+id/content_act_search"

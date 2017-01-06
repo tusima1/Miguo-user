@@ -22,6 +22,7 @@ import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.seller.util.CollectionUtils;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.work.AppRuntimeWorker;
+import com.miguo.groupon.listener.IDataInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
  * 商家列表
  * Created by qiang.chen on 2017/1/5.
  */
-public class FragmentSellerList extends Fragment implements CallbackView {
+public class FragmentShopList extends Fragment implements CallbackView {
     private RecyclerView recyclerView;
     private boolean isRefresh = true;
     private int pageNum = 1;
@@ -167,6 +168,15 @@ public class FragmentSellerList extends Fragment implements CallbackView {
                         datas.addAll(items);
                     }
                     mSellerListAdapter.notifyDataSetChanged();
+                    if (mIDataInterface != null) {
+                        mIDataInterface.verifyData(CollectionUtils.isValid(datas));
+                        //TODO for test
+                        if (CollectionUtils.isValid(datas)){
+                            if (datas.size()>20){
+                                mIDataInterface.verifyData(false);
+                            }
+                        }
+                    }
                     break;
             }
         }
@@ -180,5 +190,11 @@ public class FragmentSellerList extends Fragment implements CallbackView {
     @Override
     public void onFinish(String method) {
 
+    }
+
+    IDataInterface mIDataInterface;
+
+    public void setIDataInterface(IDataInterface iDataInterface) {
+        mIDataInterface = iDataInterface;
     }
 }
