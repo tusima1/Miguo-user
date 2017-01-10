@@ -120,7 +120,7 @@ public class SearchResultActivity extends FragmentActivity {
      */
     private void initFragment() {
         fm = getSupportFragmentManager();
-        setTabSelected("goods");
+        setTabSelected("shop");
     }
 
     private void preView() {
