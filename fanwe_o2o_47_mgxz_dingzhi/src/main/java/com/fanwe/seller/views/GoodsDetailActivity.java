@@ -539,11 +539,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         valueAnimator.setDuration(350).start();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     private void bindData(ModelGoodsDetailNew modelGoodsDetailNew) {
         if (modelGoodsDetailNew == null) {
             finish();
