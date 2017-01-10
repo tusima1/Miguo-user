@@ -17,23 +17,39 @@
 
         <LinearLayout
             app:layout_scrollFlags="scroll"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="wrap_content">
 
             <com.miguo.ui.view.RepresentViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
             </com.miguo.ui.view.RepresentViewPager>
+
+
+            <com.miguo.ui.view.RepresentBannerView
+                android:id="@+id/represent_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.miguo.ui.view.RepresentBannerView>
 
         </LinearLayout>
 
-        <View
-            android:background="@color/main_color_press"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"/>
+            android:layout_height="wrap_content">
+
+            <View
+                android:background="@color/main_color_press"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"/>
+
+        </LinearLayout>
+
+
 
     </android.support.design.widget.AppBarLayout>
 

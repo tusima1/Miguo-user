@@ -1,6 +1,7 @@
 package com.miguo.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +10,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
-import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.entity.RepresentBannerBean;
+import com.miguo.entity.SearchCateConditionBean;
 
 import java.util.List;
 
 /**
  * Created by zlh on 2017/1/6.
  */
+public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
 
-public class HiRepresentBannerAdapter extends BarryBaseRecyclerAdapter {
-
-    public HiRepresentBannerAdapter(Activity activity, List datas) {
+    public HiRepresentCateAdapter(Activity activity, List datas) {
         super(activity, datas);
     }
 
@@ -44,18 +43,20 @@ public class HiRepresentBannerAdapter extends BarryBaseRecyclerAdapter {
 
     @Override
     protected BarryListener initHolderListener(RecyclerView.ViewHolder holder, int position) {
-        return null;
+        return new HiRepresentBannerAdapterListener(this, holder, position);
     }
 
     @Override
     protected void setHolderListener(RecyclerView.ViewHolder holder, int position, BarryListener listener) {
-
+        getHolder(holder).image.setOnClickListener(listener);
     }
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
-        getHolder(holder).title.setText(getItem(position).getName());
+//        SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
+        getHolder(holder).image.setBackgroundColor(Color.BLACK);
+        getHolder(holder).title.setText("标题");
+//        getHolder(holder).title.setText(getItem(position).getName());
     }
 
     @Override
@@ -80,8 +81,8 @@ public class HiRepresentBannerAdapter extends BarryBaseRecyclerAdapter {
     }
 
     @Override
-    public RepresentBannerBean.Result.Body.Categories getItem(int position) {
-        return (RepresentBannerBean.Result.Body.Categories)super.getItem(position);
+    public SearchCateConditionBean.Result.Body.Categories getItem(int position) {
+        return (SearchCateConditionBean.Result.Body.Categories)super.getItem(position);
     }
 
     @Override
@@ -100,9 +101,28 @@ public class HiRepresentBannerAdapter extends BarryBaseRecyclerAdapter {
         public ViewHolder(View itemView) {
             super(itemView);
         }
+    }
 
+    class HiRepresentBannerAdapterListener extends BarryListener{
 
+        public HiRepresentBannerAdapterListener(BarryBaseRecyclerAdapter adapter, RecyclerView.ViewHolder holder, int position) {
+            super(adapter, holder, position);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.image:
+                    clickImage();
+                    break;
+            }
+        }
+
+        private void clickImage(){
+
+        }
 
     }
+
 
 }

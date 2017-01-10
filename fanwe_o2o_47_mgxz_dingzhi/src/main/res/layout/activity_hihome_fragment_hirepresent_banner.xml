@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
     <com.fanwe.view.LoadMoreRecyclerView
+        android:id="@+id/recyclerview"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

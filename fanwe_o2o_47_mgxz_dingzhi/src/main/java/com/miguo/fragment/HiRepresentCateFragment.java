@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.category.fragment.HiRepresentBannerFragmentCategory;
+import com.miguo.category.fragment.HiRepresentCateFragmentCategory;
 import com.miguo.definition.IntentKey;
-import com.miguo.entity.RepresentBannerBean;
+import com.miguo.entity.SearchCateConditionBean;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import java.util.List;
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentBannerFragment extends HiBaseFragment {
+public class HiRepresentCateFragment extends HiBaseFragment {
 
-    List<RepresentBannerBean.Result.Body.Categories> categories;
+    List<SearchCateConditionBean.Result.Body.Categories> categories;
 
     @Override
     protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,14 +28,14 @@ public class HiRepresentBannerFragment extends HiBaseFragment {
     @Override
     protected void initFragmentCategory() {
         getIntentData();
-        category = new HiRepresentBannerFragmentCategory(cacheView, this);
+        category = new HiRepresentCateFragmentCategory(cacheView, this);
     }
 
     private void getIntentData(){
-        categories = (List<RepresentBannerBean.Result.Body.Categories>)getArguments().getSerializable(IntentKey.REPRESENT_CATEGORYS);
+        categories = (List<SearchCateConditionBean.Result.Body.Categories>)getArguments().getSerializable(IntentKey.REPRESENT_CATEGORYS);
     }
 
-    public List<RepresentBannerBean.Result.Body.Categories> getCategories() {
+    public List<SearchCateConditionBean.Result.Body.Categories> getCategories() {
         return categories;
     }
 }

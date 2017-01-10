@@ -1,41 +1,37 @@
 package com.miguo.category.fragment;
 
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.adapter.HiRepresentBannerAdapter;
-import com.miguo.adapter.HiRepresentBannerFragmentAdapter;
+import com.miguo.adapter.HiRepresentCateAdapter;
 import com.miguo.fragment.HiBaseFragment;
-import com.miguo.fragment.HiRepresentBannerFragment;
-import com.miguo.ui.view.RepresentViewPager;
+import com.miguo.fragment.HiRepresentCateFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentBannerFragmentCategory extends FragmentCategory {
+public class HiRepresentCateFragmentCategory extends FragmentCategory {
 
+    @ViewInject(R.id.recyclerview)
     LoadMoreRecyclerView recyclerView;
-    HiRepresentBannerAdapter adapter;
+    HiRepresentCateAdapter adapter;
 
-    public HiRepresentBannerFragmentCategory(View view, HiBaseFragment fragment) {
+    public HiRepresentCateFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
     }
 
     @Override
     protected void initFirst() {
-        adapter = new HiRepresentBannerAdapter(getActivity(), new ArrayList());
+        adapter = new HiRepresentCateAdapter(getActivity(), new ArrayList());
     }
 
     @Override
@@ -74,8 +70,8 @@ public class HiRepresentBannerFragmentCategory extends FragmentCategory {
         recyclerView.setLayoutParams(params);
     }
 
-    public HiRepresentBannerFragment getFragment(){
-        return (HiRepresentBannerFragment)fragment;
+    public HiRepresentCateFragment getFragment(){
+        return (HiRepresentCateFragment)fragment;
     }
 
 }
