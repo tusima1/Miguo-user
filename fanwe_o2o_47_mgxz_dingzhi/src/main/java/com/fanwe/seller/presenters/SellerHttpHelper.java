@@ -66,6 +66,8 @@ import com.fanwe.seller.model.getShopMemberInfo.RootShopMemberInfo;
 import com.fanwe.seller.model.getStoreList.ModelStoreList;
 import com.fanwe.seller.model.getStoreList.ResultStoreList;
 import com.fanwe.seller.model.getStoreList.RootStoreList;
+import com.fanwe.seller.model.getTuanSearch.ResultGetTuanSearch;
+import com.fanwe.seller.model.getTuanSearch.RootGetTuanSearch;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -279,20 +281,20 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         OkHttpUtils.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
-                Type type = new TypeToken<Root<HashMap<String,String>>>() {
+                Type type = new TypeToken<Root<HashMap<String, String>>>() {
                 }.getType();
                 Gson gson = new Gson();
-                Root<HashMap<String,String>> root = gson.fromJson(responseBody, type);
+                Root<HashMap<String, String>> root = gson.fromJson(responseBody, type);
                 String status = root.getStatusCode();
-                HashMap<String,String> map = (HashMap<String,String>)validateBody(root);
+                HashMap<String, String> map = (HashMap<String, String>) validateBody(root);
 
-                if("200".equals(status)){
-                    List<HashMap<String,String>> datas = new ArrayList<HashMap<String, String>>();
+                if ("200".equals(status)) {
+                    List<HashMap<String, String>> datas = new ArrayList<HashMap<String, String>>();
                     datas.add(map);
-                    if (mView2!=null){
-                        onSuccess(mView2,SellerConstants.GROUP_BUY_COLLECT_POST, datas);
-                    }else if (mView!=null){
-                        onSuccess(mView,SellerConstants.GROUP_BUY_COLLECT_POST, null);
+                    if (mView2 != null) {
+                        onSuccess(mView2, SellerConstants.GROUP_BUY_COLLECT_POST, datas);
+                    } else if (mView != null) {
+                        onSuccess(mView, SellerConstants.GROUP_BUY_COLLECT_POST, null);
                     }
                 }
 
@@ -635,6 +637,62 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
     }
 
     /**
+     * 新版商家搜索
+     *
+     * @param area_one      区域一级
+     * @param area_two      区域二级
+     * @param category_one  类目一级
+     * @param category_two  类目二级
+     * @param filter        筛选
+     * @param keyword       关键字
+     * @param sort_type     排序类型
+     * @param pageNum       页码
+     * @param pageSize      页大小
+     * @param merchant_type 商家类型：1，优惠商家  0，全部商家
+     */
+    public void getShopSearch(String area_one, String area_two, String category_one, String category_two, String filter,
+                              String keyword, String sort_type, int pageNum, int pageSize, String merchant_type) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("area_one", area_one);
+        params.put("area_two", area_two);
+        params.put("category_one", category_one);
+        params.put("category_two", category_two);
+        params.put("filter", filter);
+        params.put("sort_type", sort_type);
+        params.put("keyword", keyword);
+        params.put("merchant_type", merchant_type);
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("method", SellerConstants.SHOP_SEARCH);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootBusinessListings root = gson.fromJson(responseBody, RootBusinessListings.class);
+                List<ResultBusinessListings> result = root.getResult();
+                if (SDCollectionUtil.isEmpty(result)) {
+                    onSuccess(mView, SellerConstants.SHOP_SEARCH, null);
+                    return;
+                }
+                List<ModelBusinessListings> items = result.get(0).getShop_list();
+                onSuccess(mView, SellerConstants.SHOP_SEARCH, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                mView.onFailue("");
+            }
+        });
+    }
+
+
+    /**
      * 城市列表
      */
     public void getCityList() {
@@ -931,6 +989,53 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 }
                 List<ModelGroupList> items = result.get(0).getBody();
                 onSuccess(mView, SellerConstants.GROUP_BUY, items);
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+                MGToast.showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 新版商家搜索
+     *
+     * @param area_one     区域一级
+     * @param area_two     区域二级
+     * @param category_one 类目一级
+     * @param category_two 类目二级
+     * @param filter       筛选
+     * @param keyword      关键字
+     * @param sort_type    排序类型
+     * @param pageNum      页码
+     * @param pageSize     页大小
+     */
+    public void getTuanSearch(String area_one, String area_two, String category_one, String category_two, String filter,
+                              String keyword, String sort_type, int pageNum, int pageSize) {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("token", getToken());
+        params.put("area_one", area_one);
+        params.put("area_two", area_two);
+        params.put("category_one", category_one);
+        params.put("category_two", category_two);
+        params.put("filter", filter);
+        params.put("sort_type", sort_type);
+        params.put("keyword", keyword);
+        params.put("page_size", String.valueOf(pageSize));
+        params.put("page", String.valueOf(pageNum));
+        params.put("method", SellerConstants.TUAN_SEARCH);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                RootGetTuanSearch root = gson.fromJson(responseBody, RootGetTuanSearch.class);
+                List<ResultGetTuanSearch> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
+                    onSuccess(mView, SellerConstants.TUAN_SEARCH, null);
+                    return;
+                }
+                onSuccess(mView, SellerConstants.TUAN_SEARCH, results);
             }
 
             @Override

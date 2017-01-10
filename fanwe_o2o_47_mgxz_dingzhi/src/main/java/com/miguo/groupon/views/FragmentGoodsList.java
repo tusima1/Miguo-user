@@ -19,10 +19,10 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getGroupList.ModelDealData;
 import com.fanwe.seller.model.getGroupList.ModelGroupList;
+import com.fanwe.seller.model.getTuanSearch.ResultGetTuanSearch;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.seller.util.CollectionUtils;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.work.AppRuntimeWorker;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.miguo.groupon.listener.IDataInterface;
@@ -77,14 +77,14 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
         mPtrlvContent = (PullToRefreshListView) view.findViewById(R.id.ptrlv_content);
         mAdapter = new TuanGruopListAdapter(datas, getActivity());
         mPtrlvContent.setAdapter(mAdapter);
-        mPtrlvContent.setMode(PullToRefreshBase.Mode.BOTH);
+        mPtrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
     }
 
     private void getData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getGroupList("", "", AppRuntimeWorker.getCity_id(), "default", "", "", pageNum, pageSize);
+        sellerHttpHelper.getTuanSearch("", "", "", "", "", "", "", pageNum, pageSize);
     }
 
     public void setData(List<GoodsGroupModel> models) {
@@ -120,16 +120,23 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
     }
 
     private List<ModelGroupList> items;
+    private List<ResultGetTuanSearch> results;
 
     @Override
     public void onSuccess(String method, List datas) {
         Message msg = new Message();
-        if (SellerConstants.GROUP_BUY.equals(method)) {
-            items = datas;
-            msg.what = 0;
+        if (SellerConstants.TUAN_SEARCH.equals(method)) {
+            results = datas;
+            if (CollectionUtils.isValid(results)) {
+                ResultGetTuanSearch bean = results.get(0);
+                items = bean.getTuan_list();
+                msg.what = 0;
+            }
         }
         mHandler.sendMessage(msg);
     }
+
+    private boolean flagFirst = true;
 
     Handler mHandler = new Handler() {
         @Override
@@ -137,6 +144,14 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
+                    if (flagFirst) {
+                        flagFirst = false;
+                        mPtrlvContent.postDelayed(new Runnable() {
+                            public void run() {
+                                mPtrlvContent.setFocusable(true);
+                            }
+                        }, 100);
+                    }
                     if (isRefresh) {
                         datas.clear();
                     }
@@ -147,8 +162,8 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
                         mIDataInterface.verifyData(CollectionUtils.isValid(datas));
                     }
                     //TODO for test
-                    if (CollectionUtils.isValid(datas)){
-                        if (datas.size()>20){
+                    if (CollectionUtils.isValid(datas)) {
+                        if (datas.size() > 20) {
                             mIDataInterface.verifyData(false);
                         }
                     }
@@ -209,9 +224,11 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
     public void onFinish(String method) {
 
     }
+
     IDataInterface mIDataInterface;
 
     public void setIDataInterface(IDataInterface iDataInterface) {
         mIDataInterface = iDataInterface;
     }
+
 }

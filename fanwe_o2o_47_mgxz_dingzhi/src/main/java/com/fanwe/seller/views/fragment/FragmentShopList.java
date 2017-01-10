@@ -21,7 +21,6 @@ import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.seller.util.CollectionUtils;
 import com.fanwe.utils.DataFormat;
-import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.groupon.listener.IDataInterface;
 
 import java.util.ArrayList;
@@ -78,7 +77,7 @@ public class FragmentShopList extends Fragment implements CallbackView {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getBusinessListings("", "", AppRuntimeWorker.getCity_id(), "default", "", "0", "", "", pageNum, pageSize, "0");
+        sellerHttpHelper.getShopSearch("", "", "", "", "", "", "", pageNum, pageSize, "1");
     }
 
     LinearLayoutManager mLayoutManager;
@@ -148,7 +147,7 @@ public class FragmentShopList extends Fragment implements CallbackView {
     @Override
     public void onSuccess(String method, List datas) {
         Message message = new Message();
-        if (SellerConstants.BUSINESS_LIST.equals(method)) {
+        if (SellerConstants.SHOP_SEARCH.equals(method)) {
             //店铺
             items = datas;
             message.what = 0;
@@ -171,8 +170,8 @@ public class FragmentShopList extends Fragment implements CallbackView {
                     if (mIDataInterface != null) {
                         mIDataInterface.verifyData(CollectionUtils.isValid(datas));
                         //TODO for test
-                        if (CollectionUtils.isValid(datas)){
-                            if (datas.size()>20){
+                        if (CollectionUtils.isValid(datas)) {
+                            if (datas.size() > 20) {
                                 mIDataInterface.verifyData(false);
                             }
                         }
