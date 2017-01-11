@@ -703,7 +703,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
                 sayHiLayout.removeView(topSayHi);
                 LinearLayout.LayoutParams params = getLineaLayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 params.setMargins(0, titleLayout.getMeasuredHeight(), 0, 0);
-                scrollView.scrollTo(0, 0);
+                scrollView.scrollTo(0, space.getMeasuredHeight());
             }
         }
     }
