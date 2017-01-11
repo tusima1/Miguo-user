@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/coorddinatorlayout"
+<in.srain.cube.views.ptr.PtrFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ptr_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:ptr_keep_header_when_refresh="true"
+    app:ptr_pull_to_fresh="true">
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coorddinatorlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-    <android.support.design.widget.AppBarLayout
+
+    <com.miguo.ui.view.RepresentAppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +59,8 @@
 
 
 
-    </android.support.design.widget.AppBarLayout>
+    </com.miguo.ui.view.RepresentAppBarLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
+    </in.srain.cube.views.ptr.PtrFrameLayout>

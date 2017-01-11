@@ -8,7 +8,7 @@ import com.miguo.entity.SearchCateConditionBean;
 
 public interface GetSearchCateConditionView extends BaseView {
 
-    void getSearchCateConditionSuccess(SearchCateConditionBean.Result.Body body);
+    void getSearchCateConditionSuccess(SearchCateConditionBean.ResultBean.BodyBean body);
     void getSearchCateConditionError(String message);
 
 }

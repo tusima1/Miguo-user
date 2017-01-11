@@ -18,7 +18,7 @@ import java.util.List;
 
 public class HiRepresentCateFragment extends HiBaseFragment {
 
-    List<SearchCateConditionBean.Result.Body.Categories> categories;
+    List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories;
 
     @Override
     protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,10 +32,10 @@ public class HiRepresentCateFragment extends HiBaseFragment {
     }
 
     private void getIntentData(){
-        categories = (List<SearchCateConditionBean.Result.Body.Categories>)getArguments().getSerializable(IntentKey.REPRESENT_CATEGORYS);
+        categories = (List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean>)getArguments().getSerializable(IntentKey.REPRESENT_CATEGORYS);
     }
 
-    public List<SearchCateConditionBean.Result.Body.Categories> getCategories() {
+    public List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> getCategories() {
         return categories;
     }
 }

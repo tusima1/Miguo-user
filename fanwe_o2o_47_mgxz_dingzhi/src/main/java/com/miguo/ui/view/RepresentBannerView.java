@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.fanwe.library.utils.SDCollectionUtil;
+import com.fanwe.library.utils.SDViewBinder;
+import com.miguo.entity.AdspaceListBean;
 import com.miguo.live.views.base.BaseLinearLayout;
 
 import java.util.List;
@@ -40,8 +42,10 @@ public class RepresentBannerView extends BaseLinearLayout {
     public void init(List banners){
         removeAllViews();
         if(SDCollectionUtil.isEmpty(banners)){
-//            return;
+            return;
         }
+
+        setDatas(banners);
 
         int width = getImageWidth();
         int height = getImageHeight();
@@ -49,21 +53,21 @@ public class RepresentBannerView extends BaseLinearLayout {
         int marginLeft = getImageMarginLeft();
         int marginTop = getImageMarginTop();
         int count = banners.size() >= 3 ? 3 : banners.size();
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < count; i++){
             ImageView banner = new ImageView(getContext());
             LinearLayout.LayoutParams params = getLinearLayoutParams(width, height);
             params.setMargins( i == 0 ? firstMarginLeft : marginLeft , marginTop, 0, getImageMarginBottom());
-//            SDViewBinder.setImageView("", banner);
+            SDViewBinder.setImageView(getItem(i).getIcon(), banner);
             banner.setLayoutParams(params);
-            banner.setBackgroundColor(Color.BLACK);
+            banner.setScaleType(ImageView.ScaleType.CENTER_CROP);
             banner.setOnClickListener(new OnRepresentBannerClick(i));
             addView(banner);
         }
     }
 
     @Override
-    public Object getItem(int position) {
-        return super.getItem(position);
+    public AdspaceListBean.Result.Body getItem(int position) {
+        return (AdspaceListBean.Result.Body)super.getItem(position);
     }
 
     private int getImageWidth(){

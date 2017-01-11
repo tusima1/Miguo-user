@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
+import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -53,10 +54,8 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-//        SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
-        getHolder(holder).image.setBackgroundColor(Color.BLACK);
-        getHolder(holder).title.setText("标题");
-//        getHolder(holder).title.setText(getItem(position).getName());
+        SDViewBinder.setImageView(getItem(position).getImg(), getHolder(holder).image);
+        getHolder(holder).title.setText(getItem(position).getName());
     }
 
     @Override
@@ -68,7 +67,7 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
         int width = getImageWidth();
         int height = width;
         LinearLayout.LayoutParams params = getLinearLayoutParams(width, height);
-        params.setMargins(0, dip2px(13), 0, 0);
+        params.setMargins(0, getMarginTop(), 0, 0);
         getHolder(holder).image.setLayoutParams(params);
     }
 
@@ -76,13 +75,29 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
         return (getScreenWidth() - getImageWidth() * 4) / 5;
     }
 
-    private int getImageWidth(){
+    private static int getImageWidth(){
         return (int)(getScreenWidth() * 0.14);
     }
 
+    public static int getItemHeight(){
+        return getImageWidth() + getMarginTop() + getTextViewHeight() + getTextViewMarginTop();
+    }
+
+    private static int getTextViewHeight(){
+        return dip2px(15);
+    }
+
+    private static int getTextViewMarginTop(){
+        return dip2px(7);
+    }
+
+    private static int getMarginTop(){
+        return dip2px(13);
+    }
+
     @Override
-    public SearchCateConditionBean.Result.Body.Categories getItem(int position) {
-        return (SearchCateConditionBean.Result.Body.Categories)super.getItem(position);
+    public SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean getItem(int position) {
+        return (SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean)super.getItem(position);
     }
 
     @Override
