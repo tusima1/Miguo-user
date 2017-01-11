@@ -56,14 +56,27 @@ public class FragmentShopList extends Fragment implements CallbackView {
     }
 
     private void setListener() {
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //到底部
+                if (!recyclerView.canScrollVertically(1)) {
+                    if (!isLoadingMore) {
+                        isLoadingMore = true;
+                        loadMore();
+                    }
+                }
+            }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
                 int totalItemCount = mLayoutManager.getItemCount();
-                //剩下1个item自动加载，各位自由选择 dy>0 表示向下滑动
-                if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
+                //剩下2个item自动加载， dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 2 && dy > 0) {
                     if (!isLoadingMore) {
                         isLoadingMore = true;
                         loadMore();
