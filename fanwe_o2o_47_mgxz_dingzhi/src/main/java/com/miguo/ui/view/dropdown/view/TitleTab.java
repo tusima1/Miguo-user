@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.ui.view.dropdown.interf.ExpandReverse;
 
@@ -26,6 +27,7 @@ public class TitleTab extends LinearLayout implements ExpandReverse {
     private ObjectAnimator reverseAnimator;
     private ImageView arrowImage;
     private boolean isNormal=true;
+    private TextView innerText;
 
     public TitleTab(Context context) {
         this(context,null);
@@ -41,7 +43,10 @@ public class TitleTab extends LinearLayout implements ExpandReverse {
         setOrientation(LinearLayout.HORIZONTAL);
         setGravity(Gravity.CENTER);
 
-        TextView innerText=new TextView(context);
+        LinearLayout ll=new LinearLayout(getContext());
+        ll.setOrientation(LinearLayout.HORIZONTAL);
+
+        innerText = new TextView(context);
         innerText.setGravity(Gravity.CENTER);
         innerText.setTextSize(14);
         innerText.setTextColor(Color.BLACK);
@@ -53,13 +58,18 @@ public class TitleTab extends LinearLayout implements ExpandReverse {
         arrowImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         LayoutParams arrowParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup
                 .LayoutParams.WRAP_CONTENT);
-        arrowParams.setMargins(10,6,0,0);
-
+        int offset = DisplayUtil.dp2px(getContext(), 2);
+        arrowParams.setMargins(offset,offset/2,0,0);
+        arrowParams.gravity=Gravity.CENTER_VERTICAL;
 
         //set params
-        addView(innerText,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        addView(arrowImage,arrowParams);
+        ll.addView(innerText,new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ll.addView(arrowImage,arrowParams);
 
+        LayoutParams llParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup
+                .LayoutParams.WRAP_CONTENT);
+        llParams.gravity=Gravity.CENTER;
+        addView(ll,llParams);
         initAnimator();
     }
 
@@ -70,7 +80,7 @@ public class TitleTab extends LinearLayout implements ExpandReverse {
 
     public void setText(String text){
         text = TextUtils.isEmpty(text) ? "" : text;
-        ((TextView)getChildAt(0)).setText(text);
+        innerText.setText(text);
     }
 
     public void start(){

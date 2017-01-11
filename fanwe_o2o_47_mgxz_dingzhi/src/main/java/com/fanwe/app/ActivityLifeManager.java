@@ -74,7 +74,12 @@ public class ActivityLifeManager {
 
     /*********************** Activity Manager Tools ***********************/
     public Activity getLastActivity() {
-        Activity activity = mStackActivity.lastElement();
+        Activity activity = null;
+        try {
+            activity = mStackActivity.lastElement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return activity;
     }
 

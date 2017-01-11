@@ -4,4 +4,5 @@
     <item name="title_tab_2" type="id"/>
     <item name="title_tab_3" type="id"/>
     <item name="title_tab_4" type="id"/>
+    <item name="tv_name" type="id"/>
 </resources>

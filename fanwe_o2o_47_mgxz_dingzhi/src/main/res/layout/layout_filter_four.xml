@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="90dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_name_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="20dp"
+                    android:text="我喜欢"
+                    android:textColor="#999999"
+                    android:textSize="13sp"
+                    />
+                <LinearLayout
+                    android:id="@+id/ll_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:minHeight="28dp"
+                    android:gravity="center_vertical"
+                    android:layout_below="@+id/tv_name_1"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="17dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:background="#A1A2A5"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="94dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_name_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="24dp"
+                    android:text="优惠"
+                    android:textColor="#999999"
+                    android:textSize="13sp"
+                    />
+                <LinearLayout
+                    android:id="@+id/ll_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:minHeight="28dp"
+                    android:gravity="center_vertical"
+                    android:layout_below="@+id/tv_name_2"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="17dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:background="#A1A2A5"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="94dp"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tv_name_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="24dp"
+                    android:text="价格(元)"
+                    android:textColor="#999999"
+                    android:textSize="13sp"
+                    />
+                <LinearLayout
+                    android:id="@+id/ll_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:minHeight="28dp"
+                    android:gravity="center_vertical"
+                    android:layout_below="@+id/tv_name_3"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="17dp"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:background="#A1A2A5"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="21dp"
+    >
+        <TextView
+            android:id="@+id/clear"
+            android:layout_width="96dp"
+            android:layout_height="35dp"
+            android:text="重置"
+            android:textColor="#2E2E2E"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:background="@drawable/shape_cricle_50_solid_white_stroke_2e"
+            />
+        <TextView
+            android:id="@+id/done"
+            android:layout_width="96dp"
+            android:layout_height="35dp"
+            android:text="完成"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:layout_marginLeft="46dp"
+            android:gravity="center"
+            android:background="@drawable/shape_cricle_50_solid_2e"
+            />
+    </LinearLayout>
+</LinearLayout>

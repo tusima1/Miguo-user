@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
@@ -48,6 +47,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.ui.view.floatdropdown.TestActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -307,7 +307,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickMyOrderView("all");
         } else if (v == mErWeiMa) {
             /*二维码名片*/
-            startActivity(DistributionMyQRCodeActivity.class);
+//            startActivity(DistributionMyQRCodeActivity.class);
+            startActivity(TestActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {

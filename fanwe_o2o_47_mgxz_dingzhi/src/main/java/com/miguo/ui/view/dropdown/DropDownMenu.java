@@ -58,6 +58,8 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
     private final SparseArray<View> contentViewList=new SparseArray<>();
     private int fakeHeight;//底下view的高度
 
+    private boolean initOk=true;
+
     public DropDownMenu(Context context) {
         this(context,null);
     }
@@ -174,6 +176,8 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
                     break;
             }
             layoutParams =new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,weight);
+//            titleTabLayout.setGravity(Gravity.CENTER);
+            layoutParams.gravity = Gravity.CENTER;
 
             TitleTab titleTab=new TitleTab(getContext());
             titleTab.setText(titleStr[i]);
@@ -185,6 +189,32 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
                 titleTabLayout.addView(getDividerView(),getDividerParams());
             }
 
+        }
+    }
+
+    /**
+     * 是否初始化失败,如果数据任何一点缺失即为失败,不响应任何点击事件,亦不产生任何的回调
+     * @param initOk 默认ok
+     */
+    public void setInitOk(boolean initOk) {
+        this.initOk = initOk;
+    }
+
+    /**
+     * 默认显示的标题描述文字
+     * @param titleStr
+     */
+    public void setTitleStr(String[] titleStr) {
+        this.titleStr = titleStr;
+        updateTitleText();
+    }
+
+    private void updateTitleText() {
+        if (titleStr == null || titleStr.length <=0){
+            return;
+        }
+        for (int i = 0; i < titleStr.length; i++) {
+            setTitleTabText(i,titleStr[i]);
         }
     }
 
@@ -204,6 +234,9 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
 
     @Override
     public void onClick(View v) {
+        if (!initOk){
+            return;//初始化失败
+        }
         int id =v.getId();
         if (preClickTab!=null && preClickTab!=v){
             preClickTab.start();

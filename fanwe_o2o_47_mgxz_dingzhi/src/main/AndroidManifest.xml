@@ -1007,7 +1007,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name="com.miguo.web.testMain.TestMain22Activity"></activity>
+        <activity android:name="com.miguo.ui.view.floatdropdown.TestActivity"></activity>
     </application>
 
 </manifest>
