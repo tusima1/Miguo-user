@@ -1,5 +1,7 @@
 package com.miguo.entity;
 
+import com.fanwe.base.PageBean;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,6 +10,15 @@ import java.util.List;
  */
 public class BodyFeaturedGroupBuy implements Serializable {
     private List<ModelFeaturedGroupBuy> tuan_list;
+    PageBean page;
+
+    public PageBean getPage() {
+        return page;
+    }
+
+    public void setPage(PageBean page) {
+        this.page = page;
+    }
 
     public void setTuan_list(List<ModelFeaturedGroupBuy> tuan_list) {
         this.tuan_list = tuan_list;

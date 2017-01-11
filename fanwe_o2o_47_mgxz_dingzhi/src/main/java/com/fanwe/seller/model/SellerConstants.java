@@ -115,4 +115,12 @@ public class SellerConstants {
      * 取得大王和他的小伙伴 取得铁粉
      */
     public static final String GET_SHOP_MEMBER_INFO = "GetShopMemberInfo";
+    /**
+     * 新版商家搜索
+     */
+    public static final String SHOP_SEARCH = "ShopSearch";
+    /**
+     * 新版商品搜索
+     */
+    public static final String TUAN_SEARCH = "TuanSearch";
 }
