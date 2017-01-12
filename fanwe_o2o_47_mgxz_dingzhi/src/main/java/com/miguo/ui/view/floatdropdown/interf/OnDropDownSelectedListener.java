@@ -7,5 +7,6 @@ package com.miguo.ui.view.floatdropdown.interf;
  */
 
 public interface OnDropDownSelectedListener<T> {
-    void onDropDownSelected(T t);
+//    void onDropDownSelected(int index, T levelOne, List<T> levelTwo);
+    void onDropDownSelected(T levelOne, T levelTwo);
 }

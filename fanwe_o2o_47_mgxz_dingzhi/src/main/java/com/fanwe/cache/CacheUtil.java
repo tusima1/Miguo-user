@@ -1,5 +1,7 @@
 package com.fanwe.cache;
 
+import android.util.Log;
+
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 
@@ -113,6 +115,26 @@ public class CacheUtil {
             }
         }
         return cityCurr;
+    }
+
+    public void saveUserSearchWord(List<String> hotWords) {
+        Log.e("test","save: "+hotWords.size());
+        if (hotWords ==null) {
+            hotWords = new ArrayList<>();
+        }
+        Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, hotWords);
+    }
+
+    public List<String> getUserSearchWord() {
+        List<String> hotWords;
+        try {
+            hotWords = Serial.readObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            hotWords = new ArrayList<>();
+        }
+        Log.e("test","get: "+hotWords.size());
+        return hotWords;
     }
 
 }

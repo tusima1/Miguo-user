@@ -204,6 +204,7 @@ public class SearchCateConditionBean implements Serializable{
 
                 public void setId(String id) {
                     this.id = id;
+                    setSingleId(id);
                 }
 
                 public void setTradeArea(List<TradeAreaBean> tradeArea) {
@@ -223,6 +224,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setId(String id) {
                         this.id = id;
+                        setSingleId(id);
                     }
                 }
             }
@@ -253,6 +255,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setId(String id) {
                         this.id = id;
+                        setSingleId(id);
                     }
 
                 }
@@ -293,6 +296,7 @@ public class SearchCateConditionBean implements Serializable{
 
                 public void setId(String id) {
                     this.id = id;
+                    setSingleId(id);
                 }
 
                 public List<CategoryTypeBean> getCategory_type() {
@@ -331,6 +335,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setId(String id) {
                         this.id = id;
+                        setSingleId(id);
                     }
                 }
             }
@@ -371,6 +376,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setKey(String key) {
                         this.key = key;
+                        setSingleId(key);
                     }
                 }
             }
@@ -412,6 +418,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setKey(String key) {
                         this.key = key;
+                        setSingleId(key);
                     }
                 }
             }
@@ -433,7 +440,7 @@ public class SearchCateConditionBean implements Serializable{
                     this.filterList2 = filterList2;
                 }
 
-                public static class FilterList2Bean extends TwoMode<SingleMode> implements Serializable{
+                public static class FilterList2Bean extends TwoMode<FilterList2Bean.FilterListBean> implements Serializable{
                     private String value;
                     private String key;
                     /**
@@ -457,6 +464,7 @@ public class SearchCateConditionBean implements Serializable{
                     }
 
                     public void setKey(String key) {
+                        setSingleId(key);
                         this.key = key;
                     }
 
@@ -465,7 +473,7 @@ public class SearchCateConditionBean implements Serializable{
                     }
 
                     public void setFilterList(List<FilterListBean> filterList) {
-
+                        giveList2Parent(filterList);
                         this.filterList = filterList;
                     }
 
@@ -487,6 +495,7 @@ public class SearchCateConditionBean implements Serializable{
                         }
 
                         public void setKey(String key) {
+                            setSingleId(key);
                             this.key = key;
                         }
                     }

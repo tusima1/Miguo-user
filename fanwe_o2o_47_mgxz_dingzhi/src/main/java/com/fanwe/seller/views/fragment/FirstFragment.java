@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.DPGridViewAdapter;
 import com.fanwe.seller.model.TypeModel;
+import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.utils.MGUIUtil;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class FirstFragment extends Fragment {
     private int lastSelectedPosition=0;
     public SecondSmallTypeChangeListener smallTypeChangeListener;
 
-    private List<TypeModel> mDataList = new ArrayList<TypeModel>();
+    private List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> mDataList = new ArrayList<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean>();
 
     public FirstFragment() {
         super();
@@ -67,10 +68,10 @@ public class FirstFragment extends Fragment {
                     return;
                 }
                 if(lastSelectedPosition==position){
-                    mDataList.get(position).setIfSelected(true);
+                    mDataList.get(position).setChecked(true);
                 }else{
-                    mDataList.get(position).setIfSelected(true);
-                    mDataList.get(lastSelectedPosition).setIfSelected(false);
+                    mDataList.get(position).setChecked(true);
+                    mDataList.get(lastSelectedPosition).setChecked(false);
                     lastSelectedPosition = position;
                 }
                 notifyAdapterChange();
@@ -84,7 +85,7 @@ public class FirstFragment extends Fragment {
     }
 
 
-    public void setmDataList(List<TypeModel> mDataList) {
+    public void setmDataList(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> mDataList) {
         this.mDataList = mDataList;
         if(mDPGridViewAdapter!=null){
             mDPGridViewAdapter.notifyDataSetChanged();
@@ -92,7 +93,7 @@ public class FirstFragment extends Fragment {
     }
     //取消当前adapter里面被选中的状态
     public void removeSelectedState(){
-         mDataList.get(lastSelectedPosition).setIfSelected(false);
+         mDataList.get(lastSelectedPosition).setChecked(false);
          notifyAdapterChange();
     }
 

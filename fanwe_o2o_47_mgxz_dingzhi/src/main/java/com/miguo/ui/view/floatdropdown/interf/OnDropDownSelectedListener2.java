@@ -9,5 +9,6 @@ import java.util.List;
  */
 
 public interface OnDropDownSelectedListener2<T> {
-    void onDropDownSelected(List<T> t);
+//    void onDropDownSelected(int index, T levelOne, List<T> levelTwo);
+    void onDropDownSelected(T levelOne, List<T> levelTwo);
 }

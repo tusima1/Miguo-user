@@ -58,7 +58,7 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
     private final SparseArray<View> contentViewList=new SparseArray<>();
     private int fakeHeight;//底下view的高度
 
-    private boolean initOk=true;
+    private boolean initOk=false;
 
     public DropDownMenu(Context context) {
         this(context,null);
@@ -118,7 +118,8 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
      * 最终添加的view
      */
     private void finalAddView(){
-        addDivider();
+        //TODO 这是两条线条
+//        addDivider();
         addView(titleTabLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         addDivider();
         addView(contentLayout, LayoutParams.MATCH_PARENT,0);
@@ -251,23 +252,44 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         }
         if (id == R.id.title_tab_1){
             clickOrder(1,id);
+            handleDropDownClick(v,1);
             return;
         }
         if (id == R.id.title_tab_2){
             clickOrder(2,id);
+            handleDropDownClick(v,2);
             return;
         }
         if (id == R.id.title_tab_3){
             clickOrder(3,id);
+            handleDropDownClick(v,3);
             return;
         }
         if (id == R.id.title_tab_4){
             clickOrder(4,id);
+            handleDropDownClick(v,4);
             return;
         }
 
         if (v == fakeView){
             dismiss();
+        }
+    }
+
+    public interface OnDropDownTitleClickListener{
+//        void onBefore(View v);
+        void onAfter(View v,int index);
+    }
+
+    private OnDropDownTitleClickListener ddListener;
+
+    public void setOnDropDownTitleClickListener(OnDropDownTitleClickListener ddListener) {
+        this.ddListener = ddListener;
+    }
+
+    private void handleDropDownClick(View v,int index){
+        if (ddListener!=null){
+            ddListener.onAfter(v,index);
         }
     }
 
@@ -304,9 +326,25 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         }
         text = TextUtils.isEmpty(text) ? titleStr[index] : text;
         try {
-            ((TitleTab)titleTabLayout.getChildAt(index)).setText(text);
+            ((TitleTab)titleTabLayout.getChildAt(2 * index)).setText(text);
         } catch (Exception e) {
             Log.e("test","index error!");
+        }
+    }
+
+    /**
+     * 从1开始,1234
+     * @param index 例如: 1
+     */
+    public void performTitleTabClick(int index){
+        if (index > titleTabNum){
+            return;
+        }
+        int innerIndex = index -1;
+        try {
+            ((TitleTab)titleTabLayout.getChildAt(2 * innerIndex)).performClick();
+        } catch (Exception e) {
+            Log.e("test","performTitleTabClick index error!");
         }
     }
 

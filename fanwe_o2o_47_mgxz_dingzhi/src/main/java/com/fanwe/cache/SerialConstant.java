@@ -17,4 +17,5 @@ public class SerialConstant {
      * 当前城市
      */
     public final static String FILE_CITY_CURR = "cityCurr.ser";
+    public final static String FILE_HOT_SEARCH_WORD = "hotSearchWord.ser";
 }

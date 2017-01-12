@@ -4,19 +4,6 @@
     android:layout_height="@dimen/dp33"
     android:background="@color/white">
 
-    <TextView
-        android:id="@+id/textview1"
-        android:layout_width="57dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp13"
-        android:ellipsize="end"
-        android:maxLength="4"
-        android:singleLine="true"
-        android:text="很好吃的"
-        android:textColor="@color/c_CCCCCC"
-        android:textSize="14sp" />
-
     <View
         android:id="@+id/divline"
         android:layout_width="@dimen/dp72"
@@ -26,5 +13,19 @@
         android:layout_marginTop="@dimen/dp5"
         android:background="@color/black_2e"
         android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:maxLength="4"
+        android:singleLine="true"
+        android:text="很好"
+        android:textColor="@color/c_CCCCCC"
+        android:textSize="14sp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.miguo.ui.view.floatdropdown.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +37,6 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
     }
 
     public void updateData(List<SingleMode> newSingleModes){
-//        if (singleModes!=null && singleModes.containsAll(newSingleModes)){
-//            return;
-//        }else {
-//            singleModes = newSingleModes;
-//            notifyDataSetChanged();
-//        }
         boolean changed=false;
         for (int i = 0; i < newSingleModes.size(); i++) {
             if (newSingleModes.get(i).isChecked()){
@@ -55,6 +50,33 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
 
         singleModes = newSingleModes;
         notifyDataSetChanged();
+    }
+
+    public void setData(List<SingleMode> singleModes){
+        this.singleModes=singleModes;
+    }
+
+    /**
+     * 代替点击某个item,代替 {@link View#performClick()}
+     * @param handlePosition 位置
+     */
+    public void performPosition(int handlePosition){
+        if (singleModes ==null ){
+            Log.e("test","请先调用setData()方法,目前数据为null!");
+            return;
+        }
+        SingleMode singleMode = singleModes.get(handlePosition);
+        boolean checked = singleMode.isChecked();
+        if (checked){
+            return;
+        }
+        singleMode.setChecked(true);
+        notifyItemChanged(handlePosition);
+        if (preClickPosition !=-2){
+            singleModes.get(preClickPosition).setChecked(false);
+            notifyItemChanged(preClickPosition);
+        }
+        preClickPosition = handlePosition;
     }
 
     @Override

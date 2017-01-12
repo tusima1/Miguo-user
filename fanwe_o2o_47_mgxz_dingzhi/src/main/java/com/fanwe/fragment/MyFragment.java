@@ -310,6 +310,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             /*二维码名片*/
 //            startActivity(DistributionMyQRCodeActivity.class);
             startActivity(TestActivity.class);
+//            startActivity(SearchGuideActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {
