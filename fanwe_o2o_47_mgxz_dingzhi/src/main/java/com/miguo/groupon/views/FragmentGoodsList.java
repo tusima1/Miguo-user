@@ -81,12 +81,18 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
     }
 
     public String keyword;
+    public String area_one;
+    public String area_two;
+    public String category_one;
+    public String category_two;
+    public String filter;
+    public String sort_type;
 
     private void getData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getTuanSearch("", "", "", "", "", keyword, "", pageNum, pageSize);
+        sellerHttpHelper.getTuanSearch(area_one, area_two, category_one, category_two, filter, keyword, sort_type, pageNum, pageSize);
     }
 
     public void setData(List<GoodsGroupModel> models) {
