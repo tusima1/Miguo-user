@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/secondtype_frag1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.fanwe.seller.views.customize.DPViewPager
+        android:id="@+id/secondtype_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.fanwe.seller.views.customize.DPViewPager>
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator_circle"
+        app:ci_drawable="@drawable/black_radius_square"
+        app:ci_height="5dp"
+        app:ci_margin="5dp"
+        app:ci_width="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center" />
+
+</LinearLayout>

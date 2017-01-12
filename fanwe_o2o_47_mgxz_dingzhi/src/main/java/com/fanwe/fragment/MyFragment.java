@@ -25,6 +25,7 @@ import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.mine.views.MineTeamActivity;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.DaiyanSendTypeActivity;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
@@ -316,7 +317,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(UserHomeActivity.class);
         } else if (v == mKefu) {
             //客服电话
-            clickKfPhone();
+//            clickKfPhone();
+            Intent intent = new Intent(getActivity(), DaiyanSendTypeActivity.class);
+            startActivity(intent);
         } else if (v == mSet) {
             //设置页。
              /*点击了我的区域*/
