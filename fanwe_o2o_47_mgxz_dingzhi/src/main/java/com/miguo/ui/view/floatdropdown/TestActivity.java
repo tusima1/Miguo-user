@@ -62,9 +62,6 @@ public class TestActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.e("test","body is null!!!");
                 }
-                if (body!=null){
-                    helper.setData(body);
-                }
             }
         });
     }

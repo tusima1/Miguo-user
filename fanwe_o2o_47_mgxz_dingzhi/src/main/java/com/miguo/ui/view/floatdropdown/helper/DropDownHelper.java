@@ -9,6 +9,7 @@ import android.view.View;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.entity.TwoMode;
+import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.view.dropdown.DropDownMenu;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener;
@@ -49,13 +50,18 @@ public class DropDownHelper {
 
     private void setData(){
         //SearchCateConditionBean.ResultBean.BodyBean body
-//        this.saveBody = body;
-//        List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
-//                .getHotAreaList1(), body.getAdminAreaList());
-//        List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
-//        List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
-//        List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
-//        handleData(item1,item2,item3,item4);
+        SearchCateConditionBean.ResultBean.BodyBean body =  SearchCateConditionFactory.get();
+        if (body==null){
+            Log.e("test","筛选条初始化失败,没有取到数据!");
+            return;
+        }
+        this.saveBody = body;
+        List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
+                .getHotAreaList1(), body.getAdminAreaList());
+        List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
+        List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
+        List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
+        handleData(item1,item2,item3,item4);
 
         ddm.setOnDropDownTitleClickListener(new DropDownMenu.OnDropDownTitleClickListener() {
             @Override
