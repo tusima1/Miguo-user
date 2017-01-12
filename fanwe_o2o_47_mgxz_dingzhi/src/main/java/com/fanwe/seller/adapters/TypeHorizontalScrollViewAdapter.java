@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.TypeEntity;
+import com.miguo.entity.SearchCateConditionBean;
 
 import java.util.List;
 
@@ -21,9 +22,9 @@ public class TypeHorizontalScrollViewAdapter {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<TypeEntity> mDatas=null;
+    private List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> mDatas=null;
 
-    public TypeHorizontalScrollViewAdapter(Context context, List<TypeEntity> mDatas) {
+    public TypeHorizontalScrollViewAdapter(Context context, List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> mDatas) {
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
         this.mDatas = mDatas;
@@ -54,7 +55,7 @@ public class TypeHorizontalScrollViewAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.mText.setText(mDatas.get(position).getTypeName());
+        viewHolder.mText.setText(mDatas.get(position).getName());
 
         return convertView;
     }

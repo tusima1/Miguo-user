@@ -58,41 +58,24 @@
                     </com.fanwe.seller.views.customize.DPViewPager>
                 </LinearLayout>
 
-                <LinearLayout
+                <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
+                    android:id="@+id/fake_flow_llay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#f6e4c0"
                     android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="可乐鸡翅  55元"
-                        android:textColor="#e68b4e"
-                        android:textSize="10pt" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="立即购买"
-                        android:textColor="#ffffff" />
-                </LinearLayout>
-
-                <com.fanwe.seller.views.customize.ListViewForScrollView
-                    android:id="@+id/list_view"
+                </com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu>
+                <FrameLayout
+                    android:id="@+id/content_act_search"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                </com.fanwe.seller.views.customize.ListViewForScrollView>
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </com.fanwe.seller.views.customize.MultiScrollView>
 
 
     </LinearLayout>
 
-    <LinearLayout
+    <com.miguo.ui.view.dropdown.DropDownMenu
         android:id="@+id/flow_llay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,19 +83,5 @@
         android:background="#f6e4c0"
         android:orientation="horizontal"
         android:visibility="gone">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="可乐鸡翅  55元"
-            android:textColor="#e68b4e"
-            android:textSize="10pt" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="立即购买"
-            android:textColor="#ffffff" />
-    </LinearLayout>
+    </com.miguo.ui.view.dropdown.DropDownMenu>
 </RelativeLayout>

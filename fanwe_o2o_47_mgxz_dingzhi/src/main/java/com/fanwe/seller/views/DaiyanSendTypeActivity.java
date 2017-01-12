@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import com.baidu.mapapi.map.Text;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.search.views.FragmentSearchShop;
 import com.fanwe.seller.adapters.MyPagerAdapter;
 import com.fanwe.seller.adapters.TypeHorizontalScrollViewAdapter;
 import com.fanwe.seller.adapters.TypeListViewAdapter;
@@ -32,6 +36,11 @@ import com.fanwe.seller.views.customize.PointView;
 import com.fanwe.seller.views.customize.TypeHorizontalScrollView;
 import com.fanwe.seller.views.fragment.FirstFragment;
 import com.fanwe.seller.views.fragment.SecondTypeFragment;
+import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.factory.SearchCateConditionFactory;
+import com.miguo.ui.view.dropdown.DropDownMenu;
+import com.miguo.ui.view.floatdropdown.helper.DropDownHelper;
+import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,14 +65,13 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     private CircleIndicator mIndicator;
     private TypeHorizontalScrollViewAdapter mAdapter;
-    private List<TypeEntity> mDatas;
-    private List<TypeModel> secondDatas;
+    private List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> mDatas;
+    private List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> secondDatas;
     private TypeEntity currentFirstType;
     private TypeEntity currentSecondType;
     private String currentFirstTypeStr;
     private String currentSecondTypeStr;
-    private HashMap<String, List<TypeModel>> allTypes;
-    private HashMap<String, Integer> allTypesPageSize;
+    private HashMap<String, List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean>> allTypes;
     private LinearLayout topView;
     private LinearLayout mFlowView;
     private MultiScrollView mScrollView;
@@ -71,7 +79,13 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     TypeListViewAdapter listViewAdapter;
     ArrayList<String> data;
     RelativeLayout title_line;
-
+    /**
+     * 分类数据。
+     */
+    SearchCateConditionBean.ResultBean.BodyBean  bodyBean;
+    FakeDropDownMenu fakeFlowLine;
+    DropDownMenu flowLine;
+    FragmentSearchShop fragmentShop;
 
     public DaiyanSendTypeActivity() {
     }
@@ -81,14 +95,31 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.daiyan_sendtype_act);
         title_line = (RelativeLayout) findViewById(R.id.title_line);
-
+        fakeFlowLine = (FakeDropDownMenu)findViewById(R.id.fake_flow_llay);
+        flowLine = (DropDownMenu)findViewById(R.id.flow_llay);
         mHorizontalScrollView = (TypeHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        if (fragmentShop == null) {
+            fragmentShop = new FragmentSearchShop();
+            ft.add(R.id.content_act_search, fragmentShop);
+        } else {
+            ft.show(fragmentShop);
+        }
+        ft.commit();
+
+        getConditionData();
         initHorizontalScrollView();
         createSecondViewPager();
-        initScrollView();
+//        initScrollView();
     }
 
     public void getConditionData(){
+      bodyBean= SearchCateConditionFactory.get();
+      mDatas = bodyBean.getCategoryList();
+      DropDownHelper helper = new DropDownHelper(this,flowLine);
+
 
     }
 
@@ -99,7 +130,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if(allTypes==null){
             return;
         }
-      
 
     }
 
@@ -118,7 +148,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             mFragmentList = new ArrayList<SecondTypeFragment>();
         }
         for (int i = 0; i < mDatas.size(); i++) {
-            TypeEntity entity = mDatas.get(i);
+            SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean entity = mDatas.get(i);
             secondDatas = allTypes.get(entity.getId());
             if (secondDatas != null && secondDatas.size() > 0) {
                 int pageSize = 0;
@@ -180,31 +210,20 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     public void getFirstType() {
         if (mDatas == null) {
-            mDatas = new ArrayList<TypeEntity>();
+            mDatas = new ArrayList<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean>();
+        }
+        if(allTypes ==null){
             allTypes = new HashMap<>();
-            allTypesPageSize = new HashMap<>();
         }
-        for (int i = 0; i < 10; i++) {
-            TypeEntity entity = new TypeEntity();
-            entity.setId(i + "");
-            entity.setTypeName("大类" + i + "类");
-            entity.setTypeLevel("1");
-            mDatas.add(entity);
-            updateSecondType(entity);
-            allTypes.put(i + "", secondDatas);
-        }
-
-    }
-
-    public void updateSecondType(TypeEntity firstType) {
-        secondDatas = null;
-        if (secondDatas == null) {
-            secondDatas = new ArrayList<>();
-        }
-        for (int i = 0; i < 10; i++) {
-            TypeModel model = new TypeModel();
-            model.setContent(firstType.getTypeName() + i);
-            secondDatas.add(model);
+        for (int i = 0; i < mDatas.size(); i++) {
+            if(mDatas.get(i)==null){
+                continue;
+            }
+            if(mDatas.get(i).getCategory_type()==null){
+                allTypes.put(mDatas.get(i).getId(),new ArrayList<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean>());
+            }else {
+                allTypes.put(mDatas.get(i).getId(), mDatas.get(i).getCategory_type());
+            }
         }
     }
 
@@ -232,11 +251,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         }
     }
 
-    public void updateCurrentItem(TypeEntity firstType, int position) {
+    public void updateCurrentItem(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean firstType, int position) {
         if (firstType == null || TextUtils.isEmpty(firstType.getId())) {
-            return;
-        }
-        if (allTypesPageSize == null) {
             return;
         }
         if (mViewPager != null) {
@@ -245,73 +261,84 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         }
     }
 
-    private void initScrollView() {
-        mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
-        topView = (LinearLayout) findViewById(R.id.topview);
-        mFlowView = (LinearLayout) findViewById(R.id.flow_llay);
-        listViewForScrollView = (ListViewForScrollView) findViewById(R.id.list_view);
-
-        listViewAdapter = new TypeListViewAdapter(getData(), this);
-        listViewForScrollView.setAdapter(listViewAdapter);
-        listViewForScrollView.setFocusable(false);
-        listViewForScrollView.setOnItemClickListener(onItemClickListener);
-
-        /************************关键代码**************
-         * 暂时想到的这个方案,当listview滑动到最顶部的时候,拦截scrollview事件,listview可以刷新
-         * 反之,取消拦截scrollview事件,listview不能刷新
-         * ******************************/
-        listViewForScrollView.setOnTouchListener(new View.OnTouchListener() {
-
+    private void initTitle(){
+        TextView youhuishop = (TextView)findViewById(R.id.youhuishop);
+        TextView commonshop = (TextView)findViewById(R.id.commonshop);
+        ImageView search_button = (ImageView)findViewById(R.id.search_button);
+        search_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int localheight = 0;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        localheight = (int) event.getY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        int sY = (int) event.getY();
-                        int scrollY = mScrollView.getScrollY();
-                        int height = mScrollView.getHeight();
-                        int scrollViewMeasuredHeight = mScrollView.getChildAt(0)
-                                .getMeasuredHeight();
-                        //这个表示,当滑动到scrollview顶部的时候,
-                        if (scrollY == 0) {
-                            //检测到在listview里面手势向下滑动的手势,就下拉刷新,反之,则无法触发下拉刷新
-                            if (localheight - sY > 10) {
-                                // 取消拦截scrollview事件,listview不能刷新
-                                mScrollView.requestDisallowInterceptTouchEvent(false);
-                                break;
-                            }
-                            // 拦截scrollview事件,listview可以刷新
-                            mScrollView.requestDisallowInterceptTouchEvent(true);
-                        }
-                        //这个表示scrollview没恢复到顶部,在listview里面是无法触发下拉刷新的
-                        else {
-                            // 取消拦截scrollview事件,listview不能刷新
-                            mScrollView.requestDisallowInterceptTouchEvent(false);
-                        }
-                        //滑动到底部的时候,自动去加载更多.
-                        if ((scrollY + height) == scrollViewMeasuredHeight) {
-                            // 滑到底部触发加载更多
-                            onLoadMore();
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        localheight = 0;
-                        break;
-                    default:
-                        break;
-                }
-                return false;
+            public void onClick(View view) {
+//                Intent intent1 = new Intent(DaiyanSendTypeActivity.this)
             }
         });
-
-        setListViewHeightBasedOnChildren(listViewForScrollView);
-        //监听浮动view的滚动状态
-        mScrollView.listenerFlowViewScrollState(topView, mFlowView);
-        //将ScrollView滚动到起始位置
-        mScrollView.scrollTo(0, 0);
+    }
+    private void initScrollView() {
+//        mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
+//        topView = (LinearLayout) findViewById(R.id.topview);
+//        mFlowView = (LinearLayout) findViewById(R.id.flow_llay);
+//        listViewForScrollView = (ListViewForScrollView) findViewById(R.id.list_view);
+//
+//        listViewAdapter = new TypeListViewAdapter(getData(), this);
+//        listViewForScrollView.setAdapter(listViewAdapter);
+//        listViewForScrollView.setFocusable(false);
+//        listViewForScrollView.setOnItemClickListener(onItemClickListener);
+//
+//        /************************关键代码**************
+//         * 暂时想到的这个方案,当listview滑动到最顶部的时候,拦截scrollview事件,listview可以刷新
+//         * 反之,取消拦截scrollview事件,listview不能刷新
+//         * ******************************/
+//        listViewForScrollView.setOnTouchListener(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int localheight = 0;
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        localheight = (int) event.getY();
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        int sY = (int) event.getY();
+//                        int scrollY = mScrollView.getScrollY();
+//                        int height = mScrollView.getHeight();
+//                        int scrollViewMeasuredHeight = mScrollView.getChildAt(0)
+//                                .getMeasuredHeight();
+//                        //这个表示,当滑动到scrollview顶部的时候,
+//                        if (scrollY == 0) {
+//                            //检测到在listview里面手势向下滑动的手势,就下拉刷新,反之,则无法触发下拉刷新
+//                            if (localheight - sY > 10) {
+//                                // 取消拦截scrollview事件,listview不能刷新
+//                                mScrollView.requestDisallowInterceptTouchEvent(false);
+//                                break;
+//                            }
+//                            // 拦截scrollview事件,listview可以刷新
+//                            mScrollView.requestDisallowInterceptTouchEvent(true);
+//                        }
+//                        //这个表示scrollview没恢复到顶部,在listview里面是无法触发下拉刷新的
+//                        else {
+//                            // 取消拦截scrollview事件,listview不能刷新
+//                            mScrollView.requestDisallowInterceptTouchEvent(false);
+//                        }
+//                        //滑动到底部的时候,自动去加载更多.
+//                        if ((scrollY + height) == scrollViewMeasuredHeight) {
+//                            // 滑到底部触发加载更多
+//                            onLoadMore();
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        localheight = 0;
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                return false;
+//            }
+//        });
+//
+//        setListViewHeightBasedOnChildren(listViewForScrollView);
+//        //监听浮动view的滚动状态
+//        mScrollView.listenerFlowViewScrollState(topView, mFlowView);
+//        //将ScrollView滚动到起始位置
+//        mScrollView.scrollTo(0, 0);
     }
 
 

@@ -86,11 +86,13 @@ public class FragmentShopList extends Fragment implements CallbackView {
         });
     }
 
+    public String keyword;
+
     private void getData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getShopSearch("", "", "", "", "", "", "", pageNum, pageSize, "1");
+        sellerHttpHelper.getShopSearch("", "", "", "", "", keyword, "", pageNum, pageSize, "1");
     }
 
     LinearLayoutManager mLayoutManager;
@@ -142,10 +144,6 @@ public class FragmentShopList extends Fragment implements CallbackView {
         if (pageBean != null && CollectionUtils.isValid(datas) && DataFormat.toInt(pageBean.getData_total()) <= datas.size()) {
             return false;
         }
-        //TODO for test
-        if (CollectionUtils.isValid(datas) && datas.size() > 20) {
-            return false;
-        }
         return true;
     }
 
@@ -182,12 +180,6 @@ public class FragmentShopList extends Fragment implements CallbackView {
                     mSellerListAdapter.notifyDataSetChanged();
                     if (mIDataInterface != null) {
                         mIDataInterface.verifyData(CollectionUtils.isValid(datas));
-                        //TODO for test
-                        if (CollectionUtils.isValid(datas)) {
-                            if (datas.size() > 20) {
-                                mIDataInterface.verifyData(false);
-                            }
-                        }
                     }
                     break;
             }

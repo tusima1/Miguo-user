@@ -80,11 +80,13 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
         mPtrlvContent.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
     }
 
+    public String keyword;
+
     private void getData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getTuanSearch("", "", "", "", "", "", "", pageNum, pageSize);
+        sellerHttpHelper.getTuanSearch("", "", "", "", "", keyword, "", pageNum, pageSize);
     }
 
     public void setData(List<GoodsGroupModel> models) {
@@ -160,12 +162,6 @@ public class FragmentGoodsList extends Fragment implements CallbackView {
                     mPtrlvContent.onRefreshComplete();
                     if (mIDataInterface != null) {
                         mIDataInterface.verifyData(CollectionUtils.isValid(datas));
-                    }
-                    //TODO for test
-                    if (CollectionUtils.isValid(datas)) {
-                        if (datas.size() > 20) {
-                            mIDataInterface.verifyData(false);
-                        }
                     }
                     break;
                 default:
