@@ -1,6 +1,7 @@
 package com.fanwe.seller.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +35,7 @@ import com.fanwe.seller.views.fragment.SecondTypeFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -42,7 +44,7 @@ import me.relex.circleindicator.CircleIndicator;
  * Created by zhouhy on 2017/1/11.
  */
 
-public class DaiyanSendTypeActivity  extends FragmentActivity implements ViewPager.OnPageChangeListener {
+public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener {
 
     private int[] ICON_MAP_COMMON = {R.drawable.ic_r8, R.drawable.ic_r9};
     private int ICON_SIZE = ICON_MAP_COMMON.length;
@@ -57,6 +59,9 @@ public class DaiyanSendTypeActivity  extends FragmentActivity implements ViewPag
     private List<TypeEntity> mDatas;
     private List<TypeModel> secondDatas;
     private TypeEntity currentFirstType;
+    private TypeEntity currentSecondType;
+    private String currentFirstTypeStr;
+    private String currentSecondTypeStr;
     private HashMap<String, List<TypeModel>> allTypes;
     private HashMap<String, Integer> allTypesPageSize;
     private LinearLayout topView;
@@ -75,7 +80,7 @@ public class DaiyanSendTypeActivity  extends FragmentActivity implements ViewPag
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.daiyan_sendtype_act);
-        title_line = (RelativeLayout)findViewById(R.id.title_line);
+        title_line = (RelativeLayout) findViewById(R.id.title_line);
 
         mHorizontalScrollView = (TypeHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
         initHorizontalScrollView();
@@ -83,6 +88,17 @@ public class DaiyanSendTypeActivity  extends FragmentActivity implements ViewPag
         initScrollView();
     }
 
+
+    private void getIntentData() {
+        Intent intent = getIntent();
+        currentFirstTypeStr = intent.getStringExtra("firstType");
+        currentSecondTypeStr = intent.getStringExtra("secondType");
+        if(allTypes==null){
+            return;
+        }
+      
+
+    }
 
     private void initView() {
         mViewPager = (DPViewPager) findViewById(R.id.viewpager_meituan);
@@ -137,22 +153,22 @@ public class DaiyanSendTypeActivity  extends FragmentActivity implements ViewPag
         mHorizontalScrollView
                 .setCurrentTypeChangeListener(new TypeHorizontalScrollView.CurrentTypeChangeListener() {
                     @Override
-                    public void onCurrentTypeChanged( View oldView,int position,
+                    public void onCurrentTypeChanged(View oldView, int position,
                                                      View view) {
                         updateCurrentItem(mDatas.get(position), position);
-                        updateHorizontalScrollViewItem(oldView,false);
-                        updateHorizontalScrollViewItem(view,true);
+                        updateHorizontalScrollViewItem(oldView, false);
+                        updateHorizontalScrollViewItem(view, true);
                     }
                 });
         //添加点击回调
         mHorizontalScrollView.setOnItemClickListener(new TypeHorizontalScrollView.OnItemClickListener() {
 
             @Override
-            public void onClick(View oldView,View view, int position) {
+            public void onClick(View oldView, View view, int position) {
 
                 updateCurrentItem(mDatas.get(position), position);
-                updateHorizontalScrollViewItem(oldView,false);
-                updateHorizontalScrollViewItem(view,true);
+                updateHorizontalScrollViewItem(oldView, false);
+                updateHorizontalScrollViewItem(view, true);
             }
         });
         //设置适配器
@@ -191,27 +207,28 @@ public class DaiyanSendTypeActivity  extends FragmentActivity implements ViewPag
 
     /**
      * 修改horizontalscrollview item的颜色
+     *
      * @param view
      * @param selected
      */
-    public  void updateHorizontalScrollViewItem(View view,boolean selected)
-    {
-        if(view==null){
+    public void updateHorizontalScrollViewItem(View view, boolean selected) {
+        if (view == null) {
             return;
         }
-        if(view instanceof  RelativeLayout){
-            RelativeLayout relativeLayout = (RelativeLayout)view;
-            TextView  textView =(TextView) relativeLayout.findViewById(R.id.textview1);
-            View  view1 = (View)relativeLayout.findViewById(R.id.divline);
-            if(selected) {
+        if (view instanceof RelativeLayout) {
+            RelativeLayout relativeLayout = (RelativeLayout) view;
+            TextView textView = (TextView) relativeLayout.findViewById(R.id.textview1);
+            View view1 = (View) relativeLayout.findViewById(R.id.divline);
+            if (selected) {
                 textView.setTextColor(Color.parseColor("#FF2E2E2E"));
                 view1.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 textView.setTextColor(Color.parseColor("#FFCCCCCC"));
                 view1.setVisibility(View.GONE);
             }
         }
     }
+
     public void updateCurrentItem(TypeEntity firstType, int position) {
         if (firstType == null || TextUtils.isEmpty(firstType.getId())) {
             return;

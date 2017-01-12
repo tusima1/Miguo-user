@@ -5,8 +5,6 @@ package com.fanwe.seller.adapters;
  */
 
 import android.content.Context;
-import android.widget.TextView;
-
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.TypeModel;
