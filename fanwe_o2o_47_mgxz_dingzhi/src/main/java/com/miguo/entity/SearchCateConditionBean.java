@@ -433,7 +433,7 @@ public class SearchCateConditionBean implements Serializable{
                     this.filterList2 = filterList2;
                 }
 
-                public static class FilterList2Bean extends SingleMode implements Serializable{
+                public static class FilterList2Bean extends TwoMode<SingleMode> implements Serializable{
                     private String value;
                     private String key;
                     /**
