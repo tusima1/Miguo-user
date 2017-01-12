@@ -185,7 +185,7 @@ public class SearchResultActivity extends FragmentActivity {
                     List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
                     List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
                     List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
-                    helper.setData(item1, item2, item3, item4);
+//                    helper.setData(item1, item2, item3, item4);
                 }
             }
         });
