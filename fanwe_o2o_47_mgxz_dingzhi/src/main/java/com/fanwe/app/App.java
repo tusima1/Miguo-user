@@ -32,6 +32,7 @@ import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserInfoNew;
 import com.miguo.app.HiHomeActivity;
+import com.miguo.crash.CrashHandler;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -135,6 +136,8 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
     private void init() {
         mApp = this;
+        //crash日志捕获
+        CrashHandler.getInstance().setCrashHanler(getApplicationContext());
         ImageLoaderManager.initImageLoader();
         initSDLibrary();
 

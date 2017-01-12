@@ -11,6 +11,8 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.model.createShareRecord.ResultCreateShareRecord;
 import com.fanwe.common.model.createShareRecord.RootCreateShareRecord;
+import com.fanwe.common.model.getCrashUpToken.ResultCrashUpToken;
+import com.fanwe.common.model.getCrashUpToken.RootCrashUpToken;
 import com.fanwe.common.model.getHomeClassifyList.ModelHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.ResultHomeClassifyList;
 import com.fanwe.common.model.getHomeClassifyList.RootHomeClassifyList;
@@ -199,9 +201,10 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
 
     /**
      * 通过钻石领取码获取shareid
+     *
      * @param code
      */
-    public void getShareIdByCode(String code){
+    public void getShareIdByCode(String code) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("receive_code", code);
         params.put("method", CommonConstants.GETSHAREID);
@@ -221,21 +224,21 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
                         datas.add(hashMap);
                         onSuccess(mView, CommonConstants.GETSHAREID, datas);
                     } else {
-                        onFailure2(mView,CommonConstants.GETSHAREID);
+                        onFailure2(mView, CommonConstants.GETSHAREID);
                     }
                 } else {
-                    onFailure2(mView,CommonConstants.GETSHAREID);
+                    onFailure2(mView, CommonConstants.GETSHAREID);
                 }
             }
 
             @Override
             public void onErrorResponse(String message, String errorCode) {
-                onFailure2(mView,CommonConstants.GETSHAREID);
+                onFailure2(mView, CommonConstants.GETSHAREID);
             }
         });
     }
 
-  /**
+    /**
      * 生成分享记录
      */
     public void createShareRecord(String content_type, String content_id) {
@@ -258,8 +261,37 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
                     List<ModelCreateShareRecord> items = new ArrayList<>();
                     items.add(result.get(0).getBody());
                     onSuccess(mView, CommonConstants.CREATE_SHARE_RECORD, items);
-                }catch (Exception e){
-                    Log.e("json",e.getMessage());
+                } catch (Exception e) {
+                    Log.e("json", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onErrorResponse(String message, String errorCode) {
+            }
+        });
+    }
+
+    /**
+     * crash log上传时uptoken
+     */
+    public void getCrashUpToken() {
+        TreeMap<String, String> params = new TreeMap<String, String>();
+        params.put("method", CommonConstants.CRASH_UPTOKEN);
+
+        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+            @Override
+            public void onSuccessResponse(String responseBody) {
+                try {
+                    RootCrashUpToken root = gson.fromJson(responseBody, RootCrashUpToken.class);
+                    List<ResultCrashUpToken> result = root.getResult();
+                    if (SDCollectionUtil.isEmpty(result) || !"200".equals(root.getStatusCode())) {
+                        onSuccess(mView, CommonConstants.CRASH_UPTOKEN, null);
+                        return;
+                    }
+                    onSuccess(mView, CommonConstants.CRASH_UPTOKEN, result.get(0).getBody());
+                } catch (Exception e) {
+                    Log.e("json", e.getMessage());
                 }
             }
 
@@ -275,6 +307,6 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         mView = null;
         gson = null;
         userCurrentInfo = null;
-        App.getInstance().code="";
+        App.getInstance().code = "";
     }
 }

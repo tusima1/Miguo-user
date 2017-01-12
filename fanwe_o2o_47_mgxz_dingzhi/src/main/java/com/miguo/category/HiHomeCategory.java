@@ -41,6 +41,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiHomeFragment;
+import com.miguo.fragment.HiRepresentFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
@@ -185,9 +186,9 @@ public class HiHomeCategory extends Category implements
                  * 名字 默认图标 按下后图标 tab id
                  */
                         addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
-                addTab(getString(R.string.funny), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
+                addTab(getString(R.string.find), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
                 addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
-                addTab(getString(R.string.find), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
+                addTab(getString(R.string.funny), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
                 addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
                 /**
                  * 设置为默认模式（图标+文字形式）
@@ -230,8 +231,8 @@ public class HiHomeCategory extends Category implements
     private void initHomePagers() {
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
+        fragments.add(new HiRepresentFragment());
         fragments.add(new FunnyFragment());
-        fragments.add(new SellerFragment());
         fragments.add(new MyFragment());
 
         homePagerAdapter = new HomePagerAdapter(getActivity().getSupportFragmentManager(), fragments);

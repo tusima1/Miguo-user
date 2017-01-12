@@ -78,7 +78,9 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <data
@@ -686,6 +688,14 @@
             android:name="com.miguo.app.HiWithdrawalConditionsActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan" />
+  <!--代言二级页面-->
+        <activity
+            android:name="com.fanwe.seller.views.DaiyanSendTypeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan" />

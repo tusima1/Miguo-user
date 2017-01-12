@@ -1,5 +1,10 @@
 package com.miguo.entity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -185,7 +190,6 @@ public class SearchCateConditionBean implements Serializable{
             }
 
             public static class AdminAreaListBean extends TwoMode<AdminAreaListBean.TradeAreaBean> implements Serializable{
-                private String name;
                 private String id;
                 /**
                  * name : 测试商圈12
@@ -203,14 +207,6 @@ public class SearchCateConditionBean implements Serializable{
                     setSingleId(id);
                 }
 
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
-                }
-
                 public void setTradeArea(List<TradeAreaBean> tradeArea) {
                     giveList2Parent(tradeArea);
                     this.tradeArea = tradeArea;
@@ -221,7 +217,6 @@ public class SearchCateConditionBean implements Serializable{
                 }
 
                 public class TradeAreaBean extends SingleMode implements Serializable{
-                    private String name;
                     private String id;
                     public String getId() {
                         return id;
@@ -231,18 +226,10 @@ public class SearchCateConditionBean implements Serializable{
                         this.id = id;
                         setSingleId(id);
                     }
-                    public String getName() {
-                        return name;
-                    }
-
-                    public void setName(String name) {
-                        this.name = name;
-                    }
                 }
             }
 
             public static class HotAreaList1Bean extends TwoMode<HotAreaList1Bean.HotAreaList2Bean> implements Serializable{
-                private String name;
                 /**
                  * name : 测试商圈31
                  * id : f90f4b6b-d375-4126-b4c0-de887bfbd3a9
@@ -258,17 +245,8 @@ public class SearchCateConditionBean implements Serializable{
                     giveList2Parent(hotAreaList2);
                     this.hotAreaList2=hotAreaList2;
                 }
-                
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
-                }
 
                 public static class HotAreaList2Bean extends SingleMode implements Serializable{
-                    private String name;
                     private String id;
 
                     public String getId() {
@@ -279,19 +257,12 @@ public class SearchCateConditionBean implements Serializable{
                         this.id = id;
                         setSingleId(id);
                     }
-                    public String getName() {
-                        return name;
-                    }
 
-                    public void setName(String name) {
-                        this.name = name;
-                    }
                 }
             }
 
             public static class CategoryListBean extends TwoMode<CategoryListBean.CategoryTypeBean> implements Serializable{
                 private String img;
-                private String name;
                 private String uncheck_img;
                 private String id;
                 /**
@@ -336,19 +307,9 @@ public class SearchCateConditionBean implements Serializable{
                     giveList2Parent(category_type);
                     this.category_type = category_type;
                 }
-                
-                
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
-                }
 
                 public static class CategoryTypeBean extends SingleMode implements Serializable{
                     private String img;
-                    private String name;
                     private String uncheck_img;
                     private String id;
 
@@ -367,13 +328,6 @@ public class SearchCateConditionBean implements Serializable{
                     public void setUncheck_img(String uncheck_img) {
                         this.uncheck_img = uncheck_img;
                     }
-                    public String getName() {
-                        return name;
-                    }
-
-                    public void setName(String name) {
-                        this.name = name;
-                    }
 
                     public String getId() {
                         return id;
@@ -387,7 +341,6 @@ public class SearchCateConditionBean implements Serializable{
             }
 
             public static class IntelList1Bean extends TwoMode<IntelList1Bean.IntelList2Bean> implements Serializable{
-                private String name;
                 /**
                  * value : 智能排序
                  * key : intelligent_ordering
@@ -402,13 +355,6 @@ public class SearchCateConditionBean implements Serializable{
                 public void setIntelList2(List<IntelList2Bean> intelList2) {
                     giveList2Parent(intelList2);
                     this.intelList2 = intelList2;
-                }
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
                 }
 
                 public static class IntelList2Bean extends SingleMode implements Serializable{
@@ -436,7 +382,6 @@ public class SearchCateConditionBean implements Serializable{
             }
 
             public static class NearByListBean extends TwoMode<NearByListBean.NearListBean> implements Serializable{
-                private String name;
                 /**
                  * value : 全城
                  * key : wholecity
@@ -452,13 +397,6 @@ public class SearchCateConditionBean implements Serializable{
                 public void setNearList(List<NearListBean> nearList) {
                     giveList2Parent(nearList);
                     this.nearList = nearList;
-                }
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
                 }
 
                 public static class NearListBean extends SingleMode implements Serializable{
@@ -486,7 +424,6 @@ public class SearchCateConditionBean implements Serializable{
             }
 
             public static class FilterList1Bean extends SingleMode implements Serializable{
-                private String name;
                 /**
                  * filterList : [{"value":"我喜欢","key":""},{"value":"收藏","key":"collect"},{"value":"求代言","key":"popularity"}]
                  * value : 我喜欢
@@ -502,15 +439,8 @@ public class SearchCateConditionBean implements Serializable{
                 public void setFilterList2(List<FilterList2Bean> filterList2) {
                     this.filterList2 = filterList2;
                 }
-                public String getName() {
-                    return name;
-                }
 
-                public void setName(String name) {
-                    this.name = name;
-                }
-
-                public static class FilterList2Bean extends TwoMode<FilterList2Bean.FilterListBean> implements Serializable{
+                public static class FilterList2Bean extends SingleMode implements Serializable{
                     private String value;
                     private String key;
                     /**
@@ -543,7 +473,7 @@ public class SearchCateConditionBean implements Serializable{
                     }
 
                     public void setFilterList(List<FilterListBean> filterList) {
-                        giveList2Parent(filterList);
+
                         this.filterList = filterList;
                     }
 
@@ -571,6 +501,28 @@ public class SearchCateConditionBean implements Serializable{
                     }
                 }
             }
+
+            /**
+             * created by zlh
+             * @return
+             */
+            public BodyBean clone(){
+                BodyBean condition = null;
+                try{
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                    objectOutputStream.writeObject(BodyBean.this);
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+                    ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                    condition = (BodyBean) objectInputStream.readObject();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }catch (ClassNotFoundException e){
+                    e.printStackTrace();
+                }
+                return condition;
+            }
+
         }
     }
 }

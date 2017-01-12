@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_ee"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/title_line"></include>
+
+        <com.fanwe.seller.views.customize.MultiScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/topview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.fanwe.seller.views.customize.TypeHorizontalScrollView
+                        android:id="@+id/id_horizontalScrollView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="33dp"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/white"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/id_gallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </com.fanwe.seller.views.customize.TypeHorizontalScrollView>
+
+                    <com.fanwe.seller.views.customize.DPViewPager
+                        android:id="@+id/viewpager_meituan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </com.fanwe.seller.views.customize.DPViewPager>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f6e4c0"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="可乐鸡翅  55元"
+                        android:textColor="#e68b4e"
+                        android:textSize="10pt" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="立即购买"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+                <com.fanwe.seller.views.customize.ListViewForScrollView
+                    android:id="@+id/list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </com.fanwe.seller.views.customize.ListViewForScrollView>
+            </LinearLayout>
+        </com.fanwe.seller.views.customize.MultiScrollView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/flow_llay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="#f6e4c0"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="可乐鸡翅  55元"
+            android:textColor="#e68b4e"
+            android:textSize="10pt" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="立即购买"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+</RelativeLayout>

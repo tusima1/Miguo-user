@@ -125,8 +125,8 @@ public abstract class BarryBaseRecyclerAdapter extends RecyclerView.Adapter{
         }
     }
 
-    public int dip2px(int dp){
-        return BaseUtils.dip2px(activity, dp);
+    public static int dip2px(int dp){
+        return BaseUtils.dip2px(dp);
     }
 
     public int px2dip(int px){
@@ -149,8 +149,8 @@ public abstract class BarryBaseRecyclerAdapter extends RecyclerView.Adapter{
         return getResources().getDimensionPixelSize(resId);
     }
 
-    public int getScreenWidth(){
-        return BaseUtils.getWidth(activity);
+    public static int getScreenWidth(){
+        return BaseUtils.getWidth();
     }
 
     public int geScreenHeight(){

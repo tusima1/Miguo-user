@@ -247,7 +247,6 @@ public class FunnyFragment  extends Fragment implements PtrHandler, RecyclerScro
      * @param interestingStr
      */
     public void setInterestingStr(String interestingStr) {
-        interestingStr ="琴声何在，生死难猜，用一声去等待";
         if (interestingStr == null || interestingStr.length() < 1) {
             return;
         } else {

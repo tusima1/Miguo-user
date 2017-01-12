@@ -24,6 +24,7 @@ import com.fanwe.library.SDLibrary;
  */
 public class SDPackageUtil
 {
+	static  String app_version_name ;
 
 	public static void chmod(String permission, String path)
 	{
@@ -152,7 +153,15 @@ public class SDPackageUtil
 	public static String getVersionName()
 	{
 		PackageInfo pi = getCurrentPackageInfo();
+		app_version_name = pi.versionName;
 		return pi.versionName;
 	}
 
+	public static String getApp_version_name() {
+		return app_version_name;
+	}
+
+	public static void setApp_version_name(String app_version_name) {
+		SDPackageUtil.app_version_name = app_version_name;
+	}
 }

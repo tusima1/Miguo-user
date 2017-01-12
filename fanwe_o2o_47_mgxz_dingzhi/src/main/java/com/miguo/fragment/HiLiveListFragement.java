@@ -21,7 +21,7 @@ public class HiLiveListFragement extends HiBaseFragment{
     HiLiveListFragmentCategory.OnPagerInitListener onPagerInitListener;
 
     @Override
-    protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_hilivelist, container, false);
     }
 
