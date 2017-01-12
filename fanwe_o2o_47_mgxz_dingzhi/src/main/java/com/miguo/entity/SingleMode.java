@@ -7,7 +7,7 @@ package com.miguo.entity;
  */
 
 public class SingleMode {
-    private int index;
+    private String singleId;
     private boolean checked;
     protected String name;
 
@@ -27,11 +27,11 @@ public class SingleMode {
         this.name = name;
     }
 
-    public int getIndex() {
-        return index;
+    public String getSingleId() {
+        return singleId;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setSingleId(String singleId) {
+        this.singleId = singleId;
     }
 }

@@ -133,4 +133,20 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
                                                           onDropDownSelectedListener) {
         this.onDropDownSelectedListener=onDropDownSelectedListener;
     }
+
+    public void handlePerformClick(final int left, final int right) {
+        leftListView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                leftListView.findViewHolderForAdapterPosition(left).itemView.performClick();
+                rightListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rightListView.findViewHolderForAdapterPosition(right).itemView.performClick();
+                    }
+                },300);
+
+            }
+        },300);
+    }
 }

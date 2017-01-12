@@ -200,6 +200,7 @@ public class SearchCateConditionBean implements Serializable{
 
                 public void setId(String id) {
                     this.id = id;
+                    setSingleId(id);
                 }
 
                 public String getName() {
@@ -228,6 +229,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setId(String id) {
                         this.id = id;
+                        setSingleId(id);
                     }
                     public String getName() {
                         return name;
@@ -275,6 +277,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setId(String id) {
                         this.id = id;
+                        setSingleId(id);
                     }
                     public String getName() {
                         return name;
@@ -322,6 +325,7 @@ public class SearchCateConditionBean implements Serializable{
 
                 public void setId(String id) {
                     this.id = id;
+                    setSingleId(id);
                 }
 
                 public List<CategoryTypeBean> getCategory_type() {
@@ -377,6 +381,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setId(String id) {
                         this.id = id;
+                        setSingleId(id);
                     }
                 }
             }
@@ -425,6 +430,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setKey(String key) {
                         this.key = key;
+                        setSingleId(key);
                     }
                 }
             }
@@ -474,6 +480,7 @@ public class SearchCateConditionBean implements Serializable{
 
                     public void setKey(String key) {
                         this.key = key;
+                        setSingleId(key);
                     }
                 }
             }
@@ -527,6 +534,7 @@ public class SearchCateConditionBean implements Serializable{
                     }
 
                     public void setKey(String key) {
+                        setSingleId(key);
                         this.key = key;
                     }
 
@@ -557,6 +565,7 @@ public class SearchCateConditionBean implements Serializable{
                         }
 
                         public void setKey(String key) {
+                            setSingleId(key);
                             this.key = key;
                         }
                     }

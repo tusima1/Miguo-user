@@ -1008,6 +1008,7 @@
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity android:name="com.miguo.ui.view.floatdropdown.TestActivity"></activity>
+        <activity android:name="com.miguo.ui.view.floatdropdown.SearchGuideActivity"></activity>
     </application>
 
 </manifest>

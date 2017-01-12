@@ -55,7 +55,7 @@ public class LeftListAdapter extends RecyclerView.Adapter<LeftListAdapter.ViewHo
         final boolean checked = twoMode.isChecked();
         toggle(checked,holder.fl_bg);
         holder.tv_name.setText(twoMode.getName());
-        holder.fl_bg.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checked){

@@ -199,9 +199,6 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
                 addLine(data.get(i), i);
             }
         }
-//        addLine(data.get(like),like);
-//        addLine(data.get(youHui),youHui);
-//        addLine(data.get(price),price);
     }
 
     @Override
