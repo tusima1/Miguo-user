@@ -21,7 +21,7 @@ public class MultiScrollView  extends ScrollView {
 
     View mTopView;
     View mFlowView;
-    View mTitleView;
+
 
     public MultiScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);

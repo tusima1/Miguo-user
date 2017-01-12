@@ -44,6 +44,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/search_button"
         android:layout_width="13dp"
         android:layout_height="13dp"
         android:layout_alignParentRight="true"
