@@ -88,6 +88,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         initScrollView();
     }
 
+    public void getConditionData(){
+
+    }
 
     private void getIntentData() {
         Intent intent = getIntent();
