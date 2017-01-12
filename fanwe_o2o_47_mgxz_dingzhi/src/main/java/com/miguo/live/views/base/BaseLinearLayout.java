@@ -65,7 +65,7 @@ public abstract class BaseLinearLayout extends LinearLayout{
         return BaseUtils.getWidth(getContext());
     }
 
-    public int geScreenHeight(){
+    public int getScreenHeight(){
         return BaseUtils.getHeight(getContext());
     }
 

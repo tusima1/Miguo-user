@@ -314,7 +314,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
             /**
              * 判断滑动距离是否需要加载更多
              */
-            Log.d(tag, "t: " + t + " ,get messure height: " + getMeasuredHeight() + " child 0 messure height: " + getChildAt(0).getMeasuredHeight());
+            Log.d(tag, "verticalOffset: " + t + " ,get messure height: " + getMeasuredHeight() + " child 0 messure height: " + getChildAt(0).getMeasuredHeight());
             if((t + 0 + getMeasuredHeight()) +  endLayout.getMeasuredHeight() > getChildAt(0).getMeasuredHeight()){
                 onScrollToEnd();
             }

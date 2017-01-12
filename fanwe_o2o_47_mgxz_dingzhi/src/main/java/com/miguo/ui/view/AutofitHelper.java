@@ -93,7 +93,7 @@ public class AutofitHelper {
     private static void autofit(TextView view, TextPaint paint, float minTextSize, float maxTextSize,
             int maxLines, float precision) {
         if (maxLines <= 0 || maxLines == Integer.MAX_VALUE) {
-            // Don't auto-size since there's no limit on lines.
+            // Don'verticalOffset auto-size since there's no limit on lines.
             return;
         }
 
@@ -473,7 +473,7 @@ public class AutofitHelper {
      */
     public void setTextSize(int unit, float size) {
         if (mIsAutofitting) {
-            // We don't want to update the TextView's actual textSize while we're autofitting
+            // We don'verticalOffset want to update the TextView's actual textSize while we're autofitting
             // since it'd get set to the autofitTextSize
             return;
         }

@@ -9,6 +9,7 @@ public class AdspaceParams {
      * 广告位 首页
      */
     public static final String TYPE_INDEX = "index";
+    public static final String TYPE_SHOP = "shop";
     public static final String TYPE_BANNER_INDEX = "banner_index";
     public static final String NAVIGATION_INDEX = "navigation_index";
     public static final String TYPE_TOPIC_INDEX = "topic_index";

@@ -17,6 +17,11 @@ import java.text.DecimalFormat;
 public class BaseUtils {
 
 
+    public static int getWidth(){
+        WindowManager wm = (WindowManager) App.getInstance().getSystemService(Context.WINDOW_SERVICE);
+        return wm.getDefaultDisplay().getWidth();
+    }
+
     /**
      * 获取宽度
      */

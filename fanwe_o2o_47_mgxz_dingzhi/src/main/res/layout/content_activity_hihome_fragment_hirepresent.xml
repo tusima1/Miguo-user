@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<in.srain.cube.views.ptr.PtrFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ptr_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:ptr_keep_header_when_refresh="true"
+    app:ptr_pull_to_fresh="true">
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coorddinatorlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+    <com.miguo.ui.view.RepresentAppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <LinearLayout
+            app:layout_scrollFlags="scroll"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.miguo.ui.view.RepresentViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.miguo.ui.view.RepresentViewPager>
+
+
+            <com.miguo.ui.view.RepresentBannerView
+                android:id="@+id/represent_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.miguo.ui.view.RepresentBannerView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:background="@color/main_color_press"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"/>
+
+        </LinearLayout>
+
+
+
+    </com.miguo.ui.view.RepresentAppBarLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
+    </in.srain.cube.views.ptr.PtrFrameLayout>

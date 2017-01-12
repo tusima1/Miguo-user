@@ -6,21 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.category.fragment.HiLoginQuickByMobileFragmentCategory;
+import com.miguo.category.fragment.HiRepresentFragmentCategory;
 
 /**
- * Created by zlh on 2016/12/1.
- * 快速登录
+ * Created by zlh on 2017/1/5.
  */
-public class HiLoginQuickByMobileFragment extends HiBaseFragment {
+
+public class HiRepresentFragment extends HiBaseFragment {
 
     @Override
     protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_phone_login, container, false);
+        return inflater.inflate(R.layout.activity_hihome_fragment_hirepresent, container, false);
     }
 
     @Override
     protected void initFragmentCategory() {
-        category = new HiLoginQuickByMobileFragmentCategory(cacheView, this);
+        category = new HiRepresentFragmentCategory(cacheView, this);
     }
 }
