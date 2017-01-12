@@ -1,5 +1,7 @@
 package com.fanwe.seller.model.getBusinessListings;
 
+import com.fanwe.base.PageBean;
+
 import java.util.List;
 
 /**
@@ -9,33 +11,21 @@ public class ResultBusinessListings {
 
     private List<ModelBusinessListings> shop_list;
 
-    private String p_name;
+    private PageBean page;
 
-    private String cate_name;
+    public List<ModelBusinessListings> getShop_list() {
+        return shop_list;
+    }
 
     public void setShop_list(List<ModelBusinessListings> shop_list) {
         this.shop_list = shop_list;
     }
 
-    public List<ModelBusinessListings> getShop_list() {
-        return this.shop_list;
+    public PageBean getPage() {
+        return page;
     }
 
-    public void setP_name(String p_name) {
-        this.p_name = p_name;
+    public void setPage(PageBean page) {
+        this.page = page;
     }
-
-    public String getP_name() {
-        return this.p_name;
-    }
-
-    public void setCate_name(String cate_name) {
-        this.cate_name = cate_name;
-    }
-
-    public String getCate_name() {
-        return this.cate_name;
-    }
-
-
 }
