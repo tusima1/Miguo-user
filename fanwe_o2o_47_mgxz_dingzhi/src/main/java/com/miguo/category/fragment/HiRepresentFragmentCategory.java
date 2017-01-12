@@ -62,7 +62,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @ViewInject(R.id.represent_banner)
     RepresentBannerView representBannerView;
 
-    GetSearchCateConditionDao getSearchCateConditionDao;    
+    GetSearchCateConditionDao getSearchCateConditionDao;
     GetAdspaceListDao getAdspaceListDao;
 
     public HiRepresentFragmentCategory(View view, HiBaseFragment fragment) {
