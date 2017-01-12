@@ -3,6 +3,7 @@ package com.miguo.ui.view.floatdropdown;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
@@ -17,16 +18,25 @@ public class TestActivity extends AppCompatActivity {
 
     private DropDownMenu ddm;
     private DropDownHelper helper;
+    private View button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        button = findViewById(R.id.bt);
+
         ddm = ((DropDownMenu) findViewById(R.id.ddm));
 
         helper = new DropDownHelper(this,ddm);
 //        helper.setTwoModes(twoModes);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helper.handleItem("14");
+            }
+        });
 
         getHttpData();
     }

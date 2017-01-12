@@ -13,6 +13,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.view.dropdown.DropDownMenu;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener2;
+import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 import com.miguo.ui.view.floatdropdown.view.FilterView;
 import com.miguo.ui.view.floatdropdown.view.SingleSideListView;
 import com.miguo.ui.view.floatdropdown.view.TwoSideListView;
@@ -29,31 +30,32 @@ import java.util.List;
 public class DropDownHelper {
     private final Context context;
     private DropDownMenu ddm;
+    private FakeDropDownMenu fddm;
     private SearchCateConditionBean.ResultBean.BodyBean saveBody;
     private boolean isFirst= true;
 
     public DropDownHelper(Context context, DropDownMenu ddm) {
         this.context = context;
         this.ddm = ddm;
+        setData();
+    }
+    public DropDownHelper(Context context, DropDownMenu ddm, FakeDropDownMenu fddm) {
+        this.context = context;
+        this.ddm = ddm;
+        this.fddm = fddm;
+        setData();
     }
 
-    private void handleData(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
-        if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
-            ddm.prepareContentView(prepareContentView(item1,item2,item3,item4));
-            ddm.setInitOk(true);
-        }else {
-            ddm.setInitOk(false);
-        }
-    }
 
-    public void setData(SearchCateConditionBean.ResultBean.BodyBean body){
-        this.saveBody = body;
-        List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
-                .getHotAreaList1(), body.getAdminAreaList());
-        List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
-        List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
-        List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
-        handleData(item1,item2,item3,item4);
+    private void setData(){
+        //SearchCateConditionBean.ResultBean.BodyBean body
+//        this.saveBody = body;
+//        List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
+//                .getHotAreaList1(), body.getAdminAreaList());
+//        List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
+//        List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
+//        List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
+//        handleData(item1,item2,item3,item4);
 
         ddm.setOnDropDownTitleClickListener(new DropDownMenu.OnDropDownTitleClickListener() {
             @Override
@@ -73,9 +75,24 @@ public class DropDownHelper {
         });
     }
 
+    public void handleItem(String id){
+        //
+        ((TwoSideListView)ddm.getContentViewList().get(2)).performPosition(2,0);
+    }
+
 
     private boolean isDataOk(List list){
         return !(list == null || list.size()<=0);
+    }
+
+
+    private void handleData(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
+        if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
+            ddm.prepareContentView(prepareContentView(item1,item2,item3,item4));
+            ddm.setInitOk(true);
+        }else {
+            ddm.setInitOk(false);
+        }
     }
 
     /**
@@ -91,34 +108,46 @@ public class DropDownHelper {
 
         index1.setOnDropDownSelectedListener(new OnDropDownSelectedListener<SingleMode>() {
             @Override
-            public void onDropDownSelected(SingleMode singleMode) {
-                MGToast.showToast("选中: "+singleMode.getName() +"  id: "+singleMode.getSingleId());
-                setDropDownMenuText(0,singleMode.getName());
+            public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
+                String two = "";
+                if (levelTwo !=null){
+                    two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
+                }
+                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
+                setDropDownMenuText(1,levelOne.getName());
                 ddm.dismiss();
             }
         });
         index2.setOnDropDownSelectedListener(new OnDropDownSelectedListener<SingleMode>() {
             @Override
-            public void onDropDownSelected(SingleMode singleMode) {
-                MGToast.showToast("选中: "+singleMode.getName()+"  id: "+singleMode.getSingleId());
-                setDropDownMenuText(1,singleMode.getName());
+            public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
+                String two = "";
+                if (levelTwo !=null){
+                    two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
+                }
+                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
+                setDropDownMenuText(2,levelOne.getName());
                 ddm.dismiss();
             }
         });
         index3.setOnDropDownSelectedListener(new OnDropDownSelectedListener<SingleMode>() {
             @Override
-            public void onDropDownSelected(SingleMode singleMode) {
-                MGToast.showToast("选中: "+singleMode.getName()+"  id: "+singleMode.getSingleId());
-                setDropDownMenuText(2,singleMode.getName());
+            public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
+                String two = "";
+                if (levelTwo !=null){
+                    two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
+                }
+                MGToast.showToast("一级: "+levelOne.getName() +"  id: "+levelOne.getSingleId()  +two);
+                setDropDownMenuText(3,levelOne.getName());
                 ddm.dismiss();
             }
         });
 
-        index4.setOnDropDownSelectedListener2(new OnDropDownSelectedListener2<SingleMode>() {
+        index4.setOnDropDownSelectedListener(new OnDropDownSelectedListener2<SingleMode>() {
             @Override
-            public void onDropDownSelected(List<SingleMode> t) {
+            public void onDropDownSelected(SingleMode levelOne, List<SingleMode> levelTwo) {
                 StringBuilder sb=new StringBuilder();
-                for (SingleMode mode : t) {
+                for (SingleMode mode : levelTwo) {
                     String name = mode.getName();
                     sb.append("name: "+ name +"  id: "+mode.getSingleId());
                     sb.append("\n");
@@ -141,7 +170,7 @@ public class DropDownHelper {
     }
 
     private void setDropDownMenuText(int index,String text){
-        ddm.setTitleTabText(index,text);
+        ddm.setTitleTabText(index-1,text);
     }
 
     /**

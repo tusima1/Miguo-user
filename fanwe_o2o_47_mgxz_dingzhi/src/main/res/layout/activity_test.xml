@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     android:id="@+id/activity_test"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +8,20 @@
     android:orientation="vertical"
     android:background="@color/white"
     >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/bt"
+            android:text="改变"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
 
     <com.miguo.ui.view.dropdown.DropDownMenu
         android:id="@+id/ddm"
@@ -21,4 +35,4 @@
 
 
 
-</LinearLayout>
+</FrameLayout>

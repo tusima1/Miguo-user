@@ -28,7 +28,7 @@
             android:clickable="true"
             android:background="@drawable/md_ripple_unbound_gray"
             />
-        <com.didikee.dropdownmenu.view.SearchView
+        <com.miguo.ui.view.floatdropdown.view.SearchView
             android:id="@+id/searchView"
             android:layout_toRightOf="@+id/left"
             android:layout_toLeftOf="@+id/right"

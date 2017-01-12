@@ -332,6 +332,22 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         }
     }
 
+    /**
+     * 从1开始,1234
+     * @param index 例如: 1
+     */
+    public void performTitleTabClick(int index){
+        if (index > titleTabNum){
+            return;
+        }
+        int innerIndex = index -1;
+        try {
+            ((TitleTab)titleTabLayout.getChildAt(2 * innerIndex)).performClick();
+        } catch (Exception e) {
+            Log.e("test","performTitleTabClick index error!");
+        }
+    }
+
     @Override
     public void show() {
 

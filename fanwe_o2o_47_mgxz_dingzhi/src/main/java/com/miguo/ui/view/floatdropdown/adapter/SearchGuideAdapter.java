@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.ui.view.floatdropdown.interf.OnRvItemClickListener;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class SearchGuideAdapter extends RecyclerView.Adapter<SearchGuideAdapter.ViewHolder> {
     private List<String> words;
+    private OnRvItemClickListener<String> onRvItemClickListener;
 
     public SearchGuideAdapter(List<String> words) {
         this.words = words;
@@ -34,8 +36,17 @@ public class SearchGuideAdapter extends RecyclerView.Adapter<SearchGuideAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tv_name.setText(words.get(position));
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final String name = words.get(position);
+        holder.tv_name.setText(name);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onRvItemClickListener!=null){
+                    onRvItemClickListener.onRvItemClick(v,holder.getAdapterPosition(),name);
+                }
+            }
+        });
     }
 
     @Override
@@ -49,5 +60,9 @@ public class SearchGuideAdapter extends RecyclerView.Adapter<SearchGuideAdapter.
             super(itemView);
             tv_name = (TextView) itemView.findViewById(R.id.tv_name);
         }
+    }
+
+    public void setOnRvItemClickListener(OnRvItemClickListener<String> onRvItemClickListener) {
+        this.onRvItemClickListener = onRvItemClickListener;
     }
 }
