@@ -39,6 +39,7 @@ import com.fanwe.seller.views.fragment.SecondTypeFragment;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.ui.view.dropdown.DropDownMenu;
+import com.miguo.ui.view.floatdropdown.SearchGuideActivity;
 import com.miguo.ui.view.floatdropdown.helper.DropDownHelper;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 
@@ -86,6 +87,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     FakeDropDownMenu fakeFlowLine;
     DropDownMenu flowLine;
     FragmentSearchShop fragmentShop;
+    /**
+     * 商家类型：1，优惠商家。0，全部商家
+     */
+    private String merchant_type="1";
 
     public DaiyanSendTypeActivity() {
     }
@@ -268,7 +273,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent1 = new Intent(DaiyanSendTypeActivity.this)
+                Intent intent1 = new Intent(DaiyanSendTypeActivity.this, SearchGuideActivity.class);
+                startActivity(intent1);
             }
         });
     }
