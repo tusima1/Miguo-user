@@ -9,7 +9,7 @@ import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.miguo.live.views.customviews.MGToast;
 
 /**
- * Created by Administrator on 2016/12/8.
+ * Created by qiang.chen on 2016/12/8.
  */
 
 public class ShareUtil {
@@ -17,6 +17,9 @@ public class ShareUtil {
         if (mActivity == null || shareInfoBean == null) {
             MGToast.showToast("无分享内容");
             return;
+        }
+        if (shareRecordId == null) {
+            shareRecordId = "";
         }
         if (TextUtils.isEmpty(shareInfoBean.getSummary())) {
             shareInfoBean.setSummary("欢迎来到米果小站");
@@ -40,7 +43,7 @@ public class ShareUtil {
         } else {
             if (!clickUrl.contains("/share_record_id/")) {
                 clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
-            }else if (!clickUrl.contains(shareRecordId)) {
+            } else if (!TextUtils.isEmpty(shareRecordId) && !clickUrl.contains(shareRecordId)) {
                 int i = clickUrl.indexOf("/share_record_id/");
                 String temp = clickUrl.substring(0, i);
                 clickUrl = temp + "/share_record_id/" + shareRecordId;
