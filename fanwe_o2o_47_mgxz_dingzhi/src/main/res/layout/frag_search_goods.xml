@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/layout_empty_frag_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp30"
+            android:layout_marginTop="@dimen/dp30"
+            android:gravity="center"
+            android:text="暂时没有找到相关信息"
+            android:textColor="@color/gray_text_99"
+            android:textSize="@dimen/dp16" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_f2"
+            android:paddingBottom="@dimen/dp8"
+            android:paddingLeft="@dimen/dp17"
+            android:paddingTop="@dimen/dp13"
+            android:text="为你推荐"
+            android:textColor="@color/gray_text_99"
+            android:textSize="@dimen/dp14" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/content_frag_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
