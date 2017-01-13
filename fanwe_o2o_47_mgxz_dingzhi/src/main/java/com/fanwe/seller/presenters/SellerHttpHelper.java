@@ -650,8 +650,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
      * @param pageSize      页大小
      * @param merchant_type 商家类型：1，优惠商家  0，全部商家
      */
-    public void getShopSearch(String area_one, String area_two, String category_one, String category_two, String filter,
-                              String keyword, String sort_type, int pageNum, int pageSize, String merchant_type) {
+    public void getShopSearch(String area_one, String area_two, String category_one, String category_two, String filter,String keyword, String sort_type, int pageNum, int pageSize, String merchant_type) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", getToken());
         params.put("area_one", area_one);

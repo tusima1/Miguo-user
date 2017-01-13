@@ -39,7 +39,6 @@ public class GetSearchCateConditionDaoImpl extends BaseDaoImpl implements GetSea
 
             @Override
             public void onSuccessResponse(String responseBody) {
-//                SearchCateConditionBean bean = new Gson().fromJson(responseBody, SearchCateConditionBean.class);
                 SearchCateConditionBean bean = JSON.parseObject(responseBody, SearchCateConditionBean.class);
                 if(null == bean || SDCollectionUtil.isEmpty(bean.getResult()) || SDCollectionUtil.isEmpty(bean.getResult().get(0).getBody())){
                     getListener().getSearchCateConditionError(BASE_ERROR_MESSAGE);

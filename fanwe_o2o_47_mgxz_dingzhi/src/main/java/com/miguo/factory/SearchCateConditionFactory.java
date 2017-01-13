@@ -24,11 +24,15 @@ public class SearchCateConditionFactory {
         conditions = new HashMap<>();
     }
 
+    /**
+     * 返回单独克隆对象，每次get相互独立
+     * @return
+     */
     public static SearchCateConditionBean.ResultBean.BodyBean get(){
         if(conditions.size() == 0){
             return null;
         }
-        return conditions.get(isUserLogin() ? USER_LOGIN_CONDITION : WITHOUT_USER_LOGIN_CONDITION);
+        return conditions.get(isUserLogin() ? USER_LOGIN_CONDITION : WITHOUT_USER_LOGIN_CONDITION).clone();
     }
 
     public static void update(SearchCateConditionBean.ResultBean.BodyBean condition){
