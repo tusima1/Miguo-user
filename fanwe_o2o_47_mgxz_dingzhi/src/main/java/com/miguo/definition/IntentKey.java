@@ -49,5 +49,11 @@ public class IntentKey {
     public static final String UPDATE_ACCOUNT = "update_account";
 
     public static final String REPRESENT_CATEGORYS = "represent_categories";
+    /**
+     * 跳转二级代言界面数据
+     */
+    public static final String FIRST_TYPE = "firstType";
+    public static final String SECOND_TYPE = "secondType";
+
 
 }

@@ -5,10 +5,11 @@
     android:id="@+id/ptr_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_below="@+id/title_layout"
     app:ptr_keep_header_when_refresh="true"
     app:ptr_pull_to_fresh="true">
 
-<android.support.design.widget.CoordinatorLayout
+<com.miguo.ui.view.RecyclerBounceNestedScrollView
     android:id="@+id/coorddinatorlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,14 +17,15 @@
 
 
 
-    <com.miguo.ui.view.RepresentAppBarLayout
+    <LinearLayout
         android:id="@+id/app_bar"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <LinearLayout
+            android:id="@+id/scroll_layout"
             app:layout_scrollFlags="scroll"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -50,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <View
+            <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
+                android:id="@+id/menu"
                 android:background="@color/main_color_press"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"/>
@@ -58,9 +61,18 @@
         </LinearLayout>
 
 
+        <com.fanwe.view.LoadMoreRecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </com.miguo.ui.view.RepresentAppBarLayout>
+
+        </com.fanwe.view.LoadMoreRecyclerView>
 
 
-</android.support.design.widget.CoordinatorLayout>
-    </in.srain.cube.views.ptr.PtrFrameLayout>
+
+    </LinearLayout>
+
+
+</com.miguo.ui.view.RecyclerBounceNestedScrollView>
+</in.srain.cube.views.ptr.PtrFrameLayout>

@@ -2,7 +2,7 @@ package com.fanwe.utils;
 
 import android.text.TextUtils;
 
-import com.miguo.utils.UICharacterCount;
+import com.didikee.uilibs.Text.UICharacterCount;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
