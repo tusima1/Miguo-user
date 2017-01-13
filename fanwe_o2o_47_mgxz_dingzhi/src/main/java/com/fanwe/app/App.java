@@ -288,7 +288,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     }
 
     public String getToken() {
-        return getCurrentUser() == null ?  " ": getCurrentUser().getToken();
+        return getCurrentUser() == null ?  "": getCurrentUser().getToken();
     }
 
     public void setToken(String token){

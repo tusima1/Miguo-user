@@ -3,6 +3,8 @@ package com.miguo.ui.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -21,6 +23,9 @@ import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.live.views.utils.BaseUtils;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -46,7 +51,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
     boolean isLoading = false;
 
     float startDownY;
-    float distance;
+//    float distance;
 
     int currentTop = 0;
     int downX = 0;
@@ -55,11 +60,26 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
     int moveY = 0;
     int halfScreenHeight = 0;
     int screenHeight = 0;
+    int downOffsetY = 0;
     String tag = this.getClass().getSimpleName();
     /**
      * 记录按下的时间（防止到底部判断是否要移动的时候按下就移动了）
      */
     long downTime;
+
+    static final int LOAD_MORE = 0x0010;
+
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what){
+                case LOAD_MORE:
+                    handleMessageScrollToEnd();
+                    break;
+            }
+            return false;
+        }
+    });
 
     public RecyclerBounceNestedScrollView(Context context) {
         super(context);
@@ -177,6 +197,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
         int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                this.downOffsetY = getScrollY();
                 this.downTime = System.currentTimeMillis();
                 break;
             case MotionEvent.ACTION_UP:
@@ -200,7 +221,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
                     deltaY = 0; // 在这里要归0.
                 }
 
-                distance = nowY - startDownY;
+//                distance = nowY - startDownY;
 //                LogUtil.d(tag, "deltaY: " + deltaY);
 
                 y = nowY;
@@ -213,8 +234,10 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
                                 child.getRight(), child.getBottom());
                     }
                     // 移动布局
-                    child.layout(child.getLeft(), child.getTop() - deltaY / 2,
-                            child.getRight(), child.getBottom() - deltaY / 2);
+                    Log.d(tag, "deltaY: " + deltaY);
+                    if(Math.abs(deltaY) < 50){
+                        child.layout(child.getLeft(), child.getTop() - deltaY / 2,child.getRight(), child.getBottom() - deltaY / 2);
+                    }
                 }
                 isCount = true;
                 break;
@@ -295,9 +318,11 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
      */
     public boolean isNeedMove() {
         int offset = child.getMeasuredHeight() - getHeight();
-        int scrollY = getScrollY();
+        int scrollY = getScrollY() + endLayout.getMeasuredHeight();
         // 0是顶部，后面那个是底部
-        return scrollY == 0 || scrollY == offset;
+//        return scrollY == 0 || scrollY == offset;
+        Log.d(tag, "scrollY: " + scrollY + " offset: " + offset);
+        return scrollY > offset && startDownY   != getScrollY();
     }
 
     public interface RecyclerScrollViewOnTouchListener{
@@ -329,9 +354,24 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
         }
         if(onHomeScrollViewListener != null){
             startRefreshAnimation();
-            onHomeScrollViewListener.onScrollToEnd();
             setIsLoading(true);
+            handleScrollToEnd();
         }
+    }
+
+    private void handleScrollToEnd(){
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(LOAD_MORE);
+            }
+        };
+        timer.schedule(task, 500);
+    }
+
+    private void handleMessageScrollToEnd(){
+        onHomeScrollViewListener.onScrollToEnd();
     }
 
     @Override
