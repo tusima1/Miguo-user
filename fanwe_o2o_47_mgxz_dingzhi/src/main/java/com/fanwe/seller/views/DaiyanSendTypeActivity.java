@@ -1,6 +1,5 @@
 package com.fanwe.seller.views;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,18 +20,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.mapapi.map.Text;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.search.views.FragmentSearchShop;
 import com.fanwe.seller.adapters.MyPagerAdapter;
 import com.fanwe.seller.adapters.TypeHorizontalScrollViewAdapter;
 import com.fanwe.seller.adapters.TypeListViewAdapter;
 import com.fanwe.seller.model.TypeEntity;
-import com.fanwe.seller.model.TypeModel;
 import com.fanwe.seller.views.customize.DPViewPager;
 import com.fanwe.seller.views.customize.ListViewForScrollView;
 import com.fanwe.seller.views.customize.MultiScrollView;
-import com.fanwe.seller.views.customize.PointView;
 import com.fanwe.seller.views.customize.TypeHorizontalScrollView;
 import com.fanwe.seller.views.fragment.FirstFragment;
 import com.fanwe.seller.views.fragment.SecondTypeFragment;
@@ -45,7 +41,6 @@ import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -117,7 +112,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         getConditionData();
         initHorizontalScrollView();
         createSecondViewPager();
-//        initScrollView();
+       initScrollView();
     }
 
     public void getConditionData(){
@@ -268,7 +263,19 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     private void initTitle(){
         TextView youhuishop = (TextView)findViewById(R.id.youhuishop);
+        youhuishop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                merchant_type = "1";
+            }
+        });
         TextView commonshop = (TextView)findViewById(R.id.commonshop);
+        commonshop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                merchant_type = "0";
+            }
+        });
         ImageView search_button = (ImageView)findViewById(R.id.search_button);
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,9 +286,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         });
     }
     private void initScrollView() {
-//        mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
-//        topView = (LinearLayout) findViewById(R.id.topview);
-//        mFlowView = (LinearLayout) findViewById(R.id.flow_llay);
+        mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
+        topView = (LinearLayout) findViewById(R.id.topview);
+        mFlowView = (LinearLayout) findViewById(R.id.flow_llay);
 //        listViewForScrollView = (ListViewForScrollView) findViewById(R.id.list_view);
 //
 //        listViewAdapter = new TypeListViewAdapter(getData(), this);
@@ -341,10 +348,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 //        });
 //
 //        setListViewHeightBasedOnChildren(listViewForScrollView);
-//        //监听浮动view的滚动状态
-//        mScrollView.listenerFlowViewScrollState(topView, mFlowView);
-//        //将ScrollView滚动到起始位置
-//        mScrollView.scrollTo(0, 0);
+        //监听浮动view的滚动状态
+        mScrollView.listenerFlowViewScrollState(topView, mFlowView);
+        //将ScrollView滚动到起始位置
+        mScrollView.scrollTo(0, 0);
     }
 
 
