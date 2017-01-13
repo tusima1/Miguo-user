@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.ui.view.dropdown.interf.ExpandReverse;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * Description: 
  */
 
-public class FakeDropDownMenu extends LinearLayout implements View.OnClickListener {
+public class FakeDropDownMenu extends LinearLayout implements View.OnClickListener,ExpandReverse{
     private List<String> defaultNames;
     private TextView tv_name1;
     private TextView tv_name2;
@@ -28,6 +29,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
     private View ll_2;
     private View ll_3;
     private View ll_4;
+    private boolean fake;//是不是假的
 
     public FakeDropDownMenu(Context context) {
         this(context,null);
@@ -84,6 +86,37 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         if (fakeTitleTabClickListener!=null){
             fakeTitleTabClickListener.onFakeClick(v,index);
         }
+    }
+
+    public void performIndexClick(int index){
+        switch (index){
+            case 1:
+                ll_1.performClick();
+                break;
+            case 2:
+                ll_2.performClick();
+                break;
+            case 3:
+                ll_3.performClick();
+                break;
+            case 4:
+                ll_4.performClick();
+                break;
+        }
+    }
+
+    public void setIsFake(boolean isFake) {
+        this.fake= isFake;
+    }
+
+    @Override
+    public void expand() {
+        if (fake)return;
+    }
+
+    @Override
+    public void reverse() {
+        if (fake)return;
     }
 
     public interface OnFakeTitleTabClickListener{

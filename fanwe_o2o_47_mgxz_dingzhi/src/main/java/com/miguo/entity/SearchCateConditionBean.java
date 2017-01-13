@@ -234,6 +234,7 @@ public class SearchCateConditionBean implements Serializable{
                  * name : 测试商圈31
                  * id : f90f4b6b-d375-4126-b4c0-de887bfbd3a9
                  */
+                private String key;
 
                 private List<HotAreaList2Bean> hotAreaList2;
 
@@ -244,6 +245,15 @@ public class SearchCateConditionBean implements Serializable{
                 public void setHotAreaList2(List<HotAreaList2Bean> hotAreaList2) {
                     giveList2Parent(hotAreaList2);
                     this.hotAreaList2=hotAreaList2;
+                }
+
+                public String getKey() {
+                    return key;
+                }
+
+                public void setKey(String key) {
+                    this.key = key;
+                    setSingleId(key);
                 }
 
                 public static class HotAreaList2Bean extends SingleMode implements Serializable{
@@ -386,7 +396,8 @@ public class SearchCateConditionBean implements Serializable{
                  * value : 全城
                  * key : wholecity
                  */
-
+                private String name;
+                private String key;
                 private List<NearListBean> nearList;
 
 
@@ -397,6 +408,25 @@ public class SearchCateConditionBean implements Serializable{
                 public void setNearList(List<NearListBean> nearList) {
                     giveList2Parent(nearList);
                     this.nearList = nearList;
+                }
+
+
+                public String getValue() {
+                    return name;
+                }
+
+                public void setValue(String name) {
+                    setName(name);
+                    this.name = name;
+                }
+
+                public String getKey() {
+                    return key;
+                }
+
+                public void setKey(String key) {
+                    this.key = key;
+                    setSingleId(key);
                 }
 
                 public static class NearListBean extends SingleMode implements Serializable{

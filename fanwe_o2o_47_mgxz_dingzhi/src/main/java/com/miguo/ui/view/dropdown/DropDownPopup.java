@@ -133,6 +133,7 @@ public class DropDownPopup extends PopupWindow {
     }
 
 
+    //------------------------------------------- data ---------------------------------------------
     private void handleData(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
         if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
             dropDownView.prepareContentView(prepareContentView(item1,item2,item3,item4));
@@ -250,5 +251,47 @@ public class DropDownPopup extends PopupWindow {
 
     public void setDropDownListener(OnDropDownListener dropDownListener) {
         this.dropDownListener=dropDownListener;
+    }
+
+    private Pair<Integer,Integer> location1;
+    private Pair<Integer,Integer> location2;
+    private int location3;
+    private List<Integer> location4;
+
+    public void performMarkIds(List<String> ids) {
+        for (String id : ids) {
+            findItemLocation(id);
+        }
+
+    }
+
+    private void findItemLocation(String id) {
+        List<TwoMode> item1 = mergeDataForItem1(saveBody.getNearByList(), saveBody
+                .getHotAreaList1(), saveBody.getAdminAreaList());
+        List<TwoMode> item2 = mergeDataForItem1(saveBody.getCategoryList());
+        List<SingleMode> item3 = mergeDataForItem3(saveBody.getIntelList1().get(0).getIntelList2());
+        List<TwoMode> item4 = mergeDataForItem1(saveBody.getFilterList1().get(0).getFilterList2());
+
+        //1
+        for (int i = 0; i < item1.size(); i++) {
+            List<SingleMode> singleModeList = item1.get(i).getSingleModeList();
+            for (int j = 0; j < singleModeList.size(); j++) {
+                if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
+                    location1 = new Pair<>(i,j);
+                    return;
+                }
+            }
+        }
+        //2
+        for (int i = 0; i < item1.size(); i++) {
+            List<SingleMode> singleModeList = item1.get(i).getSingleModeList();
+            for (int j = 0; j < singleModeList.size(); j++) {
+                if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
+                    location1 = new Pair<>(i,j);
+                    return;
+                }
+            }
+        }
+
     }
 }
