@@ -11,7 +11,7 @@ import com.miguo.entity.SingleMode;
 import com.miguo.entity.TwoMode;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.ui.view.dropdown.DropDownMenu;
+import com.miguo.ui.view.dropdown.DropDown;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener2;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
@@ -28,18 +28,18 @@ import java.util.List;
  * Description: 
  */
 
-public class DropDownHelper {
+public class DropDownHelper2 {
     private final Context context;
-    private DropDownMenu ddm;
+    private DropDown ddm;
     private FakeDropDownMenu fddm;
     private SearchCateConditionBean.ResultBean.BodyBean saveBody;
 
-    public DropDownHelper(Context context, DropDownMenu ddm) {
+    public DropDownHelper2(Context context, DropDown ddm) {
         this.context = context;
         this.ddm = ddm;
         setData();
     }
-    public DropDownHelper(Context context, DropDownMenu ddm, FakeDropDownMenu fddm) {
+    public DropDownHelper2(Context context, DropDown ddm, FakeDropDownMenu fddm) {
         this.context = context;
         this.ddm = ddm;
         this.fddm = fddm;

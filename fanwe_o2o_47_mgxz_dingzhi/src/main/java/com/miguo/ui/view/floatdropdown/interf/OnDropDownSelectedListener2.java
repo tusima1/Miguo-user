@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface OnDropDownSelectedListener2<T> {
 //    void onDropDownSelected(int index, T levelOne, List<T> levelTwo);
-    void onDropDownSelected(T levelOne, List<T> levelTwo);
+    void onDropDownSelected(List<T> singleModes);
 }

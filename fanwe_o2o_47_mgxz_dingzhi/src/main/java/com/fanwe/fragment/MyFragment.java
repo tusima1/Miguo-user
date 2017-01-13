@@ -48,7 +48,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.ui.view.floatdropdown.TestActivity;
+import com.miguo.ui.view.floatdropdown.TestDropDownPopActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -112,8 +112,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     @Override
     protected void init() {
         super.init();
-        initView();
         httpHelper = new UserHttpHelper(getContext(), this);
+        initView();
+
     }
 
     @Override
@@ -309,8 +310,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mErWeiMa) {
             /*二维码名片*/
 //            startActivity(DistributionMyQRCodeActivity.class);
-            startActivity(TestActivity.class);
+//            startActivity(TestActivity.class);
 //            startActivity(SearchGuideActivity.class);
+            startActivity(TestDropDownPopActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {

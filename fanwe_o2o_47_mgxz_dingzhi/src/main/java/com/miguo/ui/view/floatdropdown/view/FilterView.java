@@ -214,8 +214,31 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
 
     private void done() {
         if (onDropDownSelectedListener != null) {
-            onDropDownSelectedListener.onDropDownSelected(null,getSelectedModel(ll_price, ll_like,
-                    ll_youHui));
+            resultList.clear();
+            getSelectedView(this);
+//            onDropDownSelectedListener.onDropDownSelected(getSelectedModel(ll_price, ll_like,
+//                    ll_youHui));
+            onDropDownSelectedListener.onDropDownSelected(resultList);
+        }
+    }
+
+    private List<SingleMode> resultList=new ArrayList<>();
+
+    private void getSelectedView(View view){
+        if (view ==null ){
+            return;
+        }
+        if (view instanceof CheckTextView){
+            boolean checked = ((CheckTextView) view).isChecked();
+            if (checked){
+                resultList.add((SingleMode) ((CheckTextView) view).getHold());
+            }
+        }else if (view instanceof ViewGroup){
+            int childCount = ((ViewGroup) view).getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = ((ViewGroup) view).getChildAt(i);
+                getSelectedView(childAt);
+            }
         }
     }
 

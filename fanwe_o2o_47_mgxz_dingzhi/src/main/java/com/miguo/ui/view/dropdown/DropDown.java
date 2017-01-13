@@ -1,12 +1,10 @@
 package com.miguo.ui.view.dropdown;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
  * Description: 
  */
 
-public class DropDownMenu extends LinearLayout implements View.OnClickListener,PopupWindowLike,ExpandReverse {
+public class DropDown extends LinearLayout implements View.OnClickListener,PopupWindowLike,ExpandReverse {
 
     private final int titleTabNum=4;//默认的item数量
     private String[] titleStr=new String[]{
@@ -43,7 +41,6 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
 
     private LinearLayout titleTabLayout;//titleTab 的容器
     private FrameLayout contentLayout;//主内容 的容器
-    private View fakeView;//底部的伪装view
     private boolean isShowing;//是否在展示中
     private int preClickId=-10;//之前点击的id
 
@@ -56,19 +53,18 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
     private TitleTab preClickTab;//之前点击的tab
 
     private final SparseArray<View> contentViewList=new SparseArray<>();
-    private int fakeHeight;//底下view的高度
 
     private boolean initOk=false;
 
-    public DropDownMenu(Context context) {
+    public DropDown(Context context) {
         this(context,null);
     }
 
-    public DropDownMenu(Context context, AttributeSet attrs) {
+    public DropDown(Context context, AttributeSet attrs) {
         this(context, attrs,0);
     }
 
-    public DropDownMenu(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DropDown(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init();
@@ -90,29 +86,6 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         addView(dividerView,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
     }
 
-    private void addFakeView(){
-        fakeView =new View(getContext());
-        fakeView.setBackgroundColor(Color.parseColor("#66000000"));
-        fakeView.setOnClickListener(this);
-        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-        int widthPixels = displayMetrics.widthPixels;
-        final int heightPixels = displayMetrics.heightPixels;
-
-        titleTabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                int[] location = new int[2];
-                titleTabLayout.getLocationOnScreen(location);
-                int x = location[0];
-                int y = location[1];
-
-                int titleHeight = titleTabLayout.getHeight();
-
-                fakeHeight = heightPixels - (y + titleHeight + contentHeight);
-                addView(fakeView, LayoutParams.MATCH_PARENT, fakeHeight);
-            }
-        });
-    }
 
     /**
      * 最终添加的view
@@ -125,8 +98,6 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         addView(contentLayout, LayoutParams.MATCH_PARENT,0);
 
         contentLayout.setVisibility(GONE);
-        addFakeView();
-        fakeView.setVisibility(GONE);
     }
 
     /**
@@ -151,7 +122,7 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
      * @param show 是否显示分隔线
      */
     protected void addTitleTab(boolean show){
-        LinearLayout.LayoutParams layoutParams;
+        LayoutParams layoutParams;
         int weight=0;
         int id= R.id.title_tab_1;
         for (int i = 0; i < titleTabNum; i++) {
@@ -176,7 +147,7 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
                     weight=183;
                     break;
             }
-            layoutParams =new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,weight);
+            layoutParams =new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,weight);
 //            titleTabLayout.setGravity(Gravity.CENTER);
             layoutParams.gravity = Gravity.CENTER;
 
@@ -265,10 +236,6 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         if (id == R.id.title_tab_4){
             clickOrder(4,id);
             return;
-        }
-
-        if (v == fakeView){
-            dismiss();
         }
     }
 
@@ -379,27 +346,6 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
                     contentLayout.setLayoutParams(layoutParams);
                 }
             });
-            expandAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                        fakeView.setVisibility(VISIBLE);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            });
         }
         expandAnimator.start();
         isShowing=true;
@@ -419,27 +365,6 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
                     ViewGroup.LayoutParams layoutParams = contentLayout.getLayoutParams();
                     layoutParams.height = animatedValue;
                     contentLayout.setLayoutParams(layoutParams);
-                }
-            });
-            reverseAnimator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                        fakeView.setVisibility(GONE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
                 }
             });
         }
