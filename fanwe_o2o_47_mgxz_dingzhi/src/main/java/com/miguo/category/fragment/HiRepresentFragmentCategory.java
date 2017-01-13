@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.Space;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.entity.SingleMode;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiRepresentCateFragment;
@@ -37,6 +39,7 @@ import com.miguo.ui.view.RepresentBannerView;
 import com.miguo.ui.view.RepresentViewPager;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
+import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
@@ -56,7 +59,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener{
+public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener{
 
     @ViewInject(R.id.ptr_layout)
     PtrFrameLayout ptrFrameLayout;
@@ -107,7 +110,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     @Override
     protected void setFragmentListener() {
-        fakeDropDownMenu.setOnClickListener(listener);
         scrollview.setOnRecyclerScrollViewListener(this);
     }
 
@@ -126,6 +128,18 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private void initDropDownPopHelper(){
         dropDownPopHelper = new DropDownPopHelper(getActivity(),topFakeDropDownMenu, fakeDropDownMenu );
+        dropDownPopHelper.setOnDropDownListener(this);
+        fakeDropDownMenu.setOnFakeClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickMenu();
+            }
+        });
+    }
+
+    @Override
+    public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
+        dropDownPopHelper.dismiss();
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
