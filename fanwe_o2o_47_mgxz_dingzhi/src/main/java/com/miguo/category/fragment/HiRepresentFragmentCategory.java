@@ -35,6 +35,8 @@ import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.RepresentAppBarLayout;
 import com.miguo.ui.view.RepresentBannerView;
 import com.miguo.ui.view.RepresentViewPager;
+import com.miguo.ui.view.dropdown.DropDownPopup;
+import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
@@ -87,6 +89,8 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     GetSearchCateConditionDao getSearchCateConditionDao;
     GetAdspaceListDao getAdspaceListDao;
 
+    DropDownPopHelper dropDownPopHelper;
+
     public HiRepresentFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
     }
@@ -118,6 +122,10 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         initSearchCateCondition();
         initAdspaceList();
         onRefresh();
+    }
+
+    private void initDropDownPopHelper(){
+        dropDownPopHelper = new DropDownPopHelper(getActivity(),topFakeDropDownMenu, fakeDropDownMenu );
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -202,6 +210,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             public void getSearchCateConditionSuccess(SearchCateConditionBean.ResultBean.BodyBean body) {
                 SearchCateConditionFactory.update(body);
                 updateCategories();
+                initDropDownPopHelper();
                 loadComplete();
             }
         });
