@@ -32,7 +32,7 @@ public class SearchCateConditionFactory {
         if(conditions.size() == 0){
             return null;
         }
-        return conditions.get(isUserLogin() ? USER_LOGIN_CONDITION : WITHOUT_USER_LOGIN_CONDITION).clone();
+        return conditions.get(isUserLogin() ? USER_LOGIN_CONDITION : WITHOUT_USER_LOGIN_CONDITION);
     }
 
     public static void update(SearchCateConditionBean.ResultBean.BodyBean condition){
