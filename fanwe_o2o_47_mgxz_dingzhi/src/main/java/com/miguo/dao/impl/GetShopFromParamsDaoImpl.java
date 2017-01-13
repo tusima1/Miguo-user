@@ -10,6 +10,7 @@ import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.RootBusinessListings;
 import com.google.gson.Gson;
 import com.miguo.dao.GetShopFromParamsDao;
+import com.miguo.entity.RepresentFilterBean;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetShopFromParamsView;
@@ -28,6 +29,10 @@ public class GetShopFromParamsDaoImpl extends BaseDaoImpl implements GetShopFrom
 
     public GetShopFromParamsDaoImpl(BaseView baseView) {
         super(baseView);
+    }
+
+    public void getShop(RepresentFilterBean filter){
+        getShop(filter.getAreaOne(), filter.getAreaTwo(), filter.getCategoryOne(), filter.getCategoryTwo(), filter.getFilter(), filter.getKeyword(), filter.getSortType(), filter.getPageNum(), filter.getPageSize(), filter.getMerchantType());
     }
 
     @Override

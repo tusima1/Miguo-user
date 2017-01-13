@@ -78,4 +78,11 @@ public class ClassPath {
      */
     public static final String UPDATE_USER_WITH_ENOUGH_MONEY_ACTIVITY = "com.miguo.app.HiUpdateUserWithEnoughMoneyActivity";
 
+    /**
+     * 二级代言界面
+     * {@link com.fanwe.seller.views.DaiyanSendTypeActivity}
+     */
+    public static final String SECOND_REPRESENT = "com.fanwe.seller.views.DaiyanSendTypeActivity";
+
+
 }

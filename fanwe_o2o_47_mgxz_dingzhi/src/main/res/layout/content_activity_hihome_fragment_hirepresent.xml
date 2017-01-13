@@ -64,15 +64,11 @@
         <com.fanwe.view.LoadMoreRecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
 
         </com.fanwe.view.LoadMoreRecyclerView>
 
-        <View
-            android:background="@color/main_color_press"
-            android:layout_width="match_parent"
-            android:layout_height="1500dp"/>
 
 
     </LinearLayout>
