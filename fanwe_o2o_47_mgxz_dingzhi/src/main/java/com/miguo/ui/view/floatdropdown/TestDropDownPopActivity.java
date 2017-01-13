@@ -12,6 +12,7 @@ import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestDropDownPopActivity extends AppCompatActivity {
@@ -66,7 +67,18 @@ public class TestDropDownPopActivity extends AppCompatActivity {
         findViewById(R.id.bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popHelper.show();
+//                popHelper.show();
+                //36531bd0-51c0-4f88-bb41-f2534b986118
+                //popularity
+                List<String> ids=new ArrayList<String>();
+                ids.add("first_order");
+                ids.add("fifty_to_hundred");
+                ids.add("over_three_hundred");
+                ids.add("popularity");
+                ids.add("36531bd0-51c0-4f88-bb41-f2534b986118");
+                ids.add("6b430429-081f-48a6-a092-a3bdd1b4ad63");
+//                popHelper.performMarkIds("popularity");
+                popHelper.performMarkIds(ids);
             }
         });
     }

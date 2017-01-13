@@ -1,6 +1,7 @@
 package com.miguo.ui.view.floatdropdown.helper;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -70,6 +71,12 @@ public class DropDownPopHelper implements PopupWindowLike{
         });
 
         popup = new DropDownPopup(mHoldActivity,anchor);
+        popup.setTextChangedListener(new DropDownPopup.OnTitleTextChangedListener() {
+            @Override
+            public void onTitleTextChange(int index, @NonNull String text) {
+                setTitleText(index,text);
+            }
+        });
     }
 
     @Override
@@ -94,6 +101,9 @@ public class DropDownPopHelper implements PopupWindowLike{
             text +="...";
         }
         anchor.setTitleText(index,text);
+        if (fakeDDM!=null){
+            fakeDDM.setTitleText(index,text);
+        }
     }
 
     public void performMarkIds(String id){
@@ -105,6 +115,11 @@ public class DropDownPopHelper implements PopupWindowLike{
         ids.add(id);
         performMarkIds(ids);
     }
+
+    /**
+     * 你希望选中哪些item,把他们的 id 传进去就好了
+     * @param ids
+     */
     public void performMarkIds(List<String> ids){
         //36531bd0-51c0-4f88-bb41-f2534b986118
         if (ids!=null && ids.size()>0){

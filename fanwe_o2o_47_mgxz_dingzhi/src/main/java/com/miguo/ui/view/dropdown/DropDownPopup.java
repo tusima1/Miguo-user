@@ -2,6 +2,7 @@ package com.miguo.ui.view.dropdown;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.miguo.entity.SingleMode;
 import com.miguo.entity.TwoMode;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.ui.view.floatdropdown.helper.DropDownMarkBean;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener2;
@@ -54,11 +56,9 @@ public class DropDownPopup extends PopupWindow {
         anchor.getLocationOnScreen(anchorLocation);
         LinearLayout rootLayout=new LinearLayout(mHoldActivity);
         rootLayout.setOrientation(LinearLayout.VERTICAL);
-//        rootLayout.setBackgroundColor(Color.WHITE);
         dropDownView = new DropDown(mHoldActivity);
-//        DropDownHelper2 helper2=new DropDownHelper2(mHoldActivity, dropDownView);
-        
-        initDDListener();
+
+        initDDData();
 
         int height = DisplayUtil.dp2px(mHoldActivity, 355);
 
@@ -108,9 +108,6 @@ public class DropDownPopup extends PopupWindow {
         super.dismiss();
     }
 
-    private void initDDListener() {
-        initDDData();
-    }
     private SearchCateConditionBean.ResultBean.BodyBean saveBody;
     private void initDDData() {
         SearchCateConditionBean.ResultBean.BodyBean body =  SearchCateConditionFactory.get();
@@ -131,17 +128,6 @@ public class DropDownPopup extends PopupWindow {
         return !(list == null || list.size()<=0);
     }
 
-
-    //------------------------------------------- data ---------------------------------------------
-    private void handleData(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
-        if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
-            dropDownView.prepareContentView(prepareContentView(item1,item2,item3,item4));
-            dropDownView.setInitOk(true);
-        }else {
-            dropDownView.setInitOk(false);
-        }
-    }
-
     /**
      * 准备要展示的ContentLayout 里面的View
      */
@@ -157,11 +143,6 @@ public class DropDownPopup extends PopupWindow {
             @Override
             public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
                 handleResult(1,new Pair<SingleMode, SingleMode>(levelOne,levelTwo),null);
-                String two = "";
-                if (levelTwo !=null){
-                    two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
-                }
-//                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
                 dropDownView.dismiss();
             }
         });
@@ -169,11 +150,6 @@ public class DropDownPopup extends PopupWindow {
             @Override
             public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
                 handleResult(2,new Pair<SingleMode, SingleMode>(levelOne,levelTwo),null);
-                String two = "";
-                if (levelTwo !=null){
-                    two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
-                }
-//                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
                 dropDownView.dismiss();
             }
         });
@@ -181,12 +157,6 @@ public class DropDownPopup extends PopupWindow {
             @Override
             public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
                 handleResult(3,new Pair<SingleMode, SingleMode>(levelOne,levelTwo),null);
-
-                String two = "";
-                if (levelTwo !=null){
-                    two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
-                }
-//                MGToast.showToast("一级: "+levelOne.getName() +"  id: "+levelOne.getSingleId()  +two);
                 dropDownView.dismiss();
             }
         });
@@ -195,15 +165,6 @@ public class DropDownPopup extends PopupWindow {
             @Override
             public void onDropDownSelected(List<SingleMode> singleModes) {
                 handleResult(4,null,singleModes);
-                StringBuilder sb=new StringBuilder();
-                sb.append("数量: "+singleModes.size());
-                sb.append("\n");
-                for (SingleMode mode : singleModes) {
-                    String name = mode.getName();
-                    sb.append("name: "+ name +"  id: "+mode.getSingleId());
-                    sb.append("\n");
-                }
-//                MGToast.showToast(sb.toString());
                 dropDownView.dismiss();
             }
         });
@@ -218,6 +179,24 @@ public class DropDownPopup extends PopupWindow {
         views.add(index3);
         views.add(index4);
         return views;
+    }
+    public interface OnTitleTextChangedListener{
+        void onTitleTextChange(int index,@NonNull String text);
+    }
+    private OnTitleTextChangedListener textChangedListener;
+
+    public void setTextChangedListener(OnTitleTextChangedListener textChangedListener) {
+        this.textChangedListener = textChangedListener;
+    }
+
+    //------------------------------------------- data ---------------------------------------------
+    private void handleData(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
+        if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
+            dropDownView.prepareContentView(prepareContentView(item1,item2,item3,item4));
+            dropDownView.setInitOk(true);
+        }else {
+            dropDownView.setInitOk(false);
+        }
     }
     private List<TwoMode> mergeDataForItem1(List... array){
         if (array == null || array.length==0)return null;
@@ -252,16 +231,42 @@ public class DropDownPopup extends PopupWindow {
         this.dropDownListener=dropDownListener;
     }
 
-    private Pair<Integer,Integer> location1;
-    private Pair<Integer,Integer> location2;
-    private int location3 = -1;
+    private DropDownMarkBean location1;
+    private DropDownMarkBean location2;
+    private DropDownMarkBean location3;
     private List<String> location4 =new ArrayList<>();
 
     public void performMarkIds(List<String> ids) {
+        location1 = null;
+        location2= null;
+        location3 = null;
+        location4.clear();
         for (String id : ids) {
             findItemLocation(id);
         }
+        if (location1!=null){
+            ((TwoSideListView)dropDownView.getContentViewList().get(1)).performPosition(location1.getLevelOne(),location1.getLevelTwo());
+            handleTextChange(1,location1.getName());
+        }
+        if (location2!=null){
+            ((TwoSideListView)dropDownView.getContentViewList().get(2)).performPosition(location2.getLevelOne(),location2.getLevelTwo());
+            handleTextChange(2,location2.getName());
+        }
+        if (location3 !=null){
+            ((SingleSideListView)dropDownView.getContentViewList().get(3)).performPosition(location3.getLevelOne());
+            handleTextChange(3,location3.getName());
+        }
+        if (location4!=null && location4.size()>0){
+            //Do Not Need Text Change
+            ((FilterView)dropDownView.getContentViewList().get(4)).performSelectedItems(location4);
+        }
 
+    }
+
+    private void handleTextChange(int index,String text){
+        if (textChangedListener!=null){
+            textChangedListener.onTitleTextChange(index,text);
+        }
     }
 
     private void findItemLocation(String id) {
@@ -275,8 +280,11 @@ public class DropDownPopup extends PopupWindow {
         for (int i = 0; i < item1.size(); i++) {
             List<SingleMode> singleModeList = item1.get(i).getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
-                if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
-                    location1 = new Pair<>(i,j);
+                SingleMode mode = singleModeList.get(j);
+                if (id.equalsIgnoreCase(mode.getSingleId())){
+                    if (location1==null){
+                        location1 = new DropDownMarkBean(i,j,mode.getName());
+                    }
                     return;
                 }
             }
@@ -285,14 +293,24 @@ public class DropDownPopup extends PopupWindow {
         for (int i = 0; i < item2.size(); i++) {
             List<SingleMode> singleModeList = item2.get(i).getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
+                SingleMode mode = singleModeList.get(j);
                 if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
-                    location2 = new Pair<>(i,j);
+                    if (location2==null){
+                        location2 = new DropDownMarkBean(i,j,mode.getName());
+                    }
                     return;
                 }
             }
         }
         //3
         for (int i = 0; i < item3.size(); i++) {
+            SingleMode mode = item3.get(i);
+            if (id.equalsIgnoreCase(mode.getSingleId())){
+                if (location3 == null){
+                    location3 = new DropDownMarkBean(i,-1,mode.getName());
+                }
+                return;
+            }
 
         }
 
@@ -300,7 +318,8 @@ public class DropDownPopup extends PopupWindow {
         for (int i = 0; i < item4.size(); i++) {
             List<SingleMode> singleModeList = item4.get(i).getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
-                if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
+                SingleMode mode = singleModeList.get(j);
+                if (id.equalsIgnoreCase(mode.getSingleId())){
                     location4.add(id);
                     return;
                 }

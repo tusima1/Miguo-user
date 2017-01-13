@@ -41,6 +41,27 @@ public class SingleListAdapter extends RecyclerView.Adapter<SingleListAdapter.Vi
     public void setItemClickListener(OnSingleModeRVItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
+    /**
+     * 代替点击某个item,代替 {@link View#performClick()}
+     * @param handlePosition 位置
+     */
+    public void performPosition(int handlePosition){
+        if (singleModeList==null || singleModeList.size()<=0){
+            return;
+        }
+        SingleMode mode = singleModeList.get(handlePosition);
+        boolean checked = mode.isChecked();
+        if (checked){
+            return;
+        }
+        mode.setChecked(true);
+        notifyItemChanged(handlePosition);
+        if (preClickPosition !=-2){
+            singleModeList.get(preClickPosition).setChecked(false);
+            notifyItemChanged(preClickPosition);
+        }
+        preClickPosition = handlePosition;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

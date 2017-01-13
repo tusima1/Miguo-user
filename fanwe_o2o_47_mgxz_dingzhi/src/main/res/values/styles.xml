@@ -172,5 +172,10 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorAccent">@color/white</item>
     </style>
+    
+    <style name="MyEditTextDStyle" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/indigo</item>
+        <item name="colorControlActivated">@color/pink</item>
+    </style>
 
 </resources>

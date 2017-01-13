@@ -3,7 +3,6 @@ package com.miguo.ui.view.floatdropdown.view;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,6 +200,10 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
         }
     }
 
+    public void performSelectedItems(List<String> ids){
+        performItemState(this,ids);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == clear) {
@@ -214,12 +217,16 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
 
     private void done() {
         if (onDropDownSelectedListener != null) {
-            resultList.clear();
-            getSelectedView(this);
-//            onDropDownSelectedListener.onDropDownSelected(getSelectedModel(ll_price, ll_like,
-//                    ll_youHui));
+            getSelectedView();
             onDropDownSelectedListener.onDropDownSelected(resultList);
         }
+    }
+    public void clearCheckState() {
+        setCheckView(this);
+    }
+    public void getSelectedView(){
+        resultList.clear();
+        getSelectedView(this);
     }
 
     private List<SingleMode> resultList=new ArrayList<>();
@@ -242,54 +249,6 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
         }
     }
 
-    private ArrayList<SingleMode> getSelectedModel(ViewGroup... viewGroup) {
-        ArrayList<SingleMode> strings = new ArrayList<>();
-        if (viewGroup == null || viewGroup.length <= 0) {
-            return strings;
-        }
-        for (int i = 0; i < viewGroup.length; i++) {
-            ViewGroup group = viewGroup[i];
-            int childCount = group.getChildCount();
-            for (int i1 = 0; i1 < childCount; i1++) {
-                View childAt = group.getChildAt(i1);
-                if (childAt instanceof ViewGroup){
-                    ArrayList<SingleMode> fromViewGroup = getFromViewGroup((ViewGroup) childAt);
-                    if (fromViewGroup!=null && fromViewGroup.size()>0){
-                        strings.addAll(fromViewGroup);
-                    }
-                }else {
-                    Log.e("test","这里不存在单独存在的元素");
-                }
-            }
-        }
-        return strings;
-    }
-
-    private ArrayList<SingleMode> getFromViewGroup(ViewGroup viewGroup){
-        ArrayList<SingleMode> modes =new ArrayList<>();
-        int childCount = viewGroup.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = viewGroup.getChildAt(i);
-            SingleMode fromView = getFromView(childAt);
-            if (fromView!=null){
-                modes.add(fromView);
-            }
-        }
-        return modes;
-    }
-
-    private SingleMode getFromView(View view){
-        SingleMode mode =null;
-        if (view instanceof  CheckTextView){
-            boolean checked = ((CheckTextView) view).isChecked();
-            Log.e("test","isChecked: "+checked);
-            if (checked) {
-                mode = (SingleMode) ((CheckTextView) view).getHold();
-            }
-        }
-        return mode;
-    }
-
     private void clear() {
         clearCheckState();
         if (clearAllListener != null) {
@@ -297,26 +256,43 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
         }
     }
 
-    private void clearCheckState() {
-        clearCheckView(this);
-    }
-
-    private void clearCheckView(View  view){
+    private void setCheckView(View  view){
         if (view == null){
             return;
         }
         if (view instanceof CheckTextView){
             boolean checked = ((CheckTextView) view).isChecked();
             if (checked){
-                ((CheckTextView) view).toggle();
+                ((CheckTextView) view).setChecked(false);
             }
         }else if (view instanceof ViewGroup){
             int childCount = ((ViewGroup) view).getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childAt = ((ViewGroup) view).getChildAt(i);
-                clearCheckView(childAt);
+                setCheckView(childAt);
             }
         }
-
+    }
+    private void performItemState(View view,List<String> ids){
+        if (view == null){
+            return;
+        }
+        if (view instanceof CheckTextView){
+            boolean checked = ((CheckTextView) view).isChecked();
+            if (!checked){
+                String holdId = ((SingleMode) ((CheckTextView) view).getHold()).getSingleId();
+                for (String id : ids) {
+                    if (id.equalsIgnoreCase(holdId)){
+                        ((CheckTextView) view).setChecked(true);
+                    }
+                }
+            }
+        }else if (view instanceof ViewGroup){
+            int childCount = ((ViewGroup) view).getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = ((ViewGroup) view).getChildAt(i);
+                performItemState(childAt,ids);
+            }
+        }
     }
 }

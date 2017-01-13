@@ -1,5 +1,6 @@
 package com.miguo.ui.view.floatdropdown;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +14,7 @@ import com.fanwe.cache.CacheUtil;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.search.views.SearchResultActivity;
 import com.miguo.entity.HotWordsBean;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.view.floatdropdown.adapter.SearchGuideAdapter;
@@ -174,6 +176,9 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
                 saveUserSearchData();
             }
             //TODO 跳转
+            Intent intent = new Intent();
+            intent.setClass(this, SearchResultActivity.class);
+            startActivity(intent);
 
 
         }
