@@ -161,7 +161,7 @@ public class DropDownPopup extends PopupWindow {
                 if (levelTwo !=null){
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
                 }
-                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
+//                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
                 dropDownView.dismiss();
             }
         });
@@ -173,7 +173,7 @@ public class DropDownPopup extends PopupWindow {
                 if (levelTwo !=null){
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
                 }
-                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
+//                MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
                 dropDownView.dismiss();
             }
         });
@@ -185,7 +185,7 @@ public class DropDownPopup extends PopupWindow {
                 if (levelTwo !=null){
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
                 }
-                MGToast.showToast("一级: "+levelOne.getName() +"  id: "+levelOne.getSingleId()  +two);
+//                MGToast.showToast("一级: "+levelOne.getName() +"  id: "+levelOne.getSingleId()  +two);
                 dropDownView.dismiss();
             }
         });
@@ -202,7 +202,7 @@ public class DropDownPopup extends PopupWindow {
                     sb.append("name: "+ name +"  id: "+mode.getSingleId());
                     sb.append("\n");
                 }
-                MGToast.showToast(sb.toString());
+//                MGToast.showToast(sb.toString());
                 dropDownView.dismiss();
             }
         });
