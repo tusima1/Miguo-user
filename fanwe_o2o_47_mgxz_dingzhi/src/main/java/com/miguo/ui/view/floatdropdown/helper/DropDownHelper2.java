@@ -74,7 +74,7 @@ public class DropDownHelper2 {
                 ddm.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ddm.performTitleTabClick(index);
+                        ddm.onClick(index);
                     }
                 },300);
 
@@ -121,7 +121,6 @@ public class DropDownHelper2 {
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
                 }
                 MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
-                setDropDownMenuText(1,levelOne.getName());
                 ddm.dismiss();
             }
         });
@@ -133,7 +132,6 @@ public class DropDownHelper2 {
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
                 }
                 MGToast.showToast("选中: "+levelOne.getName() +"  id: "+levelOne.getSingleId() +two);
-                setDropDownMenuText(2,levelOne.getName());
                 ddm.dismiss();
             }
         });
@@ -145,7 +143,6 @@ public class DropDownHelper2 {
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();
                 }
                 MGToast.showToast("一级: "+levelOne.getName() +"  id: "+levelOne.getSingleId()  +two);
-                setDropDownMenuText(3,levelOne.getName());
                 ddm.dismiss();
             }
         });
@@ -176,10 +173,6 @@ public class DropDownHelper2 {
         views.add(index3);
         views.add(index4);
         return views;
-    }
-
-    private void setDropDownMenuText(int index,String text){
-        ddm.setTitleTabText(index-1,text);
     }
 
     /**

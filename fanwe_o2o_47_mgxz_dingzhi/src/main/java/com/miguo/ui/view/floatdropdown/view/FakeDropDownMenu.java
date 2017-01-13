@@ -52,6 +52,9 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         ll_4 = findViewById(R.id.ll_4);
 
         ll_1.setOnClickListener(this);
+        ll_2.setOnClickListener(this);
+        ll_3.setOnClickListener(this);
+        ll_4.setOnClickListener(this);
     }
 
     @Override
@@ -93,7 +96,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         this.fakeTitleTabClickListener = fakeTitleTabClickListener;
     }
 
-    public void setFakeTitleText(int index,String text){
+    public void setTitleText(int index,String text){
         text = TextUtils.isEmpty(text) ? "" :text;
         switch (index){
             case 1:

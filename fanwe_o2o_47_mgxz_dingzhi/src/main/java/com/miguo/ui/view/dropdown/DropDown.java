@@ -3,11 +3,9 @@ package com.miguo.ui.view.dropdown;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -15,10 +13,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.fanwe.o2o.miguo.R;
 import com.miguo.ui.view.dropdown.interf.ExpandReverse;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
-import com.miguo.ui.view.dropdown.view.TitleTab;
 
 import java.util.ArrayList;
 
@@ -28,21 +24,12 @@ import java.util.ArrayList;
  * Description: 
  */
 
-public class DropDown extends LinearLayout implements View.OnClickListener,PopupWindowLike,ExpandReverse {
+public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReverse {
 
-    private final int titleTabNum=4;//默认的item数量
-    private String[] titleStr=new String[]{
-            "附近",
-            "全部",
-            "智能排序",
-            "筛选"
-    };
     private int contentHeight;//内容的高度(规定的)
 
-    private LinearLayout titleTabLayout;//titleTab 的容器
     private FrameLayout contentLayout;//主内容 的容器
     private boolean isShowing;//是否在展示中
-    private int preClickId=-10;//之前点击的id
 
     private ValueAnimator expandAnimator;
     private ValueAnimator reverseAnimator;
@@ -50,7 +37,6 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
     private int expandDuration = 250;
     private int reverseDuration = 300;
 
-    private TitleTab preClickTab;//之前点击的tab
 
     private final SparseArray<View> contentViewList=new SparseArray<>();
 
@@ -72,7 +58,6 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
 
     private void init() {
         setBaseParams();
-        addTitleTab(true);
         addDivider();
         finalAddView();
     }
@@ -82,7 +67,7 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
      */
     private void addDivider() {
         View dividerView =new View(getContext());
-        dividerView.setBackgroundColor(Color.GRAY);
+        dividerView.setBackgroundColor(Color.parseColor("#EEEEEE"));
         addView(dividerView,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
     }
 
@@ -93,9 +78,8 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
     private void finalAddView(){
         //TODO 这是两条线条
 //        addDivider();
-        addView(titleTabLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        addDivider();
-        addView(contentLayout, LayoutParams.MATCH_PARENT,0);
+//        addDivider();
+        addView(contentLayout, LayoutParams.MATCH_PARENT,contentHeight);
 
         contentLayout.setVisibility(GONE);
     }
@@ -109,59 +93,12 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
         setBackgroundColor(Color.WHITE);
         setOrientation(LinearLayout.VERTICAL);
 
-        titleTabLayout =new LinearLayout(getContext());
-        titleTabLayout.setOrientation(LinearLayout.HORIZONTAL);
-        titleTabLayout.setGravity(Gravity.CENTER_VERTICAL);
-        titleTabLayout.setMinimumHeight(dp2px(getContext(),36));
+//        titleTabLayout =new LinearLayout(getContext());
+//        titleTabLayout.setOrientation(LinearLayout.HORIZONTAL);
+//        titleTabLayout.setGravity(Gravity.CENTER_VERTICAL);
+//        titleTabLayout.setMinimumHeight(dp2px(getContext(),36));
 
         contentLayout = new FrameLayout(getContext());
-    }
-
-    /**
-     * 添加 TitleTab ,根据数量 和 分隔线
-     * @param show 是否显示分隔线
-     */
-    protected void addTitleTab(boolean show){
-        LayoutParams layoutParams;
-        int weight=0;
-        int id= R.id.title_tab_1;
-        for (int i = 0; i < titleTabNum; i++) {
-            switch (i){
-                case 0:
-                    weight=183;
-                    id=R.id.title_tab_1;
-                    break;
-                case 1:
-                    weight=148;
-                    id=R.id.title_tab_2;
-                    break;
-                case 2:
-                    weight=200;
-                    id=R.id.title_tab_3;
-                    break;
-                case  3:
-                    weight=183;
-                    id=R.id.title_tab_4;
-                    break;
-                default:
-                    weight=183;
-                    break;
-            }
-            layoutParams =new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,weight);
-//            titleTabLayout.setGravity(Gravity.CENTER);
-            layoutParams.gravity = Gravity.CENTER;
-
-            TitleTab titleTab=new TitleTab(getContext());
-            titleTab.setText(titleStr[i]);
-            titleTab.setId(id);
-            titleTab.setBackgroundDrawable(getResources().getDrawable(R.drawable.md_ripple_white));
-            titleTab.setOnClickListener(this);
-            titleTabLayout.addView(titleTab,layoutParams);
-            if (show && (i!=titleTabNum-1)){
-                titleTabLayout.addView(getDividerView(),getDividerParams());
-            }
-
-        }
     }
 
     /**
@@ -170,24 +107,6 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
      */
     public void setInitOk(boolean initOk) {
         this.initOk = initOk;
-    }
-
-    /**
-     * 默认显示的标题描述文字
-     * @param titleStr
-     */
-    public void setTitleStr(String[] titleStr) {
-        this.titleStr = titleStr;
-        updateTitleText();
-    }
-
-    private void updateTitleText() {
-        if (titleStr == null || titleStr.length <=0){
-            return;
-        }
-        for (int i = 0; i < titleStr.length; i++) {
-            setTitleTabText(i,titleStr[i]);
-        }
     }
 
     /**
@@ -204,94 +123,31 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
         return new ViewGroup.LayoutParams(2,dp2px(getContext(),19));
     }
 
-    @Override
-    public void onClick(View v) {
+    public void onClick(int index) {
         if (!initOk){
             return;//初始化失败
         }
-        int id =v.getId();
-        if (preClickTab!=null && preClickTab!=v){
-            preClickTab.start();
-        }
-        if (v instanceof TitleTab){
-            ((TitleTab) v).start();
-            preClickTab = (TitleTab) v;
-        }
-        if (id == preClickId && isShowing){
-            dismiss();
-            return;
-        }
-        if (id == R.id.title_tab_1){
-            clickOrder(1,id);
-            return;
-        }
-        if (id == R.id.title_tab_2){
-            clickOrder(2,id);
-            return;
-        }
-        if (id == R.id.title_tab_3){
-            clickOrder(3,id);
-            return;
-        }
-        if (id == R.id.title_tab_4){
-            clickOrder(4,id);
-            return;
-        }
+        clickOrder(index);
     }
 
     /**
      * 点击
      * @param order
-     * @param id
      */
-    private void clickOrder(int order,int id){
+    private void clickOrder(int order){
         contentLayout.removeAllViews();
         contentLayout.setVisibility(VISIBLE);
 
         contentLayout.addView(contentViewList.get(order),new FrameLayout.LayoutParams(ViewGroup
                 .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        if (!isShowing){
-            expand();
-        }
-        preClickId = id;
+//        if (!isShowing){
+//            expand();
+//        }
     }
 
     public int dp2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
-    }
-
-    /**
-     * 设置标题的文字
-     * @param index from 0 ~~
-     * @param text nullable
-     */
-    public void setTitleTabText(int index,String text){
-        if (index > titleTabNum-1){
-            return;
-        }
-        text = TextUtils.isEmpty(text) ? titleStr[index] : text;
-        try {
-            ((TitleTab)titleTabLayout.getChildAt(2 * index)).setText(text);
-        } catch (Exception e) {
-            Log.e("test","index error!");
-        }
-    }
-
-    /**
-     * 从1开始,1234
-     * @param index 例如: 1
-     */
-    public void performTitleTabClick(int index){
-        if (index > titleTabNum){
-            return;
-        }
-        int innerIndex = index -1;
-        try {
-            ((TitleTab)titleTabLayout.getChildAt(2 * innerIndex)).performClick();
-        } catch (Exception e) {
-            Log.e("test","performTitleTabClick index error!");
-        }
     }
 
     @Override
@@ -301,11 +157,8 @@ public class DropDown extends LinearLayout implements View.OnClickListener,Popup
 
     @Override
     public void dismiss() {
-        preClickTab.reverse();
-        reverse();
-        preClickId=-10;
+//        reverse();
         isShowing =false;
-        preClickTab=null;
     }
 
     public boolean isShowing(){
