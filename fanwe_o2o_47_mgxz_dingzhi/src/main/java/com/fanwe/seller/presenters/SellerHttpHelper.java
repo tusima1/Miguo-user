@@ -631,7 +631,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onFinish() {
-                mView.onFailue("");
+                mView.onFinish("");
             }
         });
     }
@@ -673,9 +673,9 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
                 List<ResultBusinessListings> results = root.getResult();
                 if (SDCollectionUtil.isEmpty(results)) {
                     onSuccess(mView, SellerConstants.SHOP_SEARCH, null);
-                    return;
+                }else {
+                    onSuccess(mView, SellerConstants.SHOP_SEARCH, results);
                 }
-                onSuccess(mView, SellerConstants.SHOP_SEARCH, results);
             }
 
             @Override
@@ -685,7 +685,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
 
             @Override
             public void onFinish() {
-                mView.onFailue("");
+                mView.onFinish("");
             }
         });
     }

@@ -91,6 +91,9 @@ public class FirstFragment extends Fragment {
             mDPGridViewAdapter.notifyDataSetChanged();
         }
     }
+    public List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> getDataList(){
+        return this.mDataList;
+    }
     //取消当前adapter里面被选中的状态
     public void removeSelectedState(){
          mDataList.get(lastSelectedPosition).setChecked(false);

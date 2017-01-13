@@ -44,6 +44,9 @@ public class TypeHorizontalScrollViewAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
+        if(mDatas==null||position>=mDatas.size()){
+            return null;
+        }
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(
