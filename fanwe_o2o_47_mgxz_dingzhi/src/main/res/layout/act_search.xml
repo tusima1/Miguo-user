@@ -1,63 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/layout_search_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="@dimen/dp40"
+        android:orientation="horizontal">
 
-        <include layout="@layout/item_layout_sample_title" />
+        <TextView
+            android:id="@+id/tv_goods_frag_groupon_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="商品"
+            android:textColor="@color/c_CCCCCC"
+            android:textSize="@dimen/dp14" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp40"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_goods_frag_groupon_list"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:text="商品"
-                android:textColor="@color/c_CCCCCC"
-                android:textSize="@dimen/dp14" />
-
-            <TextView
-                android:id="@+id/tv_shop_frag_groupon_list"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:text="商家"
-                android:textColor="@color/black_2e"
-                android:textSize="@dimen/dp14" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_gravity="bottom"
-            android:background="#CCCCCC" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp36" />
-
-        <FrameLayout
-            android:id="@+id/content_act_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_shop_frag_groupon_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="商家"
+            android:textColor="@color/black_2e"
+            android:textSize="@dimen/dp14" />
     </LinearLayout>
 
-    <com.miguo.ui.view.dropdown.DropDownMenu
-        android:id="@+id/ddm_act_search"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp36"
-        android:layout_marginTop="80dp" />
-</FrameLayout>
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:background="#CCCCCC" />
+
+    <FrameLayout
+        android:id="@+id/content_act_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
