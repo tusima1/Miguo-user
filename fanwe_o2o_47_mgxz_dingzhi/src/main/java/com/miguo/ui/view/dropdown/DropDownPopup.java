@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.didikee.uilibs.utils.DisplayUtil;
-import com.didikee.uilibs.utils.UIColor;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.entity.TwoMode;
@@ -37,7 +36,7 @@ public class DropDownPopup extends PopupWindow {
 
     private final Activity mHoldActivity;
     private View anchor;
-    private int bgColor = UIColor.getAlphaColor(66,Color.BLACK);
+    private String bgColor = "#4D000000";
     private DropDown dropDownView;
     private OnDropDownListener dropDownListener;
 
@@ -55,7 +54,7 @@ public class DropDownPopup extends PopupWindow {
         anchor.getLocationOnScreen(anchorLocation);
         LinearLayout rootLayout=new LinearLayout(mHoldActivity);
         rootLayout.setOrientation(LinearLayout.VERTICAL);
-        rootLayout.setBackgroundColor(Color.WHITE);
+//        rootLayout.setBackgroundColor(Color.WHITE);
         dropDownView = new DropDown(mHoldActivity);
 //        DropDownHelper2 helper2=new DropDownHelper2(mHoldActivity, dropDownView);
         
@@ -64,7 +63,7 @@ public class DropDownPopup extends PopupWindow {
         int height = DisplayUtil.dp2px(mHoldActivity, 355);
 
         View fakeView =new View(mHoldActivity);
-        fakeView.setBackgroundColor(bgColor);
+        fakeView.setBackgroundColor(Color.parseColor(bgColor));
         fakeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,8 +254,8 @@ public class DropDownPopup extends PopupWindow {
 
     private Pair<Integer,Integer> location1;
     private Pair<Integer,Integer> location2;
-    private int location3;
-    private List<Integer> location4;
+    private int location3 = -1;
+    private List<String> location4 =new ArrayList<>();
 
     public void performMarkIds(List<String> ids) {
         for (String id : ids) {
@@ -293,13 +292,16 @@ public class DropDownPopup extends PopupWindow {
             }
         }
         //3
+        for (int i = 0; i < item3.size(); i++) {
+
+        }
 
         //4
         for (int i = 0; i < item4.size(); i++) {
             List<SingleMode> singleModeList = item4.get(i).getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
                 if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
-                    location2 = new Pair<>(i,j);
+                    location4.add(id);
                     return;
                 }
             }
