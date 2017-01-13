@@ -177,7 +177,7 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
         }
     }
 
-    public void setOnDropDownSelectedListener2(OnDropDownSelectedListener2<SingleMode>
+    public void setOnDropDownSelectedListener(OnDropDownSelectedListener2<SingleMode>
                                                        onDropDownSelectedListener) {
         this.onDropDownSelectedListener = onDropDownSelectedListener;
     }
@@ -199,9 +199,6 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
                 addLine(data.get(i), i);
             }
         }
-//        addLine(data.get(like),like);
-//        addLine(data.get(youHui),youHui);
-//        addLine(data.get(price),price);
     }
 
     @Override
@@ -217,8 +214,31 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
 
     private void done() {
         if (onDropDownSelectedListener != null) {
-            onDropDownSelectedListener.onDropDownSelected(getSelectedModel(ll_price, ll_like,
-                    ll_youHui));
+            resultList.clear();
+            getSelectedView(this);
+//            onDropDownSelectedListener.onDropDownSelected(getSelectedModel(ll_price, ll_like,
+//                    ll_youHui));
+            onDropDownSelectedListener.onDropDownSelected(resultList);
+        }
+    }
+
+    private List<SingleMode> resultList=new ArrayList<>();
+
+    private void getSelectedView(View view){
+        if (view ==null ){
+            return;
+        }
+        if (view instanceof CheckTextView){
+            boolean checked = ((CheckTextView) view).isChecked();
+            if (checked){
+                resultList.add((SingleMode) ((CheckTextView) view).getHold());
+            }
+        }else if (view instanceof ViewGroup){
+            int childCount = ((ViewGroup) view).getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = ((ViewGroup) view).getChildAt(i);
+                getSelectedView(childAt);
+            }
         }
     }
 
@@ -271,8 +291,32 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
     }
 
     private void clear() {
+        clearCheckState();
         if (clearAllListener != null) {
             clearAllListener.clear();
         }
+    }
+
+    private void clearCheckState() {
+        clearCheckView(this);
+    }
+
+    private void clearCheckView(View  view){
+        if (view == null){
+            return;
+        }
+        if (view instanceof CheckTextView){
+            boolean checked = ((CheckTextView) view).isChecked();
+            if (checked){
+                ((CheckTextView) view).toggle();
+            }
+        }else if (view instanceof ViewGroup){
+            int childCount = ((ViewGroup) view).getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = ((ViewGroup) view).getChildAt(i);
+                clearCheckView(childAt);
+            }
+        }
+
     }
 }

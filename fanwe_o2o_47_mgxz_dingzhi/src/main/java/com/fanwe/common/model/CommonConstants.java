@@ -22,18 +22,22 @@ public class CommonConstants {
     /**
      * 通过分享码获取分享id接口.
      */
-    public static final String  GETSHAREID="GetShareID";
+    public static final String GETSHAREID = "GetShareID";
     /**
      * 分享ID.
      */
-    public static final String   SHARE_RECORD_ID = "share_record_id";
+    public static final String SHARE_RECORD_ID = "share_record_id";
     /**
      * 取当前系统时间。
      */
-    public static  final String  SYSNCTIME= "SysncTime";
+    public static final String SYSNCTIME = "SysncTime";
 
     /**
      * 生成分享记录。
      */
     public static final String CREATE_SHARE_RECORD = "CreateShareRecord";
+    /**
+     * crash log上传时uptoken
+     */
+    public static final String CRASH_UPTOKEN = "CrashUpToken";
 }

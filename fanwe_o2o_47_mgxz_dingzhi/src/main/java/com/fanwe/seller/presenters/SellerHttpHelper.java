@@ -670,13 +670,12 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootBusinessListings root = gson.fromJson(responseBody, RootBusinessListings.class);
-                List<ResultBusinessListings> result = root.getResult();
-                if (SDCollectionUtil.isEmpty(result)) {
+                List<ResultBusinessListings> results = root.getResult();
+                if (SDCollectionUtil.isEmpty(results)) {
                     onSuccess(mView, SellerConstants.SHOP_SEARCH, null);
                     return;
                 }
-                List<ModelBusinessListings> items = result.get(0).getShop_list();
-                onSuccess(mView, SellerConstants.SHOP_SEARCH, items);
+                onSuccess(mView, SellerConstants.SHOP_SEARCH, results);
             }
 
             @Override

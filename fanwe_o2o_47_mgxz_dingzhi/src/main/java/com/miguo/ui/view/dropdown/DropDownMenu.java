@@ -58,7 +58,7 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
     private final SparseArray<View> contentViewList=new SparseArray<>();
     private int fakeHeight;//底下view的高度
 
-    private boolean initOk=true;
+    private boolean initOk=false;
 
     public DropDownMenu(Context context) {
         this(context,null);
@@ -118,7 +118,8 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
      * 最终添加的view
      */
     private void finalAddView(){
-        addDivider();
+        //TODO 这是两条线条
+//        addDivider();
         addView(titleTabLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         addDivider();
         addView(contentLayout, LayoutParams.MATCH_PARENT,0);
@@ -304,9 +305,25 @@ public class DropDownMenu extends LinearLayout implements View.OnClickListener,P
         }
         text = TextUtils.isEmpty(text) ? titleStr[index] : text;
         try {
-            ((TitleTab)titleTabLayout.getChildAt(index)).setText(text);
+            ((TitleTab)titleTabLayout.getChildAt(2 * index)).setText(text);
         } catch (Exception e) {
             Log.e("test","index error!");
+        }
+    }
+
+    /**
+     * 从1开始,1234
+     * @param index 例如: 1
+     */
+    public void performTitleTabClick(int index){
+        if (index > titleTabNum){
+            return;
+        }
+        int innerIndex = index -1;
+        try {
+            ((TitleTab)titleTabLayout.getChildAt(2 * innerIndex)).performClick();
+        } catch (Exception e) {
+            Log.e("test","performTitleTabClick index error!");
         }
     }
 

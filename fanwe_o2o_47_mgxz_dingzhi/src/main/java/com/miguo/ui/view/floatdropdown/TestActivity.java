@@ -3,34 +3,40 @@ package com.miguo.ui.view.floatdropdown;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
-import com.miguo.ui.view.dropdown.DropDownMenu;
-import com.miguo.entity.SingleMode;
-import com.miguo.entity.TwoMode;
-import com.miguo.ui.view.floatdropdown.helper.DropDownHelper;
 import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.ui.view.dropdown.DropDownMenu;
+import com.miguo.ui.view.floatdropdown.helper.DropDownHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 public class TestActivity extends AppCompatActivity {
 
     private DropDownMenu ddm;
     private DropDownHelper helper;
+    private View button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        button = findViewById(R.id.bt);
+
         ddm = ((DropDownMenu) findViewById(R.id.ddm));
 
         helper = new DropDownHelper(this,ddm);
 //        helper.setTwoModes(twoModes);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helper.handleItem("14");
+            }
+        });
 
         getHttpData();
     }
@@ -56,35 +62,8 @@ public class TestActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Log.e("test","body is null!!!");
                 }
-                if (body!=null){
-                    List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
-                            .getHotAreaList1(), body.getAdminAreaList());
-                    List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
-                    List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
-                    List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
-                    helper.setData(item1,item2,item3,item4);
-                }
             }
         });
-    }
-
-
-    private List<TwoMode> mergeDataForItem1(List... array){
-        if (array == null || array.length==0)return null;
-        List<TwoMode> list=new ArrayList<>();
-        for (List<TwoMode> anArray : array) {
-            list.addAll(anArray);
-        }
-        return list;
-    }
-
-    private List<SingleMode> mergeDataForItem3(List... array){
-        if (array == null || array.length==0)return null;
-        List<SingleMode> list=new ArrayList<>();
-        for (List<SingleMode> anArray : array) {
-            list.addAll(anArray);
-        }
-        return list;
     }
 
 

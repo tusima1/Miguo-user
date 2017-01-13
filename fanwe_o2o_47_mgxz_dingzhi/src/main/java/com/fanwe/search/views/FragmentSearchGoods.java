@@ -37,6 +37,13 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface {
         return view;
     }
 
+    public void search(String keyword) {
+        if (fragmentGoods != null) {
+            fragmentGoods.keyword = keyword;
+            fragmentGoods.refresh();
+        }
+    }
+
     private void setListener() {
         layoutEmpty.setOnClickListener(new View.OnClickListener() {
             @Override

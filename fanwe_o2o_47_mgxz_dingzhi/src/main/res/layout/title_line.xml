@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/title_line"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:layout_centerVertical="true"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="8dp"
+        android:layout_height="13dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp17"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_left_arrow_dark" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/youhuishop"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="优惠商家"
+            android:textColor="@color/c_595959"
+
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/commonshop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="52dp"
+            android:textColor="@color/c_CCCCCC"
+            android:text="全部商家"
+            android:textSize="@dimen/text_size" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/search_button"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginRight="@dimen/dp17"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_search_orange" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/gray_cc"/>
+</RelativeLayout>

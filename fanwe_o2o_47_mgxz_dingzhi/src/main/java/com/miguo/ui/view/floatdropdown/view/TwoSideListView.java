@@ -33,7 +33,7 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
     private List<TwoMode> data =new ArrayList<>();
     private LeftListAdapter leftAdapter;
     private RightListAdapter rightAdapter;
-    private int preLeftMarkPosition = -2;//左边的位置
+    private int currLeftMarkPosition = -2;//左边的位置
     private OnDropDownSelectedListener<SingleMode> onDropDownSelectedListener;
 
     public TwoSideListView(Context context) {
@@ -65,6 +65,23 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
 
     }
 
+    /**
+     * 代替 performClick()方法,在adapter初始化的时候加载.
+     * 如果想用performCLick() 参见 {@link TwoSideListView#handlePerformClick(int, int)}
+     * @param leftPosition 左边为一级类目
+     * @param rightPosition 右边为二级类目
+     */
+    public void performPosition(int leftPosition, int rightPosition){
+        if (leftPosition<0 ||rightPosition <0){
+            return;
+        }
+        leftAdapter.performPosition(leftPosition);
+        rightAdapter.setData(data.get(leftPosition).getSingleModeList());
+        rightAdapter.performPosition(rightPosition);
+        currLeftMarkPosition = leftPosition;
+        clearLastDataState();
+    }
+
     public void setData(final List<TwoMode> data){
         this.data = data;
         leftAdapter = new LeftListAdapter(data);
@@ -76,8 +93,7 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
             @Override
             public void onItemClick(View v, final int position, final List<SingleMode> singleModes) {
                 Log.e("test","left item click: "+ position);
-                preLeftMarkPosition=position;
-//                rightAdapter.updateData(data.get(position).getSingleModeList());
+                currLeftMarkPosition =position;
                 leftListView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -97,23 +113,25 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
         rightAdapter.setOnItemClickListener(new OnSingleModeRVItemClickListener() {
             @Override
             public void onItemClick(View v, int position, SingleMode singleMode) {
+                int leftCurrPosition = leftAdapter.getClickPosition();
                 if (onDropDownSelectedListener!=null){
-                    onDropDownSelectedListener.onDropDownSelected(singleMode);
+                    onDropDownSelectedListener.onDropDownSelected(data.get(leftCurrPosition),singleMode);
                 }
-                preLeftMarkPosition = leftAdapter.getClickPosition();
+                currLeftMarkPosition = leftCurrPosition;
+                Log.e("test","之前的位置: "+ currLeftMarkPosition);
                 clearLastDataState();
             }
         });
     }
 
     private void clearLastDataState() {
-        if (preLeftMarkPosition <0){
+        if (currLeftMarkPosition <0){
             return;
         }
         //先这样吧,后面根据position定点恢复
         int leftSize = data.size();
         for (int i = 0; i < leftSize; i++) {
-            if (preLeftMarkPosition!=i ){
+            if (currLeftMarkPosition !=i ){
                 TwoMode twoMode = data.get(i);
                 int size = twoMode.getSingleModeList().size();
                 for (int i1 = 0; i1 < size; i1++) {
@@ -124,13 +142,27 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
                 }
             }
         }
-//        TwoMode twoMode = data.get(preLeftMarkPosition);
-//        twoMode.getSingleModeList().get(preRightMarkPosition).setChecked(false);
     }
 
     @Override
     public void setOnDropDownSelectedListener(OnDropDownSelectedListener<SingleMode>
                                                           onDropDownSelectedListener) {
         this.onDropDownSelectedListener=onDropDownSelectedListener;
+    }
+
+    public void handlePerformClick(final int left, final int right) {
+        leftListView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                leftListView.findViewHolderForAdapterPosition(left).itemView.performClick();
+                rightListView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rightListView.findViewHolderForAdapterPosition(right).itemView.performClick();
+                    }
+                },300);
+
+            }
+        },300);
     }
 }

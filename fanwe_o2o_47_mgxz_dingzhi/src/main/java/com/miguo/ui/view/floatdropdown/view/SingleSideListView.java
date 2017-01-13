@@ -50,7 +50,7 @@ public class SingleSideListView extends FrameLayout implements SetDropDownListen
             @Override
             public void onItemClick(View v, int position, SingleMode singleMode) {
                 if (onDropDownSelectedListener!=null){
-                    onDropDownSelectedListener.onDropDownSelected(singleMode);
+                    onDropDownSelectedListener.onDropDownSelected(singleMode,null);
                 }
             }
         });

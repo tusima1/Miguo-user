@@ -16,6 +16,9 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.cache.CacheUtil;
+import com.fanwe.common.model.CommonConstants;
+import com.fanwe.common.model.getCrashUpToken.ModelCrashUpToken;
+import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.CurrCityModelDao;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -24,14 +27,17 @@ import com.fanwe.model.CitylistModel;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.presenters.SellerHttpHelper;
+import com.fanwe.seller.util.CollectionUtils;
 import com.fanwe.user.view.WelcomeActivity;
 import com.fanwe.work.AppRuntimeWorker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.miguo.crash.CrashUtil;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
+import com.miguo.utils.UploadUtil;
 import com.miguo.utils.dev.DevCode;
 import com.miguo.utils.dev.SPUtil;
 import com.miguo.utils.permission.DangerousPermissions;
@@ -78,6 +84,15 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
             checkPermissions();
         } else {
             init();
+        }
+        //请求crash log上传token
+      //  getCrashLogToken();
+    }
+
+    private void getCrashLogToken() {
+        if (CrashUtil.isCrashLogExist()) {
+            CommonHttpHelper mCommonHttpHelper = new CommonHttpHelper(this, this);
+            mCommonHttpHelper.getCrashUpToken();
         }
     }
 
@@ -223,7 +238,6 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
     }
 
 
-
     private void requestInitInterface() {
         //请求城市列表
         sellerHttpHelper.getCityList();
@@ -231,11 +245,11 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
 
     private void startMainActivity() {
         Boolean user_first = setting.getBoolean("FIRST", true);
-        String version = setting.getString("version",-1+"");
+        String version = setting.getString("version", -1 + "");
         PackageInfo info = SDPackageUtil.getCurrentPackageInfo();
         String versionCode = String.valueOf(info.versionCode);
 
-        if(user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {
+        if (user_first || (!versionCode.equals(-1 + "") && !version.equals(versionCode))) {
             Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
             startActivity(intent);
             finish();
@@ -278,15 +292,19 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
     private List<ModelCityList> hot_city = new ArrayList<>();
     private ArrayList<ModelCityList> tempDatasCity;
     private ModelCityList defaultCity;
+    private ArrayList<ModelCrashUpToken> tempModelCrashUpToken;
 
     @Override
     public void onSuccess(String method, List datas) {
+        Message message = new Message();
         if (SellerConstants.CITY_LIST.equals(method)) {
             tempDatasCity = (ArrayList<ModelCityList>) datas;
-            Message message = new Message();
             message.what = 0;
-            mHandler.sendMessage(message);
+        } else if (CommonConstants.CRASH_UPTOKEN.equals(method)) {
+            tempModelCrashUpToken = (ArrayList<ModelCrashUpToken>) datas;
+            message.what = 2;
         }
+        mHandler.sendMessage(message);
     }
 
     private Handler mHandler = new Handler() {
@@ -303,6 +321,11 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
                     //请求城市列表
                     requestInitInterface();
                     startMainActivity();
+                    break;
+                case 2:
+                    if (CollectionUtils.isValid(tempModelCrashUpToken) && tempModelCrashUpToken.get(0) != null) {
+                        UploadUtil.getInstance().uploadCrashLog(tempModelCrashUpToken.get(0).getUptoken());
+                    }
                     break;
             }
         }

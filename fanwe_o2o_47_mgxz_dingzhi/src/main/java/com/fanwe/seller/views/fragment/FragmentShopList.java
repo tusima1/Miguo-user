@@ -18,6 +18,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.adapters.SellerListAdapter;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
+import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
 import com.fanwe.seller.presenters.SellerHttpHelper;
 import com.fanwe.seller.util.CollectionUtils;
 import com.fanwe.utils.DataFormat;
@@ -86,11 +87,20 @@ public class FragmentShopList extends Fragment implements CallbackView {
         });
     }
 
+    public String keyword;
+    public String merchant_type = "0";
+    public String area_one;
+    public String area_two;
+    public String category_one;
+    public String category_two;
+    public String filter;
+    public String sort_type;
+
     private void getData() {
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(getActivity(), this);
         }
-        sellerHttpHelper.getShopSearch("", "", "", "", "", "", "", pageNum, pageSize, "1");
+        sellerHttpHelper.getShopSearch(area_one, area_two, category_one, category_two, filter, keyword, sort_type, pageNum, pageSize, merchant_type);
     }
 
     LinearLayoutManager mLayoutManager;
@@ -142,10 +152,6 @@ public class FragmentShopList extends Fragment implements CallbackView {
         if (pageBean != null && CollectionUtils.isValid(datas) && DataFormat.toInt(pageBean.getData_total()) <= datas.size()) {
             return false;
         }
-        //TODO for test
-        if (CollectionUtils.isValid(datas) && datas.size() > 20) {
-            return false;
-        }
         return true;
     }
 
@@ -155,6 +161,7 @@ public class FragmentShopList extends Fragment implements CallbackView {
     }
 
     private List<ModelBusinessListings> items;
+    List<ResultBusinessListings> results;
     private PageBean pageBean;
 
     @Override
@@ -162,8 +169,13 @@ public class FragmentShopList extends Fragment implements CallbackView {
         Message message = new Message();
         if (SellerConstants.SHOP_SEARCH.equals(method)) {
             //店铺
-            items = datas;
-            message.what = 0;
+            results = datas;
+            if (CollectionUtils.isValid(results)) {
+                ResultBusinessListings resultTemp = results.get(0);
+                items = resultTemp.getShop_list();
+                pageBean = resultTemp.getPage();
+                message.what = 0;
+            }
         }
         mHandler.sendMessage(message);
     }
@@ -182,12 +194,6 @@ public class FragmentShopList extends Fragment implements CallbackView {
                     mSellerListAdapter.notifyDataSetChanged();
                     if (mIDataInterface != null) {
                         mIDataInterface.verifyData(CollectionUtils.isValid(datas));
-                        //TODO for test
-                        if (CollectionUtils.isValid(datas)) {
-                            if (datas.size() > 20) {
-                                mIDataInterface.verifyData(false);
-                            }
-                        }
                     }
                     break;
             }

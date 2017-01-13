@@ -44,6 +44,25 @@ public class LeftListAdapter extends RecyclerView.Adapter<LeftListAdapter.ViewHo
         return preClickPosition;
     }
 
+    /**
+     * 代替点击某个item,代替 {@link View#performClick()}
+     * @param handlePosition 位置
+     */
+    public void performPosition(int handlePosition){
+        TwoMode twoMode = twoModes.get(handlePosition);
+        boolean checked = twoMode.isChecked();
+        if (checked){
+            return;
+        }
+        twoMode.setChecked(true);
+        notifyItemChanged(handlePosition);
+        if (preClickPosition !=-2){
+            twoModes.get(preClickPosition).setChecked(false);
+            notifyItemChanged(preClickPosition);
+        }
+        preClickPosition = handlePosition;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item_left,parent,false));
@@ -55,7 +74,7 @@ public class LeftListAdapter extends RecyclerView.Adapter<LeftListAdapter.ViewHo
         final boolean checked = twoMode.isChecked();
         toggle(checked,holder.fl_bg);
         holder.tv_name.setText(twoMode.getName());
-        holder.fl_bg.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checked){

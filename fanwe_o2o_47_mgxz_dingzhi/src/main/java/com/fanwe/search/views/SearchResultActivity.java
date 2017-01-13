@@ -7,7 +7,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fanwe.network.HttpCallback;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.work.AppRuntimeWorker;
+import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.entity.SingleMode;
+import com.miguo.entity.TwoMode;
+import com.miguo.ui.view.dropdown.DropDownMenu;
+import com.miguo.ui.view.floatdropdown.helper.DropDownHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by Administrator on 2017/1/5.
@@ -16,6 +28,8 @@ import com.fanwe.o2o.miguo.R;
 public class SearchResultActivity extends FragmentActivity {
     private ImageView ivLeft;
     private TextView tvMiddle, tvGoods, tvShop;
+    private DropDownMenu ddm;
+    private DropDownHelper helper;
     private String pageType;
 
     @Override
@@ -37,6 +51,18 @@ public class SearchResultActivity extends FragmentActivity {
             case R.id.tv_shop_frag_groupon_list:
                 clickShop();
                 break;
+        }
+    }
+
+    public void searchByKeyword(String keyword) {
+        if ("shop".equals(pageType)) {
+            if (fragmentShop != null) {
+                fragmentShop.search(keyword);
+            }
+        } else {
+            if (fragmentGoods != null) {
+                fragmentGoods.search(keyword);
+            }
         }
     }
 
@@ -129,8 +155,11 @@ public class SearchResultActivity extends FragmentActivity {
     }
 
     private void getData() {
-
+        helper = new DropDownHelper(this, ddm);
     }
+
+
+
 
     private void setListener() {
         ivLeft.setOnClickListener(new View.OnClickListener() {
@@ -146,5 +175,6 @@ public class SearchResultActivity extends FragmentActivity {
         tvMiddle = (TextView) findViewById(R.id.tv_middle);
         tvGoods = (TextView) findViewById(R.id.tv_goods_frag_groupon_list);
         tvShop = (TextView) findViewById(R.id.tv_shop_frag_groupon_list);
+        ddm = ((DropDownMenu) findViewById(R.id.ddm_act_search));
     }
 }
