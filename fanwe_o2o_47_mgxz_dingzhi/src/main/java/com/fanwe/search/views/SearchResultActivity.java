@@ -156,59 +156,10 @@ public class SearchResultActivity extends FragmentActivity {
 
     private void getData() {
         helper = new DropDownHelper(this, ddm);
-        getHttpData();
-    }
-
-    private void getHttpData() {
-        TreeMap<String, String> params = new TreeMap<String, String>();
-        params.put("method", "GetSearchCateCondition");
-        params.put("city_id", AppRuntimeWorker.getCity_id());
-        OkHttpUtil.getInstance().get(params, new HttpCallback<SearchCateConditionBean>() {
-            @Override
-            public void onFinish() {
-
-            }
-
-            @Override
-            public void onSuccessWithBean(SearchCateConditionBean shaiXuanModel) {
-                super.onSuccessWithBean(shaiXuanModel);
-                SearchCateConditionBean.ResultBean.BodyBean body = null;
-                try {
-                    body = shaiXuanModel.getResult().get(0)
-                            .getBody().get(0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (body != null) {
-                    List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
-                            .getHotAreaList1(), body.getAdminAreaList());
-                    List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
-                    List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
-                    List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
-//                    helper.setData(item1, item2, item3, item4);
-                }
-            }
-        });
     }
 
 
-    private List<TwoMode> mergeDataForItem1(List... array) {
-        if (array == null || array.length == 0) return null;
-        List<TwoMode> list = new ArrayList<>();
-        for (List<TwoMode> anArray : array) {
-            list.addAll(anArray);
-        }
-        return list;
-    }
 
-    private List<SingleMode> mergeDataForItem3(List... array) {
-        if (array == null || array.length == 0) return null;
-        List<SingleMode> list = new ArrayList<>();
-        for (List<SingleMode> anArray : array) {
-            list.addAll(anArray);
-        }
-        return list;
-    }
 
     private void setListener() {
         ivLeft.setOnClickListener(new View.OnClickListener() {
