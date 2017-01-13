@@ -34,12 +34,11 @@ public class GetSearchCateConditionDaoImpl extends BaseDaoImpl implements GetSea
     public void getSearchCateCondition() {
         TreeMap<String, String> params = new TreeMap<>();
         params.put("method", "GetSearchCateCondition");
-        params.put("city_id", "69e0405b-de8c-4247-8a0a-91ca45c4b30c");
+//        params.put("city_id", "69e0405b-de8c-4247-8a0a-91ca45c4b30c");
         OkHttpUtils.getInstance().get("", params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
-//                SearchCateConditionBean bean = new Gson().fromJson(responseBody, SearchCateConditionBean.class);
                 SearchCateConditionBean bean = JSON.parseObject(responseBody, SearchCateConditionBean.class);
                 if(null == bean || SDCollectionUtil.isEmpty(bean.getResult()) || SDCollectionUtil.isEmpty(bean.getResult().get(0).getBody())){
                     getListener().getSearchCateConditionError(BASE_ERROR_MESSAGE);

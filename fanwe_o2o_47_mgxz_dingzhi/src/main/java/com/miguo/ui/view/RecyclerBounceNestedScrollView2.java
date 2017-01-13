@@ -30,7 +30,7 @@ import java.util.TimerTask;
 /**
  * Created by 狗蛋哥/zlh on 16/4/13.
  */
-public class RecyclerBounceNestedScrollView extends NestedScrollView{
+public class RecyclerBounceNestedScrollView2 extends NestedScrollView{
 
     ImageView refreshView;
     TextView notice;
@@ -83,11 +83,11 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
         }
     });
 
-    public RecyclerBounceNestedScrollView(Context context) {
+    public RecyclerBounceNestedScrollView2(Context context) {
         super(context);
     }
 
-    public RecyclerBounceNestedScrollView(Context context, AttributeSet attrs) {
+    public RecyclerBounceNestedScrollView2(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         this.halfScreenHeight = BaseUtils.getHeight(getContext()) / 4;
@@ -247,7 +247,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
 //                        deltaY = Math.abs(deltaY);
                         childTop = childTop - deltaY / 2;
                         childBottom = childBottom - deltaY / 2;
-                        child.layout(child.getLeft(), childTop,child.getRight(), child.getBottom() - deltaY / 2);
+                        child.layout(child.getLeft(), childTop,child.getRight(), childBottom);
                     }
                 }
                 isCount = true;

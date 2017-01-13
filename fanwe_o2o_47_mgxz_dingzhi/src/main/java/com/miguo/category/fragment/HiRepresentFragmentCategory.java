@@ -1,14 +1,19 @@
 package com.miguo.category.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.Space;
+import android.util.Log;
+import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -22,18 +27,28 @@ import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.entity.SingleMode;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiRepresentCateFragment;
+import com.miguo.listener.fragment.HiRepresentFragmentListener;
+import com.miguo.ui.view.BarryTab;
+import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.RepresentAppBarLayout;
 import com.miguo.ui.view.RepresentBannerView;
 import com.miguo.ui.view.RepresentViewPager;
+import com.miguo.ui.view.dropdown.DropDownPopup;
+import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
+import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
+import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -44,16 +59,28 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler{
+public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener{
 
     @ViewInject(R.id.ptr_layout)
     PtrFrameLayout ptrFrameLayout;
 
+    @ViewInject(R.id.scroll_layout)
+    LinearLayout scrollLayout;
+
+    @ViewInject(R.id.coorddinatorlayout)
+    RecyclerBounceNestedScrollView scrollview;
+
     @ViewInject(R.id.app_bar)
-    RepresentAppBarLayout appBarLayout;
+    LinearLayout appBarLayout;
 
     @ViewInject(R.id.title_layout)
     RelativeLayout topLayout;
+
+    @ViewInject(R.id.menu)
+    FakeDropDownMenu fakeDropDownMenu;
+
+    @ViewInject(R.id.top_menu)
+    FakeDropDownMenu topFakeDropDownMenu;
 
     @ViewInject(R.id.pager)
     RepresentViewPager pager;
@@ -64,6 +91,8 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     GetSearchCateConditionDao getSearchCateConditionDao;
     GetAdspaceListDao getAdspaceListDao;
+
+    DropDownPopHelper dropDownPopHelper;
 
     public HiRepresentFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -76,24 +105,41 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     @Override
     protected void initFragmentListener() {
-
+        listener = new HiRepresentFragmentListener(this);
     }
 
     @Override
     protected void setFragmentListener() {
-
+        scrollview.setOnRecyclerScrollViewListener(this);
     }
 
     @Override
     protected void init() {
         initPtrLayout(ptrFrameLayout);
         setTitlePadding(topLayout);
+        initBottomSpace();
         /**
          * 接口请求
          */
         initSearchCateCondition();
         initAdspaceList();
         onRefresh();
+    }
+
+    private void initDropDownPopHelper(){
+        dropDownPopHelper = new DropDownPopHelper(getActivity(),topFakeDropDownMenu, fakeDropDownMenu );
+        dropDownPopHelper.setOnDropDownListener(this);
+        fakeDropDownMenu.setOnFakeClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickMenu();
+            }
+        });
+    }
+
+    @Override
+    public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
+        dropDownPopHelper.dismiss();
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -109,9 +155,16 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         ptrFrameLayout.setPtrHandler(this);
     }
 
+    private void initBottomSpace(){
+        BarryTab tab = (BarryTab) getActivity().findViewById(R.id.tab);
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//        scrollview.setPadding(0, 0, 0, tab.getMeasuredHeight());
+//        scrollview.setLayoutParams(params);
+    }
+
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return appBarLayout.canRefresh();
+        return scrollview.canRefresh();
     }
 
     @Override
@@ -125,6 +178,33 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_SHOP, AdspaceParams.TERMINAL_TYPE);
     }
 
+    public void loadComplete(){
+        ptrFrameLayout.refreshComplete();
+    }
+
+    @Override
+    public void onScrollChanged(int l, int t, int oldl, int oldt) {
+        handleFilterBar(t);
+        Log.d(tag, "t : " + t);
+    }
+
+    @Override
+    public void onScrollToEnd() {
+
+    }
+
+    private void handleFilterBar(int t){
+        if(t >= scrollLayout.getMeasuredHeight()){
+            if(topFakeDropDownMenu.getVisibility() != View.VISIBLE){
+                showTopMenu();
+            }
+            return;
+        }
+        if(topFakeDropDownMenu.getVisibility() == View.VISIBLE){
+            showFakeMenu();
+        }
+    }
+
     /**
      * 获取分类数据
      */
@@ -132,13 +212,19 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         getSearchCateConditionDao = new GetSearchCateConditionDaoImpl(new GetSearchCateConditionView(){
             @Override
             public void getSearchCateConditionError(String message) {
-                loadComplete();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadComplete();
+                    }
+                });
             }
 
             @Override
             public void getSearchCateConditionSuccess(SearchCateConditionBean.ResultBean.BodyBean body) {
                 SearchCateConditionFactory.update(body);
                 updateCategories();
+                initDropDownPopHelper();
                 loadComplete();
             }
         });
@@ -166,16 +252,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         representBannerView.init(body);
     }
 
-    public void updateCategories(){
-        if(null != SearchCateConditionFactory.get()){
-            initCategories(SearchCateConditionFactory.get().getCategoryList());
-        }
-    }
-
-    public void loadComplete(){
-        ptrFrameLayout.refreshComplete();
-    }
-
     private void initCategories(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
         updateCategoryViewPagerParams(categories);
         ArrayList<Fragment> fragments = new ArrayList<>();
@@ -201,8 +277,28 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         pager.setLayoutParams(params);
     }
 
+    public void updateCategories(){
+        if(null != SearchCateConditionFactory.get()){
+            initCategories(SearchCateConditionFactory.get().getCategoryList());
+        }
+    }
+
+    public void clickMenu(){
+        scrollview.smoothScrollTo(0, scrollLayout.getMeasuredHeight());
+        showTopMenu();
+    }
+
+    private void showTopMenu(){
+        topFakeDropDownMenu.setVisibility(View.VISIBLE);
+        fakeDropDownMenu.setVisibility(View.GONE);
+    }
+
+    private void showFakeMenu(){
+        topFakeDropDownMenu.setVisibility(View.GONE);
+        fakeDropDownMenu.setVisibility(View.VISIBLE);
+    }
+
     private int getCategoryViewPagerHeight(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
         return categories.size() <= 4 ? HiRepresentCateAdapter.getItemHeight() : HiRepresentCateAdapter.getItemHeight() * 2;
     }
-
 }

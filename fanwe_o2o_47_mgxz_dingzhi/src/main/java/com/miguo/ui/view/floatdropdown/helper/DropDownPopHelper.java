@@ -1,14 +1,17 @@
 package com.miguo.ui.view.floatdropdown.helper;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.didikee.uilibs.Text.UICharacterCount;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by didik 
@@ -19,6 +22,7 @@ import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 public class DropDownPopHelper implements PopupWindowLike{
     private final Activity mHoldActivity;
     private final FakeDropDownMenu anchor;
+    private FakeDropDownMenu fakeDDM;
     private DropDownPopup popup;
 
     public DropDownPopHelper(Activity mHoldActivity, FakeDropDownMenu anchor) {
@@ -26,8 +30,31 @@ public class DropDownPopHelper implements PopupWindowLike{
         this.anchor = anchor;
         initPopup();
     }
+    public DropDownPopHelper(Activity mHoldActivity, FakeDropDownMenu anchor,FakeDropDownMenu fakeDDM) {
+        this.mHoldActivity = mHoldActivity;
+        this.anchor = anchor;
+        this.fakeDDM = fakeDDM;
+        initPopup();
+    }
 
     private void initPopup() {
+        anchor.setIsFake(false);
+        if (fakeDDM != null){
+            fakeDDM.setIsFake(true);
+            fakeDDM.setFakeTitleTabClickListener(new FakeDropDownMenu.OnFakeTitleTabClickListener() {
+                @Override
+                public void onFakeClick(View v, final int index) {
+                    anchor.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            anchor.performIndexClick(index);
+                        }
+                    },300);
+
+                }
+            });
+        }
+        //事件最终都是由真的anchor处理
         anchor.setFakeTitleTabClickListener(new FakeDropDownMenu.OnFakeTitleTabClickListener() {
             @Override
             public void onFakeClick(View v, int index) {
@@ -41,6 +68,7 @@ public class DropDownPopHelper implements PopupWindowLike{
 
             }
         });
+
         popup = new DropDownPopup(mHoldActivity,anchor);
     }
 
@@ -59,11 +87,29 @@ public class DropDownPopHelper implements PopupWindowLike{
     }
 
     public void setTitleText(int index,String text) {
-        float count = UICharacterCount.getCount(text);
-        float v = count / 2;
-        if (v > 5){
-
+        text = TextUtils.isEmpty(text) ? " " : text;
+        int length = text.length();
+        if (length>4){
+            text = text.substring(0,4);
+            text +="...";
         }
         anchor.setTitleText(index,text);
+    }
+
+    public void performMarkIds(String id){
+        //36531bd0-51c0-4f88-bb41-f2534b986118
+        if (TextUtils.isEmpty(id)){
+            return;
+        }
+        List<String> ids=new ArrayList<>();
+        ids.add(id);
+        performMarkIds(ids);
+    }
+    public void performMarkIds(List<String> ids){
+        //36531bd0-51c0-4f88-bb41-f2534b986118
+        if (ids!=null && ids.size()>0){
+            popup.performMarkIds(ids);
+        }
+
     }
 }
