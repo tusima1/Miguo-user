@@ -3,6 +3,8 @@ package com.miguo.ui.view;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 
 /**
  * Created by zlh on 2017/1/11.
@@ -10,6 +12,7 @@ import android.util.AttributeSet;
 
 public class RepresentAppBarLayout extends AppBarLayout implements AppBarLayout.OnOffsetChangedListener {
 
+    protected String tag = "RepresentAppBarLayout";
     int verticalOffset;
 
     public RepresentAppBarLayout(Context context) {
@@ -37,6 +40,16 @@ public class RepresentAppBarLayout extends AppBarLayout implements AppBarLayout.
 
     public void setVerticalOffset(int verticalOffset) {
         this.verticalOffset = verticalOffset;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_MOVE:
+                Log.d(tag, "move y: " + event.getY());
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 
     public boolean canRefresh(){
