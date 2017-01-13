@@ -151,7 +151,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         }
     }
 
-    public void onFakeClickListener(OnClickListener listener){
+    public void setOnFakeClickListener(OnClickListener listener){
         this.listener = listener;
     }
 }
