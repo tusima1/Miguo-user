@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
+import com.didikee.uilibs.Text.UICharacterCount;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
@@ -55,5 +56,14 @@ public class DropDownPopHelper implements PopupWindowLike{
 
     public void setOnDropDownListener(OnDropDownListener dropDownListener) {
         popup.setDropDownListener(dropDownListener);
+    }
+
+    public void setTitleText(int index,String text) {
+        float count = UICharacterCount.getCount(text);
+        float v = count / 2;
+        if (v > 5){
+
+        }
+        anchor.setTitleText(index,text);
     }
 }

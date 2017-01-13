@@ -29,7 +29,7 @@ public class TestDropDownPopActivity extends AppCompatActivity {
 
         popHelper.setOnDropDownListener(new OnDropDownListener() {
             @Override
-            public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List
+            public void onItemSelected(int index, Pair<SingleMode,SingleMode> pair, List
                                 <SingleMode> items) {
                 if (index == 4){
                     if (items!=null){
@@ -48,7 +48,16 @@ public class TestDropDownPopActivity extends AppCompatActivity {
                         singleId2 = second.getSingleId();
                     }
                     MGToast.showToast("一级id: " + singleId1 +"   二级id: "+singleId2);
+
+                    String titleName="";
+                    if (pair.second!=null){
+                        titleName = pair.second.getName();
+                    }else {
+                        titleName = pair.first.getName();
+                    }
+                    popHelper.setTitleText(index,titleName);
                 }
+
                 popHelper.dismiss();
             }
         });

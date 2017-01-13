@@ -96,7 +96,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         this.fakeTitleTabClickListener = fakeTitleTabClickListener;
     }
 
-    public void setFakeTitleText(int index,String text){
+    public void setTitleText(int index,String text){
         text = TextUtils.isEmpty(text) ? "" :text;
         switch (index){
             case 1:

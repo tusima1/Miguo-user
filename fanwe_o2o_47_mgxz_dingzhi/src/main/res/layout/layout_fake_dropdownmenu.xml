@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#595959"
                 android:textSize="14sp"
-                android:text="哈哈"
+                android:text="附近"
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#595959"
                 android:textSize="14sp"
-                android:text="哈哈"
+                android:text="全部"
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -122,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#595959"
                 android:textSize="14sp"
-                android:text="哈哈"
+                android:text="智能排序"
                 />
             <ImageView
                 android:layout_width="wrap_content"
@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#595959"
                 android:textSize="14sp"
-                android:text="哈哈"
+                android:text="筛选"
                 />
             <ImageView
                 android:layout_width="wrap_content"
