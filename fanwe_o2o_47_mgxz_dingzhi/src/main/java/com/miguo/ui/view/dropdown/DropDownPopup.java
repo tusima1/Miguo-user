@@ -283,11 +283,23 @@ public class DropDownPopup extends PopupWindow {
             }
         }
         //2
-        for (int i = 0; i < item1.size(); i++) {
-            List<SingleMode> singleModeList = item1.get(i).getSingleModeList();
+        for (int i = 0; i < item2.size(); i++) {
+            List<SingleMode> singleModeList = item2.get(i).getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
                 if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
-                    location1 = new Pair<>(i,j);
+                    location2 = new Pair<>(i,j);
+                    return;
+                }
+            }
+        }
+        //3
+
+        //4
+        for (int i = 0; i < item4.size(); i++) {
+            List<SingleMode> singleModeList = item4.get(i).getSingleModeList();
+            for (int j = 0; j < singleModeList.size(); j++) {
+                if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
+                    location2 = new Pair<>(i,j);
                     return;
                 }
             }

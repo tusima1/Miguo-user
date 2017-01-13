@@ -30,6 +30,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
     private View ll_3;
     private View ll_4;
     private boolean fake;//是不是假的
+    private OnClickListener listener;
 
     public FakeDropDownMenu(Context context) {
         this(context,null);
@@ -61,6 +62,9 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        if (listener!=null){
+            listener.onClick(v);
+        }
         if (v == ll_1){
             handleClick(v,1);
             return;
@@ -145,5 +149,9 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
                 tv_name4.setText(text);
                 break;
         }
+    }
+
+    public void onFakeClickListener(OnClickListener listener){
+        this.listener = listener;
     }
 }
