@@ -8,14 +8,11 @@
     android:background="@color/white"
     tools:context="com.miguo.ui.view.floatdropdown.TestDropDownPopActivity">
 
-    <View
+    <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
         android:id="@+id/anchor"
         android:layout_marginTop="@dimen/dp50"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp36"
-        android:background="@drawable/md_ripple_orange_deep"
-        android:clickable="true"
-        />
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/bt"
