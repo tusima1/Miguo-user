@@ -1,12 +1,14 @@
 package com.miguo.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by didik 
  * Created time 2017/1/5
  * Description: 
  */
 
-public class SingleMode {
+public class SingleMode implements Serializable{
     private String singleId;
     private boolean checked;
     protected String name;

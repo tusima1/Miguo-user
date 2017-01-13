@@ -1,5 +1,6 @@
 package com.miguo.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * Description: 
  */
 
-public class TwoMode <T extends SingleMode> extends SingleMode{
+public class TwoMode <T extends SingleMode> extends SingleMode implements Serializable{
 
     private List<T> singleModeList;
 
