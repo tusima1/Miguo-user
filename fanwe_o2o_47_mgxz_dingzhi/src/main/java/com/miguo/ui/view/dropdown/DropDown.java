@@ -67,7 +67,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
      */
     private void addDivider() {
         View dividerView =new View(getContext());
-        dividerView.setBackgroundColor(Color.GRAY);
+        dividerView.setBackgroundColor(Color.parseColor("#EEEEEE"));
         addView(dividerView,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
     }
 
@@ -78,7 +78,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
     private void finalAddView(){
         //TODO 这是两条线条
 //        addDivider();
-        addDivider();
+//        addDivider();
         addView(contentLayout, LayoutParams.MATCH_PARENT,contentHeight);
 
         contentLayout.setVisibility(GONE);

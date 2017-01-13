@@ -181,6 +181,7 @@ public class DropDownPopup extends PopupWindow {
             @Override
             public void onDropDownSelected(SingleMode levelOne, SingleMode levelTwo) {
                 handleResult(3,new Pair<SingleMode, SingleMode>(levelOne,levelTwo),null);
+
                 String two = "";
                 if (levelTwo !=null){
                     two =" \n"+ "二级: "+levelTwo.getName() +"  id: "+ levelTwo.getSingleId();

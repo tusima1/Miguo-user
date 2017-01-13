@@ -37,9 +37,17 @@ public class TestDropDownPopActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    if (pair!=null){
-                        MGToast.showToast("一级id: " + pair.first.getSingleId() +"   二级id: "+pair.second.getSingleId());
+                    SingleMode first = pair.first;
+                    SingleMode second = pair.second;
+                    String singleId1 = "无";
+                    String singleId2 = "无";
+                    if (first!=null ){
+                        singleId1 = first.getSingleId();
                     }
+                    if (second!=null ){
+                        singleId2 = second.getSingleId();
+                    }
+                    MGToast.showToast("一级id: " + singleId1 +"   二级id: "+singleId2);
                 }
                 popHelper.dismiss();
             }

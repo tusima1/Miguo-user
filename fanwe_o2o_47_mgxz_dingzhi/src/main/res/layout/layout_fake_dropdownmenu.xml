@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="36dp"
-              android:background="@color/white"
+              android:layout_height="wrap_content"
+
     >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#EEEEEE"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp36"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+
     <LinearLayout
         android:id="@+id/ll_1"
         android:layout_width="0dp"
@@ -82,12 +94,13 @@
         </LinearLayout>
 
     </LinearLayout>
-    <View
-        android:layout_width="1px"
-        android:layout_height="19dp"
-        android:background="#EEEEEE"
-        android:layout_gravity="center"
-        />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="19dp"
+            android:layout_gravity="center"
+            android:background="#EEEEEE"
+            />
     <LinearLayout
         android:id="@+id/ll_3"
         android:layout_width="0dp"
@@ -165,5 +178,11 @@
         </LinearLayout>
 
     </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#EEEEEE"
+        />
 
 </LinearLayout>
