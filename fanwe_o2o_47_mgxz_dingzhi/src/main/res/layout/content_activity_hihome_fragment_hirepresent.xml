@@ -27,7 +27,6 @@
 
             <LinearLayout
                 android:id="@+id/scroll_layout"
-                app:layout_scrollFlags="scroll"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -40,13 +39,14 @@
                 </com.miguo.ui.view.RepresentViewPager>
 
                 <me.relex.circleindicator.CircleIndicator
+                    android:layout_marginTop="3dp"
                     android:id="@+id/indicator_circle"
                     app:ci_drawable="@drawable/gray_radius_square"
                     app:ci_height="5dp"
                     app:ci_margin="5dp"
                     app:ci_width="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="15dp"
                     android:gravity="center" />
 
 
@@ -59,17 +59,13 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
+                android:layout_marginTop="14dp"
+                android:id="@+id/menu"
+                android:background="@color/main_color_press"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="36dp"/>
 
-                <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
-                    android:id="@+id/menu"
-                    android:background="@color/main_color_press"
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"/>
-
-            </LinearLayout>
 
 
             <com.fanwe.view.LoadMoreRecyclerView

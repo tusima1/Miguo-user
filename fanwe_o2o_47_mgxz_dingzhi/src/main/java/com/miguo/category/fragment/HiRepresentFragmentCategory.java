@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.Space;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -17,12 +18,14 @@ import android.widget.RelativeLayout;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
+import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiRepresentBannerFragmentAdapter;
 import com.miguo.adapter.HiRepresentCateAdapter;
+import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.adapter.RepresentShopAdapter;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetSearchCateConditionDao;
@@ -34,15 +37,18 @@ import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.PageSize;
 import com.miguo.entity.AdspaceListBean;
+import com.miguo.entity.BannerTypeModel;
 import com.miguo.entity.RepresentFilterBean;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
+import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiRepresentCateFragment;
 import com.miguo.listener.fragment.HiRepresentFragmentListener;
 import com.miguo.model.TouchToMoveListener;
 import com.miguo.ui.view.BarryTab;
+import com.miguo.ui.view.HomeViewPager;
 import com.miguo.ui.view.PtrFrameLayoutForViewPager;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.RepresentBannerView;
@@ -50,6 +56,7 @@ import com.miguo.ui.view.RepresentViewPager;
 import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
+import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
 import com.miguo.view.GetShopFromParamsView;
@@ -68,7 +75,7 @@ import me.relex.circleindicator.CircleIndicator;
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener, TouchToMoveListener{
+public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener, TouchToMoveListener, RepresentBannerView.OnRepresentBannerClickListener{
 
     @ViewInject(R.id.ptr_layout)
     PtrFrameLayoutForViewPager ptrFrameLayout;
@@ -90,9 +97,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     @ViewInject(R.id.top_menu)
     FakeDropDownMenu topFakeDropDownMenu;
-
-    @ViewInject(R.id.tab_space)
-    View tabSpace;
 
     @ViewInject(R.id.pager)
     RepresentViewPager pager;
@@ -141,6 +145,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @Override
     protected void setFragmentListener() {
         scrollview.setOnRecyclerScrollViewListener(this);
+        representBannerView.setOnRepresentBannerClickListener(this);
     }
 
     @Override
@@ -213,6 +218,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     public void onRefresh(){
         filterBean.setPageNum(PageSize.BASE_NUMBER_ONE);
         setCurrentHttpUuid(UUID.randomUUID().toString());
+        setTouchToMove(true);
         getSearchCateConditionDao.getSearchCateCondition();
         getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_SHOP, AdspaceParams.TERMINAL_TYPE);
         onRefreshShopList();
@@ -251,6 +257,66 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @Override
     public void onActionMove(MotionEvent ev) {
         setTouchToMove(false);
+    }
+
+    @Override
+    public void onBannerClick(AdspaceListBean.Result.Body banner) {
+        if (null == banner) {
+            return;
+        }
+
+        if (null == banner.getType() || null == banner.getType_id()) {
+            return;
+        }
+
+        String type_id = banner.getType_id();
+        if (TextUtils.isEmpty(type_id) || !type_id.startsWith("{")) {
+            return;
+        }
+
+        BannerTypeModel model = HomeCategoryUtils.parseTypeJson(type_id);
+
+        if (banner.getType().equals(AdspaceParams.BANNER_LIVE_LIST)) {
+            onActionLiveList();
+            return;
+        }
+        if (banner.getType().equals(AdspaceParams.BANNER_SHOP_LIST)) {
+            onActionShopList(model.getCate_id(), banner.getType_id());
+            return;
+        }
+        String paramValue = model.getId();
+        if (TextUtils.isEmpty(paramValue)) {
+            paramValue = model.getUrl();
+        }
+
+        AdspaceTypeFactory.clickWidthType(banner.getType(), getActivity(), paramValue);
+    }
+
+    /**
+     * 跳转到直播列表
+     */
+    public void onActionLiveList() {
+        getHomeViewPager().setCurrentItem(2);
+        /**
+         * 如果当前的低栏隐藏了
+         */
+        if (getTab().getAlpha() == 0) {
+//            startTabShowAnimation();
+        }
+    }
+
+    /**
+     * 跳转到门店列表
+     */
+    public void onActionShopList(String cate_id, String tid) {
+        getHomeViewPager().setCurrentItem(1);
+        ((SellerFragment) ((HomePagerAdapter) getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id, tid);
+        /**
+         * 如果当前的低栏隐藏了
+         */
+        if (getTab().getAlpha() == 0) {
+//            startTabShowAnimation();
+        }
     }
 
     private void handleFilterBar(int t){
@@ -397,5 +463,13 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     public void setTouchToMove(boolean touchToMove) {
         this.touchToMove = touchToMove;
+    }
+
+    public BarryTab getTab() {
+        return (BarryTab) getActivity().findViewById(R.id.tab);
+    }
+
+    public HomeViewPager getHomeViewPager() {
+        return (HomeViewPager) view.getParent();
     }
 }

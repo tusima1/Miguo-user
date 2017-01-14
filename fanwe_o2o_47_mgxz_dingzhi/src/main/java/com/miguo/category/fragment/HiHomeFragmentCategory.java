@@ -742,7 +742,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void onActionLiveList() {
-        getHomeViewPager().setCurrentItem(1);
+        getHomeViewPager().setCurrentItem(2);
         /**
          * 如果当前的低栏隐藏了
          */
@@ -756,7 +756,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void onActionShopList(String cate_id, String tid) {
-        getHomeViewPager().setCurrentItem(2);
+        getHomeViewPager().setCurrentItem(1);
         ((SellerFragment) ((HomePagerAdapter) getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id, tid);
         /**
          * 如果当前的低栏隐藏了
