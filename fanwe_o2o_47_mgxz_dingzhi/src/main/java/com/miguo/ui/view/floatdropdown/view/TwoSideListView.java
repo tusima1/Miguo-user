@@ -60,6 +60,7 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
         rightListView=new RecyclerView(getContext());
 
         leftListView.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        rightListView.setBackgroundColor(Color.WHITE);
         addView(leftListView,new LayoutParams(0, LayoutParams.MATCH_PARENT,31));
         addView(rightListView,new LayoutParams(0, LayoutParams.MATCH_PARENT,71));
 

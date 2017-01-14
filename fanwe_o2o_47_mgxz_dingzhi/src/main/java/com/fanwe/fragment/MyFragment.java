@@ -219,7 +219,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
      * 请求我的账户接口
      */
     public void requestMyAccount() {
-
         if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             httpHelper.getPersonalHome();
         }
