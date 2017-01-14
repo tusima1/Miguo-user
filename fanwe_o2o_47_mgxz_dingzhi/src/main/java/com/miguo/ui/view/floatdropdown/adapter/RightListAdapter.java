@@ -72,10 +72,15 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
         SingleMode singleMode = singleModes.get(handlePosition);
         boolean checked = singleMode.isChecked();
         if (checked){
+            Log.e("test","performPosition(int handlePosition)方法,The Item has already checked");
             return;
         }
         singleMode.setChecked(true);
         notifyItemChanged(handlePosition);
+        if (preClickPosition == handlePosition){
+            //Note: already marked,Do Not Mark Again.
+            return;
+        }
         if (preClickPosition !=-2){
             singleModes.get(preClickPosition).setChecked(false);
             notifyItemChanged(preClickPosition);

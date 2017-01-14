@@ -75,13 +75,8 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         ll_2.setOnClickListener(this);
         ll_3.setOnClickListener(this);
         ll_4.setOnClickListener(this);
-        initAnimator();
     }
 
-    private void initAnimator() {
-//        expandAnimator = ObjectAnimator.ofFloat(arrowImage,"rotation",0,180f);
-//        reverseAnimator = ObjectAnimator.ofFloat(arrowImage,"rotation",180f,360f);
-    }
     @Override
     public void onClick(View v) {
         if (listener!=null){
@@ -114,6 +109,10 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         }
         //anim
         handleArrowImageAnim(index);
+    }
+
+    public void resetLastPosition(){
+        lastPosition = -1;
     }
 
     public void handleArrowImageAnim(int index){//when fakeView click,make index == 0 to dismiss pop and reverse arrow imageView.
