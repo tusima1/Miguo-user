@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiRepresentFragmentCategory;
 
 /**
@@ -22,5 +23,16 @@ public class HiRepresentFragment extends HiBaseFragment {
     @Override
     protected void initFragmentCategory() {
         category = new HiRepresentFragmentCategory(cacheView, this);
+    }
+
+    public void updateFromCityChanged(){
+        if(null != getCategory()){
+            getCategory().onRefresh();
+        }
+    }
+
+    @Override
+    public HiRepresentFragmentCategory getCategory() {
+        return (HiRepresentFragmentCategory)super.getCategory();
     }
 }

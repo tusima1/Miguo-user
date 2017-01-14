@@ -2,27 +2,22 @@ package com.miguo.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.fanwe.common.ImageLoaderManager;
-import com.fanwe.customview.MGGradientView;
 import com.fanwe.library.utils.SDViewBinder;
 import com.miguo.app.HiBaseActivity;
-import com.miguo.app.HiHomeActivity;
 import com.miguo.category.fragment.HiHomeFragmentCategory;
-import com.miguo.category.fragment.HomeCategoryUtils;
+import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.definition.AdspaceParams;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.BannerTypeModel;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.utils.DisplayUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

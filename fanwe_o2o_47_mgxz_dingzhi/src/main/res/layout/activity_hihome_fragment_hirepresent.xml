@@ -6,6 +6,12 @@
     <include layout="@layout/top_activity_hihome_fragment_hirepresent"/>
     <include layout="@layout/content_activity_hihome_fragment_hirepresent"/>
 
+    <View
+        android:layout_alignParentBottom="true"
+        android:id="@+id/tab_space"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"/>
+
     <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
         android:layout_below="@+id/title_layout"
         android:id="@+id/top_menu"

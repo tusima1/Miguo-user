@@ -1,5 +1,6 @@
 package com.miguo.view;
 
+import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
 
 public interface GetShopFromParamsView extends BaseView {
 
-    void getShopFromParamsSuccess(List<ResultBusinessListings> results);
+    void getShopFromParamsSuccess(List<ModelBusinessListings> results);
+    void getShopFromParamsLoadMoreSuccess(List<ModelBusinessListings> results);
     void getShopFromParamsError(String message);
 
 }

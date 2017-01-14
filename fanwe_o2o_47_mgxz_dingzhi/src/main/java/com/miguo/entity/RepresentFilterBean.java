@@ -57,7 +57,7 @@ public class RepresentFilterBean implements Serializable {
         setCategoryTwo("");
         setFilter("");
         setKeyword("");
-        setPageNum(1);
+        setPageNum(PageSize.BASE_NUMBER_ONE);
         setPageSize(PageSize.BASE_PAGE_SIZE);
         setMerchantType("0");
         setSortType("");

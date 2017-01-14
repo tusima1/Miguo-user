@@ -1,8 +1,6 @@
 package com.miguo.category.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,7 +30,6 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.adapter.HomebannerPagerAdapter;
-import com.miguo.definition.IntentKey;
 import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
@@ -59,6 +56,7 @@ import com.miguo.ui.view.HomeLooperViewPager;
 import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
+import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;

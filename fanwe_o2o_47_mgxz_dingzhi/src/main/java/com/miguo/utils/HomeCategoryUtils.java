@@ -1,4 +1,4 @@
-package com.miguo.category.fragment;
+package com.miguo.utils;
 
 import com.fanwe.user.UserConstants;
 import com.miguo.entity.BannerTypeModel;
