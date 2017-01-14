@@ -10,6 +10,7 @@ import android.view.View;
 import com.miguo.entity.SingleMode;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
+import com.miguo.ui.view.floatdropdown.interf.OnCallDismissPopListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 
@@ -75,6 +76,13 @@ public class DropDownPopHelper implements PopupWindowLike {
             }
         });
 
+        anchor.setOnFakeCallDismissPopListener(new OnCallDismissPopListener() {
+            @Override
+            public void callDismissPop(boolean immediately) {
+                callDismiss(immediately);
+            }
+        });
+
         popup = new DropDownPopup(mHoldActivity, anchor);
         popup.setTextChangedListener(new DropDownPopup.OnTitleTextChangedListener() {
             @Override
@@ -82,6 +90,19 @@ public class DropDownPopHelper implements PopupWindowLike {
                 setTitleText(index, text);
             }
         });
+        popup.setOnCallDismissPopListener(new OnCallDismissPopListener() {
+            @Override
+            public void callDismissPop(boolean immediately) {
+                callDismiss(immediately);
+            }
+        });
+    }
+    private void callDismiss(boolean isImmediately){
+        if (isImmediately){
+            popup.dismiss();
+        }else {
+            dismiss();
+        }
     }
 
     @Override
@@ -91,7 +112,7 @@ public class DropDownPopHelper implements PopupWindowLike {
 
     @Override
     public void dismiss() {
-        popup.dismiss();
+        anchor.handleArrowImageAnim(0);
     }
 
     public void setOnDropDownListener(final OnDropDownListener dropDownListener) {
