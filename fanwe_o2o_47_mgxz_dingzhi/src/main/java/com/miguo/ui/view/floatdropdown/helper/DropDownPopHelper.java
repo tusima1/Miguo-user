@@ -96,11 +96,11 @@ public class DropDownPopHelper implements PopupWindowLike {
         });
     }
     private void callDismiss(boolean isImmediately){
-        anchor.resetLastPosition();
         if (isImmediately){
-            dismiss();
+            popup.dismiss();
         }else {
             anchor.handleArrowImageAnim(0);
+            anchor.resetLastPosition();
         }
     }
 
@@ -111,8 +111,7 @@ public class DropDownPopHelper implements PopupWindowLike {
 
     @Override
     public void dismiss() {
-        anchor.resetLastPosition();
-        popup.dismiss();
+        callDismiss(false);
     }
 
     public void setOnDropDownListener(final OnDropDownListener dropDownListener) {

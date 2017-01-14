@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -332,6 +333,18 @@ public class DropDownPopup extends PopupWindow{
         for (String id : ids) {
             findItemLocation(id);
         }
+        performMarkPositions();
+    }
+
+    public void performDefaultMarkPositions(){
+        location1 = new DropDownMarkBean(0,0,"");
+        location2 = new DropDownMarkBean(0,0,"");
+        location3 = new DropDownMarkBean(0,-1,"");
+        location4.clear();
+        performMarkPositions();
+    }
+
+    private void performMarkPositions(){
         if (location1!=null){
             ((TwoSideListView)dropDownView.getContentViewList().get(1)).performPosition(location1.getLevelOne(),location1.getLevelTwo());
             handleTextChange(1,location1.getName());
@@ -348,10 +361,13 @@ public class DropDownPopup extends PopupWindow{
             //Do Not Need Text Change
             ((FilterView)dropDownView.getContentViewList().get(4)).performSelectedItems(location4);
         }
-
     }
 
     private void handleTextChange(int index,String text){
+        //没有数据不刷新
+        if (TextUtils.isEmpty(text)){
+            return;
+        }
         if (textChangedListener!=null){
             textChangedListener.onTitleTextChange(index,text);
         }
