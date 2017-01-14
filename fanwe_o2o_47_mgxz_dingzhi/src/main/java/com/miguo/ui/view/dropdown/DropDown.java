@@ -38,6 +38,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
     private int expandDuration = 250;
     private int reverseDuration = 300;
 
+    private boolean isAnimating = false;
 
     private final SparseArray<View> contentViewList=new SparseArray<>();
 
@@ -189,6 +190,9 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
     @Override
     public void reverse() {
+        if (isAnimating){
+            return;
+        }
         if (reverseAnimator == null){
             reverseAnimator = ValueAnimator.ofInt(contentHeight,0);
             reverseAnimator.setTarget(contentLayout);
@@ -209,6 +213,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
         reverseAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
+                isAnimating = true;
                 if (dismissFinishListener!=null){
                     dismissFinishListener.startReverse();
                 }
@@ -216,6 +221,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                isAnimating = false;
                 if (dismissFinishListener!=null){
                     dismissFinishListener.endReverse();
                 }

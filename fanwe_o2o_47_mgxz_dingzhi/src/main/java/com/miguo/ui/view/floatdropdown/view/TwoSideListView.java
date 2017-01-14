@@ -76,6 +76,7 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
         if (leftPosition<0 ||rightPosition <0){
             return;
         }
+        Log.e("test","TwosideListView = "+ "leftPosition: "+leftPosition + "rightPosition: "+rightPosition);
         leftAdapter.performPosition(leftPosition);
         rightAdapter.setData(data.get(leftPosition).getSingleModeList());
         rightAdapter.performPosition(rightPosition);

@@ -3,7 +3,6 @@ package com.miguo.ui.view.floatdropdown.helper;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -65,7 +64,6 @@ public class DropDownPopHelper implements PopupWindowLike {
         anchor.setFakeTitleTabClickListener(new FakeDropDownMenu.OnFakeTitleTabClickListener() {
             @Override
             public void onFakeClick(View v, int index) {
-                Log.e("test", "index: " + index);
                 if (popup.isShowing()) {
                     popup.handleClick(index);
                 } else {
@@ -98,6 +96,7 @@ public class DropDownPopHelper implements PopupWindowLike {
         });
     }
     private void callDismiss(boolean isImmediately){
+        anchor.resetLastPosition();
         if (isImmediately){
             dismiss();
         }else {
@@ -112,6 +111,7 @@ public class DropDownPopHelper implements PopupWindowLike {
 
     @Override
     public void dismiss() {
+        anchor.resetLastPosition();
         popup.dismiss();
     }
 
@@ -154,7 +154,6 @@ public class DropDownPopHelper implements PopupWindowLike {
     }
 
     public void performMarkIds(String id) {
-        //36531bd0-51c0-4f88-bb41-f2534b986118
         if (TextUtils.isEmpty(id)) {
             return;
         }
@@ -168,7 +167,6 @@ public class DropDownPopHelper implements PopupWindowLike {
      * @param ids
      */
     public void performMarkIds(List<String> ids) {
-        //36531bd0-51c0-4f88-bb41-f2534b986118
         if (ids != null && ids.size() > 0) {
             popup.performMarkIds(ids);
         }
