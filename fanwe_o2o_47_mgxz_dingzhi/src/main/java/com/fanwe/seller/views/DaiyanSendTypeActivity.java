@@ -216,8 +216,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     public FirstFragment.SecondTypeClickListener secondTypeClickListener = new FirstFragment.SecondTypeClickListener() {
         @Override
         public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean) {
-            Log.d("FirstFragment", "" + typeBean.getId());
+
             if (helper != null && !TextUtils.isEmpty(typeBean.getId())) {
+                Log.d("helper",typeBean.getId());
                 helper.performMarkIds(typeBean.getId());
             }
         }
@@ -286,8 +287,13 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                         updateCurrentItem(position);
                         if (helper != null && !TextUtils.isEmpty(mDatas.get(position).getId())) {
                             String selectedId = mDatas.get(position).getId();
-                            if (isNeedPopviewUpdate && (COLLECT.equals(selectedId) || REPRESENT.equals(selectedId))) {
-                                helper.performMarkIds(selectedId);
+                            if  (COLLECT.equals(selectedId) || REPRESENT.equals(selectedId)){
+                                if(isNeedPopviewUpdate) {
+                                    Log.d("helper",selectedId);
+                                    helper.performMarkIds(selectedId);
+                                }else{
+                                    isNeedPopviewUpdate =true;
+                                }
                             }
                         }
                         updateHorizontalScrollViewItem(oldView, false);
@@ -302,7 +308,12 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                 if (helper != null && !TextUtils.isEmpty(mDatas.get(position).getId())) {
                     String selectedId = mDatas.get(position).getId();
                     if (COLLECT.equals(selectedId) || REPRESENT.equals(selectedId)) {
-                        helper.performMarkIds(selectedId);
+                        if(isNeedPopviewUpdate) {
+                            Log.d("helper",selectedId);
+                            helper.performMarkIds(selectedId);
+                        }else{
+                            isNeedPopviewUpdate =true;
+                        }
                     }
                 }
                 updateHorizontalScrollViewItem(oldView, false);
@@ -375,6 +386,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                 List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> datas = firstFragment.getDataList();
                 for (int j = 0; j < datas.size(); j++) {
                     if (!TextUtils.isEmpty(currentSecondTypeStr) && datas.get(j).getId().equals(currentSecondTypeStr)) {
+                        firstFragment.setLastSelectedPosition(j);
                         datas.get(j).setChecked(true);
                     } else {
                         datas.get(j).setChecked(false);
@@ -392,6 +404,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         image_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(helper!=null){
+                    helper.dismiss();
+                }
                 finish();
             }
         });

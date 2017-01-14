@@ -144,5 +144,13 @@ public class FirstFragment extends Fragment {
     public void setmDPGridViewAdapter(DPGridViewAdapter mDPGridViewAdapter) {
         this.mDPGridViewAdapter = mDPGridViewAdapter;
     }
+
+    public int getLastSelectedPosition() {
+        return lastSelectedPosition;
+    }
+
+    public void setLastSelectedPosition(int lastSelectedPosition) {
+        this.lastSelectedPosition = lastSelectedPosition;
+    }
 }
 
