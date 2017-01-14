@@ -82,5 +82,13 @@ public abstract class DPBaseAdapter<T> extends BaseAdapter {
     }
 
     public abstract void convert(DPAdapterViewHolder holder,T t);
+
+    public List<T> getmDataList() {
+        return mDataList;
+    }
+
+    public void setmDataList(List<T> mDataList) {
+        this.mDataList = mDataList;
+    }
 }
 

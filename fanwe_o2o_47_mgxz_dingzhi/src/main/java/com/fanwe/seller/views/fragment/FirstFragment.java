@@ -136,5 +136,13 @@ public class FirstFragment extends Fragment {
     public void setSecondTypeClickListener(SecondTypeClickListener secondTypeClickListener) {
         this.secondTypeClickListener = secondTypeClickListener;
     }
+
+    public DPGridViewAdapter getmDPGridViewAdapter() {
+        return mDPGridViewAdapter;
+    }
+
+    public void setmDPGridViewAdapter(DPGridViewAdapter mDPGridViewAdapter) {
+        this.mDPGridViewAdapter = mDPGridViewAdapter;
+    }
 }
 

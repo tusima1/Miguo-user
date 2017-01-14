@@ -1,11 +1,7 @@
 package com.fanwe.seller.views.customize;
 
-/**
- * Created by Administrator on 2017/1/11.
- */
 
 import android.content.Context;
-import android.content.Entity;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -23,7 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/1/6.
+ * Created by zhouhy on 2017/1/6.
  */
 
 public class TypeHorizontalScrollView extends HorizontalScrollView implements
@@ -99,6 +95,7 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
      * 保存View与位置的键值对
      */
     private Map<View, Integer> mViewPos = new HashMap<View, Integer>();
+    private Map<Integer,View> mPosView=new HashMap<>();
 
     public TypeHorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -188,6 +185,7 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
         view.setOnClickListener(this);
         mContainer.addView(view);
         mViewPos.put(view, mCurrentIndex);
+        mPosView.put(mCurrentIndex,view);
 
         //当前第一张图片小标
         mFristIndex++;
@@ -217,6 +215,7 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
             //将此View放入第一个位置
             View view = mAdapter.getView(index, null, mContainer);
             mViewPos.put(view, index);
+            mPosView.put(index,view);
             mContainer.addView(view, 0);
             view.setOnClickListener(this);
             //水平滚动位置向左移动view的宽度个像素
@@ -294,6 +293,7 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
             view.setOnClickListener(this);
             mContainer.addView(view);
             mViewPos.put(view, i);
+            mPosView.put(i,view);
             mCurrentIndex = i;
         }
         oldView =mContainer.getChildAt(mFristIndex);
@@ -348,6 +348,15 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
         }
     }
 
+    /**
+     * 滚动到某一位置。
+     * @param index
+     */
+    public void scrollToIndex(int index){
+        if(mPosView!=null&&mPosView.get(index)!=null){
+            onClick(mPosView.get(index));
+        }
+    }
     public void setOnItemClickListener(OnItemClickListener mOnClickListener) {
         this.mOnClickListener = mOnClickListener;
     }
