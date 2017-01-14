@@ -48,14 +48,6 @@ public class TestDropDownPopActivity extends AppCompatActivity {
                         singleId2 = second.getSingleId();
                     }
                     MGToast.showToast("一级id: " + singleId1 +"   二级id: "+singleId2);
-
-                    String titleName="";
-                    if (pair.second!=null){
-                        titleName = pair.second.getName();
-                    }else {
-                        titleName = pair.first.getName();
-                    }
-                    popHelper.setTitleText(index,titleName);
                 }
 
                 popHelper.dismiss();

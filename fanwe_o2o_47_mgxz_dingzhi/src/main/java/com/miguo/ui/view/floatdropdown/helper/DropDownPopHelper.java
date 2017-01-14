@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
+import com.miguo.entity.SingleMode;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
@@ -20,7 +22,7 @@ import java.util.List;
  * Description: 
  */
 
-public class DropDownPopHelper implements PopupWindowLike{
+public class DropDownPopHelper implements PopupWindowLike {
     private final Activity mHoldActivity;
     private final FakeDropDownMenu anchor;
     private FakeDropDownMenu fakeDDM;
@@ -31,7 +33,9 @@ public class DropDownPopHelper implements PopupWindowLike{
         this.anchor = anchor;
         initPopup();
     }
-    public DropDownPopHelper(Activity mHoldActivity, FakeDropDownMenu anchor,FakeDropDownMenu fakeDDM) {
+
+    public DropDownPopHelper(Activity mHoldActivity, FakeDropDownMenu anchor, FakeDropDownMenu
+            fakeDDM) {
         this.mHoldActivity = mHoldActivity;
         this.anchor = anchor;
         this.fakeDDM = fakeDDM;
@@ -40,9 +44,10 @@ public class DropDownPopHelper implements PopupWindowLike{
 
     private void initPopup() {
         anchor.setIsFake(false);
-        if (fakeDDM != null){
+        if (fakeDDM != null) {
             fakeDDM.setIsFake(true);
-            fakeDDM.setFakeTitleTabClickListener(new FakeDropDownMenu.OnFakeTitleTabClickListener() {
+            fakeDDM.setFakeTitleTabClickListener(new FakeDropDownMenu.OnFakeTitleTabClickListener
+                    () {
                 @Override
                 public void onFakeClick(View v, final int index) {
                     anchor.postDelayed(new Runnable() {
@@ -50,7 +55,7 @@ public class DropDownPopHelper implements PopupWindowLike{
                         public void run() {
                             anchor.performIndexClick(index);
                         }
-                    },300);
+                    }, 300);
 
                 }
             });
@@ -59,10 +64,10 @@ public class DropDownPopHelper implements PopupWindowLike{
         anchor.setFakeTitleTabClickListener(new FakeDropDownMenu.OnFakeTitleTabClickListener() {
             @Override
             public void onFakeClick(View v, int index) {
-                Log.e("test","index: "+index);
-                if (popup.isShowing()){
+                Log.e("test", "index: " + index);
+                if (popup.isShowing()) {
                     popup.handleClick(index);
-                }else {
+                } else {
                     popup.show();
                     popup.handleClick(index);
                 }
@@ -70,11 +75,11 @@ public class DropDownPopHelper implements PopupWindowLike{
             }
         });
 
-        popup = new DropDownPopup(mHoldActivity,anchor);
+        popup = new DropDownPopup(mHoldActivity, anchor);
         popup.setTextChangedListener(new DropDownPopup.OnTitleTextChangedListener() {
             @Override
             public void onTitleTextChange(int index, @NonNull String text) {
-                setTitleText(index,text);
+                setTitleText(index, text);
             }
         });
     }
@@ -89,29 +94,50 @@ public class DropDownPopHelper implements PopupWindowLike{
         popup.dismiss();
     }
 
-    public void setOnDropDownListener(OnDropDownListener dropDownListener) {
-        popup.setDropDownListener(dropDownListener);
+    public void setOnDropDownListener(final OnDropDownListener dropDownListener) {
+        popup.setDropDownListener(new OnDropDownListener() {
+            @Override
+            public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List
+                    <SingleMode> items) {
+                if (pair != null) {
+                    String titleName = "";
+                    if (pair.second != null) {
+                        titleName = pair.second.getName();
+                    } else {
+                        titleName = pair.first.getName();
+                    }
+                    setTitleText(index, titleName);
+                }
+
+                if (dropDownListener != null) {
+                    dropDownListener.onItemSelected(index, pair, items);
+                }
+                //if need,dismiss pop here.
+                //popHelper.dismiss();
+            }
+        });
     }
 
-    public void setTitleText(int index,String text) {
+
+    public void setTitleText(int index, String text) {
         text = TextUtils.isEmpty(text) ? " " : text;
         int length = text.length();
-        if (length>4){
-            text = text.substring(0,4);
-            text +="...";
+        if (length > 4) {
+            text = text.substring(0, 4);
+            text += "...";
         }
-        anchor.setTitleText(index,text);
-        if (fakeDDM!=null){
-            fakeDDM.setTitleText(index,text);
+        anchor.setTitleText(index, text);
+        if (fakeDDM != null) {
+            fakeDDM.setTitleText(index, text);
         }
     }
 
-    public void performMarkIds(String id){
+    public void performMarkIds(String id) {
         //36531bd0-51c0-4f88-bb41-f2534b986118
-        if (TextUtils.isEmpty(id)){
+        if (TextUtils.isEmpty(id)) {
             return;
         }
-        List<String> ids=new ArrayList<>();
+        List<String> ids = new ArrayList<>();
         ids.add(id);
         performMarkIds(ids);
     }
@@ -120,9 +146,9 @@ public class DropDownPopHelper implements PopupWindowLike{
      * 你希望选中哪些item,把他们的 id 传进去就好了
      * @param ids
      */
-    public void performMarkIds(List<String> ids){
+    public void performMarkIds(List<String> ids) {
         //36531bd0-51c0-4f88-bb41-f2534b986118
-        if (ids!=null && ids.size()>0){
+        if (ids != null && ids.size() > 0) {
             popup.performMarkIds(ids);
         }
 

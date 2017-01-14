@@ -1,6 +1,7 @@
 package com.miguo.ui.view.floatdropdown.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -37,6 +38,7 @@ public class SingleSideListView extends FrameLayout implements SetDropDownListen
 
     public SingleSideListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setBackgroundColor(Color.WHITE);
         init();
     }
 

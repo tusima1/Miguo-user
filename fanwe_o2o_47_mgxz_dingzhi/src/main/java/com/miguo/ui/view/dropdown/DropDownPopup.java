@@ -1,5 +1,6 @@
 package com.miguo.ui.view.dropdown;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -7,6 +8,8 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -34,13 +37,20 @@ import java.util.List;
  * Description: 
  */
 
-public class DropDownPopup extends PopupWindow {
+public class DropDownPopup extends PopupWindow{
 
     private final Activity mHoldActivity;
     private View anchor;
     private String bgColor = "#4D000000";
     private DropDown dropDownView;
     private OnDropDownListener dropDownListener;
+
+    private int animIn= 200;
+    private int animOut=250;
+
+    private ValueAnimator fadeIn;
+    private ValueAnimator fadeOut;
+    private View fakeView;
 
     public DropDownPopup(Activity mHoldActivity,View anchor) {
         this.mHoldActivity = mHoldActivity;
@@ -52,18 +62,18 @@ public class DropDownPopup extends PopupWindow {
         if (mHoldActivity == null){
             return;
         }
-        int[] anchorLocation=new int[2];
-        anchor.getLocationOnScreen(anchorLocation);
         LinearLayout rootLayout=new LinearLayout(mHoldActivity);
         rootLayout.setOrientation(LinearLayout.VERTICAL);
         dropDownView = new DropDown(mHoldActivity);
+        dropDownView.setBackgroundColor(Color.parseColor(bgColor));
 
         initDDData();
 
         int height = DisplayUtil.dp2px(mHoldActivity, 355);
 
-        View fakeView =new View(mHoldActivity);
+        fakeView = new View(mHoldActivity);
         fakeView.setBackgroundColor(Color.parseColor(bgColor));
+        fakeView.setAlpha(0.1f);
         fakeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,15 +90,57 @@ public class DropDownPopup extends PopupWindow {
         setAnimationStyle(android.R.style.Animation);//clear pop default animation
         setOutsideTouchable(false);
         setTouchable(true);
-//        setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         initListener();
+        initAnimations();
+    }
+
+    private void initAnimations() {
+        fadeIn = ValueAnimator.ofFloat(0.1f,1.0f);
+        fadeIn.setDuration(animIn);
+        fadeIn.setTarget(fakeView);
+        fadeIn.setInterpolator(new AccelerateInterpolator());
+        fadeIn.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                fakeView.setAlpha(animatedValue);
+            }
+        });
+
+        fadeOut = ValueAnimator.ofFloat(1.0f,0.1f);
+        fadeOut.setDuration(animOut);
+        fadeOut.setTarget(fakeView);
+        fadeOut.setInterpolator(new DecelerateInterpolator());
+        fadeOut.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float animatedValue = (float) animation.getAnimatedValue();
+                fakeView.setAlpha(animatedValue);
+            }
+        });
     }
 
     private void initListener() {
-        dropDownView.setDismissFinishListener(new DropDown.OnDismissFinishListener() {
+        dropDownView.setDismissFinishListener(new DropDown.OnInnerAnimateListener() {
+
             @Override
-            public void onFinishDismiss() {
+            public void startExpand() {
+                fadeIn.start();
+            }
+
+            @Override
+            public void endExpand() {
+
+            }
+
+            @Override
+            public void startReverse() {
+                fadeOut.start();
+            }
+
+            @Override
+            public void endReverse() {
                 DropDownPopup.super.dismiss();
             }
         });
@@ -104,9 +156,7 @@ public class DropDownPopup extends PopupWindow {
 
     public void show(){
         if (!mHoldActivity.isFinishing()){
-            int height = anchor.getHeight();
             showAsDropDown(anchor);
-//            showAsDropDown(anchor,0,-height);
         }else {
             MGToast.showToast("Activity is processing or finishing ~~");
         }
@@ -189,6 +239,7 @@ public class DropDownPopup extends PopupWindow {
         views.add(index4);
         return views;
     }
+
     public interface OnTitleTextChangedListener{
         void onTitleTextChange(int index,@NonNull String text);
     }
