@@ -12,14 +12,17 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 import com.didikee.uilibs.utils.DisplayUtil;
+import com.fanwe.o2o.miguo.R;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.entity.TwoMode;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.view.floatdropdown.helper.DropDownMarkBean;
+import com.miguo.ui.view.floatdropdown.interf.OnCallDismissPopListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener2;
@@ -52,6 +55,13 @@ public class DropDownPopup extends PopupWindow{
     private ValueAnimator fadeOut;
     private View fakeView;
 
+    //------------------------------
+    private ValueAnimator expandAnimator;
+    private ValueAnimator reverseAnimator;
+
+    private int expandDuration = 250;
+    private int reverseDuration = 300;
+
     public DropDownPopup(Activity mHoldActivity,View anchor) {
         this.mHoldActivity = mHoldActivity;
         this.anchor = anchor;
@@ -62,10 +72,13 @@ public class DropDownPopup extends PopupWindow{
         if (mHoldActivity == null){
             return;
         }
+        RelativeLayout root=new RelativeLayout(mHoldActivity);
+
         LinearLayout rootLayout=new LinearLayout(mHoldActivity);
         rootLayout.setOrientation(LinearLayout.VERTICAL);
         dropDownView = new DropDown(mHoldActivity);
-        dropDownView.setBackgroundColor(Color.parseColor(bgColor));
+//        dropDownView.setBackgroundColor(Color.parseColor(bgColor));
+        dropDownView.setBackgroundColor(Color.TRANSPARENT);
 
         initDDData();
 
@@ -73,20 +86,31 @@ public class DropDownPopup extends PopupWindow{
 
         fakeView = new View(mHoldActivity);
         fakeView.setBackgroundColor(Color.parseColor(bgColor));
-        fakeView.setAlpha(0.1f);
+        fakeView.setAlpha(0f);
         fakeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                if (callDismissPopListener!=null){
+                    callDismissPopListener.callDismissPop(false);
+                }
             }
         });
+        dropDownView.setId(R.id.TOP);
+        fakeView.setId(R.id.BOTTOM);
+        RelativeLayout.LayoutParams ddParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height);
+        ddParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        RelativeLayout.LayoutParams fakeParams=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        fakeParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        fakeParams.addRule(RelativeLayout.BELOW,R.id.TOP);
 
-        rootLayout.addView(dropDownView,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
-        rootLayout.addView(fakeView,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        root.addView(dropDownView,ddParams);
+        root.addView(fakeView,fakeParams);
+//        rootLayout.addView(dropDownView,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height));
+//        rootLayout.addView(fakeView,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        setContentView(rootLayout);
+        setContentView(root);
         setAnimationStyle(android.R.style.Animation);//clear pop default animation
         setOutsideTouchable(false);
         setTouchable(true);
@@ -96,7 +120,7 @@ public class DropDownPopup extends PopupWindow{
     }
 
     private void initAnimations() {
-        fadeIn = ValueAnimator.ofFloat(0.1f,1.0f);
+        fadeIn = ValueAnimator.ofFloat(0f,1.0f);
         fadeIn.setDuration(animIn);
         fadeIn.setTarget(fakeView);
         fadeIn.setInterpolator(new AccelerateInterpolator());
@@ -108,7 +132,7 @@ public class DropDownPopup extends PopupWindow{
             }
         });
 
-        fadeOut = ValueAnimator.ofFloat(1.0f,0.1f);
+        fadeOut = ValueAnimator.ofFloat(1.0f,0f);
         fadeOut.setDuration(animOut);
         fadeOut.setTarget(fakeView);
         fadeOut.setInterpolator(new DecelerateInterpolator());
@@ -119,6 +143,10 @@ public class DropDownPopup extends PopupWindow{
                 fakeView.setAlpha(animatedValue);
             }
         });
+    }
+    private OnCallDismissPopListener callDismissPopListener;
+    public void setOnCallDismissPopListener(OnCallDismissPopListener callDismissPopListener) {
+        this.callDismissPopListener = callDismissPopListener;
     }
 
     private void initListener() {

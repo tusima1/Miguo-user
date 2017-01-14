@@ -1,15 +1,18 @@
 package com.miguo.ui.view.floatdropdown.view;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
 import com.miguo.ui.view.dropdown.interf.ExpandReverse;
+import com.miguo.ui.view.floatdropdown.interf.OnCallDismissPopListener;
 
 import java.util.List;
 
@@ -25,12 +28,21 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
     private TextView tv_name2;
     private TextView tv_name3;
     private TextView tv_name4;
+    private ImageView iv_name1;
+    private ImageView iv_name2;
+    private ImageView iv_name3;
+    private ImageView iv_name4;
     private View ll_1;
     private View ll_2;
     private View ll_3;
     private View ll_4;
     private boolean fake;//是不是假的
     private OnClickListener listener;
+
+
+    private ObjectAnimator expandAnimator;
+    private ObjectAnimator reverseAnimator;
+    private int lastPosition = -1;
 
     public FakeDropDownMenu(Context context) {
         this(context,null);
@@ -49,6 +61,11 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         tv_name3 = ((TextView) findViewById(R.id.tv_name3));
         tv_name4 = ((TextView) findViewById(R.id.tv_name4));
 
+        iv_name1 = ((ImageView) findViewById(R.id.iv_name1));
+        iv_name2 = ((ImageView) findViewById(R.id.iv_name2));
+        iv_name3 = ((ImageView) findViewById(R.id.iv_name3));
+        iv_name4 = ((ImageView) findViewById(R.id.iv_name4));
+
         ll_1 = findViewById(R.id.ll_1);
         ll_2 = findViewById(R.id.ll_2);
         ll_3 = findViewById(R.id.ll_3);
@@ -58,8 +75,13 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         ll_2.setOnClickListener(this);
         ll_3.setOnClickListener(this);
         ll_4.setOnClickListener(this);
+        initAnimator();
     }
 
+    private void initAnimator() {
+//        expandAnimator = ObjectAnimator.ofFloat(arrowImage,"rotation",0,180f);
+//        reverseAnimator = ObjectAnimator.ofFloat(arrowImage,"rotation",180f,360f);
+    }
     @Override
     public void onClick(View v) {
         if (listener!=null){
@@ -90,6 +112,60 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         if (fakeTitleTabClickListener!=null){
             fakeTitleTabClickListener.onFakeClick(v,index);
         }
+        //anim
+        handleArrowImageAnim(index);
+    }
+
+    public void handleArrowImageAnim(int index){//when fakeView click,make index == 0 to dismiss pop and reverse arrow imageView.
+        if (index == 0){
+            reverseAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(lastPosition),"rotation",180f,360f);
+            reverseAnimator.start();
+            lastPosition = -1;
+            callPopDismissImmediately();
+        }
+        if (index == lastPosition){
+            //点击了同一个item 第二次
+            reverseAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(index),"rotation",180,360f);
+            reverseAnimator.start();
+            lastPosition = -1;
+            callPopDismissImmediately();
+        }else {
+            expandAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(index),"rotation",0,180f);
+            expandAnimator.start();
+            if (lastPosition!=-1){
+                reverseAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(lastPosition),"rotation",180f,360f);
+                reverseAnimator.start();
+            }
+            lastPosition = index;
+        }
+    }
+
+    private void callPopDismissImmediately() {//Immediate
+        if (callDismissPopListener!=null){
+            callDismissPopListener.callDismissPop(true);
+        }
+    }
+
+    private ImageView getTargetAnimationView(int index){
+        ImageView result;
+        switch (index){
+            case 1:
+                result = iv_name1;
+                break;
+            case 2:
+                result = iv_name2;
+                break;
+            case 3:
+                result = iv_name3;
+                break;
+            case 4:
+                result = iv_name4;
+                break;
+            default:
+                result = null;
+                break;
+        }
+        return result;
     }
 
     public void performIndexClick(int index){
@@ -133,7 +209,12 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
         this.fakeTitleTabClickListener = fakeTitleTabClickListener;
     }
 
-    public void setTitleText(int index,String text){
+    private OnCallDismissPopListener callDismissPopListener;
+    public void setOnFakeCallDismissPopListener(OnCallDismissPopListener callDismissPopListener) {
+        this.callDismissPopListener = callDismissPopListener;
+    }
+
+    public void setTitleText(int index, String text){
         text = TextUtils.isEmpty(text) ? "" :text;
         switch (index){
             case 1:
@@ -154,4 +235,5 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
     public void setOnFakeClickListener(OnClickListener listener){
         this.listener = listener;
     }
+
 }
