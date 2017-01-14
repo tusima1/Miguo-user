@@ -65,7 +65,7 @@ public class GetShopFromParamsDaoImpl extends BaseDaoImpl implements GetShopFrom
                     return;
                 }
 
-                if(SDCollectionUtil.isEmpty(results.get(0).getShop_list())){
+                if(isEmpty(results.get(0).getShop_list())){
                     getListener().getShopFromParamsError(BASE_ERROR_MESSAGE);
                     return;
                 }

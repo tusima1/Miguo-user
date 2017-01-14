@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
@@ -34,6 +35,7 @@ import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
 import com.miguo.dao.impl.GetShopFromParamsDaoImpl;
 import com.miguo.definition.AdspaceParams;
+import com.miguo.definition.FilterIndexParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.PageSize;
 import com.miguo.entity.AdspaceListBean;
@@ -180,9 +182,66 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         });
     }
 
+    /**
+     *
+     * @param index 1/2/3/4
+     * @param pair 附近、分类、排序的左右数据id
+     * @param items 筛选的数据只有在index为4的时候
+     */
     @Override
     public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
+        switch (index){
+            case FilterIndexParams.NEAR_BY:
+                handleItemSelectNearBy(pair);
+                break;
+            case FilterIndexParams.CATEGORY:
+                handleItemSelectCategory(pair);
+                break;
+            case FilterIndexParams.INTEL:
+                handleItemSelectsIntel(pair);
+                break;
+            case FilterIndexParams.FILTER:
+                handleItemSelectFilter(items);
+                break;
+        }
+        filterBean.setPageNum(PageSize.BASE_NUMBER_ONE);
+        onRefreshShopList();
         dropDownPopHelper.dismiss();
+    }
+
+    private void handleItemSelectNearBy(Pair<SingleMode, SingleMode> pair){
+        if(null != pair.first){
+            filterBean.setAreaOne(pair.first.getSingleId());
+        }
+        if(null != pair.second){
+            filterBean.setAreaTwo(pair.second.getSingleId());
+        }
+    }
+
+    private void handleItemSelectCategory(Pair<SingleMode, SingleMode> pair){
+        if(null != pair.first){
+            filterBean.setCategoryOne(pair.first.getSingleId());
+        }
+        if(null != pair.second){
+            filterBean.setCategoryTwo(pair.second.getSingleId());
+        }
+    }
+
+    private void handleItemSelectsIntel(Pair<SingleMode, SingleMode> pair){
+        if(null != pair.first){
+            filterBean.setSortType(pair.first.getSingleId());
+        }
+    }
+
+    private void handleItemSelectFilter(List<SingleMode> items){
+        if(SDCollectionUtil.isEmpty(items)){
+            return;
+        }
+        String ids = "";
+        for(int i = 0; i < items.size(); i++){
+            ids = ids + (i == 0 ? "" : ",") + items.get(i).getSingleId();
+        }
+        filterBean.setFilter(ids);
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -439,7 +498,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     }
 
     public void clickMenu(){
-        scrollview.smoothScrollTo(0, scrollLayout.getMeasuredHeight());
+        scrollview.smoothScrollTo(0, scrollLayout.getMeasuredHeight() + dip2px(14));
         showTopMenu();
     }
 
