@@ -87,11 +87,15 @@ public class RepresentBannerView extends BaseLinearLayout {
     }
 
     private int getImageMarginTop(){
-        return (int)(getScreenWidth() * 0.042);
+        /**
+         * 5dp是CircleIndicator的margin
+         */
+        return (int)(getScreenWidth() * 0.042) - dip2px(5);
     }
 
     private int getImageMarginBottom(){
-        return (int)(getScreenHeight() * 0.022);
+//        return (int)(getScreenHeight() * 0.022);
+        return 0;
     }
 
     class OnRepresentBannerClick implements View.OnClickListener{
@@ -115,7 +119,7 @@ public class RepresentBannerView extends BaseLinearLayout {
     }
 
     public interface OnRepresentBannerClickListener{
-        void onBannerClick(Object banner);
+        void onBannerClick(AdspaceListBean.Result.Body banner);
     }
 
 }

@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.Space;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -14,14 +15,18 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
+import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiRepresentBannerFragmentAdapter;
 import com.miguo.adapter.HiRepresentCateAdapter;
+import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.adapter.RepresentShopAdapter;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetSearchCateConditionDao;
@@ -30,24 +35,30 @@ import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
 import com.miguo.dao.impl.GetShopFromParamsDaoImpl;
 import com.miguo.definition.AdspaceParams;
+import com.miguo.definition.FilterIndexParams;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.PageSize;
 import com.miguo.entity.AdspaceListBean;
+import com.miguo.entity.BannerTypeModel;
 import com.miguo.entity.RepresentFilterBean;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
+import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiRepresentCateFragment;
 import com.miguo.listener.fragment.HiRepresentFragmentListener;
+import com.miguo.model.TouchToMoveListener;
 import com.miguo.ui.view.BarryTab;
+import com.miguo.ui.view.HomeViewPager;
+import com.miguo.ui.view.PtrFrameLayoutForViewPager;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
-import com.miguo.ui.view.RepresentAppBarLayout;
 import com.miguo.ui.view.RepresentBannerView;
 import com.miguo.ui.view.RepresentViewPager;
-import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
+import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
 import com.miguo.view.GetShopFromParamsView;
@@ -55,22 +66,21 @@ import com.miguo.view.GetShopFromParamsView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.MaterialHeader;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener{
+public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener, TouchToMoveListener, RepresentBannerView.OnRepresentBannerClickListener{
 
     @ViewInject(R.id.ptr_layout)
-    PtrFrameLayout ptrFrameLayout;
+    PtrFrameLayoutForViewPager ptrFrameLayout;
 
     @ViewInject(R.id.scroll_layout)
     LinearLayout scrollLayout;
@@ -93,6 +103,8 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @ViewInject(R.id.pager)
     RepresentViewPager pager;
     HiRepresentBannerFragmentAdapter bannerAdapter;
+    @ViewInject(R.id.indicator_circle)
+    CircleIndicator circleIndicator;
 
     @ViewInject(R.id.represent_banner)
     RepresentBannerView representBannerView;
@@ -107,6 +119,10 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     GetShopFromParamsDao getShopFromParamsDao;
 
     DropDownPopHelper dropDownPopHelper;
+
+    boolean touchToMove;
+
+    int pageNum;
 
     public HiRepresentFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -131,6 +147,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @Override
     protected void setFragmentListener() {
         scrollview.setOnRecyclerScrollViewListener(this);
+        representBannerView.setOnRepresentBannerClickListener(this);
     }
 
     @Override
@@ -151,7 +168,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     private void initRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(shopAdapter);
-        recyclerView.setNestedScrollingEnabled(false);
 
     }
 
@@ -166,9 +182,66 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         });
     }
 
+    /**
+     *
+     * @param index 1/2/3/4
+     * @param pair 附近、分类、排序的左右数据id
+     * @param items 筛选的数据只有在index为4的时候
+     */
     @Override
     public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
+        switch (index){
+            case FilterIndexParams.NEAR_BY:
+                handleItemSelectNearBy(pair);
+                break;
+            case FilterIndexParams.CATEGORY:
+                handleItemSelectCategory(pair);
+                break;
+            case FilterIndexParams.INTEL:
+                handleItemSelectsIntel(pair);
+                break;
+            case FilterIndexParams.FILTER:
+                handleItemSelectFilter(items);
+                break;
+        }
+        filterBean.setPageNum(PageSize.BASE_NUMBER_ONE);
+        onRefreshShopList();
         dropDownPopHelper.dismiss();
+    }
+
+    private void handleItemSelectNearBy(Pair<SingleMode, SingleMode> pair){
+        if(null != pair.first){
+            filterBean.setAreaOne(pair.first.getSingleId());
+        }
+        if(null != pair.second){
+            filterBean.setAreaTwo(pair.second.getSingleId());
+        }
+    }
+
+    private void handleItemSelectCategory(Pair<SingleMode, SingleMode> pair){
+        if(null != pair.first){
+            filterBean.setCategoryOne(pair.first.getSingleId());
+        }
+        if(null != pair.second){
+            filterBean.setCategoryTwo(pair.second.getSingleId());
+        }
+    }
+
+    private void handleItemSelectsIntel(Pair<SingleMode, SingleMode> pair){
+        if(null != pair.first){
+            filterBean.setSortType(pair.first.getSingleId());
+        }
+    }
+
+    private void handleItemSelectFilter(List<SingleMode> items){
+        if(SDCollectionUtil.isEmpty(items)){
+            return;
+        }
+        String ids = "";
+        for(int i = 0; i < items.size(); i++){
+            ids = ids + (i == 0 ? "" : ",") + items.get(i).getSingleId();
+        }
+        filterBean.setFilter(ids);
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -186,14 +259,14 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private void initBottomSpace(){
         BarryTab tab = (BarryTab) getActivity().findViewById(R.id.tab);
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//        scrollview.setPadding(0, 0, 0, tab.getMeasuredHeight());
-//        scrollview.setLayoutParams(params);
+        RelativeLayout.LayoutParams params = getRelativeLayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, tab.getMeasuredHeight());
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//        tabSpace.setLayoutParams(params);
     }
 
     @Override
     public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return scrollview.canRefresh();
+        return isTouchToMove() && scrollview.canRefresh();
     }
 
     @Override
@@ -202,14 +275,21 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     }
 
     public void onRefresh(){
+        filterBean.setPageNum(PageSize.BASE_NUMBER_ONE);
         setCurrentHttpUuid(UUID.randomUUID().toString());
+        setTouchToMove(true);
         getSearchCateConditionDao.getSearchCateCondition();
         getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_SHOP, AdspaceParams.TERMINAL_TYPE);
+        onRefreshShopList();
+    }
+
+    private void onRefreshShopList(){
         getShopFromParamsDao.getShop(filterBean);
     }
 
     public void loadComplete(){
         ptrFrameLayout.refreshComplete();
+        scrollview.loadComplite();
     }
 
     @Override
@@ -220,7 +300,82 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     @Override
     public void onScrollToEnd() {
+        onRefreshShopList();
+    }
 
+    @Override
+    public void onActionCancel(MotionEvent ev) {
+        setTouchToMove(true);
+    }
+
+    @Override
+    public void onActionDown(MotionEvent ev) {
+        setTouchToMove(false);
+    }
+
+    @Override
+    public void onActionMove(MotionEvent ev) {
+        setTouchToMove(false);
+    }
+
+    @Override
+    public void onBannerClick(AdspaceListBean.Result.Body banner) {
+        if (null == banner) {
+            return;
+        }
+
+        if (null == banner.getType() || null == banner.getType_id()) {
+            return;
+        }
+
+        String type_id = banner.getType_id();
+        if (TextUtils.isEmpty(type_id) || !type_id.startsWith("{")) {
+            return;
+        }
+
+        BannerTypeModel model = HomeCategoryUtils.parseTypeJson(type_id);
+
+        if (banner.getType().equals(AdspaceParams.BANNER_LIVE_LIST)) {
+            onActionLiveList();
+            return;
+        }
+        if (banner.getType().equals(AdspaceParams.BANNER_SHOP_LIST)) {
+            onActionShopList(model.getCate_id(), banner.getType_id());
+            return;
+        }
+        String paramValue = model.getId();
+        if (TextUtils.isEmpty(paramValue)) {
+            paramValue = model.getUrl();
+        }
+
+        AdspaceTypeFactory.clickWidthType(banner.getType(), getActivity(), paramValue);
+    }
+
+    /**
+     * 跳转到直播列表
+     */
+    public void onActionLiveList() {
+        getHomeViewPager().setCurrentItem(2);
+        /**
+         * 如果当前的低栏隐藏了
+         */
+        if (getTab().getAlpha() == 0) {
+//            startTabShowAnimation();
+        }
+    }
+
+    /**
+     * 跳转到门店列表
+     */
+    public void onActionShopList(String cate_id, String tid) {
+        getHomeViewPager().setCurrentItem(1);
+        ((SellerFragment) ((HomePagerAdapter) getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id, tid);
+        /**
+         * 如果当前的低栏隐藏了
+         */
+        if (getTab().getAlpha() == 0) {
+//            startTabShowAnimation();
+        }
     }
 
     private void handleFilterBar(int t){
@@ -238,8 +393,17 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     private void initRepresentShop(){
         getShopFromParamsDao = new GetShopFromParamsDaoImpl(new GetShopFromParamsView() {
             @Override
-            public void getShopFromParamsSuccess(List<ResultBusinessListings> results) {
+            public void getShopFromParamsSuccess(List<ModelBusinessListings> results) {
+                filterBean.setPageNum(filterBean.getPageNum() + 1);
                 shopAdapter.notifyDataSetChanged(results);
+                loadComplete();
+            }
+
+            @Override
+            public void getShopFromParamsLoadMoreSuccess(List<ModelBusinessListings> results) {
+                filterBean.setPageNum(filterBean.getPageNum() + 1);
+                shopAdapter.notifyDataSetChangedLoadmore(results);
+                loadComplete();
             }
 
             @Override
@@ -282,11 +446,13 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             @Override
             public void getAdspaceListSuccess(String httpUuid, List<AdspaceListBean.Result.Body> body, String type) {
                 initRepresentBanner(body);
+                scrollview.smoothScrollTo(0, 2);
                 loadComplete();
             }
 
             @Override
             public void getAdspaceListError(String httpUuid) {
+                scrollview.smoothScrollTo(0, 2);
                 loadComplete();
             }
         });
@@ -314,6 +480,10 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         }
         bannerAdapter = new HiRepresentBannerFragmentAdapter(fragment.getChildFragmentManager(), fragments);
         pager.setAdapter(bannerAdapter);
+        circleIndicator.setViewPager(pager);
+        circleIndicator.setVisibility(categories.size() <= 8 ? View.GONE : View.VISIBLE);
+        pager.setTouchToMoveListener(this);
+        pager.setPtrFrameLayout(ptrFrameLayout);
     }
 
     private void updateCategoryViewPagerParams(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
@@ -328,7 +498,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     }
 
     public void clickMenu(){
-        scrollview.smoothScrollTo(0, scrollLayout.getMeasuredHeight());
+        scrollview.smoothScrollTo(0, scrollLayout.getMeasuredHeight() + dip2px(14));
         showTopMenu();
     }
 
@@ -344,5 +514,21 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private int getCategoryViewPagerHeight(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
         return categories.size() <= 4 ? HiRepresentCateAdapter.getItemHeight() : HiRepresentCateAdapter.getItemHeight() * 2;
+    }
+
+    public boolean isTouchToMove() {
+        return touchToMove;
+    }
+
+    public void setTouchToMove(boolean touchToMove) {
+        this.touchToMove = touchToMove;
+    }
+
+    public BarryTab getTab() {
+        return (BarryTab) getActivity().findViewById(R.id.tab);
+    }
+
+    public HomeViewPager getHomeViewPager() {
+        return (HomeViewPager) view.getParent();
     }
 }

@@ -1,6 +1,5 @@
 package com.miguo.dao.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
@@ -10,8 +9,8 @@ import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.RootBusinessListings;
 import com.google.gson.Gson;
 import com.miguo.dao.GetShopFromParamsDao;
+import com.miguo.definition.PageSize;
 import com.miguo.entity.RepresentFilterBean;
-import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.view.BaseView;
 import com.miguo.view.GetShopFromParamsView;
 
@@ -36,7 +35,7 @@ public class GetShopFromParamsDaoImpl extends BaseDaoImpl implements GetShopFrom
     }
 
     @Override
-    public void getShop(String area_one, String area_two, String category_one, String category_two, String filter, String keyword, String sort_type, int pageNum, int pageSize, String merchant_type) {
+    public void getShop(String area_one, String area_two, String category_one, String category_two, String filter, String keyword, String sort_type, final int pageNum, int pageSize, String merchant_type) {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("area_one", area_one);
@@ -55,12 +54,27 @@ public class GetShopFromParamsDaoImpl extends BaseDaoImpl implements GetShopFrom
             public void onSuccessResponse(String responseBody) {
                 RootBusinessListings root = new Gson().fromJson(responseBody, RootBusinessListings.class);
                 List<ResultBusinessListings> results = root.getResult();
+
                 if(null == root || SDCollectionUtil.isEmpty(root.getResult())){
                     getListener().getShopFromParamsError(BASE_ERROR_MESSAGE);
                     return;
                 }
 
-                getListener().getShopFromParamsSuccess(root.getResult());
+                if(!root.getStatusCode().equals("200")){
+                    getListener().getShopFromParamsError(BASE_ERROR_MESSAGE);
+                    return;
+                }
+
+                if(isEmpty(results.get(0).getShop_list())){
+                    getListener().getShopFromParamsError(BASE_ERROR_MESSAGE);
+                    return;
+                }
+
+                if(pageNum == PageSize.BASE_NUMBER_ONE){
+                    getListener().getShopFromParamsSuccess(root.getResult().get(0).getShop_list());
+                    return;
+                }
+                getListener().getShopFromParamsLoadMoreSuccess(root.getResult().get(0).getShop_list());
             }
 
             @Override

@@ -501,6 +501,7 @@ public class HiHomeCategory extends Category implements
 
     public void updateFromCityChanged(ModelCityList model) {
         ((HiHomeFragment) fragments.get(0)).updateFromCityChanged(model);
+        ((HiRepresentFragment) fragments.get(1)).updateFromCityChanged();
     }
 
     public void handlerFunnyFragment() {

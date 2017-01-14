@@ -389,6 +389,7 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
     }
 
     private void handleMessageScrollToEnd(){
+        endLayout.setVisibility(View.VISIBLE);
         onHomeScrollViewListener.onScrollToEnd();
     }
 
