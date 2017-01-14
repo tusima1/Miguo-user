@@ -62,6 +62,8 @@ import java.util.List;
 public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener, CallbackView, OnDropDownListener {
 
 
+    public static final String COLLECT = "collect";
+    public static final String REPRESENT = "represent";
     private TypeHorizontalScrollView mHorizontalScrollView;
 
     private DPViewPager mViewPager;
@@ -226,7 +228,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     public FirstFragment.SecondTypeClickListener secondTypeClickListener = new FirstFragment.SecondTypeClickListener() {
         @Override
         public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean) {
-            Log.d("FirstFragment",""+typeBean.getId());
+            Log.d("FirstFragment", "" + typeBean.getId());
             if (helper != null && !TextUtils.isEmpty(typeBean.getId())) {
                 helper.performMarkIds(typeBean.getId());
             }
@@ -295,7 +297,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                                                      View view) {
                         updateCurrentItem(mDatas.get(position), position);
                         if (helper != null && !TextUtils.isEmpty(mDatas.get(position).getId())) {
-                            helper.performMarkIds(mDatas.get(position).getId());
+                            String selectedId = mDatas.get(position).getId();
+                            if (COLLECT.equals(selectedId) || REPRESENT.equals(selectedId)) {
+                                helper.performMarkIds(selectedId);
+                            }
                         }
                         updateHorizontalScrollViewItem(oldView, false);
                         updateHorizontalScrollViewItem(view, true);
@@ -306,9 +311,12 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             @Override
             public void onClick(View oldView, View view, int position) {
                 updateCurrentItem(mDatas.get(position), position);
+
                 if (helper != null && !TextUtils.isEmpty(mDatas.get(position).getId())) {
-                    Log.d("%%%%%%%%%%%%%",mDatas.get(position).getId());
-//                    helper.performMarkIds(mDatas.get(position).getId());
+                    String selectedId = mDatas.get(position).getId();
+                    if (COLLECT.equals(selectedId) || REPRESENT.equals(selectedId)) {
+                          helper.performMarkIds(selectedId);
+                    }
                 }
                 updateHorizontalScrollViewItem(oldView, false);
                 updateHorizontalScrollViewItem(view, true);
@@ -491,7 +499,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
         topView = (LinearLayout) findViewById(R.id.topview);
         mFlowView = (FakeDropDownMenu) findViewById(R.id.flow_llay);
-        fakeFlowLine = (FakeDropDownMenu)findViewById(R.id.fake_flow_llay);
+        fakeFlowLine = (FakeDropDownMenu) findViewById(R.id.fake_flow_llay);
 
         helper = new DropDownPopHelper(this, fakeFlowLine, mFlowView);
         helper.setOnDropDownListener(this);
@@ -505,7 +513,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         setRecycleView();
         recyclerView.setOnTouchListener(touchListener);
         //监听浮动view的滚动状态
-        mScrollView.listenerFlowViewScrollState(topView, mFlowView,fakeFlowLine);
+        mScrollView.listenerFlowViewScrollState(topView, mFlowView, fakeFlowLine);
         mScrollView.setScrollChangedFlowViewListener(new MultiScrollView.ScrollChangedFlowViewListener() {
             @Override
             public void ifShowFlowView(boolean show) {
@@ -660,6 +668,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     @Override
     public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
-
+        helper.dismiss();
     }
 }

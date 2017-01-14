@@ -52,10 +52,10 @@ public class MultiScrollView extends ScrollView {
             if (t >= value) {
 //                scrollChangedFlowViewListener.ifShowFlowView(true);
                 mFlowView.setVisibility(View.VISIBLE);
-                mFakeFlowView.setVisibility(View.GONE);
+                mFakeFlowView.setVisibility(View.INVISIBLE);
             } else {
 //                scrollChangedFlowViewListener.ifShowFlowView(false);
-                mFlowView.setVisibility(View.GONE);
+                mFlowView.setVisibility(View.INVISIBLE);
                 mFakeFlowView.setVisibility(View.VISIBLE);
             }
         }
