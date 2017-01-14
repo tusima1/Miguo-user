@@ -17,11 +17,12 @@ import android.widget.ScrollView;
  * Created by zhouhy on 2017/1/9.
  */
 
-public class MultiScrollView  extends ScrollView {
+public class MultiScrollView extends ScrollView {
 
     View mTopView;
     View mFlowView;
-
+    View mFakeFlowView;
+    ScrollChangedFlowViewListener scrollChangedFlowViewListener;
 
     public MultiScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,28 +31,32 @@ public class MultiScrollView  extends ScrollView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d("MultiScrollView"," onInterceptTouchEvent hehe");
+        Log.d("MultiScrollView", " onInterceptTouchEvent hehe");
         return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        Log.d("MultiScrollView"," onTouchEvent hehe"+ev.getAction());
+        Log.d("MultiScrollView", " onTouchEvent hehe" + ev.getAction());
         return super.onTouchEvent(ev);
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        Log.d("MultiScrollView","l:"+l +" t:"+t+"oldl:"+oldl+"oldt:"+oldt);
-        Log.d("MultiScrollView"," onScrollChanged mTopView.getHeight()："+mTopView.getHeight() );
+        Log.d("MultiScrollView", "l:" + l + " t:" + t + "oldl:" + oldl + "oldt:" + oldt);
+        Log.d("MultiScrollView", " onScrollChanged mTopView.getHeight()：" + mTopView.getHeight());
 
         super.onScrollChanged(l, t, oldl, oldt);
         if (mTopView != null && mFlowView != null) {
             int value = mTopView.getHeight();
             if (t >= value) {
+//                scrollChangedFlowViewListener.ifShowFlowView(true);
                 mFlowView.setVisibility(View.VISIBLE);
+                mFakeFlowView.setVisibility(View.INVISIBLE);
             } else {
-                mFlowView.setVisibility(View.GONE);
+//                scrollChangedFlowViewListener.ifShowFlowView(false);
+                mFlowView.setVisibility(View.INVISIBLE);
+                mFakeFlowView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -62,9 +67,25 @@ public class MultiScrollView  extends ScrollView {
      * @param topView  顶部区域view，即当ScrollView滑动的高度要大于等于哪个view的时候隐藏floatview
      * @param flowView 浮动view，即要哪个view停留在顶部
      */
-    public void listenerFlowViewScrollState(View topView, View flowView) {
+    public void listenerFlowViewScrollState(View topView, View flowView, View mFakeFlowView) {
 
-        mTopView = topView;
-        mFlowView = flowView;
+        this.mTopView = topView;
+        this.mFlowView = flowView;
+        this.mFakeFlowView = mFakeFlowView;
+    }
+
+    /**
+     * 当滑动发生变化的时候显示或者隐藏对应的VIEW.
+     */
+    public interface ScrollChangedFlowViewListener {
+        public void ifShowFlowView(boolean show);
+    }
+
+    public ScrollChangedFlowViewListener getScrollChangedFlowViewListener() {
+        return scrollChangedFlowViewListener;
+    }
+
+    public void setScrollChangedFlowViewListener(ScrollChangedFlowViewListener scrollChangedFlowViewListener) {
+        this.scrollChangedFlowViewListener = scrollChangedFlowViewListener;
     }
 }

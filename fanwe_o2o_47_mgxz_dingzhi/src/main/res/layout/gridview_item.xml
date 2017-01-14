@@ -16,8 +16,8 @@
         android:gravity="center"
         android:textColor="@color/c_CCCCCC"
         android:text="很好吃的"
-        android:maxLength="4"
-        android:textSize="@dimen/sp12" />
+        android:maxLength="10"
+        android:textSize="@dimen/sp10" />
 
 
 </RelativeLayout>

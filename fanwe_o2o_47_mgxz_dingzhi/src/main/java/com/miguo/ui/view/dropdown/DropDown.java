@@ -1,5 +1,6 @@
 package com.miguo.ui.view.dropdown;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -52,53 +53,23 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
     public DropDown(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
         init();
     }
 
     private void init() {
-        setBaseParams();
-        addDivider();
         finalAddView();
     }
-
-    /**
-     * 添加外层layout 之间的分隔线
-     */
-    private void addDivider() {
-        View dividerView =new View(getContext());
-        dividerView.setBackgroundColor(Color.parseColor("#EEEEEE"));
-        addView(dividerView,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
-    }
-
 
     /**
      * 最终添加的view
      */
     private void finalAddView(){
-        //TODO 这是两条线条
-//        addDivider();
-//        addDivider();
-        addView(contentLayout, LayoutParams.MATCH_PARENT,contentHeight);
-
-        contentLayout.setVisibility(GONE);
-    }
-
-    /**
-     * 设置基本的参数
-     */
-    protected void setBaseParams(){
-        contentHeight = dp2px(getContext(),355);
-
-        setBackgroundColor(Color.WHITE);
         setOrientation(LinearLayout.VERTICAL);
-
-//        titleTabLayout =new LinearLayout(getContext());
-//        titleTabLayout.setOrientation(LinearLayout.HORIZONTAL);
-//        titleTabLayout.setGravity(Gravity.CENTER_VERTICAL);
-//        titleTabLayout.setMinimumHeight(dp2px(getContext(),36));
-
+        contentHeight = dp2px(getContext(),355);
         contentLayout = new FrameLayout(getContext());
+        contentLayout.setBackgroundColor(Color.WHITE);
+        addView(contentLayout, LayoutParams.MATCH_PARENT,0);
+        contentLayout.setVisibility(GONE);
     }
 
     /**
@@ -107,20 +78,6 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
      */
     public void setInitOk(boolean initOk) {
         this.initOk = initOk;
-    }
-
-    /**
-     * 获取分隔线
-     * @return 分隔线 divider
-     */
-    protected View getDividerView(){
-        View divider=new View(getContext());
-        divider.setBackgroundColor(Color.parseColor("#EEEEEE"));
-        return divider;
-    }
-
-    protected ViewGroup.LayoutParams getDividerParams(){
-        return new ViewGroup.LayoutParams(2,dp2px(getContext(),19));
     }
 
     public void onClick(int index) {
@@ -140,9 +97,9 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
         contentLayout.addView(contentViewList.get(order),new FrameLayout.LayoutParams(ViewGroup
                 .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        if (!isShowing){
-//            expand();
-//        }
+        if (!isShowing){
+            expand();
+        }
     }
 
     public int dp2px(Context context, float dipValue) {
@@ -157,8 +114,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
     @Override
     public void dismiss() {
-//        reverse();
-        isShowing =false;
+        reverse();
     }
 
     public boolean isShowing(){
@@ -197,9 +153,36 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
                     ViewGroup.LayoutParams layoutParams = contentLayout.getLayoutParams();
                     layoutParams.height = animatedValue;
                     contentLayout.setLayoutParams(layoutParams);
+                    float alpha = (float) ((animatedValue * 1.0) / contentHeight);
+                    contentLayout.setAlpha(alpha);
                 }
             });
         }
+        expandAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                if (dismissFinishListener!=null){
+                    dismissFinishListener.startExpand();
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (dismissFinishListener!=null){
+                    dismissFinishListener.endExpand();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         expandAnimator.start();
         isShowing=true;
     }
@@ -218,9 +201,49 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
                     ViewGroup.LayoutParams layoutParams = contentLayout.getLayoutParams();
                     layoutParams.height = animatedValue;
                     contentLayout.setLayoutParams(layoutParams);
+                    float alpha = (float) ((animatedValue * 1.0) / contentHeight);
+                    contentLayout.setAlpha(alpha);
                 }
             });
         }
+        reverseAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                if (dismissFinishListener!=null){
+                    dismissFinishListener.startReverse();
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (dismissFinishListener!=null){
+                    dismissFinishListener.endReverse();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         reverseAnimator.start();
+        isShowing =false;
+    }
+
+    public interface OnInnerAnimateListener {
+        void startExpand();
+        void endExpand();
+        void startReverse();
+        void endReverse();
+    }
+    private OnInnerAnimateListener dismissFinishListener;
+
+    public void setDismissFinishListener(OnInnerAnimateListener dismissFinishListener) {
+        this.dismissFinishListener = dismissFinishListener;
     }
 }

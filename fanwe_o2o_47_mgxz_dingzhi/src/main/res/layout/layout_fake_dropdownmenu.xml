@@ -41,6 +41,7 @@
                 android:text="附近"
                 />
             <ImageView
+                android:id="@+id/iv_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down_gray"
@@ -83,6 +84,7 @@
                 android:text="全部"
                 />
             <ImageView
+                android:id="@+id/iv_name2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -125,6 +127,7 @@
                 android:text="智能排序"
                 />
             <ImageView
+                android:id="@+id/iv_name3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down_gray"
@@ -167,6 +170,7 @@
                 android:text="筛选"
                 />
             <ImageView
+                android:id="@+id/iv_name4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down_gray"

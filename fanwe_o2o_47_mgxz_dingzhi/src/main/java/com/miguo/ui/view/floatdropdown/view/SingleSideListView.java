@@ -1,14 +1,15 @@
 package com.miguo.ui.view.floatdropdown.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.miguo.ui.view.floatdropdown.adapter.SingleListAdapter;
 import com.miguo.entity.SingleMode;
+import com.miguo.ui.view.floatdropdown.adapter.SingleListAdapter;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownSelectedListener;
 import com.miguo.ui.view.floatdropdown.interf.OnSingleModeRVItemClickListener;
 import com.miguo.ui.view.floatdropdown.interf.SetDropDownListener;
@@ -37,6 +38,7 @@ public class SingleSideListView extends FrameLayout implements SetDropDownListen
 
     public SingleSideListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setBackgroundColor(Color.WHITE);
         init();
     }
 
@@ -66,7 +68,16 @@ public class SingleSideListView extends FrameLayout implements SetDropDownListen
         singleAdapter = new SingleListAdapter(singleModes);
         initRv();
     }
-
+    /**
+     * 代替 performClick()方法,在adapter初始化的时候加载.
+     * 如果想用performCLick() 参见 {@link TwoSideListView#handlePerformClick(int, int)}
+     */
+    public void performPosition(int clickPosition){
+        if (clickPosition<0){
+            return;
+        }
+        singleAdapter.performPosition(clickPosition);
+    }
     @Override
     public void setOnDropDownSelectedListener(OnDropDownSelectedListener<SingleMode>
                                                           onDropDownSelectedListener) {
