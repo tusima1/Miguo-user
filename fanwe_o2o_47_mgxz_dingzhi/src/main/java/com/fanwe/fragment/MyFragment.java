@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.DistributionStoreWapActivity;
@@ -40,15 +39,13 @@ import com.fanwe.user.view.WalletNewActivity;
 import com.fanwe.user.view.customviews.RedDotView;
 import com.fanwe.utils.MGStringFormatter;
 import com.fanwe.utils.SDFormatUtil;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.utils.BaseUtils;
-import com.miguo.ui.view.floatdropdown.SearchGuideActivity;
+import com.miguo.ui.view.floatdropdown.TestDropDownPopActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -87,7 +84,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
     private TextView mTvStarNum;
     private TextView mTvCollectNum;
     private TextView mTvFansNum;
-    private PullToRefreshScrollView mPtrsvAll;
     private String mUserFaceString = "";
     private UserHttpHelper httpHelper;
     private ModelPersonalHome modelPersonalHome;
@@ -132,7 +128,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         initTopView();
         initMyOrders();
         initGridLayout();
-        initPullToRefreshScrollView();
 //        setUserData();
     }
 
@@ -220,24 +215,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         mAllOrder.setOnClickListener(this);
     }
 
-    private void initPullToRefreshScrollView() {
-        mPtrsvAll = (PullToRefreshScrollView) findViewById(R.id.frag_my_account_ptrsv_all);
-        mPtrsvAll.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        mPtrsvAll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
-
-            @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-                requestMyAccount();
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-            }
-
-        });
-        mPtrsvAll.setRefreshing();
-    }
-
     /**
      * 请求我的账户接口
      */
@@ -311,8 +288,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             /*二维码名片*/
 //            startActivity(DistributionMyQRCodeActivity.class);
 //            startActivity(TestActivity.class);
-            startActivity(SearchGuideActivity.class);
-//            startActivity(TestDropDownPopActivity.class);
+//            startActivity(SearchGuideActivity.class);
+            startActivity(TestDropDownPopActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {
@@ -395,10 +372,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         setCustomRedText(mRDV_orderNotRefund, modelPersonalHome.getRefunt());
 
         //--------------红点数量
-//        private TextView mTvRedShopCart;
-//        private TextView mTvRedFriends;
-//        private TextView mTvRedQuan;
-
         //购物车数量
         setRedText(mTvRedShopCart, modelPersonalHome.getCart_count());
         //战队数量
@@ -476,7 +449,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onSuccess(String method, List datas) {
-        mPtrsvAll.onRefreshComplete();
         switch (method) {
             case UserConstants.PERSONALHOME:
                 modelPersonalHome = (ModelPersonalHome) datas.get(0);
@@ -487,7 +459,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onFailue(String responseBody) {
-        mPtrsvAll.onRefreshComplete();
         switch (responseBody) {
             case UserConstants.PERSONALHOME:
                 break;
@@ -496,7 +467,6 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 
     @Override
     public void onFinish(String method) {
-        mPtrsvAll.onRefreshComplete();
         switch (method) {
             case UserConstants.PERSONALHOME:
                 break;

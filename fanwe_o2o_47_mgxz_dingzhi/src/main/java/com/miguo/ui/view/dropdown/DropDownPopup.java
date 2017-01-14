@@ -77,14 +77,23 @@ public class DropDownPopup extends PopupWindow {
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         setContentView(rootLayout);
+        setAnimationStyle(android.R.style.Animation);//clear pop default animation
         setOutsideTouchable(false);
         setTouchable(true);
 //        setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-
+        initListener();
     }
 
-    
+    private void initListener() {
+        dropDownView.setDismissFinishListener(new DropDown.OnDismissFinishListener() {
+            @Override
+            public void onFinishDismiss() {
+                DropDownPopup.super.dismiss();
+            }
+        });
+    }
+
 
     public void handleClick(int index){
         if (this.isShowing()){
@@ -105,7 +114,7 @@ public class DropDownPopup extends PopupWindow {
 
     @Override
     public void dismiss() {
-        super.dismiss();
+        dropDownView.dismiss();
     }
 
     private SearchCateConditionBean.ResultBean.BodyBean saveBody;
@@ -269,6 +278,11 @@ public class DropDownPopup extends PopupWindow {
         }
     }
 
+    /**
+     * 找到item的位置
+     * @param id 没有二级:返回一级的数据
+     *           有二级: 返回二级的id数据
+     */
     private void findItemLocation(String id) {
         List<TwoMode> item1 = mergeDataForItem1(saveBody.getNearByList(), saveBody
                 .getHotAreaList1(), saveBody.getAdminAreaList());

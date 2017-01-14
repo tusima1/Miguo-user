@@ -1,5 +1,6 @@
 package com.miguo.ui.view.dropdown;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -58,7 +59,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
     private void init() {
         setBaseParams();
-        addDivider();
+//        addDivider();
         finalAddView();
     }
 
@@ -76,11 +77,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
      * 最终添加的view
      */
     private void finalAddView(){
-        //TODO 这是两条线条
-//        addDivider();
-//        addDivider();
-        addView(contentLayout, LayoutParams.MATCH_PARENT,contentHeight);
-
+        addView(contentLayout, LayoutParams.MATCH_PARENT,0);
         contentLayout.setVisibility(GONE);
     }
 
@@ -90,14 +87,8 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
     protected void setBaseParams(){
         contentHeight = dp2px(getContext(),355);
 
-        setBackgroundColor(Color.WHITE);
+        setBackgroundColor(Color.TRANSPARENT);
         setOrientation(LinearLayout.VERTICAL);
-
-//        titleTabLayout =new LinearLayout(getContext());
-//        titleTabLayout.setOrientation(LinearLayout.HORIZONTAL);
-//        titleTabLayout.setGravity(Gravity.CENTER_VERTICAL);
-//        titleTabLayout.setMinimumHeight(dp2px(getContext(),36));
-
         contentLayout = new FrameLayout(getContext());
     }
 
@@ -107,20 +98,6 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
      */
     public void setInitOk(boolean initOk) {
         this.initOk = initOk;
-    }
-
-    /**
-     * 获取分隔线
-     * @return 分隔线 divider
-     */
-    protected View getDividerView(){
-        View divider=new View(getContext());
-        divider.setBackgroundColor(Color.parseColor("#EEEEEE"));
-        return divider;
-    }
-
-    protected ViewGroup.LayoutParams getDividerParams(){
-        return new ViewGroup.LayoutParams(2,dp2px(getContext(),19));
     }
 
     public void onClick(int index) {
@@ -140,9 +117,9 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
         contentLayout.addView(contentViewList.get(order),new FrameLayout.LayoutParams(ViewGroup
                 .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        if (!isShowing){
-//            expand();
-//        }
+        if (!isShowing){
+            expand();
+        }
     }
 
     public int dp2px(Context context, float dipValue) {
@@ -157,8 +134,7 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
 
     @Override
     public void dismiss() {
-//        reverse();
-        isShowing =false;
+        reverse();
     }
 
     public boolean isShowing(){
@@ -221,6 +197,39 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
                 }
             });
         }
+        reverseAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (dismissFinishListener!=null){
+                    dismissFinishListener.onFinishDismiss();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         reverseAnimator.start();
+        isShowing =false;
+    }
+
+    public interface OnDismissFinishListener{
+        void onFinishDismiss();
+    }
+    private OnDismissFinishListener dismissFinishListener;
+
+    public void setDismissFinishListener(OnDismissFinishListener dismissFinishListener) {
+        this.dismissFinishListener = dismissFinishListener;
     }
 }
