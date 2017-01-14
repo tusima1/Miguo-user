@@ -6,6 +6,7 @@ package com.fanwe.seller.views.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class FirstFragment extends Fragment {
 
     private List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> mDataList = new ArrayList<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean>();
 
+    private SecondTypeClickListener secondTypeClickListener;
     public FirstFragment() {
         super();
     }
@@ -63,7 +65,7 @@ public class FirstFragment extends Fragment {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(),"index"+position,Toast.LENGTH_SHORT).show();
+
                 if(mDataList==null||mDPGridViewAdapter==null){
                     return;
                 }
@@ -74,6 +76,8 @@ public class FirstFragment extends Fragment {
                     mDataList.get(lastSelectedPosition).setChecked(false);
                     lastSelectedPosition = position;
                 }
+                secondTypeClickListener.onItemClickListner(mDataList.get(position));
+
                 notifyAdapterChange();
 //                smallTypeChangeListener.smallTypeChange(mDataList.get(position));
             }
@@ -90,6 +94,9 @@ public class FirstFragment extends Fragment {
         if(mDPGridViewAdapter!=null){
             mDPGridViewAdapter.notifyDataSetChanged();
         }
+    }
+    public List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> getDataList(){
+        return this.mDataList;
     }
     //取消当前adapter里面被选中的状态
     public void removeSelectedState(){
@@ -116,6 +123,18 @@ public class FirstFragment extends Fragment {
 
     public void setSmallTypeChangeListener(SecondSmallTypeChangeListener smallTypeChangeListener) {
         this.smallTypeChangeListener = smallTypeChangeListener;
+    }
+
+    public interface  SecondTypeClickListener{
+        public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean);
+    }
+
+    public SecondTypeClickListener getSecondTypeClickListener() {
+        return secondTypeClickListener;
+    }
+
+    public void setSecondTypeClickListener(SecondTypeClickListener secondTypeClickListener) {
+        this.secondTypeClickListener = secondTypeClickListener;
     }
 }
 

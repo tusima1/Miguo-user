@@ -29,7 +29,7 @@ import java.util.Map;
 public class TypeHorizontalScrollView extends HorizontalScrollView implements
         View.OnClickListener {
 
-    private int lastPosition = 0;
+    private int lastPosition = -1;
     private View oldView = null;
 
     /**
@@ -296,7 +296,7 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
             mViewPos.put(view, i);
             mCurrentIndex = i;
         }
-
+        oldView =mContainer.getChildAt(mFristIndex);
         if (mListener != null) {
             notifyCurrentImgChanged();
         }
@@ -363,5 +363,13 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
 
     public void setLastPosition(int lastPosition) {
         this.lastPosition = lastPosition;
+    }
+
+    public int getmFristIndex() {
+        return mFristIndex;
+    }
+
+    public void setmFristIndex(int mFristIndex) {
+        this.mFristIndex = mFristIndex;
     }
 }

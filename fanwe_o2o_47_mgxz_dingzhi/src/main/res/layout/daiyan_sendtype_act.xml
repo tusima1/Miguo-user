@@ -7,10 +7,23 @@
     android:background="@color/gray_ee"
     android:orientation="vertical">
 
+    <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
+        android:id="@+id/flow_llay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:background="#f6e4c0"
+        android:orientation="horizontal"
+        android:visibility="gone">
+    </com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <include layout="@layout/title_line"></include>
 
@@ -65,23 +78,36 @@
                     android:background="#f6e4c0"
                     android:orientation="horizontal">
                 </com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu>
-                <FrameLayout
-                    android:id="@+id/content_act_search"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview_frag_sell_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:scrollbars="none" />
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/empty_line"
+                    android:layout_marginTop="@dimen/dp80"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/list_empty"/>
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_text_99"
+                        android:textSize="@dimen/text_size_base"
+                        android:text="启禀了陛下，商家正在赶来的路上"/>
+                </LinearLayout>
             </LinearLayout>
         </com.fanwe.seller.views.customize.MultiScrollView>
 
 
     </LinearLayout>
-
-    <com.miguo.ui.view.dropdown.DropDownMenu
-        android:id="@+id/flow_llay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:background="#f6e4c0"
-        android:orientation="horizontal"
-        android:visibility="gone">
-    </com.miguo.ui.view.dropdown.DropDownMenu>
 </RelativeLayout>

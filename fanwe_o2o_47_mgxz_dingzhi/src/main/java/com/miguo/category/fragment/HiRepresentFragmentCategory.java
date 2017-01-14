@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.Space;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -14,18 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
+import com.fanwe.view.LoadMoreRecyclerView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiRepresentBannerFragmentAdapter;
 import com.miguo.adapter.HiRepresentCateAdapter;
+import com.miguo.adapter.RepresentShopAdapter;
 import com.miguo.dao.GetAdspaceListDao;
 import com.miguo.dao.GetSearchCateConditionDao;
+import com.miguo.dao.GetShopFromParamsDao;
 import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
+import com.miguo.dao.impl.GetShopFromParamsDaoImpl;
 import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.entity.AdspaceListBean;
+import com.miguo.entity.RepresentFilterBean;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.factory.SearchCateConditionFactory;
@@ -43,6 +50,7 @@ import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
+import com.miguo.view.GetShopFromParamsView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -89,13 +97,25 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @ViewInject(R.id.represent_banner)
     RepresentBannerView representBannerView;
 
+    @ViewInject(R.id.recyclerview)
+    LoadMoreRecyclerView recyclerView;
+    RepresentShopAdapter shopAdapter;
+    RepresentFilterBean filterBean;
+
     GetSearchCateConditionDao getSearchCateConditionDao;
     GetAdspaceListDao getAdspaceListDao;
+    GetShopFromParamsDao getShopFromParamsDao;
 
     DropDownPopHelper dropDownPopHelper;
 
     public HiRepresentFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
+    }
+
+    @Override
+    protected void initFirst() {
+        filterBean = new RepresentFilterBean();
+        shopAdapter = new RepresentShopAdapter(getActivity(), new ArrayList());
     }
 
     @Override
@@ -118,12 +138,21 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         initPtrLayout(ptrFrameLayout);
         setTitlePadding(topLayout);
         initBottomSpace();
+        initRecyclerView();
         /**
          * 接口请求
          */
         initSearchCateCondition();
         initAdspaceList();
+        initRepresentShop();
         onRefresh();
+    }
+
+    private void initRecyclerView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(shopAdapter);
+        recyclerView.setNestedScrollingEnabled(false);
+
     }
 
     private void initDropDownPopHelper(){
@@ -176,6 +205,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         setCurrentHttpUuid(UUID.randomUUID().toString());
         getSearchCateConditionDao.getSearchCateCondition();
         getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_SHOP, AdspaceParams.TERMINAL_TYPE);
+        getShopFromParamsDao.getShop(filterBean);
     }
 
     public void loadComplete(){
@@ -203,6 +233,20 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         if(topFakeDropDownMenu.getVisibility() == View.VISIBLE){
             showFakeMenu();
         }
+    }
+
+    private void initRepresentShop(){
+        getShopFromParamsDao = new GetShopFromParamsDaoImpl(new GetShopFromParamsView() {
+            @Override
+            public void getShopFromParamsSuccess(List<ResultBusinessListings> results) {
+                shopAdapter.notifyDataSetChanged(results);
+            }
+
+            @Override
+            public void getShopFromParamsError(String message) {
+
+            }
+        });
     }
 
     /**
@@ -290,11 +334,11 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private void showTopMenu(){
         topFakeDropDownMenu.setVisibility(View.VISIBLE);
-        fakeDropDownMenu.setVisibility(View.GONE);
+        fakeDropDownMenu.setVisibility(View.INVISIBLE);
     }
 
     private void showFakeMenu(){
-        topFakeDropDownMenu.setVisibility(View.GONE);
+        topFakeDropDownMenu.setVisibility(View.INVISIBLE);
         fakeDropDownMenu.setVisibility(View.VISIBLE);
     }
 

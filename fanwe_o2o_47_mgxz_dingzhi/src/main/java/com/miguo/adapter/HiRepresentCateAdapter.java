@@ -1,6 +1,7 @@
 package com.miguo.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +15,11 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
 import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.factory.ClassNameFactory;
+import com.miguo.utils.BaseUtils;
 
 import java.util.List;
 
@@ -134,7 +139,10 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
         }
 
         private void clickImage(){
-
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), ClassNameFactory.getClass(ClassPath.SECOND_REPRESENT));
+            intent.putExtra(IntentKey.FIRST_TYPE, getItem(position).getId());
+            BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 
     }
