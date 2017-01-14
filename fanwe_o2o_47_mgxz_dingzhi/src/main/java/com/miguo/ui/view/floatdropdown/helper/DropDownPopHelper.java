@@ -99,9 +99,9 @@ public class DropDownPopHelper implements PopupWindowLike {
     }
     private void callDismiss(boolean isImmediately){
         if (isImmediately){
-            popup.dismiss();
-        }else {
             dismiss();
+        }else {
+            anchor.handleArrowImageAnim(0);
         }
     }
 
@@ -112,7 +112,7 @@ public class DropDownPopHelper implements PopupWindowLike {
 
     @Override
     public void dismiss() {
-        anchor.handleArrowImageAnim(0);
+        popup.dismiss();
     }
 
     public void setOnDropDownListener(final OnDropDownListener dropDownListener) {

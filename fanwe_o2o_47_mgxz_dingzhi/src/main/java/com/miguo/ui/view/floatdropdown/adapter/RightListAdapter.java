@@ -65,6 +65,10 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
             Log.e("test","请先调用setData()方法,目前数据为null!");
             return;
         }
+        if (singleModes.size()-1 <handlePosition ){
+            Log.e("test","performPosition(int handlePosition)方法,position out of bound!--> except position: "+handlePosition);
+            return;
+        }
         SingleMode singleMode = singleModes.get(handlePosition);
         boolean checked = singleMode.isChecked();
         if (checked){
