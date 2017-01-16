@@ -21,26 +21,33 @@
                 android:layout_height="23dp"
                 android:layout_gravity="center_vertical"
                 android:layout_toRightOf="@+id/frag_home_title_bar_ll_earn"
-                android:background="@drawable/shape_cricle_white_cc_solid_white_stoke_black">
+                android:background="@drawable/shape_cricle_white_cc_represent_search_bar">
 
-                <ImageView
-                    android:id="@+id/frag_home_title_bar_iv_search"
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_search_home_title_v2" />
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/frag_home_title_bar_iv_search"
-                    android:text="可搜索商品、商家、地点"
-                    android:textColor="@color/c_CCCCCC"
-                    android:textSize="12dp" />
+                    <ImageView
+                        android:id="@+id/frag_home_title_bar_iv_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/ic_search_home_title_v2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:text="可搜索商品、商家、地点"
+                        android:textColor="@color/c_CCCCCC"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+
+
 
 
             </RelativeLayout>

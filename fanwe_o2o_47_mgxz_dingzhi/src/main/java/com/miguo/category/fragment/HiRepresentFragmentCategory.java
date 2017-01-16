@@ -132,8 +132,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     boolean touchToMove;
 
-    int pageNum;
-
     public HiRepresentFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
     }
