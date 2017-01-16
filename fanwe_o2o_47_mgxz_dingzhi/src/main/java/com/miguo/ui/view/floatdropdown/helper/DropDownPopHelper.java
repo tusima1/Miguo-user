@@ -166,12 +166,20 @@ public class DropDownPopHelper implements PopupWindowLike {
         popup.performDefaultMarkPositions();
     }
 
-    public void performMarkIds(String id) {
-        if (TextUtils.isEmpty(id)) {
+    public void performMarkIds(String levelOneId,String levelTwoId) {
+        StringBuilder sb=new StringBuilder();
+        if (TextUtils.isEmpty(levelOneId)) {
             return;
         }
+        if (TextUtils.isEmpty(levelTwoId)){
+            sb.append(levelOneId);
+        }else {
+            sb.append(levelOneId);
+            sb.append("-&-");
+            sb.append(levelTwoId);
+        }
         List<String> ids = new ArrayList<>();
-        ids.add(id);
+        ids.add(sb.toString());
         performMarkIds(ids);
     }
 
