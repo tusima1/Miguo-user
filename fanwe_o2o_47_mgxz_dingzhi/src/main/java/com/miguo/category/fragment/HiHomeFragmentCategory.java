@@ -30,6 +30,8 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.adapter.HomebannerPagerAdapter;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
 import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
@@ -45,6 +47,7 @@ import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.CheckCitySignBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.factory.AdspaceTypeFactory;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
 import com.miguo.utils.BaseUtils;
@@ -756,8 +759,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void onActionShopList(String cate_id, String tid) {
-        getHomeViewPager().setCurrentItem(1);
-        ((SellerFragment) ((HomePagerAdapter) getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id, tid);
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ClassNameFactory.getClass(ClassPath.SECOND_REPRESENT));
+        intent.putExtra(IntentKey.FIRST_TYPE, cate_id);
+        intent.putExtra(IntentKey.SECOND_TYPE, tid);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
         /**
          * 如果当前的低栏隐藏了
          */

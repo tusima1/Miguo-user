@@ -1,5 +1,6 @@
 package com.miguo.category.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ import com.miguo.dao.impl.GetAdspaceListDaoImpl;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
 import com.miguo.dao.impl.GetShopFromParamsDaoImpl;
 import com.miguo.definition.AdspaceParams;
+import com.miguo.definition.ClassPath;
 import com.miguo.definition.FilterIndexParams;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.PageSize;
@@ -44,6 +46,7 @@ import com.miguo.entity.RepresentFilterBean;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.factory.AdspaceTypeFactory;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiRepresentCateFragment;
@@ -58,6 +61,7 @@ import com.miguo.ui.view.RepresentViewPager;
 import com.miguo.ui.view.floatdropdown.helper.DropDownPopHelper;
 import com.miguo.ui.view.floatdropdown.interf.OnDropDownListener;
 import com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
@@ -372,8 +376,11 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
      * 跳转到门店列表
      */
     public void onActionShopList(String cate_id, String tid) {
-        getHomeViewPager().setCurrentItem(1);
-        ((SellerFragment) ((HomePagerAdapter) getHomeViewPager().getAdapter()).getItem(2)).handlerCateIdChanged(cate_id, tid);
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ClassNameFactory.getClass(ClassPath.SECOND_REPRESENT));
+        intent.putExtra(IntentKey.FIRST_TYPE, cate_id);
+        intent.putExtra(IntentKey.SECOND_TYPE, tid);
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
         /**
          * 如果当前的低栏隐藏了
          */
