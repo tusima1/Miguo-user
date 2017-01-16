@@ -238,6 +238,16 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         scrollview.loadComplite();
     }
 
+    public void loadCompleteWithNoData(){
+        ptrFrameLayout.refreshComplete();
+        scrollview.loadCompliteWithNoData();
+    }
+
+    public void loadCompleteWithNetworkError(){
+        ptrFrameLayout.refreshComplete();
+        scrollview.loadCompliteWithError();
+    }
+
     /**
      *
      * @param index 1/2/3/4
@@ -269,18 +279,14 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         if(null != pair.first){
             filterBean.setAreaOne(pair.first.getSingleId());
         }
-        if(null != pair.second){
-            filterBean.setAreaTwo(pair.second.getSingleId());
-        }
+        filterBean.setAreaTwo(isSecondEmpty(pair) ? "" : pair.second.getSingleId());
     }
 
     private void handleItemSelectCategory(Pair<SingleMode, SingleMode> pair){
         if(null != pair.first){
             filterBean.setCategoryOne(pair.first.getSingleId());
         }
-        if(null != pair.second){
-            filterBean.setCategoryTwo(pair.second.getSingleId());
-        }
+        filterBean.setCategoryTwo(isSecondEmpty(pair) ? "" : pair.second.getSingleId());
     }
 
     private void handleItemSelectsIntel(Pair<SingleMode, SingleMode> pair){
@@ -290,14 +296,17 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     }
 
     private void handleItemSelectFilter(List<SingleMode> items){
-        if(SDCollectionUtil.isEmpty(items)){
-            return;
-        }
         String ids = "";
-        for(int i = 0; i < items.size(); i++){
-            ids = ids + (i == 0 ? "" : ",") + items.get(i).getSingleId();
+        if(!SDCollectionUtil.isEmpty(items)){
+            for(int i = 0; i < items.size(); i++){
+                ids = ids + (i == 0 ? "" : ",") + items.get(i).getSingleId();
+            }
         }
         filterBean.setFilter(ids);
+    }
+
+    private boolean isSecondEmpty(Pair<SingleMode, SingleMode> pair){
+        return null == pair.second;
     }
 
     @Override
@@ -413,13 +422,22 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             @Override
             public void getShopFromParamsLoadMoreSuccess(List<ModelBusinessListings> results) {
                 filterBean.setPageNum(filterBean.getPageNum() + 1);
+                if(SDCollectionUtil.isEmpty(results)){
+                    loadCompleteWithNoData();
+                    return;
+                }
                 shopAdapter.notifyDataSetChangedLoadmore(results);
                 loadComplete();
             }
 
             @Override
             public void getShopFromParamsError(String message) {
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadCompleteWithNetworkError();
+                    }
+                });
             }
         });
     }
