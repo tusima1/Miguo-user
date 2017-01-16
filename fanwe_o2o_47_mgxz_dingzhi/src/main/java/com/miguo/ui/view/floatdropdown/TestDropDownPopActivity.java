@@ -68,8 +68,9 @@ public class TestDropDownPopActivity extends AppCompatActivity {
 //                ids.add("popularity");
 //                ids.add("36531bd0-51c0-4f88-bb41-f2534b986118");
 //                ids.add("6b430429-081f-48a6-a092-a3bdd1b4ad63");
-                popHelper.performMarkIds("72");
+//                popHelper.performMarkIds("72");
 //                popHelper.performMarkIds(ids);
+                popHelper.performDefaultMarkPositions();
             }
         });
     }

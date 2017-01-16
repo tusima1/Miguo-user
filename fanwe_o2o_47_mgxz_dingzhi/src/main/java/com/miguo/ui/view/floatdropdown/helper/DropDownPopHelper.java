@@ -152,6 +152,13 @@ public class DropDownPopHelper implements PopupWindowLike {
         }
     }
 
+    /**
+     * 选中默认的位置
+     */
+    public void performDefaultMarkPositions(){
+        popup.performDefaultMarkPositions();
+    }
+
     public void performMarkIds(String id) {
         if (TextUtils.isEmpty(id)) {
             return;

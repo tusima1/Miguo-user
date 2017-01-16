@@ -2,6 +2,7 @@ package com.miguo.ui.view.floatdropdown.view;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -222,5 +223,11 @@ public class SearchView extends FrameLayout implements ExpandReverse {
 
     public String getEditText(){
         return editText.getText().toString().trim();
+    }
+
+    public void setText(String text){
+        if (!TextUtils.isEmpty(text)){
+            editText.setText(text);
+        }
     }
 }

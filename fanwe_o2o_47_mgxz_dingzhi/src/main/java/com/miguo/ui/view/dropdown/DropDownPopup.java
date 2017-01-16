@@ -56,13 +56,6 @@ public class DropDownPopup extends PopupWindow{
     private ValueAnimator fadeOut;
     private View fakeView;
 
-    //------------------------------
-    private ValueAnimator expandAnimator;
-    private ValueAnimator reverseAnimator;
-
-    private int expandDuration = 250;
-    private int reverseDuration = 300;
-
     public DropDownPopup(Activity mHoldActivity,View anchor) {
         this.mHoldActivity = mHoldActivity;
         this.anchor = anchor;
@@ -379,6 +372,9 @@ public class DropDownPopup extends PopupWindow{
      *           有二级: 返回二级的id数据
      */
     private void findItemLocation(String id) {
+        if (saveBody == null){
+            return;
+        }
         List<TwoMode> item1 = mergeDataForItem1(saveBody.getNearByList(), saveBody
                 .getHotAreaList1(), saveBody.getAdminAreaList());
         List<TwoMode> item2 = mergeDataForItem1(saveBody.getCategoryList());
