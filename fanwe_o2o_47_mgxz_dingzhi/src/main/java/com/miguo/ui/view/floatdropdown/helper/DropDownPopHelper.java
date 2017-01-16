@@ -187,7 +187,7 @@ public class DropDownPopHelper implements PopupWindowLike {
      * 你希望选中哪些item,把他们的 id 传进去就好了
      * @param ids
      */
-    public void performMarkIds(List<String> ids) {
+    private void performMarkIds(List<String> ids) {
         if (ids != null && ids.size() > 0) {
             popup.performMarkIds(ids);
         }

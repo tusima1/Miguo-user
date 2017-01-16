@@ -234,7 +234,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean) {
 
             if (helper != null && !TextUtils.isEmpty(typeBean.getId())) {
-                helper.performMarkIds(typeBean.getId());
+                helper.performMarkIds(category_one,typeBean.getId());
                 currentSecondTypeStr = typeBean.getId();
                 category_two = currentSecondTypeStr;
 
