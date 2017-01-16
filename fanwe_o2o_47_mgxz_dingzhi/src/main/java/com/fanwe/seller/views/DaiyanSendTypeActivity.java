@@ -76,9 +76,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     private SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean currentSecondType;
     private HashMap<Integer, SecondTypeFragment> secondFragmentList;
     private int currentFirstTypePosition = -1;
-    private int currentSecondTypePosition = -1;
-    private String currentFirstTypeStr;
-    private String currentSecondTypeStr;
+
     private HashMap<String, List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean>> allTypes;
     private LinearLayout topView;
     private FakeDropDownMenu mFlowView;
@@ -174,10 +172,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if (mDatas == null) {
             return;
         }
-        //设置被选中的情形。
-        if (!TextUtils.isEmpty(currentFirstTypeStr) || currentFirstType != null) {
 
-        }
 
     }
 
@@ -202,15 +197,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     private void getIntentData() {
         Intent intent = getIntent();
-        currentFirstTypeStr = intent.getStringExtra("firstType");
-        currentSecondTypeStr = intent.getStringExtra("secondType");
+        category_one = intent.getStringExtra("firstType");
+        category_two = intent.getStringExtra("secondType");
 
-        if (!TextUtils.isEmpty(currentFirstTypeStr)) {
-            category_one = currentFirstTypeStr;
-            if (!TextUtils.isEmpty(currentSecondTypeStr)) {
-                category_two = currentSecondTypeStr;
-            }
-        }
 
     }
 
@@ -220,8 +209,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         mViewPager.setNeedScroll(false);
         mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragmentList));
 
-        if (!TextUtils.isEmpty(currentFirstTypeStr)) {
-            currentFirstTypePosition = getPositionByFirstTypeId(currentFirstTypeStr);
+        if (!TextUtils.isEmpty(category_one)) {
+            currentFirstTypePosition = getPositionByFirstTypeId(category_one);
         }
         if (currentFirstTypePosition != -1) {
             mHorizontalScrollView.scrollToIndex(currentFirstTypePosition);
@@ -234,10 +223,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean) {
 
             if (helper != null && !TextUtils.isEmpty(typeBean.getId())) {
-                helper.performMarkIds(typeBean.getId());
-                currentSecondTypeStr = typeBean.getId();
-                category_two = currentSecondTypeStr;
-
+                helper.performMarkIds(category_one,typeBean.getId());
+                category_two = typeBean.getId();
                 requestData(true);
             }
         }
@@ -255,9 +242,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean entity = mDatas.get(i);
             secondDatas = allTypes.get(entity.getId());
             if (secondDatas != null && secondDatas.size() > 0) {
-                if (entity.isChecked() && !TextUtils.isEmpty(currentSecondTypeStr)) {
+                if (entity.isChecked() && !TextUtils.isEmpty(category_two)) {
                     for (int k = 0; k < secondDatas.size(); k++) {
-                        if (secondDatas.get(k).getId().equals(currentSecondTypeStr)) {
+                        if (secondDatas.get(k).getId().equals(category_two)) {
                             secondDatas.get(k).setChecked(true);
                             currentSecondType = secondDatas.get(k);
                         }
@@ -312,9 +299,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                                 } else {
                                     isNeedPopviewUpdate = true;
                                 }
-
-                            currentFirstTypeStr = selectedId;
-                            category_one = selectedId;
+                           category_one = selectedId;
                             requestData(true);
                         }
                         updateHorizontalScrollViewItem(oldView, false);
@@ -336,7 +321,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                             isNeedPopviewUpdate = true;
                         }
 
-                    currentFirstTypeStr = selectedId;
                     category_one = selectedId;
                     requestData(true);
                 }
@@ -407,25 +391,26 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if (secondTypeFragment != null && secondTypeFragment.getFragments() != null && secondTypeFragment.getFragments().size() > 0) {
             for (int i = 0; i < secondTypeFragment.getFragments().size(); i++) {
                 FirstFragment firstFragment = secondTypeFragment.getFragments().get(i);
-                int selectedSecondType=0;
+                int selectedSecondType = 0;
                 List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> datas = firstFragment.getDataList();
-                for (int j = 0; j < datas.size(); j++) {
-                    if (!TextUtils.isEmpty(currentSecondTypeStr) && datas.get(j).getId().equals(currentSecondTypeStr)) {
-                        firstFragment.setLastSelectedPosition(j);
-                        selectedSecondType = j;
-                        datas.get(j).setChecked(true);
-                    } else {
-                        datas.get(j).setChecked(false);
+                if (datas != null) {
+                    for (int j = 0; j < datas.size(); j++) {
+                        if (!TextUtils.isEmpty(category_two) && datas.get(j).getId().equals(category_two)) {
+                            firstFragment.setLastSelectedPosition(j);
+                            selectedSecondType = j;
+                            datas.get(j).setChecked(true);
+                        } else {
+                            datas.get(j).setChecked(false);
+                        }
                     }
-                }
-                if(selectedSecondType==0){
-                    currentSecondTypeStr = datas.get(0).getId();
-                    category_two = currentSecondTypeStr;
-                    datas.get(0).setChecked(true);
-                }
+                    if (selectedSecondType == 0) {
+                        category_two = datas.get(0).getId();
+                        datas.get(0).setChecked(true);
+                    }
 
-                if (firstFragment.getmDPGridViewAdapter() != null && firstFragment.getmDPGridViewAdapter().getmDataList() != null) {
-                    firstFragment.notifyAdapterChange();
+                    if (firstFragment.getmDPGridViewAdapter() != null && firstFragment.getmDPGridViewAdapter().getmDataList() != null) {
+                        firstFragment.notifyAdapterChange();
+                    }
                 }
             }
         }
@@ -810,9 +795,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             mHorizontalScrollView.scrollToIndex(position);
             if (position != -1) {
                 if (secondType != null && !TextUtils.isEmpty(secondType.getSingleId())) {
-                    currentSecondTypeStr = secondType.getSingleId();
+                    category_two = secondType.getSingleId();
                 } else {
-                    currentSecondTypeStr = "";
+                    category_two= "";
                 }
                 updateCurrentItem(position);
             }
