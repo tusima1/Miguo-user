@@ -26,7 +26,7 @@ import com.miguo.live.model.getLiveListNew.ModelHost;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.NetWorkStateUtil;
 
 import java.util.List;

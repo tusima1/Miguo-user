@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 
 /**
@@ -57,7 +57,7 @@ public class BaseHorizantalScrollView extends HorizontalScrollView{
     }
 
     public int getScreenWidth(){
-        return BaseUtils.getWidth(getContext());
+        return BaseUtils.getWidth();
     }
 
     public int geScreenHeight(){

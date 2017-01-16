@@ -16,7 +16,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.category.dialog.DialogCategory;
 import com.miguo.live.views.dialog.BaseDialog;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 /**
  * 购物后分享得佣金

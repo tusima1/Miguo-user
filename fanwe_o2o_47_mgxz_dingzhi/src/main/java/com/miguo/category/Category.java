@@ -16,7 +16,7 @@ import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.listener.Listener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.live.views.view.BaseView;
 
 /**
@@ -249,7 +249,7 @@ public abstract class Category implements BaseView {
 
 
     public int getScreenWidth(){
-        return BaseUtils.getWidth(getActivity());
+        return BaseUtils.getWidth();
     }
 
     public int getScreenHeight(){

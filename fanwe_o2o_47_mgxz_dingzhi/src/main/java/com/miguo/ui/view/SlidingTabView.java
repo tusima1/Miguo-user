@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 
 /**
@@ -179,7 +179,7 @@ public class SlidingTabView extends LinearLayout {
     }
 
     private int getTabWidth(double num){
-        int screenWidth = BaseUtils.getWidth(getContext());
+        int screenWidth = BaseUtils.getWidth();
         int width = (int) (screenWidth / num);
         return width;
     }

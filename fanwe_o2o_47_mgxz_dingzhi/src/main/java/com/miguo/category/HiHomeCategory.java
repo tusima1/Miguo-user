@@ -49,7 +49,7 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
@@ -321,7 +321,7 @@ public class HiHomeCategory extends Category implements
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
                 intent.putExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, true);
-                com.miguo.utils.BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
+                BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.LOGIN_SUCCESS_FOR_DIAMON);
                 getDiamondLoginDialog.dismiss();
             }
         });

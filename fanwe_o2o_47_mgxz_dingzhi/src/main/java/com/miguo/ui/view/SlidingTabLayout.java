@@ -19,7 +19,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 
 /**
@@ -63,7 +63,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         setFillViewport(true);
         titleOffset = (int) (TITLE_OFFSET_DIPS * getResources().getDisplayMetrics().density);
         addView(tabStrip, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        width = BaseUtils.getWidth(context);
+        width = BaseUtils.getWidth();
     }
 
     public void setViewPager(ViewPager viewPager,int pageNum) {
@@ -225,7 +225,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     }
 
     private void setTabWidth(int num){
-        int screenWidth = BaseUtils.getWidth(getContext());
+        int screenWidth = BaseUtils.getWidth();
         int width = screenWidth / num;
         setSingleTabWidth(width);
     }

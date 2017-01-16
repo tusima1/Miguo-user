@@ -30,7 +30,7 @@ import com.miguo.dao.ShoppingCartDao;
 import com.miguo.dao.impl.ShoppingCartDaoImpl;
 import com.miguo.framework.WebActionJSHandler;
 import com.miguo.listener.HiWebPageListener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.view.ShoppingCartView;
 
 /**

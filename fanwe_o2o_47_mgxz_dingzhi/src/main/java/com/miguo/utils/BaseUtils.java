@@ -23,8 +23,8 @@ public class BaseUtils {
     /**
      * 获取宽度
      */
-    public static int getWidth(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    public static int getWidth() {
+        WindowManager wm = (WindowManager) App.getInstance().getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getWidth();
     }
 
@@ -32,7 +32,7 @@ public class BaseUtils {
      * 获取屏幕高度
      */
     public static int getHeight(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) App.getInstance().getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getHeight();
     }
 
@@ -78,20 +78,17 @@ public class BaseUtils {
      * 跳转到新到activity
      */
     public static void jumpToNewActivity(Activity activity, Intent intent) {
-        intent.putExtra("index", 0);
-//        activity.startParallaxSwipeBackActivty(activity, intent);
         activity.startActivity(intent);
-//        ((Activity)activity).overridePendingTransition(R.anim.translate_left,R.anim.translate_right);
+        activity.overridePendingTransition(R.anim.translate_left,R.anim.translate_right);
     }
 
     /**
      * 跳转到新到activit并且结束当前Activity
      */
     public static void jumpToNewActivityWithFinish(Activity activity, Intent intent) {
-//        activity.startParallaxSwipeBackActivty(activity, intent);
         activity.startActivity(intent);
         activity.finish();
-//        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
     }
 
     /**
@@ -132,18 +129,21 @@ public class BaseUtils {
      * 销毁activity
      */
     public static void finishActivity(Activity activity) {
-//        VoicePlayer.creat(activity).stop();
         activity.finish();
         activity.overridePendingTransition(R.anim.translate_left_out, R.anim.translate_right_out);
     }
 
+    public static int dip2px(float dpValue) {
+        return dip2px(null, dpValue);
+    }
+
     public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+        final float scale = App.getInstance().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
     public static int px2dip(Context context, float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+        final float scale = App.getInstance().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
 

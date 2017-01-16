@@ -20,7 +20,7 @@ import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.live.views.dialog.HintHostDialog;
 import com.miguo.live.views.dialog.HintMemberDialog;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.live.views.view.PlayBackActivity;
 import com.miguo.utils.NetWorkStateUtil;
 import com.sunday.eventbus.SDEventManager;

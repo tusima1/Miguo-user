@@ -11,23 +11,11 @@ public class DanmuBean implements Serializable{
     String content;
     String name;
     String url;
-    String[] avatars = {
-            "http://img.xiaoneiit.com/avatar/1.jpg",
-            "http://img.xiaoneiit.com/avatar/2.jpg",
-            "http://img.xiaoneiit.com/avatar/3.jpg",
-            "http://img.xiaoneiit.com/avatar/4.jpg",
-            "http://img.xiaoneiit.com/avatar/5.jpg",
-            "http://img.xiaoneiit.com/avatar/6.jpg",
-            "http://img.xiaoneiit.com/avatar/7.jpg",
-            "http://img.xiaoneiit.com/avatar/8.jpg"
-
-    };
 
     public DanmuBean(int avatar, String content, String name) {
         this.avatar = avatar;
         this.content = content;
         this.name = name;
-        setUrl(avatars[avatar]);
     }
 
     public DanmuBean(String avatar, String content, String name) {

@@ -16,7 +16,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.HomeLiveFragmentRecyclerView;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.presenters.LiveHttpHelper;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.tencent.imcore.Context;
 
 import java.util.ArrayList;

@@ -20,7 +20,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;

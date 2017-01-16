@@ -12,7 +12,7 @@ import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.views.LiveStartActivity;
 import com.miguo.live.views.LiveStartAuthActivity;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.BarryTab;
 
 /**

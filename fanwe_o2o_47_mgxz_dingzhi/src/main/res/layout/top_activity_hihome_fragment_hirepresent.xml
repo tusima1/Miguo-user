@@ -16,7 +16,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
-                android:id="@+id/frag_home_title_bar_ll_search"
+                android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
                 android:layout_gravity="center_vertical"

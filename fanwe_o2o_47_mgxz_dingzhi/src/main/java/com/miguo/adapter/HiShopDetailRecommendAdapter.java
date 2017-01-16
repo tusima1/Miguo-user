@@ -21,7 +21,7 @@ import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.entity.HiShopDetailBean;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.DisplayUtil;
 
 import java.util.ArrayList;

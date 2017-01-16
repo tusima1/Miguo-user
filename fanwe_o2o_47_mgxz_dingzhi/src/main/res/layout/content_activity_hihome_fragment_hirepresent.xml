@@ -76,6 +76,14 @@
 
             </com.fanwe.view.LoadMoreRecyclerView>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/space_layput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
