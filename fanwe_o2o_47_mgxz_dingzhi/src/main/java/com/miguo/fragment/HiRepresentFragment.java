@@ -27,7 +27,7 @@ public class HiRepresentFragment extends HiBaseFragment {
 
     public void updateFromCityChanged(){
         if(null != getCategory()){
-            getCategory().onRefresh();
+            getCategory().onRefreshFromCityChanged();
         }
     }
 

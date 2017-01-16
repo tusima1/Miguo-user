@@ -121,6 +121,9 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     RepresentShopAdapter shopAdapter;
     RepresentFilterBean filterBean;
 
+    @ViewInject(R.id.space_layput)
+    LinearLayout spaceLayout;
+
     GetSearchCateConditionDao getSearchCateConditionDao;
     GetAdspaceListDao getAdspaceListDao;
     GetShopFromParamsDao getShopFromParamsDao;
@@ -162,7 +165,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     protected void init() {
         initPtrLayout(ptrFrameLayout);
         setTitlePadding(topLayout);
-        initBottomSpace();
         initRecyclerView();
         /**
          * 接口请求
@@ -188,6 +190,52 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
                 clickMenu();
             }
         });
+    }
+
+    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
+        ptrFrameLayout.disableWhenHorizontalMove(true);
+        ptrFrameLayout.setEnabledNextPtrAtOnce(false);
+        MaterialHeader ptrHead = new MaterialHeader(getActivity());
+        ptrHead.setPadding(0, 24, 0, 24);
+        ptrFrameLayout.setHeaderView(ptrHead);
+        ptrFrameLayout.addPtrUIHandler(ptrHead);
+        /**
+         * 设置下拉刷新回调
+         */
+        ptrFrameLayout.setPtrHandler(this);
+    }
+
+    @Override
+    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+        return isTouchToMove() && scrollview.canRefresh();
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout frame) {
+        onRefresh();
+    }
+
+    public void onRefresh(){
+        filterBean.setPageNum(PageSize.BASE_NUMBER_ONE);
+        setCurrentHttpUuid(UUID.randomUUID().toString());
+        setTouchToMove(true);
+        getSearchCateConditionDao.getSearchCateCondition();
+        getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_SHOP, AdspaceParams.TERMINAL_TYPE);
+        onRefreshShopList();
+    }
+
+    public void onRefreshFromCityChanged(){
+        filterBean = new RepresentFilterBean();
+        onRefresh();
+    }
+
+    private void onRefreshShopList(){
+        getShopFromParamsDao.getShop(filterBean);
+    }
+
+    public void loadComplete(){
+        ptrFrameLayout.refreshComplete();
+        scrollview.loadComplite();
     }
 
     /**
@@ -250,54 +298,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             ids = ids + (i == 0 ? "" : ",") + items.get(i).getSingleId();
         }
         filterBean.setFilter(ids);
-    }
-
-    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
-        ptrFrameLayout.disableWhenHorizontalMove(true);
-        ptrFrameLayout.setEnabledNextPtrAtOnce(false);
-        MaterialHeader ptrHead = new MaterialHeader(getActivity());
-        ptrHead.setPadding(0, 24, 0, 24);
-        ptrFrameLayout.setHeaderView(ptrHead);
-        ptrFrameLayout.addPtrUIHandler(ptrHead);
-        /**
-         * 设置下拉刷新回调
-         */
-        ptrFrameLayout.setPtrHandler(this);
-    }
-
-    private void initBottomSpace(){
-        BarryTab tab = (BarryTab) getActivity().findViewById(R.id.tab);
-        RelativeLayout.LayoutParams params = getRelativeLayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, tab.getMeasuredHeight());
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-//        tabSpace.setLayoutParams(params);
-    }
-
-    @Override
-    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-        return isTouchToMove() && scrollview.canRefresh();
-    }
-
-    @Override
-    public void onRefreshBegin(PtrFrameLayout frame) {
-        onRefresh();
-    }
-
-    public void onRefresh(){
-        filterBean.setPageNum(PageSize.BASE_NUMBER_ONE);
-        setCurrentHttpUuid(UUID.randomUUID().toString());
-        setTouchToMove(true);
-        getSearchCateConditionDao.getSearchCateCondition();
-        getAdspaceListDao.getAdspaceList(getCurrentHttpUuid(), AppRuntimeWorker.getCity_id(), AdspaceParams.TYPE_SHOP, AdspaceParams.TERMINAL_TYPE);
-        onRefreshShopList();
-    }
-
-    private void onRefreshShopList(){
-        getShopFromParamsDao.getShop(filterBean);
-    }
-
-    public void loadComplete(){
-        ptrFrameLayout.refreshComplete();
-        scrollview.loadComplite();
     }
 
     @Override
