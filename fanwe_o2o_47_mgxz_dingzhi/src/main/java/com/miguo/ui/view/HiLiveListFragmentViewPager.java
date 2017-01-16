@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.fanwe.BaseActivity;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.app.HiHomeActivity;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 /**
  * Created by Administrator on 2016/11/22.

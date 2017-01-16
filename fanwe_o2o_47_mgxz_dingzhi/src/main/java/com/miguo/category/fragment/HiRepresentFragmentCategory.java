@@ -85,6 +85,9 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @ViewInject(R.id.scroll_layout)
     LinearLayout scrollLayout;
 
+    @ViewInject(R.id.search_bar)
+    RelativeLayout searchBar;
+
     @ViewInject(R.id.coorddinatorlayout)
     RecyclerBounceNestedScrollView scrollview;
 
@@ -146,6 +149,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     @Override
     protected void setFragmentListener() {
+        searchBar.setOnClickListener(listener);
         scrollview.setOnRecyclerScrollViewListener(this);
         representBannerView.setOnRepresentBannerClickListener(this);
     }

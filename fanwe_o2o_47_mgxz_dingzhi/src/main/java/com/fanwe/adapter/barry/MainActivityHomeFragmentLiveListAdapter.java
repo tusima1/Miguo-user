@@ -25,7 +25,7 @@ import com.miguo.live.model.getLiveListNew.ModelHost;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.DisplayUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
@@ -43,7 +43,7 @@ public class MainActivityHomeFragmentLiveListAdapter extends BarryBaseRecyclerAd
 
     public MainActivityHomeFragmentLiveListAdapter(Activity activity, List datas) {
         super(activity, datas);
-        width = BaseUtils.getWidth(activity);
+        width = BaseUtils.getWidth();
     }
 
     @Override

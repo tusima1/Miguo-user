@@ -53,7 +53,7 @@ import com.miguo.entity.HiShopDetailBean;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.ShopDetailPagerItemFragmet;
 import com.miguo.listener.HiShopDetailListener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.ShopDetailTagView;
 import com.miguo.ui.view.ShopDetailViewPager;

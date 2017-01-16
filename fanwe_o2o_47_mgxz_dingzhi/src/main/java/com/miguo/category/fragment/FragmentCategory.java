@@ -14,7 +14,7 @@ import com.fanwe.app.App;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.FragmentListener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 
 /**
@@ -180,7 +180,7 @@ public abstract class FragmentCategory {
     }
 
     public int getScreenWidth(){
-        return BaseUtils.getWidth(getActivity());
+        return BaseUtils.getWidth();
     }
 
     public int getScreenHeight(){

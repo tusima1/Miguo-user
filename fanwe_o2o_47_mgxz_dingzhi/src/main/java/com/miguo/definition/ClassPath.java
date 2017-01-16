@@ -84,5 +84,11 @@ public class ClassPath {
      */
     public static final String SECOND_REPRESENT = "com.fanwe.seller.views.DaiyanSendTypeActivity";
 
+    /**
+     * 搜索引导页
+     * {@link com.miguo.ui.view.floatdropdown.SearchGuideActivity}
+     */
+    public static final String SEARCH_GUIDE = "com.miguo.ui.view.floatdropdown.SearchGuideActivity";
+
 
 }

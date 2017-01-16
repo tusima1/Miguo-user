@@ -11,7 +11,7 @@ import com.miguo.definition.AdspaceParams;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 /**
  * Created by zlh/狗蛋哥/Barry on 2016/11/2.
@@ -43,7 +43,7 @@ public class AdspaceTypeFactory {
     private static void goGoodsDetail(Activity context, String type_id){
         Intent intent = new Intent(context, ClassNameFactory.getClass(ClassPath.GOODS_DETAIL_ACTIVITY));
         intent.putExtra(GoodsDetailActivity.EXTRA_GOODS_ID, type_id);
-        com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(context, intent);
+        BaseUtils.jumpToNewActivity(context, intent);
     }
 
     /**
@@ -54,7 +54,7 @@ public class AdspaceTypeFactory {
     private static void goShopDetail(Activity context, String type_id){
         Intent intent = new Intent(context, ClassNameFactory.getClass(ClassPath.SHOP_DETAIL_ACTIVITY));
         intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, type_id);
-        com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(context, intent);
+        BaseUtils.jumpToNewActivity(context, intent);
     }
 
     /**
@@ -67,7 +67,7 @@ public class AdspaceTypeFactory {
         Bundle bundle = new Bundle();
         bundle.putString(IntentKey.SPECIAL_TOPIC_ID, type_id);
         intent.putExtras(bundle);
-        com.miguo.live.views.utils.BaseUtils.jumpToNewActivity(context, intent);
+        BaseUtils.jumpToNewActivity(context, intent);
     }
 
     /**

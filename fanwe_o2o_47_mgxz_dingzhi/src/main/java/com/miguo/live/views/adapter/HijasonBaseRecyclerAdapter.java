@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.fanwe.app.App;
 import com.miguo.listener.Listener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 import java.util.List;
 
@@ -136,7 +136,7 @@ public abstract class HijasonBaseRecyclerAdapter extends RecyclerView.Adapter{
     }
 
     public int getScreenWidth(){
-        return BaseUtils.getWidth(activity);
+        return BaseUtils.getWidth();
     }
 
     public int geScreenHeight(){

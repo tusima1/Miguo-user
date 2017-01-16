@@ -13,7 +13,7 @@ import com.miguo.category.HiWebPageCategory;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.ResultCode;
 import com.miguo.factory.ClassNameFactory;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/11/8.

@@ -16,7 +16,7 @@ import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.factory.ClassNameFactory;
 import com.fanwe.search.views.SearchResultActivity;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeTagsView;
 

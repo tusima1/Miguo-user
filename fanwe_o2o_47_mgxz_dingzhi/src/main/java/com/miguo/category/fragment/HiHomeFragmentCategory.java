@@ -47,7 +47,7 @@ import com.miguo.entity.MenuBean;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.AutoBanner;
 import com.miguo.ui.view.AutofitTextView;
 import com.miguo.ui.view.BarryTab;

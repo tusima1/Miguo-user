@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.ViewConfiguration;
 
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 /**
  * Created by zlh on 2016/9/23.

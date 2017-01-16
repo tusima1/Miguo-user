@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.miguo.live.views.utils.BaseUtils;
+import com.miguo.utils.BaseUtils;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public abstract class BaseLinearLayout extends LinearLayout{
     }
 
     public int getScreenWidth(){
-        return BaseUtils.getWidth(getContext());
+        return BaseUtils.getWidth();
     }
 
     public int getScreenHeight(){

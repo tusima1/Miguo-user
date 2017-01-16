@@ -18,7 +18,6 @@ import com.miguo.definition.PageSize;
 import com.miguo.entity.ModelFeaturedGroupBuy;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiHomeFragment;
-import com.miguo.live.views.utils.BaseUtils;
 import com.miguo.view.FeaturedGrouponView;
 
 import java.util.ArrayList;
