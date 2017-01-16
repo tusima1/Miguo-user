@@ -176,12 +176,16 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
                 saveUserSearchData();
             }
             //TODO 跳转
-            Intent intent = new Intent();
-            intent.setClass(this, SearchResultActivity.class);
-            startActivity(intent);
-
-
+            gotoSearchResultActivity(searchWord);
         }
+    }
+
+    private void gotoSearchResultActivity(String keyword){
+        Intent intent = new Intent();
+        intent.putExtra("keyword",keyword);
+        intent.setClass(this, SearchResultActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void updateHistoryAera(){
@@ -244,6 +248,6 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onRvItemClick(View view, int position, String s) {
-        MGToast.showToast(s);
+        gotoSearchResultActivity(s);
     }
 }

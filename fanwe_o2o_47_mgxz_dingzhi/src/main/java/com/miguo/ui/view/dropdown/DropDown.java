@@ -93,6 +93,9 @@ public class DropDown extends LinearLayout implements PopupWindowLike,ExpandReve
      * @param order
      */
     private void clickOrder(int order){
+        if (contentViewList==null || contentViewList.size()!=4){
+            return;
+        }
         contentLayout.removeAllViews();
         contentLayout.setVisibility(VISIBLE);
 

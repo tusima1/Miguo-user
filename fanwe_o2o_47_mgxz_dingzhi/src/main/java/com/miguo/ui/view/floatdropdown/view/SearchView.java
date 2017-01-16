@@ -228,6 +228,7 @@ public class SearchView extends FrameLayout implements ExpandReverse {
     public void setText(String text){
         if (!TextUtils.isEmpty(text)){
             editText.setText(text);
+            editText.setSelection(text.length());
         }
     }
 }

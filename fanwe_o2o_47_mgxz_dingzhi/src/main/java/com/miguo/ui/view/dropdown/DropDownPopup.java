@@ -204,7 +204,18 @@ public class DropDownPopup extends PopupWindow{
         List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
         handleData(item1,item2,item3,item4);
     }
-
+    public void updateData(SearchCateConditionBean.ResultBean.BodyBean newBody){
+        if (newBody ==null){
+            return;
+        }
+        this.saveBody = newBody;
+        List<TwoMode> item1 = mergeDataForItem1(newBody.getNearByList(), newBody
+                .getHotAreaList1(), newBody.getAdminAreaList());
+        List<TwoMode> item2 = mergeDataForItem1(newBody.getCategoryList());
+        List<SingleMode> item3 = mergeDataForItem3(newBody.getIntelList1().get(0).getIntelList2());
+        List<TwoMode> item4 = mergeDataForItem1(newBody.getFilterList1().get(0).getFilterList2());
+        handleDataAgain(item1,item2,item3,item4);
+    }
     private boolean isDataOk(List list){
         return !(list == null || list.size()<=0);
     }
@@ -275,6 +286,17 @@ public class DropDownPopup extends PopupWindow{
     private void handleData(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
         if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
             dropDownView.prepareContentView(prepareContentView(item1,item2,item3,item4));
+            dropDownView.setInitOk(true);
+        }else {
+            dropDownView.setInitOk(false);
+        }
+    }
+    private void handleDataAgain(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
+        if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
+            ((TwoSideListView)dropDownView.getContentViewList().get(1)).setData(item1);
+            ((TwoSideListView)dropDownView.getContentViewList().get(2)).setData(item2);
+            ((SingleSideListView)dropDownView.getContentViewList().get(3)).setData(item3);
+            ((FilterView)dropDownView.getContentViewList().get(4)).setData(item4);
             dropDownView.setInitOk(true);
         }else {
             dropDownView.setInitOk(false);

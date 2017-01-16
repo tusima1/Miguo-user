@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 
+import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
@@ -149,6 +150,12 @@ public class DropDownPopHelper implements PopupWindowLike {
         anchor.setTitleText(index, text);
         if (fakeDDM != null) {
             fakeDDM.setTitleText(index, text);
+        }
+    }
+
+    public void updateData(SearchCateConditionBean.ResultBean.BodyBean newBody){
+        if (newBody!=null){
+            popup.updateData(newBody);
         }
     }
 
