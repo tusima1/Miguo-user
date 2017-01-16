@@ -121,6 +121,12 @@ public class SellerListAdapter extends RecyclerView.Adapter<SellerListAdapter.MV
 
     }
 
+
+
+    public void setListData(List<ModelBusinessListings> listData) {
+        this.listData = listData;
+    }
+
     public class MViewHolder extends RecyclerView.ViewHolder {
         public ImageView iv_image, iv_tag_tuan, iv_represent;
         public View viewHolderImage;
