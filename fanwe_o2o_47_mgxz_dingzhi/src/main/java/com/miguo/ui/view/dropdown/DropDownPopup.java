@@ -438,7 +438,7 @@ public class DropDownPopup extends PopupWindow{
             for (int j = 0; j < singleModeList.size(); j++) {
                 SingleMode mode = singleModeList.get(j);
                 String one = twoMode.getSingleId();
-                if (idOne.equalsIgnoreCase(mode.getSingleId()) && idOne.equalsIgnoreCase(one)){
+                if (idTwo.equalsIgnoreCase(mode.getSingleId()) && idOne.equalsIgnoreCase(one)){
                     if (location2==null){
                         location2 = new DropDownMarkBean(i,j,mode.getName());
                     }
