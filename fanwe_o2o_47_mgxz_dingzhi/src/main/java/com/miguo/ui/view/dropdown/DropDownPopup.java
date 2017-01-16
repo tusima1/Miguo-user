@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -54,13 +55,6 @@ public class DropDownPopup extends PopupWindow{
     private ValueAnimator fadeIn;
     private ValueAnimator fadeOut;
     private View fakeView;
-
-    //------------------------------
-    private ValueAnimator expandAnimator;
-    private ValueAnimator reverseAnimator;
-
-    private int expandDuration = 250;
-    private int reverseDuration = 300;
 
     public DropDownPopup(Activity mHoldActivity,View anchor) {
         this.mHoldActivity = mHoldActivity;
@@ -210,7 +204,18 @@ public class DropDownPopup extends PopupWindow{
         List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
         handleData(item1,item2,item3,item4);
     }
-
+    public void updateData(SearchCateConditionBean.ResultBean.BodyBean newBody){
+        if (newBody ==null){
+            return;
+        }
+        this.saveBody = newBody;
+        List<TwoMode> item1 = mergeDataForItem1(newBody.getNearByList(), newBody
+                .getHotAreaList1(), newBody.getAdminAreaList());
+        List<TwoMode> item2 = mergeDataForItem1(newBody.getCategoryList());
+        List<SingleMode> item3 = mergeDataForItem3(newBody.getIntelList1().get(0).getIntelList2());
+        List<TwoMode> item4 = mergeDataForItem1(newBody.getFilterList1().get(0).getFilterList2());
+        handleDataAgain(item1,item2,item3,item4);
+    }
     private boolean isDataOk(List list){
         return !(list == null || list.size()<=0);
     }
@@ -286,6 +291,17 @@ public class DropDownPopup extends PopupWindow{
             dropDownView.setInitOk(false);
         }
     }
+    private void handleDataAgain(List<TwoMode> item1,List<TwoMode> item2 ,List<SingleMode> item3,List item4) {
+        if (isDataOk(item1) && isDataOk(item2) && isDataOk(item3) && isDataOk(item4)){
+            ((TwoSideListView)dropDownView.getContentViewList().get(1)).setData(item1);
+            ((TwoSideListView)dropDownView.getContentViewList().get(2)).setData(item2);
+            ((SingleSideListView)dropDownView.getContentViewList().get(3)).setData(item3);
+            ((FilterView)dropDownView.getContentViewList().get(4)).setData(item4);
+            dropDownView.setInitOk(true);
+        }else {
+            dropDownView.setInitOk(false);
+        }
+    }
     private List<TwoMode> mergeDataForItem1(List... array){
         if (array == null || array.length==0)return null;
         List<TwoMode> list=new ArrayList<>();
@@ -332,6 +348,18 @@ public class DropDownPopup extends PopupWindow{
         for (String id : ids) {
             findItemLocation(id);
         }
+        performMarkPositions();
+    }
+
+    public void performDefaultMarkPositions(){
+        location1 = new DropDownMarkBean(0,0,"");
+        location2 = new DropDownMarkBean(0,0,"");
+        location3 = new DropDownMarkBean(0,-1,"");
+        location4.clear();
+        performMarkPositions();
+    }
+
+    private void performMarkPositions(){
         if (location1!=null){
             ((TwoSideListView)dropDownView.getContentViewList().get(1)).performPosition(location1.getLevelOne(),location1.getLevelTwo());
             handleTextChange(1,location1.getName());
@@ -348,10 +376,13 @@ public class DropDownPopup extends PopupWindow{
             //Do Not Need Text Change
             ((FilterView)dropDownView.getContentViewList().get(4)).performSelectedItems(location4);
         }
-
     }
 
     private void handleTextChange(int index,String text){
+        //没有数据不刷新
+        if (TextUtils.isEmpty(text)){
+            return;
+        }
         if (textChangedListener!=null){
             textChangedListener.onTitleTextChange(index,text);
         }
@@ -363,6 +394,9 @@ public class DropDownPopup extends PopupWindow{
      *           有二级: 返回二级的id数据
      */
     private void findItemLocation(String id) {
+        if (saveBody == null){
+            return;
+        }
         List<TwoMode> item1 = mergeDataForItem1(saveBody.getNearByList(), saveBody
                 .getHotAreaList1(), saveBody.getAdminAreaList());
         List<TwoMode> item2 = mergeDataForItem1(saveBody.getCategoryList());

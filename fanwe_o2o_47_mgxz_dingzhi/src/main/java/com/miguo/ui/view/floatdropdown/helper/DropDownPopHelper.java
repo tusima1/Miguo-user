@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 
+import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.ui.view.dropdown.DropDownPopup;
 import com.miguo.ui.view.dropdown.interf.PopupWindowLike;
@@ -96,11 +97,11 @@ public class DropDownPopHelper implements PopupWindowLike {
         });
     }
     private void callDismiss(boolean isImmediately){
-        anchor.resetLastPosition();
         if (isImmediately){
-            dismiss();
+            popup.dismiss();
         }else {
             anchor.handleArrowImageAnim(0);
+            anchor.resetLastPosition();
         }
     }
 
@@ -111,8 +112,7 @@ public class DropDownPopHelper implements PopupWindowLike {
 
     @Override
     public void dismiss() {
-        anchor.resetLastPosition();
-        popup.dismiss();
+        callDismiss(false);
     }
 
     public void setOnDropDownListener(final OnDropDownListener dropDownListener) {
@@ -151,6 +151,19 @@ public class DropDownPopHelper implements PopupWindowLike {
         if (fakeDDM != null) {
             fakeDDM.setTitleText(index, text);
         }
+    }
+
+    public void updateData(SearchCateConditionBean.ResultBean.BodyBean newBody){
+        if (newBody!=null){
+            popup.updateData(newBody);
+        }
+    }
+
+    /**
+     * 选中默认的位置
+     */
+    public void performDefaultMarkPositions(){
+        popup.performDefaultMarkPositions();
     }
 
     public void performMarkIds(String id) {

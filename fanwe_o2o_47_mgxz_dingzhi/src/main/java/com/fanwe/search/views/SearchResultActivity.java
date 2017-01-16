@@ -26,10 +26,10 @@ public class SearchResultActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_search);
+        getData();
         preWidget();
         preView();
         setListener();
-        getData();
     }
 
     public void onClick(View v) {
@@ -141,10 +141,16 @@ public class SearchResultActivity extends FragmentActivity {
 
     private void preView() {
         initFragment();
+        if (!TextUtils.isEmpty(keyword)){
+            searchView.setText(keyword);
+            searchAction();
+        }
     }
 
     private void getData() {
-
+        if (getIntent() != null) {
+            keyword = getIntent().getStringExtra("keyword");
+        }
     }
 
 
