@@ -96,10 +96,17 @@ public class TwoSideListView extends LinearLayout implements SetDropDownListener
             public void onItemClick(View v, final int position, final List<SingleMode> singleModes) {
                 Log.e("test","left item click: "+ position);
                 currLeftMarkPosition =position;
+                final List singleModeList = data.get(position).getSingleModeList();
+                //当不存在二级列表时,选中二级就直接回调!(产品需求)
+                if (singleModeList == null || singleModeList.size() == 0){
+                    if (onDropDownSelectedListener!=null){
+                        onDropDownSelectedListener.onDropDownSelected(data.get(position),null);
+                    }
+                }
                 leftListView.post(new Runnable() {
                     @Override
                     public void run() {
-                        rightAdapter.updateData(data.get(position).getSingleModeList());
+                        rightAdapter.updateData(singleModeList);
                     }
                 });
             }

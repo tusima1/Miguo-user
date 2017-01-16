@@ -59,7 +59,7 @@ public class RepresentFilterBean implements Serializable {
         setKeyword("");
         setPageNum(PageSize.BASE_NUMBER_ONE);
         setPageSize(PageSize.BASE_PAGE_SIZE);
-        setMerchantType("0");
+        setMerchantType("1");
         setSortType("");
     }
 
