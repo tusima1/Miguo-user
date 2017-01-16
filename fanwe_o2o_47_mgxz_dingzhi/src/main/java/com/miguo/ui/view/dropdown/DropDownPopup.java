@@ -403,12 +403,27 @@ public class DropDownPopup extends PopupWindow{
         List<SingleMode> item3 = mergeDataForItem3(saveBody.getIntelList1().get(0).getIntelList2());
         List<TwoMode> item4 = mergeDataForItem1(saveBody.getFilterList1().get(0).getFilterList2());
 
+        String idOne="";
+        String idTwo="";
+        if (id.contains("-&-")){
+            String[] split = id.split("-&-");
+            if (split.length!=2){
+                return;
+            }else {
+                idOne = split[0];
+                idTwo = split[1];
+            }
+        }else {
+            idOne = id;
+        }
         //1
         for (int i = 0; i < item1.size(); i++) {
-            List<SingleMode> singleModeList = item1.get(i).getSingleModeList();
+            TwoMode twoMode = item1.get(i);
+            List<SingleMode> singleModeList = twoMode.getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
                 SingleMode mode = singleModeList.get(j);
-                if (id.equalsIgnoreCase(mode.getSingleId())){
+                String one = twoMode.getSingleId();
+                if (idTwo.equalsIgnoreCase(mode.getSingleId()) && idOne.equalsIgnoreCase(one)){
                     if (location1==null){
                         location1 = new DropDownMarkBean(i,j,mode.getName());
                     }
@@ -418,10 +433,12 @@ public class DropDownPopup extends PopupWindow{
         }
         //2
         for (int i = 0; i < item2.size(); i++) {
-            List<SingleMode> singleModeList = item2.get(i).getSingleModeList();
+            TwoMode twoMode = item2.get(i);
+            List<SingleMode> singleModeList = twoMode.getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
                 SingleMode mode = singleModeList.get(j);
-                if (id.equalsIgnoreCase(singleModeList.get(j).getSingleId())){
+                String one = twoMode.getSingleId();
+                if (idTwo.equalsIgnoreCase(mode.getSingleId()) && idOne.equalsIgnoreCase(one)){
                     if (location2==null){
                         location2 = new DropDownMarkBean(i,j,mode.getName());
                     }
@@ -432,7 +449,7 @@ public class DropDownPopup extends PopupWindow{
         //3
         for (int i = 0; i < item3.size(); i++) {
             SingleMode mode = item3.get(i);
-            if (id.equalsIgnoreCase(mode.getSingleId())){
+            if (idOne.equalsIgnoreCase(mode.getSingleId())){
                 if (location3 == null){
                     location3 = new DropDownMarkBean(i,-1,mode.getName());
                 }
@@ -446,7 +463,7 @@ public class DropDownPopup extends PopupWindow{
             List<SingleMode> singleModeList = item4.get(i).getSingleModeList();
             for (int j = 0; j < singleModeList.size(); j++) {
                 SingleMode mode = singleModeList.get(j);
-                if (id.equalsIgnoreCase(mode.getSingleId())){
+                if (idOne.equalsIgnoreCase(mode.getSingleId())){
                     location4.add(id);
                     return;
                 }

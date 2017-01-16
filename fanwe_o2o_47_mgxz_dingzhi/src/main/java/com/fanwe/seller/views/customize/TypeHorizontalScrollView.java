@@ -45,7 +45,6 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
     public interface OnItemClickListener {
         void onClick(View lastView, View view, int pos);
     }
-
     private CurrentTypeChangeListener mListener;
 
     private OnItemClickListener mOnClickListener;
@@ -241,7 +240,6 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
         }
         initOldView();
         mListener.onCurrentTypeChanged(oldView, mFristIndex, mContainer.getChildAt(0));
-
     }
 
     /**
@@ -341,10 +339,10 @@ public class TypeHorizontalScrollView extends HorizontalScrollView implements
                 mContainer.getChildAt(i).setBackgroundColor(Color.WHITE);
             }
             initOldView();
-
             mOnClickListener.onClick(oldView, v, mViewPos.get(v));
             lastPosition = mViewPos.get(v);
             oldView = v;
+
         }
     }
 

@@ -166,12 +166,20 @@ public class DropDownPopHelper implements PopupWindowLike {
         popup.performDefaultMarkPositions();
     }
 
-    public void performMarkIds(String id) {
-        if (TextUtils.isEmpty(id)) {
+    public void performMarkIds(String levelOneId,String levelTwoId) {
+        StringBuilder sb=new StringBuilder();
+        if (TextUtils.isEmpty(levelOneId)) {
             return;
         }
+        if (TextUtils.isEmpty(levelTwoId)){
+            sb.append(levelOneId);
+        }else {
+            sb.append(levelOneId);
+            sb.append("-&-");
+            sb.append(levelTwoId);
+        }
         List<String> ids = new ArrayList<>();
-        ids.add(id);
+        ids.add(sb.toString());
         performMarkIds(ids);
     }
 
@@ -179,7 +187,7 @@ public class DropDownPopHelper implements PopupWindowLike {
      * 你希望选中哪些item,把他们的 id 传进去就好了
      * @param ids
      */
-    public void performMarkIds(List<String> ids) {
+    private void performMarkIds(List<String> ids) {
         if (ids != null && ids.size() > 0) {
             popup.performMarkIds(ids);
         }

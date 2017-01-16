@@ -179,7 +179,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     }
 
-    private void initDropDownPopHelper(){
+    private void initDropDownPopHelper(){;
         dropDownPopHelper = new DropDownPopHelper(getActivity(),topFakeDropDownMenu, fakeDropDownMenu );
         dropDownPopHelper.setOnDropDownListener(this);
         fakeDropDownMenu.setOnFakeClickListener(new View.OnClickListener() {
