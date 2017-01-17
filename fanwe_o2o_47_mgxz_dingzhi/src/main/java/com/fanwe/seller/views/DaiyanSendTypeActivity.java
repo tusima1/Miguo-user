@@ -611,7 +611,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if (!isLoadmore) {
             items.clear();
         }
-        items.addAll(models);
+        if (models != null && models.size()>0){
+            items.addAll(models);
+        }
         //是否显示空的列表样式 。
         if (items != null && items.size() > 0) {
             ifShowEmptyListView(false);
@@ -695,6 +697,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     @Override
                     public void run() {
                         ResultBusinessListings resultTemp = results.get(0);
+                        if (resultTemp.getShop_list()==null || resultTemp.getShop_list().size()<=0){
+                            setData(null);
+                            return;
+                        }
                         pageBean = resultTemp.getPage();
                         pageNum = Integer.valueOf(pageBean.getPage());
                         pageNum++;
