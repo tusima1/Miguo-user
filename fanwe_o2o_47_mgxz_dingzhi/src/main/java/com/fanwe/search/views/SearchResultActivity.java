@@ -28,6 +28,7 @@ public class SearchResultActivity extends FragmentActivity {
         setContentView(R.layout.act_search);
         getData();
         preWidget();
+        initFragment();
         preView();
         setListener();
     }
@@ -118,6 +119,7 @@ public class SearchResultActivity extends FragmentActivity {
             }
             if (fragmentGoods == null) {
                 fragmentGoods = new FragmentSearchGoods();
+                fragmentGoods.initSearchKeyword(keyword);
                 ft.add(R.id.content_act_search, fragmentGoods);
             } else {
                 ft.show(fragmentGoods);
@@ -140,7 +142,6 @@ public class SearchResultActivity extends FragmentActivity {
     }
 
     private void preView() {
-        initFragment();
         if (!TextUtils.isEmpty(keyword)){
             searchView.setText(keyword);
             searchAction();
