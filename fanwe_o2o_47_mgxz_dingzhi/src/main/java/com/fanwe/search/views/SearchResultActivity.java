@@ -7,7 +7,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fanwe.cache.CacheUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.ui.view.floatdropdown.interf.OnSearchActionListener;
 import com.miguo.ui.view.floatdropdown.view.SearchView;
 
 /**
@@ -175,6 +177,7 @@ public class SearchResultActivity extends FragmentActivity {
         if (TextUtils.isEmpty(keyword)) {
             //do nothing
         } else {
+            CacheUtil.getInstance().saveUserSearchWord(keyword);
             searchByKeyword(keyword);
         }
     }
@@ -186,5 +189,12 @@ public class SearchResultActivity extends FragmentActivity {
         searchView = ((SearchView) findViewById(R.id.searchView));
         left = findViewById(R.id.left);
         right = findViewById(R.id.right);
+
+        searchView.setSearchActionListener(new OnSearchActionListener() {
+            @Override
+            public void doSearch(String keyword) {
+                searchAction();
+            }
+        });
     }
 }

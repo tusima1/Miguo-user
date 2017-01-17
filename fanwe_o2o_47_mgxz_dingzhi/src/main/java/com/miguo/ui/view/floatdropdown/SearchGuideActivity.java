@@ -19,7 +19,7 @@ import com.miguo.entity.HotWordsBean;
 import com.miguo.ui.view.floatdropdown.adapter.SearchGuideAdapter;
 import com.miguo.ui.view.floatdropdown.decoration.SearchItemDecoration;
 import com.miguo.ui.view.floatdropdown.interf.OnRvItemClickListener;
-import com.miguo.ui.view.floatdropdown.interf.OnTextChangedListener;
+import com.miguo.ui.view.floatdropdown.interf.OnSearchActionListener;
 import com.miguo.ui.view.floatdropdown.view.SearchView;
 
 import java.util.ArrayList;
@@ -64,10 +64,10 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
         rv_history = (RecyclerView)findViewById(R.id.rv_history);
 
 
-        searchView.setTextChangedListener(new OnTextChangedListener() {
+        searchView.setSearchActionListener(new OnSearchActionListener() {
             @Override
-            public void onTextChanged(boolean isEmpty, CharSequence str) {
-//                Toast.makeText(SearchGuideActivity.this, "isEmpty: "+ isEmpty +"    str: "+str, Toast.LENGTH_SHORT).show();
+            public void doSearch(String keyword) {
+                searchAction();
             }
         });
 

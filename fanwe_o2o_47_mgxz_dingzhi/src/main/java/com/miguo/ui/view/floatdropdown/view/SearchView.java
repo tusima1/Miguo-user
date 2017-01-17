@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.o2o.miguo.R;
@@ -87,9 +85,14 @@ public class SearchView extends FrameLayout implements ExpandReverse {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Log.e("test","actionId: "+actionId);
                 if (actionId == EditorInfo.IME_ACTION_DONE){
-                    Toast.makeText(getContext(), "actionId: "+actionId, Toast.LENGTH_SHORT).show();
+                    String editText = getEditText();
+                    if (TextUtils.isEmpty(editText)){
+                        return false;
+                    }
+                    if (searchActionListener!=null){
+                        searchActionListener.doSearch(editText);
+                    }
                     return true;
                 }
                 return false;
