@@ -13,7 +13,7 @@ android {
         targetSdkVersion 24
 
         versionCode 2017010303
-        versionName "5.7.10"
+        versionName "5.7.10.d"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7

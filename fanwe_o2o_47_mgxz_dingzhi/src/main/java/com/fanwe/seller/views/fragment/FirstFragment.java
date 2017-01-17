@@ -30,56 +30,58 @@ import java.util.List;
  */
 public class FirstFragment extends Fragment {
 
-    private int mImageResId;
-    private String mIndex;
     private GridView mGridView;
     DPGridViewAdapter mDPGridViewAdapter;
-    private int lastSelectedPosition=0;
-    public SecondSmallTypeChangeListener smallTypeChangeListener;
+    private int lastSelectedPosition = 0;
+
 
     private List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> mDataList = new ArrayList<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean>();
 
     private SecondTypeClickListener secondTypeClickListener;
+    private int childPosition = -1;
+    /**
+     * 对应的上层父亲fragment
+     */
+    private SecondTypeFragment bigFragment;
+
     public FirstFragment() {
         super();
+
+
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle arguments = getArguments();
-//        if (arguments != null) {
-//            mImageResId = arguments.getInt(MeiTuanActivity.KEY_IMAGE);
-//            mIndex = arguments.getString(MeiTuanActivity.KEY_INDEX);
-//        }
-    }
 
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.gridview, container, false);
-        mGridView = (GridView)view.findViewById(R.id.gridview);
+        mGridView = (GridView) view.findViewById(R.id.gridview);
         mDPGridViewAdapter = new DPGridViewAdapter(getActivity(), mDataList, R.layout.gridview_item);
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(mDataList==null||mDPGridViewAdapter==null){
+                if (mDataList == null || mDPGridViewAdapter == null) {
                     return;
                 }
-                if(lastSelectedPosition==position){
+                if (lastSelectedPosition == position) {
                     mDataList.get(position).setChecked(true);
-                }else{
+                } else {
                     mDataList.get(position).setChecked(true);
                     mDataList.get(lastSelectedPosition).setChecked(false);
                     lastSelectedPosition = position;
                 }
-                secondTypeClickListener.onItemClickListner(mDataList.get(position));
+                secondTypeClickListener.onItemClickListner(bigFragment, childPosition, mDataList.get(position));
 
                 notifyAdapterChange();
-//                smallTypeChangeListener.smallTypeChange(mDataList.get(position));
+
             }
         });
         mGridView.setNumColumns(4);
@@ -91,42 +93,34 @@ public class FirstFragment extends Fragment {
 
     public void setmDataList(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> mDataList) {
         this.mDataList = mDataList;
-        if(mDPGridViewAdapter!=null){
+        if (mDPGridViewAdapter != null) {
             mDPGridViewAdapter.notifyDataSetChanged();
         }
     }
-    public List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> getDataList(){
+
+    public List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> getDataList() {
         return this.mDataList;
     }
+
     //取消当前adapter里面被选中的状态
-    public void removeSelectedState(){
-         mDataList.get(lastSelectedPosition).setChecked(false);
-         notifyAdapterChange();
+    public void removeSelectedState() {
+        mDataList.get(lastSelectedPosition).setChecked(false);
+        notifyAdapterChange();
     }
 
-    public void notifyAdapterChange(){
-        MGUIUtil.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mDPGridViewAdapter.notifyDataSetChanged();
-            }
-        });
+    public void notifyAdapterChange() {
+        if (mDPGridViewAdapter != null) {
+            MGUIUtil.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mDPGridViewAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
-    public interface  SecondSmallTypeChangeListener{
-        public void smallTypeChange(TypeModel model);
-    }
-
-    public SecondSmallTypeChangeListener getSmallTypeChangeListener() {
-        return smallTypeChangeListener;
-    }
-
-    public void setSmallTypeChangeListener(SecondSmallTypeChangeListener smallTypeChangeListener) {
-        this.smallTypeChangeListener = smallTypeChangeListener;
-    }
-
-    public interface  SecondTypeClickListener{
-        public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean);
+    public interface SecondTypeClickListener {
+        public void onItemClickListner(SecondTypeFragment bigFrag, int childPosition, SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean);
     }
 
     public SecondTypeClickListener getSecondTypeClickListener() {
@@ -151,6 +145,30 @@ public class FirstFragment extends Fragment {
 
     public void setLastSelectedPosition(int lastSelectedPosition) {
         this.lastSelectedPosition = lastSelectedPosition;
+    }
+
+    public int getChildPosition() {
+        return childPosition;
+    }
+
+    public void setChildPosition(int childPosition) {
+        this.childPosition = childPosition;
+    }
+
+    public SecondTypeFragment getBigFragment() {
+        return bigFragment;
+    }
+
+    public void setBigFragment(SecondTypeFragment bigFragment) {
+        this.bigFragment = bigFragment;
+    }
+
+    public void updateCheckType(int newPosition, boolean ifCheck) {
+        mDataList.get(lastSelectedPosition).setChecked(false);
+        if (ifCheck) {
+            mDataList.get(newPosition).setChecked(true);
+        }
+        notifyAdapterChange();
     }
 }
 

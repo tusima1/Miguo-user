@@ -25,6 +25,7 @@ public class TestDropDownPopActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test_drop_down_pop);
 
         FakeDropDownMenu anchor = (FakeDropDownMenu) findViewById(R.id.anchor);
+        int a = 1/0;
         popHelper = new DropDownPopHelper(this,anchor);
 
         popHelper.setOnDropDownListener(new OnDropDownListener() {

@@ -112,8 +112,6 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     //排序
     public static List<ModelShopListNavs> navs;
 
-    //自动登录中
-    public static boolean isLoging = false;
     /**
      * 当前系统时间。
      */
@@ -137,7 +135,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     private void init() {
         mApp = this;
         //crash日志捕获
-        CrashHandler.getInstance().setCrashHanler(getApplicationContext());
+        CrashHandler.getInstance().initCrashHandler(getApplicationContext());
         ImageLoaderManager.initImageLoader();
         initSDLibrary();
 
