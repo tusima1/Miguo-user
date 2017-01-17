@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.ui.view.dropdown.interf.ExpandReverse;
 import com.miguo.ui.view.floatdropdown.interf.OnCallDismissPopListener;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
  * Description: 
  */
 
-public class FakeDropDownMenu extends LinearLayout implements View.OnClickListener,ExpandReverse{
+public class FakeDropDownMenu extends LinearLayout implements View.OnClickListener{
     private List<String> defaultNames;
     private TextView tv_name1;
     private TextView tv_name2;
@@ -116,6 +115,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
     }
 
     public void handleArrowImageAnim(int index){//when fakeView click,make index == 0 to dismiss pop and reverse arrow imageView.
+        if (fake)return;
         if (index == 0){
             reverseAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(lastPosition),"rotation",180f,360f);
             reverseAnimator.start();
@@ -186,16 +186,6 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
 
     public void setIsFake(boolean isFake) {
         this.fake= isFake;
-    }
-
-    @Override
-    public void expand() {
-        if (fake)return;
-    }
-
-    @Override
-    public void reverse() {
-        if (fake)return;
     }
 
     public interface OnFakeTitleTabClickListener{

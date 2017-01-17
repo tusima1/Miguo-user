@@ -64,7 +64,7 @@
                 android:id="@+id/menu"
                 android:background="@color/main_color_press"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"/>
+                android:layout_height="wrap_content"/>
 
 
 
