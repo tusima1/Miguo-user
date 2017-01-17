@@ -381,6 +381,9 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
      * 跳转到门店列表
      */
     public void onActionShopList(String cate_id, String tid) {
+        if(cate_id == null || cate_id.equals("")){
+            return;
+        }
         Intent intent = new Intent();
         intent.setClass(getActivity(), ClassNameFactory.getClass(ClassPath.SECOND_REPRESENT));
         intent.putExtra(IntentKey.FIRST_TYPE, cate_id);

@@ -759,6 +759,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     @Override
     public void onActionShopList(String cate_id, String tid) {
+        if(cate_id == null || cate_id.equals("")){
+            return;
+        }
         Intent intent = new Intent();
         intent.setClass(getActivity(), ClassNameFactory.getClass(ClassPath.SECOND_REPRESENT));
         intent.putExtra(IntentKey.FIRST_TYPE, cate_id);
