@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.definition.FilterIndexParams;
+import com.miguo.definition.PageSize;
 import com.miguo.entity.SingleMode;
 import com.miguo.groupon.listener.IDataInterface;
 import com.miguo.groupon.views.FragmentFeaturedGroupon;
@@ -27,10 +30,11 @@ import java.util.List;
  * Created by qiang.chen on 2017/1/6.
  */
 
-public class FragmentSearchGoods extends Fragment implements IDataInterface {
+public class FragmentSearchGoods extends Fragment implements IDataInterface ,OnDropDownListener{
     private LinearLayout layoutEmpty;
     private FakeDropDownMenu ddm;
     private DropDownPopHelper popHelper;
+    String keywords;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,40 +64,12 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface {
         }
     }
 
+    public void initSearchKeyword(String keyword){
+        this.keywords = keyword;
+    }
+
     private void setListener() {
-        popHelper.setOnDropDownListener(new OnDropDownListener() {
-            @Override
-            public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
-                if (index == 4) {
-                    if (items != null) {
-                        MGToast.showToast("数量: " + items.size());
-                    }
-
-                } else {
-                    SingleMode first = pair.first;
-                    SingleMode second = pair.second;
-                    String singleId1 = "无";
-                    String singleId2 = "无";
-                    if (first != null) {
-                        singleId1 = first.getSingleId();
-                    }
-                    if (second != null) {
-                        singleId2 = second.getSingleId();
-                    }
-                    MGToast.showToast("一级id: " + singleId1 + "   二级id: " + singleId2);
-
-                    String titleName = "";
-                    if (pair.second != null) {
-                        titleName = pair.second.getName();
-                    } else {
-                        titleName = pair.first.getName();
-                    }
-                    popHelper.setTitleText(index, titleName);
-                }
-
-                popHelper.dismiss();
-            }
-        });
+        popHelper.setOnDropDownListener(this);
         layoutEmpty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +78,70 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface {
                 }
             }
         });
+    }
+
+    /**
+     *
+     * @param index 1/2/3/4
+     * @param pair 附近、分类、排序的左右数据id
+     * @param items 筛选的数据只有在index为4的时候
+     */
+    @Override
+    public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List<SingleMode> items) {
+        switch (index){
+            case FilterIndexParams.NEAR_BY:
+                handleItemSelectNearBy(pair);
+                break;
+            case FilterIndexParams.CATEGORY:
+                handleItemSelectCategory(pair);
+                break;
+            case FilterIndexParams.INTEL:
+                handleItemSelectsIntel(pair);
+                break;
+            case FilterIndexParams.FILTER:
+                handleItemSelectFilter(items);
+                break;
+        }
+        onRefreshShopList();
+        popHelper.dismiss();
+    }
+
+    private void onRefreshShopList(){
+        if (fragmentGoods != null) {
+            fragmentGoods.refresh();
+        }
+    }
+
+    private void handleItemSelectNearBy(Pair<SingleMode, SingleMode> pair){
+        fragmentGoods.area_one = isFirstEmpty(pair) ? "" : pair.first.getSingleId();
+        fragmentGoods.area_two = isSecondEmpty(pair) ? "" : pair.second.getSingleId();
+    }
+
+    private void handleItemSelectCategory(Pair<SingleMode, SingleMode> pair){
+        fragmentGoods.category_one = isFirstEmpty(pair) ? "" : pair.first.getSingleId();
+        fragmentGoods.category_two = isSecondEmpty(pair) ? "" : pair.second.getSingleId();
+    }
+
+    private void handleItemSelectsIntel(Pair<SingleMode, SingleMode> pair){
+        fragmentGoods.sort_type = isFirstEmpty(pair) ? "" : pair.first.getSingleId();
+    }
+
+    private void handleItemSelectFilter(List<SingleMode> items){
+        String ids = "";
+        if(!SDCollectionUtil.isEmpty(items)){
+            for(int i = 0; i < items.size(); i++){
+                ids = ids + (i == 0 ? "" : ",") + items.get(i).getSingleId();
+            }
+        }
+        fragmentGoods.filter = ids;
+    }
+
+    private boolean isSecondEmpty(Pair<SingleMode, SingleMode> pair){
+        return null == pair.second;
+    }
+
+    private boolean isFirstEmpty(Pair<SingleMode, SingleMode> pair){
+        return null == pair.first;
     }
 
     private FragmentGoodsList fragmentGoods;
@@ -117,6 +157,7 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface {
         if (fragmentGoods == null) {
             fragmentGoods = new FragmentGoodsList();
             fragmentGoods.setIDataInterface(this);
+            fragmentGoods.keyword = keywords;
             fragmentGoods.refresh();
             ft.add(R.id.content_frag_search, fragmentGoods);
         } else {

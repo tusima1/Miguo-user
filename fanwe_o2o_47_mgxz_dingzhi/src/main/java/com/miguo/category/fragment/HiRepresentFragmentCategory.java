@@ -274,23 +274,17 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     }
 
     private void handleItemSelectNearBy(Pair<SingleMode, SingleMode> pair){
-        if(null != pair.first){
-            filterBean.setAreaOne(pair.first.getSingleId());
-        }
+        filterBean.setAreaOne(isFirstEmpty(pair) ? "" : pair.first.getSingleId());
         filterBean.setAreaTwo(isSecondEmpty(pair) ? "" : pair.second.getSingleId());
     }
 
     private void handleItemSelectCategory(Pair<SingleMode, SingleMode> pair){
-        if(null != pair.first){
-            filterBean.setCategoryOne(pair.first.getSingleId());
-        }
+        filterBean.setCategoryOne(isFirstEmpty(pair) ? "" : pair.first.getSingleId());
         filterBean.setCategoryTwo(isSecondEmpty(pair) ? "" : pair.second.getSingleId());
     }
 
     private void handleItemSelectsIntel(Pair<SingleMode, SingleMode> pair){
-        if(null != pair.first){
-            filterBean.setSortType(pair.first.getSingleId());
-        }
+        filterBean.setSortType(isFirstEmpty(pair) ? "" : pair.first.getSingleId());
     }
 
     private void handleItemSelectFilter(List<SingleMode> items){
@@ -305,6 +299,10 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private boolean isSecondEmpty(Pair<SingleMode, SingleMode> pair){
         return null == pair.second;
+    }
+
+    private boolean isFirstEmpty(Pair<SingleMode, SingleMode> pair){
+        return null == pair.first;
     }
 
     @Override
