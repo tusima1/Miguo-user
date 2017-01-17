@@ -100,7 +100,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     ImageView qrScran;
 
     @ViewInject(R.id.frag_home_title_bar_ll_search)
-    RelativeLayout searchLayout;
+    LinearLayout searchLayout;
 
     @ViewInject(R.id.frag_home_title_bar_ll_msg)
     LinearLayout messageLayout;
@@ -239,6 +239,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         messageLayout.setOnClickListener(listener);
         areaLayout.setOnClickListener(listener);
         searchLayout.setOnClickListener(listener);
+        titleLayout.setOnClickListener(listener);
         qrScran.setOnClickListener(listener);
         citySayHi.setOnClickListener(listener);
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener) listener);
