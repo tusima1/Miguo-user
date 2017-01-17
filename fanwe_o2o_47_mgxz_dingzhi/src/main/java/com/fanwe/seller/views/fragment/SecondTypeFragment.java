@@ -25,6 +25,9 @@ public class SecondTypeFragment extends Fragment {
     public List<FirstFragment> fragments;
     private CircleIndicator mIndicator;
 
+    private ChangeChildFragmentsState changeChildFragmentsState;
+
+    private int selectedChildFragment =0;
     public SecondTypeFragment() {
         super();
     }
@@ -48,5 +51,26 @@ public class SecondTypeFragment extends Fragment {
 
     public void setFragments(List<FirstFragment> fragments) {
         this.fragments = fragments;
+    }
+
+    public int getSelectedChildFragment() {
+        return selectedChildFragment;
+    }
+
+    public void setSelectedChildFragment(int selectedChildFragment) {
+        this.selectedChildFragment = selectedChildFragment;
+    }
+
+    public interface  ChangeChildFragmentsState{
+        public void  removeUnCheckedState();
+
+    }
+
+    public ChangeChildFragmentsState getChangeChildFragmentsState() {
+        return changeChildFragmentsState;
+    }
+
+    public void setChangeChildFragmentsState(ChangeChildFragmentsState changeChildFragmentsState) {
+        this.changeChildFragmentsState = changeChildFragmentsState;
     }
 }

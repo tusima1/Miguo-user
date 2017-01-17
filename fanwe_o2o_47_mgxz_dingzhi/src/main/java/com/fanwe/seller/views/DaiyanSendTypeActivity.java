@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.PageBean;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -60,9 +62,6 @@ import java.util.List;
 
 public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener, CallbackView, OnDropDownListener {
 
-
-    public static final String COLLECT = "collect";
-    public static final String REPRESENT = "represent";
     private TypeHorizontalScrollView mHorizontalScrollView;
 
     private DPViewPager mViewPager;
@@ -128,6 +127,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     boolean isNeedPopviewUpdate = true;
 
     int displayHeight = 0;
+    boolean isFirstCome = false;
 
     public DaiyanSendTypeActivity() {
     }
@@ -141,14 +141,15 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         title_line = (RelativeLayout) findViewById(R.id.title_line);
         fakeFlowLine = (FakeDropDownMenu) findViewById(R.id.fake_flow_llay);
         whitebg = (LinearLayout) findViewById(R.id.whitebg);
+        mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
         mHorizontalScrollView = (TypeHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
         getIntentData();
         initTitle();
         getConditionData();
         initHorizontalScrollView();
         createSecondViewPager();
-
         initScrollView();
+        chagneWithIntentData();
     }
 
     @Override
@@ -172,8 +173,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if (mDatas == null) {
             return;
         }
-
-
     }
 
     /**
@@ -198,6 +197,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     private void getIntentData() {
         Intent intent = getIntent();
         category_one = intent.getStringExtra("firstType");
+        if(ServerUrl.DEBUG){
+            category_one = "represent";
+        }
         category_two = intent.getStringExtra("secondType");
 
 
@@ -211,23 +213,53 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
         if (!TextUtils.isEmpty(category_one)) {
             currentFirstTypePosition = getPositionByFirstTypeId(category_one);
+        }else{
+            //默认第一个分类的第一个全部被选中。
+            currentFirstTypePosition = 0;
+            category_two="";
         }
+
+    }
+    private void chagneWithIntentData(){
         if (currentFirstTypePosition != -1) {
+            isFirstCome = true;
             mHorizontalScrollView.scrollToIndex(currentFirstTypePosition);
-            updateCurrentItem(currentFirstTypePosition);
+
+        }
+        if(currentFirstTypePosition!=-1&&currentFirstTypePosition!=0){
+            mScrollView.smoothScrollTo(currentFirstTypePosition*57,0);
         }
     }
 
+    public SecondTypeFragment.ChangeChildFragmentsState changeChildFragmentsState = new SecondTypeFragment.ChangeChildFragmentsState() {
+        @Override
+        public void removeUnCheckedState() {
+
+        }
+    };
+
     public FirstFragment.SecondTypeClickListener secondTypeClickListener = new FirstFragment.SecondTypeClickListener() {
         @Override
-        public void onItemClickListner(SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean) {
-
+        public void onItemClickListner(SecondTypeFragment bigFrag, int childPosition, SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean) {
+            if(bigFrag!=null){
+                bigFrag.setSelectedChildFragment(childPosition);
+               List<FirstFragment> list =bigFrag.getFragments();
+                if(list!=null) {
+                    for (int i = 0; i<list.size() ;i++ ){
+                        if(i!=childPosition){
+                            FirstFragment fragment = list.get(i);
+                            fragment.removeSelectedState();
+                        }
+                    }
+                }
+            }
             if (helper != null && !TextUtils.isEmpty(typeBean.getId())) {
-                helper.performMarkIds(category_one,typeBean.getId());
                 category_two = typeBean.getId();
+                helper.performMarkIds(category_one, typeBean.getId());
                 requestData(true);
             }
         }
+
     };
 
     public void createSecondViewPager() {
@@ -261,6 +293,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     pageSize = 1;
                 }
                 SecondTypeFragment secondTypeFragment = new SecondTypeFragment();
+                secondTypeFragment.setChangeChildFragmentsState(changeChildFragmentsState);
                 List<FirstFragment> firstFragments = new ArrayList<>();
                 for (int j = 0; j < pageSize; j++) {
                     FirstFragment firstFragment = new FirstFragment();
@@ -268,6 +301,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     if (lastIndex > secondDatas.size()) {
                         lastIndex = secondDatas.size();
                     }
+                    firstFragment.setChildPosition(j);
+                    firstFragment.setBigFragment(secondTypeFragment);
                     firstFragment.setmDataList(secondDatas.subList(j * 8, lastIndex));
                     firstFragment.setSecondTypeClickListener(secondTypeClickListener);
                     firstFragments.add(firstFragment);
@@ -290,38 +325,28 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     @Override
                     public void onCurrentTypeChanged(View oldView, int position,
                                                      View view) {
-                        updateCurrentItem(position);
-                        if (helper != null && !TextUtils.isEmpty(mDatas.get(position).getId())) {
-                            String selectedId = mDatas.get(position).getId();
-
-                                if (isNeedPopviewUpdate) {
-                                    helper.performMarkIds(category_one,selectedId);
-                                } else {
-                                    isNeedPopviewUpdate = true;
-                                }
-                           category_one = selectedId;
-                            requestData(true);
-                        }
-                        updateHorizontalScrollViewItem(oldView, false);
-                        updateHorizontalScrollViewItem(view, true);
-
                     }
                 });
         //添加点击回调
         mHorizontalScrollView.setOnItemClickListener(new TypeHorizontalScrollView.OnItemClickListener() {
             @Override
             public void onClick(View oldView, View view, int position) {
-                updateCurrentItem(position);
-                if (helper != null && !TextUtils.isEmpty(mDatas.get(position).getId())) {
+                if (!TextUtils.isEmpty(mDatas.get(position).getId())) {
                     String selectedId = mDatas.get(position).getId();
-
+                    if(!isFirstCome&&!TextUtils.isEmpty(category_one)&&category_one.equals(selectedId)){
+                        return;
+                    }
+                    isFirstCome = false;
+                    category_one = selectedId;
+                    category_two ="";
+                    updateCurrentItem(position);
+                    if (helper != null) {
                         if (isNeedPopviewUpdate) {
-                            helper.performMarkIds(category_one,selectedId);
+                            helper.performMarkIds(category_one, "");
                         } else {
                             isNeedPopviewUpdate = true;
                         }
-
-                    category_one = selectedId;
+                    }
                     requestData(true);
                 }
                 updateHorizontalScrollViewItem(oldView, false);
@@ -329,9 +354,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             }
         });
         //设置适配器
-        if (currentFirstTypePosition != -1) {
-            mHorizontalScrollView.setmFristIndex(currentFirstTypePosition);
-        }
+
         mHorizontalScrollView.initDatas(mAdapter);
 
     }
@@ -381,36 +404,56 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     public void updateCurrentItem(int position) {
         if (mViewPager != null) {
-            mViewPager.setCurrentItem(position);
+          mViewPager.setCurrentItem(position);
             updateSecondItem(position);
         }
     }
 
+    /**
+     * 更换二级分类被选中的情况。
+     *
+     * @param position 当前被选中的一级分类。
+     */
+
     public void updateSecondItem(int position) {
+        //一级分类对应的 二级分类 fragment  里面嵌入了多个firstFragment.
         SecondTypeFragment secondTypeFragment = mFragmentList.get(position);
+//        被选中的二级分类所在的firstfragment所在的位置。
+        int selectedFirstFragment = -1;
+        SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean firstBean = null;
         if (secondTypeFragment != null && secondTypeFragment.getFragments() != null && secondTypeFragment.getFragments().size() > 0) {
             for (int i = 0; i < secondTypeFragment.getFragments().size(); i++) {
                 FirstFragment firstFragment = secondTypeFragment.getFragments().get(i);
-                int selectedSecondType = 0;
+
                 List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> datas = firstFragment.getDataList();
                 if (datas != null) {
                     for (int j = 0; j < datas.size(); j++) {
+                        //如果没有二级分类被选 中，默认选中全部，也就是第一个。
+                        if (i == 0 && j == 0) {
+                            firstBean = datas.get(j);
+                        }
+                        Log.d("update second","category_two:"+category_two);
                         if (!TextUtils.isEmpty(category_two) && datas.get(j).getId().equals(category_two)) {
                             firstFragment.setLastSelectedPosition(j);
-                            selectedSecondType = j;
+                            selectedFirstFragment = i;
                             datas.get(j).setChecked(true);
                         } else {
                             datas.get(j).setChecked(false);
                         }
                     }
-                    if (selectedSecondType == 0) {
-                        category_two = datas.get(0).getId();
-                        datas.get(0).setChecked(true);
-                    }
-
-                    if (firstFragment.getmDPGridViewAdapter() != null && firstFragment.getmDPGridViewAdapter().getmDataList() != null) {
-                        firstFragment.notifyAdapterChange();
-                    }
+                }
+            }
+            if (selectedFirstFragment == -1 && firstBean != null) {
+                secondTypeFragment.getFragments().get(0).setLastSelectedPosition(0);
+                firstBean.setChecked(true);
+                category_two = firstBean.getId();
+            } else {
+                firstBean.setChecked(false);
+            }
+            for (int k = 0; k < secondTypeFragment.getFragments().size(); k++) {
+                FirstFragment firstFragment = secondTypeFragment.getFragments().get(k);
+                if (firstFragment.getmDPGridViewAdapter() != null && firstFragment.getmDPGridViewAdapter().getmDataList() != null) {
+                    firstFragment.notifyAdapterChange();
                 }
             }
         }
@@ -515,7 +558,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     };
 
     private void initScrollView() {
-        mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
+
         topView = (LinearLayout) findViewById(R.id.topview);
         mFlowView = (FakeDropDownMenu) findViewById(R.id.flow_llay);
         fakeFlowLine = (FakeDropDownMenu) findViewById(R.id.fake_flow_llay);
@@ -553,10 +596,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(mContext, this);
         }
-        if(isFresh){
-            pageNum =1;
-            isLoadmore=false;
-            updateFirstTypeAndSecondType(category_one,category_two);
+        if (isFresh) {
+            pageNum = 1;
+            isLoadmore = false;
+            updateFirstTypeAndSecondType(category_one, category_two);
         }
         sellerHttpHelper.getShopSearch(area_one, area_two, category_one, category_two, filter, "", sort_type, pageNum, pageSize, merchant_type);
     }
@@ -575,18 +618,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         recyclerView.setAdapter(mRecycleViewAdapter);
     }
 
-    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-
-        @Override
-        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                long arg3) {
-            Toast.makeText(DaiyanSendTypeActivity.this, "菜单" + (arg2 + 1), Toast.LENGTH_SHORT).show();
-        }
-    };
-
     public void setData(List<ModelBusinessListings> models) {
         if (!isLoadmore) {
-           items.clear();
+            items.clear();
         }
         items.addAll(models);
         //是否显示空的列表样式 。
@@ -754,6 +788,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         }
     }
 
+
     private void handleItemSelectFilter(List<SingleMode> items) {
         if (SDCollectionUtil.isEmpty(items)) {
             return;
@@ -765,24 +800,34 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         filter = ids;
     }
 
-    public void updateFirstTypeAndSecondType(String firstType,String secondType){
+    /**
+     * 判断category_two 是否属于category_one 下的子类
+     * @param firstType
+     * @param secondType
+     */
+    public void updateFirstTypeAndSecondType(String firstType, String secondType) {
         category_one = "";
-        category_two="";
+        category_two = "";
         int position = getPositionByFirstTypeId(firstType);
         category_one = firstType;
-        if(position!=-1&&!TextUtils.isEmpty(secondType)){
+        if (position != -1 && !TextUtils.isEmpty(secondType)) {
 
-            List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> secondTypeBeanList =mDatas.get(position).getCategory_type();
-            if(secondTypeBeanList!=null) {
-                for (int i = 0;i<secondTypeBeanList.size();i++){
+            List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean> secondTypeBeanList = mDatas.get(position).getCategory_type();
+            if (secondTypeBeanList != null) {
+                for (int i = 0; i < secondTypeBeanList.size(); i++) {
                     SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean bean = secondTypeBeanList.get(i);
-                    if(secondType.equals(bean.getId())){
+                    if (secondType.equals(bean.getId())) {
                         category_two = secondType;
                     }
                 }
             }
         }
     }
+
+    /**
+     * 类型切换。
+     * @param pair
+     */
 
     public void typeChange(Pair<SingleMode, SingleMode> pair) {
         if (pair == null) {
@@ -797,7 +842,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                 if (secondType != null && !TextUtils.isEmpty(secondType.getSingleId())) {
                     category_two = secondType.getSingleId();
                 } else {
-                    category_two= "";
+                    category_two = "";
                 }
                 updateCurrentItem(position);
             }
