@@ -13,16 +13,13 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.PageBean;
-import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDToast;
 import com.fanwe.o2o.miguo.R;
@@ -197,9 +194,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     private void getIntentData() {
         Intent intent = getIntent();
         category_one = intent.getStringExtra("firstType");
-        if(ServerUrl.DEBUG){
-            category_one = "represent";
-        }
+
         category_two = intent.getStringExtra("secondType");
 
 
@@ -231,12 +226,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         }
     }
 
-    public SecondTypeFragment.ChangeChildFragmentsState changeChildFragmentsState = new SecondTypeFragment.ChangeChildFragmentsState() {
-        @Override
-        public void removeUnCheckedState() {
 
-        }
-    };
 
     public FirstFragment.SecondTypeClickListener secondTypeClickListener = new FirstFragment.SecondTypeClickListener() {
         @Override
@@ -293,7 +283,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     pageSize = 1;
                 }
                 SecondTypeFragment secondTypeFragment = new SecondTypeFragment();
-                secondTypeFragment.setChangeChildFragmentsState(changeChildFragmentsState);
                 List<FirstFragment> firstFragments = new ArrayList<>();
                 for (int j = 0; j < pageSize; j++) {
                     FirstFragment firstFragment = new FirstFragment();
