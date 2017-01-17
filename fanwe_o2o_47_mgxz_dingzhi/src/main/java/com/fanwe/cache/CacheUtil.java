@@ -1,5 +1,6 @@
 package com.fanwe.cache;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -117,10 +118,39 @@ public class CacheUtil {
         return cityCurr;
     }
 
+    public void saveUserSearchWord(String singleWord) {
+        if (TextUtils.isEmpty(singleWord)) {
+            return;
+        }
+        List<String> userSearchWord = getUserSearchWord();
+        for (String s : userSearchWord) {
+            if (s.equalsIgnoreCase(singleWord)){
+                Log.e("test","存在同样的key.");
+                return;
+            }
+        }
+        List<String> newList=new ArrayList<>();
+        if (userSearchWord.size()>=9){
+            for (int i = 0; i < 8; i++) {
+                newList.add(userSearchWord.get(i));
+            }
+        }
+        newList.add(0,singleWord);
+        Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, newList);
+    }
+
     public void saveUserSearchWord(List<String> hotWords) {
-        Log.e("test","save: "+hotWords.size());
-        if (hotWords ==null) {
-            hotWords = new ArrayList<>();
+        if (hotWords ==null || hotWords.size() == 0) {
+            Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, new ArrayList<String>());
+            return;
+        }
+        List<String> newList=new ArrayList<>();
+        if ( hotWords.size()>=9){
+            for (int i = 0; i < 9; i++) {
+                newList.add(hotWords.get(i));
+            }
+            Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, newList);
+            return;
         }
         Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, hotWords);
     }
@@ -133,7 +163,13 @@ public class CacheUtil {
             e.printStackTrace();
             hotWords = new ArrayList<>();
         }
-        Log.e("test","get: "+hotWords.size());
+        List<String> newList=new ArrayList<>();
+        if (hotWords!=null && hotWords.size()>=9){
+            for (int i = 0; i < 9; i++) {
+                newList.add(hotWords.get(i));
+            }
+            return newList;
+        }
         return hotWords;
     }
 

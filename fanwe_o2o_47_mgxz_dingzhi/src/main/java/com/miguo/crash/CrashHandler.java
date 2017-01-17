@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fanwe.InitAdvsMultiActivity;
+import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.miguo.utils.SharedPreferencesUtils;
 
@@ -38,8 +39,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private static final String TAG = "CrashHandler";
     private Context mContext;
     private static CrashHandler mInstance = new CrashHandler();
-
-
     private CrashHandler() {
     }
 
@@ -57,19 +56,35 @@ public class CrashHandler implements UncaughtExceptionHandler {
      */
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        // 使用Toast来显示异常信息
         showCrashToast();
-        //将一些信息保存到SDcard中
-        savaInfoToSD(mContext, ex);
+        saveCrashReport2SD(mContext, ex);
+        restartApp();
+    }
 
-        Intent intent = new Intent(App.getInstance().getApplicationContext(), InitAdvsMultiActivity.class);
-        PendingIntent restartIntent = PendingIntent.getActivity(App.getInstance().getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+    /**
+     * 为我们的应用程序设置自定义Crash处理
+     */
+    public void initCrashHandler(Context context) {
+        mContext = context;
+        Thread.setDefaultUncaughtExceptionHandler(this);
+    }
+
+    private void restartApp() {
+        Intent intent = new Intent(App.getInstance().getApplicationContext(),
+                InitAdvsMultiActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent restartIntent = PendingIntent.getActivity(App.getInstance()
+                .getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         //重启应用
         AlarmManager mgr = (AlarmManager) App.getInstance().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent); // 重启应用
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis(), restartIntent);
+
+        //清空Activity栈,防止系统自动重启至崩溃页面,导致崩溃再次出现.
+        ActivityLifeManager.getInstance().finishAllActivity();
         //退出程序
         android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(1);
+        System.exit(0);
+        System.gc();
     }
 
     private void showCrashToast() {
@@ -77,24 +92,16 @@ public class CrashHandler implements UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(App.getInstance().getApplicationContext(), "很抱歉,程序出现异常,即将重启", Toast.LENGTH_LONG).show();
+                Toast.makeText(App.getInstance().getApplicationContext(), "很抱歉,程序出现异常,即将重启",
+                        Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }.start();
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);//Toast展示的时间
         } catch (InterruptedException e) {
         }
     }
-
-    /**
-     * 为我们的应用程序设置自定义Crash处理
-     */
-    public void setCrashHanler(Context context) {
-        mContext = context;
-        Thread.setDefaultUncaughtExceptionHandler(this);
-    }
-
 
     /**
      * 获取一些简单的信息,软件版本，手机版本，型号等信息存放在LinkedHashMap中
@@ -107,7 +114,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
         PackageManager mPackageManager = context.getPackageManager();
         PackageInfo mPackageInfo = null;
         try {
-            mPackageInfo = mPackageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+            mPackageInfo = mPackageManager.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_ACTIVITIES);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -119,7 +127,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
         map.put("SDK版本", "" + Build.VERSION.SDK_INT);
         map.put("versionName", mPackageInfo.versionName);
         map.put("versionCode", "" + mPackageInfo.versionCode);
-        map.put("crash时间", paserTime(System.currentTimeMillis()));
+        map.put("crash时间", parserTime(System.currentTimeMillis()));
 
         return map;
     }
@@ -148,9 +156,9 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @param ex
      * @return
      */
-    private String savaInfoToSD(Context context, Throwable ex) {
+    private String saveCrashReport2SD(Context context, Throwable ex) {
         String fileName = null;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : obtainSimpleInfo(context).entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -163,7 +171,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 dir.mkdirs();
             }
             try {
-                fileName = dir.toString() + File.separator + paserTime(System.currentTimeMillis());
+                fileName = dir.toString() + File.separator + parserTime(System.currentTimeMillis()) +".txt";
                 FileOutputStream fos = new FileOutputStream(fileName);
                 fos.write(sb.toString().getBytes());
                 fos.flush();
@@ -175,19 +183,17 @@ public class CrashHandler implements UncaughtExceptionHandler {
         return fileName;
     }
 
-
     /**
      * 将毫秒数转换成yyyy-MM-dd-HH-mm-ss的格式，并在后缀加入随机数
      *
      * @param milliseconds
      * @return
      */
-    private String paserTime(long milliseconds) {
+    private String parserTime(long milliseconds) {
         System.setProperty("user.timezone", "Asia/Shanghai");
         TimeZone tz = TimeZone.getTimeZone("Asia/Shanghai");
         TimeZone.setDefault(tz);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String times = format.format(new Date(milliseconds));
-        return times;
+        return format.format(new Date(milliseconds));
     }
 }

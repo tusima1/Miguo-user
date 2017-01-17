@@ -145,30 +145,4 @@ public class ActivityLifeManager {
         mStackActivity.clear();
     }
 
-    public void finishAllActivityExcept(Class<?> cls) {
-        for (int i = mStackActivity.size() - 1; i >= 0; i--) {
-            Activity act = mStackActivity.get(i);
-            if (act != null) {
-                if (act.getClass().equals(cls)) {
-                    continue;
-                } else {
-                    finishActivity(act);
-                }
-            }
-        }
-    }
-
-    public void finishAllActivityExcept(Activity activity) {
-        for (int i = mStackActivity.size() - 1; i >= 0; i--) {
-            Activity act = mStackActivity.get(i);
-            if (act != null) {
-                if (act == activity) {
-                    continue;
-                } else {
-                    finishActivity(act);
-                }
-            }
-        }
-    }
-
 }

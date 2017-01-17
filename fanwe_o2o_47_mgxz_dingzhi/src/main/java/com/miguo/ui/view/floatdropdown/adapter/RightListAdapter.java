@@ -24,7 +24,8 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
 
     private List<SingleMode> singleModes;
     private OnSingleModeRVItemClickListener itemClickListener;
-    private int preClickPosition = -2;
+    private final int UnKnowPosition = -2;
+    private int preClickPosition = UnKnowPosition;
     public final int checkedTextColor;
     public final int uncheckedTextColor;
     public final int uncheckedDividerColor;
@@ -45,7 +46,7 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
             }
         }
         if (!changed){
-            preClickPosition = -2;
+            preClickPosition = UnKnowPosition;
         }
 
         singleModes = newSingleModes;
@@ -65,7 +66,8 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
             Log.e("test","请先调用setData()方法,目前数据为null!");
             return;
         }
-        if (singleModes.size()-1 <handlePosition ){
+        int size = singleModes.size();
+        if (size-1 <handlePosition ){
             Log.e("test","performPosition(int handlePosition)方法,position out of bound!--> except position: "+handlePosition);
             return;
         }
@@ -81,7 +83,7 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
             //Note: already marked,Do Not Mark Again.
             return;
         }
-        if (preClickPosition !=-2){
+        if (preClickPosition !=UnKnowPosition && preClickPosition < size){
             singleModes.get(preClickPosition).setChecked(false);
             notifyItemChanged(preClickPosition);
         }
@@ -108,7 +110,7 @@ public class RightListAdapter extends RecyclerView.Adapter<RightListAdapter.View
                 singleMode.setChecked(true);
                 int adapterCurPosition = holder.getAdapterPosition();
                 notifyItemChanged(adapterCurPosition);
-                if (preClickPosition !=-2){
+                if (preClickPosition !=UnKnowPosition){
                     singleModes.get(preClickPosition).setChecked(false);
                     notifyItemChanged(preClickPosition);
                 }

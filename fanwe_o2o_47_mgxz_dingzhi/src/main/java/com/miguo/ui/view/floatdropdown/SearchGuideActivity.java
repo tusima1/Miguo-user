@@ -16,7 +16,6 @@ import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.search.views.SearchResultActivity;
 import com.miguo.entity.HotWordsBean;
-import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.view.floatdropdown.adapter.SearchGuideAdapter;
 import com.miguo.ui.view.floatdropdown.decoration.SearchItemDecoration;
 import com.miguo.ui.view.floatdropdown.interf.OnRvItemClickListener;
@@ -158,7 +157,6 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
 
     private void searchAction(){
         String searchWord = searchView.getEditText();
-        MGToast.showToast(searchWord);
         if (TextUtils.isEmpty(searchWord)){
             //do nothing
         }else {
@@ -171,6 +169,9 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             if (!same){
+                if (history.size() == 9){
+                    history.remove(8);
+                }
                 history.add(0,searchWord);
                 updateHistoryAera();
                 saveUserSearchData();
