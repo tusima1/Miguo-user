@@ -297,9 +297,9 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(UserHomeActivity.class);
         } else if (v == mKefu) {
             //客服电话
-//            clickKfPhone();
-            Intent intent = new Intent(getActivity(), DaiyanSendTypeActivity.class);
-            startActivity(intent);
+         clickKfPhone();
+//            Intent intent = new Intent(getActivity(), DaiyanSendTypeActivity.class);
+//            startActivity(intent);
         } else if (v == mSet) {
             //设置页。
              /*点击了我的区域*/

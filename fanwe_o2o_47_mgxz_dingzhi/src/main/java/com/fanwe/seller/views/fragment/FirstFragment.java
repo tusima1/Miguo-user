@@ -123,9 +123,6 @@ public class FirstFragment extends Fragment {
         public void onItemClickListner(SecondTypeFragment bigFrag, int childPosition, SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean.CategoryTypeBean typeBean);
     }
 
-    public SecondTypeClickListener getSecondTypeClickListener() {
-        return secondTypeClickListener;
-    }
 
     public void setSecondTypeClickListener(SecondTypeClickListener secondTypeClickListener) {
         this.secondTypeClickListener = secondTypeClickListener;
@@ -139,17 +136,12 @@ public class FirstFragment extends Fragment {
         this.mDPGridViewAdapter = mDPGridViewAdapter;
     }
 
-    public int getLastSelectedPosition() {
-        return lastSelectedPosition;
-    }
 
     public void setLastSelectedPosition(int lastSelectedPosition) {
         this.lastSelectedPosition = lastSelectedPosition;
     }
 
-    public int getChildPosition() {
-        return childPosition;
-    }
+
 
     public void setChildPosition(int childPosition) {
         this.childPosition = childPosition;
@@ -163,12 +155,6 @@ public class FirstFragment extends Fragment {
         this.bigFragment = bigFragment;
     }
 
-    public void updateCheckType(int newPosition, boolean ifCheck) {
-        mDataList.get(lastSelectedPosition).setChecked(false);
-        if (ifCheck) {
-            mDataList.get(newPosition).setChecked(true);
-        }
-        notifyAdapterChange();
-    }
+
 }
 
