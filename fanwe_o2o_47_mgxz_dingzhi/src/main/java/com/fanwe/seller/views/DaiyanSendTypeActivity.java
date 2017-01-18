@@ -151,7 +151,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     @Override
     protected void onResume() {
+
         super.onResume();
+        requestData(false);
     }
 
 
