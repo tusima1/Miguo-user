@@ -12,8 +12,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 24
 
-        versionCode 2017011704
-        versionName "5.7.14.d"
+        versionCode 2017011801
+        versionName "6.0.47.t"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7
