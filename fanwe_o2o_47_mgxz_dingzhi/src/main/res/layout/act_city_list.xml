@@ -11,6 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
+        android:visibility="gone"
         android:background="@drawable/layer_white_stroke_corner_item_single"
         android:drawableLeft="@drawable/ic_search_normal"
         android:hint="请输入关键字"
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/eare_location" />
+            android:src="@drawable/ic_location_orange" />
 
         <TextView
             style="@style/text_base"
@@ -80,34 +81,7 @@
                 </com.fanwe.library.customview.FlowLayout>
             </LinearLayout>
 
-            <ListView
-                android:id="@+id/act_city_list_lv_citys"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:cacheColorHint="#00000000"
-                android:divider="@color/stroke"
-                android:dividerHeight="1px"
-                android:listSelector="#00000000" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/act_city_list_tv_touched_letter"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:background="@drawable/layer_main_color_normal"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:visibility="invisible" />
-
-        <com.fanwe.customview.SideBar
-            android:id="@+id/act_city_list_sb_letters"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
     </RelativeLayout>
 
 </LinearLayout>

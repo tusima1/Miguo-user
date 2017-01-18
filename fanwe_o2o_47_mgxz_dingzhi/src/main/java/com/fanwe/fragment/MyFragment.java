@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.fanwe.DistributionMyQRCodeActivity;
 import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
@@ -24,7 +25,6 @@ import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.mine.views.MineTeamActivity;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.views.DaiyanSendTypeActivity;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getPersonalHome.ModelPersonalHome;
 import com.fanwe.user.presents.UserHttpHelper;
@@ -45,7 +45,6 @@ import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.BaseUtils;
-import com.miguo.ui.view.floatdropdown.TestDropDownPopActivity;
 import com.miguo.utils.MGLog;
 
 import java.util.List;
@@ -286,10 +285,10 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             clickMyOrderView("all");
         } else if (v == mErWeiMa) {
             /*二维码名片*/
-//            startActivity(DistributionMyQRCodeActivity.class);
+            startActivity(DistributionMyQRCodeActivity.class);
 //            startActivity(TestActivity.class);
 //            startActivity(SearchGuideActivity.class);
-            startActivity(TestDropDownPopActivity.class);
+//            startActivity(TestDropDownPopActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {

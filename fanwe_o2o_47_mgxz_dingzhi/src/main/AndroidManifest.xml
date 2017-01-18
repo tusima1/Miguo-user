@@ -1023,9 +1023,12 @@
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.miguo.ui.view.floatdropdown.TestActivity"/>
-        <activity android:name="com.miguo.ui.view.floatdropdown.SearchGuideActivity"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name="com.miguo.ui.view.floatdropdown.SearchGuideActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name="com.miguo.ui.view.floatdropdown.TestDropDownPopActivity">
+        </activity>
+        <activity android:name="com.fanwe.CityChooseActivity">
         </activity>
     </application>
 

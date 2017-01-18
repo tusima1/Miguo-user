@@ -10,17 +10,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.fanwe.adapter.CityListAdapter;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.EnumEventTag;
-import com.fanwe.customview.SideBar;
-import com.fanwe.customview.SideBar.OnTouchingLetterChangedListener;
 import com.fanwe.library.customview.ClearEditText;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -70,20 +66,11 @@ public class CityListActivity extends BaseActivity {
     @ViewInject(R.id.act_city_list_et_search)
     private ClearEditText mEtSearch;
 
-    @ViewInject(R.id.act_city_list_lv_citys)
-    private ListView mLvCitys;
-
-    @ViewInject(R.id.act_city_list_tv_touched_letter)
-    private TextView mTvTouchedLetter;
-
-    @ViewInject(R.id.act_city_list_sb_letters)
-    private SideBar mSbLetters;
 
     private List<ModelCityList> mListModel = new ArrayList<ModelCityList>();
     private List<ModelCityList> mListModelHotCity;
     private List<ModelCityList> mListFilterModel = new ArrayList<ModelCityList>();
 
-    private CityListAdapter mAdapter;
     private boolean fromAuth;
 
     @Override
@@ -96,10 +83,8 @@ public class CityListActivity extends BaseActivity {
 
     private void init() {
         initTitle();
-        bindDefaultData();
         initViewState();
         bindDataFromDb();
-        initSlideBar();
         initCurrentLocation();
         registeEtSearchListener();
         registeClick();
@@ -109,9 +94,6 @@ public class CityListActivity extends BaseActivity {
     private void preData() {
         if (getIntent() != null) {
             fromAuth = getIntent().getBooleanExtra("fromAuth", false);
-        }
-        if (mAdapter != null) {
-            mAdapter.setFromAuth(fromAuth);
         }
     }
 
@@ -242,16 +224,8 @@ public class CityListActivity extends BaseActivity {
                 }
             }
         }
-        mAdapter.updateData(mListFilterModel);
     }
 
-    /**
-     * 初始化检索条
-     */
-    private void initSlideBar() {
-        mSbLetters.setTextView(mTvTouchedLetter);
-        mSbLetters.setOnTouchingLetterChangedListener(new CityListActivity_OnTouchingLetterChangedListener());
-    }
 
     /**
      * 从数据库取数据
@@ -263,13 +237,8 @@ public class CityListActivity extends BaseActivity {
         } else {
             mListModel.clear();
         }
-        mAdapter.updateData(mListModel);
     }
 
-    private void bindDefaultData() {
-        mAdapter = new CityListAdapter(mListModel, this, 1);
-        mLvCitys.setAdapter(mAdapter);
-    }
 
     private void initTitle() {
         String title;
@@ -331,17 +300,6 @@ public class CityListActivity extends BaseActivity {
         intent.putExtra(IntentKey.RETURN_CITY_DATA, tempBean);
         setResult(ResultCode.RESUTN_OK, intent);
         BaseUtils.finishActivity(this);
-    }
-
-    class CityListActivity_OnTouchingLetterChangedListener implements OnTouchingLetterChangedListener {
-        @Override
-        public void onTouchingLetterChanged(String s) {
-            int position = mAdapter.getLettersAsciisFirstPosition(s.charAt(0));
-            if (position != -1) {
-                mLvCitys.setSelection(position);
-            }
-        }
-
     }
 
     @Override
