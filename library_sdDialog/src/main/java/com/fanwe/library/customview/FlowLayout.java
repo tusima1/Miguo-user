@@ -226,6 +226,11 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
+    public void setSpace(int h,int v){
+        horizontalSpacing = h;
+        verticalSpacing = v;
+    }
+
     private void drawDebugInfo(Canvas canvas, View child) {
         if (!debugDraw) {
             return;

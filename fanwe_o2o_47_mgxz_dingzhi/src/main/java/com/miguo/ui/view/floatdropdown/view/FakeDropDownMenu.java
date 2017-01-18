@@ -121,6 +121,7 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
             reverseAnimator.start();
             lastPosition = -1;
             callPopDismissImmediately();
+            return;
         }
         if (index == lastPosition){
             //点击了同一个item 第二次

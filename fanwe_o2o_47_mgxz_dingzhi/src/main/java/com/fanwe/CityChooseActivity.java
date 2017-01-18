@@ -1,10 +1,10 @@
 package com.fanwe;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,15 +16,21 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.app.App;
+import com.fanwe.library.customview.FlowLayout;
+import com.fanwe.library.utils.SDResourcesUtil;
+import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.work.AppRuntimeWorker;
-import com.miguo.live.views.customviews.MGToast;
-import com.miguo.ui.test.HorAdapter;
-import com.miguo.ui.view.floatdropdown.interf.OnRvItemClickListener;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.ResultCode;
+import com.miguo.entity.CityGroupListBean;
+import com.miguo.factory.ClassNameFactory;
+import com.miguo.utils.BaseUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -34,6 +40,8 @@ public class CityChooseActivity extends AppCompatActivity {
     private TextView mTvLocation;
     private LinearLayout mContent;
     private RecyclerView recyclerView;
+    private int dp8;
+    private boolean fromAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,65 +53,42 @@ public class CityChooseActivity extends AppCompatActivity {
     }
 
     private void init() {
+        dp8 = DisplayUtil.dp2px(this, 8);
         initView();
         initTitle();
-        initRv();
+        preData();
         requestCityInfo();
     }
-
-    private void initRv() {
-        List<String> words= new ArrayList<>();
-        words.add("米果小站");
-        words.add("你好");
-        words.add("深圳");
-        words.add("江西");
-        words.add("湖南");
-        words.add("乌鲁木齐");
-        words.add("赣州");
-        words.add("不想编了");
-        words.add("厉害");
-        words.add("哈哈哈");
-        words.add("米果小站");
-        words.add("你好");
-        words.add("湖南");
-        words.add("乌鲁木齐");
-        words.add("赣州");
-        words.add("不想编了");
-        words.add("哈哈哈");
-        words.add("你好");
-        words.add("深圳");
-        words.add("湖南");
-        words.add("乌鲁木齐");
-        words.add("赣州");
-        words.add("不想编了");
-        words.add("厉害");
-        words.add("哈哈哈");
-
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.HORIZONTAL));
-        HorAdapter horAdapter=new HorAdapter(words);
-        horAdapter.setOnRvItemClickListener(new OnRvItemClickListener<String>() {
-            @Override
-            public void onRvItemClick(View view, int position, String s) {
-                MGToast.showToast(s);
-            }
-        });
-        recyclerView.setAdapter(horAdapter);
+    private void preData() {
+        if (getIntent() != null) {
+            fromAuth = getIntent().getBooleanExtra("fromAuth", false);
+        }
     }
 
     private void requestCityInfo() {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", "CityGroupList");
-        OkHttpUtil.getInstance().get(params, new HttpCallback() {
+        OkHttpUtil.getInstance().get(params, new HttpCallback<CityGroupListBean>() {
             @Override
             public void onFinish() {
 
             }
 
             @Override
-            public void onSuccess(String response) {
-                super.onSuccess(response);
-                Log.e("test","city: "+response);
+            public void onSuccessWithBean(CityGroupListBean cityGroupListBean) {
+                List<CityGroupListBean.ResultBean.BodyBean> body =null;
+                try {
+                    body = cityGroupListBean.getResult()
+                            .get(0).getBody();
+                } catch (Exception e) {
+                    Log.e("test","数据异常");
+                }
+
+                if (body == null)return;
+                for (CityGroupListBean.ResultBean.BodyBean bodyBean : body) {
+                    createFlowView(bodyBean.getGroup_name(),bodyBean.getGroup_item());
+                }
             }
         });
     }
@@ -125,6 +110,46 @@ public class CityChooseActivity extends AppCompatActivity {
 
         mTvLocation = (TextView) findViewById(R.id.tv_show);
         mContent = (LinearLayout) findViewById(R.id.activity_city_choose);
+    }
+
+    private void createFlowView(String areaTitle, List<CityGroupListBean.ResultBean.BodyBean.GroupItemBean> itemCityList){
+        if (TextUtils.isEmpty(areaTitle) || itemCityList ==null || itemCityList.size()<=0){
+            return;
+        }
+        mContent.addView(createTextView(areaTitle),getTextParams());
+
+        FlowLayout flowLayout=new FlowLayout(this);
+        flowLayout.setSpace(dp8,dp8);
+
+        LinearLayout.LayoutParams flParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        flParams.setMargins(dp8,dp8,dp8,dp8);
+        mContent.addView(flowLayout,flParams);
+
+    }
+
+    private TextView createFlowItem(CityGroupListBean.ResultBean.BodyBean.GroupItemBean item){
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SDViewUtil.dp2px(50), SDViewUtil.dp2px(40));
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(params);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(item.getName());
+        textView.setTag(item);
+        SDViewUtil.setTextSizeSp(textView, 13);
+        textView.setTextColor(SDResourcesUtil.getColor(R.color.gray));
+        textView.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!fromAuth) {
+//                    AppRuntimeWorker.setCityNameByModel(model);
+//                    setActivityResult(model);
+                } else {
+//                    SDEventManager.post(model, EnumEventTag.CITY_RESIDENT.ordinal());
+//                    finish();
+                }
+            }
+        });
+        return null;
     }
 
     private void createAreaView(String areaTitle, List itemCityList){
@@ -156,5 +181,12 @@ public class CityChooseActivity extends AppCompatActivity {
     private LinearLayout.LayoutParams getTextParams(){
         LinearLayout.LayoutParams textParams= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DisplayUtil.dp2px(this,36));
         return textParams;
+    }
+
+    public void setActivityResult(ModelCityList tempBean) {
+        Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
+        intent.putExtra(IntentKey.RETURN_CITY_DATA, tempBean);
+        setResult(ResultCode.RESUTN_OK, intent);
+        BaseUtils.finishActivity(this);
     }
 }
