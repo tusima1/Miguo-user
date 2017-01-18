@@ -51,8 +51,9 @@ public class FunnyTypeHorizantalScrollView extends BaseHorizantalScrollView{
 
     private void init(){
         setHorizontalScrollBarEnabled(false);
+        setBackgroundColor(getColor(R.color.c_F2F2F2));
         content = new FunnyTypeContentLinearLayout(getContext());
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(wrapContent(), wrapContent());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(matchParent(), wrapContent());
         content.setLayoutParams(params);
         content.setBackgroundColor(getColor(R.color.c_F2F2F2));
         addView(content);

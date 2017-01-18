@@ -123,6 +123,8 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     @ViewInject(R.id.space_layput)
     LinearLayout spaceLayout;
+    @ViewInject(R.id.empty_data)
+    LinearLayout emptyData;
 
     GetSearchCateConditionDao getSearchCateConditionDao;
     GetAdspaceListDao getAdspaceListDao;
@@ -415,6 +417,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             public void getShopFromParamsSuccess(List<ModelBusinessListings> results) {
                 filterBean.setPageNum(filterBean.getPageNum() + 1);
                 shopAdapter.notifyDataSetChanged(results);
+                handleInitShopListHeight(results);
                 loadComplete();
             }
 
@@ -439,6 +442,11 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
                 });
             }
         });
+    }
+
+    private void handleInitShopListHeight(List<ModelBusinessListings> results){
+        spaceLayout.setVisibility(results.size() > 5 ? View.GONE : View.VISIBLE);
+        emptyData.setVisibility(results.size() > 0 ? View.GONE : View.VISIBLE);
     }
 
     /**

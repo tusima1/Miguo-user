@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/bottom"
-                android:src="@drawable/list_empty" />
+                android:src="@drawable/ic_list_empty" />
         </RelativeLayout>
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView

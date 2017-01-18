@@ -41,6 +41,7 @@
                 <me.relex.circleindicator.CircleIndicator
                     android:layout_marginTop="3dp"
                     android:id="@+id/indicator_circle"
+                    android:visibility="gone"
                     app:ci_drawable="@drawable/gray_radius_square"
                     app:ci_height="5dp"
                     app:ci_margin="5dp"
@@ -51,6 +52,7 @@
 
 
                 <com.miguo.ui.view.RepresentBannerView
+                    android:paddingBottom="14dp"
                     android:id="@+id/represent_banner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -60,7 +62,6 @@
             </LinearLayout>
 
             <com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
-                android:layout_marginTop="14dp"
                 android:id="@+id/menu"
                 android:background="@color/main_color_press"
                 android:layout_width="match_parent"
@@ -77,11 +78,34 @@
             </com.fanwe.view.LoadMoreRecyclerView>
 
             <LinearLayout
+                android:visibility="visible"
                 android:orientation="vertical"
                 android:id="@+id/space_layput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="1000dp">
 
+                <LinearLayout
+                    android:visibility="visible"
+                    android:id="@+id/empty_data"
+                    android:layout_marginTop="@dimen/dp80"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_list_empty"/>
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_text_99"
+                        android:textSize="@dimen/text_size_base"
+                        android:text="启禀了陛下，商家正在赶来的路上"/>
+                </LinearLayout>
 
             </LinearLayout>
 
