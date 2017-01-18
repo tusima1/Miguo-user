@@ -222,12 +222,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 酒店城市定位 -->
-        <activity
-            android:name="com.fanwe.HoltelSearchCityActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
         <!-- 商城 -->
         <activity
             android:name="com.fanwe.GoodsListActivity"
@@ -1028,7 +1022,8 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name="com.miguo.ui.view.floatdropdown.TestDropDownPopActivity">
         </activity>
-        <activity android:name="com.fanwe.CityChooseActivity">
+        <activity android:name="com.fanwe.CityChooseActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
     </application>
 

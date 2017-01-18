@@ -42,7 +42,6 @@
         android:layout_gravity="right|center_vertical"
         android:layout_marginRight="@dimen/dp17"
         android:gravity="center"
-
         android:visibility="gone"/>
 
     <View

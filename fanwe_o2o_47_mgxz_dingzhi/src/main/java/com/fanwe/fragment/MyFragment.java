@@ -289,6 +289,7 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
 //            startActivity(TestActivity.class);
 //            startActivity(SearchGuideActivity.class);
 //            startActivity(TestDropDownPopActivity.class);
+//            startActivity(CityChooseActivity.class);
         } else if (v == mIvUserFace) {
             startActivity(UserHomeActivity.class);
         } else if (v == mUserName) {
