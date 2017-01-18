@@ -148,6 +148,8 @@ public class CacheUtil {
             for (int i = 0; i < 8; i++) {
                 newList.add(userSearchWord.get(i));
             }
+        }else {
+            newList.addAll(userSearchWord);
         }
         newList.add(0,singleWord);
         Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, newList);

@@ -117,8 +117,10 @@ public class FakeDropDownMenu extends LinearLayout implements View.OnClickListen
     public void handleArrowImageAnim(int index){//when fakeView click,make index == 0 to dismiss pop and reverse arrow imageView.
         if (fake)return;
         if (index == 0){
-            reverseAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(lastPosition),"rotation",180f,360f);
-            reverseAnimator.start();
+            if (lastPosition !=0 && lastPosition !=-1){
+                reverseAnimator = ObjectAnimator.ofFloat(getTargetAnimationView(lastPosition),"rotation",180f,360f);
+                reverseAnimator.start();
+            }
             lastPosition = -1;
             callPopDismissImmediately();
             return;

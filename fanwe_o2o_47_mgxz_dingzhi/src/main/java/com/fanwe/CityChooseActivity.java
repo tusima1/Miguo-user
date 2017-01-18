@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,8 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewUtil;
@@ -39,7 +41,6 @@ public class CityChooseActivity extends AppCompatActivity {
     private TextView mCenterTitleText;
     private TextView mTvLocation;
     private LinearLayout mContent;
-    private RecyclerView recyclerView;
     private int dp8;
     private boolean fromAuth;
 
@@ -47,7 +48,6 @@ public class CityChooseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_choose);
-        recyclerView = ((RecyclerView) findViewById(R.id.rv));
         init();
 
     }
@@ -56,6 +56,7 @@ public class CityChooseActivity extends AppCompatActivity {
         dp8 = DisplayUtil.dp2px(this, 8);
         initView();
         initTitle();
+        initCurrentLocation();
         preData();
         requestCityInfo();
     }
@@ -110,6 +111,47 @@ public class CityChooseActivity extends AppCompatActivity {
 
         mTvLocation = (TextView) findViewById(R.id.tv_show);
         mContent = (LinearLayout) findViewById(R.id.activity_city_choose);
+
+        mLeftImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+    /**
+     * 当前位置
+     */
+    private void initCurrentLocation() {
+        if (!BaiduMapManager.getInstance().hasLocationSuccess()) {
+            locationCity();
+        } else {
+            updateLocationTextView();
+        }
+    }
+    protected void locationCity() {
+        mTvLocation.setText("定位中...");
+        BaiduMapManager.getInstance().startLocation(new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation location) {
+                updateLocationTextView();
+                BaiduMapManager.getInstance().stopLocation();
+            }
+        });
+    }
+    private void updateLocationTextView() {
+        if (BaiduMapManager.getInstance().hasLocationSuccess()) {
+            String dist = BaiduMapManager.getInstance().getDistrictShort();
+            Log.e("test","dist: "+dist);
+            if (!TextUtils.isEmpty(dist)) {
+                mTvLocation.setText(dist);
+            } else {
+                String city = BaiduMapManager.getInstance().getCityShort();
+                mTvLocation.setText(city);
+            }
+        } else {
+            mTvLocation.setText("定位失败，点击重试");
+        }
     }
 
     private void createFlowView(String areaTitle, List<CityGroupListBean.ResultBean.BodyBean.GroupItemBean> itemCityList){
@@ -120,23 +162,26 @@ public class CityChooseActivity extends AppCompatActivity {
 
         FlowLayout flowLayout=new FlowLayout(this);
         flowLayout.setSpace(dp8,dp8);
-
+        for (CityGroupListBean.ResultBean.BodyBean.GroupItemBean groupItemBean : itemCityList) {
+            flowLayout.addView(createFlowItem(groupItemBean),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SDViewUtil.dp2px(42)));
+        }
         LinearLayout.LayoutParams flParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         flParams.setMargins(dp8,dp8,dp8,dp8);
         mContent.addView(flowLayout,flParams);
-
     }
 
     private TextView createFlowItem(CityGroupListBean.ResultBean.BodyBean.GroupItemBean item){
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(SDViewUtil.dp2px(50), SDViewUtil.dp2px(40));
+//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SDViewUtil.dp2px(40));
         TextView textView = new TextView(this);
-        textView.setLayoutParams(params);
+//        textView.setLayoutParams(params);
         textView.setGravity(Gravity.CENTER);
         textView.setText(item.getName());
         textView.setTag(item);
+        textView.setMinWidth(DisplayUtil.dp2px(this,56));
         SDViewUtil.setTextSizeSp(textView, 13);
         textView.setTextColor(SDResourcesUtil.getColor(R.color.gray));
-        textView.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
+//        textView.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
+        textView.setBackgroundResource(R.drawable.ripple_v21_test);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,21 +194,7 @@ public class CityChooseActivity extends AppCompatActivity {
                 }
             }
         });
-        return null;
-    }
-
-    private void createAreaView(String areaTitle, List itemCityList){
-        if (TextUtils.isEmpty(areaTitle) || itemCityList ==null || itemCityList.size()<=0){
-            return;
-        }
-        mContent.addView(createTextView(areaTitle),getTextParams());
-//        mContent.addView();
-    }
-
-    private RecyclerView createRV(){
-        RecyclerView itemRv=new RecyclerView(this);
-//        itemRv.setLayoutManager(new GridLayoutManager(this,));
-        return itemRv;
+        return textView;
     }
 
     private TextView createTextView(String text){
