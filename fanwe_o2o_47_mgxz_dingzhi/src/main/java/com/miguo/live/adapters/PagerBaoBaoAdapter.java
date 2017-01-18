@@ -65,7 +65,7 @@ public class PagerBaoBaoAdapter extends RecyclerView.Adapter<PagerBaoBaoAdapter.
                 String  url = DisplayUtil.qiniuUrlExchange(baoBaoEntity.getImg(),60,60);
                 ImageLoader.getInstance().displayImage(url,holder.iv_img);
             }else {
-                holder.iv_img.setImageResource(R.drawable.list_empty);
+                holder.iv_img.setImageResource(R.drawable.ic_list_empty);
             }
             holder.tv_title .setText(baoBaoEntity.getName());
             holder.tv_price.setText(baoBaoEntity.getTuan_price());

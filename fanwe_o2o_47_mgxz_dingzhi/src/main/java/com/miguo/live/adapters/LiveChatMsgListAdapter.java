@@ -197,7 +197,7 @@ public class LiveChatMsgListAdapter extends BaseAdapter implements AbsListView.O
             String  url = DisplayUtil.qiniuUrlExchange(faceUrl,60,60);
             com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(url,holder.faceUrl);
         }else{
-            holder.faceUrl.setImageResource(R.drawable.list_empty);
+            holder.faceUrl.setImageResource(R.drawable.ic_list_empty);
         }
         return convertView;
     }
