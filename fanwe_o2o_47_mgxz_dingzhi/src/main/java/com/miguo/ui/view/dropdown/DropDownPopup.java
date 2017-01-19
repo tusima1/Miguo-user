@@ -71,7 +71,6 @@ public class DropDownPopup extends PopupWindow{
         LinearLayout rootLayout=new LinearLayout(mHoldActivity);
         rootLayout.setOrientation(LinearLayout.VERTICAL);
         dropDownView = new DropDown(mHoldActivity);
-//        dropDownView.setBackgroundColor(Color.parseColor(bgColor));
         dropDownView.setBackgroundColor(Color.TRANSPARENT);
 
         initDDData();
@@ -192,6 +191,24 @@ public class DropDownPopup extends PopupWindow{
     private SearchCateConditionBean.ResultBean.BodyBean saveBody;
     private void initDDData() {
         SearchCateConditionBean.ResultBean.BodyBean body =  SearchCateConditionFactory.get();
+        if (body==null){
+            Log.e("test","筛选条初始化失败,没有取到数据!");
+            return;
+        }
+        this.saveBody = body;
+        List<TwoMode> item1 = mergeDataForItem1(body.getNearByList(), body
+                .getHotAreaList1(), body.getAdminAreaList());
+        List<TwoMode> item2 = mergeDataForItem1(body.getCategoryList());
+        List<SingleMode> item3 = mergeDataForItem3(body.getIntelList1().get(0).getIntelList2());
+        List<TwoMode> item4 = mergeDataForItem1(body.getFilterList1().get(0).getFilterList2());
+        handleData(item1,item2,item3,item4);
+    }
+
+    /**
+     * 现在不想用哎
+     * @param body
+     */
+    public void setData(SearchCateConditionBean.ResultBean.BodyBean body){
         if (body==null){
             Log.e("test","筛选条初始化失败,没有取到数据!");
             return;
@@ -350,11 +367,17 @@ public class DropDownPopup extends PopupWindow{
         }
         performMarkPositions();
     }
+    //目前标题是写死的
+    private final String[] titleName =new String[]{
+            "附近",
+            "全部",
+            "智能排序"
+    };
 
     public void performDefaultMarkPositions(){
-        location1 = new DropDownMarkBean(0,0,"");
-        location2 = new DropDownMarkBean(0,0,"");
-        location3 = new DropDownMarkBean(0,-1,"");
+        location1 = new DropDownMarkBean(0,0,titleName[0]);
+        location2 = new DropDownMarkBean(0,0,titleName[1]);
+        location3 = new DropDownMarkBean(0,-1,titleName[2]);
         location4.clear();
         performMarkPositions();
     }

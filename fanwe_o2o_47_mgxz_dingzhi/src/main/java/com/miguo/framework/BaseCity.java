@@ -1,12 +1,14 @@
 package com.miguo.framework;
 
+import java.io.Serializable;
+
 /**
  * Created by didik 
  * Created time 2017/1/18
  * Description: 
  */
 
-public class BaseCity {
+public class BaseCity implements Serializable{
     protected String name;
     protected String id;
     protected String unName;

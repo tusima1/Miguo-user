@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.fanwe.o2o.miguo.R;
 import com.miguo.ui.view.floatdropdown.interf.OnCallDismissPopListener;
 
-import java.util.List;
-
 /**
  * Created by didik 
  * Created time 2017/1/10
@@ -22,7 +20,6 @@ import java.util.List;
  */
 
 public class FakeDropDownMenu extends LinearLayout implements View.OnClickListener{
-    private List<String> defaultNames;
     private TextView tv_name1;
     private TextView tv_name2;
     private TextView tv_name3;

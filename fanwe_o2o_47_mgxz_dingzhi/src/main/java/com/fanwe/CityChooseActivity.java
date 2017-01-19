@@ -18,6 +18,7 @@ import com.baidu.location.BDLocationListener;
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.constant.EnumEventTag;
 import com.fanwe.library.customview.FlowLayout;
 import com.fanwe.library.utils.SDResourcesUtil;
 import com.fanwe.library.utils.SDViewUtil;
@@ -31,7 +32,10 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.ResultCode;
 import com.miguo.entity.CityGroupListBean;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.framework.BaseCity;
+import com.miguo.framework.CityManager;
 import com.miguo.utils.BaseUtils;
+import com.sunday.eventbus.SDEventManager;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -141,13 +145,14 @@ public class CityChooseActivity extends AppCompatActivity {
     }
     private void updateLocationTextView() {
         if (BaiduMapManager.getInstance().hasLocationSuccess()) {
-            String dist = BaiduMapManager.getInstance().getDistrictShort();
+            String dist = BaiduMapManager.getInstance().getDistrict();
+            String city = BaiduMapManager.getInstance().getCity();
+            String address = BaiduMapManager.getInstance().getCurAddress();
             Log.e("test","dist: "+dist);
-            if (!TextUtils.isEmpty(dist)) {
-                mTvLocation.setText(dist);
+            if (!TextUtils.isEmpty(address)) {
+                mTvLocation.setText("当前位置: "+address);
             } else {
-                String city = BaiduMapManager.getInstance().getCityShort();
-                mTvLocation.setText(city);
+                mTvLocation.setText("当前位置: "+city+dist);
             }
         } else {
             mTvLocation.setText("定位失败，点击重试");
@@ -163,7 +168,7 @@ public class CityChooseActivity extends AppCompatActivity {
         FlowLayout flowLayout=new FlowLayout(this);
         flowLayout.setSpace(dp8,dp8);
         for (CityGroupListBean.ResultBean.BodyBean.GroupItemBean groupItemBean : itemCityList) {
-            flowLayout.addView(createFlowItem(groupItemBean),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SDViewUtil.dp2px(42)));
+            flowLayout.addView(createFlowItem(groupItemBean),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SDViewUtil.dp2px(36)));
         }
         LinearLayout.LayoutParams flParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         flParams.setMargins(dp8,dp8,dp8,dp8);
@@ -171,26 +176,36 @@ public class CityChooseActivity extends AppCompatActivity {
     }
 
     private TextView createFlowItem(CityGroupListBean.ResultBean.BodyBean.GroupItemBean item){
-//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SDViewUtil.dp2px(40));
         TextView textView = new TextView(this);
-//        textView.setLayoutParams(params);
         textView.setGravity(Gravity.CENTER);
         textView.setText(item.getName());
         textView.setTag(item);
         textView.setMinWidth(DisplayUtil.dp2px(this,56));
+        int dp8 = DisplayUtil.dp2px(this, 8);
+        textView.setPadding(dp8,0,dp8,0);
         SDViewUtil.setTextSizeSp(textView, 13);
         textView.setTextColor(SDResourcesUtil.getColor(R.color.gray));
-//        textView.setBackgroundResource(R.drawable.selector_white_gray_stroke_all);
-        textView.setBackgroundResource(R.drawable.ripple_v21_test);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            textView.setBackgroundResource(R.drawable.ripple_v21_test);
+        }else {
+            textView.setBackgroundResource(R.drawable.selector_city_choose_btn);
+        }
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CityGroupListBean.ResultBean.BodyBean.GroupItemBean city = (CityGroupListBean.ResultBean.BodyBean.GroupItemBean) v.getTag();
+                if (city==null)return;
+                CityManager.getInstance().saveCurrCity(new BaseCity(city.getName(),city.getId(),city.getUname()));
+                ModelCityList modelCityList = new ModelCityList();
+                modelCityList.setName(city.getName());
+                modelCityList.setId(city.getId());
+                modelCityList.setUname(city.getUname());
                 if (!fromAuth) {
-//                    AppRuntimeWorker.setCityNameByModel(model);
-//                    setActivityResult(model);
+                    AppRuntimeWorker.setCityNameByModel(modelCityList);
+                    setActivityResult(modelCityList);
                 } else {
-//                    SDEventManager.post(model, EnumEventTag.CITY_RESIDENT.ordinal());
-//                    finish();
+                    SDEventManager.post(modelCityList,EnumEventTag.CITY_RESIDENT.ordinal());
+                    finish();
                 }
             }
         });

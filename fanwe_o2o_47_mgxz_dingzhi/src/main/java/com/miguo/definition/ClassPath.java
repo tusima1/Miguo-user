@@ -25,7 +25,7 @@ public class ClassPath {
      * 城市列表
      * {@link com.fanwe.CityListActivity}
      */
-    public static final String CITY_LIST_ACTIVITY = "com.fanwe.CityListActivity";
+    public static final String CITY_LIST_ACTIVITY = "com.fanwe.CityChooseActivity";
     /**
      * 专题详情
      * {@link com.fanwe.seller.views.SpecialTopicActivity}
