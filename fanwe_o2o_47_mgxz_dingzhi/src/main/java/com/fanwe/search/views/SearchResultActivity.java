@@ -1,10 +1,12 @@
 package com.fanwe.search.views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.fanwe.cache.CacheUtil;
@@ -179,7 +181,13 @@ public class SearchResultActivity extends FragmentActivity {
         } else {
             CacheUtil.getInstance().saveUserSearchWord(keyword);
             searchByKeyword(keyword);
+            hideKeyboard();
         }
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
 

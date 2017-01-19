@@ -360,25 +360,7 @@ public class MarketCityListActivity extends BaseActivity {
                 ll_content.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//						if(mTag==1){
-//							if (AppRuntimeWorker.setCity_name(model.getName()))
-//							{
-//								mActivity.finish();
-//							} else
-//							{
-//								MGToast.showToast("设置城市失败");
-//							}
-//						}else if(mTag==2)
-//						{
-//							Intent intent = new Intent();
-//							intent.putExtra("city", model.getName());
-//							mActivity.setResult(HoltelSearchCityActivity.result_Code, intent);
-//							mActivity.finish();
-//						}
                         setResultCity(model.getName(), model.getId());
-//						if (listener!=null) {
-//							listener.onCityChange(model.getName(), model.getId());
-//						}
                     }
                 });
 

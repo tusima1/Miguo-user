@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.fanwe.CityListActivity;
+import com.fanwe.CityChooseActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.constant.EnumEventTag;
@@ -127,7 +127,7 @@ public class LiveAuthActivity extends Activity implements VisitImgAdapter.AdddMo
         int id = v.getId();
         switch (id) {
             case R.id.layout_city_live_auth:
-                intent = new Intent(mContext, CityListActivity.class);
+                intent = new Intent(mContext, CityChooseActivity.class);
                 intent.putExtra("fromAuth", true);
                 startActivityForResult(intent, RequestCode.RESUTN_CITY_ID);
                 break;

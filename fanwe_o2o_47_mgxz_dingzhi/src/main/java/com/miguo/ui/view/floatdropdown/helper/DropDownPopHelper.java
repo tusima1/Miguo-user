@@ -24,6 +24,8 @@ import java.util.List;
  */
 
 public class DropDownPopHelper implements PopupWindowLike {
+    private final String QiuDaiYan="求代言";
+    private final String Collection="收藏";
     private final Activity mHoldActivity;
     private final FakeDropDownMenu anchor;
     private FakeDropDownMenu fakeDDM;
@@ -95,6 +97,7 @@ public class DropDownPopHelper implements PopupWindowLike {
                 callDismiss(immediately);
             }
         });
+        performDefaultMarkPositions();
     }
     private void callDismiss(boolean isImmediately){
         if (isImmediately){
@@ -104,6 +107,7 @@ public class DropDownPopHelper implements PopupWindowLike {
             anchor.resetLastPosition();
         }
     }
+
 
     @Override
     public void show() {
@@ -121,15 +125,23 @@ public class DropDownPopHelper implements PopupWindowLike {
             public void onItemSelected(int index, Pair<SingleMode, SingleMode> pair, List
                     <SingleMode> items) {
                 if (pair != null) {
-                    String titleName = "";
-                    if (pair.second != null) {
-                        titleName = pair.second.getName();
-                    } else {
-                        titleName = pair.first.getName();
+                    String oneTitleName="";
+                    String twoTitleName="";
+                    String titleName="";
+                    if (pair.first!=null){
+                        oneTitleName =pair.first.getName();
+                    }
+                    if (pair.second!=null){
+                        twoTitleName=pair.second.getName();
+                    }
+                    if (!TextUtils.isEmpty(twoTitleName)){
+                        titleName = twoTitleName;
+                    }
+                    if (!TextUtils.isEmpty(oneTitleName) && (QiuDaiYan.equalsIgnoreCase(oneTitleName) || Collection.equalsIgnoreCase(oneTitleName))){
+                        titleName = oneTitleName;
                     }
                     setTitleText(index, titleName);
                 }
-
                 if (dropDownListener != null) {
                     dropDownListener.onItemSelected(index, pair, items);
                 }
@@ -166,6 +178,34 @@ public class DropDownPopHelper implements PopupWindowLike {
         popup.performDefaultMarkPositions();
     }
 
+    public void performMarkIds(List<Pair<String,String>> pairsIds){
+        if (pairsIds==null || pairsIds.size()<=0){
+            performDefaultMarkPositions();
+            return;
+        }
+        List<String> ids = new ArrayList<>();
+        StringBuilder sb;
+        for (Pair<String, String> pairsId : pairsIds) {
+            if (pairsId==null)continue;
+            String one=pairsId.first;
+            String two=pairsId.second;
+
+            sb=new StringBuilder();
+            if (TextUtils.isEmpty(one)) {
+                continue;
+            }
+            if (TextUtils.isEmpty(two)){
+                sb.append(one);
+            }else {
+                sb.append(one);
+                sb.append("-&-");
+                sb.append(two);
+            }
+            ids.add(sb.toString());
+        }
+        innerPerformMarkIds(ids);
+    }
+
     public void performMarkIds(String levelOneId,String levelTwoId) {
         StringBuilder sb=new StringBuilder();
         if (TextUtils.isEmpty(levelOneId)) {
@@ -180,14 +220,14 @@ public class DropDownPopHelper implements PopupWindowLike {
         }
         List<String> ids = new ArrayList<>();
         ids.add(sb.toString());
-        performMarkIds(ids);
+        innerPerformMarkIds(ids);
     }
 
     /**
      * 你希望选中哪些item,把他们的 id 传进去就好了
      * @param ids
      */
-    private void performMarkIds(List<String> ids) {
+    private void innerPerformMarkIds(List<String> ids) {
         if (ids != null && ids.size() > 0) {
             popup.performMarkIds(ids);
         }
