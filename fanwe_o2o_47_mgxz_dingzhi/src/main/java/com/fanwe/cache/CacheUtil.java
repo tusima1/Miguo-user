@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.seller.model.getCityList.ModelCityList;
+import com.miguo.framework.BaseCity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +118,19 @@ public class CacheUtil {
         }
         return cityCurr;
     }
+    public BaseCity getCurrCity() {//new
+        BaseCity currCity = null;
+            try {
+                currCity = Serial.readObjectByFile(SerialConstant.FILE_CURR_CITY);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return currCity;
+    }
+    public void setCurrCity(BaseCity baseCity) {//new
+        if (baseCity == null)return;
+        Serial.saveObjectByFile(SerialConstant.FILE_CURR_CITY,baseCity);
+    }
 
     public void saveUserSearchWord(String singleWord) {
         if (TextUtils.isEmpty(singleWord)) {
@@ -134,6 +148,8 @@ public class CacheUtil {
             for (int i = 0; i < 8; i++) {
                 newList.add(userSearchWord.get(i));
             }
+        }else {
+            newList.addAll(userSearchWord);
         }
         newList.add(0,singleWord);
         Serial.saveObjectByFile(SerialConstant.FILE_HOT_SEARCH_WORD, newList);

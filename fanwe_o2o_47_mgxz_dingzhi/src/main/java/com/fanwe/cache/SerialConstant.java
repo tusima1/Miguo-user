@@ -18,4 +18,5 @@ public class SerialConstant {
      */
     public final static String FILE_CITY_CURR = "cityCurr.ser";
     public final static String FILE_HOT_SEARCH_WORD = "hotSearchWord.ser";
+    public final static String FILE_CURR_CITY = "currCity.ser";//new
 }

@@ -57,6 +57,13 @@ public class CityGroupListBean {
     }
 
     public class ResultBean {
+        /**
+         * group_name : 已开通城市
+         * group_item : [{"uname":"Chaozhou","name":"潮州",
+         * "id":"002a6000-5c1e-4cda-b7f4-63c08c1d2463"},{"uname":"Shengzhou","name":"嵊州",
+         * "id":"fc9ebab9-7aa1-49d5-8c56-2bddc7d92ded"}]
+         */
+
         private List<BodyBean> body;
 
         public List<BodyBean> getBody() {
@@ -68,23 +75,32 @@ public class CityGroupListBean {
         }
 
         public class BodyBean {
+            private String group_name;
             /**
              * uname : Chaozhou
              * name : 潮州
              * id : 002a6000-5c1e-4cda-b7f4-63c08c1d2463
              */
 
-            private List<已开通城市Bean> 已开通城市;
+            private List<GroupItemBean> group_item;
 
-            public List<已开通城市Bean> get已开通城市() {
-                return 已开通城市;
+            public String getGroup_name() {
+                return group_name;
             }
 
-            public void set已开通城市(List<已开通城市Bean> 已开通城市) {
-                this.已开通城市 = 已开通城市;
+            public void setGroup_name(String group_name) {
+                this.group_name = group_name;
             }
 
-            public  class 已开通城市Bean {
+            public List<GroupItemBean> getGroup_item() {
+                return group_item;
+            }
+
+            public void setGroup_item(List<GroupItemBean> group_item) {
+                this.group_item = group_item;
+            }
+
+            public class GroupItemBean {
                 private String uname;
                 private String name;
                 private String id;
