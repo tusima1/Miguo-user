@@ -181,15 +181,20 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     }
 
-    private void initDropDownPopHelper(){;
-        dropDownPopHelper = new DropDownPopHelper(getActivity(),topFakeDropDownMenu, fakeDropDownMenu );
-        dropDownPopHelper.setOnDropDownListener(this);
-        fakeDropDownMenu.setOnFakeClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickMenu();
-            }
-        });
+    private void initDropDownPopHelper(){
+        if(dropDownPopHelper == null){
+            dropDownPopHelper = new DropDownPopHelper(getActivity(),topFakeDropDownMenu, fakeDropDownMenu );
+            dropDownPopHelper.setOnDropDownListener(this);
+            fakeDropDownMenu.setOnFakeClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickMenu();
+                }
+            });
+            return;
+        }
+        dropDownPopHelper.updateData(SearchCateConditionFactory.get());
+
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
