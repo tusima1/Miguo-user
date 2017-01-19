@@ -45,6 +45,17 @@ public class SecondTypeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(fragments!=null&&fragments.size()<2){
+            mIndicator.setVisibility(View.INVISIBLE);
+        }else{
+            mIndicator.setVisibility(View.VISIBLE);
+
+        }
+    }
+
     public List<FirstFragment> getFragments() {
         return fragments;
     }

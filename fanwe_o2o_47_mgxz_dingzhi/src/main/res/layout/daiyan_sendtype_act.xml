@@ -88,13 +88,14 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_list_empty"/>
                     <TextView
+                        android:id="@+id/empty_desc"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dp28"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/gray_text_99"
                         android:textSize="@dimen/text_size_base"
-                        android:text="启禀了陛下，商家正在赶来的路上"/>
+                        android:text="启禀陛下，商家正在赶来的路上"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
