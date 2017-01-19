@@ -504,6 +504,10 @@ public class HiHomeCategory extends Category implements
         ((HiRepresentFragment) fragments.get(1)).updateFromCityChanged();
     }
 
+    public void onResume(){
+        fragments.get(1).onResume();
+    }
+
     public void handlerFunnyFragment() {
         homeViewPager.setCurrentItem(1);
     }

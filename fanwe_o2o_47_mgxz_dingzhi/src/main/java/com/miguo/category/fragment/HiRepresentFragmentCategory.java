@@ -178,7 +178,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     private void initRecyclerView(){
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(shopAdapter);
-
     }
 
     private void initDropDownPopHelper(){
@@ -193,8 +192,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             });
             return;
         }
-        dropDownPopHelper.updateData(SearchCateConditionFactory.get());
-
+        dropDownPopHelper.updateData(SearchCateConditionFactory.getHomeRepresent());
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -315,7 +313,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     @Override
     public void onScrollChanged(int l, int t, int oldl, int oldt) {
         handleFilterBar(t);
-        Log.d(tag, "t : " + t);
     }
 
     @Override
@@ -532,9 +529,22 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         pager.setLayoutParams(params);
     }
 
+    public void onResume(){
+        if(SearchCateConditionFactory.userChanged()){
+            updateCategories();
+            updateDropDownHelper();
+        }
+    }
+
+    private void updateDropDownHelper(){
+        dropDownPopHelper.updateData(SearchCateConditionFactory.getHomeRepresent());
+        List<Pair> pairs = new ArrayList<>();
+    }
+
     public void updateCategories(){
-        if(null != SearchCateConditionFactory.get()){
-            initCategories(SearchCateConditionFactory.get().getCategoryList());
+        SearchCateConditionBean.ResultBean.BodyBean bean = SearchCateConditionFactory.getHomeRepresent();
+        if(null != bean){
+            initCategories(bean.getCategoryList());
         }
     }
 

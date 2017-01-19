@@ -75,6 +75,10 @@ public class HiHomeActivity extends HiBaseActivity {
     @Override
     protected void doOnResume() {
 
+        if(null != getCategory()){
+            getCategory().onResume();
+        }
+
         if (null != getCategory()) {
             getCategory().onRefreshGreeting();
         }

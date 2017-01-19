@@ -19,9 +19,11 @@ public class SearchCateConditionFactory {
     static final int USER_LOGIN_CONDITION           =   0x00010;
     static final int WITHOUT_USER_LOGIN_CONDITION   =   0x00020;
     static final String COLLECT_ID                  = "collect";
+    static boolean last;
 
     static {
         conditions = new HashMap<>();
+        last = false;
     }
 
     /**
@@ -33,6 +35,15 @@ public class SearchCateConditionFactory {
             return null;
         }
         return conditions.get(isUserLogin() ? USER_LOGIN_CONDITION : WITHOUT_USER_LOGIN_CONDITION).clone();
+    }
+
+    /**
+     * 首页调用
+     * @return
+     */
+    public static SearchCateConditionBean.ResultBean.BodyBean getHomeRepresent(){
+        setLast(isUserLogin());
+        return get();
     }
 
     public static void update(SearchCateConditionBean.ResultBean.BodyBean condition){
@@ -86,5 +97,17 @@ public class SearchCateConditionFactory {
 
     private static boolean isUserLogin(){
         return !TextUtils.isEmpty(App.getInstance().getToken());
+    }
+
+    public static boolean isLast() {
+        return last;
+    }
+
+    public static boolean userChanged(){
+        return isLast() != isUserLogin();
+    }
+
+    public static void setLast(boolean last) {
+        SearchCateConditionFactory.last = last;
     }
 }

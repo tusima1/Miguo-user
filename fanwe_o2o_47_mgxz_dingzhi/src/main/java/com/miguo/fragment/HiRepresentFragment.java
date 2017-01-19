@@ -32,6 +32,14 @@ public class HiRepresentFragment extends HiBaseFragment {
     }
 
     @Override
+    public void onResume() {
+        if(null != getCategory()){
+            getCategory().onResume();
+        }
+        super.onResume();
+    }
+
+    @Override
     public HiRepresentFragmentCategory getCategory() {
         return (HiRepresentFragmentCategory)super.getCategory();
     }
