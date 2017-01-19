@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="23dp"
+             android:layout_height="24dp"
     android:background="@drawable/shape_circle_50_solid_f2_stroke_cc"
     >
     <ImageView
@@ -16,13 +16,15 @@
 
     <ImageView
         android:id="@+id/iv_delete"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:padding="@dimen/dp5"
         android:src="@drawable/ic_close_gray"
+        android:scaleType="centerInside"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginEnd="7dp"
         />
     <EditText
         android:id="@+id/edit"
@@ -33,7 +35,7 @@
         android:layout_toLeftOf="@+id/iv_delete"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:hint="请输入商品名、商家"
+        android:hint="请输入商品名、商家、地点"
         android:textColorHint="#CCCCCC"
         android:textColor="#595959"
         android:background="@null"
