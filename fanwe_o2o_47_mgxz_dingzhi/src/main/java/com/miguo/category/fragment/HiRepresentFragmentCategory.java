@@ -538,7 +538,21 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private void updateDropDownHelper(){
         dropDownPopHelper.updateData(SearchCateConditionFactory.getHomeRepresent());
-        List<Pair> pairs = new ArrayList<>();
+        List<Pair<String, String>> pairs = new ArrayList<>();
+        Pair<String, String> area = new Pair<>(filterBean.getAreaOne(), filterBean.getAreaTwo());
+        Pair<String, String> category = new Pair<>(filterBean.getCategoryOne(), filterBean.getCategoryTwo());
+        Pair<String, String> intel = new Pair<>(filterBean.getSortType(), "");
+        pairs.add(area);
+        pairs.add(category);
+        pairs.add(intel);
+        String[] filters = filterBean.getFilter().split("\\,");
+        if(null != filters){
+            for(int i = 0; i<filters.length; i++){
+                Pair<String, String> filter = new Pair<>(filters[i], "");
+                pairs.add(filter);
+            }
+        }
+        dropDownPopHelper.performMarkIds(pairs);
     }
 
     public void updateCategories(){

@@ -50,15 +50,21 @@ public class SearchResultActivity extends FragmentActivity {
     }
 
     public void searchByKeyword(String keyword) {
-        if ("shop".equals(pageType)) {
-            if (fragmentShop != null) {
-                fragmentShop.search(keyword);
-            }
-        } else {
-            if (fragmentGoods != null) {
-                fragmentGoods.search(keyword);
-            }
+        if (fragmentShop != null) {
+            fragmentShop.search(keyword);
         }
+        if (fragmentGoods != null) {
+            fragmentGoods.search(keyword);
+        }
+//        if ("shop".equals(pageType)) {
+//            if (fragmentShop != null) {
+//                fragmentShop.search(keyword);
+//            }
+//        } else {
+//            if (fragmentGoods != null) {
+//                fragmentGoods.search(keyword);
+//            }
+//        }
     }
 
     private void clickShop() {
@@ -111,6 +117,7 @@ public class SearchResultActivity extends FragmentActivity {
             }
             if (fragmentShop == null) {
                 fragmentShop = new FragmentSearchShop();
+                fragmentShop.initSearchKeyword(keyword);
                 ft.add(R.id.content_act_search, fragmentShop);
             } else {
                 ft.show(fragmentShop);
@@ -142,7 +149,7 @@ public class SearchResultActivity extends FragmentActivity {
      */
     private void initFragment() {
         fm = getSupportFragmentManager();
-        setTabSelected("shop");
+        setTabSelected("goods");
     }
 
     private void preView() {

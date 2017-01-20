@@ -64,6 +64,10 @@ public class FragmentSearchShop extends Fragment implements IDataInterface ,OnDr
         }
     }
 
+    public void initSearchKeyword(String keyword){
+        this.keywords = keyword;
+    }
+
     private void setListener() {
         popHelper.setOnDropDownListener(this);
         layoutEmpty.setOnClickListener(new View.OnClickListener() {
