@@ -99,18 +99,21 @@ public class FilterView extends LinearLayout implements OnCheckChangeListener, V
         }
         switch (index) {
             case like:
+                ll_like.removeAllViews();
                 for (LinearLayout linearLayout : itemContainer) {
                     ll_like.addView(linearLayout, containerParams);
                 }
                 tv_like.setText(data.getName());
                 break;
             case youHui:
+                ll_youHui.removeAllViews();
                 for (LinearLayout linearLayout : itemContainer) {
                     ll_youHui.addView(linearLayout, containerParams);
                 }
                 tv_youHui.setText(data.getName());
                 break;
             case price:
+                ll_price.removeAllViews();
                 for (LinearLayout linearLayout : itemContainer) {
                     ll_price.addView(linearLayout, containerParams);
                 }
