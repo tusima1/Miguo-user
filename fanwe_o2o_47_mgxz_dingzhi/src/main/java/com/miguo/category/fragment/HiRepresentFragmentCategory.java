@@ -192,7 +192,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             });
             return;
         }
-        dropDownPopHelper.updateData(SearchCateConditionFactory.getHomeRepresent());
+        updateDropDownHelper();
     }
 
     protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
@@ -536,7 +536,10 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
         }
     }
 
-    private void updateDropDownHelper(){
+    private void  updateDropDownHelper(){
+        if(null == dropDownPopHelper){
+            return;
+        }
         dropDownPopHelper.updateData(SearchCateConditionFactory.getHomeRepresent());
         List<Pair<String, String>> pairs = new ArrayList<>();
         Pair<String, String> area = new Pair<>(filterBean.getAreaOne(), filterBean.getAreaTwo());

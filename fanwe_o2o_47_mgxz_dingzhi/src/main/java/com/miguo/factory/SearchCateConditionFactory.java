@@ -66,10 +66,10 @@ public class SearchCateConditionFactory {
                 }
             }
         }
-        if(!SDCollectionUtil.isEmpty(condition.getFilterList1())){
-            int filterCount = condition.getFilterList1().size();
+        if(!SDCollectionUtil.isEmpty(condition.getFilterList1()) && !SDCollectionUtil.isEmpty(condition.getFilterList1().get(0).getFilterList2())){
+            int filterCount = condition.getFilterList1().get(0).getFilterList2().size();
             for(int i = 0; i < filterCount; i++){
-                if(isCollect(condition.getFilterList1().get(i).getFilterList2())){
+                if(isCollect(condition.getFilterList1().get(0).getFilterList2().get(i).getFilterList())){
                     break;
                 }
             }
@@ -81,8 +81,8 @@ public class SearchCateConditionFactory {
         return category.getId().equals(COLLECT_ID);
     }
 
-    private static boolean isCollect(List<SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean> filters){
-        for(SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean filter:filters){
+    private static boolean   isCollect(List<SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean.FilterListBean> filters){
+        for(SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean.FilterListBean filter:filters){
             if(isCollect(filter)){
                 filters.remove(filter);
                 return true;
@@ -91,7 +91,7 @@ public class SearchCateConditionFactory {
         return false;
     }
 
-    private static boolean isCollect(SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean filter){
+    private static boolean isCollect(SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean.FilterListBean filter){
         return filter.getKey().equals(COLLECT_ID);
     }
 
