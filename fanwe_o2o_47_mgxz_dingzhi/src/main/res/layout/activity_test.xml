@@ -8,30 +8,12 @@
     android:orientation="vertical"
     android:background="@color/white"
     >
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
 
-        <Button
-            android:id="@+id/bt"
-            android:text="改变"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </FrameLayout>
-
-    <com.miguo.ui.view.dropdown.DropDownMenu
-        android:id="@+id/ddm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <!--<com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>-->
+    <com.miguo.ui.view.floatdropdown.view.CheckTextView
+        android:id="@+id/view"
+        android:layout_gravity="center"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="@dimen/dp200"/>
 
 
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.ui.view.floatdropdown.interf.OnRvItemClickListener;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class SearchGuideAdapter extends RecyclerView.Adapter<SearchGuideAdapter.
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final String name = words.get(position);
-        holder.tv_name.setText(name);
+        holder.tv_name.setText(MGStringFormatter.getLimitedChinese(name,5));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

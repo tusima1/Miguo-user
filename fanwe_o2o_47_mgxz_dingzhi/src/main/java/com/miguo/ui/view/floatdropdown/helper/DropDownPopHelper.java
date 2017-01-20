@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.view.View;
 
+import com.fanwe.utils.MGStringFormatter;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
 import com.miguo.ui.view.dropdown.DropDownPopup;
@@ -140,6 +141,9 @@ public class DropDownPopHelper implements PopupWindowLike {
                     if (!TextUtils.isEmpty(oneTitleName) && (QiuDaiYan.equalsIgnoreCase(oneTitleName) || Collection.equalsIgnoreCase(oneTitleName))){
                         titleName = oneTitleName;
                     }
+                    if (!TextUtils.isEmpty(oneTitleName) && TextUtils.isEmpty(titleName)){
+                        titleName = oneTitleName;
+                    }
                     setTitleText(index, titleName);
                 }
                 if (dropDownListener != null) {
@@ -153,21 +157,17 @@ public class DropDownPopHelper implements PopupWindowLike {
 
 
     public void setTitleText(int index, String text) {
-        text = TextUtils.isEmpty(text) ? " " : text;
-        int length = text.length();
-        if (length > 4) {
-            text = text.substring(0, 4);
-            text += "...";
-        }
-        anchor.setTitleText(index, text);
+        String limitedChinese = MGStringFormatter.getLimitedChinese(text, 5);
+        anchor.setTitleText(index, limitedChinese);
         if (fakeDDM != null) {
-            fakeDDM.setTitleText(index, text);
+            fakeDDM.setTitleText(index, limitedChinese);
         }
     }
 
     public void updateData(SearchCateConditionBean.ResultBean.BodyBean newBody){
         if (newBody!=null){
             popup.updateData(newBody);
+            performDefaultMarkPositions();
         }
     }
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +31,7 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
     protected TextView textView;
     private View actView;
     private int duration = 150;
+    private boolean isAnimating= false;//是否在动画中
 
     private float locationX;
     private float locationY;
@@ -120,6 +120,7 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
         isChecked = !isChecked;
         if (isAttachedToWindow() && Build.VERSION.SDK_INT >= Build
                 .VERSION_CODES.LOLLIPOP) {
+            actView.clearAnimation();
             startAnimate();
         } else {
             actView.setVisibility(isChecked ? VISIBLE : GONE);
@@ -143,12 +144,14 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
             open.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    actView.setVisibility(VISIBLE);
+                    isAnimating = true;
+//                    actView.setVisibility(VISIBLE);
+                    actView.setVisibility(isChecked ? VISIBLE : GONE);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-
+                    isAnimating = false;
                 }
 
                 @Override
@@ -170,12 +173,14 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
             reveal.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
+                    isAnimating = true;
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    actView.setVisibility(GONE);
+                    isAnimating = false;
+//                    actView.setVisibility(GONE);
+                    actView.setVisibility(isChecked ? VISIBLE : GONE);
                 }
 
                 @Override
@@ -190,7 +195,6 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
             });
             reveal.start();
         }
-        Log.e("test", "x: " + locationX + "y: " + locationY);
     }
 
     /**
