@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,6 +74,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener,
         ShopFansFragment.ShowListener,
         CallbackView {
+    private int resultCode = 0;
 
     @ViewInject(R.id.recycler_scrollview)
     RecyclerBounceNestedScrollView scrollView;
@@ -269,9 +271,16 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     }
 
     private String merchantID;
+    /**
+     * 上次代言的参数。
+     */
+    private int lastDataPos = -1;
+    private  String is_endorsement ="";
 
     private void getIntentData() {
         merchantID = getActivity().getIntent().getExtras().getString(HiShopDetailActivity.EXTRA_MERCHANT_ID);
+        lastDataPos = getActivity().getIntent().getExtras().getInt(HiShopDetailActivity.LAST_DATA_POS);
+        Log.d("lastDataPos",lastDataPos+"");
     }
 
     private void initShopDetail() {
@@ -350,13 +359,18 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         }
         represent.setClickable(false);
         representMerchantDao.getRepresentMerchant(result.getEnt_id(), result.getId());
-
+        is_endorsement = "1";
     }
 
     /**
      * 点击返回
      */
     public void clickBack() {
+        Intent mIntent = new Intent();
+        mIntent.putExtra(HiShopDetailActivity.IS_ENDORSEMENT, is_endorsement);
+        mIntent.putExtra(HiShopDetailActivity.LAST_DATA_POS, lastDataPos);
+        // 设置结果，并进行传送
+        getActivity().setResult(resultCode, mIntent);
         BaseUtils.finishActivity(getActivity());
     }
 
