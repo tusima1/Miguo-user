@@ -112,6 +112,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
      * 是否加载更多。
      */
     private boolean isLoadmore = false;
+    private boolean isLoading = false;
 
     private Context mContext;
     /**
@@ -130,6 +131,12 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
      */
     TextView empty_desc;
 
+    /**
+     * 上次代言的参数。
+     */
+    private int lastDataPos = -1;
+    private  String is_endorsement ="";
+
     public DaiyanSendTypeActivity() {
     }
 
@@ -144,7 +151,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         whitebg = (LinearLayout) findViewById(R.id.whitebg);
         mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
         mHorizontalScrollView = (TypeHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
-        empty_desc = (TextView)findViewById(R.id.empty_desc);
+        empty_desc = (TextView) findViewById(R.id.empty_desc);
         getIntentData();
         initTitle();
         getConditionData();
@@ -157,10 +164,12 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     @Override
     protected void onResume() {
         super.onResume();
+
         if (helper != null) {
             helper.performMarkIds(category_one, category_two);
+
         }
-//         requestData(false);
+
     }
 
 
@@ -206,6 +215,17 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         category_two = intent.getStringExtra("secondType");
     }
 
+    /**
+     * 获取从代言过来的修改后的参数。
+     */
+    private void getChangedIntentData(){
+        lastDataPos = getIntent().getIntExtra("lastDataPos",-1);
+        is_endorsement = getIntent().getStringExtra("is_endorsement");
+        if("represent".equals(category_one)&&lastDataPos!=-1){
+            mRecycleViewAdapter.updateItemData(lastDataPos,is_endorsement);
+        }
+    }
+
     private void initView() {
         mViewPager = (DPViewPager) findViewById(R.id.viewpager_meituan);
         mViewPager.setOnPageChangeListener(this);
@@ -226,7 +246,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         if (currentFirstTypePosition != -1) {
             isFirstCome = true;
             mHorizontalScrollView.scrollToIndex(currentFirstTypePosition);
-
         }
         if (currentFirstTypePosition != -1 && currentFirstTypePosition != 0) {
             mScrollView.smoothScrollTo(currentFirstTypePosition * 57, 0);
@@ -327,6 +346,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         mHorizontalScrollView.setOnItemClickListener(new TypeHorizontalScrollView.OnItemClickListener() {
             @Override
             public void onClick(View oldView, View view, int position) {
+                Log.d("onclick","position:"+position);
                 if (!TextUtils.isEmpty(mDatas.get(position).getId())) {
                     String selectedId = mDatas.get(position).getId();
                     if (!isFirstCome && !TextUtils.isEmpty(category_one) && category_one.equals(selectedId)) {
@@ -471,6 +491,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         youhuishop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if("1".equals(merchant_type)){
+                    return;
+                }
                 merchant_type = "1";
                 isLoadmore = false;
                 updateTextView(youhuishop, true);
@@ -482,6 +505,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         commonshop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if("0".equals(merchant_type)){
+                    return;
+                }
                 merchant_type = "0";
                 isLoadmore = false;
                 updateTextView(youhuishop, false);
@@ -523,7 +549,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     int scrollViewMeasuredHeight = mScrollView.getChildAt(0)
                             .getMeasuredHeight();
                     //这个表示,当滑动到scrollview顶部的时候,
-                    Log.d("recycleviewTouch", "localheight:" + localheight + " localheight - sY：" + (localheight - sY) + " scrollViewMeasuredHeight:" + scrollViewMeasuredHeight);
                     if (scrollY == 0) {
                         //检测到在listview里面手势向下滑动的手势,就下拉刷新,反之,则无法触发下拉刷新
                         if (localheight - sY > 10) {
@@ -542,7 +567,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     //滑动到底部的时候,自动去加载更多.
                     if ((scrollY + height) >= scrollViewMeasuredHeight) {
                         // 滑到底部触发加载更多
-                        Log.d("recycleviewTouch", "(scrollY + height) >= scrollViewMeasuredHeight:" + ((scrollY + height) >= scrollViewMeasuredHeight));
                         onLoadMore();
                     }
                     break;
@@ -587,11 +611,11 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         });
         //将ScrollView滚动到起始位置
         mScrollView.scrollTo(0, 0);
-        requestData(true);
     }
 
 
     private void requestData(boolean isFresh) {
+
         if (sellerHttpHelper == null) {
             sellerHttpHelper = new SellerHttpHelper(mContext, this);
         }
@@ -600,7 +624,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             isLoadmore = false;
             updateFirstTypeAndSecondType(category_one, category_two);
         }
-        sellerHttpHelper.getShopSearch(area_one, area_two, category_one, category_two, filter, "", sort_type, pageNum, pageSize, merchant_type);
+        if(!isLoading) {
+            sellerHttpHelper.getShopSearch(area_one, area_two, category_one, category_two, filter, "", sort_type, pageNum, pageSize, merchant_type);
+            isLoading = true;
+        }
     }
 
     /**
@@ -618,6 +645,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     }
 
     public void setData(List<ModelBusinessListings> models) {
+        isLoading = false;
         int lastPosition = 0;
 
         if (!isLoadmore) {
@@ -655,13 +683,16 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     }
 
     private void onLoadMore() {
-        if (pageBean == null || TextUtils.isEmpty(pageBean.getPage_total()) || pageNum <= Integer.valueOf(pageBean.getPage_total())) {
-            Log.d("recycleview", "加载更多");
-            isLoadmore = true;
-            requestData(false);
-        } else {
-            SDToast.showToast("没有更多了！");
+        if (!isLoading) {
+            if (pageBean == null || TextUtils.isEmpty(pageBean.getPage_total()) || pageNum <= Integer.valueOf(pageBean.getPage_total())) {
+                Log.d("recycleview", "加载更多");
+                isLoadmore = true;
+                requestData(false);
+            } else {
+                SDToast.showToast("没有更多了！");
+            }
         }
+
     }
 
     /**
@@ -672,8 +703,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         String str = "启禀陛下，商家正在赶来的路上";
         if (show) {
             empty_line.setVisibility(View.VISIBLE);
-            if("collect".equals(category_one)){
-                str ="启禀陛下，这个分类里你没收藏" ;
+            if ("collect".equals(category_one)) {
+                str = "启禀陛下，这个分类里你没收藏";
             }
             empty_desc.setText(str);
         } else {
@@ -811,7 +842,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     private void handleItemSelectFilter(List<SingleMode> items) {
         if (SDCollectionUtil.isEmpty(items)) {
-             filter="";
+            filter = "";
         }
         String ids = "";
         for (int i = 0; i < items.size(); i++) {
@@ -899,5 +930,16 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         return position;
     }
 
+    // 回调方法，从第二个页面回来的时候会执行这个方法
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 0:
+                getChangedIntentData();
+                break;
+            default:
+                break;
+        }
+    }
 
 }

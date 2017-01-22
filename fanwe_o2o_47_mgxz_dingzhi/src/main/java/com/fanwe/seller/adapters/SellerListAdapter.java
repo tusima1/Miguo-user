@@ -56,9 +56,8 @@ public class SellerListAdapter extends RecyclerView.Adapter<SellerListAdapter.MV
         return holder;
     }
 
-
     @Override
-    public void onBindViewHolder(MViewHolder mViewHolder, int position) {
+    public void onBindViewHolder(MViewHolder mViewHolder, final int position) {
         final ModelBusinessListings model = listData.get(position);
         mViewHolder.layoutItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,10 +65,12 @@ public class SellerListAdapter extends RecyclerView.Adapter<SellerListAdapter.MV
                 Intent itemintent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putString(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getId());
+                //把当前数据所在列表中的位置传过去，用来adapter 刷 新某一项的值。
+                bundle.putInt("lastDataPos",position);
                 bundle.putInt("type", 0);
                 itemintent.putExtras(bundle);
                 itemintent.setClass(App.getApplication(), HiShopDetailActivity.class);
-                activity.startActivity(itemintent);
+                activity.startActivityForResult(itemintent,0);
             }
         });
         setView(model, mViewHolder, position);
@@ -121,6 +122,16 @@ public class SellerListAdapter extends RecyclerView.Adapter<SellerListAdapter.MV
 
     }
 
+    public void updateItemData(int position, String is_endorsement){
+        if(getItemCount()>=position) {
+            ModelBusinessListings datas = listData.get(position);
+            String value = datas.getIs_endorsement();
+            if(!TextUtils.isEmpty(is_endorsement)&&!is_endorsement.equals(value)){
+                datas.setIs_endorsement(is_endorsement);
+                notifyItemRemoved(position);
+            }
+        }
+    }
 
 
     public void setListData(List<ModelBusinessListings> listData) {
