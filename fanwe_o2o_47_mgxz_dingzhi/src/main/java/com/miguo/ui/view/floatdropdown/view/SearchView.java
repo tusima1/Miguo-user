@@ -87,9 +87,6 @@ public class SearchView extends FrameLayout implements ExpandReverse {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE){
                     String editText = getEditText();
-                    if (TextUtils.isEmpty(editText)){
-                        return false;
-                    }
                     if (searchActionListener!=null){
                         searchActionListener.doSearch(editText);
                     }

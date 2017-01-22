@@ -31,16 +31,16 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
     protected TextView textView;
     private View actView;
     private int duration = 150;
-    private boolean isAnimating= false;//是否在动画中
 
     private float locationX;
     private float locationY;
 
-    private int checkedTextColor = Color.WHITE;
     private int uncheckedTextColor;
 
     private Object holdSome;
     private OnCheckChangeListener checkChangeListener;
+    private Animator open;
+    private Animator reveal;
 
     public CheckTextView(Context context) {
         this(context, null);
@@ -118,14 +118,14 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
     @Override
     public void onClick(View v) {
         isChecked = !isChecked;
-        if (isAttachedToWindow() && Build.VERSION.SDK_INT >= Build
-                .VERSION_CODES.LOLLIPOP) {
+        //Build.VERSION_CODES.LOLLIPOP
+        if (isAttachedToWindow() && Build.VERSION.SDK_INT >= 23) {
             actView.clearAnimation();
             startAnimate();
         } else {
             actView.setVisibility(isChecked ? VISIBLE : GONE);
         }
-        textView.setTextColor(isChecked ? checkedTextColor : uncheckedTextColor);
+        textView.setTextColor(isChecked ? Color.WHITE : uncheckedTextColor);
         if (checkChangeListener!=null){
             checkChangeListener.changed(v,isChecked);
         }
@@ -137,21 +137,18 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
         int height = getHeight();
         float radius = (float) (Math.sqrt((Math.pow(width, 2) + Math.pow(height, 2))) / 2);
         if (isChecked) {
-            Animator open = ViewAnimationUtils.createCircularReveal(actView, (int) locationX,
+            open = ViewAnimationUtils.createCircularReveal(actView, (int) locationX,
                     (int) locationY, 0, radius);
             open.setDuration(duration);
             open.setInterpolator(new AccelerateInterpolator());
             open.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    isAnimating = true;
-//                    actView.setVisibility(VISIBLE);
                     actView.setVisibility(isChecked ? VISIBLE : GONE);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    isAnimating = false;
                 }
 
                 @Override
@@ -166,20 +163,17 @@ public class CheckTextView extends FrameLayout implements Checkable, View.OnClic
             });
             open.start();
         } else {
-            Animator reveal = ViewAnimationUtils.createCircularReveal(actView, (int) locationX,
+            reveal = ViewAnimationUtils.createCircularReveal(actView, (int) locationX,
                     (int) locationY, radius, 0);
             reveal.setDuration(duration);
             reveal.setInterpolator(new DecelerateInterpolator());
             reveal.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    isAnimating = true;
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    isAnimating = false;
-//                    actView.setVisibility(GONE);
                     actView.setVisibility(isChecked ? VISIBLE : GONE);
                 }
 

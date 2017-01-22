@@ -39,7 +39,9 @@ import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/22.
+ * 使用{@link OkHttpUtil}
  */
+@Deprecated
 public class OkHttpUtils {
     private volatile static OkHttpUtils mInstance;
     public static final MediaType JSON

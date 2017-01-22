@@ -157,8 +157,10 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
 
     private void searchAction(){
         String searchWord = searchView.getEditText();
+        //Note: searchWord 可以为空
         if (TextUtils.isEmpty(searchWord)){
             //do nothing
+            gotoSearchResultActivity(searchWord);
         }else {
             //跳转
             boolean same =false;
@@ -208,7 +210,7 @@ public class SearchGuideActivity extends AppCompatActivity implements View.OnCli
     private void getHttpData(){
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("method", "GetHostList");
-        params.put("city_id", "69e0405b-de8c-4247-8a0a-91ca45c4b30c");
+//        params.put("city_id", "69e0405b-de8c-4247-8a0a-91ca45c4b30c");
         OkHttpUtil.getInstance().get(params, new HttpCallback<HotWordsBean>() {
             @Override
             public void onFinish() {
