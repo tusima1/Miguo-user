@@ -60,6 +60,7 @@ import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.GetUserReceiveCodeView;
 import com.miguo.view.LoginByMobileView;
 import com.miguo.view.TencentIMBindPresenterView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -306,6 +307,7 @@ public class HiHomeCategory extends Category implements
              * {@link #loginError(String)}
              */
             loginByMobileDao.loginByMobile(SharedPreferencesUtils.getInstance().getUserName(), SharedPreferencesUtils.getInstance().getPassword());
+            MobclickAgent.onEvent(getActivity(), "login");
         }
     }
 
