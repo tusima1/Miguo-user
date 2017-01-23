@@ -203,6 +203,7 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface ,OnD
             fragmentFeatured = new FragmentFeaturedGroupon();
             ft.add(R.id.content_frag_search, fragmentFeatured);
         }
+        ft.show(fragmentFeatured);
         fragmentFeatured.refresh();
         ft.commit();
     }
