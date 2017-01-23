@@ -37,6 +37,7 @@ import com.fanwe.seller.views.customize.MultiScrollView;
 import com.fanwe.seller.views.customize.TypeHorizontalScrollView;
 import com.fanwe.seller.views.fragment.FirstFragment;
 import com.fanwe.seller.views.fragment.SecondTypeFragment;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
 import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.entity.SingleMode;
@@ -219,8 +220,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
      * 获取从代言过来的修改后的参数。
      */
     private void getChangedIntentData(){
-        lastDataPos = getIntent().getIntExtra("lastDataPos",-1);
-        is_endorsement = getIntent().getStringExtra("is_endorsement");
+        Intent backIntent = getIntent();
+        lastDataPos = backIntent.getIntExtra("lastDataPos",-1);
+        is_endorsement = backIntent.getStringExtra("is_endorsement");
         if("represent".equals(category_one)&&lastDataPos!=-1){
             mRecycleViewAdapter.updateItemData(lastDataPos,is_endorsement);
         }
@@ -536,7 +538,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            Log.d("recycleviewTouch", "-------------");
+            Log.d("MultirecycleviewTouch", "-------------");
             int localheight = 0;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -564,6 +566,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                         // 取消拦截scrollview事件,listview不能刷新
                         mScrollView.requestDisallowInterceptTouchEvent(false);
                     }
+                    Log.d("Multirecyclevie","scrollY :"+scrollY +" height:"+height +" scrollViewMeasuredHeight:"+scrollViewMeasuredHeight);
                     //滑动到底部的时候,自动去加载更多.
                     if ((scrollY + height) >= scrollViewMeasuredHeight) {
                         // 滑到底部触发加载更多
@@ -599,18 +602,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         recyclerView.setOnTouchListener(touchListener);
         //监听浮动view的滚动状态
         mScrollView.listenerFlowViewScrollState(topView, mFlowView, fakeFlowLine);
-        mScrollView.setScrollChangedFlowViewListener(new MultiScrollView.ScrollChangedFlowViewListener() {
-            @Override
-            public void ifShowFlowView(boolean show) {
-                if (show) {
-                    showTopMenu();
-                } else {
-                    showFakeMenu();
-                }
-            }
-        });
         //将ScrollView滚动到起始位置
         mScrollView.scrollTo(0, 0);
+        mScrollView.setChildOnTouchListener(touchListener);
+        mScrollView.setChildView(recyclerView);
     }
 
 
@@ -933,6 +928,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     // 回调方法，从第二个页面回来的时候会执行这个方法
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String srt = data.getStringExtra(HiShopDetailActivity.LAST_DATA_POS);
         switch (requestCode) {
             case 0:
                 getChangedIntentData();

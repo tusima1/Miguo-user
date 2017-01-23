@@ -288,13 +288,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     /**
      * 上次代言的参数。
      */
-    private int lastDataPos = -1;
+    private int lastDataPos1 ;
     private  String is_endorsement ="";
 
     private void getIntentData() {
         merchantID = getActivity().getIntent().getExtras().getString(HiShopDetailActivity.EXTRA_MERCHANT_ID);
-        lastDataPos = getActivity().getIntent().getExtras().getInt(HiShopDetailActivity.LAST_DATA_POS);
-        Log.d("lastDataPos",lastDataPos+"");
+        lastDataPos1 = getActivity().getIntent().getExtras().getInt(HiShopDetailActivity.LAST_DATA_POS,-1);
+        Log.d("lastDataPos",lastDataPos1+"");
     }
 
     private void initShopDetail() {
@@ -428,11 +428,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      */
     public void clickBack() {
         Intent mIntent = new Intent();
-        mIntent.putExtra(HiShopDetailActivity.IS_ENDORSEMENT, is_endorsement);
-        mIntent.putExtra(HiShopDetailActivity.LAST_DATA_POS, lastDataPos);
+        mIntent.putExtra(HiShopDetailActivity.IS_ENDORSEMENT, merchantID);
+        mIntent.putExtra(HiShopDetailActivity.LAST_DATA_POS, lastDataPos1);
         // 设置结果，并进行传送
         getActivity().setResult(resultCode, mIntent);
-        BaseUtils.finishActivity(getActivity());
+         BaseUtils.finishActivity(getActivity());
     }
 
     private String shareRecordId;
