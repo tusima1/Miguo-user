@@ -152,7 +152,7 @@ public class MyAccountActivity extends BaseActivity implements CallbackView {
     }
 
     private void init() {
-        mLoginHelper = new LoginHelper(this);
+        mLoginHelper = new LoginHelper();
         mUserFaceModule = new UserFaceModule(this);
         mUserFaceModule.initPhotoHandler();
         getServiceNum();

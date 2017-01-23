@@ -141,7 +141,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
 //		initAppCrashHandler();
         //关闭友盟分析默认的统计方式
-        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.openActivityDurationTrack(true);
         MobclickAgent.setCatchUncaughtExceptions(true);
 
         //腾讯视频sdk

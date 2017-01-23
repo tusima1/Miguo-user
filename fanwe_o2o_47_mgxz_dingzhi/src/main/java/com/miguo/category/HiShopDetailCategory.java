@@ -1,17 +1,21 @@
 package com.miguo.category;
 
+import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.fanwe.StoreLocationActivity;
@@ -32,6 +36,7 @@ import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.user.UserConstants;
+import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.ShareUtil;
 import com.fanwe.view.LoadMoreRecyclerView;
@@ -60,6 +65,7 @@ import com.miguo.ui.view.ShopDetailViewPager;
 import com.miguo.view.CollectShopView;
 import com.miguo.view.HiShopDetailView;
 import com.miguo.view.RepresentMerchantView;
+import com.tencent.qcloud.suixinbo.model.CurLiveInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +79,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener,
         ShopFansFragment.ShowListener,
         CallbackView {
+    private int resultCode = 0;
 
     @ViewInject(R.id.recycler_scrollview)
     RecyclerBounceNestedScrollView scrollView;
@@ -181,10 +188,14 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     /**
      * 是否已代言
      */
-    @ViewInject(R.id.represent_message)
+    @ViewInject(R.id.tv_represent_message)
     TextView representMessage;
-    @ViewInject(R.id.represent)
-    TextView represent;
+    @ViewInject(R.id.tv_represent)
+    TextView tvRepresent;
+    @ViewInject(R.id.tv_mine_shop)
+    TextView tvMineShop;
+    @ViewInject(R.id.tv_share)
+    TextView tvShare;
     @ViewInject(R.id.layout_recmmend)
     LinearLayout layoutRecmmend;
     @ViewInject(R.id.layout_people)
@@ -197,6 +208,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     RelativeLayout layoutBottom;
     @ViewInject(R.id.mode_top_layout)
     LinearLayout modeTopLayout;
+    @ViewInject(R.id.iv_represent)
+    ImageView ivRepresent;
 
     HiShopDetailDao shopDetailDao;
     HiShopDetailBean.Result result;
@@ -237,6 +250,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
 
     @Override
     protected void setThisListener() {
+        ivRepresent.setOnClickListener(listener);
         call.setOnClickListener(listener);
         location.setOnClickListener(listener);
         collect.setOnClickListener(listener);
@@ -244,7 +258,9 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         share.setOnClickListener(listener);
         backBg.setOnClickListener(listener);
         shareBg.setOnClickListener(listener);
-        represent.setOnClickListener(listener);
+        tvRepresent.setOnClickListener(listener);
+        tvMineShop.setOnClickListener(listener);
+        tvShare.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
         scrollView.hideLoadingLayout();
 
@@ -269,9 +285,16 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     }
 
     private String merchantID;
+    /**
+     * 上次代言的参数。
+     */
+    private int lastDataPos1 ;
+    private  String is_endorsement ="";
 
     private void getIntentData() {
         merchantID = getActivity().getIntent().getExtras().getString(HiShopDetailActivity.EXTRA_MERCHANT_ID);
+        lastDataPos1 = getActivity().getIntent().getExtras().getInt(HiShopDetailActivity.LAST_DATA_POS,-1);
+        Log.d("lastDataPos",lastDataPos1+"");
     }
 
     private void initShopDetail() {
@@ -336,6 +359,53 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         scrollView.smoothScrollTo(0, (modeTopLayout.getMeasuredHeight() - BaseUtils.dip2px(15)));
     }
 
+    boolean scrollAlready;
+
+    /**
+     * 点击求代言
+     */
+    public void clickRepresentBtn() {
+        if (!scrollAlready) {
+            //1、如果未代言，展开条幅
+            ivRepresent.setImageResource(R.drawable.ic_represent_open);
+            //2、下滑到屏幕底部(延时1s)
+            scrollAlready = true;
+            representAnim();
+        } else {
+            //页面滚动到底部
+            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        }
+    }
+
+    /**
+     * 延时1.5s，给条幅展示的时间
+     */
+    private void representAnim() {
+        int time = 0;
+        //还未代言，有延时
+        if (!isRepresent) {
+            time = 1500;
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //收起条幅
+                if (isRepresent) {
+                    ivRepresent.setImageResource(R.drawable.ic_represent_already);
+                } else {
+                    ivRepresent.setImageResource(R.drawable.ic_represent_do);
+                }
+                float curTranslationY = ivRepresent.getTranslationY();
+                ObjectAnimator animator = ObjectAnimator.ofFloat(ivRepresent, "translationY", curTranslationY,
+                        (int) (BaseUtils.getHeight(getActivity()) * 0.5 - BaseUtils.dip2px(85)));
+                animator.setDuration(500);
+                animator.start();
+                //页面滚动到底部
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        }, time);
+    }
+
     /**
      * 点击代言
      */
@@ -348,19 +418,31 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         if (result == null) {
             return;
         }
-        represent.setClickable(false);
+        tvRepresent.setClickable(false);
         representMerchantDao.getRepresentMerchant(result.getEnt_id(), result.getId());
-
+        is_endorsement = "1";
     }
 
     /**
      * 点击返回
      */
     public void clickBack() {
-        BaseUtils.finishActivity(getActivity());
+        Intent mIntent = new Intent();
+        mIntent.putExtra(HiShopDetailActivity.IS_ENDORSEMENT, merchantID);
+        mIntent.putExtra(HiShopDetailActivity.LAST_DATA_POS, lastDataPos1);
+        // 设置结果，并进行传送
+        getActivity().setResult(resultCode, mIntent);
+         BaseUtils.finishActivity(getActivity());
     }
 
     private String shareRecordId;
+
+    /**
+     * 跳转到我的小店
+     */
+    public void clickMineShopBtn() {
+        getActivity().startActivity(new Intent(getActivity(), UserHomeActivity.class));
+    }
 
     /**
      * 点击分享
@@ -597,12 +679,23 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         showShareTipPop();
     }
 
+    private boolean isRepresent;
+
     public void updateRepresent() {
+        isRepresent = result.isEndorsement();
         /**
          * 是否已代言
          */
-        represent.setVisibility(result.isEndorsement() ? View.GONE : View.VISIBLE);
-        representMessage.setText(result.isEndorsement() ? "您已是这家店的代言人，快带领亲朋好友走上人生巅峰" : "建议消费过后，再申请代言人资格");
+        tvRepresent.setVisibility(isRepresent ? View.GONE : View.VISIBLE);
+        tvMineShop.setVisibility(isRepresent ? View.VISIBLE : View.GONE);
+        tvShare.setVisibility(isRepresent ? View.VISIBLE : View.GONE);
+        representMessage.setText(isRepresent ? "你已代言，分享可赚钱" : "赚人气，赚代言费，与朋友分享自己的生活");
+        //求代言按钮
+        if (isRepresent) {
+            ivRepresent.setImageResource(R.drawable.ic_represent_already);
+        } else {
+            ivRepresent.setImageResource(R.drawable.ic_represent_do);
+        }
     }
 
     private String getCrowdPeopleText(final HiShopDetailBean.Result result) {
@@ -688,7 +781,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
 
     @Override
     public void onFinish() {
-        represent.setClickable(true);
+        tvRepresent.setClickable(true);
     }
 
     @Override

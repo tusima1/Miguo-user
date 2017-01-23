@@ -187,9 +187,9 @@ public class SearchResultActivity extends FragmentActivity {
             //do nothing
         } else {
             CacheUtil.getInstance().saveUserSearchWord(keyword);
-            searchByKeyword(keyword);
-            hideKeyboard();
         }
+        searchByKeyword(keyword);
+        hideKeyboard();
     }
 
     private void hideKeyboard() {

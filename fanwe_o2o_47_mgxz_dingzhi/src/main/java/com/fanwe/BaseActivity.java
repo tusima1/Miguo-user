@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.fanwe.app.ActivityLifeManager;
 import com.fanwe.app.App;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.EnumEventTag;
@@ -31,8 +29,6 @@ import com.fanwe.work.ScanResultHandler;
 import com.fanwe.work.SystemBarTintManager;
 import com.lidroid.xutils.ViewUtils;
 import com.miguo.app.HiHomeActivity;
-import com.miguo.definition.ClassPath;
-import com.miguo.factory.ClassNameFactory;
 import com.sunday.eventbus.SDBaseEvent;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
@@ -133,18 +129,18 @@ public class BaseActivity extends SDBaseActivity implements SDTitleSimpleListene
     @Override
     protected void onPause() {
         super.onPause();
-        if (!TextUtils.isEmpty(umengTag)) {
-            MobclickAgent.onPageEnd(umengTag);
-        }
+//        if (!TextUtils.isEmpty(umengTag)) {
+//            MobclickAgent.onPageEnd(umengTag);
+//        }
         MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!TextUtils.isEmpty(umengTag)) {
-            MobclickAgent.onPageStart(umengTag);
-        }
+//        if (!TextUtils.isEmpty(umengTag)) {
+//            MobclickAgent.onPageStart(umengTag);
+//        }
         MobclickAgent.onResume(this);
     }
 

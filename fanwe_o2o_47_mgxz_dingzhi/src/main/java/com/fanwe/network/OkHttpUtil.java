@@ -4,8 +4,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.app.App;
+import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
+import com.fanwe.library.utils.SDPackageUtil;
+import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
@@ -51,6 +54,20 @@ public class OkHttpUtil {
     private static final String APP_TYPE = "app_type";
     private static final String APP_KEY_DEFAULT = "c3e67013-e439-11e5-bbcc-a0d3c1ef5680";
     private static final String APP_SECURITY_DEFAULT = "2acabf04914eeaec6b841a81f09711d8";
+    //    java接口增加公共参数
+    private static final String CITY_ID="city_id";
+    /**
+     * longitude经度
+     */
+    private static final String LONGITUDE="longitude";
+    /**
+     * latitude纬度
+     */
+    private static final String LATITUDE="latitude";
+    /**
+     * app_version终端的版本号
+     */
+    private static final String APP_VERSION="app_version";
     /**
      * 加密方式 。
      */
@@ -410,8 +427,22 @@ public class OkHttpUtil {
         params.put(APP_KEY, APP_KEY_DEFAULT);
         params.put(APP_SECURITY, APP_SECURITY_DEFAULT);
         params.put(TIMESTAMP, String.valueOf((new Date()).getTime()));
-        params.put(IMEI, App.getApplication().getImei());
+        params.put(IMEI, App.getInstance().getImei());
         params.put(APP_TYPE, "2");
+        params.put(CITY_ID, AppRuntimeWorker.getCity_id());
+        params.put(LONGITUDE, BaiduMapManager.getInstance().getLongitude()+"");
+        params.put(LATITUDE,BaiduMapManager.getInstance().getLatitude()+"");
+        String versionName = SDPackageUtil.getVersionName();
+        if(TextUtils.isEmpty(versionName)){
+            versionName = SDPackageUtil.getCurrentPackageInfo().versionName;
+        }
+        params.put(APP_VERSION, versionName);
+//        TreeMap<String, String> params = new TreeMap<>();
+//        params.put(APP_KEY, APP_KEY_DEFAULT);
+//        params.put(APP_SECURITY, APP_SECURITY_DEFAULT);
+//        params.put(TIMESTAMP, String.valueOf((new Date()).getTime()));
+//        params.put(IMEI, App.getApplication().getImei());
+//        params.put(APP_TYPE, "2");
         return params;
     }
 

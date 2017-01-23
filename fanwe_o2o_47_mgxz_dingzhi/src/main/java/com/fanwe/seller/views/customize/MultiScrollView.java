@@ -22,7 +22,8 @@ public class MultiScrollView extends ScrollView {
     View mTopView;
     View mFlowView;
     View mFakeFlowView;
-    ScrollChangedFlowViewListener scrollChangedFlowViewListener;
+    View childView;
+    View.OnTouchListener childOnTouchListener;
 
     public MultiScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,28 +38,28 @@ public class MultiScrollView extends ScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        Log.d("MultiScrollView", " onTouchEvent hehe" + ev.getAction());
-        return super.onTouchEvent(ev);
+        boolean consume = false;
+        if(childOnTouchListener!=null){
+            consume = childOnTouchListener.onTouch(childView,ev);
+        }
+        return consume&super.onTouchEvent(ev);
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        Log.d("MultiScrollView", "l:" + l + " t:" + t + "oldl:" + oldl + "oldt:" + oldt);
-        Log.d("MultiScrollView", " onScrollChanged mTopView.getHeight()：" + mTopView.getHeight());
-
-        super.onScrollChanged(l, t, oldl, oldt);
         if (mTopView != null && mFlowView != null) {
             int value = mTopView.getHeight();
             if (t >= value) {
-//                scrollChangedFlowViewListener.ifShowFlowView(true);
+
                 mFlowView.setVisibility(View.VISIBLE);
                 mFakeFlowView.setVisibility(View.INVISIBLE);
             } else {
-//                scrollChangedFlowViewListener.ifShowFlowView(false);
+
                 mFlowView.setVisibility(View.INVISIBLE);
                 mFakeFlowView.setVisibility(View.VISIBLE);
             }
         }
+        super.onScrollChanged(l, t, oldl, oldt);
     }
 
     /**
@@ -81,11 +82,19 @@ public class MultiScrollView extends ScrollView {
         public void ifShowFlowView(boolean show);
     }
 
-    public ScrollChangedFlowViewListener getScrollChangedFlowViewListener() {
-        return scrollChangedFlowViewListener;
+    public OnTouchListener getChildOnTouchListener() {
+        return childOnTouchListener;
     }
 
-    public void setScrollChangedFlowViewListener(ScrollChangedFlowViewListener scrollChangedFlowViewListener) {
-        this.scrollChangedFlowViewListener = scrollChangedFlowViewListener;
+    public void setChildOnTouchListener(OnTouchListener childOnTouchListener) {
+        this.childOnTouchListener = childOnTouchListener;
+    }
+
+    public View getChildView() {
+        return childView;
+    }
+
+    public void setChildView(View childView) {
+        this.childView = childView;
     }
 }

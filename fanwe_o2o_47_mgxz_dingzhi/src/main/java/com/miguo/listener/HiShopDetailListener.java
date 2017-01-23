@@ -9,7 +9,7 @@ import com.miguo.category.HiShopDetailCategory;
 /**
  * Created by Administrator on 2016/10/21.
  */
-public class HiShopDetailListener extends Listener{
+public class HiShopDetailListener extends Listener {
 
     public HiShopDetailListener(Category category) {
         super(category);
@@ -17,7 +17,7 @@ public class HiShopDetailListener extends Listener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.call:
                 clickCall();
                 break;
@@ -33,35 +33,50 @@ public class HiShopDetailListener extends Listener{
                 break;
             case R.id.share:
             case R.id.share_bg:
+            case R.id.tv_share:
                 clickShare();
                 break;
-            case R.id.represent:
+            case R.id.tv_represent:
                 clickRepresent();
+                break;
+            case R.id.iv_represent:
+                clickRepresentBtn();
+                break;
+            case R.id.tv_mine_shop:
+                clickMineShopBtn();
                 break;
         }
     }
 
-    private void clickRepresent(){
+    private void clickMineShopBtn() {
+        getCategory().clickMineShopBtn();
+    }
+
+    private void clickRepresent() {
         getCategory().clickRepresent();
     }
 
-    private void clickBack(){
+    private void clickRepresentBtn() {
+        getCategory().clickRepresentBtn();
+    }
+
+    private void clickBack() {
         getCategory().clickBack();
     }
 
-    private void clickShare(){
+    private void clickShare() {
         getCategory().clickShare();
     }
 
-    private void clickCall(){
+    private void clickCall() {
         getCategory().clickCall();
     }
 
-    private void clickLocation(){
+    private void clickLocation() {
         getCategory().clickLocation();
     }
 
-    private void clickCollect(){
+    private void clickCollect() {
         getCategory().clickCollect();
     }
 
