@@ -185,7 +185,7 @@ public class FragmentSearchShop extends Fragment implements IDataInterface ,OnDr
      */
     private void addShopFragment() {
         FragmentTransaction ft = fm.beginTransaction();
-        if (fragmentFeatured != null && !fragmentFeatured.isHidden()) {
+        if (fragmentFeatured != null) {
             ft.hide(fragmentFeatured);
         }
         if (fragmentShop.isHidden()) {
@@ -199,12 +199,14 @@ public class FragmentSearchShop extends Fragment implements IDataInterface ,OnDr
      */
     private void addFeaturedFragment() {
         FragmentTransaction ft = fm.beginTransaction();
-        if (fragmentShop != null && !fragmentShop.isHidden()) {
+        if (fragmentShop != null) {
             ft.hide(fragmentShop);
         }
-        fragmentFeatured = new FragmentFeaturedGroupon();
+        if(fragmentFeatured == null){
+            fragmentFeatured = new FragmentFeaturedGroupon();
+            ft.add(R.id.content_frag_search, fragmentFeatured);
+        }
         fragmentFeatured.refresh();
-        ft.add(R.id.content_frag_search, fragmentFeatured);
         ft.commit();
     }
 

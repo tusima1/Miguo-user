@@ -36,6 +36,7 @@ public class GetMenuListDaoImpl extends BaseDaoImpl implements GetMenuListDao{
         map.put("method", "GetMenuList");
         map.put("city_id", AppRuntimeWorker.getCity_id());
         map.put("menu_type", menu_type);
+        map.put("banner_type", "navigation_1_index");
         map.put("terminal_type", terminal_type);
         OkHttpUtils.getInstance().get("", map, new MgCallback(MenuBean.class) {
 

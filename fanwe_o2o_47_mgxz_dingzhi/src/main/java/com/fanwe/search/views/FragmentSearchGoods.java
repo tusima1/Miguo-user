@@ -182,10 +182,10 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface ,OnD
      */
     private void addGoodsFragment() {
         FragmentTransaction ft = fm.beginTransaction();
-        if (fragmentFeatured != null && !fragmentFeatured.isHidden()) {
+        if (fragmentFeatured != null) {
             ft.hide(fragmentFeatured);
         }
-        if (fragmentGoods.isHidden()) {
+        if (fragmentGoods != null) {
             ft.show(fragmentGoods);
         }
         ft.commit();
@@ -199,9 +199,11 @@ public class FragmentSearchGoods extends Fragment implements IDataInterface ,OnD
         if (fragmentGoods != null && !fragmentGoods.isHidden()) {
             ft.hide(fragmentGoods);
         }
-        fragmentFeatured = new FragmentFeaturedGroupon();
+        if(fragmentFeatured == null){
+            fragmentFeatured = new FragmentFeaturedGroupon();
+            ft.add(R.id.content_frag_search, fragmentFeatured);
+        }
         fragmentFeatured.refresh();
-        ft.add(R.id.content_frag_search, fragmentFeatured);
         ft.commit();
     }
 }
