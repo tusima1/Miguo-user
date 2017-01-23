@@ -86,7 +86,7 @@ public class InitAdvsMultiActivity extends FragmentActivity implements CallbackV
             init();
         }
         //请求crash log上传token
-      //  getCrashLogToken();
+       getCrashLogToken();
     }
 
     private void getCrashLogToken() {

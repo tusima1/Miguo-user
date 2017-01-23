@@ -168,6 +168,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
         if (helper != null) {
             helper.performMarkIds(category_one, category_two);
+                helper.dismiss();
 
         }
 
@@ -220,7 +221,9 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
      * 获取从代言过来的修改后的参数。
      */
     private void getChangedIntentData(Intent backIntent){
-
+   if(backIntent==null){
+       return;
+   }
         lastDataPos = backIntent.getIntExtra("lastDataPos",-1);
         is_endorsement = backIntent.getStringExtra("is_endorsement");
         if("represent".equals(category_one)&&lastDataPos!=-1){
