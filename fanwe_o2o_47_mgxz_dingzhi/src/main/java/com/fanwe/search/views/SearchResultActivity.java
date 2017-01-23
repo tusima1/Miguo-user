@@ -56,15 +56,6 @@ public class SearchResultActivity extends FragmentActivity {
         if (fragmentGoods != null) {
             fragmentGoods.search(keyword);
         }
-//        if ("shop".equals(pageType)) {
-//            if (fragmentShop != null) {
-//                fragmentShop.search(keyword);
-//            }
-//        } else {
-//            if (fragmentGoods != null) {
-//                fragmentGoods.search(keyword);
-//            }
-//        }
     }
 
     private void clickShop() {
