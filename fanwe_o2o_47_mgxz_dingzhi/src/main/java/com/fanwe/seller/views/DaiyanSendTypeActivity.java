@@ -357,9 +357,12 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     if (!isFirstCome && !TextUtils.isEmpty(category_one) && category_one.equals(selectedId)) {
                         return;
                     }
+                    if(!isFirstCome) {
+                        category_two = "";
+                    }
                     isFirstCome = false;
                     category_one = selectedId;
-                    category_two = "";
+
                     updateCurrentItem(position);
                     if (helper != null) {
                         if (isNeedPopviewUpdate) {
