@@ -32,7 +32,6 @@ public class MultiScrollView extends ScrollView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d("MultiScrollView", " onInterceptTouchEvent hehe");
         return super.onInterceptTouchEvent(ev);
     }
 
@@ -50,11 +49,9 @@ public class MultiScrollView extends ScrollView {
         if (mTopView != null && mFlowView != null) {
             int value = mTopView.getHeight();
             if (t >= value) {
-
                 mFlowView.setVisibility(View.VISIBLE);
                 mFakeFlowView.setVisibility(View.INVISIBLE);
             } else {
-
                 mFlowView.setVisibility(View.INVISIBLE);
                 mFakeFlowView.setVisibility(View.VISIBLE);
             }

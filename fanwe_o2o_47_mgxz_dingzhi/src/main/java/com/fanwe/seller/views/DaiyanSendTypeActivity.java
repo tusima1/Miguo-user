@@ -219,8 +219,8 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     /**
      * 获取从代言过来的修改后的参数。
      */
-    private void getChangedIntentData(){
-        Intent backIntent = getIntent();
+    private void getChangedIntentData(Intent backIntent){
+
         lastDataPos = backIntent.getIntExtra("lastDataPos",-1);
         is_endorsement = backIntent.getStringExtra("is_endorsement");
         if("represent".equals(category_one)&&lastDataPos!=-1){
@@ -928,10 +928,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     // 回调方法，从第二个页面回来的时候会执行这个方法
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String srt = data.getStringExtra(HiShopDetailActivity.LAST_DATA_POS);
+
         switch (requestCode) {
             case 0:
-                getChangedIntentData();
+                getChangedIntentData(data);
                 break;
             default:
                 break;

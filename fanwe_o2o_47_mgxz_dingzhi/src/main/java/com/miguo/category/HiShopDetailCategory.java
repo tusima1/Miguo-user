@@ -35,6 +35,7 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDIntentUtil;
 import com.fanwe.model.Store_infoModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.views.DaiyanSendTypeActivity;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.view.UserHomeActivity;
 import com.fanwe.utils.DataFormat;
@@ -428,8 +429,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      */
     public void clickBack() {
         Intent mIntent = new Intent();
-        mIntent.putExtra(HiShopDetailActivity.IS_ENDORSEMENT, merchantID);
-        mIntent.putExtra(HiShopDetailActivity.LAST_DATA_POS, lastDataPos1);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(HiShopDetailActivity.LAST_DATA_POS, lastDataPos1);
+        bundle.putString(HiShopDetailActivity.IS_ENDORSEMENT, is_endorsement);
+        mIntent.putExtras(bundle);
         // 设置结果，并进行传送
         getActivity().setResult(resultCode, mIntent);
          BaseUtils.finishActivity(getActivity());

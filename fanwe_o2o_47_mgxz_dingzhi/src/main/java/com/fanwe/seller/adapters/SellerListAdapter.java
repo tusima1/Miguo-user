@@ -126,7 +126,7 @@ public class SellerListAdapter extends RecyclerView.Adapter<SellerListAdapter.MV
         if(getItemCount()>=position) {
             ModelBusinessListings datas = listData.get(position);
             String value = datas.getIs_endorsement();
-            if(!TextUtils.isEmpty(is_endorsement)&&!is_endorsement.equals(value)){
+            if(!TextUtils.isEmpty(is_endorsement)&&!is_endorsement.equals(value)&&"1".equals(is_endorsement)){
                 datas.setIs_endorsement(is_endorsement);
                 notifyItemRemoved(position);
             }
