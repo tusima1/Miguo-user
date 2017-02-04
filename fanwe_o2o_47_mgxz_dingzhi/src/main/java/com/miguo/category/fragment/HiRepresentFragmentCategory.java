@@ -454,7 +454,7 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
 
     private void updateSpaceHeight(List<ModelBusinessListings> results){
         int recyclerviewHeight = results.size() * dip2px(120);
-        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, getScreenHeight() - fakeDropDownMenu.getMeasuredHeight() - recyclerviewHeight);
+        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, getScreenHeight() - fakeDropDownMenu.getMeasuredHeight() - recyclerviewHeight - dip2px(70));
         spaceLayout.setLayoutParams(params);
     }
 
