@@ -18,7 +18,7 @@ import com.miguo.ui.view.floatdropdown.view.SearchView;
  * Created by Administrator on 2017/1/5.
  */
 
-public class SearchResultActivity extends FragmentActivity {
+public class SearchResultActivity extends FragmentActivity implements View.OnClickListener {
     private TextView tvGoods, tvShop;
     private String pageType;
     private SearchView searchView;
@@ -37,6 +37,7 @@ public class SearchResultActivity extends FragmentActivity {
         setListener();
     }
 
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -170,6 +171,8 @@ public class SearchResultActivity extends FragmentActivity {
                 searchAction();
             }
         });
+        tvGoods.setOnClickListener(this);
+        tvShop.setOnClickListener(this);
     }
 
     private void searchAction() {
