@@ -22,7 +22,6 @@ import com.fanwe.model.GoodsModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getCityList.ModelCityList;
-import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.service.update.AppUpgradeService;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.view.UserHomeActivity;
@@ -49,12 +48,12 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
-import com.miguo.utils.BaseUtils;
 import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeViewPager;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.ClipboardUtils;
 import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.GetUserReceiveCodeView;
@@ -495,9 +494,6 @@ public class HiHomeCategory extends Category implements
      */
 
     public void clickTab(int position) {
-        if (null != getHomeFragment() && position != 0) {
-//            getHomeFragment().showTitleAndTab();
-        }
         homeViewPager.setCurrentItem(position);
     }
 

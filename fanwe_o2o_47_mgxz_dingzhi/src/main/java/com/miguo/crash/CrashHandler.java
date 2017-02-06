@@ -156,8 +156,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
      * @param ex
      * @return
      */
-    private String saveCrashReport2SD(Context context, Throwable ex) {
-        String fileName = null;
+    private void saveCrashReport2SD(Context context, Throwable ex) {
+        File bugFile ;
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : obtainSimpleInfo(context).entrySet()) {
             String key = entry.getKey();
@@ -168,11 +168,15 @@ public class CrashHandler implements UncaughtExceptionHandler {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File dir = new File(CrashConstant.CRASH_DIR);
             if (!dir.exists()) {
-                dir.mkdirs();
+                boolean mkdirs = dir.mkdirs();
+                if (!mkdirs){
+                    Log.e("test","创建文件夹和文件名失败!");
+                    return ;
+                }
             }
             try {
-                fileName = dir.toString() + File.separator + parserTime(System.currentTimeMillis()) +".txt";
-                FileOutputStream fos = new FileOutputStream(fileName);
+                bugFile = new File(dir,parserTime(System.currentTimeMillis()) +".txt");
+                FileOutputStream fos = new FileOutputStream(bugFile);
                 fos.write(sb.toString().getBytes());
                 fos.flush();
                 fos.close();
@@ -180,7 +184,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 e.printStackTrace();
             }
         }
-        return fileName;
     }
 
     /**
