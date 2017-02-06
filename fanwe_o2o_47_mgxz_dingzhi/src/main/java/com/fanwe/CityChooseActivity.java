@@ -122,6 +122,14 @@ public class CityChooseActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        mTvLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("定位失败，点击重试".equalsIgnoreCase(mTvLocation.getText().toString())){
+                    locationCity();
+                }
+            }
+        });
     }
     /**
      * 当前位置
@@ -148,11 +156,14 @@ public class CityChooseActivity extends AppCompatActivity {
             String dist = BaiduMapManager.getInstance().getDistrict();
             String city = BaiduMapManager.getInstance().getCity();
             String address = BaiduMapManager.getInstance().getCurAddress();
-            Log.e("test","dist: "+dist);
             if (!TextUtils.isEmpty(address)) {
                 mTvLocation.setText("当前位置: "+address);
             } else {
-                mTvLocation.setText("当前位置: "+city+dist);
+                if (TextUtils.isEmpty(city) || "null".equalsIgnoreCase(city) || TextUtils.isEmpty(dist) || "null".equalsIgnoreCase(dist)){
+                    mTvLocation.setText("定位失败，点击重试");
+                }else {
+                    mTvLocation.setText("当前位置: "+city+dist);
+                }
             }
         } else {
             mTvLocation.setText("定位失败，点击重试");

@@ -3,6 +3,7 @@ package com.fanwe.user.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -152,10 +153,9 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
 
 
     protected void cancelOrder(final ModelOrderItemOut model, final int position) {
-        if (model == null) {
+        if (model == null || mListModel.size()<=0) {
             return;
         }
-
         SDDialogConfirm dialog = new SDDialogConfirm();
         dialog.setTextContent("确定取消订单？");
         dialog.setmListener(new SDDialogCustom.SDDialogCustomListener() {
@@ -178,7 +178,11 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                         if (UserConstants.ORDER_INFO_CANCEL_ORDER.endsWith(method)){
                             //删除订单成功
                             MGToast.showToast("订单取消成功!");
-                            mListModel.remove(position);
+                            try {
+                                mListModel.remove(position);
+                            } catch (Exception e) {
+                                Log.e("bug","huawei 手机角标越界!");
+                            }
                             notifyDataSetChanged();
                         }
                     }
