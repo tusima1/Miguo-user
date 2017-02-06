@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.PageBean;
 import com.fanwe.library.utils.SDCollectionUtil;
@@ -127,6 +128,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
 
     int displayHeight = 0;
     boolean isFirstCome = false;
+    boolean isFirstLoading = true;
     /**
      * 搜索结果为空显示的话。
      */
@@ -137,6 +139,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
      */
     private int lastDataPos = -1;
     private  String is_endorsement ="";
+    private boolean lastLogin=false;
 
     public DaiyanSendTypeActivity() {
     }
@@ -153,6 +156,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         mScrollView = (MultiScrollView) findViewById(R.id.scroll_view);
         mHorizontalScrollView = (TypeHorizontalScrollView) findViewById(R.id.id_horizontalScrollView);
         empty_desc = (TextView) findViewById(R.id.empty_desc);
+        lastLogin =checkLogin();
         getIntentData();
         initTitle();
         getConditionData();
@@ -160,16 +164,19 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         createSecondViewPager();
         initScrollView();
         changeWithIntentData();
+        isFirstLoading = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        if(!lastLogin&&checkLogin()){
+
+        }
         if (helper != null) {
             helper.performMarkIds(category_one, category_two);
                 helper.dismiss();
-
         }
 
     }
@@ -252,9 +259,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             isFirstCome = true;
             mHorizontalScrollView.scrollToIndex(currentFirstTypePosition);
         }
-        if (currentFirstTypePosition != -1 && currentFirstTypePosition != 0) {
-            mScrollView.smoothScrollTo(currentFirstTypePosition * 57, 0);
-        }
+
     }
 
 
@@ -595,7 +600,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         mFlowView = (FakeDropDownMenu) findViewById(R.id.flow_llay);
         fakeFlowLine = (FakeDropDownMenu) findViewById(R.id.fake_flow_llay);
 
-        helper = new DropDownPopHelper(this, fakeFlowLine, mFlowView);
+        helper = new DropDownPopHelper(this, mFlowView,fakeFlowLine);
         helper.setOnDropDownListener(this);
         fakeFlowLine.setOnFakeClickListener(new View.OnClickListener() {
             @Override
@@ -840,7 +845,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         }
     }
 
-
     private void handleItemSelectFilter(List<SingleMode> items) {
         if (SDCollectionUtil.isEmpty(items)) {
             filter = "";
@@ -942,6 +946,14 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
             default:
                 break;
         }
+    }
+
+    private boolean checkLogin(){
+        boolean  isLogin = false;
+       if(!TextUtils.isEmpty(App.getInstance().getToken())){
+           isLogin= true;
+       }
+         return isLogin;
     }
 
 }
