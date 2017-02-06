@@ -449,6 +449,13 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
     private void handleInitShopListHeight(List<ModelBusinessListings> results){
         spaceLayout.setVisibility(results.size() > 5 ? View.GONE : View.VISIBLE);
         emptyData.setVisibility(results.size() > 0 ? View.GONE : View.VISIBLE);
+        updateSpaceHeight(results);
+    }
+
+    private void updateSpaceHeight(List<ModelBusinessListings> results){
+        int recyclerviewHeight = results.size() * dip2px(120);
+        LinearLayout.LayoutParams params = getLineaLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, getScreenHeight() - fakeDropDownMenu.getMeasuredHeight() - recyclerviewHeight - dip2px(70));
+        spaceLayout.setLayoutParams(params);
     }
 
     /**

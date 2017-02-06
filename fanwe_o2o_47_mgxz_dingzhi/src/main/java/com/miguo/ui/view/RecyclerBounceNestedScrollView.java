@@ -236,19 +236,18 @@ public class RecyclerBounceNestedScrollView extends NestedScrollView{
                         childBottom = child.getMeasuredHeight();
                     }
                     // 初始化头部矩形
-                    if (normal.isEmpty()) {
-                        // 保存正常的布局位置
-                        normal.set(child.getLeft(), child.getTop(),
-                                child.getRight(), child.getBottom());
-                    }
-                    // 移动布局
-                    if(Math.abs(deltaY) < 30){
-                        Log.d(tag, "deltaY: " + deltaY + " child top 1: " + child.getTop() + " child top 2 : " + childTop  + " child bottom: " + child.getBottom() + " child bottom 2: " + childBottom + " messure height: " + child.getMeasuredHeight());
-//                        deltaY = Math.abs(deltaY);
-                        childTop = childTop - deltaY / 2;
-                        childBottom = childBottom - deltaY / 2;
-                        child.layout(child.getLeft(), childTop,child.getRight(), child.getBottom() - deltaY / 2);
-                    }
+//                    if (normal.isEmpty()) {
+//                        // 保存正常的布局位置
+//                        normal.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
+//                    }
+//                    // 移动布局
+//                    if(Math.abs(deltaY) < 30){
+//                        Log.d(tag, "deltaY: " + deltaY + " child top 1: " + child.getTop() + " child top 2 : " + childTop  + " child bottom: " + child.getBottom() + " child bottom 2: " + childBottom + " messure height: " + child.getMeasuredHeight());
+////                        deltaY = Math.abs(deltaY);
+//                        childTop = childTop - deltaY / 2;
+//                        childBottom = childBottom - deltaY / 2;
+//                        child.layout(child.getLeft(), childTop,child.getRight(), child.getBottom() - deltaY / 2);
+//                    }
                 }
                 isCount = true;
                 isMoveBegin = true;
