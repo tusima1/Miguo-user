@@ -356,7 +356,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         mHorizontalScrollView.setOnItemClickListener(new TypeHorizontalScrollView.OnItemClickListener() {
             @Override
             public void onClick(View oldView, View view, int position) {
-                Log.d("onclick","position:"+position);
                 if (!TextUtils.isEmpty(mDatas.get(position).getId())) {
                     String selectedId = mDatas.get(position).getId();
                     if (!isFirstCome && !TextUtils.isEmpty(category_one) && category_one.equals(selectedId)) {
@@ -461,7 +460,6 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                         if (i == 0 && j == 0) {
                             firstBean = datas.get(j);
                         }
-                        Log.d("update second", "category_two:" + category_two);
                         if (!TextUtils.isEmpty(category_two) && datas.get(j).getId().equals(category_two)) {
                             firstFragment.setLastSelectedPosition(j);
                             selectedFirstFragment = i;
@@ -549,7 +547,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
     View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            Log.d("MultirecycleviewTouch", "-------------");
+//            Log.d("MultirecycleviewTouch", "-------------");
             int localheight = 0;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -575,9 +573,10 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     //这个表示scrollview没恢复到顶部,在listview里面是无法触发下拉刷新的
                     else {
                         // 取消拦截scrollview事件,listview不能刷新
-                        mScrollView.requestDisallowInterceptTouchEvent(false);
+                    mScrollView.requestDisallowInterceptTouchEvent(false);
+
                     }
-                    Log.d("Multirecyclevie","scrollY :"+scrollY +" height:"+height +" scrollViewMeasuredHeight:"+scrollViewMeasuredHeight);
+//                    Log.d("Multirecyclevie","scrollY :"+scrollY +" height:"+height +" scrollViewMeasuredHeight:"+scrollViewMeasuredHeight);
                     //滑动到底部的时候,自动去加载更多.
                     if ((scrollY + height) >= scrollViewMeasuredHeight) {
                         // 滑到底部触发加载更多
@@ -610,6 +609,14 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
         });
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview_frag_sell_list);
         setRecycleView();
+        LinearLayoutManager layoutManager = new  LinearLayoutManager(this);
+        layoutManager.setSmoothScrollbarEnabled(true);
+        layoutManager.setAutoMeasureEnabled(true);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setNestedScrollingEnabled(false);
+
         recyclerView.setOnTouchListener(touchListener);
         //监听浮动view的滚动状态
         mScrollView.listenerFlowViewScrollState(topView, mFlowView, fakeFlowLine);
@@ -695,7 +702,7 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                 isLoadmore = true;
                 requestData(false);
             } else {
-                SDToast.showToast("没有更多了！");
+//                SDToast.showToast("没有更多了！");
             }
         }
 
