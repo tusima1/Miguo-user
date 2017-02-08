@@ -7,8 +7,7 @@ import com.miguo.category.HiShopDetailCategory;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/19.
  */
-public class
-HiShopDetailActivity extends HiBaseActivity{
+public class HiShopDetailActivity extends HiBaseActivity{
 
     public static final String EXTRA_MERCHANT_ID = "extra_merchant_id";
     public static final String EXTRA_SHOP_ID = "extra_shop_id";
@@ -27,6 +26,11 @@ HiShopDetailActivity extends HiBaseActivity{
     @Override
     protected void doOnDestory() {
         getCategory().destory();
+    }
+
+    @Override
+    protected void finishActivity() {
+        if(null != getCategory()) getCategory().clickBack();
     }
 
     @Override
