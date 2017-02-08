@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -56,7 +57,7 @@ import cn.jpush.android.api.JPushInterface;
 /**
  * 初始化Activity
  */
-public class InitAdvsMultiActivity extends FragmentActivity implements CallbackView {
+public class InitAdvsMultiActivity extends AppCompatActivity implements CallbackView {
     private SellerHttpHelper sellerHttpHelper;
 
     // app所需要的全部危险权限

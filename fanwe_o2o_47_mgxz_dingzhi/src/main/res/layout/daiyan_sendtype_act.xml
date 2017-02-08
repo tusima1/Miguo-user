@@ -71,8 +71,9 @@
                 </com.miguo.ui.view.floatdropdown.view.FakeDropDownMenu>
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview_frag_sell_list"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:scrollbars="none" />
                 <LinearLayout
                     android:visibility="gone"

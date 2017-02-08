@@ -5,11 +5,10 @@ package com.fanwe.seller.views.customize;
  */
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
 import android.widget.ScrollView;
 
 /**
@@ -17,7 +16,7 @@ import android.widget.ScrollView;
  * Created by zhouhy on 2017/1/9.
  */
 
-public class MultiScrollView extends ScrollView {
+public class MultiScrollView extends NestedScrollView {
 
     View mTopView;
     View mFlowView;
@@ -32,20 +31,23 @@ public class MultiScrollView extends ScrollView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+
         return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
         boolean consume = false;
         if(childOnTouchListener!=null){
             consume = childOnTouchListener.onTouch(childView,ev);
         }
-        return consume&super.onTouchEvent(ev);
+        return super.onTouchEvent(ev);
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+
         if (mTopView != null && mFlowView != null) {
             int value = mTopView.getHeight();
             if (t >= value) {
