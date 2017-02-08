@@ -8,7 +8,7 @@ import android.preference.PreferenceActivity;
 public class SharedPreferencesConfig {
 
     public static final String NAME = "mgxz";
-    public static final int MODE = PreferenceActivity.MODE_WORLD_READABLE;
+    public static final int MODE = PreferenceActivity.MODE_PRIVATE;
 
     public static final String MOBILE = "mobile";
     public static final String PASSWORD = "pwd";
