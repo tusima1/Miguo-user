@@ -3,7 +3,7 @@ package com.miguo.dao.impl;
 import android.util.Log;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.entity.CheckCitySignBean;
 import com.miguo.view.BaseView;
@@ -33,7 +33,7 @@ public class CheckCitySignDaoImpl extends BaseDaoImpl implements CheckCitySignDa
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "CheckCitySign");
         map.put("city_id", city_id);
-        OkHttpUtils.getInstance().get("", map, new MgCallback(CheckCitySignBean.class) {
+        OkHttpUtil.getInstance().get("", map, new MgCallback(CheckCitySignBean.class) {
 
             @Override
             public void onSuccessResponse(String responseBody) {

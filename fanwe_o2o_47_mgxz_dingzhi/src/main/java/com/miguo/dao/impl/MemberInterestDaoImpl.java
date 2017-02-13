@@ -1,7 +1,7 @@
 package com.miguo.dao.impl;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.miguo.dao.MemberInterestDao;
 import com.miguo.entity.MemberInterestBean;
@@ -33,7 +33,7 @@ public class MemberInterestDaoImpl extends BaseDaoImpl implements MemberInterest
             params.put("level", level + "");
         }
         params.put("method", UserConstants.MEMBERINTEREST);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback(MemberInterestBean.class) {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback(MemberInterestBean.class) {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 getListener().getMemberInterestError(message);

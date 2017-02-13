@@ -3,7 +3,7 @@ package com.miguo.dao.impl;
 import android.util.Log;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.dao.HomeGreetingDao;
 import com.miguo.entity.HomeGreetingBean;
@@ -37,7 +37,7 @@ public class HomeGreetingDaoImpl extends BaseDaoImpl implements HomeGreetingDao{
         if(token != null && !token.equals("")){
             map.put("token", token);
         }
-        OkHttpUtils.getInstance().get("", map, new MgCallback() {
+        OkHttpUtil.getInstance().get("", map, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

@@ -5,7 +5,7 @@ import com.fanwe.dao.barry.UserUpdateDao;
 import com.fanwe.dao.barry.view.UserUpdateView;
 import com.fanwe.model.UserUpdateInfoBean;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.LiveConstants;
 
@@ -28,7 +28,7 @@ public class UserUpdateInfoDaoImpl implements UserUpdateDao {
         TreeMap<String, String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.USER_UPGRADE_ORDER);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 UserUpdateInfoBean bean = new Gson().fromJson(responseBody, UserUpdateInfoBean.class);

@@ -9,7 +9,7 @@ import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.seller.model.postShopComment.RootShopComment;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
@@ -110,7 +110,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put(key, value);
         params.put("method", UserConstants.USER_INFO_METHOD);
 
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 try {
@@ -155,7 +155,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.PERSONALHOME);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
 
@@ -215,7 +215,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", String.valueOf(pageSize));
         params.put("method", UserConstants.MY_DISTRIBUTION_CROPS);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootMyDistributionCorps root = gson.fromJson(responseBody,
@@ -251,7 +251,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("mobile", mobile);
         params.put("method", UserConstants.USER_CHANGE_MOBILE);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
@@ -291,7 +291,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.USER_RED_PACKET_LIST);
 //        params.put("page","1");
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -363,7 +363,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         if (!TextUtils.isEmpty(order_id)) {
             params.put("order_id", order_id);
         }
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -397,7 +397,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", UserConstants.DISTR_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 if (mView == null) {
@@ -448,7 +448,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.QR_SHOP_CARD);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -506,7 +506,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", UserConstants.USER_UPGRADE_ORDER);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGetUserUpgradeOrder root = gson.fromJson(responseBody,
@@ -538,7 +538,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("is_use_account_money", is_use_account_money + "");
         params.put("method", UserConstants.USER_UPGRADE_ORDER);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootPostUserUpgradeOrder root = gson.fromJson(responseBody,
@@ -574,7 +574,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("captcha", captcha);
         params.put("method", UserConstants.USER_CHANGE_PWD);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
@@ -610,7 +610,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("captcha", captcha);
         params.put("method", UserConstants.USER_FORGOT);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
@@ -644,7 +644,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("advice", advice);
         params.put("method", UserConstants.ADVICE);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 if (mView == null) {
@@ -682,7 +682,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", pageSize + "");
         params.put("method", UserConstants.ATTENTION_Fans);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 final List<ResultFans> result = gson.fromJson(responseBody, RootFans.class)
@@ -739,7 +739,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", String.valueOf(pageSize));
         params.put("method", UserConstants.ATTENTION_FOCUS);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootAttentionFocus root = gson.fromJson(responseBody, RootAttentionFocus.class);
@@ -781,7 +781,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", String.valueOf(pageSize));
         params.put("method", UserConstants.SHOP_AND_USER_COLLECT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopAndUserCollect root = gson.fromJson(responseBody, RootShopAndUserCollect.class);
@@ -822,7 +822,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("attention_status", attention_status);
         params.put("method", UserConstants.ATTENTION);
 
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -869,7 +869,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.MY_WALLET);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -929,7 +929,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("user_id", user_id);
         params.put("method", UserConstants.PERSON_HOME_PAGE);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootPersonHomePage root = gson.fromJson(responseBody, RootPersonHomePage.class);
@@ -960,7 +960,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("user_id", user_id);
         params.put("method", UserConstants.GET_PRODUCT_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootProductList root = gson.fromJson(responseBody, RootProductList.class);
@@ -991,7 +991,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("user_id", user_id);
         params.put("method", UserConstants.GET_SPOKE_PLAY);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 ModelRootLive root = gson.fromJson(responseBody, ModelRootLive.class);
@@ -1022,7 +1022,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("user_id", user_id);
         params.put("method", UserConstants.USER_ATTENTION);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootUserAttention root = gson.fromJson(responseBody, RootUserAttention.class);
@@ -1050,7 +1050,7 @@ public class UserHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", UserConstants.USER_DISTRIBUTION_LEVEL);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {

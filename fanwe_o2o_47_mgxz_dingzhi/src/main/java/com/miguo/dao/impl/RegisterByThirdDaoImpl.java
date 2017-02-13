@@ -8,7 +8,7 @@ import com.fanwe.jpush.JpushHelper;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -50,7 +50,7 @@ public class RegisterByThirdDaoImpl extends BaseDaoImpl implements RegisterByThi
         }
         params.put("platform", platform);
         params.put("method", UserConstants.THIRD_REGISTER_URL);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

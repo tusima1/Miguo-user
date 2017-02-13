@@ -3,7 +3,7 @@ package com.fanwe.shoppingcart.presents;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.PaymentTypeInfo;
@@ -40,7 +40,7 @@ public class CommonShoppingHelper extends Presenter {
         params.put("scene","android");
         params.put("method", ShoppingCartconstants.GET_PAYMENT);
 
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtil.getInstance().get(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {

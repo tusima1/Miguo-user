@@ -3,7 +3,7 @@ package com.miguo.dao.impl;
 import com.fanwe.base.Root;
 import com.fanwe.common.model.CommonConstants;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +34,7 @@ public class GetInterestingDaoImpl extends BaseDaoImpl implements HiGetInteresti
         params.put("city_id", city_id);
         params.put("method", CommonConstants.INTERESTING);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String,String>>>() {}.getType();

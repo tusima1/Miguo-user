@@ -6,7 +6,7 @@ import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Result;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.model.wallet.ExchangeDiamondHistoryModel;
@@ -54,7 +54,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.WALLET);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -101,7 +101,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.WALLET_BALANCE);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -147,7 +147,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.WALLET_INCOME);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -192,7 +192,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.WALLET_INCOME);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -242,7 +242,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("regex_id", regex_id);
         params.put("method", UserConstants.WALLET_INCOME);
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -292,7 +292,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page", page);
         params.put("page_size", page_size);
         params.put("method", UserConstants.WALLET_INCOME_CONVERTHISTORY);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -355,7 +355,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", page_size);
         params.put("page", page);
         params.put("method", UserConstants.WALLET_BALANCE);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -414,7 +414,7 @@ public class WalletHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page_size", page_size);
         params.put("page", page);
         params.put("method", UserConstants.WALLET_BALANCE);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);

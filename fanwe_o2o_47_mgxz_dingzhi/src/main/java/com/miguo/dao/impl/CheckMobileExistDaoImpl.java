@@ -1,7 +1,7 @@
 package com.miguo.dao.impl;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.miguo.dao.CheckMobileExistDao;
 import com.miguo.entity.UserCheckExistBean;
@@ -24,7 +24,7 @@ public class CheckMobileExistDaoImpl extends BaseDaoImpl implements CheckMobileE
         TreeMap<String, String> params = new TreeMap<>();
         params.put("mobile", mobile);
         params.put("method", UserConstants.USER_CHECK_EXIST);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback(UserCheckExistBean.class) {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback(UserCheckExistBean.class) {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 getListener().mobileDoesNotExist(message);

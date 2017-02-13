@@ -7,7 +7,7 @@ import com.fanwe.dao.barry.CommandGroupBuyDao;
 import com.fanwe.dao.barry.view.CommandGroupBuyView;
 import com.fanwe.model.CommandGroupBuyBean;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.LiveConstants;
 
@@ -40,7 +40,7 @@ public class CommandGroupBuyDaoImpl implements CommandGroupBuyDao{
         params.put("method", LiveConstants.COMMAND_GROUP_BUY);
         Log.d(tag, "m_longitude: " + m_longitude);
         Log.d(tag, "m_latitude: " + m_latitude);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 CommandGroupBuyBean bean = new Gson().fromJson(responseBody, CommandGroupBuyBean.class);

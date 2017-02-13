@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.dao.FeaturedGrouponDao;
 import com.miguo.definition.GrouponConstants;
@@ -47,7 +47,7 @@ public class FeaturedGrouponDaoImpl extends BaseDaoImpl implements FeaturedGroup
         params.put("m_latitude", m_latitude);
         params.put("method", GrouponConstants.FEATURED_GROUP_BUG);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 //200

@@ -1,7 +1,7 @@
 package com.miguo.dao.impl;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.TencentSignDao;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.generateSign.RootGenerateSign;
@@ -31,7 +31,7 @@ public class TencentSignDaoImpl extends BaseDaoImpl implements TencentSignDao{
         params.put("token", token);
         params.put("method", LiveConstants.GENERATE_SIGN);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback(RootGenerateSign.class) {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback(RootGenerateSign.class) {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {

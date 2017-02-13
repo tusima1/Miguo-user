@@ -8,7 +8,7 @@ import com.fanwe.jpush.JpushHelper;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -39,7 +39,7 @@ public class LoginByMobilleWithSMSDaoImpl extends BaseDaoImpl implements LoginBy
         params.put("captcha", smsCode);
         params.put("share_record_id",shareCode);
         params.put("method", UserConstants.USER_QUICK_LOGIN);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

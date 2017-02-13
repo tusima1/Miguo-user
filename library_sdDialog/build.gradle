@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 21
     }
 
     buildTypes {
@@ -26,7 +26,7 @@ dependencies {
     compile files('libs/alipayutdid.jar')
     compile files('libs/eventbus-1.4-src-modify.jar')
     compile files('libs/universal-image-loader-1.9.4-with-sources.jar')
-    compile 'com.android.support:support-v4:19.0.0'
+    compile 'com.android.support:support-v4:+'
 
 
 }

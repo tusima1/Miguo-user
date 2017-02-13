@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.GiftDanmuBean;
 import com.miguo.live.model.LiveConstants;
@@ -305,7 +305,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         params.put("token", App.getApplication().getToken()); //token
         params.put("gift_id", Constants.GIFT_DANMU_ID); //弹幕ID iOS和Android端协商好
         params.put("gift_num", "1"); //弹幕ID iOS和Android端协商好
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 GiftDanmuBean bean = new Gson().fromJson(responseBody, GiftDanmuBean.class);
@@ -1163,7 +1163,7 @@ public class LiveHelper extends com.tencent.qcloud.suixinbo.presenters.Presenter
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.HOSTPITPAT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onErrorResponse(String message, String errorCode) {

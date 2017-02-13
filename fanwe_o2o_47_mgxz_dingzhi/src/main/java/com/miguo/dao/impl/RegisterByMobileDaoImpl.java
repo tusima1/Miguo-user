@@ -9,7 +9,7 @@ import com.fanwe.library.utils.MD5Util;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -41,7 +41,7 @@ public class RegisterByMobileDaoImpl extends BaseDaoImpl implements RegisterByMo
         params.put("captcha", smsCode);
         params.put("share_record_id",shareCode);
         params.put("method", UserConstants.USER_REGISTER);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<UserInfoNew>>() {

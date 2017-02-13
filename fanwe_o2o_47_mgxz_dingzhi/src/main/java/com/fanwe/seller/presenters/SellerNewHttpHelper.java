@@ -7,7 +7,7 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getGroupDeatilNew.ModelGoodsDetailNew;
 import com.fanwe.seller.model.getGroupDeatilNew.ResultGoodsDetailNew;
@@ -50,7 +50,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
         }
         params.put("method", SellerConstants.GROUP_BUY_DETAIL_NEW);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 List<ResultGoodsDetailNew> result = gson.fromJson(responseBody,
@@ -89,7 +89,7 @@ public class SellerNewHttpHelper extends OldCallbackHelper implements IHelper {
             params.put("m_latitude", m_latitude);
         }
         params.put("method", SellerConstants.SPECIAL_TOPIC);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 List<ResultSpecialTopic> result = gson.fromJson(responseBody, RootSpecialTopic

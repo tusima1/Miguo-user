@@ -14,6 +14,11 @@ public class ServerUrl {
      ******************************/
     public static final boolean TEST = true;//给测试使用请设置为true
 
+    /*************************
+     *HTTPS
+     ******************************/
+    public static final boolean HTTPS = true;//给测试使用请设置为true
+
     /***********************
      * Do Not Modify
      ***********************/

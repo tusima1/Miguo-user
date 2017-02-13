@@ -1,7 +1,7 @@
 package com.miguo.dao.impl;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.miguo.dao.GetSMSCodeDao;
 import com.miguo.definition.SMSType;
@@ -26,7 +26,7 @@ public class GetSMSCodeDaoImpl extends BaseDaoImpl implements GetSMSCodeDao{
         params.put("mobile", mobile);
         params.put("type", type + "");
         params.put("method", UserConstants.SEND_CAPTCHA);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 getListener().getSMSCodeSuccess("验证码发送成功！");

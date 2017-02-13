@@ -370,7 +370,11 @@ public class DaiyanSendTypeActivity extends FragmentActivity implements ViewPage
                     updateCurrentItem(position);
                     if (helper != null) {
                         if (isNeedPopviewUpdate) {
-                            helper.performMarkIds(category_one, "");
+                            String secondSelectedId = "";
+                            if(mDatas.get(position).getCategory_type()!=null&&mDatas.get(position).getCategory_type().size()>0){
+                                 secondSelectedId = mDatas.get(position).getCategory_type().get(0).getId();
+                            }
+                            helper.performMarkIds(category_one, secondSelectedId);
                         } else {
                             isNeedPopviewUpdate = true;
                         }

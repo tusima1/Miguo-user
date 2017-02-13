@@ -12,7 +12,7 @@ import com.fanwe.base.Root;
 import com.fanwe.common.MGDict;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.miguo.live.interf.IHelper;
@@ -140,7 +140,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("tag", tag);
         params.put("method", LiveConstants.LIVE_LIST_NEW);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 if (mView2 == null) {
@@ -197,7 +197,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
-        OkHttpUtils.getInstance().get(null, params, mgCallback);
+        OkHttpUtil.getInstance().get(null, params, mgCallback);
 
     }
 
@@ -218,7 +218,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("method", LiveConstants.AUDIENCE_COUNT);
 
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootAudienceCount rootAudienceCount = gson.fromJson(responseBody, RootAudienceCount.class);
@@ -264,7 +264,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("is_playback", is_playback);
         params.put("method", LiveConstants.AUDIENCE_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootAudienceList rootAudienceList = gson.fromJson(responseBody, RootAudienceList
@@ -299,7 +299,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("room_id", room_id);
         params.put("method", LiveConstants.END_INFO);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 onSuccess(mView, LiveConstants.END_INFO, null);
@@ -327,7 +327,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("receive_code", receive_code);
         params.put("method", LiveConstants.ENTER_ROOM);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
 
@@ -374,7 +374,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("type", type);
         params.put("method", LiveConstants.EXIT_ROOM);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 onSuccess(mView, LiveConstants.EXIT_ROOM, null);
@@ -397,7 +397,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.GENERATE_SIGN);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign
@@ -432,7 +432,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("host_id", host_id);
         params.put("method", LiveConstants.HOST_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
@@ -475,7 +475,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("interest", interest);
         params.put("method", LiveConstants.HOST_INFO);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHostInfo rootHostInfo = gson.fromJson(responseBody, RootHostInfo.class);
@@ -508,7 +508,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("tag_count", tag_count);
         params.put("method", LiveConstants.HOST_TAGS);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHostTags rootHostTags = gson.fromJson(responseBody, RootHostTags.class);
@@ -540,7 +540,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("room_id", room_id);
         params.put("method", LiveConstants.STOP_LIVE);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootStopLive rootStopLive = gson.fromJson(responseBody, RootStopLive.class);
@@ -575,7 +575,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("dic_type", dic_type);
         params.put("method", LiveConstants.BUSS_DICTION_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Log.e("test", responseBody);
@@ -614,7 +614,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("method", LiveConstants.UP_TOKEN);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootUpToken rootUpToken = gson.fromJson(responseBody, RootUpToken.class);
@@ -645,7 +645,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("focus_id", focus_id);
         params.put("method", LiveConstants.CHECK_FOCUS);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCheckFocus rootCheckFocus = gson.fromJson(responseBody, RootCheckFocus.class);
@@ -685,7 +685,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("focus_id", focus_id);
         params.put("method", LiveConstants.USER_FOCUS);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootUserFocus root = gson.fromJson(responseBody, RootUserFocus.class);
@@ -714,7 +714,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("id", shop_id);
         params.put("method", LiveConstants.HAND_OUT_RED_PACKET);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Log.d(LogTag.HIJASON, getClass().getSimpleName() + " -> " + "getHandOutRedPacket -> " + "onSuccessResponse:" + "\n" + responseBody);
@@ -760,7 +760,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", LiveConstants.HAND_OUT_RED_PACKET);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHandOutRedPacketPost rootHandOutRedPacketPost = gson.fromJson(responseBody, RootHandOutRedPacketPost.class);
@@ -797,7 +797,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", LiveConstants.GET_RED_PACKETS);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<UserRedPacketInfo>>() {
@@ -838,7 +838,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         }
         params.put("method", LiveConstants.GET_USER_RED_PACKETS);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<UserRedPacketInfo>>() {
@@ -880,7 +880,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", LiveConstants.STORES_RANDOM_COMMENT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootStoresRandomComment rootStoresRandomComment = gson.fromJson(responseBody, RootStoresRandomComment.class);
@@ -918,7 +918,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.LIST_OF_STORES);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<BaoBaoEntity>>() {
@@ -955,7 +955,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.HOST_AUTH_TIME);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHostAuthTime rootHostAuthTime = gson.fromJson(responseBody, RootHostAuthTime.class);
@@ -983,7 +983,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", LiveConstants.RECHARGE_DIAMOND_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootPayHistory root = gson.fromJson(responseBody, RootPayHistory.class);
@@ -1023,7 +1023,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", LiveConstants.RECEIVE_CODE);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootReceiveCode root = gson.fromJson(responseBody, RootReceiveCode.class);
@@ -1062,7 +1062,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("gift_id", gift_id);
         params.put("method", LiveConstants.POST_GIFT_INFO);
 
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
 
@@ -1096,7 +1096,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", LiveConstants.USE_RECEIVE_CODE);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootUseReceiveCode root = gson.fromJson(responseBody, RootUseReceiveCode.class);
@@ -1133,7 +1133,7 @@ public class LiveHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.BY_PASS_LIVE);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
             }

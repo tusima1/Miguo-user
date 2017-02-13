@@ -18,7 +18,7 @@ public class SearchCateConditionFactory {
     static HashMap<Integer, SearchCateConditionBean.ResultBean.BodyBean>    conditions;
     static final int USER_LOGIN_CONDITION           =   0x00010;
     static final int WITHOUT_USER_LOGIN_CONDITION   =   0x00020;
-    static final String COLLECT_ID                  = "collect";
+    static final String COLLECT_ID                  =   "collect";
     static boolean last;
 
     static {
@@ -81,7 +81,7 @@ public class SearchCateConditionFactory {
         return category.getId().equals(COLLECT_ID);
     }
 
-    private static boolean   isCollect(List<SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean.FilterListBean> filters){
+    private static boolean isCollect(List<SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean.FilterListBean> filters){
         for(SearchCateConditionBean.ResultBean.BodyBean.FilterList1Bean.FilterList2Bean.FilterListBean filter:filters){
             if(isCollect(filter)){
                 filters.remove(filter);

@@ -7,7 +7,7 @@ import com.fanwe.jpush.JpushHelper;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.miguo.dao.LoginByMobileDao;
@@ -40,7 +40,7 @@ public class LoginByMobileDaoImpl extends BaseDaoImpl implements LoginByMobileDa
         params.put("mobile", mobile);
         params.put("pwd", password);
         params.put("method", UserConstants.USER_lOGIN);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback(LoginUserBean.class) {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback(LoginUserBean.class) {
 
 
             @Override

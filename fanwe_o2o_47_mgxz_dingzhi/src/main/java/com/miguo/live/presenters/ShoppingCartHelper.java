@@ -9,7 +9,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.views.customviews.MGToast;
@@ -57,7 +57,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SHOPPING_CART);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 try {
@@ -108,7 +108,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SHOPPING_CART);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Root root = JSON.parseObject(responseBody, Root.class);
@@ -151,7 +151,7 @@ public class ShoppingCartHelper extends OldCallbackHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SHOPPING_CART);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Root root = JSON.parseObject(responseBody, Root.class);

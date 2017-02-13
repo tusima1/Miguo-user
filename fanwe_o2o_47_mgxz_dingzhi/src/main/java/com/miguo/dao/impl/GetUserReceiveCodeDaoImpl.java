@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.GetUserReceiveCodeDao;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.live.model.getUseReceiveCode.ResultUseReceiveCode;
@@ -40,7 +40,7 @@ public class GetUserReceiveCodeDaoImpl extends BaseDaoImpl implements GetUserRec
         params.put("receive_code", receive_code);
 
         params.put("method", LiveConstants.USE_RECEIVE_CODE);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback(RootUseReceiveCode.class) {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback(RootUseReceiveCode.class) {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 getListener().getUserReceiveCodeError(message);

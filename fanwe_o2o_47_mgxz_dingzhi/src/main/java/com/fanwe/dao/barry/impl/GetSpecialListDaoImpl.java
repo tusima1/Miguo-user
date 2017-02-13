@@ -6,7 +6,7 @@ import com.fanwe.dao.barry.view.GetSpecialListView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.LiveConstants;
 
@@ -32,7 +32,7 @@ public class GetSpecialListDaoImpl implements GetSpecialListDao{
         params.put("cur_geo_x", cur_geo_x);
         params.put("cur_geo_y", cur_geo_y);
         params.put("page", page);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 SpecialListModel bean = new Gson().fromJson(responseBody, SpecialListModel.class);

@@ -5,7 +5,7 @@ import com.fanwe.dao.barry.MemberDetailDao;
 import com.fanwe.dao.barry.view.MemberDetailView;
 import com.fanwe.model.MemberDetailBean;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.LiveConstants;
 
@@ -28,7 +28,7 @@ public class MemberDetailDaoImpl implements MemberDetailDao{
         params.put("token", App.getInstance().getToken());
         params.put("type", type);
         params.put("method", LiveConstants.MEMBER_DETAIL);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 MemberDetailBean bean = new Gson().fromJson(responseBody, MemberDetailBean.class);

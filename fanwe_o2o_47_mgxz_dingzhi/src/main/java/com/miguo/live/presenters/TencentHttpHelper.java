@@ -8,7 +8,7 @@ import android.content.Context;
 import com.fanwe.app.App;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
 import com.miguo.live.interf.ITencentResult;
@@ -82,7 +82,7 @@ public class TencentHttpHelper implements ITencentResult {
             params.put("token", token);
             params.put("method", LiveConstants.GENERATE_SIGN);
 
-            OkHttpUtils.getInstance().get(null, params, mgCallback);
+            OkHttpUtil.getInstance().get(null, params, mgCallback);
 
     }
 
@@ -96,7 +96,7 @@ public class TencentHttpHelper implements ITencentResult {
         params.put("token", token);
         params.put("method", LiveConstants.GENERATE_SIGN);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGenerateSign rootGenerateSign = gson.fromJson(responseBody, RootGenerateSign.class);

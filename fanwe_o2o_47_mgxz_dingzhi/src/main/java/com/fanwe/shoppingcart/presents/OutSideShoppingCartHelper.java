@@ -9,7 +9,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.shoppingcart.RefreshCalbackView;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.OrderDetailInfo;
@@ -62,7 +62,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("method", UserConstants.ORDER_OPERATOR);
         params.put("order_id", order_id);
         params.put("want_salary", want_salary);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -105,7 +105,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("add_goods_num", add_goods_num);
         params.put("share_record_id", share_record_id);
         params.put("method", ShoppingCartconstants.SHOPPING_CART);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -145,7 +145,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", ShoppingCartconstants.SHOPPING_CART);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -203,7 +203,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("token", App.getInstance().getToken());
         params.put("id", id);
         params.put("method", ShoppingCartconstants.SHOPPING_CART);
-        OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().delete(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -290,7 +290,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("add_goods_num", add_goods_num.substring(0, add_goods_num.length() - 1));
         params.put("share_record_ids", share_record_ids.substring(0, share_record_ids.length() - 1));
         params.put("method", ShoppingCartconstants.BATCH_SHOPPING_CART);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -339,7 +339,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("token", App.getInstance().getToken());
         params.put("id", good_ids);
         params.put("method", ShoppingCartconstants.SP_CART_TOORDER);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -395,7 +395,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("token", App.getInstance().getToken());
         params.put("id", id);
         params.put("method", ShoppingCartconstants.PENDIING_ORDER);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -453,7 +453,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("city", AppRuntimeWorker.getCity_id());
         params.put("method", ShoppingCartconstants.ORDER_INFO);
 
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -493,7 +493,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("city", AppRuntimeWorker.getCity_id());
         params.put("method", ShoppingCartconstants.GET_ORDER_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -539,7 +539,7 @@ public class OutSideShoppingCartHelper extends Presenter {
 
         params.put("method", ShoppingCartconstants.SP_CART_TOORDER);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -594,7 +594,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("id", id);
         params.put("method", ShoppingCartconstants.GET_USERING_REDPACKETS);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -655,7 +655,7 @@ public class OutSideShoppingCartHelper extends Presenter {
         params.put("city", AppRuntimeWorker.getCity_id());
         params.put("method", ShoppingCartconstants.ORDER_INFO);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

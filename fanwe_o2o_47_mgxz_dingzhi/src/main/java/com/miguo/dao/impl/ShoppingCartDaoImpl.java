@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.ShoppingCartDao;
 import com.miguo.live.model.LiveConstants;
 import com.miguo.view.BaseView;
@@ -38,7 +38,7 @@ public class ShoppingCartDaoImpl extends BaseDaoImpl implements ShoppingCartDao{
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.SHOPPING_CART);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Root root = JSON.parseObject(responseBody, Root.class);

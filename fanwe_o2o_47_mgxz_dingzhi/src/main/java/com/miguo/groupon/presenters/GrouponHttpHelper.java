@@ -7,7 +7,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.definition.GrouponConstants;
 import com.miguo.entity.ResultFeaturedGroupBuy;
@@ -54,7 +54,7 @@ public class GrouponHttpHelper implements IHelper {
         params.put("m_latitude", m_latitude);
         params.put("method", GrouponConstants.FEATURED_GROUP_BUG);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 //200
