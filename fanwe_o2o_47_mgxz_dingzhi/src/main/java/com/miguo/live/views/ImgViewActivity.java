@@ -1,11 +1,9 @@
 package com.miguo.live.views;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
 
 import com.fanwe.o2o.miguo.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -17,7 +15,6 @@ import java.io.File;
  * Created by qiang.chen on 2016/6/20.
  */
 public class ImgViewActivity extends Activity {
-    private Context mContext = ImgViewActivity.this;
     private ImageView ivImg;
     private String path;
 
