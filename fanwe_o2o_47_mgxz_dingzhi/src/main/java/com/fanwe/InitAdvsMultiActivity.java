@@ -157,7 +157,7 @@ public class InitAdvsMultiActivity extends AppCompatActivity implements Callback
     private void initAppApi() {
         if (ServerUrl.DEBUG) {
             String javaApi = (String) SPUtil.getData(this, DevCode.API_JAVA, ServerUrl.TEST ? DevCode.SERVER_API_JAVA_TEST_URL : DevCode
-                    .SERVER_API_JAVA_DEV_URL);
+                    .JAVA_API_37);
             String h5Api = (String) SPUtil.getData(this, DevCode.API_H5, ServerUrl.TEST ? DevCode.SERVER_H5_TEST : DevCode
                     .SERVER_H5_DEV);
             ServerUrl.setServerApi(javaApi);

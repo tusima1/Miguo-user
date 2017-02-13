@@ -1,5 +1,6 @@
 package com.miguo.entity;
 
+import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.utils.DataFormat;
 import com.fanwe.utils.SDDistanceUtil;
@@ -65,7 +66,35 @@ public class HiShopDetailBean implements Serializable{
         private String geo_x;
         private String geo_y;
         private String tel;
+        List<Offline> offline_list;
+        /**
+         * 是否开通线上买单  1是0否
+         */
+        int offline;
 
+        public boolean canPayFromOffline(){
+            return offline == 1;
+        }
+
+        public int getOffline() {
+            return offline;
+        }
+
+        public void setOffline(int offline) {
+            this.offline = offline;
+        }
+
+        public Offline getOfflineInfo(){
+            return SDCollectionUtil.isEmpty(getOffline_list()) ? null : getOffline_list().get(0);
+        }
+
+        public List<Offline> getOffline_list() {
+            return offline_list;
+        }
+
+        public void setOffline_list(List<Offline> offline_list) {
+            this.offline_list = offline_list;
+        }
 
         public boolean isEndorsement(){
             return getIs_endorsement().equals("1");
@@ -253,6 +282,170 @@ public class HiShopDetailBean implements Serializable{
 
         public void setLive_list(List<ModelRoom> live_list) {
             this.live_list = live_list;
+        }
+
+        public class Offline implements Serializable{
+
+            /**
+             * 原价
+             */
+            public static final int ORIGINAL = 0;
+            /**
+             * 折扣
+             */
+            public static final int DISCOUNT = 1;
+            /**
+             * 满减
+             */
+            public static final int DECREASE = 2;
+
+            /**
+             * 线上买单类型 0：原价 1：打折 2：满减
+             * 1
+             */
+            int online_pay_type;
+            /**
+             * 折扣，类型为打折时使用
+             * 9.7
+             */
+            String discount;
+            /**
+             * 满减金额限制，类型为满减时使用
+             * 100.00
+             */
+            String full_amount_limit;
+            /**
+             * 满减优惠金额，类型为满减时使用
+             * 5.00
+             */
+            String full_discount;
+            /**
+             * 最高优惠金额，0不限制，类型为满减时使用
+             * 50.00
+             */
+            String max_discount_limit;
+            /**
+             * 可用期间，0：不限制，周一：1，周二:2 可多选，用‘,’分割
+             * 1,2,4
+             */
+            String available_week;
+            /**
+             * 可用时段开始，0：不限制
+             * 0800
+             */
+            String available_time_start;
+            /**
+             *  可用时段结束，0：不限制
+             *  1130
+             */
+            String available_time_end;
+            /**
+             * 不可用期间,默认：0 无限制,关联系统配置表（m_admin_config）的code，多个用','分割
+             * qingrenjie,qixi,zhongqiujie
+             */
+            String unavailable_date;
+            /**
+             * 买单ID
+             * 08e30ea2-1e5b-4208-a150-2c5e51bd1abb
+             */
+            String id;
+
+            public String getAvailableWeek(){
+                String[] weeks = getAvailable_week().split("\\,");
+                for(int i = 0; i < weeks.length; i++){
+                    if(i!=0){
+
+                    }
+                }
+            }
+
+            public String getDiscountText(){
+                return getDiscount() + "折";
+            }
+
+            public String getDecreaseText(){
+                return "每满" + getFull_amount_limit() + "元减" + getFull_discount() + "元";
+            }
+
+            public String getAvailable_time_end() {
+                return available_time_end;
+            }
+
+            public void setAvailable_time_end(String available_time_end) {
+                this.available_time_end = available_time_end;
+            }
+
+            public String getAvailable_time_start() {
+                return available_time_start;
+            }
+
+            public void setAvailable_time_start(String available_time_start) {
+                this.available_time_start = available_time_start;
+            }
+
+            public String getAvailable_week() {
+                return available_week;
+            }
+
+            public void setAvailable_week(String available_week) {
+                this.available_week = available_week;
+            }
+
+            public String getDiscount() {
+                return discount;
+            }
+
+            public void setDiscount(String discount) {
+                this.discount = discount;
+            }
+
+            public String getFull_amount_limit() {
+                return full_amount_limit;
+            }
+
+            public void setFull_amount_limit(String full_amount_limit) {
+                this.full_amount_limit = full_amount_limit;
+            }
+
+            public String getFull_discount() {
+                return full_discount;
+            }
+
+            public void setFull_discount(String full_discount) {
+                this.full_discount = full_discount;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getMax_discount_limit() {
+                return max_discount_limit;
+            }
+
+            public void setMax_discount_limit(String max_discount_limit) {
+                this.max_discount_limit = max_discount_limit;
+            }
+
+            public int getOnline_pay_type() {
+                return online_pay_type;
+            }
+
+            public void setOnline_pay_type(int online_pay_type) {
+                this.online_pay_type = online_pay_type;
+            }
+
+            public String getUnavailable_date() {
+                return unavailable_date;
+            }
+
+            public void setUnavailable_date(String unavailable_date) {
+                this.unavailable_date = unavailable_date;
+            }
         }
 
         public class ShopTags implements Serializable{
