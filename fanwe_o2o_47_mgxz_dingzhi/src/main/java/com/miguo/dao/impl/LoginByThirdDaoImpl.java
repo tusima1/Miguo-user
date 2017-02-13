@@ -9,7 +9,7 @@ import com.fanwe.library.dialog.SDDialogManager;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.User_infoModel;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.ThirdLoginInfo;
 import com.fanwe.user.model.UserInfoNew;
@@ -48,7 +48,7 @@ public class LoginByThirdDaoImpl extends BaseDaoImpl implements LoginByThirdDao{
         params.put("nick", nick);
 
         params.put("method", UserConstants.TRHID_LOGIN_URL);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
 

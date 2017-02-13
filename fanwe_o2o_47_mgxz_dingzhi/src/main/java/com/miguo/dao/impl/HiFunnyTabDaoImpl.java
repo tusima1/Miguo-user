@@ -3,7 +3,7 @@ package com.miguo.dao.impl;
 import android.util.Log;
 
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.HiFunnyTabDao;
 import com.miguo.definition.TabSet;
 import com.miguo.entity.HiFunnyTabBean;
@@ -28,7 +28,7 @@ public class HiFunnyTabDaoImpl extends BaseDaoImpl implements HiFunnyTabDao{
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "InterestingTab");
         map.put("tab_set", tab_set);
-        OkHttpUtils.getInstance().get("", map, new MgCallback(HiFunnyTabBean.class) {
+        OkHttpUtil.getInstance().get("", map, new MgCallback(HiFunnyTabBean.class) {
 
             @Override
             public void onSuccessResponse(String responseBody) {

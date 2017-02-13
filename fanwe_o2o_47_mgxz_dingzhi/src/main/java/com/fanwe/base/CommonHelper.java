@@ -5,7 +5,8 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.miguo.live.interf.IHelper;
 import com.miguo.utils.MGLog;
@@ -76,7 +77,7 @@ public class CommonHelper extends OldCallbackHelper implements IHelper{
         params.put("mobile", mobile);
         params.put("type", type + "");
         params.put("method", SEND_CAPTCHA);
-        OkHttpUtils.getInstance().get(null, params, mgCallback);
+        OkHttpUtil.getInstance().get(null, params, mgCallback);
     }
 
     /**
@@ -89,7 +90,7 @@ public class CommonHelper extends OldCallbackHelper implements IHelper{
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("mobile", mobile);
         params.put("method", UserConstants.USER_CHECK_EXIST);
-        OkHttpUtils.getInstance().get(null, params, callback);
+        OkHttpUtil.getInstance().get(null, params, callback);
     }
 
     /**
@@ -106,7 +107,7 @@ public class CommonHelper extends OldCallbackHelper implements IHelper{
         }
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.JPUSH_ALIAS);
-        OkHttpUtils.getInstance().put(null, params, callback);
+        OkHttpUtil.getInstance().put(null, params, callback);
 
     }
 

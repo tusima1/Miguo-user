@@ -7,7 +7,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.Presenter;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.RedPacketInfo;
 
@@ -49,7 +49,7 @@ public class RedPacketHelper extends Presenter {
         params.put("",userid);
         params.put("userid",shopId);
         params.put("method","");
-        OkHttpUtils.getInstance().get(null,params,callback);
+        OkHttpUtil.getInstance().get(null,params,callback);
     }
     public List<RedPacketInfo> getTestData(){
         List<RedPacketInfo>  redList= new ArrayList<RedPacketInfo>();

@@ -8,7 +8,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.fanwe.user.model.getOrderInfo.ResultOrderInfo;
 import com.fanwe.user.model.getOrderInfo.RootOrderInfo;
@@ -75,7 +75,7 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
             params.put("page", page+"");
         }
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -116,7 +116,7 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.ORDER_INFO_CANCEL_ORDER);
         params.put("order_id", deal_id);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -154,7 +154,7 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.ORDER_INFO);
         params.put("order_id", deal_id);
-        OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -194,7 +194,7 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("method", UserConstants.REFUND_APPLICATION_PAGE);
         params.put("id", detail_id);
         params.put("tuan_id", tuan_id);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -247,7 +247,7 @@ public class OrderHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("id", order_id);
         params.put("tuan_id", tuan_id);
         params.put("number", number);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);

@@ -23,6 +23,7 @@ import com.fanwe.library.utils.SDViewUtil;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.model.RuntimeConfigModel;
 import com.fanwe.model.SettingModel;
+import com.fanwe.network.okhttp3.NetConfig;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getBusinessCircleList.ModelBusinessCircleList;
 import com.fanwe.seller.model.getClassifyList.ModelClassifyList;
@@ -47,6 +48,8 @@ import com.tencent.rtmp.ITXLiveBaseListener;
 import com.tencent.rtmp.TXLiveBase;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,7 +58,7 @@ import cn.jpush.android.api.JPushInterface;
 
 
 public class App extends MultiDexApplication implements SDEventObserver, TANetChangeObserver, ITXLiveBaseListener {
-
+    public static final String TAG = App.class.getSimpleName();
     private static App mApp = null;
 
     public List<Class<? extends Activity>> mListClassNotFinishWhenLoginState0 = new ArrayList<Class<? extends Activity>>();
@@ -115,7 +118,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     /**
      * 当前系统时间。
      */
-    public static Long sysTime=0l;
+    public static Long sysTime = 0l;
 
 
     public void setmLocalUser(LocalUserModel localUser) {
@@ -130,6 +133,26 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
         myApplication = this;
         TXLiveBase.getInstance().listener = this;
         init();
+        //当且仅当当前的协议 是HTTPS的时候才初始化证书。
+        if(ServerUrl.HTTPS) {
+            addSSLCert();
+        }
+    }
+
+    /**
+     * 将证书读入，以后应当分辨一下不同的环境 加载不同的证书。
+     */
+    private void addSSLCert() {
+        // 添加https证书
+        try {
+
+            InputStream is = getAssets().open("certificate.cer");
+            NetConfig.addCertificate(is); // 这里将证书读取出来，，放在配置中byte[]里
+
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
     private void init() {
@@ -207,20 +230,6 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
         return mApp;
     }
 
-    public void exitApp(boolean isBackground) {
-        AppConfig.setRefId("");
-        SDActivityManager.getInstance().finishAllActivity();
-        SDEventManager.post(EnumEventTag.EXIT_APP.ordinal());
-        if (isBackground) {
-
-        } else {
-            System.exit(0);
-        }
-    }
-
-    public static String getStringById(int resId) {
-        return getApplication().getString(resId);
-    }
 
     @Override
     public void onConnect(netType type) {
@@ -289,10 +298,10 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     }
 
     public String getToken() {
-        return getCurrentUser() == null ?  "": getCurrentUser().getToken();
+        return getCurrentUser() == null ? "" : getCurrentUser().getToken();
     }
 
-    public void setToken(String token){
+    public void setToken(String token) {
         getCurrentUser().setToken(token);
     }
 
@@ -313,7 +322,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
         int appId = Constants.SDK_APPID;
         int ccType = Constants.ACCOUNT_TYPE;
-        if(ServerUrl.DEBUG){
+        if (ServerUrl.DEBUG) {
             appId = Constants.SDK_APPID_TEST;
             ccType = Constants.ACCOUNT_TYPE_Test;
         }
@@ -323,7 +332,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     }
 
     public String getUserSign() {
-        return null != getCurrentUser() ? null != getCurrentUser().getUseSign() ? getCurrentUser().getUseSign()  : "" : "";
+        return null != getCurrentUser() ? null != getCurrentUser().getUseSign() ? getCurrentUser().getUseSign() : "" : "";
     }
 
     public void setUserSign(String useSign) {
@@ -358,7 +367,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
 
     public String getUserIcon() {
-        return null != getCurrentUser() ? null !=getCurrentUser().getIcon() ? getCurrentUser().getIcon() : "" : "" ;
+        return null != getCurrentUser() ? null != getCurrentUser().getIcon() ? getCurrentUser().getIcon() : "" : "";
     }
 
     public void setUserIcon(String icon) {

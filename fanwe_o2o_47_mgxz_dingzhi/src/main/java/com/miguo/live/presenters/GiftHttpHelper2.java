@@ -4,7 +4,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.base.OldCallbackHelper;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.model.LiveConstants;
@@ -34,7 +34,7 @@ public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", LiveConstants.GET_GIFT_INFO);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -79,7 +79,7 @@ public class GiftHttpHelper2 extends OldCallbackHelper implements IHelper {
         params.put("gift_num", gift_num);
         params.put("gift_id", gift_id);
         params.put("method", LiveConstants.GET_GIFT_INFO);
-        OkHttpUtils.getInstance().put(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().put(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 if(mView2!=null) {

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.dao.HiShopDetailDao;
 import com.miguo.entity.HiShopDetailBean;
@@ -36,7 +36,7 @@ public class HiShopDetailDaoImpl extends BaseDaoImpl implements HiShopDetailDao{
         map.put("m_longitude", m_longitude);
         map.put("m_latitude", m_latitude);
         map.put("token", App.getApplication().getToken());
-        OkHttpUtils.getInstance().get("", map, new MgCallback() {
+        OkHttpUtil.getInstance().get("", map, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

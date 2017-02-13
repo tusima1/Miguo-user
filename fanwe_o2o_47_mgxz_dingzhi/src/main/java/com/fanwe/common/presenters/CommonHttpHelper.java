@@ -22,7 +22,8 @@ import com.fanwe.common.model.getUpgradeVersion.RootVersion;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDPackageUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.user.model.UserInfoNew;
 import com.google.gson.Gson;
@@ -70,7 +71,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("method", CommonConstants.HOME_CLASSIFY_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootHomeClassifyList root = gson.fromJson(responseBody, RootHomeClassifyList.class);
@@ -97,7 +98,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("city_id", city_id);
         params.put("method", CommonConstants.INTERESTING);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {
@@ -134,7 +135,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("version", SDPackageUtil.getCurrentPackageInfo().versionName);
         params.put("method", CommonConstants.UPGRADE_VERSION);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootVersion rootVersion = gson.fromJson(responseBody, RootVersion.class);
@@ -170,7 +171,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", CommonConstants.USERDISTRIBUTIIONLEVEL);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {
@@ -209,7 +210,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("receive_code", code);
         params.put("method", CommonConstants.GETSHAREID);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {
@@ -248,7 +249,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("content_id", content_id);
         params.put("method", CommonConstants.CREATE_SHARE_RECORD);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 try {
@@ -279,7 +280,7 @@ public class CommonHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("method", CommonConstants.CRASH_UPTOKEN);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 try {

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.InterestingLiveVideoDao;
 import com.miguo.definition.PageSize;
 import com.miguo.entity.HiFunnyLiveVideoBean;
@@ -33,7 +33,7 @@ public class InterestingLiveVideoDaoImpl extends BaseDaoImpl implements Interest
         map.put("page_size", page_size + "");
         map.put("tab_id", tab_id);
         map.put("city_id", city_id);
-        OkHttpUtils.getInstance().get("", map, new MgCallback(HiFunnyLiveVideoBean.class) {
+        OkHttpUtil.getInstance().get("", map, new MgCallback(HiFunnyLiveVideoBean.class) {
 
             @Override
             public void onSuccessResponse(String responseBody) {

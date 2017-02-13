@@ -3,7 +3,7 @@ package com.miguo.dao.impl;
 import com.alibaba.fastjson.JSON;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.dao.GetSearchCateConditionDao;
 import com.miguo.entity.SearchCateConditionBean;
@@ -35,7 +35,7 @@ public class GetSearchCateConditionDaoImpl extends BaseDaoImpl implements GetSea
         TreeMap<String, String> params = new TreeMap<>();
         params.put("method", "GetSearchCateCondition");
 //        params.put("city_id", "69e0405b-de8c-4247-8a0a-91ca45c4b30c");
-        OkHttpUtils.getInstance().get("", params, new MgCallback() {
+        OkHttpUtil.getInstance().get("", params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

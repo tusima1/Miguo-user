@@ -4,7 +4,7 @@ import com.fanwe.app.App;
 import com.fanwe.base.Presenter;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.reward.RewardConstants;
 import com.fanwe.reward.model.DiamondTypeEntity;
 import com.fanwe.reward.model.DiamondUserOwnEntity;
@@ -44,7 +44,7 @@ public class DiamondHelper  extends Presenter {
         params.put("token", App.getInstance().getToken());
         params.put("method", RewardConstants.BUY_DIAMOND);
 
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtil.getInstance().get(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -77,7 +77,7 @@ public class DiamondHelper  extends Presenter {
         params.put("token", App.getInstance().getToken());
         params.put("method", RewardConstants.USER_DIAMOND);
 
-        OkHttpUtils.getInstance().get(null,params,new MgCallback(){
+        OkHttpUtil.getInstance().get(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {
@@ -118,7 +118,7 @@ public class DiamondHelper  extends Presenter {
         params.put("token", App.getInstance().getToken());
         params.put("method", RewardConstants.DIAMOND_ORDER);
 
-        OkHttpUtils.getInstance().put(null,params,new MgCallback(){
+        OkHttpUtil.getInstance().put(null,params,new MgCallback(){
 
             @Override
             public void onSuccessResponse(String responseBody) {

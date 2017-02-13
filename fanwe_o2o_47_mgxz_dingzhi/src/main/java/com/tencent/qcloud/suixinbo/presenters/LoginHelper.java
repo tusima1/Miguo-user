@@ -12,7 +12,7 @@ import com.fanwe.base.CallbackView;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.model.UserInfoNew;
 import com.fanwe.user.presents.IMUserInfoHelper;
 import com.google.gson.Gson;
@@ -416,7 +416,7 @@ public class LoginHelper extends com.tencent.qcloud.suixinbo.presenters.Presente
         params.put("shop_id", shop_id);
         params.put("method", LiveConstants.APPLY_ROOM);
 
-        OkHttpUtils.getInstance().get(null, params, mgCallback);
+        OkHttpUtil.getInstance().get(null, params, mgCallback);
 
     }
 

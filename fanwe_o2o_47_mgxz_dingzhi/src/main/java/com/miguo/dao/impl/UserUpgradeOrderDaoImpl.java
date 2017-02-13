@@ -2,7 +2,7 @@ package com.miguo.dao.impl;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.miguo.dao.UserUpgradeOrderDao;
 import com.miguo.definition.PaymentId;
 import com.miguo.entity.UserUpgradeOrderBean;
@@ -32,7 +32,7 @@ public class UserUpgradeOrderDaoImpl extends BaseDaoImpl implements UserUpgradeO
         TreeMap<String , String> params = new TreeMap<>();
         params.put("token", App.getInstance().getToken());
         params.put("method", "UserUpgradeOrder");
-        OkHttpUtils.getInstance().get("", params, new MgCallback(UserUpgradeOrderBean.class) {
+        OkHttpUtil.getInstance().get("", params, new MgCallback(UserUpgradeOrderBean.class) {
             @Override
             public void onSuccessResponseWithBean(Object responseBody) {
                 UserUpgradeOrderBean bean = (UserUpgradeOrderBean)responseBody;
@@ -67,7 +67,7 @@ public class UserUpgradeOrderDaoImpl extends BaseDaoImpl implements UserUpgradeO
         params.put("token", App.getInstance().getToken());
         params.put("payment_id", payment_id);
         params.put("method", "UserUpgradeOrder");
-        OkHttpUtils.getInstance().post(null, params, new MgCallback(UserUpgradeOrderBean2.class) {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback(UserUpgradeOrderBean2.class) {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 getListener2().userUpgradeError(message);

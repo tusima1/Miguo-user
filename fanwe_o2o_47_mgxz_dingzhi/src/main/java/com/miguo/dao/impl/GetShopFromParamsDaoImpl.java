@@ -3,7 +3,7 @@ package com.miguo.dao.impl;
 import com.fanwe.app.App;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getBusinessListings.ResultBusinessListings;
 import com.fanwe.seller.model.getBusinessListings.RootBusinessListings;
@@ -49,7 +49,7 @@ public class GetShopFromParamsDaoImpl extends BaseDaoImpl implements GetShopFrom
         params.put("page_size", String.valueOf(pageSize));
         params.put("page", String.valueOf(pageNum));
         params.put("method", SellerConstants.SHOP_SEARCH);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootBusinessListings root = new Gson().fromJson(responseBody, RootBusinessListings.class);

@@ -16,7 +16,8 @@ import com.fanwe.commission.model.getUserBankCardList.RootUserBankCard;
 import com.fanwe.commission.model.getWithdrawLog.ResultWithdrawLog;
 import com.fanwe.commission.model.getWithdrawLog.RootWithdrawLog;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -54,7 +55,7 @@ public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
         params.put("page_size", page_size);
         params.put("select_type", select_type);
         //TODO 资金日志
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -77,7 +78,7 @@ public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.USER_ACCOUNT);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -123,7 +124,7 @@ public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.USER_BANK_CARD_LIST);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -187,7 +188,7 @@ public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
         params.put("token", App.getInstance().getToken());
         params.put("method", CommissionConstance.USER_WITHDRAW_LOG);
         params.put("wd_type", money_type);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -256,7 +257,7 @@ public class MoneyHttpHelper extends OldCallbackHelper implements IHelper{
         if (!TextUtils.isEmpty(bank_user)) {
             params.put("bank_user", bank_user);
         }
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);

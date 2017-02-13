@@ -2,7 +2,9 @@ package com.fanwe.library.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
@@ -201,9 +204,19 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		return mTitle;
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private void findViews()
 	{
 		mWeb = findWebView();
+		WebSettings settings = mWeb.getSettings();
+		settings.setJavaScriptEnabled(true);
+		settings.setDomStorageEnabled(true);
+		settings.setAllowFileAccess(true);
+		settings.setAppCacheEnabled(true);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+				settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+			}
+
 		mPgbHorizontal = findProgressBar();
 	}
 

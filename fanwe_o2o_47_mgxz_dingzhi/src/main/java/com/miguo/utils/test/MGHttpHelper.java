@@ -2,7 +2,7 @@ package com.miguo.utils.test;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
@@ -66,22 +66,22 @@ public abstract class MGHttpHelper {
         };
         switch (mode){
             case GET:
-                OkHttpUtils.getInstance().get(customUrl,params,callback);
+                OkHttpUtil.getInstance().get(customUrl,params,callback);
                 break;
             case POST:
-                OkHttpUtils.getInstance().post(customUrl,params,callback);
+                OkHttpUtil.getInstance().post(customUrl,params,callback);
                 break;
             case PUT:
-                OkHttpUtils.getInstance().put(customUrl,params,callback);
+                OkHttpUtil.getInstance().put(customUrl,params,callback);
                 break;
             case DELETE:
-                OkHttpUtils.getInstance().delete(customUrl,params,callback);
+                OkHttpUtil.getInstance().delete(customUrl,params,callback);
                 break;
             case THIRD_LOGIN:
-                OkHttpUtils.getInstance().thirdUrlGet(customUrl,params,callback);
+                OkHttpUtil.getInstance().thirdUrlGet(customUrl,params,callback);
                 break;
             default:
-                OkHttpUtils.getInstance().get(null,params,callback);
+                OkHttpUtil.getInstance().get(null,params,callback);
                 break;
         }
 

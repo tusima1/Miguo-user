@@ -5,7 +5,7 @@ import com.fanwe.dao.barry.UserAgreementDao;
 import com.fanwe.dao.barry.view.UserAgreementView;
 import com.fanwe.model.UserAgreementBean;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.model.LiveConstants;
 
@@ -28,7 +28,7 @@ public class UserAgreementDaoImpl implements UserAgreementDao{
         params.put("token", App.getInstance().getToken());
         params.put("type", type);
         params.put("method", LiveConstants.USER_AGREEMENT);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 UserAgreementBean bean = new Gson().fromJson(responseBody, UserAgreementBean.class);

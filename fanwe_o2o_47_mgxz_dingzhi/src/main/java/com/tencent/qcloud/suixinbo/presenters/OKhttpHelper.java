@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.miguo.live.views.customviews.MGToast;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -212,7 +212,7 @@ public class OKhttpHelper {
         params.put("chat_room_id", chat_room_id);
         params.put("method", LiveConstants.REGISTER_ROOM_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 MGToast.showToast("后台房间信息注册成功");

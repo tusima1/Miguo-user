@@ -9,7 +9,8 @@ import com.fanwe.commission.model.CommissionConstance;
 import com.fanwe.commission.model.getCommissionLog.ResultCommissionLog;
 import com.fanwe.commission.model.getCommissionLog.RootCommissionLog;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
+import com.fanwe.network.OkHttpUtil;
 import com.google.gson.Gson;
 import com.miguo.live.interf.IHelper;
 import com.miguo.live.views.customviews.MGToast;
@@ -45,7 +46,7 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
         params.put("page", page);
         params.put("page_size", page_size);
         params.put("select_type", select_type);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);
@@ -93,7 +94,7 @@ public class LogHttpHelper extends OldCallbackHelper implements IHelper{
         params.put("method", CommissionConstance.USER_COMMISSION_LOG);
         params.put("page", page);
         params.put("page_size", page_size);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onErrorResponse(String message, String errorCode) {
                 MGToast.showToast(message);

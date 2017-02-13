@@ -14,9 +14,9 @@ public class DevCode {
 
     public static final String SERVER_API_ONLINE_URL = "http://mapi.mgxz.com";
     public static final String SERVER_API_JAVA_TEST_URL = "http://mapi.test.mgxz.com/";
-    public static final String SERVER_API_JAVA_DEV_URL = "http://mapi.dev.mgxz.com/";
+    public static final String SERVER_API_JAVA_DEV_URL = "https://mapi.dev.mgxz.com/";
 
     public static final String SERVER_H5_TEST="http://m.test.mgxz.com/";//测试
-    public static final String SERVER_H5_DEV="http://m.dev.mgxz.com/";//开发
+    public static final String SERVER_H5_DEV="https://m.dev.mgxz.com/";//开发
     public static final String SERVER_H5_ONLINE="http://m.mgxz.com/";//线上
 }

@@ -90,6 +90,9 @@ public class OkHttpUtils {
             .readTimeout(10, TimeUnit.SECONDS)
             .build();
 
+
+
+
     public static OkHttpUtils getInstance() {
         if (mInstance == null) {
             mInstance = new OkHttpUtils();

@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.getRepresentMerchant.RootRepresentMerchant;
 import com.google.gson.Gson;
@@ -35,7 +35,7 @@ public class RepresentMerchantDaoImpl extends BaseDaoImpl implements RepresentMe
         params.put("shop_id", shop_id);
         params.put("method", SellerConstants.REPRESENT_MERCHANT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootRepresentMerchant root = new Gson().fromJson(responseBody, RootRepresentMerchant.class);

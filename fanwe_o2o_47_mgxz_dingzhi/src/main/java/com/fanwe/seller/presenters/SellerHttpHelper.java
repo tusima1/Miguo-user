@@ -11,7 +11,7 @@ import com.fanwe.base.Root;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.seller.model.ModelComment;
 import com.fanwe.seller.model.SellerConstants;
 import com.fanwe.seller.model.SellerDetailInfo;
@@ -126,7 +126,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("city_id", cityId);
         params.put("method", SellerConstants.STORE_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootStoreList rootShopList = gson.fromJson(responseBody, RootStoreList.class);
@@ -161,7 +161,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("biz_id", sellerId);
         params.put("method", SellerConstants.LIVE_BIZ_SHOP);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<SellerDetailInfo>>() {
@@ -201,7 +201,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", SellerConstants.SHOP_COLLECT);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 onSuccess(mView, SellerConstants.SHOP_COLLECT_POST, null);
@@ -222,7 +222,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", SellerConstants.SHOP_COLLECT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootStoreList root = gson.fromJson(responseBody, RootStoreList.class);
@@ -251,7 +251,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", SellerConstants.SHOP_COLLECT);
 
-        OkHttpUtils.getInstance().delete(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().delete(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 if (mView2 != null) {
@@ -278,7 +278,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("tuan_id", tuan_id);
         params.put("method", SellerConstants.GROUP_BUY_COLLECT);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {
@@ -315,7 +315,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", SellerConstants.GROUP_BUY_COLLECT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGroupBuyCollect root = gson.fromJson(responseBody, RootGroupBuyCollect.class);
@@ -343,7 +343,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("tuan_id", tuan_id);
         params.put("method", SellerConstants.GROUP_BUY_COLLECT);
-        OkHttpUtils.getInstance().delete(params, new MgCallback() {
+        OkHttpUtil.getInstance().delete(params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 if (mView2 != null) {
@@ -369,7 +369,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("city_id", city_id);
         params.put("method", SellerConstants.BUSINESS_CIRCLE_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootBusinessCircleList root = gson.fromJson(responseBody, RootBusinessCircleList.class);
@@ -400,7 +400,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", SellerConstants.CHECK_SHOP_COLLECT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCheckShopCollect root = gson.fromJson(responseBody, RootCheckShopCollect.class);
@@ -431,7 +431,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("tuan_id", tuan_id);
         params.put("method", SellerConstants.CHECK_GROUP_BUY_COLLECT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCheckShopCollect root = gson.fromJson(responseBody, RootCheckShopCollect.class);
@@ -467,7 +467,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", SellerConstants.ORDER_BY_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootOrderByList root = gson.fromJson(responseBody, RootOrderByList.class);
@@ -495,7 +495,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", SellerConstants.CLASSIFY_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootClassifyList root = gson.fromJson(responseBody, RootClassifyList.class);
@@ -544,7 +544,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page", String.valueOf(pageNum));
         params.put("method", SellerConstants.SHOP_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopList rootShopList = gson.fromJson(responseBody, RootShopList.class);
@@ -611,7 +611,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
 
         params.put("method", SellerConstants.BUSINESS_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootBusinessListings root = gson.fromJson(responseBody, RootBusinessListings.class);
@@ -665,7 +665,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page", String.valueOf(pageNum));
         params.put("method", SellerConstants.SHOP_SEARCH);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootBusinessListings root = gson.fromJson(responseBody, RootBusinessListings.class);
@@ -697,7 +697,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("method", SellerConstants.CITY_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCityList root = gson.fromJson(responseBody, RootCityList.class);
@@ -730,7 +730,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("city_id", city_id);
         params.put("method", SellerConstants.MARKET_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootMarketList root = gson.fromJson(responseBody, RootMarketList.class);
@@ -765,7 +765,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("city_id", city_id);
         params.put("method", SellerConstants.SHOP_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopInfo root = gson.fromJson(responseBody, RootShopInfo.class);
@@ -805,7 +805,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("ent_id", ent_id);
         params.put("method", SellerConstants.BUSINESS_DISTRIBUTION_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootBusinessDistributionList root = gson.fromJson(responseBody, RootBusinessDistributionList.class);
@@ -835,7 +835,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("ent_id", ent_id);
         params.put("method", SellerConstants.GROUP_BUY_BY_MERCHANT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCroupBuyByMerchant root = gson.fromJson(responseBody, RootCroupBuyByMerchant.class);
@@ -867,7 +867,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", SellerConstants.COMMENT_LIST);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCommentList root = gson.fromJson(responseBody, RootCommentList.class);
@@ -896,7 +896,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("id", tuan_id);
         params.put("method", SellerConstants.GROUP_BUY_DETAIL);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGroupBuyDetail root = gson.fromJson(responseBody, RootGroupBuyDetail.class);
@@ -927,7 +927,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("ent_id", ent_id);
         params.put("method", SellerConstants.REPRESENT_MERCHANT);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootRepresentMerchant root = gson.fromJson(responseBody, RootRepresentMerchant.class);
@@ -976,7 +976,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page", String.valueOf(pageNum));
         params.put("method", SellerConstants.GROUP_BUY);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGroupList rootGroupList = gson.fromJson(responseBody, RootGroupList.class);
@@ -1024,7 +1024,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("page", String.valueOf(pageNum));
         params.put("method", SellerConstants.TUAN_SEARCH);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootGetTuanSearch root = gson.fromJson(responseBody, RootGetTuanSearch.class);
@@ -1060,7 +1060,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("image", image);
         params.put("method", SellerConstants.SHOP_COMMENT);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
@@ -1097,7 +1097,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("image", image);
         params.put("method", SellerConstants.GROUP_BUY_COMMENT);
 
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopComment root = gson.fromJson(responseBody, RootShopComment.class);
@@ -1122,7 +1122,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("token", getToken());
         params.put("method", SellerConstants.MY_DISTRIBUTION_SHOP);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 onSuccess(mView, SellerConstants.MY_DISTRIBUTION_SHOP, null);
@@ -1148,7 +1148,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", String.valueOf(shop_id));
         params.put("method", SellerConstants.COMMENT_TOTAL);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootCommentTotal root = gson.fromJson(responseBody, RootCommentTotal.class);
@@ -1179,7 +1179,7 @@ public class SellerHttpHelper extends OldCallbackHelper implements IHelper {
         params.put("shop_id", shop_id);
         params.put("method", SellerConstants.GET_SHOP_MEMBER_INFO);
 
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 RootShopMemberInfo root = gson.fromJson(responseBody, RootShopMemberInfo.class);

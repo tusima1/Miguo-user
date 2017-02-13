@@ -8,19 +8,31 @@ import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.MD5Util;
 import com.fanwe.library.utils.SDPackageUtil;
+import com.fanwe.network.okhttp3.NetConfig;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.CertificateFactory;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -77,10 +89,7 @@ public class OkHttpUtil {
             = MediaType.parse("application/x-www-form-urlencoded");
 
 
-    private OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .build();
+    private OkHttpClient client = createOkHttp();
 
     public static OkHttpUtil getInstance() {
         if (mInstance == null) {
@@ -89,99 +98,228 @@ public class OkHttpUtil {
         return mInstance;
     }
 
+
+    /**
+     * 如果当前协议是https 将添加证书，确保证书存在。
+     * @return
+     */
+    public OkHttpClient createOkHttp() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS);
+        if(!ServerUrl.HTTPS){
+            return  builder.build();
+        }else {
+            // 添加证书
+
+            List<InputStream> certificates = new ArrayList<>();
+
+            List<byte[]> certs_data = NetConfig.getCertificatesData();
+
+            // 将字节数组转为数组输入流
+
+            if (certs_data != null && !certs_data.isEmpty()) {
+
+                for (byte[] bytes : certs_data) {
+
+                    certificates.add(new ByteArrayInputStream(bytes));
+
+                }
+                SSLSocketFactory sslSocketFactory = getSocketFactory(certificates);
+
+                if (sslSocketFactory != null) {
+
+                    builder.sslSocketFactory(sslSocketFactory);
+
+                }
+            }
+        }
+        return builder.build();
+    }
+
+    /**
+
+     * 添加证书
+
+     *
+
+     * @param certificates
+
+     */
+
+    private static SSLSocketFactory getSocketFactory(List<InputStream> certificates) {
+        try {
+
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+
+            keyStore.load(null);
+
+
+
+            try {
+
+                for (int i = 0, size = certificates.size(); i < size; ) {
+
+                    InputStream certificate = certificates.get(i);
+
+                    String certificateAlias = Integer.toString(i++);
+
+                    keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));
+
+
+
+                    if (certificate != null)
+
+                        certificate.close();
+
+                }
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            }
+
+
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+
+
+
+            TrustManagerFactory trustManagerFactory =
+
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+
+
+
+            trustManagerFactory.init(keyStore);
+
+            sslContext.init
+
+                    (
+
+                            null,
+
+                            trustManagerFactory.getTrustManagers(),
+
+                            new SecureRandom()
+
+                    );
+
+
+
+            return sslContext.getSocketFactory();
+
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+
+
+        return null;
+
+    }
+
+
+
     public void get(TreeMap<String, String> params, HttpCallback mCallback) {
         get(params, mCallback, false);
     }
 
-    public void get(TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void get(TreeMap<String, String> params, Callback  mCallback, boolean isNeedLogin) {
         get(null, params, mCallback, isNeedLogin);
     }
 
-    public void get(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void get(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         get(url, params, mCallback, isNeedLogin, null);
     }
 
     //TODO for oldVersion
-    public void get(String url, TreeMap<String, String> params, HttpCallback mCallback) {
+    public void get(String url, TreeMap<String, String> params, Callback mCallback) {
         get(url, params, mCallback, false, null);
     }
 
-    public void get(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin, Object tag) {
+    public void get(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
         httpHandle(GET, url, params, mCallback, isNeedLogin, tag);
     }
 
-    public void put(TreeMap<String, String> params, HttpCallback mCallback) {
+    public void put(TreeMap<String, String> params, Callback mCallback) {
         put(params, mCallback, false);
     }
 
-    public void put(TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void put(TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         put(null, params, mCallback, isNeedLogin);
     }
 
-    public void put(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void put(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         put(url, params, mCallback, isNeedLogin, null);
     }
 
     //TODO for oldVersion
-    public void put(String url, TreeMap<String, String> params, HttpCallback mCallback) {
+    public void put(String url, TreeMap<String, String> params, Callback mCallback) {
         put(url, params, mCallback, false, null);
     }
 
-    public void put(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin, Object tag) {
+    public void put(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
         httpHandle(PUT, url, params, mCallback, isNeedLogin, tag);
     }
 
-    public void post(TreeMap<String, String> params, HttpCallback mCallback) {
+    public void post(TreeMap<String, String> params, Callback mCallback) {
         post(params, mCallback, false);
     }
 
-    public void post(TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void post(TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         post(null, params, mCallback, isNeedLogin);
     }
 
-    public void post(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void post(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         post(url, params, mCallback, isNeedLogin, null);
     }
 
     //TODO for oldVersion
-    public void post(String url, TreeMap<String, String> params, HttpCallback mCallback) {
+    public void post(String url, TreeMap<String, String> params, Callback mCallback) {
         post(url, params, mCallback, false, null);
     }
 
-    public void post(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin, Object tag) {
+    public void post(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
         httpHandle(POST, url, params, mCallback, isNeedLogin, tag);
     }
 
-    public void delete(TreeMap<String, String> params, HttpCallback mCallback) {
+    public void delete(TreeMap<String, String> params, Callback mCallback) {
         delete(params, mCallback, false);
     }
 
-    public void delete(TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void delete(TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         delete(null, params, mCallback, isNeedLogin);
     }
 
-    public void delete(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin) {
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         delete(url, params, mCallback, isNeedLogin, null);
     }
 
     //TODO for oldVersion
-    public void delete(String url, TreeMap<String, String> params, HttpCallback mCallback) {
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback) {
         delete(url, params, mCallback, false, null);
     }
 
-    public void delete(String url, TreeMap<String, String> params, HttpCallback mCallback, boolean isNeedLogin, Object tag) {
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
         httpHandle(DELETE, url, params, mCallback, isNeedLogin, tag);
     }
 
-    public void thirdUrlGet(String url, TreeMap<String, String> params, HttpCallback mCallback) {
+    public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback) {
         thirdUrlGet(url, params, mCallback, null);
     }
 
-    public void thirdUrlGet(String url, TreeMap<String, String> params, HttpCallback mCallback, Object tag) {
+    public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
         httpHandle(THIRD_GET, url, params, mCallback, false, tag);
     }
 
-    private void httpHandle(int method, String url, TreeMap<String, String> params, final HttpCallback callback, boolean isNeedLogin, Object tag) {
+    private void httpHandle(int method, String url, TreeMap<String, String> params, final Callback callback, boolean isNeedLogin, Object tag) {
         if (NetWorkStateUtil.isConnected(App.getInstance())) {
             if (isNeedLogin) {
                 String token = App.getInstance().getToken();
@@ -216,7 +354,11 @@ public class OkHttpUtil {
                     @Override
                     public void run() {
                         callback.onFailure(null,new IOException());
-                        callback.onFinish();
+                        if(callback instanceof  HttpCallback) {
+                            ((HttpCallback) callback).onFinish();
+                        }else if(callback instanceof  MgCallback){
+                            ((MgCallback) callback).onFinish();
+                        }
                     }
                 });
             }

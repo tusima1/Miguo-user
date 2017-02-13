@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.shoppingcart.model.ShoppingCartInfo;
 import com.fanwe.utils.SDFormatUtil;
@@ -68,7 +68,7 @@ public class ShoppingCartMultiAddDaoImpl extends BaseDaoImpl implements Shopping
         params.put("add_goods_num", add_goods_num.substring(0, add_goods_num.length() - 1));
         params.put("share_record_ids", share_record_ids.substring(0, share_record_ids.length() - 1));
         params.put("method", ShoppingCartconstants.BATCH_SHOPPING_CART);
-        OkHttpUtils.getInstance().post(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().post(null, params, new MgCallback() {
 
             @Override
             public void onSuccessResponse(String responseBody) {

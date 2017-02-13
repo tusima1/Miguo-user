@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.fanwe.app.App;
 import com.fanwe.base.Root;
 import com.fanwe.network.MgCallback;
-import com.fanwe.network.OkHttpUtils;
+import com.fanwe.network.OkHttpUtil;
 import com.fanwe.user.UserConstants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,7 +33,7 @@ public class GetUserLevelDaoImpl extends BaseDaoImpl implements GetUserLevelDao 
         TreeMap<String, String> params = new TreeMap<String, String>();
         params.put("token", App.getInstance().getToken());
         params.put("method", UserConstants.USER_DISTRIBUTION_LEVEL);
-        OkHttpUtils.getInstance().get(null, params, new MgCallback() {
+        OkHttpUtil.getInstance().get(null, params, new MgCallback() {
             @Override
             public void onSuccessResponse(String responseBody) {
                 Type type = new TypeToken<Root<HashMap<String, String>>>() {}.getType();
