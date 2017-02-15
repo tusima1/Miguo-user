@@ -350,13 +350,52 @@ public class HiShopDetailBean implements Serializable{
              */
             String id;
 
+            /**
+             * 获取可用时间，周一，周二，周三，周四，周五，周六，周日
+             * 如果连续就 周x - 周y
+             * 不连续就用逗号分隔
+             * @return
+             */
             public String getAvailableWeek(){
-                String[] weeks = getAvailable_week().split("\\,");
-                for(int i = 0; i < weeks.length; i++){
-                    if(i!=0){
-
+                try{
+                    String[] WEEKS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+                    String[] weeks = getAvailable_week().split("\\,");
+                    String week = "";
+                    boolean match = true;
+                    int preMatch = 0;
+                    for(int i = 0; i < weeks.length; i++){
+                        if(i!=0){
+                            int currentMatch = Integer.parseInt(weeks[i]) - Integer.parseInt(weeks[i - 1]);
+                            match = preMatch == 0 ? true : currentMatch == preMatch ? true : false;
+                            preMatch = currentMatch;
+                            if(!match){
+                                break;
+                            }
+                        }
                     }
+                    if(match){
+                        week = WEEKS[0] + "到" + WEEKS[Integer.parseInt(weeks[weeks.length - 1]) - 1];
+                        return week;
+                    }
+                    for(int i = 0; i<weeks.length; i++){
+                        week = week + (i == 0 ? WEEKS[Integer.parseInt(weeks[i]) - 1] : "，" + WEEKS[Integer.parseInt(weeks[i]) - 1]);
+                    }
+                    return week;
+                }catch (Exception e){
+                    return "";
                 }
+            }
+
+            public String getAvailableTime(){
+                String availableTime;
+                try{
+                    String start = getAvailable_time_start().substring(0, 2) + ":" + getAvailable_time_start().substring(2,getAvailable_time_start().length());
+                    String end = getAvailable_time_end().substring(0, 2) + ":" + getAvailable_time_end().substring(2,getAvailable_time_end().length());
+                    availableTime = start + "—" + end;
+                }catch (Exception e){
+                    availableTime = "00:00—24:00";
+                }
+                return availableTime;
             }
 
             public String getDiscountText(){

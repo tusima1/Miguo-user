@@ -212,6 +212,9 @@ public abstract class Category implements BaseView {
         return getActivity().getResources();
     }
 
+    public boolean isEmpty(Object o){
+        return null == o || o.toString().equals("");
+    }
 
     /**
      * 统一showToast

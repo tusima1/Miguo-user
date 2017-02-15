@@ -260,6 +260,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         backBg.setOnClickListener(listener);
         shareBg.setOnClickListener(listener);
         tvRepresent.setOnClickListener(listener);
+        offlineLayout.setOnClickListener(listener);
         tvMineShop.setOnClickListener(listener);
         tvShare.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
@@ -736,16 +737,18 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
             case HiShopDetailBean.Result.Offline.DISCOUNT:
                 updateDecrease(result.getOfflineInfo().getDiscountText());
                 updatePayTimeVisibility(View.VISIBLE);
+                updatePayTime();
                 break;
             case HiShopDetailBean.Result.Offline.DECREASE:
                 updateDecrease(result.getOfflineInfo().getDecreaseText());
                 updatePayTimeVisibility(View.VISIBLE);
+                updatePayTime();
                 break;
         }
     }
 
     private void updatePayTime(){
-        this.payTime.setText(result.getOfflineInfo().);
+        this.payTime.setText(result.getOfflineInfo().getAvailableWeek() + "  " + result.getOfflineInfo().getAvailableTime());
     }
 
     /**
@@ -898,4 +901,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         dismissShareTipPop();
     }
 
+    public String getMerchantID() {
+        return merchantID;
+    }
 }

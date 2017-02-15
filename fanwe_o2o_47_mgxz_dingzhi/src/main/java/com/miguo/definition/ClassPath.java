@@ -89,6 +89,11 @@ public class ClassPath {
      * {@link com.miguo.ui.view.floatdropdown.SearchGuideActivity}
      */
     public static final String SEARCH_GUIDE = "com.miguo.ui.view.floatdropdown.SearchGuideActivity";
+    /**
+     * 线下买单
+     * {@link com.miguo.app.HiOfflinePayActivity}
+     */
+    public static final String OFFLINE_PAY = "com.miguo.app.HiOfflinePayActivity";
 
 
 }

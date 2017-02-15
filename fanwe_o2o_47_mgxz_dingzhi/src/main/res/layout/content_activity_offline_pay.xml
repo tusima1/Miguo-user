@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.miguo.ui.view.RecyclerBounceNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycler_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/title_layout"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/content_activity_hishop_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:textSize="15sp"
+            android:layout_marginTop="18dp"
+            android:textColor="@color/c_2e2e2e"
+            android:text="醉清迈泰式餐厅（西溪印象城店）"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <RelativeLayout
+            android:background="@drawable/shape_bg_gray_5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp">
+
+            <EditText
+                android:layout_toRightOf="@+id/amount_text"
+                android:textCursorDrawable="@null"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:id="@+id/amount_of_consumption"
+                android:background="@null"
+                android:inputType="numberDecimal"
+                android:hint="询问服务员后输入"
+                android:textColorHint="@color/c_CCCCCC"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:textSize="13sp"
+                android:layout_marginLeft="10dp"
+                android:text="消费金额："
+                android:id="@+id/amount_text"
+                android:textColor="@color/c_595959"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="18dp">
+
+            <CheckBox
+                android:layout_marginLeft="17dp"
+                android:button="@drawable/offline_pay_checkbox"
+                android:id="@+id/do_not_participate_in_the_amount_of_concessions"
+                android:layout_width="17dp"
+                android:layout_height="17dp" />
+
+            <TextView
+                android:id="@+id/do_not_participate_in_the_amount_of_concessions_text"
+                android:text="输入不参与优惠金额（如酒水、套餐、特价菜等）"
+                android:layout_marginLeft="7dp"
+                android:textSize="11sp"
+                android:textColor="@color/c_999999"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/do_not_participate_in_the_amount_layout"
+            android:background="@drawable/shape_bg_gray_5dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp">
+
+            <EditText
+                android:layout_toRightOf="@+id/do_not_participate_in_the_amount_text"
+                android:textCursorDrawable="@null"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|right"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:id="@+id/do_not_participate_in_the_amount_of_consumption"
+                android:background="@null"
+                android:inputType="numberDecimal"
+                android:hint="询问服务员后输入"
+                android:textColorHint="@color/c_CCCCCC"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:textSize="13sp"
+                android:text="不参与优惠金额："
+                android:layout_marginLeft="10dp"
+                android:id="@+id/do_not_participate_in_the_amount_text"
+                android:textColor="@color/c_595959"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/group2_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="13sp"
+                    android:id="@+id/decrease"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginTop="16dp"
+                    android:text="每满100减8元，最高减50元"
+                    android:textColor="@color/c_2e2e2e"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textSize="11sp"
+                    android:id="@+id/pay_time"
+                    android:layout_marginLeft="17dp"
+                    android:text="周一到周四  00:00—24:00"
+                    android:textColor="@color/c_CCCCCC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:background="@drawable/offline_space_layer"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+
+            <RelativeLayout
+                android:background="@drawable/offline_space_layer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="12sp"
+                    android:textColor="@color/c_999999"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:text="实付金额"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <TextView
+                    android:layout_toLeftOf="@+id/order_amount"
+                    android:textColor="@color/c_f5b830"
+                    android:textSize="14sp"
+                    android:layout_alignBottom="@+id/order_amount"
+                    android:text="￥"
+                    android:layout_marginBottom="1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/order_amount"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/c_f5b830"
+                    android:textSize="18sp"
+                    android:text="0"
+                    android:layout_marginRight="17dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="35dp"
+                android:id="@+id/commit_order"
+                android:textSize="15sp"
+                android:background="@drawable/offline_pay_confirm_unselect"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="确定买单"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+            
+            
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+
+        
+        
+    </LinearLayout>
+</com.miguo.ui.view.RecyclerBounceNestedScrollView>
