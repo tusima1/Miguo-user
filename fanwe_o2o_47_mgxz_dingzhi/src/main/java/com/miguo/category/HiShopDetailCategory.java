@@ -904,4 +904,8 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
     public String getMerchantID() {
         return merchantID;
     }
+
+    public HiShopDetailBean.Result getResult() {
+        return result;
+    }
 }

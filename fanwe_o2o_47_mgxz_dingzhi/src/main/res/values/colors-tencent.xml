@@ -8,6 +8,7 @@
     <color name="dialog_btn_pressed_color">#efefef</color>
     <!--app主色调，背景色-->
     <color name="colorPrimary">#FFFFFF</color>
+    <color name="translucent">#00000000</color>
     <!--红色-->
     <color name="colorRed">#FF3333</color>
     <!--文字白色-->

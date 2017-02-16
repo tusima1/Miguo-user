@@ -17,6 +17,7 @@
 
         <TextView
             android:textSize="15sp"
+            android:id="@+id/shop_name"
             android:layout_marginTop="18dp"
             android:textColor="@color/c_2e2e2e"
             android:text="醉清迈泰式餐厅（西溪印象城店）"
@@ -50,7 +51,7 @@
             <TextView
                 android:textSize="13sp"
                 android:layout_marginLeft="10dp"
-                android:text="消费金额："
+                android:text="消费总额："
                 android:id="@+id/amount_text"
                 android:textColor="@color/c_595959"
                 android:layout_width="wrap_content"

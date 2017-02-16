@@ -206,6 +206,10 @@ public class BeforeOnlinePayBean {
                 return discount;
             }
 
+            public Double getRealDiscount(){
+                return getDiscount() / 10;
+            }
+
             public void setDiscount(Double discount) {
                 this.discount = discount;
             }

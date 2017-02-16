@@ -23,7 +23,14 @@ public class HiOfflinePayListener extends Listener {
             case R.id.do_not_participate_in_the_amount_of_concessions_text:
                 clickWithoutDiscountAmount();
                 break;
+            case R.id.commit_order:
+                clickCommitOrder();
+                break;
         }
+    }
+
+    private void clickCommitOrder(){
+        getCategory().clickCommitOrder();
     }
 
     private void clickWithoutDiscountAmount(){

@@ -12,18 +12,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiOfflinePayActivity;
 import com.miguo.dao.BeforeOnlinePayDao;
+import com.miguo.dao.OnlinePayOrderDao;
 import com.miguo.dao.impl.BeforeOnlinePayDaoImpl;
+import com.miguo.dao.impl.OnlinePayOrderDaoImpl;
+import com.miguo.dialog.OfflinePayLoginDialog;
 import com.miguo.entity.BeforeOnlinePayBean;
 import com.miguo.entity.HiShopDetailBean;
+import com.miguo.entity.OnlinePayOrderBean;
 import com.miguo.listener.HiOfflinePayListener;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.view.BeforeOnlinePayView;
+import com.miguo.view.OnlinePayOrderView;
 
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/2/14.
@@ -34,6 +40,11 @@ public class HiOfflinePayCategory extends Category {
     RecyclerBounceNestedScrollView recyclerBounceNestedScrollView;
 
     /**
+     * 商家名称
+     */
+    @ViewInject(R.id.shop_name)
+    TextView shopname;
+    /**
      * 消费金额
      */
     @ViewInject(R.id.amount_of_consumption)
@@ -43,7 +54,7 @@ public class HiOfflinePayCategory extends Category {
      * 输入不参与优惠金额的复选框
      */
     @ViewInject(R.id.do_not_participate_in_the_amount_of_concessions)
-    CheckBox withoutDiscountAmount;
+    CheckBox withoutDiscountAmountCB;
 
     /**
      * 输入不参与优惠金额提示
@@ -94,6 +105,10 @@ public class HiOfflinePayCategory extends Category {
     BeforeOnlinePayDao beforeOnlinePayDao;
     BeforeOnlinePayBean.Result.Body offlinePayInfo;
 
+    OnlinePayOrderDao onlinePayOrderDao;
+    double amount;
+    double withoutDiscountAmount;
+
     public HiOfflinePayCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -105,7 +120,8 @@ public class HiOfflinePayCategory extends Category {
 
     @Override
     protected void initFirst() {
-
+        initBeforeOnlinePayDao();
+        initOnlinePayOrderDao();
     }
 
     @Override
@@ -117,19 +133,18 @@ public class HiOfflinePayCategory extends Category {
     protected void setThisListener() {
         amountOfConsumption.addTextChangedListener(listener);
         doNotParticipateInTheamountOfConsumption.addTextChangedListener(listener);
-        withoutDiscountAmount.setOnCheckedChangeListener(listener);
+        withoutDiscountAmountCB.setOnCheckedChangeListener(listener);
         withoutDiscountAmountText.setOnClickListener(listener);
         commitOrder.setOnClickListener(listener);
     }
 
     @Override
     protected void init() {
-
+        shopname.setText(getActivity().getShopName());
     }
 
     @Override
     protected void initViews() {
-        initBeforeOnlinePayDao();
         initAmountOfConsumptionHint();
         recyclerBounceNestedScrollView.hideLoadingLayout();
     }
@@ -148,6 +163,29 @@ public class HiOfflinePayCategory extends Category {
             }
         });
         beforeOnlinePayDao.getOfflinePayInfo(getActivity().getShopId());
+    }
+
+    private void initOnlinePayOrderDao(){
+        onlinePayOrderDao = new OnlinePayOrderDaoImpl(new OnlinePayOrderView() {
+            @Override
+            public void onlinePayOrderSuccess(OnlinePayOrderBean.Result.Body orderInfo) {
+                showToast(orderInfo.getOrder_id());
+            }
+
+            @Override
+            public void offerHasExpired() {
+
+            }
+
+            @Override
+            public void onlinePayOrderError(String message) {
+
+            }
+        });
+    }
+
+    private void handleOfferHasExpired(){
+
     }
 
     private void handleGetOfflineInfoSuccess(){
@@ -229,7 +267,36 @@ public class HiOfflinePayCategory extends Category {
     }
 
     public void clickWithoutDiscountAmount(){
-        withoutDiscountAmount.setChecked(!withoutDiscountAmount.isChecked());
+        withoutDiscountAmountCB.setChecked(!withoutDiscountAmountCB.isChecked());
+    }
+
+    public void clickCommitOrder(){
+        /**
+         * 未登录
+         */
+        if(isEmpty(App.getInstance().getCurrentUser().getToken())){
+            OfflinePayLoginDialog dialog = new OfflinePayLoginDialog();
+            dialog.show(getActivity().getSupportFragmentManager(),"offline_pay");
+            dialog.setOnOfflinePayDialogListener(new OfflinePayLoginDialog.OnOfflinePayDialogListener() {
+                @Override
+                public void loginSuccess() {
+                    confirmOrder();
+                }
+            });
+            return;
+        }
+        confirmOrder();
+    }
+
+    /**
+     * 第一次点击确认订单
+     */
+    private void confirmOrder(){
+        onlinePayOrderDao.onlinePayOrder(amount, parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString()),App.getInstance().getToken(),getActivity().getShopId());
+    }
+
+    private void continueOrder(){
+        onlinePayOrderDao.onlinePayOrder(amount, parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString()), 1 ,App.getInstance().getToken(),getActivity().getShopId());
     }
 
     /**
@@ -304,9 +371,52 @@ public class HiOfflinePayCategory extends Category {
     }
 
     private void handleCalculateAmount(){
-        if(inputAmountNotEmpty()){
-
+        if(!inputAmountNotEmpty()){
+            orderAmount.setText("0");
+            return;
         }
+
+        switch (offlinePayInfo.getOnline_pay_type()){
+            case HiShopDetailBean.Result.Offline.ORIGINAL:
+                handleOriginalAmount();
+                break;
+            case HiShopDetailBean.Result.Offline.DISCOUNT:
+                handleDiscountAmount();
+                break;
+            case HiShopDetailBean.Result.Offline.DECREASE:
+                handleDecreaseAmount();
+                break;
+        }
+
+    }
+
+    /**
+     * 原价金额
+     */
+    private void handleOriginalAmount(){
+        amount = parseDouble(amountOfConsumption.getText().toString());
+        withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
+        orderAmount.setText(amount + "");
+    }
+
+    /**
+     * 打折金额
+     */
+    private void handleDiscountAmount(){
+        withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
+        amount = (parseDouble(amountOfConsumption.getText().toString()) - withoutDiscountAmount) * offlinePayInfo.getRealDiscount();
+        orderAmount.setText(amount + "");
+    }
+
+    /**
+     * 满减金额
+     */
+    private void handleDecreaseAmount(){
+        withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
+        Double decrease = (int)((parseDouble(amountOfConsumption.getText().toString()) - withoutDiscountAmount) / offlinePayInfo.getFull_amount_limit()) * offlinePayInfo.getFull_discount();
+        decrease = offlinePayInfo.getMax_discount_limit() == 0 ? decrease : decrease > offlinePayInfo.getMax_discount_limit() ? offlinePayInfo.getMax_discount_limit() : decrease;
+        amount = parseDouble(amountOfConsumption.getText().toString()) - decrease;
+        orderAmount.setText(amount + "");
     }
 
     /**
@@ -331,6 +441,14 @@ public class HiOfflinePayCategory extends Category {
      */
     private boolean isCommitOrderSelect(){
         return preConfirmOrderBackground == R.drawable.offline_pay_confirm_select;
+    }
+
+    private Double parseDouble(String d){
+        try {
+            return Double.parseDouble(d);
+        }catch (Exception e){
+            return 0.00;
+        }
     }
 
     /**

@@ -55,6 +55,7 @@
 
     <!-- hint 灰色字体 rgb 204,204,204 -->
     <color name="c_CCCCCC">#CCCCCC</color>
+    <color name="c_99000000">#99000000</color>
     <color name="c_D9D9D9">#D9D9D9</color>
     <color name="c_dddddd">#dddddd</color>
     <color name="c_595959">#595959</color>
@@ -111,6 +112,7 @@
 
     <color name="c_232323">#232323</color>
     <color name="c_f5b830">#f5b830</color>
+    <color name="c_e5e5e5">#e5e5e5</color>
     <color name="c_f6b72c">#F6B72C</color>
     <color name="c_F5B830">#f5b830</color>
     <color name="c_c03f3f">#c03f3f</color>

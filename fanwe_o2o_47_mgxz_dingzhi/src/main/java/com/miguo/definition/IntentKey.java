@@ -56,6 +56,7 @@ public class IntentKey {
     public static final String SECOND_TYPE = "secondType";
 
     public static final String OFFLINE_SHOP_ID = "offline_shop_id";
+    public static final String OFFLINE_SHOP_NAME = "offline_shop_name";
 
 
 }
