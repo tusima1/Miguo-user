@@ -324,7 +324,7 @@ public class InitAdvsMultiActivity extends AppCompatActivity implements Callback
                     startMainActivity();
                     break;
                 case 2:
-                    if (CollectionUtils.isValid(tempModelCrashUpToken) && tempModelCrashUpToken.get(0) != null) {
+                    if (CollectionUtils.isValid(tempModelCrashUpToken) && tempModelCrashUpToken.get(0) != null &&!ServerUrl.DEBUG) {
                         UploadUtil.getInstance().uploadCrashLog(tempModelCrashUpToken.get(0).getUptoken());
                     }
                     break;

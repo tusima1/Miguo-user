@@ -162,7 +162,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
         ImageLoaderManager.initImageLoader();
         initSDLibrary();
 
-//		initAppCrashHandler();
+
         //关闭友盟分析默认的统计方式
         MobclickAgent.openActivityDurationTrack(true);
         MobclickAgent.setCatchUncaughtExceptions(true);

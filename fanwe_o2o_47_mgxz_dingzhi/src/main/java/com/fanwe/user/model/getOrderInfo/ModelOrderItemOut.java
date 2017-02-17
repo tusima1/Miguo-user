@@ -12,8 +12,12 @@ public class ModelOrderItemOut {
     private String status_name;
     private String pay_amount;
     private String order_id;
+    /**
+     * 2：团购，5：到店付
+     */
     private String order_type;
     private String order_sn;
+
     /**
      * number : 3
      * refund_status : 0

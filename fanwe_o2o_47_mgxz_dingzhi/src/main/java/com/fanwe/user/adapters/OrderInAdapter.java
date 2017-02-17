@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.fanwe.AddCommentActivity;
 import com.fanwe.TuanDetailActivity;
+import com.fanwe.app.App;
 import com.fanwe.constant.Constant;
 import com.fanwe.library.adapter.SDBaseAdapter;
 import com.fanwe.library.utils.SDViewBinder;
@@ -21,6 +22,7 @@ import com.fanwe.seller.views.GoodsDetailActivity;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.view.RefundApplicationActivity;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.app.HiShopDetailActivity;
 import com.miguo.utils.DisplayUtil;
 
 import java.util.List;
@@ -178,7 +180,10 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     @Override
                     public void onClick(View v) {
                         String tuan_id = model.getTuan_id();
-                        gotoRefundApplication(tuan_id);
+                        if(!TextUtils.isEmpty(tuan_id)) {
+                            gotoRefundApplication(tuan_id);
+                        }
+
                     }
                 });
             }else{
@@ -211,6 +216,11 @@ public class OrderInAdapter extends SDBaseAdapter<ModelOrderItemIn> {
                     Intent intent = new Intent(mActivity, GoodsDetailActivity.class);
                     intent.putExtra(TuanDetailActivity.EXTRA_GOODS_ID, model.getTuan_id());
                     intent.putExtra(TuanDetailActivity.EXTRA_DETAIL_ID, model.getDetail_id());
+                    mActivity.startActivity(intent);
+                }else if(!TextUtils.isEmpty(model.getShop_id())){
+                    Intent intent = new Intent();
+                    intent.setClass(App.getApplication(), HiShopDetailActivity.class);
+                    intent.putExtra(HiShopDetailActivity.EXTRA_MERCHANT_ID, model.getShop_id());
                     mActivity.startActivity(intent);
                 }
             }
