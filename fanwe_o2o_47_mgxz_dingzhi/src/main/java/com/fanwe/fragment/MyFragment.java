@@ -43,7 +43,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
-import com.miguo.ui.RedPacketOpenResultActivity;
+import com.miguo.ui.test.TestActivity;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGLog;
 
@@ -286,8 +286,8 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
         } else if (v == mErWeiMa) {
             /*二维码名片*/
 //        startActivity(DistributionMyQRCodeActivity.class);
-//        startActivity(TestActivity.class);
-        startActivity(RedPacketOpenResultActivity.class);
+        startActivity(TestActivity.class);
+//        startActivity(RedPacketOpenResultActivity.class);
 //            startActivity(SearchGuideActivity.class);
 //            startActivity(TestDropDownPopActivity.class);
         } else if (v == mIvUserFace) {

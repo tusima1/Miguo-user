@@ -3,6 +3,7 @@ package com.miguo.ui.view.customviews;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.ui.RedPacketOpenResultActivity;
+import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.Rotate3dAnimation;
 
 /**
@@ -57,8 +60,20 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
         }
         if (v==ivOpen){
             playAnimation2();
+            startRedPacketOpenResultActivity();
             return;
         }
+    }
+
+    private void startRedPacketOpenResultActivity() {
+        int delay = (int) (Math.random() * 1500);
+        MGUIUtil.runOnUiThreadDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ivOpen.clearAnimation();
+                mHoldActivity.startActivity(new Intent(mHoldActivity, RedPacketOpenResultActivity.class));
+            }
+        },delay);
     }
 
     private void playAnimation() {

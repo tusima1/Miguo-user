@@ -21,6 +21,8 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
     private TextView tvMoney;
     private ImageView ivFace;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

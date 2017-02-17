@@ -67,19 +67,19 @@ public class OkHttpUtil {
     private static final String APP_KEY_DEFAULT = "c3e67013-e439-11e5-bbcc-a0d3c1ef5680";
     private static final String APP_SECURITY_DEFAULT = "2acabf04914eeaec6b841a81f09711d8";
     //    java接口增加公共参数
-    private static final String CITY_ID="city_id";
+    private static final String CITY_ID = "city_id";
     /**
      * longitude经度
      */
-    private static final String LONGITUDE="longitude";
+    private static final String LONGITUDE = "longitude";
     /**
      * latitude纬度
      */
-    private static final String LATITUDE="latitude";
+    private static final String LATITUDE = "latitude";
     /**
      * app_version终端的版本号
      */
-    private static final String APP_VERSION="app_version";
+    private static final String APP_VERSION = "app_version";
     /**
      * 加密方式 。
      */
@@ -104,11 +104,12 @@ public class OkHttpUtil {
      * @return
      */
     public OkHttpClient createOkHttp() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(10, TimeUnit
+                .SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS);
-        if(!ServerUrl.HTTPS){
-            return  builder.build();
-        }else {
+        if (!ServerUrl.HTTPS) {
+            return builder.build();
+        } else {
             // 添加证书
 
             List<InputStream> certificates = new ArrayList<>();
@@ -156,7 +157,6 @@ public class OkHttpUtil {
             keyStore.load(null);
 
 
-
             try {
 
                 for (int i = 0, size = certificates.size(); i < size; ) {
@@ -165,8 +165,8 @@ public class OkHttpUtil {
 
                     String certificateAlias = Integer.toString(i++);
 
-                    keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));
-
+                    keyStore.setCertificateEntry(certificateAlias, certificateFactory
+                            .generateCertificate(certificate));
 
 
                     if (certificate != null)
@@ -182,15 +182,12 @@ public class OkHttpUtil {
             }
 
 
-
             SSLContext sslContext = SSLContext.getInstance("TLS");
-
 
 
             TrustManagerFactory trustManagerFactory =
 
                     TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
 
 
             trustManagerFactory.init(keyStore);
@@ -208,9 +205,7 @@ public class OkHttpUtil {
                     );
 
 
-
             return sslContext.getSocketFactory();
-
 
 
         } catch (Exception e) {
@@ -220,22 +215,21 @@ public class OkHttpUtil {
         }
 
 
-
         return null;
 
     }
-
 
 
     public void get(TreeMap<String, String> params, HttpCallback mCallback) {
         get(params, mCallback, false);
     }
 
-    public void get(TreeMap<String, String> params, Callback  mCallback, boolean isNeedLogin) {
+    public void get(TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
         get(null, params, mCallback, isNeedLogin);
     }
 
-    public void get(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
+    public void get(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin) {
         get(url, params, mCallback, isNeedLogin, null);
     }
 
@@ -244,7 +238,8 @@ public class OkHttpUtil {
         get(url, params, mCallback, false, null);
     }
 
-    public void get(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
+    public void get(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin, Object tag) {
         httpHandle(GET, url, params, mCallback, isNeedLogin, tag);
     }
 
@@ -256,7 +251,8 @@ public class OkHttpUtil {
         put(null, params, mCallback, isNeedLogin);
     }
 
-    public void put(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
+    public void put(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin) {
         put(url, params, mCallback, isNeedLogin, null);
     }
 
@@ -265,7 +261,8 @@ public class OkHttpUtil {
         put(url, params, mCallback, false, null);
     }
 
-    public void put(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
+    public void put(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin, Object tag) {
         httpHandle(PUT, url, params, mCallback, isNeedLogin, tag);
     }
 
@@ -277,7 +274,8 @@ public class OkHttpUtil {
         post(null, params, mCallback, isNeedLogin);
     }
 
-    public void post(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
+    public void post(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin) {
         post(url, params, mCallback, isNeedLogin, null);
     }
 
@@ -286,7 +284,8 @@ public class OkHttpUtil {
         post(url, params, mCallback, false, null);
     }
 
-    public void post(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
+    public void post(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin, Object tag) {
         httpHandle(POST, url, params, mCallback, isNeedLogin, tag);
     }
 
@@ -298,7 +297,8 @@ public class OkHttpUtil {
         delete(null, params, mCallback, isNeedLogin);
     }
 
-    public void delete(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin) {
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin) {
         delete(url, params, mCallback, isNeedLogin, null);
     }
 
@@ -307,7 +307,8 @@ public class OkHttpUtil {
         delete(url, params, mCallback, false, null);
     }
 
-    public void delete(String url, TreeMap<String, String> params, Callback mCallback, boolean isNeedLogin, Object tag) {
+    public void delete(String url, TreeMap<String, String> params, Callback mCallback, boolean
+            isNeedLogin, Object tag) {
         httpHandle(DELETE, url, params, mCallback, isNeedLogin, tag);
     }
 
@@ -315,11 +316,13 @@ public class OkHttpUtil {
         thirdUrlGet(url, params, mCallback, null);
     }
 
-    public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+    public void thirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback,
+                            Object tag) {
         httpHandle(THIRD_GET, url, params, mCallback, false, tag);
     }
 
-    private void httpHandle(int method, String url, TreeMap<String, String> params, final Callback callback, boolean isNeedLogin, Object tag) {
+    private void httpHandle(int method, String url, TreeMap<String, String> params, final
+    Callback callback, boolean isNeedLogin, Object tag) {
         if (NetWorkStateUtil.isConnected(App.getInstance())) {
             if (isNeedLogin) {
                 String token = App.getInstance().getToken();
@@ -353,10 +356,10 @@ public class OkHttpUtil {
                 MGUIUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        callback.onFailure(null,new IOException());
-                        if(callback instanceof  HttpCallback) {
+                        callback.onFailure(null, new IOException());
+                        if (callback instanceof HttpCallback) {
                             ((HttpCallback) callback).onFinish();
-                        }else if(callback instanceof  MgCallback){
+                        } else if (callback instanceof MgCallback) {
                             ((MgCallback) callback).onFinish();
                         }
                     }
@@ -373,14 +376,16 @@ public class OkHttpUtil {
      * @param params
      * @param mCallback
      */
-    private void handleHttpThirdUrlGet(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+    private void handleHttpThirdUrlGet(String url, TreeMap<String, String> params, Callback
+            mCallback, Object tag) {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (entry.getValue() == null) {
                 paramStr.append(entry.getKey() + "=" + "" + "&");
             } else {
                 try {
-                    paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
+                    paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(),
+                            "UTF-8") + "&");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -397,7 +402,8 @@ public class OkHttpUtil {
         call.enqueue(mCallback);
     }
 
-    private void handleHttpDelete(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+    private void handleHttpDelete(String url, TreeMap<String, String> params, Callback mCallback,
+                                  Object tag) {
         FormBody.Builder build = new FormBody.Builder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (!TextUtils.isEmpty(entry.getValue())) {
@@ -419,7 +425,8 @@ public class OkHttpUtil {
         client.newCall(requestPut).enqueue(mCallback);
     }
 
-    private void handleHttpPost(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+    private void handleHttpPost(String url, TreeMap<String, String> params, Callback mCallback,
+                                Object tag) {
         StringBuilder requestStr = new StringBuilder("");
         FormBody.Builder build = new FormBody.Builder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -446,7 +453,8 @@ public class OkHttpUtil {
         client.newCall(requestPost).enqueue(mCallback);
     }
 
-    private void handleHttpPut(String url, TreeMap<String, String> params, Callback mCallback, Object tag) {
+    private void handleHttpPut(String url, TreeMap<String, String> params, Callback mCallback,
+                               Object tag) {
         StringBuilder requestStr = new StringBuilder("");
         FormBody.Builder build = new FormBody.Builder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -473,14 +481,16 @@ public class OkHttpUtil {
         client.newCall(requestPut).enqueue(mCallback);
     }
 
-    private void handleHttpGet(String url, TreeMap<String, String> params, Callback callback, Object tag) {
+    private void handleHttpGet(String url, TreeMap<String, String> params, Callback callback,
+                               Object tag) {
         StringBuilder paramStr = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
             if (entry.getValue() == null) {
                 paramStr.append(entry.getKey() + "=" + "" + "&");
             } else {
                 try {
-                    paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF-8") + "&");
+                    paramStr.append(entry.getKey() + "=" + URLEncoder.encode(entry.getValue(),
+                            "UTF-8") + "&");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -572,10 +582,10 @@ public class OkHttpUtil {
         params.put(IMEI, App.getInstance().getImei());
         params.put(APP_TYPE, "2");
         params.put(CITY_ID, AppRuntimeWorker.getCity_id());
-        params.put(LONGITUDE, BaiduMapManager.getInstance().getLongitude()+"");
-        params.put(LATITUDE,BaiduMapManager.getInstance().getLatitude()+"");
+        params.put(LONGITUDE, BaiduMapManager.getInstance().getLongitude() + "");
+        params.put(LATITUDE, BaiduMapManager.getInstance().getLatitude() + "");
         String versionName = SDPackageUtil.getVersionName();
-        if(TextUtils.isEmpty(versionName)){
+        if (TextUtils.isEmpty(versionName)) {
             versionName = SDPackageUtil.getCurrentPackageInfo().versionName;
         }
         params.put(APP_VERSION, versionName);
