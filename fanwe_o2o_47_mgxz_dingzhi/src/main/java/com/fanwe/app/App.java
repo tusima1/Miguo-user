@@ -10,13 +10,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.common.ImageLoaderManager;
-import com.fanwe.constant.EnumEventTag;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.dao.SettingModelDao;
 import com.fanwe.library.SDLibrary;
 import com.fanwe.library.command.SDCommandManager;
-import com.fanwe.library.common.SDActivityManager;
 import com.fanwe.library.config.SDLibraryConfig;
 import com.fanwe.library.utils.LogUtil;
 import com.fanwe.library.utils.SDViewUtil;
@@ -158,7 +156,9 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     private void init() {
         mApp = this;
         //crash日志捕获
-        CrashHandler.getInstance().initCrashHandler(getApplicationContext());
+        if (!ServerUrl.DEBUG){
+            CrashHandler.getInstance().initCrashHandler(getApplicationContext());
+        }
         ImageLoaderManager.initImageLoader();
         initSDLibrary();
 

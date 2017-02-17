@@ -11,8 +11,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.didikee.uilibs.views.ImageTextView;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.ui.view.customviews.ImageTextView;
 import com.miguo.utils.StatusBarCompat;
 
 /**

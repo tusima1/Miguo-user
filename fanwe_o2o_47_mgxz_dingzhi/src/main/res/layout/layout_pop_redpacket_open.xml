@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="312dp"
+                android:layout_height="415dp"
+    android:background="@drawable/ic_redpacket_bg"
+    >
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="@dimen/dp24"
+        android:layout_height="@dimen/dp24"
+        android:padding="@dimen/dp4"
+        android:src="@drawable/ic_close_red"
+        android:scaleType="centerInside"
+        android:layout_margin="@dimen/md_normal_margin"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        />
+    <ImageView
+        android:id="@+id/iv_face"
+        android:layout_width="@dimen/md_item_normal_height"
+        android:layout_height="@dimen/md_item_normal_height"
+        android:src="@drawable/ic_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_face"
+        android:textColor="@color/WHITE"
+        android:textSize="19sp"
+        android:layout_centerHorizontal="true"
+        android:text="老板娘"
+        android:layout_marginTop="@dimen/md_small_margin"
+        />
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name"
+        android:textColor="#9BFFFFFF"
+        android:textSize="14sp"
+        android:layout_centerHorizontal="true"
+        android:text="给你发了一个红包，金额随机"
+        android:layout_marginTop="@dimen/md_small_margin"
+        />
+    <TextView
+        android:id="@+id/tv_sub_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:textColor="@color/WHITE"
+        android:textSize="22sp"
+        android:layout_centerHorizontal="true"
+        android:text="恭喜发财，万事如意"
+        android:layout_marginTop="@dimen/dp28"
+        />
+
+    <ImageView
+        android:id="@+id/iv_open"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_open"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="92dp"
+        />
+
+
+</RelativeLayout>
