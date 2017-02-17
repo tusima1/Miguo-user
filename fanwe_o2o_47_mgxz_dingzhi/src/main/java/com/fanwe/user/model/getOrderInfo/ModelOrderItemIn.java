@@ -22,6 +22,8 @@ public class ModelOrderItemIn {
     private String can_refund;//是否可退款：0：不可退款，1：可退款
     private String can_comment;//是否可评价：0：不可评价，1：可评价
     private String can_consume;//是否可消费：0，不可消费，1，可消费
+    private String shop_id;//门店ID。
+
 
     public String getCan_refund() {
         return can_refund;
@@ -165,5 +167,13 @@ public class ModelOrderItemIn {
 
     public void setDetail_id(String detail_id) {
         this.detail_id = detail_id;
+    }
+
+    public String getShop_id() {
+        return shop_id;
+    }
+
+    public void setShop_id(String shop_id) {
+        this.shop_id = shop_id;
     }
 }

@@ -101,6 +101,7 @@
     <color name="gray_text_99">#999999</color>
     <color name="gray_text_e2">#e2e2e2</color>
     <color name="black_trans_90">#b2000000</color>
+    <color name="redPacket_bg">#D23838</color>
     <!--淡黄色-->
     <color name="my_main_color">#f5b830</color>
     <color name="c_e6e6e6">#e6e6e6</color>
