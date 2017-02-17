@@ -15,7 +15,9 @@
     <color name="bg_activity_gray">#f4f4f4</color>
 
     <!-- 首页推荐XXX字体颜色 -->
-    <color name="text_home_recommend">#2e2e2e</color>
+    <color name="text_home_recommend">@color/c_2e2e2e</color>
+    <color name="c_2e2e2e">#2e2e2e</color>
+
     <!-- 首页item项内容颜色 -->
     <color name="text_item_title">#4C4C4C</color>
     <color name="text_item_content">#9B9B9B</color>
@@ -53,8 +55,11 @@
 
     <!-- hint 灰色字体 rgb 204,204,204 -->
     <color name="c_CCCCCC">#CCCCCC</color>
+    <color name="c_99000000">#99000000</color>
     <color name="c_D9D9D9">#D9D9D9</color>
+    <color name="c_dddddd">#dddddd</color>
     <color name="c_595959">#595959</color>
+    <color name="c_999999">#999999</color>
 
 
     <!--color mgxz-->
@@ -108,6 +113,8 @@
 
     <color name="c_232323">#232323</color>
     <color name="c_f5b830">#f5b830</color>
+    <color name="c_e5e5e5">#e5e5e5</color>
+    <color name="c_f6b72c">#F6B72C</color>
     <color name="c_F5B830">#f5b830</color>
     <color name="c_c03f3f">#c03f3f</color>
     <color name="yellow_f5">#f5b830</color>

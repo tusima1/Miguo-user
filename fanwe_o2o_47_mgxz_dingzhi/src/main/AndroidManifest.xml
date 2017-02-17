@@ -642,6 +642,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
+        <!-- 线下买单 -->
+        <activity
+            android:name="com.miguo.app.HiOfflinePayActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 新Login -->
         <activity
             android:name="com.miguo.app.HiWebPageActivity"

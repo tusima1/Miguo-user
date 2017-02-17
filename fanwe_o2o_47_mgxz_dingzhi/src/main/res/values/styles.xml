@@ -13,6 +13,9 @@
 
     </style>
 
+    <style name="BaseDialog" parent="AppTheme">
+        <item name="android:windowBackground">@color/translucent</item>
+    </style>
 
     <style name="MiguoAppTheme" parent="AppTheme.NoActionBar">
         <!-- Customize your theme here. -->
