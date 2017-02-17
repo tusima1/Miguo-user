@@ -116,6 +116,12 @@ public class HiOfflinePayOrderCategory extends Category {
         content = findViewById(android.R.id.content);
         redPacketPopup = new RedPacketPopup(getActivity(),content);
         redPacketPopup.setNeedData(share,name,faceIcon,showContent,order_id,money);
+        redPacketPopup.setDismissListener(new RedPacketPopup.OnPopupWindowDismissListener() {
+            @Override
+            public void whenDismiss() {
+                getActivity().finish();
+            }
+        });
         redPacketPopup.showAtLocation(content, Gravity.CENTER,0,0);
     }
 

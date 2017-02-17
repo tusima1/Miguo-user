@@ -21,10 +21,10 @@ import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
 import com.fanwe.umeng.UmengShareManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.entity.StatusBean;
 import com.miguo.ui.view.customviews.ArcDrawable;
 import com.umeng.socialize.UMShareAPI;
@@ -60,12 +60,13 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
     @ViewInject(R.id.redPacket_view)
     private View redPacketView;
 
-    private ShareInfoBean shareInfo;
-    private String order_id = "";
 
     private SHARE_MEDIA platform;
     private CommonHttpHelper commonHttpHelper;
     private String shareRecordId = "";//分享id
+    private String money = "";
+    private String order_id = "";
+    private OnlinePayOrderPaymentBean.Result.Body.Share share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,20 +78,33 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         setListener();
         initView();
         getRecordId();
-        shareInfo = new ShareInfoBean();
-        shareInfo.setClickurl("https://github.com/didikee");
-        shareInfo.setImageurl("http://files.softicons.com/download/game-icons/super-mario-icons-by-sandro-pereira/png/48/Mushroom - 1UP.png");
-        shareInfo.setSummary("hoisiodso就努力开发建设");
-        shareInfo.setTitle("测试测试");
+        bindData();
+//        shareInfo = new ShareInfoBean();
+//        shareInfo.setClickurl("https://github.com/didikee");
+//        shareInfo.setImageurl("http://files.softicons.com/download/game-icons/super-mario-icons-by-sandro-pereira/png/48/Mushroom - 1UP.png");
+//        shareInfo.setSummary("hoisiodso就努力开发建设");
+//        shareInfo.setTitle("测试测试");
+    }
+
+    private void bindData() {
+        tvMoney.setText(money);
     }
 
     private void getIntentData() {
-//        Intent intent = getIntent();
-//        if (intent==null){
-//            finish();
-//            return;
-//        }
-//        order_id = intent.getStringExtra("order_id");
+        Intent intent = getIntent();
+        if (intent==null){
+            finish();
+            return;
+        }
+        money = intent.getStringExtra("money");
+        order_id = intent.getStringExtra("order_id");
+        share = (OnlinePayOrderPaymentBean.Result.Body.Share) intent.getSerializableExtra("share");
+
+        if (TextUtils.isEmpty(money) || TextUtils.isEmpty(order_id) ||share == null){
+            Toast.makeText(this, "参数错误", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
     }
 
     private void initView() {
@@ -154,12 +168,12 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
             Toast.makeText(this, "分享失败!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (shareInfo!=null){
+        if (share!=null){
             onShareClick();
             UmengShareManager.share(platform, this,
-                    shareInfo.getTitle(),
-                    shareInfo.getSummary(),
-                    shareInfo.getClickurl(), UmengShareManager.getUMImage(this, shareInfo.getImageurl()), umShareListener);
+                    share.getTitle(),
+                    share.getSummary(),
+                    share.getClickurl(), UmengShareManager.getUMImage(this, share.getImageurl()), umShareListener);
         }
     }
 
@@ -192,7 +206,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
 
     private void onShareClick(){
         TreeMap<String,String> params = new TreeMap<>();
-        params.put("order_id","");
+        params.put("order_id",order_id);
         params.put("token", App.getInstance().getToken());
         params.put("method","OnlinePayShareProfit");
         OkHttpUtil.getInstance().get(params, new HttpCallback<StatusBean>() {

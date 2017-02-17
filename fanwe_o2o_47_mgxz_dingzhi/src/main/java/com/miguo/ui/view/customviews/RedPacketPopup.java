@@ -75,9 +75,22 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
             @Override
             public void run() {
                 ivOpen.clearAnimation();
-                mHoldActivity.startActivity(new Intent(mHoldActivity, RedPacketOpenResultActivity.class));
+                startActivity();
+
             }
         },delay);
+    }
+
+    private void startActivity() {
+        Intent intent =new Intent(mHoldActivity, RedPacketOpenResultActivity.class);
+        intent.putExtra("money",money);
+        intent.putExtra("order_id",order_id);
+        intent.putExtra("share",share);
+        mHoldActivity.startActivity(intent);
+        dismiss();
+        if (dismissListener!=null){
+            dismissListener.whenDismiss();
+        }
     }
 
     private void playAnimation() {
@@ -116,5 +129,14 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
         this.order_id = order_id;
         this.share= share;
         this.money = money;
+    }
+
+    public interface OnPopupWindowDismissListener{
+        void whenDismiss();
+    }
+    private RedPacketPopup.OnPopupWindowDismissListener dismissListener;
+
+    public void setDismissListener(RedPacketPopup.OnPopupWindowDismissListener dismissListener) {
+        this.dismissListener = dismissListener;
     }
 }
