@@ -94,6 +94,11 @@ public class ClassPath {
      * {@link com.miguo.app.HiOfflinePayActivity}
      */
     public static final String OFFLINE_PAY = "com.miguo.app.HiOfflinePayActivity";
+    /**
+     * 线下买单支付
+     * {@link com.miguo.app.HiOfflinePayOrderActivity}
+     */
+    public static final String OFFLINE_PAY_ORDER = "com.miguo.app.HiOfflinePayOrderActivity";
 
 
 }

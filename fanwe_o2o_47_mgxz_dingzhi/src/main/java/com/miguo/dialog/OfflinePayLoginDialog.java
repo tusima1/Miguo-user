@@ -17,7 +17,7 @@ public class OfflinePayLoginDialog extends HiBaseDialog {
     OnOfflinePayDialogListener onOfflinePayDialogListener;
 
     @Override
-    protected View craetView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.dialog_activity_offline_pay_login, container, false);
     }
 
