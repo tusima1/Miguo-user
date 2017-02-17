@@ -78,4 +78,17 @@
             <enum name="invisible" value="1"/>
         </attr>
     </declare-styleable>
+
+    <!--ImageTextView-->
+    <declare-styleable name="ImageTextView">
+        <attr name="text" format="string"/>
+        <attr name="textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="textGravity" format="enum">
+            <enum name="LEFT" value="0"/>
+            <enum name="CENTER" value="1"/>
+            <enum name="RIGHT" value="2"/>
+        </attr>
+        <attr name="textBold" format="boolean"/>
+    </declare-styleable>
 </resources>

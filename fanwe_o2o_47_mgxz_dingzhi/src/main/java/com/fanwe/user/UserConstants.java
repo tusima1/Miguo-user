@@ -312,10 +312,15 @@ public class UserConstants {
     /**
      * 发送验证码
      */
-    public static String SEND_CAPTCHA = "SendCaptcha";
+    public static final String SEND_CAPTCHA = "SendCaptcha";
     /**
      * 获取代言权限
      */
-    public static String MEMBERINTEREST = "MemberInterest";
+    public static final String MEMBERINTEREST = "MemberInterest";
+
+    /**
+     * 线下支付提交订单
+     */
+    public static final String ONLINE_PAY_ORDER = "OnlinePayOrder";
 
 }

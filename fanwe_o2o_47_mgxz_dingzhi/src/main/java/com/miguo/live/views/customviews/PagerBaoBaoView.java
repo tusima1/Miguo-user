@@ -26,10 +26,6 @@ import java.util.List;
  */
 public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListener,CallbackView {
 
-//    private ImageView mIv_img;//商品图片
-//    private TextView mTv_title;//标题
-//    private TextView mIv_title_append;//标题说明
-//    private TextView mGet;//获取按钮
     private RecyclerView mRecycler;
     private Context mContext;
     private CallbackView mCallbackView;
@@ -63,10 +59,6 @@ public class PagerBaoBaoView extends RelativeLayout implements View.OnClickListe
         this.mContext=context;
         LayoutInflater.from(context).inflate(R.layout.item_pager_baobao,this);
 
-//        mIv_img = ((ImageView) this.findViewById(R.id.iv_baobao));
-//        mTv_title = ((TextView) this.findViewById(R.id.tv_title));
-//        mIv_title_append = ((TextView) this.findViewById(R.id.tv_title_append));
-//        mGet = ((TextView) this.findViewById(R.id.get));
         mRecycler = ((RecyclerView) findViewById(R.id.bao_recyler));
         if(mAdapter!=null) {
             mAdapter.setmShoppingCartHelper(mShoppingCartHelper);

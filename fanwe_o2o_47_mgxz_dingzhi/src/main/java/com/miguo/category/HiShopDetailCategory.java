@@ -260,6 +260,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         backBg.setOnClickListener(listener);
         shareBg.setOnClickListener(listener);
         tvRepresent.setOnClickListener(listener);
+        offlineLayout.setOnClickListener(listener);
         tvMineShop.setOnClickListener(listener);
         tvShare.setOnClickListener(listener);
         scrollView.setOnRecyclerScrollViewListener(this);
@@ -632,6 +633,10 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         } else {
             distance.setText("距离 " + result.getDistanceFormat());
         }
+        /**
+         * 线下买单
+         */
+        updateOffline();
 
         /**
          * 精选列表
@@ -681,6 +686,85 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         updateRepresent();
 
         showShareTipPop();
+    }
+
+    @ViewInject(R.id.offline_layout)
+    RelativeLayout offlineLayout;
+    @ViewInject(R.id.offline_space)
+    View offlineSpace;
+    /**
+     * 满减
+     * 每满100元减8元
+     */
+    @ViewInject(R.id.decrease)
+    TextView decrease;
+    /**
+     * 时间区域 周一到周四 00:00-24:00
+     */
+    @ViewInject(R.id.pay_time)
+    TextView payTime;
+    private void updateOffline(){
+        /**
+         * 处理是否能线下买单
+         */
+        handleCanPayFromOffline();
+        /**
+         * 如果没有开通线下买单，那就不继续走了
+         */
+        if(!result.canPayFromOffline()){
+            return;
+        }
+        /**
+         * 处理不同买单类型的UI变动
+         */
+        handleOfflinePayType();
+    }
+
+    private void handleCanPayFromOffline(){
+        offlineLayout.setVisibility(result.canPayFromOffline() ? View.VISIBLE : View.GONE);
+        offlineSpace.setVisibility(result.canPayFromOffline() ? View.VISIBLE : View.GONE);
+    }
+
+    /**
+     * 处理不同买单类型的UI变动
+     */
+    private void handleOfflinePayType(){
+        switch (result.getOfflineInfo().getOnline_pay_type()){
+            case HiShopDetailBean.Result.Offline.ORIGINAL:
+                updateDecrease("在线买单，有好运");
+                updatePayTimeVisibility(View.GONE);
+                break;
+            case HiShopDetailBean.Result.Offline.DISCOUNT:
+                updateDecrease(result.getOfflineInfo().getDiscountText());
+                updatePayTimeVisibility(View.VISIBLE);
+                updatePayTime();
+                break;
+            case HiShopDetailBean.Result.Offline.DECREASE:
+                updateDecrease(result.getOfflineInfo().getDecreaseText());
+                updatePayTimeVisibility(View.VISIBLE);
+                updatePayTime();
+                break;
+        }
+    }
+
+    private void updatePayTime(){
+        this.payTime.setText(result.getOfflineInfo().getAvailableWeek() + "  " + result.getOfflineInfo().getAvailableTime());
+    }
+
+    /**
+     * 更新满减文字
+     * @param decrease 内容
+     */
+    private void updateDecrease(String decrease){
+        this.decrease.setText(decrease);
+    }
+
+    /**
+     * 更新时间文本是否可见（原价不可见）
+     * @param visibility 是否可见码
+     */
+    private void updatePayTimeVisibility(int visibility){
+        this.payTime.setVisibility(visibility);
     }
 
     private boolean isRepresent;
@@ -817,4 +901,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         dismissShareTipPop();
     }
 
+    public String getMerchantID() {
+        return merchantID;
+    }
+
+    public HiShopDetailBean.Result getResult() {
+        return result;
+    }
 }

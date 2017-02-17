@@ -94,7 +94,66 @@
             <!-- 空白留空部分 -->
             <include layout="@layout/activity_hishaop_detail_item4" />
 
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/offline_layout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_marginLeft="17dp"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/decrease"
+                        android:text="满100减8元"
+                        android:textSize="16sp"
+                        android:textColor="@color/c_f6b72c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/pay_time"
+                        android:text="周一到周四 00:00-24:00"
+                        android:textColor="@color/c_CCCCCC"
+                        android:layout_marginTop="4dp"
+                        android:textSize="11sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="14sp"
+                    android:text="买单"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="17dp"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/shape_bg_yellow_5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="25dp" />
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/offline_space"
+                android:background="@color/gray_f2"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+
+
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/content_shop_member"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

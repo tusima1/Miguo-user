@@ -3,12 +3,15 @@ package com.miguo.listener;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
+import android.widget.TextSwitcher;
 
 import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
@@ -30,6 +33,7 @@ public abstract class Listener implements
         AbsListView.OnScrollListener,
         RadioGroup.OnCheckedChangeListener,
         CompoundButton.OnCheckedChangeListener,
+        TextWatcher,
         View.OnTouchListener, PtrHandler
 {
 
@@ -63,6 +67,21 @@ public abstract class Listener implements
     }
 
     protected void onClickThis(View v){
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
 
     }
 

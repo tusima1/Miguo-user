@@ -13,6 +13,9 @@
 
     </style>
 
+    <style name="BaseDialog" parent="AppTheme">
+        <item name="android:windowBackground">@color/translucent</item>
+    </style>
 
     <style name="MiguoAppTheme" parent="AppTheme.NoActionBar">
         <!-- Customize your theme here. -->
@@ -175,8 +178,8 @@
     </style>
     
     <style name="MyEditTextDStyle" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@color/indigo</item>
-        <item name="colorControlActivated">@color/pink</item>
+        <item name="colorControlNormal">@color/text_base_color</item>
+        <item name="colorControlActivated">@color/PINK_200</item>
     </style>
 
 </resources>

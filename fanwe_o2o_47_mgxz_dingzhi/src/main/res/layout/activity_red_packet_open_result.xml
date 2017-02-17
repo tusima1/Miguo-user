@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_red_packet_open_result"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/WHITE"
+    android:orientation="vertical"
+    tools:context="com.miguo.ui.RedPacketOpenResultActivity">
+
+    <FrameLayout
+        android:id="@+id/location_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp44"
+        android:background="@color/redPacket_bg"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp44"
+            android:layout_marginRight="@dimen/dp44"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="老板娘的红包"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/redPacket_bg"
+        android:minHeight="77dp"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/tv_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="0.06"
+                android:textColor="@color/WHITE"
+                android:textSize="45sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dp10"
+                android:layout_marginLeft="@dimen/dp4"
+                android:ellipsize="end"
+                android:gravity="bottom"
+                android:lines="1"
+                android:text="元"
+                android:textColor="@color/WHITE"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/redPacket_bg"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:text="存入钱包，可提现，可消费"
+        android:textColor="#ACFFFFFF"
+        android:textSize="13sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp4"
+        android:background="@color/redPacket_bg"
+        />
+
+    <View
+        android:id="@+id/redPacket_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp36"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="38dp"
+        android:text="红包翻倍"
+        android:textColor="#FFBC441D"
+        android:textSize="40sp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp20"
+        android:minHeight="32dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_weixin_friend"
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_weixin_firend_red"
+            />
+
+        <ImageView
+            android:id="@+id/iv_weixin"
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp14"
+            android:src="@drawable/ic_weixin_red"
+            />
+
+        <ImageView
+            android:id="@+id/iv_weibo"
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp14"
+            android:src="@drawable/ic_weibo_red"
+            />
+
+        <ImageView
+            android:id="@+id/iv_qq"
+            android:layout_width="63dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp14"
+            android:src="@drawable/ic_qq_red"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp24"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="谁会帮我 分享出去试试"
+        android:textColor="#999999"
+        />
+</LinearLayout>

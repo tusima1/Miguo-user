@@ -642,6 +642,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
+        <!-- 线下买单 -->
+        <activity
+            android:name="com.miguo.app.HiOfflinePayActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 新Login -->
         <activity
             android:name="com.miguo.app.HiWebPageActivity"
@@ -1022,8 +1029,19 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name="com.miguo.ui.view.floatdropdown.TestDropDownPopActivity">
         </activity>
-        <activity android:name="com.fanwe.CityChooseActivity"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name="com.fanwe.CityChooseActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+        <activity android:name="com.miguo.ui.test.TestActivity">
+        </activity>
+        <activity
+            android:name="com.miguo.ui.RedPacketResultActivity"
+            android:theme="@style/Transparent_title_area">
+        </activity>
+        <activity android:name="com.miguo.ui.RedPacketOpenResultActivity"
+                  android:theme="@style/Transparent_title_area"
+            >
         </activity>
     </application>
 
