@@ -203,7 +203,7 @@ public class OnlinePayOrderPaymentBean implements Serializable{
                 /**
                  * 线上买单的佣金
                  */
-                Double salary;
+                String salary;
                 /**
                  * 订单id
                  */
@@ -257,11 +257,11 @@ public class OnlinePayOrderPaymentBean implements Serializable{
                     this.payment_id = payment_id;
                 }
 
-                public Double getSalary() {
+                public String getSalary() {
                     return salary;
                 }
 
-                public void setSalary(Double salary) {
+                public void setSalary(String salary) {
                     this.salary = salary;
                 }
 

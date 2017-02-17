@@ -1,5 +1,7 @@
 package com.miguo.category;
 
+import android.view.Gravity;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -13,6 +15,7 @@ import com.miguo.listener.HiOfflinePayOrderListener;
 import com.miguo.presenters.OnlinePayOrderPaymentPresenter;
 import com.miguo.presenters.impl.OnlinePayOrderPaymentPresenterImpl;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
+import com.miguo.ui.view.customviews.RedPacketPopup;
 import com.miguo.view.OnlinePayOrderPaymentPresenterView;
 
 /**
@@ -90,7 +93,14 @@ public class HiOfflinePayOrderCategory extends Category {
         onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(new OnlinePayOrderPaymentPresenterView() {
             @Override
             public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
-                showToast("支付成功");
+                showRedPacketPop(
+                        body.getShare_info(),
+                        "老板娘",
+                        body.getIcon(),
+                        body.getContent(),
+                        body.getOrder_info().getOrder_id(),
+                        body.getOrder_info().getSalary()
+                );
             }
 
             @Override
@@ -98,6 +108,15 @@ public class HiOfflinePayOrderCategory extends Category {
                 showToast(message);
             }
         });
+    }
+    private View content;
+    private RedPacketPopup redPacketPopup;
+
+    private void showRedPacketPop(OnlinePayOrderPaymentBean.Result.Body.Share share,String name,String faceIcon,String showContent,String order_id,String money){
+        content = findViewById(android.R.id.content);
+        redPacketPopup = new RedPacketPopup(getActivity(),content);
+        redPacketPopup.setNeedData(share,name,faceIcon,showContent,order_id,money);
+        redPacketPopup.showAtLocation(content, Gravity.CENTER,0,0);
     }
 
     public void clickPay(){

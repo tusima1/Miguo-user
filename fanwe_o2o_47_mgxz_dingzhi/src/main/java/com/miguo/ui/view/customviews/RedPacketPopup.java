@@ -11,7 +11,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.ui.RedPacketOpenResultActivity;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.Rotate3dAnimation;
@@ -30,6 +32,8 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
     private ImageView ivClose;
     private ImageView ivOpen;
     private ImageView ivFace;
+    private OnlinePayOrderPaymentBean.Result.Body.Share share;
+    private String money;
 
     public RedPacketPopup(Activity mHoldActivity, View mAnchor) {
         super(mHoldActivity, mAnchor);
@@ -96,5 +100,21 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
         rotationAnimator.setRepeatMode(ValueAnimator.RESTART);
         rotationAnimator.setInterpolator(new LinearInterpolator());
         rotationAnimator.start();
+    }
+
+    private String name;
+    private String faceIcon;
+    private String showContent;
+    private String order_id;
+    public void setNeedData(OnlinePayOrderPaymentBean.Result.Body.Share share, String name, String faceIcon, String showContent, String order_id,String money) {
+//        this.name = name;
+//        this.faceIcon = faceIcon;
+//        this.showContent = showContent;
+        tvSubTitle.setText(showContent);
+        Glide.with(mHoldActivity).load(faceIcon).into(ivFace);
+        tvName.setText(name);
+        this.order_id = order_id;
+        this.share= share;
+        this.money = money;
     }
 }

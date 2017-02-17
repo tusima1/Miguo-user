@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didikee.uilibs.utils.StatusBarUtil;
-import com.fanwe.PayActivity;
 import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.model.CommonConstants;
@@ -22,7 +22,6 @@ import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.seller.model.getGroupDeatilNew.ShareInfoBean;
-import com.fanwe.shoppingcart.ShoppingCartconstants;
 import com.fanwe.umeng.UmengShareManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -34,8 +33,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.List;
 import java.util.TreeMap;
-
-import static com.miguo.live.views.LiveAuthActivity.datas;
 
 public class RedPacketOpenResultActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -79,6 +76,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         StatusBarUtil.setColor(this, Color.parseColor("#D23838"),0);
         setListener();
         initView();
+        getRecordId();
         shareInfo = new ShareInfoBean();
         shareInfo.setClickurl("https://github.com/didikee");
         shareInfo.setImageurl("http://files.softicons.com/download/game-icons/super-mario-icons-by-sandro-pereira/png/48/Mushroom - 1UP.png");
@@ -152,6 +150,10 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
     }
 
     private void doShare(SHARE_MEDIA platform){
+        if(TextUtils.isEmpty(shareRecordId)){
+            Toast.makeText(this, "分享失败!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (shareInfo!=null){
             onShareClick();
             UmengShareManager.share(platform, this,
@@ -247,10 +249,6 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
                 }
             });
         }
-        if (buyItem > 1) {
-            commonHttpHelper.createShareRecord(Constant.ShareType.WEB_HOME, "");
-        } else {
-            commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, "");
-        }
+        commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, "");
     }
 }
