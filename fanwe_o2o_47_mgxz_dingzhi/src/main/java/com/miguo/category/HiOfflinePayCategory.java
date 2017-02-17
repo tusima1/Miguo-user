@@ -1,5 +1,6 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
@@ -22,12 +23,17 @@ import com.miguo.dao.BeforeOnlinePayDao;
 import com.miguo.dao.OnlinePayOrderDao;
 import com.miguo.dao.impl.BeforeOnlinePayDaoImpl;
 import com.miguo.dao.impl.OnlinePayOrderDaoImpl;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.dialog.OfflinePayContinueOrderDialog;
 import com.miguo.dialog.OfflinePayLoginDialog;
 import com.miguo.entity.BeforeOnlinePayBean;
 import com.miguo.entity.HiShopDetailBean;
 import com.miguo.entity.OnlinePayOrderBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiOfflinePayListener;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
+import com.miguo.utils.BaseUtils;
 import com.miguo.view.BeforeOnlinePayView;
 import com.miguo.view.OnlinePayOrderView;
 
@@ -165,29 +171,54 @@ public class HiOfflinePayCategory extends Category {
         beforeOnlinePayDao.getOfflinePayInfo(getActivity().getShopId());
     }
 
+    /**
+     * 确定买单接口
+     */
     private void initOnlinePayOrderDao(){
         onlinePayOrderDao = new OnlinePayOrderDaoImpl(new OnlinePayOrderView() {
             @Override
             public void onlinePayOrderSuccess(OnlinePayOrderBean.Result.Body orderInfo) {
-                showToast(orderInfo.getOrder_id());
+                handlePayOrderSuccess(orderInfo);
             }
 
             @Override
             public void offerHasExpired() {
-
+                handleOfferHasExpired();
             }
 
             @Override
             public void onlinePayOrderError(String message) {
-
+                showToast(message);
             }
         });
     }
 
-    private void handleOfferHasExpired(){
-
+    private void handlePayOrderSuccess(OnlinePayOrderBean.Result.Body orderInfo){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.OFFLINE_PAY_ORDER));
+        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_NAME, getActivity().getShopName());
+        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_AMOUNT, orderAmount.getText().toString());
+        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SN, orderInfo.getOrder_sn());
+        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_ID, orderInfo.getOrder_id());
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
+    /**
+     * 买单优惠已过
+     */
+    private void handleOfferHasExpired(){
+        OfflinePayContinueOrderDialog dialog = new OfflinePayContinueOrderDialog();
+        dialog.setOnOfflinePayContinueOrderDialogListener(new OfflinePayContinueOrderDialog.OnOfflinePayContinueOrderDialogListener() {
+            @Override
+            public void continueOrder() {
+                continuePayOrder();
+            }
+        });
+        dialog.show(getActivity().getSupportFragmentManager(),"continue order");
+    }
+
+    /**
+     * 获取买单页面数据成功
+     */
     private void handleGetOfflineInfoSuccess(){
         handleCanPayFromOffline();
         handleOfflinePayType();
@@ -248,6 +279,10 @@ public class HiOfflinePayCategory extends Category {
         this.payTime.setVisibility(visibility);
     }
 
+    /**
+     * 满减文字隐藏和可见
+     * @param visibility
+     */
     private void updateDecreaseVisibility(int visibility){
         this.decrease.setVisibility(visibility);
     }
@@ -266,10 +301,16 @@ public class HiOfflinePayCategory extends Category {
         doNotParticipateInTheamountOfConsumption.setHint(new SpannableString(spannableString));
     }
 
+    /**
+     * 点击输入不优惠金额文字部分
+     */
     public void clickWithoutDiscountAmount(){
         withoutDiscountAmountCB.setChecked(!withoutDiscountAmountCB.isChecked());
     }
 
+    /**
+     * 点击确定买单
+     */
     public void clickCommitOrder(){
         /**
          * 未登录
@@ -295,7 +336,10 @@ public class HiOfflinePayCategory extends Category {
         onlinePayOrderDao.onlinePayOrder(amount, parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString()),App.getInstance().getToken(),getActivity().getShopId());
     }
 
-    private void continueOrder(){
+    /**
+     * 优惠已过，继续支付
+     */
+    private void continuePayOrder(){
         onlinePayOrderDao.onlinePayOrder(amount, parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString()), 1 ,App.getInstance().getToken(),getActivity().getShopId());
     }
 

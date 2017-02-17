@@ -125,18 +125,20 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
     private void initContentPosition(){
         RelativeLayout.LayoutParams params = getRelativeLayoutParams(dip2px(273), dip2px(173));
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        params.setMargins(0, (int)(getScreenHeight() * 0.31), 0, 0);
+        params.setMargins(0, (int)(getScreenHeight() * 0.20), 0, 0);
         content.setLayoutParams(params);
     }
 
     public void onTextChanged(){
         if(TextUtils.isEmpty(sms.getText().toString())){
             preSMSBackground = R.drawable.shape_bg_gray_f2_8;
-            sms.setBackground(getDrawable(R.drawable.shape_bg_gray_f2_8));
+            sure.setBackground(getDrawable(R.drawable.shape_bg_gray_f2_8));
+            sure.setTextColor(getColor(R.color.c_999999));
             return;
         }
         if(preSMSBackground == R.drawable.shape_bg_gray_f2_8){
-            sms.setBackground(getDrawable(R.drawable.shape_bg_yellow_8dp));
+            sure.setBackground(getDrawable(R.drawable.shape_bg_yellow_8dp));
+            sure.setTextColor(getColor(R.color.white));
             preSMSBackground = R.drawable.shape_bg_yellow_8dp;
         }
     }
