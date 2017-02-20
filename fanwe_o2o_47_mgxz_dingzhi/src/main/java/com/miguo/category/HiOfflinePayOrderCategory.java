@@ -22,7 +22,7 @@ import com.miguo.view.OnlinePayOrderPaymentPresenterView;
  * Created by Barry/狗蛋哥/zlh on 2017/2/17.
  */
 
-public class HiOfflinePayOrderCategory extends Category {
+public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrderPaymentPresenterView{
 
     @ViewInject(R.id.shop_name)
     TextView shopName;
@@ -90,25 +90,26 @@ public class HiOfflinePayOrderCategory extends Category {
      * 支付presenter
      */
     private void initOnlinePayOrderPaymentPresenter(){
-        onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(new OnlinePayOrderPaymentPresenterView() {
-            @Override
-            public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
-                showRedPacketPop(
-                        body.getShare_info(),
-                        "老板娘",
-                        body.getIcon(),
-                        body.getContent(),
-                        body.getOrder_info().getOrder_id(),
-                        body.getOrder_info().getSalary()
-                );
-            }
-
-            @Override
-            public void payError(String message) {
-                showToast(message);
-            }
-        });
+        onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(this);
     }
+
+    @Override
+    public void payError(String message) {
+        showToast(message);
+    }
+
+    @Override
+    public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+        showRedPacketPop(
+                body.getShare_info(),
+                "老板娘",
+                body.getIcon(),
+                body.getContent(),
+                body.getOrder_info().getOrder_id(),
+                body.getOrder_info().getSalary()
+        );
+    }
+
     private View content;
     private RedPacketPopup redPacketPopup;
 

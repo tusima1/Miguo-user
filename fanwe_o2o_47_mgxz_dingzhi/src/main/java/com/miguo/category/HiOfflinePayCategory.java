@@ -199,6 +199,8 @@ public class HiOfflinePayCategory extends Category {
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_AMOUNT, orderAmount.getText().toString());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SN, orderInfo.getOrder_sn());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_ID, orderInfo.getOrder_id());
+        intent.putExtra(IntentKey.OFFLINE_PAY_USER_AMOUNT, orderInfo.getUser_account_money());
+        intent.putExtra(IntentKey.OFFLINE_PAY_TOTAL_AMOUNT, orderInfo.getTotal_price());
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 

@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.fanwe.o2o.miguo.R;
-import com.miguo.app.HiOfflinePayOrderActivity;
 import com.miguo.category.Category;
 import com.miguo.category.HiOfflinePayOrderCategory;
 
@@ -34,7 +33,14 @@ public class HiOfflinePayOrderListener extends Listener {
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        super.onCheckedChanged(buttonView, isChecked);
+        switch (buttonView.getId()){
+            case R.id.wechat_cb:
+                break;
+            case R.id.alipay_cb:
+                break;
+            case R.id.amount_cb:
+                break;
+        }
     }
 
     @Override

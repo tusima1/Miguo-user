@@ -15,6 +15,14 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
     String amount;
     String orderSn;
     String orderId;
+    /**
+     * 用户余额
+     */
+    Double userAmount;
+    /**
+     * 需付金额
+     */
+    Double totalAmount;
     @Override
     protected Category initCategory() {
         getIntentData();
@@ -27,10 +35,14 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
     }
 
     private void getIntentData(){
-         setShopName(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_NAME));
-         setAmount(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_AMOUNT));
-         setOrderSn(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_SN));
-         setOrderId(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_ID));
+        if(null != getIntent()){
+            setShopName(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_NAME));
+            setAmount(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_AMOUNT));
+            setOrderSn(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_SN));
+            setOrderId(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_ID));
+            setUserAmount(getIntent().getDoubleExtra(IntentKey.OFFLINE_PAY_USER_AMOUNT, 0));
+            setTotalAmount(getIntent().getDoubleExtra(IntentKey.OFFLINE_PAY_TOTAL_AMOUNT, 0));
+        }
     }
 
     public String getOrderId() {
@@ -65,4 +77,19 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
         this.shopName = shopName;
     }
 
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Double getUserAmount() {
+        return userAmount;
+    }
+
+    public void setUserAmount(Double userAmount) {
+        this.userAmount = userAmount;
+    }
 }
