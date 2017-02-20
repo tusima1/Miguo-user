@@ -64,4 +64,7 @@ public class IntentKey {
     public static final String OFFLINE_PAY_ORDER_ID = "pay_order_id";
 
 
+    public static final String ICON = "icon";
+    public static final String MONEY = "money";
+    public static final String DESC = "desc";
 }

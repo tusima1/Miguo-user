@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.MGStringFormatter;
+import com.miguo.definition.IntentKey;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.ui.RedPacketOpenResultActivity;
 import com.miguo.utils.MGUIUtil;
@@ -83,9 +85,11 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
 
     private void startActivity() {
         Intent intent =new Intent(mHoldActivity, RedPacketOpenResultActivity.class);
-        intent.putExtra("money",money);
+        intent.putExtra(IntentKey.MONEY,money);
         intent.putExtra("order_id",order_id);
         intent.putExtra("share",share);
+        intent.putExtra(IntentKey.ICON,faceIcon);
+        intent.putExtra(IntentKey.DESC,showContent);
         mHoldActivity.startActivity(intent);
         dismiss();
         if (dismissListener!=null){
@@ -121,14 +125,24 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
     private String order_id;
     public void setNeedData(OnlinePayOrderPaymentBean.Result.Body.Share share, String name, String faceIcon, String showContent, String order_id,String money) {
 //        this.name = name;
-//        this.faceIcon = faceIcon;
-//        this.showContent = showContent;
+        this.faceIcon = faceIcon;
+        this.showContent = showContent;
         tvSubTitle.setText(showContent);
         Glide.with(mHoldActivity).load(faceIcon).into(ivFace);
         tvName.setText(name);
         this.order_id = order_id;
         this.share= share;
-        this.money = money;
+        this.money = getMoneyTwo(money);
+    }
+
+    private String getMoneyTwo(String money){
+        Float floatMoney = 0F;
+        try {
+            floatMoney = Float.valueOf(money);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return MGStringFormatter.getFloat2(floatMoney/2);
     }
 
     public interface OnPopupWindowDismissListener{

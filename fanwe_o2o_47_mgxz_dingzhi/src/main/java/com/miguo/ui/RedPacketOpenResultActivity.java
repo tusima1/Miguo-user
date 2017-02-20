@@ -24,6 +24,7 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.definition.IntentKey;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.entity.StatusBean;
 import com.miguo.ui.view.customviews.ArcDrawable;
@@ -66,6 +67,8 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
     private String shareRecordId = "";//分享id
     private String money = "";
     private String order_id = "";
+    private String face_icon = "";
+    private String showContent = "";
     private OnlinePayOrderPaymentBean.Result.Body.Share share;
 
     @Override
@@ -79,11 +82,6 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         initView();
         getRecordId();
         bindData();
-//        shareInfo = new ShareInfoBean();
-//        shareInfo.setClickurl("https://github.com/didikee");
-//        shareInfo.setImageurl("http://files.softicons.com/download/game-icons/super-mario-icons-by-sandro-pereira/png/48/Mushroom - 1UP.png");
-//        shareInfo.setSummary("hoisiodso就努力开发建设");
-//        shareInfo.setTitle("测试测试");
     }
 
     private void bindData() {
@@ -96,8 +94,10 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
             finish();
             return;
         }
-        money = intent.getStringExtra("money");
+        money = intent.getStringExtra(IntentKey.MONEY);
         order_id = intent.getStringExtra("order_id");
+        face_icon = intent.getStringExtra(IntentKey.ICON);
+        showContent = intent.getStringExtra(IntentKey.DESC);
         share = (OnlinePayOrderPaymentBean.Result.Body.Share) intent.getSerializableExtra("share");
 
         if (TextUtils.isEmpty(money) || TextUtils.isEmpty(order_id) ||share == null){
@@ -229,7 +229,11 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
 
     private void startRedPacketResultActivity(){
         if (isRequestOk){
-            startActivity(new Intent(this,RedPacketResultActivity.class));
+            Intent intent =new Intent(this,RedPacketResultActivity.class);
+            intent.putExtra(IntentKey.ICON,face_icon);
+            intent.putExtra(IntentKey.MONEY,money);
+            intent.putExtra(IntentKey.DESC,showContent);
+            startActivity(intent);
         }else {
             // api request error
         }
