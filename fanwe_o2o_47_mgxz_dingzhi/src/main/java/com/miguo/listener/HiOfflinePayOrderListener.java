@@ -24,7 +24,28 @@ public class HiOfflinePayOrderListener extends Listener {
             case R.id.pay_order:
                 clickPay();
                 break;
+            case R.id.wechat_layout:
+                clickWechatLayout();
+                break;
+            case R.id.alipay_layout:
+                clickAlipayLayout();
+                break;
+            case R.id.account_layout:
+                clickAccountLayout();
+                break;
         }
+    }
+
+    private void clickWechatLayout(){
+        getCategory().handleClickWechatLayout();
+    }
+
+    private void clickAlipayLayout(){
+        getCategory().handleClickAlipayLayout();
+    }
+
+    private void clickAccountLayout(){
+        getCategory().handleClickAccountLayout();
     }
 
     private void clickPay(){
@@ -33,14 +54,7 @@ public class HiOfflinePayOrderListener extends Listener {
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.wechat_cb:
-                break;
-            case R.id.alipay_cb:
-                break;
-            case R.id.amount_cb:
-                break;
-        }
+        getCategory().onCheckedChanged(buttonView, isChecked);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.miguo.entity;
 
+import com.fanwe.utils.DataFormat;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -162,12 +164,28 @@ public class BeforeOnlinePayBean {
                 return availableTime;
             }
 
+            public boolean isIntegerForDouble(Double obj){
+                return DataFormat.isIntegerForDouble(obj);
+            }
+
             public String getDiscountText(){
                 return getDiscount() + "折";
             }
 
             public String getDecreaseText(){
-                return "每满" + getFull_amount_limit() + "元减" + getFull_discount() + "元" + (getMax_discount_limit() == 0 ? "" :  "，最高减" + getMax_discount_limit() + "元");
+                return "每满" + getFullAmountLimit()  + "元减" + getFullDiscount() + "元" + getMaxDiscount();
+            }
+
+            public String getFullAmountLimit(){
+                return isIntegerForDouble(getFull_amount_limit()) ? getFull_amount_limit().intValue() + "" : getFull_amount_limit() + "";
+            }
+
+            public String getFullDiscount(){
+                return isIntegerForDouble(getFull_discount()) ? getFull_discount().intValue() + "" : getFull_discount() + "";
+            }
+
+            public String getMaxDiscount(){
+                return getMax_discount_limit() == 0 ? "" :  "，最高减" + (isIntegerForDouble(getMax_discount_limit()) ? getMax_discount_limit().intValue() + "" : getMax_discount_limit() + "") + "元";
             }
 
             public String getAvailable_time_end() {

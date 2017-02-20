@@ -3,6 +3,8 @@ package com.miguo.category;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
@@ -36,12 +38,24 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     @ViewInject(R.id.recycler_scrollview)
     RecyclerBounceNestedScrollView recyclerBounceNestedScrollView;
 
+    @ViewInject(R.id.account_text)
+    TextView userAccount;
+
     @ViewInject(R.id.wechat_cb)
     CheckBox wechat;
     @ViewInject(R.id.alipay_cb)
     CheckBox alipay;
     @ViewInject(R.id.amount_cb)
     CheckBox account;
+
+    @ViewInject(R.id.wechat_layout)
+    RelativeLayout wechatLayout;
+
+    @ViewInject(R.id.alipay_layout)
+    RelativeLayout alipayLayout;
+
+    @ViewInject(R.id.account_layout)
+    RelativeLayout accountLayout;
 
     @ViewInject(R.id.pay_order)
     TextView pay;
@@ -71,6 +85,12 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     @Override
     protected void setThisListener() {
         pay.setOnClickListener(listener);
+        wechatLayout.setOnClickListener(listener);
+        alipayLayout.setOnClickListener(listener);
+        accountLayout.setOnClickListener(listener);
+        wechat.setOnCheckedChangeListener(listener);
+        alipay.setOnCheckedChangeListener(listener);
+        account.setOnCheckedChangeListener(listener);
     }
 
     @Override
@@ -80,6 +100,7 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     @Override
     protected void initViews() {
+        userAccount.setText(getActivity().getUserAmountString());
         shopName.setText(getActivity().getShopName());
         amount.setText(getActivity().getAmount());
         orderSn.setText(getActivity().getOrderSn());
@@ -156,6 +177,83 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
             onlinePayOrderPaymentPresenter.amount(getActivity().getOrderId());
             return;
         }
+    }
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView.isPressed()){
+            switch (buttonView.getId()){
+                case R.id.wechat_cb:
+                    handleWechatChecked(isChecked);
+                    break;
+                case R.id.alipay_cb:
+                    handleAlipayChecked(isChecked);
+                    break;
+                case R.id.amount_cb:
+                    handleAccountChecked(isChecked);
+                    break;
+            }
+        }
+    }
+
+    public void handleClickWechatLayout(){
+        wechat.setChecked(!wechat.isChecked());
+        handleWechatChecked(wechat.isChecked());
+    }
+
+    public void handleClickAlipayLayout(){
+        alipay.setChecked(!alipay.isChecked());
+        handleAlipayChecked(alipay.isChecked());
+    }
+
+    public void handleClickAccountLayout(){
+        account.setChecked(!account.isChecked());
+        handleAccountChecked(account.isChecked());
+    }
+
+    private void handleWechatChecked(boolean isChecked) {
+        if (isChecked) {
+            if(userHasEnoughAccountMoney()){
+                account.setChecked(false);
+            }
+            alipay.setChecked(false);
+            return;
+        }
+
+        if(!alipay.isChecked() && !account.isChecked() || (!userHasEnoughAccountMoney() && account.isChecked())){
+            wechat.setChecked(true);
+        }
+    }
+
+    private void handleAlipayChecked(boolean isChecked){
+        if (isChecked) {
+            if(userHasEnoughAccountMoney()){
+                account.setChecked(false);
+            }
+            wechat.setChecked(false);
+            return;
+        }
+
+        if(!wechat.isChecked() && !account.isChecked() || (!userHasEnoughAccountMoney() && account.isChecked())){
+            alipay.setChecked(true);
+        }
+    }
+
+    private void handleAccountChecked(boolean isChecked){
+        if (isChecked) {
+            if(userHasEnoughAccountMoney()){
+                alipay.setChecked(false);
+                wechat.setChecked(false);
+            }
+            return;
+        }
+
+        if(!wechat.isChecked() && !alipay.isChecked()){
+            account.setChecked(true);
+        }
+    }
+
+    public boolean userHasEnoughAccountMoney(){
+        return getActivity().getUserAmount() >= getActivity().getTotalAmount();
     }
 
     @Override

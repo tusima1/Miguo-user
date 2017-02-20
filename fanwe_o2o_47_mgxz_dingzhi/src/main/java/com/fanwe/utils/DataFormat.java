@@ -1,5 +1,8 @@
 package com.fanwe.utils;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 /**
  * Created by Administrator on 2016/8/23.
  */
@@ -21,6 +24,36 @@ public class DataFormat {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    /**
+     * 传入double，返回两位小数double,四舍五入
+     * @param d
+     * @return
+     */
+    public static Double toDouble(Double d){
+        BigDecimal bigDecimal = new BigDecimal(d);
+        return bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    /**
+     * 传入double，返回两位小数double,四舍五入
+     * @param d
+     * @return
+     */
+    public static Double toDoubleDown(Double d){
+        BigDecimal bigDecimal = new BigDecimal(d);
+        return bigDecimal.setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+    }
+
+    /**
+     * 判断double是否是整数
+     * @param obj
+     * @return
+     */
+    public static boolean isIntegerForDouble(double obj) {
+        double eps = 1e-10;  // 精度范围
+        return obj-Math.floor(obj) < eps;
     }
 
     public static int toInt(String str) {

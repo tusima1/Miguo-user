@@ -85,7 +85,11 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
         this.totalAmount = totalAmount;
     }
 
-    public Double getUserAmount() {
+    public String getUserAmountString() {
+        return "用户余额：" + userAmount + "元";
+    }
+
+    public Double getUserAmount(){
         return userAmount;
     }
 

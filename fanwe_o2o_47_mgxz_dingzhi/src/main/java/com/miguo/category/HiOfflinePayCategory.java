@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
@@ -146,7 +147,7 @@ public class HiOfflinePayCategory extends Category {
 
     @Override
     protected void init() {
-        shopname.setText(getActivity().getShopName());
+
     }
 
     @Override
@@ -160,6 +161,7 @@ public class HiOfflinePayCategory extends Category {
             @Override
             public void getOfflinePayInfoSuccess(BeforeOnlinePayBean.Result.Body offlinePayInfo) {
                 HiOfflinePayCategory.this.offlinePayInfo = offlinePayInfo;
+                shopname.setText(offlinePayInfo.getShop_name());
                 handleGetOfflineInfoSuccess();
             }
 
@@ -195,13 +197,13 @@ public class HiOfflinePayCategory extends Category {
 
     private void handlePayOrderSuccess(OnlinePayOrderBean.Result.Body orderInfo){
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.OFFLINE_PAY_ORDER));
-        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_NAME, getActivity().getShopName());
+        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_NAME, offlinePayInfo.getShop_name());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_AMOUNT, orderAmount.getText().toString());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SN, orderInfo.getOrder_sn());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_ID, orderInfo.getOrder_id());
         intent.putExtra(IntentKey.OFFLINE_PAY_USER_AMOUNT, orderInfo.getUser_account_money());
         intent.putExtra(IntentKey.OFFLINE_PAY_TOTAL_AMOUNT, orderInfo.getTotal_price());
-        BaseUtils.jumpToNewActivity(getActivity(), intent);
+        BaseUtils.jumpToNewActivityWithFinish(getActivity(), intent);
     }
 
     /**
@@ -314,6 +316,13 @@ public class HiOfflinePayCategory extends Category {
      * 点击确定买单
      */
     public void clickCommitOrder(){
+        if(!inputAmountNotEmpty()){
+            return;
+        }
+        if(parseDouble(amountOfConsumption.getText().toString()) < parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString())){
+            showToast("消费金额不能小于不参与优惠金额！");
+            return;
+        }
         /**
          * 未登录
          */
@@ -335,14 +344,14 @@ public class HiOfflinePayCategory extends Category {
      * 第一次点击确认订单
      */
     private void confirmOrder(){
-        onlinePayOrderDao.onlinePayOrder(amount, parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString()),App.getInstance().getToken(),getActivity().getShopId());
+        onlinePayOrderDao.onlinePayOrder(amountOfConsumption.getText().toString(), doNotParticipateInTheamountOfConsumption.getText().toString(),App.getInstance().getToken(),getActivity().getShopId());
     }
 
     /**
      * 优惠已过，继续支付
      */
     private void continuePayOrder(){
-        onlinePayOrderDao.onlinePayOrder(amount, parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString()), 1 ,App.getInstance().getToken(),getActivity().getShopId());
+        onlinePayOrderDao.onlinePayOrder(amountOfConsumption.getText().toString(), doNotParticipateInTheamountOfConsumption.getText().toString(), 1 ,App.getInstance().getToken(),getActivity().getShopId());
     }
 
     /**
@@ -442,7 +451,7 @@ public class HiOfflinePayCategory extends Category {
     private void handleOriginalAmount(){
         amount = parseDouble(amountOfConsumption.getText().toString());
         withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
-        orderAmount.setText(amount + "");
+        orderAmount.setText(isIntegerForDouble(amount) ? (int)amount + "" : amount + "");
     }
 
     /**
@@ -450,8 +459,13 @@ public class HiOfflinePayCategory extends Category {
      */
     private void handleDiscountAmount(){
         withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
-        amount = (parseDouble(amountOfConsumption.getText().toString()) - withoutDiscountAmount) * offlinePayInfo.getRealDiscount();
-        orderAmount.setText(amount + "");
+        if(parseDouble(amountOfConsumption.getText().toString()) < withoutDiscountAmount){
+            amount = DataFormat.toDoubleDown(withoutDiscountAmount * offlinePayInfo.getRealDiscount());
+            orderAmount.setText(isIntegerForDouble(amount) ? (int)amount + "" : amount + "");
+            return;
+        }
+        amount = DataFormat.toDoubleDown((parseDouble(amountOfConsumption.getText().toString()) - withoutDiscountAmount) * offlinePayInfo.getRealDiscount());
+        orderAmount.setText(isIntegerForDouble(amount) ? (int)amount + "" : amount + "");
     }
 
     /**
@@ -459,10 +473,23 @@ public class HiOfflinePayCategory extends Category {
      */
     private void handleDecreaseAmount(){
         withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
+        if(parseDouble(amountOfConsumption.getText().toString()) < withoutDiscountAmount){
+            orderAmount.setText(isIntegerForDouble(withoutDiscountAmount) ? (int)withoutDiscountAmount + "" : withoutDiscountAmount + "");
+            return;
+        }
         Double decrease = (int)((parseDouble(amountOfConsumption.getText().toString()) - withoutDiscountAmount) / offlinePayInfo.getFull_amount_limit()) * offlinePayInfo.getFull_discount();
         decrease = offlinePayInfo.getMax_discount_limit() == 0 ? decrease : decrease > offlinePayInfo.getMax_discount_limit() ? offlinePayInfo.getMax_discount_limit() : decrease;
         amount = parseDouble(amountOfConsumption.getText().toString()) - decrease;
-        orderAmount.setText(amount + "");
+        orderAmount.setText(isIntegerForDouble(amount) ? (int)amount + "" : amount + "");
+    }
+
+    /**
+     * 判断double是否是整数
+     * @param obj
+     * @return
+     */
+    public static boolean isIntegerForDouble(double obj) {
+        return DataFormat.isIntegerForDouble(obj);
     }
 
     /**
@@ -491,7 +518,7 @@ public class HiOfflinePayCategory extends Category {
 
     private Double parseDouble(String d){
         try {
-            return Double.parseDouble(d);
+            return DataFormat.toDoubleDown(Double.parseDouble(d));
         }catch (Exception e){
             return 0.00;
         }
