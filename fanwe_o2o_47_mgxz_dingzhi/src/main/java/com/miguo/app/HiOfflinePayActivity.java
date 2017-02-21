@@ -11,7 +11,6 @@ import com.miguo.definition.IntentKey;
 public class HiOfflinePayActivity extends HiBaseActivity {
 
     String shopId;
-    String shopName;
 
     @Override
     protected Category initCategory() {
@@ -27,7 +26,6 @@ public class HiOfflinePayActivity extends HiBaseActivity {
     private void getIntentData(){
         if(null != getIntent()){
             shopId = getIntent().getStringExtra(IntentKey.OFFLINE_SHOP_ID);
-            shopName = getIntent().getStringExtra(IntentKey.OFFLINE_SHOP_NAME);
         }
     }
 
@@ -35,7 +33,4 @@ public class HiOfflinePayActivity extends HiBaseActivity {
         return shopId;
     }
 
-    public String getShopName() {
-        return shopName;
-    }
 }

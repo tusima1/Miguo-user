@@ -308,22 +308,22 @@ public class HiShopDetailBean implements Serializable{
              * 折扣，类型为打折时使用
              * 9.7
              */
-            String discount;
+            Double discount;
             /**
              * 满减金额限制，类型为满减时使用
              * 100.00
              */
-            String full_amount_limit;
+            Double full_amount_limit;
             /**
              * 满减优惠金额，类型为满减时使用
              * 5.00
              */
-            String full_discount;
+            Double full_discount;
             /**
              * 最高优惠金额，0不限制，类型为满减时使用
              * 50.00
              */
-            String max_discount_limit;
+            Double max_discount_limit;
             /**
              * 可用期间，0：不限制，周一：1，周二:2 可多选，用‘,’分割
              * 1,2,4
@@ -403,7 +403,23 @@ public class HiShopDetailBean implements Serializable{
             }
 
             public String getDecreaseText(){
-                return "每满" + getFull_amount_limit() + "元减" + getFull_discount() + "元";
+                return "每满" + getFullAmountLimit()  + "元减" + getFullDiscount() + "元" + getMaxDiscount();
+            }
+
+            public String getFullAmountLimit(){
+                return isIntegerForDouble(getFull_amount_limit()) ? getFull_amount_limit().intValue() + "" : getFull_amount_limit() + "";
+            }
+
+            public String getFullDiscount(){
+                return isIntegerForDouble(getFull_discount()) ? getFull_discount().intValue() + "" : getFull_discount() + "";
+            }
+
+            public String getMaxDiscount(){
+                return getMax_discount_limit() == 0 ? "" :  "，最高减" + (isIntegerForDouble(getMax_discount_limit()) ? getMax_discount_limit().intValue() + "" : getMax_discount_limit() + "") + "元";
+            }
+
+            public boolean isIntegerForDouble(Double obj){
+                return DataFormat.isIntegerForDouble(obj);
             }
 
             public String getAvailable_time_end() {
@@ -430,27 +446,27 @@ public class HiShopDetailBean implements Serializable{
                 this.available_week = available_week;
             }
 
-            public String getDiscount() {
+            public Double getDiscount() {
                 return discount;
             }
 
-            public void setDiscount(String discount) {
+            public void setDiscount(Double discount) {
                 this.discount = discount;
             }
 
-            public String getFull_amount_limit() {
+            public Double getFull_amount_limit() {
                 return full_amount_limit;
             }
 
-            public void setFull_amount_limit(String full_amount_limit) {
+            public void setFull_amount_limit(Double full_amount_limit) {
                 this.full_amount_limit = full_amount_limit;
             }
 
-            public String getFull_discount() {
+            public Double getFull_discount() {
                 return full_discount;
             }
 
-            public void setFull_discount(String full_discount) {
+            public void setFull_discount(Double full_discount) {
                 this.full_discount = full_discount;
             }
 
@@ -462,11 +478,11 @@ public class HiShopDetailBean implements Serializable{
                 this.id = id;
             }
 
-            public String getMax_discount_limit() {
+            public Double getMax_discount_limit() {
                 return max_discount_limit;
             }
 
-            public void setMax_discount_limit(String max_discount_limit) {
+            public void setMax_discount_limit(Double max_discount_limit) {
                 this.max_discount_limit = max_discount_limit;
             }
 

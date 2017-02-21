@@ -59,7 +59,6 @@ public class HiShopDetailListener extends Listener {
     private void clickOfflineLayout(){
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.OFFLINE_PAY));
         intent.putExtra(IntentKey.OFFLINE_SHOP_ID, getCategory().getMerchantID());
-        intent.putExtra(IntentKey.OFFLINE_SHOP_NAME, getCategory().getResult().getShop_name());
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 

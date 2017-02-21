@@ -48,6 +48,10 @@ public class HiHomeActivity extends HiBaseActivity {
      * 团购详情.
      */
     private final static String SHOPPING_DETAIL = "^https?://[^/]+.mgxz.com/index/detail/id/([^/\\s]+)";
+    /**
+     * 到店买单.
+     */
+    private final static String OFFLINE_PAY = "^https?://[^/]+.mgxz.com/offline/paylist/shop_id/([^/\\s]+)";
 
 
     private DevUtil devUtil;
@@ -189,7 +193,12 @@ public class HiHomeActivity extends HiBaseActivity {
             Intent intentStore = new Intent(this, TuanDetailActivity.class);
             intentStore.putExtra(EXTRA_GOODS_ID, mId);
             startActivity(intentStore);
-        } else {
+        } else if (getCompleteUrl(extraString,OFFLINE_PAY)){
+            String mId = extraString.split("\\/")[extraString.split("\\/").length - 1];
+            Intent intentStore = new Intent(this, HiOfflinePayActivity.class);
+            intentStore.putExtra(IntentKey.OFFLINE_SHOP_ID, mId);
+            startActivity(intentStore);
+        }else {
             MGToast.showToast("对不起，无法识别。");
         }
     }

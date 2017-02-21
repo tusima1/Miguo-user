@@ -1,28 +1,38 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiOfflinePayOrderActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.dialog.OfflinePaySuccessDialog;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiOfflinePayOrderListener;
 import com.miguo.presenters.OnlinePayOrderPaymentPresenter;
 import com.miguo.presenters.impl.OnlinePayOrderPaymentPresenterImpl;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.customviews.RedPacketPopup;
+import com.miguo.utils.BaseUtils;
+import com.miguo.utils.CountDownTimer;
 import com.miguo.view.OnlinePayOrderPaymentPresenterView;
 
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/2/17.
  */
 
-public class HiOfflinePayOrderCategory extends Category {
+public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrderPaymentPresenterView{
 
     @ViewInject(R.id.shop_name)
     TextView shopName;
@@ -36,12 +46,24 @@ public class HiOfflinePayOrderCategory extends Category {
     @ViewInject(R.id.recycler_scrollview)
     RecyclerBounceNestedScrollView recyclerBounceNestedScrollView;
 
+    @ViewInject(R.id.account_text)
+    TextView userAccount;
+
     @ViewInject(R.id.wechat_cb)
     CheckBox wechat;
     @ViewInject(R.id.alipay_cb)
     CheckBox alipay;
     @ViewInject(R.id.amount_cb)
     CheckBox account;
+
+    @ViewInject(R.id.wechat_layout)
+    RelativeLayout wechatLayout;
+
+    @ViewInject(R.id.alipay_layout)
+    RelativeLayout alipayLayout;
+
+    @ViewInject(R.id.account_layout)
+    RelativeLayout accountLayout;
 
     @ViewInject(R.id.pay_order)
     TextView pay;
@@ -71,6 +93,12 @@ public class HiOfflinePayOrderCategory extends Category {
     @Override
     protected void setThisListener() {
         pay.setOnClickListener(listener);
+        wechatLayout.setOnClickListener(listener);
+        alipayLayout.setOnClickListener(listener);
+        accountLayout.setOnClickListener(listener);
+        wechat.setOnCheckedChangeListener(listener);
+        alipay.setOnCheckedChangeListener(listener);
+        account.setOnCheckedChangeListener(listener);
     }
 
     @Override
@@ -80,6 +108,7 @@ public class HiOfflinePayOrderCategory extends Category {
 
     @Override
     protected void initViews() {
+        userAccount.setText(getActivity().getUserAmountString());
         shopName.setText(getActivity().getShopName());
         amount.setText(getActivity().getAmount());
         orderSn.setText(getActivity().getOrderSn());
@@ -90,25 +119,37 @@ public class HiOfflinePayOrderCategory extends Category {
      * 支付presenter
      */
     private void initOnlinePayOrderPaymentPresenter(){
-        onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(new OnlinePayOrderPaymentPresenterView() {
-            @Override
-            public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
-                showRedPacketPop(
-                        body.getShare_info(),
-                        "老板娘",
-                        body.getIcon(),
-                        body.getContent(),
-                        body.getOrder_info().getOrder_id(),
-                        body.getOrder_info().getSalary()
-                );
-            }
-
-            @Override
-            public void payError(String message) {
-                showToast(message);
-            }
-        });
+        onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(this);
     }
+
+    @Override
+    public void payError(String message) {
+        showToast(message);
+    }
+
+    @Override
+    public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+        if(DataFormat.toDouble(body.getOrder_info().getSalary()) <= 0){
+            OfflinePaySuccessDialog dialog = new OfflinePaySuccessDialog();
+            dialog.setOfflinePaySuccessDialogListener(new OfflinePaySuccessDialog.OfflinePaySuccessDialogListener() {
+                @Override
+                public void onConfirm() {
+                    BaseUtils.finishActivity(getActivity());
+                }
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "pay_success_dialog");
+            return;
+        }
+        showRedPacketPop(
+                body.getShare_info(),
+                "老板娘",
+                body.getIcon(),
+                body.getContent(),
+                body.getOrder_info().getOrder_id(),
+                body.getOrder_info().getSalary()
+        );
+    }
+
     private View content;
     private RedPacketPopup redPacketPopup;
 
@@ -161,6 +202,87 @@ public class HiOfflinePayOrderCategory extends Category {
             onlinePayOrderPaymentPresenter.amount(getActivity().getOrderId());
             return;
         }
+    }
+
+    public void clickBack(){
+        getActivity().clickBack();
+    }
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView.isPressed()){
+            switch (buttonView.getId()){
+                case R.id.wechat_cb:
+                    handleWechatChecked(isChecked);
+                    break;
+                case R.id.alipay_cb:
+                    handleAlipayChecked(isChecked);
+                    break;
+                case R.id.amount_cb:
+                    handleAccountChecked(isChecked);
+                    break;
+            }
+        }
+    }
+
+    public void handleClickWechatLayout(){
+        wechat.setChecked(!wechat.isChecked());
+        handleWechatChecked(wechat.isChecked());
+    }
+
+    public void handleClickAlipayLayout(){
+        alipay.setChecked(!alipay.isChecked());
+        handleAlipayChecked(alipay.isChecked());
+    }
+
+    public void handleClickAccountLayout(){
+        account.setChecked(!account.isChecked());
+        handleAccountChecked(account.isChecked());
+    }
+
+    private void handleWechatChecked(boolean isChecked) {
+        if (isChecked) {
+            if(userHasEnoughAccountMoney()){
+                account.setChecked(false);
+            }
+            alipay.setChecked(false);
+            return;
+        }
+
+        if(!alipay.isChecked() && !account.isChecked() || (!userHasEnoughAccountMoney() && account.isChecked())){
+            wechat.setChecked(true);
+        }
+    }
+
+    private void handleAlipayChecked(boolean isChecked){
+        if (isChecked) {
+            if(userHasEnoughAccountMoney()){
+                account.setChecked(false);
+            }
+            wechat.setChecked(false);
+            return;
+        }
+
+        if(!wechat.isChecked() && !account.isChecked() || (!userHasEnoughAccountMoney() && account.isChecked())){
+            alipay.setChecked(true);
+        }
+    }
+
+    private void handleAccountChecked(boolean isChecked){
+        if (isChecked) {
+            if(userHasEnoughAccountMoney()){
+                alipay.setChecked(false);
+                wechat.setChecked(false);
+            }
+            return;
+        }
+
+        if(!wechat.isChecked() && !alipay.isChecked()){
+            account.setChecked(true);
+        }
+    }
+
+    public boolean userHasEnoughAccountMoney(){
+        return getActivity().getUserAmount() >= getActivity().getTotalAmount();
     }
 
     @Override
