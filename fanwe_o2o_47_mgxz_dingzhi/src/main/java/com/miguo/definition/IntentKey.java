@@ -58,6 +58,7 @@ public class IntentKey {
     public static final String OFFLINE_SHOP_ID = "offline_shop_id";
     public static final String OFFLINE_SHOP_NAME = "offline_shop_name";
 
+    public static final String OFFLINE_PAY_ORDER_SHOP_ID = "pay_order_shop_id";
     public static final String OFFLINE_PAY_ORDER_SHOP_NAME = "pay_order_shop_name";
     public static final String OFFLINE_PAY_ORDER_AMOUNT = "pay_order_amount";
     public static final String OFFLINE_PAY_ORDER_SN = "pay_order_sn";

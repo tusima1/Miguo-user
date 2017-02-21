@@ -1,5 +1,6 @@
 package com.miguo.category.dialog;
 
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -52,6 +53,8 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
 
     int preSMSBackground;
 
+    TimerCount timerCount;
+
     public OfflinePayLoginDialogCategory(View view, HiBaseDialog fragment) {
         super(view, fragment);
     }
@@ -83,6 +86,11 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
     @Override
     protected void init() {
         initContentPosition();
+        initTimer();
+    }
+
+    private void initTimer(){
+        timerCount = new TimerCount(60000, 1000);
     }
 
     /**
@@ -100,6 +108,7 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
 
             @Override
             public void loginByMobileWithSMSError(String message) {
+                timerCount.onFinish();
                 showToast(message);
             }
         });
@@ -154,6 +163,7 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
             return;
         }
         getSMSCodeDao.getSMSCodeForQuickLoginAndBindMobile(phone.getText().toString());
+        timerCount.start();
     }
 
     public void clickSure(){
@@ -166,6 +176,25 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
 
     public void clickCancel(){
         dismiss();
+    }
+
+    public class TimerCount extends CountDownTimer {
+
+        public TimerCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
+        }
+
+        @Override
+        public void onFinish() {
+            getSMSCode.setText("获取验证码");
+            getSMSCode.setEnabled(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            getSMSCode.setText(millisUntilFinished / 1000 + "s");
+            getSMSCode.setEnabled(false);
+        }
     }
 
     @Override

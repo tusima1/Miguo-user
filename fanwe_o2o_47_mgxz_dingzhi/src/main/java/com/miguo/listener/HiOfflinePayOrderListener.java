@@ -19,7 +19,6 @@ public class HiOfflinePayOrderListener extends Listener {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
         switch (v.getId()){
             case R.id.pay_order:
                 clickPay();
@@ -33,7 +32,14 @@ public class HiOfflinePayOrderListener extends Listener {
             case R.id.account_layout:
                 clickAccountLayout();
                 break;
+            case R.id.back:
+                clickBack();
+                break;
         }
+    }
+
+    private void clickBack(){
+        getCategory().clickBack();
     }
 
     private void clickWechatLayout(){

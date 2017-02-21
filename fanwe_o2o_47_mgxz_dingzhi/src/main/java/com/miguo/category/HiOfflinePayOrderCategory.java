@@ -1,5 +1,6 @@
 package com.miguo.category;
 
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -8,16 +9,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiOfflinePayOrderActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.dialog.OfflinePaySuccessDialog;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiOfflinePayOrderListener;
 import com.miguo.presenters.OnlinePayOrderPaymentPresenter;
 import com.miguo.presenters.impl.OnlinePayOrderPaymentPresenterImpl;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.customviews.RedPacketPopup;
+import com.miguo.utils.BaseUtils;
+import com.miguo.utils.CountDownTimer;
 import com.miguo.view.OnlinePayOrderPaymentPresenterView;
 
 /**
@@ -121,6 +129,17 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     @Override
     public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+        if(DataFormat.toDouble(body.getOrder_info().getSalary()) <= 0){
+            OfflinePaySuccessDialog dialog = new OfflinePaySuccessDialog();
+            dialog.setOfflinePaySuccessDialogListener(new OfflinePaySuccessDialog.OfflinePaySuccessDialogListener() {
+                @Override
+                public void onConfirm() {
+                    BaseUtils.finishActivity(getActivity());
+                }
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "pay_success_dialog");
+            return;
+        }
         showRedPacketPop(
                 body.getShare_info(),
                 "老板娘",
@@ -183,6 +202,10 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
             onlinePayOrderPaymentPresenter.amount(getActivity().getOrderId());
             return;
         }
+    }
+
+    public void clickBack(){
+        getActivity().clickBack();
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

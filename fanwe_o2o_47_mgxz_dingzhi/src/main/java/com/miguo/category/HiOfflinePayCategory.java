@@ -147,7 +147,9 @@ public class HiOfflinePayCategory extends Category {
 
     @Override
     protected void init() {
-
+        amountOfConsumption.setEnabled(false);
+        doNotParticipateInTheamountOfConsumption.setEnabled(false);
+        beforeOnlinePayDao.getOfflinePayInfo(getActivity().getShopId());
     }
 
     @Override
@@ -162,6 +164,8 @@ public class HiOfflinePayCategory extends Category {
             public void getOfflinePayInfoSuccess(BeforeOnlinePayBean.Result.Body offlinePayInfo) {
                 HiOfflinePayCategory.this.offlinePayInfo = offlinePayInfo;
                 shopname.setText(offlinePayInfo.getShop_name());
+                amountOfConsumption.setEnabled(true);
+                doNotParticipateInTheamountOfConsumption.setEnabled(true);
                 handleGetOfflineInfoSuccess();
             }
 
@@ -170,7 +174,6 @@ public class HiOfflinePayCategory extends Category {
                 showToast(message);
             }
         });
-        beforeOnlinePayDao.getOfflinePayInfo(getActivity().getShopId());
     }
 
     /**
@@ -197,6 +200,7 @@ public class HiOfflinePayCategory extends Category {
 
     private void handlePayOrderSuccess(OnlinePayOrderBean.Result.Body orderInfo){
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.OFFLINE_PAY_ORDER));
+        intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_ID, getActivity().getShopId());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SHOP_NAME, offlinePayInfo.getShop_name());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_AMOUNT, orderAmount.getText().toString());
         intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_SN, orderInfo.getOrder_sn());
