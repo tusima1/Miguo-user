@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.didikee.uilibs.utils.StatusBarUtil;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.view.WalletNewActivity;
 import com.miguo.definition.IntentKey;
 import com.miguo.ui.view.customviews.ArcDrawable;
 
@@ -24,6 +25,7 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
     private TextView tvName;
     private TextView tvDesc;
     private TextView tvMoney;
+    private TextView tv_link;
     private ImageView ivFace;
 
 
@@ -69,12 +71,14 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
         tvTitle = ((TextView) findViewById(R.id.tv_title));
         tvName = ((TextView) findViewById(R.id.tv_name));
         tvDesc = ((TextView) findViewById(R.id.tv_desc));
+        tv_link = ((TextView) findViewById(R.id.tv_link));
         tvMoney = ((TextView) findViewById(R.id.tv_money));
         redPacketView = findViewById(R.id.redPacket_view);
 
         ivFace = ((ImageView) findViewById(R.id.iv_face));
 
         mBack.setOnClickListener(this);
+        tv_link.setOnClickListener(this);
         redPacketView.setBackground(new ArcDrawable());
     }
 
@@ -84,7 +88,10 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
             onBackPressed();
             return;
         }
-
+        if (tv_link == v){
+            startActivity(new Intent(this, WalletNewActivity.class));
+            finish();
+        }
 
     }
 }
