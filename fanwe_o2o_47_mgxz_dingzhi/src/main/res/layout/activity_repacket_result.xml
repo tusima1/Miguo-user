@@ -131,14 +131,35 @@
 
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_below="@+id/location_3"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1"
-        android:text="已存入钱包，可提现，可消费"
-        android:textColor="#999999"
-        android:textSize="13sp"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="已存入"
+            android:textColor="#999999"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="@string/link_txt"
+            android:autoLink="all"
+            android:textColor="#999999"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="，可提现，可消费"
+            android:textColor="#999999"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

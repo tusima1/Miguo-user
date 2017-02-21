@@ -95,4 +95,6 @@
 
     <string name="red_time_countdown">抢红包倒计时</string>
 
+    <string name="link_txt"><u>我的钱包</u></string>
+
 </resources>

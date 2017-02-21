@@ -234,6 +234,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
             intent.putExtra(IntentKey.MONEY,money);
             intent.putExtra(IntentKey.DESC,showContent);
             startActivity(intent);
+            finish();
         }else {
             // api request error
         }

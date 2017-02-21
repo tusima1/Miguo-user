@@ -56,7 +56,8 @@ public class TestWebActivity extends AppCompatActivity {
                 }
             }
         });
-
+        url=getIntent().getStringExtra(IntentKey.HOME_BANNER_WEB_PAGE);
+        webView.setWebViewParams(jsHandler1,url);
         iv_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,8 +69,6 @@ public class TestWebActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        url=getIntent().getStringExtra(IntentKey.HOME_BANNER_WEB_PAGE);
-        webView.setWebViewParams(jsHandler1,url);
         webView.startLoadUrl();
     }
 

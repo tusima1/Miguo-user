@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fanwe.DistributionStoreWapActivity;
 import com.fanwe.MyAccountActivity;
 import com.fanwe.ShopCartActivity;
 import com.fanwe.app.App;
@@ -46,6 +45,7 @@ import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.test.TestActivity;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGLog;
+import com.miguo.web.TestWebActivity;
 
 import java.util.List;
 
@@ -250,12 +250,15 @@ public class MyFragment extends BaseFragment implements RedDotView.OnRedDotViewC
             startActivity(ShopCartActivity.class);
         } else if (v == mShop) {
             /*我的小店*/
-            Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
-            String id = "";
-            if (App.getInstance().getCurrentUser() != null) {
-                id = App.getInstance().getCurrentUser().getUser_id();
-            }
-            intent.putExtra("id", id);
+//            Intent intent = new Intent(getActivity(), DistributionStoreWapActivity.class);
+//            String id = "";
+//            if (App.getInstance().getCurrentUser() != null) {
+//                id = App.getInstance().getCurrentUser().getUser_id();
+//            }
+//            intent.putExtra("id", id);
+//            startActivity(intent);
+            Intent intent = new Intent(getActivity(), TestWebActivity.class);
+            intent.putExtra(IntentKey.HOME_BANNER_WEB_PAGE, "https://m.mgxz.com");
             startActivity(intent);
         } else if (v == mFriends) {
             /*我的战队*/
