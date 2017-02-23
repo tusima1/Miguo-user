@@ -13,8 +13,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.didikee.uilibs.utils.StatusBarUtil;
 import com.fanwe.o2o.miguo.R;
+import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.ui.view.customviews.ArcDrawable;
+import com.miguo.utils.BaseUtils;
 
 public class RedPacketResultActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +33,7 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
     private String money;
     private String face_icon;
     private String showContent;
+    private TextView myWallet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +74,13 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
         tvName = ((TextView) findViewById(R.id.tv_name));
         tvDesc = ((TextView) findViewById(R.id.tv_desc));
         tvMoney = ((TextView) findViewById(R.id.tv_money));
+        myWallet = ((TextView) findViewById(R.id.my_wallet));
         redPacketView = findViewById(R.id.redPacket_view);
 
         ivFace = ((ImageView) findViewById(R.id.iv_face));
 
         mBack.setOnClickListener(this);
+        myWallet.setOnClickListener(this);
         redPacketView.setBackground(new ArcDrawable());
     }
 
@@ -83,6 +89,10 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
         if (mBack == v){
             onBackPressed();
             return;
+        }
+        if(myWallet == v){
+            Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.MY_WALLET));
+            BaseUtils.jumpToNewActivityWithFinish(this, intent);
         }
 
 

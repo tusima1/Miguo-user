@@ -51,7 +51,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 String content = null;
                 switch (resp.errCode) {
                     case 0: // 成功
-                        content = "支付成功";
+                        content = null;
                         WechatPayStatus.setSUCCESS(true);
                         SDEventManager.post(EnumEventTag.PAY_SUCCESS_WEIXIN.ordinal());
                         break;

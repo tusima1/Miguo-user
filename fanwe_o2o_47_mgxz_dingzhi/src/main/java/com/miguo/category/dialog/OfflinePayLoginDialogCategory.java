@@ -51,7 +51,7 @@ public class OfflinePayLoginDialogCategory extends DialogFragmentCategory {
 
     GetSMSCodeDao getSMSCodeDao;
 
-    int preSMSBackground;
+    int preSMSBackground = R.drawable.shape_bg_gray_f2_8;
 
     TimerCount timerCount;
 

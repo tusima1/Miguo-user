@@ -18,6 +18,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.dev.DevUtil;
 import com.sunday.eventbus.SDBaseEvent;
 
@@ -51,7 +52,7 @@ public class HiHomeActivity extends HiBaseActivity {
     /**
      * 到店买单.
      */
-    private final static String OFFLINE_PAY = "^https?://[^/]+.mgxz.com/offline/paylist/shop_id/([^/\\s]+)";
+    private final static String OFFLINE_PAY = "^https?://[^/]+.mgxz.com/offline/paylist/shop/([^/\\s]+)";
 
 
     private DevUtil devUtil;
@@ -180,24 +181,24 @@ public class HiHomeActivity extends HiBaseActivity {
             Intent intentStore = new Intent(this, DistributionStoreWapActivity.class);
             intentStore.putExtra("user_id", user_id);
             intentStore.putExtra("url", extraString);
-            startActivity(intentStore);
+            BaseUtils.jumpToNewActivity(this, intentStore);
         } else if (getCompleteUrl(extraString, SHOP_DETAIL)) {
             //门店详情
             String extra_merchant_id = extraString.split("\\/")[extraString.split("\\/").length - 1];
             Intent intentStore = new Intent(this, StoreDetailActivity.class);
             intentStore.putExtra(EXTRA_MERCHANT_ID, extra_merchant_id);
-            startActivity(intentStore);
+            BaseUtils.jumpToNewActivity(this, intentStore);
         } else if (getCompleteUrl(extraString, SHOPPING_DETAIL)) {
             //团购详情
             String mId = extraString.split("\\/")[extraString.split("\\/").length - 1];
             Intent intentStore = new Intent(this, TuanDetailActivity.class);
             intentStore.putExtra(EXTRA_GOODS_ID, mId);
-            startActivity(intentStore);
+            BaseUtils.jumpToNewActivity(this, intentStore);
         } else if (getCompleteUrl(extraString,OFFLINE_PAY)){
             String mId = extraString.split("\\/")[extraString.split("\\/").length - 1];
             Intent intentStore = new Intent(this, HiOfflinePayActivity.class);
             intentStore.putExtra(IntentKey.OFFLINE_SHOP_ID, mId);
-            startActivity(intentStore);
+            BaseUtils.jumpToNewActivity(this, intentStore);
         }else {
             MGToast.showToast("对不起，无法识别。");
         }

@@ -7,6 +7,7 @@ import com.miguo.category.Category;
 import com.miguo.category.HiOfflinePayOrderCategory;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.WechatPayStatus;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 
@@ -53,6 +54,27 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void doOnResume() {
+        if(null != getCategory()){
+            if(WechatPayStatus.isSuccess()){
+                getCategory().paySuccessWechat();
+                WechatPayStatus.reset();
+            }
+            if(WechatPayStatus.isERROR()){
+                getCategory().payError("支付失败");
+                WechatPayStatus.reset();
+            }
+        }
+        getCategory().checkPaySuccessWithAlipay();
+    }
+
+    @Override
     protected void finishActivity() {
         clickBack();
     }
@@ -62,6 +84,11 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
         intent.putExtra(IntentKey.OFFLINE_SHOP_ID, getShopId());
         finish();
         BaseUtils.jumpToNewActivityWithBackway(this, intent);
+    }
+
+    @Override
+    public HiOfflinePayOrderCategory getCategory() {
+        return (HiOfflinePayOrderCategory)super.getCategory();
     }
 
     public String getOrderId() {

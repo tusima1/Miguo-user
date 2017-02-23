@@ -181,19 +181,19 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         @Override
         public void onResult(SHARE_MEDIA share_media) {
             startRedPacketResultActivity();
-            Toast.makeText(RedPacketOpenResultActivity.this, ""+share_media.toString()+"成功", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(RedPacketOpenResultActivity.this, ""+share_media.toString()+"成功", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
             startRedPacketResultActivity();
-            Toast.makeText(RedPacketOpenResultActivity.this, ""+share_media.toString()+"失败", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(RedPacketOpenResultActivity.this, ""+share_media.toString()+"失败", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
             startRedPacketResultActivity();
-            Toast.makeText(RedPacketOpenResultActivity.this, ""+share_media.toString()+"取消", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(RedPacketOpenResultActivity.this, ""+share_media.toString()+"取消", Toast.LENGTH_SHORT).show();
         }
     };
     @Override

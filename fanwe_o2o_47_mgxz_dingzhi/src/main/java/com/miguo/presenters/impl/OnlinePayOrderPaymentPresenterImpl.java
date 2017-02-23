@@ -22,6 +22,8 @@ public class OnlinePayOrderPaymentPresenterImpl extends BasePresenterImpl implem
 
     OnlinePayOrderPaymentDao onlinePayOrderPaymentDao;
 
+    OnlinePayOrderPaymentBean.Result.Body body;
+
     public OnlinePayOrderPaymentPresenterImpl(BaseView baseView) {
         super(baseView);
     }
@@ -50,16 +52,19 @@ public class OnlinePayOrderPaymentPresenterImpl extends BasePresenterImpl implem
         onlinePayOrderPaymentDao = new OnlinePayOrderPaymentDaoImpl(new OnlinePayOrderPaymentView() {
             @Override
             public void amountPaySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+                OnlinePayOrderPaymentPresenterImpl.this.body = body;
                 getListener().paySuccess(body);
             }
 
             @Override
             public void wechatPaySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+                OnlinePayOrderPaymentPresenterImpl.this.body = body;
                 handleWechatPaySuccess(body);
             }
 
             @Override
             public void alipaySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+                OnlinePayOrderPaymentPresenterImpl.this.body = body;
                 handleAlipaySuccess(body);
             }
 
@@ -128,7 +133,7 @@ public class OnlinePayOrderPaymentPresenterImpl extends BasePresenterImpl implem
         SDWxappPay.getInstance().pay(req);
     }
 
-    private void handleAlipaySuccess(OnlinePayOrderPaymentBean.Result.Body body){
+    private void handleAlipaySuccess(final OnlinePayOrderPaymentBean.Result.Body body){
         UserUpgradeOrderBean2.Result.Body.Config config = body.getConfig();
         if(null == getActivity()){
             throw new RuntimeException("BaseView must extends com.miguo.category.Category");
@@ -175,14 +180,14 @@ public class OnlinePayOrderPaymentPresenterImpl extends BasePresenterImpl implem
                  * 支付成功
                  */
                 if ("9000".equals(status)){
-                    getListener().payError("支付成功");
+                    getListener().paySuccessAlipay(body);
                     return;
                 }
                 /**
                  * 支付结果确认中
                  */
                 if ("8000".equals(status)){
-                    getListener().payError("支付结果确认中");
+                    getListener().paySuccessAlipay(body);
                     return;
                 }
                 /**
@@ -208,5 +213,10 @@ public class OnlinePayOrderPaymentPresenterImpl extends BasePresenterImpl implem
     @Override
     public OnlinePayOrderPaymentPresenterView getListener() {
         return (OnlinePayOrderPaymentPresenterView)baseView;
+    }
+
+    @Override
+    public OnlinePayOrderPaymentBean.Result.Body getBody() {
+        return body;
     }
 }

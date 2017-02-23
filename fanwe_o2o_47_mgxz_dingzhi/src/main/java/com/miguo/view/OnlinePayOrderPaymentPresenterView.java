@@ -13,6 +13,8 @@ public interface OnlinePayOrderPaymentPresenterView extends BaseView{
      */
     void paySuccess(OnlinePayOrderPaymentBean.Result.Body body);
 
+    void paySuccessAlipay(OnlinePayOrderPaymentBean.Result.Body body);
+
     /**
      * 支付失败
      * @param message

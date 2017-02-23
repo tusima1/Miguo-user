@@ -1,5 +1,7 @@
 package com.miguo.presenters;
 
+import com.miguo.entity.OnlinePayOrderPaymentBean;
+
 /**
  * Created by Administrator on 2017/2/17.
  */
@@ -25,5 +27,7 @@ public interface OnlinePayOrderPaymentPresenter extends BasePresenter {
      *
      */
     void amount(String orderId);
+
+    OnlinePayOrderPaymentBean.Result.Body getBody();
 
 }

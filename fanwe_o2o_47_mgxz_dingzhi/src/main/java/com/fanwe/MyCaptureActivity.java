@@ -1,15 +1,18 @@
 package com.fanwe;
 
 import android.content.Intent;
+import android.os.Build;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.zxing.CaptureActivity;
 import com.google.zxing.Result;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ResultCode;
+import com.miguo.utils.BaseUtils;
 
 public class MyCaptureActivity extends CaptureActivity
 {
@@ -25,13 +28,26 @@ public class MyCaptureActivity extends CaptureActivity
 	private boolean mIsStartByAdvs = false;
 	private int mFinishActivityWhenScanFinish = 1;
 
+	RelativeLayout titleLayout;
+
 	@Override
 	protected void init()
 	{
 		initIntentData();
 		setLayoutId(R.layout.include_title);
 		iv_back = (ImageView) findViewById(R.id.iv_back);
+		titleLayout = (RelativeLayout)findViewById(R.id.title_layout);
 		registeClick();
+		initTitlePadding();
+	}
+
+	private void initTitlePadding(){
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+			return;
+		}
+		if (titleLayout != null) {
+//			titleLayout.setPadding(0, BaseUtils.getStatusBarHeight(this), 0, 0);
+		}
 	}
 
 	private void initIntentData()

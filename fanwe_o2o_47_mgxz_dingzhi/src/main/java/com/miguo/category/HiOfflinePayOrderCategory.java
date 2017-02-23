@@ -1,6 +1,7 @@
 package com.miguo.category;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -16,6 +17,7 @@ import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiOfflinePayOrderActivity;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.PaymentId;
 import com.miguo.dialog.OfflinePaySuccessDialog;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.factory.ClassNameFactory;
@@ -127,17 +129,12 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
         showToast(message);
     }
 
+    String paymentId;
+
     @Override
-    public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+    public void paySuccessAlipay(OnlinePayOrderPaymentBean.Result.Body body) {
         if(DataFormat.toDouble(body.getOrder_info().getSalary()) <= 0){
-            OfflinePaySuccessDialog dialog = new OfflinePaySuccessDialog();
-            dialog.setOfflinePaySuccessDialogListener(new OfflinePaySuccessDialog.OfflinePaySuccessDialogListener() {
-                @Override
-                public void onConfirm() {
-                    BaseUtils.finishActivity(getActivity());
-                }
-            });
-            dialog.show(getActivity().getSupportFragmentManager(), "pay_success_dialog");
+            this.paymentId = PaymentId.ALIPAY;
             return;
         }
         showRedPacketPop(
@@ -148,6 +145,50 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
                 body.getOrder_info().getOrder_id(),
                 body.getOrder_info().getSalary()
         );
+    }
+
+    public void paySuccessWechat(){
+        paySuccess(onlinePayOrderPaymentPresenter.getBody());
+    }
+
+    @Override
+    public void paySuccess(OnlinePayOrderPaymentBean.Result.Body body) {
+        if(DataFormat.toDouble(body.getOrder_info().getSalary()) <= 0){
+            showPaySuccessDialog();
+            return;
+        }
+        showRedPacketPop(
+                body.getShare_info(),
+                "老板娘",
+                body.getIcon(),
+                body.getContent(),
+                body.getOrder_info().getOrder_id(),
+                body.getOrder_info().getSalary()
+        );
+    }
+
+    public void checkPaySuccessWithAlipay(){
+        if(isEmpty(paymentId)) return;
+        if(paymentId.equals(PaymentId.ALIPAY)){
+            this.paymentId = "";
+            showPaySuccessDialog();
+        }
+    }
+
+    public void showPaySuccessDialog(){
+        final OfflinePaySuccessDialog dialog = new OfflinePaySuccessDialog();
+        dialog.setOfflinePaySuccessDialogListener(new OfflinePaySuccessDialog.OfflinePaySuccessDialogListener() {
+            @Override
+            public void onConfirm() {
+                BaseUtils.finishActivity(getActivity());
+            }
+        });
+        /**
+         * 如果是支付宝支付，是在onSaveInstanceState之后调用这个方法，会抛出
+         * java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState异常
+         * 需要在onResume调用fragment创建
+         */
+        dialog.show(getActivity().getSupportFragmentManager(), "pay_success_dialog");
     }
 
     private View content;

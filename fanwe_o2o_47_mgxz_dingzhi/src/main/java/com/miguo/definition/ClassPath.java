@@ -100,5 +100,11 @@ public class ClassPath {
      */
     public static final String OFFLINE_PAY_ORDER = "com.miguo.app.HiOfflinePayOrderActivity";
 
+    /**
+     * 我的钱包
+     * {@link com.fanwe.user.view.WalletNewActivity}
+     */
+    public static final String MY_WALLET = "com.fanwe.user.view.WalletNewActivity";
+
 
 }
