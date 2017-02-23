@@ -3,6 +3,7 @@ package com.miguo.category;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -151,7 +152,9 @@ public class HiWebPageCategory extends Category implements ShoppingCartView {
         //默认缩放模式
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         webView.setWebViewClient(new WebViewClient() {
 
             @Override

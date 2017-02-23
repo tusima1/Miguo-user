@@ -2,6 +2,7 @@ package com.fanwe.fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -145,6 +146,10 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(false);
         mWeb.setBackgroundColor(Color.parseColor("#f4f4f4"));
+        //添加 https 与 http 混合支持
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
     }
 
     @Override

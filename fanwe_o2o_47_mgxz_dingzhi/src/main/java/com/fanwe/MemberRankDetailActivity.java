@@ -1,5 +1,12 @@
 package com.fanwe;
 
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.TextView;
+
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.dao.barry.MemberDetailDao;
 import com.fanwe.dao.barry.impl.MemberDetailDaoImpl;
@@ -8,12 +15,6 @@ import com.fanwe.library.utils.SDViewBinder;
 import com.fanwe.model.Uc_DistModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
-
-import android.graphics.Color;
-import android.os.Bundle;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.TextView;
 
 public class MemberRankDetailActivity extends BaseActivity
 {
@@ -49,6 +50,9 @@ public class MemberRankDetailActivity extends BaseActivity
 		webSettings.setJavaScriptEnabled(true); 
 		webSettings.setSupportZoom(false);
 		mWebView.setBackgroundColor(Color.parseColor("#ffffff"));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+		}
 	}
 
 	private void requestData() 

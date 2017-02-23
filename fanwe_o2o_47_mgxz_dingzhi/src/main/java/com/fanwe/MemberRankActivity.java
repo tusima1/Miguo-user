@@ -1,7 +1,9 @@
 package com.fanwe;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -132,6 +134,7 @@ public class MemberRankActivity extends BaseActivity implements CallbackView {
                 "utf-8", null);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWeb() {
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setSavePassword(false);
@@ -139,6 +142,9 @@ public class MemberRankActivity extends BaseActivity implements CallbackView {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(false);
         mWebView.setBackgroundColor(Color.parseColor("#ffffff"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
     }
 
     private void initClick() {

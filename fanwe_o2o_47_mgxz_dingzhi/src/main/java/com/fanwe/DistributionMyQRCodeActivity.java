@@ -151,12 +151,17 @@ public class DistributionMyQRCodeActivity extends BaseActivity implements OnLong
            @Override
            public void onSuccess(String method, List datas) {
                 if (UserConstants.QR_SHOP_CARD.equals(method)){
-                    ModelNameCardQR nameCardQR = (ModelNameCardQR) datas.get(0);
-                    if (nameCardQR!=null){
-                        bindData(nameCardQR);
+                    if (datas!=null && datas.size()>0){
+                        ModelNameCardQR nameCardQR = (ModelNameCardQR) datas.get(0);
+                        if (nameCardQR!=null){
+                            bindData(nameCardQR);
+                        }else {
+                            MGToast.showToast("请求数据失败!");
+                        }
                     }else {
                         MGToast.showToast("请求数据失败!");
                     }
+
                 }
            }
 
