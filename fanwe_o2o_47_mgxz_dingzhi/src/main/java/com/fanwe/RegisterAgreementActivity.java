@@ -1,6 +1,8 @@
 package com.fanwe;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -73,6 +75,7 @@ public class RegisterAgreementActivity extends BaseActivity
 		mTitle.setMiddleTextTop("注册协议");
 	}
 
+	@SuppressLint("SetJavaScriptEnabled")
 	private void initWebView()
 	{
 		WebSettings webSettings = mWebView.getSettings(); 
@@ -81,5 +84,8 @@ public class RegisterAgreementActivity extends BaseActivity
 		webSettings.setJavaScriptEnabled(true); 
 		webSettings.setSupportZoom(false);
 		mWebView.setBackgroundColor(Color.parseColor("#ffffff"));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+		}
 	}
 }

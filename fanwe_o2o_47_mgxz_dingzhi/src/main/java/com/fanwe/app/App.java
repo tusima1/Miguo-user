@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fanwe.common.ImageLoaderManager;
+import com.fanwe.constant.SSLCertificateName;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.dao.LocalUserModelDao;
 import com.fanwe.dao.SettingModelDao;
@@ -143,13 +144,20 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
     private void addSSLCert() {
         // 添加https证书
         try {
-
-            InputStream is = getAssets().open("certificate.cer");
+            InputStream is = getAssets().open(getCerName());
             NetConfig.addCertificate(is); // 这里将证书读取出来，，放在配置中byte[]里
-
-
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        }
+    }
+
+    private String getCerName(){
+        if (ServerUrl.DEBUG){
+            //测试
+            return ServerUrl.TEST ? SSLCertificateName.TEST : SSLCertificateName.DEV;
+        }else {
+            // 线上
+            return SSLCertificateName.ONLINE;
         }
     }
 

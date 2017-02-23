@@ -204,7 +204,7 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		return mTitle;
 	}
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+	@SuppressLint("SetJavaScriptEnabled")
 	private void findViews()
 	{
 		mWeb = findWebView();
@@ -213,7 +213,7 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		settings.setDomStorageEnabled(true);
 		settings.setAllowFileAccess(true);
 		settings.setAppCacheEnabled(true);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 			}
 
@@ -377,6 +377,9 @@ public class WebViewFragment extends SDBaseFragment implements SDTitleListener
 		settings.setBuiltInZoomControls(true);
 		settings.setPluginState(PluginState.ON);
 		settings.setDomStorageEnabled(true);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+		}
 		if (SDOtherUtil.getBuildVersion() >= 11)
 		{
 			settings.setDisplayZoomControls(false);

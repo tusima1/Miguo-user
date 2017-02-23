@@ -3,6 +3,7 @@ package com.miguo.web;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -57,7 +58,9 @@ public class MyWebView extends WebView {
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         this.setWebViewClient(setMyWebViewClient());
         this.setWebChromeClient(new WebChromeClient());
     }

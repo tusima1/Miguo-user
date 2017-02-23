@@ -126,11 +126,11 @@ public class OkHttpUtil {
 
                 }
                 SSLSocketFactory sslSocketFactory = getSocketFactory(certificates);
-
                 if (sslSocketFactory != null) {
-
                     builder.sslSocketFactory(sslSocketFactory);
-
+                    Log.e("test","SSLSocketFactory : is ok");
+                }else {
+                    Log.e("test","SSLSocketFactory : 失败");
                 }
             }
         }
@@ -149,72 +149,33 @@ public class OkHttpUtil {
 
     private static SSLSocketFactory getSocketFactory(List<InputStream> certificates) {
         try {
-
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-
             keyStore.load(null);
-
-
             try {
-
                 for (int i = 0, size = certificates.size(); i < size; ) {
-
                     InputStream certificate = certificates.get(i);
-
                     String certificateAlias = Integer.toString(i++);
-
                     keyStore.setCertificateEntry(certificateAlias, certificateFactory
                             .generateCertificate(certificate));
-
-
                     if (certificate != null)
-
                         certificate.close();
-
                 }
-
             } catch (IOException e) {
-
                 e.printStackTrace();
-
             }
-
-
             SSLContext sslContext = SSLContext.getInstance("TLS");
-
-
-            TrustManagerFactory trustManagerFactory =
-
-                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
-
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init(keyStore);
-
-            sslContext.init
-
-                    (
-
+            sslContext.init(
                             null,
-
                             trustManagerFactory.getTrustManagers(),
-
                             new SecureRandom()
-
                     );
-
-
             return sslContext.getSocketFactory();
-
-
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
-
-
         return null;
 
     }
