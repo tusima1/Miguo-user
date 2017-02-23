@@ -80,6 +80,14 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
     }
 
     public void clickBack(){
+        if(null == getCategory()){
+            clickBack2();
+            return;
+        }
+        getCategory().cancelOrder();
+    }
+
+    public void clickBack2(){
         Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.OFFLINE_PAY));
         intent.putExtra(IntentKey.OFFLINE_SHOP_ID, getShopId());
         finish();

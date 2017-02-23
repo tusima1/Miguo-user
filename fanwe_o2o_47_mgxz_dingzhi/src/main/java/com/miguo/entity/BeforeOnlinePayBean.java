@@ -116,6 +116,10 @@ public class BeforeOnlinePayBean {
                 return offline == 1;
             }
 
+            public boolean canUserOnlinePay(){
+                return getCan_use_online_pay() == 1;
+            }
+
             /**
              * 获取可用时间，周一，周二，周三，周四，周五，周六，周日
              * 如果连续就 周x - 周y

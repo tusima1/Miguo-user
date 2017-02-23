@@ -214,6 +214,8 @@ public class HiOfflinePayCategory extends Category {
      * 买单优惠已过
      */
     private void handleOfferHasExpired(){
+        offlinePayInfo.setCan_use_online_pay(0);
+        handleCalculateAmount();
         OfflinePayContinueOrderDialog dialog = new OfflinePayContinueOrderDialog();
         dialog.setOnOfflinePayContinueOrderDialogListener(new OfflinePayContinueOrderDialog.OnOfflinePayContinueOrderDialogListener() {
             @Override
@@ -251,14 +253,14 @@ public class HiOfflinePayCategory extends Category {
                 break;
             case HiShopDetailBean.Result.Offline.DISCOUNT:
                 updateDecrease(offlinePayInfo.getDiscountText());
-                updatePayTimeVisibility(View.VISIBLE);
-                updateDecreaseVisibility(View.VISIBLE);
+                updatePayTimeVisibility(offlinePayInfo.canUserOnlinePay() ? View.VISIBLE : View.GONE);
+                updateDecreaseVisibility(offlinePayInfo.canUserOnlinePay() ? View.VISIBLE : View.GONE);
                 updatePayTime();
                 break;
             case HiShopDetailBean.Result.Offline.DECREASE:
                 updateDecrease(offlinePayInfo.getDecreaseText());
-                updatePayTimeVisibility(View.VISIBLE);
-                updateDecreaseVisibility(View.VISIBLE);
+                updatePayTimeVisibility(offlinePayInfo.canUserOnlinePay() ? View.VISIBLE : View.GONE);
+                updateDecreaseVisibility(offlinePayInfo.canUserOnlinePay() ? View.VISIBLE : View.GONE);
                 updatePayTime();
                 break;
         }
@@ -341,7 +343,11 @@ public class HiOfflinePayCategory extends Category {
             });
             return;
         }
-        confirmOrder();
+        if(offlinePayInfo.canUserOnlinePay()){
+            confirmOrder();
+            return;
+        }
+        continuePayOrder();
     }
 
     /**
@@ -448,7 +454,6 @@ public class HiOfflinePayCategory extends Category {
                 handleDecreaseAmount();
                 break;
         }
-
     }
 
     /**
@@ -464,6 +469,10 @@ public class HiOfflinePayCategory extends Category {
      * 打折金额
      */
     private void handleDiscountAmount(){
+        if(!offlinePayInfo.canUserOnlinePay()){
+            handleOriginalAmount();
+            return;
+        }
         withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
         Double amountOfConsumption = parseDouble(this.amountOfConsumption.getText().toString());
         if(amountOfConsumption < withoutDiscountAmount){
@@ -479,6 +488,10 @@ public class HiOfflinePayCategory extends Category {
      * 满减金额
      */
     private void handleDecreaseAmount(){
+        if(!offlinePayInfo.canUserOnlinePay()){
+            handleOriginalAmount();
+            return;
+        }
         withoutDiscountAmount = parseDouble(doNotParticipateInTheamountOfConsumption.getText().toString());
         Double amountOfConsumption = parseDouble(this.amountOfConsumption.getText().toString());
         if(amountOfConsumption < withoutDiscountAmount){

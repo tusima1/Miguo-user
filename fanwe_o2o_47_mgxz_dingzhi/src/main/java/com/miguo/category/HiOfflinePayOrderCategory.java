@@ -9,12 +9,15 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiOfflinePayOrderActivity;
+import com.miguo.dao.OnlinePayCancelDao;
+import com.miguo.dao.impl.OnlinePayCancelDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.PaymentId;
@@ -28,6 +31,7 @@ import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.customviews.RedPacketPopup;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.CountDownTimer;
+import com.miguo.view.OnlinePayCancelView;
 import com.miguo.view.OnlinePayOrderPaymentPresenterView;
 
 /**
@@ -72,6 +76,8 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     OnlinePayOrderPaymentPresenter onlinePayOrderPaymentPresenter;
 
+    OnlinePayCancelDao onlinePayCancelDao;
+
     public HiOfflinePayOrderCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -79,6 +85,7 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     @Override
     protected void initFirst() {
         initOnlinePayOrderPaymentPresenter();
+        initOnlinePayCancelDao();
     }
 
     @Override
@@ -122,6 +129,24 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
      */
     private void initOnlinePayOrderPaymentPresenter(){
         onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(this);
+    }
+
+    private void initOnlinePayCancelDao(){
+        onlinePayCancelDao = new OnlinePayCancelDaoImpl(new OnlinePayCancelView() {
+            @Override
+            public void cancelSuccess() {
+                getActivity().clickBack2();
+            }
+
+            @Override
+            public void cancelError(String message) {
+                getActivity().clickBack2();
+            }
+        });
+    }
+
+    public void cancelOrder(){
+        onlinePayCancelDao.cancelOrder(getActivity().getOrderId(), App.getInstance().getToken());
     }
 
     @Override
