@@ -1,7 +1,6 @@
 package com.miguo.category;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -11,27 +10,28 @@ import android.widget.TextView;
 
 import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.user.view.MyOrderListActivity;
 import com.fanwe.utils.DataFormat;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiOfflinePayOrderActivity;
 import com.miguo.dao.OnlinePayCancelDao;
+import com.miguo.dao.OnlinePayOrderContinuePaymentDao;
 import com.miguo.dao.impl.OnlinePayCancelDaoImpl;
-import com.miguo.definition.ClassPath;
-import com.miguo.definition.IntentKey;
+import com.miguo.dao.impl.OnlinePayOrderContinuePaymentDaoImpl;
 import com.miguo.definition.PaymentId;
 import com.miguo.dialog.OfflinePaySuccessDialog;
+import com.miguo.entity.OnlinePayOrderBean;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
-import com.miguo.factory.ClassNameFactory;
 import com.miguo.listener.HiOfflinePayOrderListener;
 import com.miguo.presenters.OnlinePayOrderPaymentPresenter;
 import com.miguo.presenters.impl.OnlinePayOrderPaymentPresenterImpl;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.ui.view.customviews.RedPacketPopup;
 import com.miguo.utils.BaseUtils;
-import com.miguo.utils.CountDownTimer;
 import com.miguo.view.OnlinePayCancelView;
+import com.miguo.view.OnlinePayOrderContinuePaymentView;
 import com.miguo.view.OnlinePayOrderPaymentPresenterView;
 
 /**
@@ -78,6 +78,10 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     OnlinePayCancelDao onlinePayCancelDao;
 
+    OnlinePayOrderContinuePaymentDao onlinePayOrderContinuePaymentDao;
+
+    OnlinePayOrderBean.Result.Body orderInfo;
+
     public HiOfflinePayOrderCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -86,6 +90,7 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     protected void initFirst() {
         initOnlinePayOrderPaymentPresenter();
         initOnlinePayCancelDao();
+        initOnlinePayOrderContinuePaymentDao();
     }
 
     @Override
@@ -112,7 +117,13 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     @Override
     protected void init() {
+        initOrderInfo();
+    }
 
+    private void initOrderInfo(){
+        if(getActivity().isFromOrderList()){
+            onlinePayOrderContinuePaymentDao.getOrderInfo(getActivity().getOrderId(), App.getInstance().getToken());
+        }
     }
 
     @Override
@@ -121,6 +132,9 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
         shopName.setText(getActivity().getShopName());
         amount.setText(getActivity().getAmount());
         orderSn.setText(getActivity().getOrderSn());
+        if(!getActivity().isFromOrderList()){
+            updateUserAccountVisibility(getActivity().getUserAmount() <= 0 ? View.GONE : View.VISIBLE);
+        }
         recyclerBounceNestedScrollView.hideLoadingLayout();
     }
 
@@ -129,6 +143,33 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
      */
     private void initOnlinePayOrderPaymentPresenter(){
         onlinePayOrderPaymentPresenter = new OnlinePayOrderPaymentPresenterImpl(this);
+    }
+
+    private void initOnlinePayOrderContinuePaymentDao(){
+        onlinePayOrderContinuePaymentDao = new OnlinePayOrderContinuePaymentDaoImpl(new OnlinePayOrderContinuePaymentView() {
+            @Override
+            public void getOrderInfoSuccess(OnlinePayOrderBean.Result.Body orderInfo) {
+                HiOfflinePayOrderCategory.this.orderInfo = orderInfo;
+                handleUpdateOrderInfo();
+            }
+
+            @Override
+            public void getOrderInfoError(String message) {
+                HiOfflinePayOrderCategory.this.orderInfo = null;
+            }
+        });
+    }
+
+    private void handleUpdateOrderInfo(){
+        shopName.setText(orderInfo.getShop_name());
+        orderSn.setText(orderInfo.getOrder_sn());
+        amount.setText(orderInfo.getTotal_price() + "");
+        userAccount.setText("用户余额" + orderInfo.getUser_account_money());
+        updateUserAccountVisibility(orderInfo.getUser_account_money() <= 0 ? View.GONE : View.VISIBLE);
+    }
+
+    private void updateUserAccountVisibility(int visibility){
+        accountLayout.setVisibility(visibility);
     }
 
     private void initOnlinePayCancelDao(){
@@ -151,7 +192,12 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     @Override
     public void payError(String message) {
-        showToast(message);
+        if(getActivity().isFromOrderList()){
+            return;
+        }
+        Intent intent = new Intent(getActivity(), MyOrderListActivity.class);
+        intent.putExtra(MyOrderListActivity.EXTRA_ORDER_STATUS, "pay_wait");
+        BaseUtils.jumpToNewActivityWithFinish(getActivity(), intent);
     }
 
     String paymentId;
@@ -233,39 +279,44 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     }
 
     public void clickPay(){
+        if(getActivity().isFromOrderList()){
+            if(this.orderInfo == null){
+                return;
+            }
+        }
         /**
          * 微信和余额混合支付
          */
         if(wechat.isChecked() && account.isChecked()){
-            onlinePayOrderPaymentPresenter.wechat(getActivity().getOrderId(), 1);
+            onlinePayOrderPaymentPresenter.wechat(getActivity().isFromOrderList() ? orderInfo.getOrder_id() : getActivity().getOrderId(), 1);
             return;
         }
         /**
          * 支付宝和余额混合支付
          */
         if(alipay.isChecked() && account.isChecked()){
-            onlinePayOrderPaymentPresenter.alipay(getActivity().getOrderId(), 1);
+            onlinePayOrderPaymentPresenter.alipay(getActivity().isFromOrderList() ? orderInfo.getOrder_id() : getActivity().getOrderId(), 1);
             return;
         }
         /**
          * 微信支付
          */
         if(wechat.isChecked()){
-            onlinePayOrderPaymentPresenter.wechat(getActivity().getOrderId(), 0);
+            onlinePayOrderPaymentPresenter.wechat(getActivity().isFromOrderList() ? orderInfo.getOrder_id() : getActivity().getOrderId(), 0);
             return;
         }
         /**
          * 支付宝支付
          */
         if(alipay.isChecked()){
-            onlinePayOrderPaymentPresenter.alipay(getActivity().getOrderId(), 0);
+            onlinePayOrderPaymentPresenter.alipay(getActivity().isFromOrderList() ? orderInfo.getOrder_id() : getActivity().getOrderId(), 0);
             return;
         }
         /**
          * 余额支付
          */
         if(account.isChecked()){
-            onlinePayOrderPaymentPresenter.amount(getActivity().getOrderId());
+            onlinePayOrderPaymentPresenter.amount(getActivity().isFromOrderList() ? orderInfo.getOrder_id() : getActivity().getOrderId());
             return;
         }
     }
@@ -349,6 +400,10 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
 
     public boolean userHasEnoughAccountMoney(){
         return getActivity().getUserAmount() >= getActivity().getTotalAmount();
+    }
+
+    public OnlinePayOrderBean.Result.Body getOrderInfo() {
+        return orderInfo;
     }
 
     @Override

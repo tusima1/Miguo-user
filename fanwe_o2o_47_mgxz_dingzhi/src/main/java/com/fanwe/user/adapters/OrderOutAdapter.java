@@ -22,7 +22,11 @@ import com.fanwe.user.model.getOrderInfo.ModelOrderItemIn;
 import com.fanwe.user.model.getOrderInfo.ModelOrderItemOut;
 import com.fanwe.user.presents.OrderHttpHelper;
 import com.fanwe.utils.MGStringFormatter;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 
 import java.util.List;
 
@@ -89,9 +93,10 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                     @Override
                     public void onClick(View v) {
                         if(!TextUtils.isEmpty(model.getOrder_id())) {
-                            Intent intent = new Intent(mActivity, ConfirmOrderActivity.class);
-                            intent.putExtra("orderId", model.getOrder_id());
-                            mActivity.startActivity(intent);
+                            Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.OFFLINE_PAY_ORDER));
+                            intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_ID, model.getOrder_id());
+                            intent.putExtra(IntentKey.OFFLINE_PAY_IS_FROM_ORDER_LIST, true);
+                            BaseUtils.jumpToNewActivity(mActivity, intent);
                         }
 
                     }
