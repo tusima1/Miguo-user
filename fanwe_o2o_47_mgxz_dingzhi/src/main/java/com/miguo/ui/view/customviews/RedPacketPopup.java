@@ -84,7 +84,8 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
     }
 
     private void startActivity() {
-        Intent intent =new Intent(mHoldActivity, RedPacketOpenResultActivity.class);
+        Intent intent =new Intent(mHoldActivity, RedPacketOpen
+                ResultActivity.class);
         intent.putExtra(IntentKey.MONEY,money);
         intent.putExtra("order_id",order_id);
         intent.putExtra("share",share);

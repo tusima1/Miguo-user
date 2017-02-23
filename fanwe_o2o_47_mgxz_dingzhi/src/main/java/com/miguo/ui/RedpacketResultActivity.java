@@ -13,7 +13,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.didikee.uilibs.utils.StatusBarUtil;
 import com.fanwe.o2o.miguo.R;
+<<<<<<< HEAD
 import com.miguo.definition.ClassPath;
+=======
+import com.fanwe.user.view.WalletNewActivity;
+>>>>>>> e475f019f4465ecbb1b44832cfa026b876016ac7
 import com.miguo.definition.IntentKey;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.ui.view.customviews.ArcDrawable;
@@ -27,6 +31,7 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
     private TextView tvName;
     private TextView tvDesc;
     private TextView tvMoney;
+    private TextView tv_link;
     private ImageView ivFace;
 
 
@@ -73,6 +78,7 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
         tvTitle = ((TextView) findViewById(R.id.tv_title));
         tvName = ((TextView) findViewById(R.id.tv_name));
         tvDesc = ((TextView) findViewById(R.id.tv_desc));
+        tv_link = ((TextView) findViewById(R.id.tv_link));
         tvMoney = ((TextView) findViewById(R.id.tv_money));
         myWallet = ((TextView) findViewById(R.id.my_wallet));
         redPacketView = findViewById(R.id.redPacket_view);
@@ -80,7 +86,11 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
         ivFace = ((ImageView) findViewById(R.id.iv_face));
 
         mBack.setOnClickListener(this);
+<<<<<<< HEAD
         myWallet.setOnClickListener(this);
+=======
+        tv_link.setOnClickListener(this);
+>>>>>>> e475f019f4465ecbb1b44832cfa026b876016ac7
         redPacketView.setBackground(new ArcDrawable());
     }
 
@@ -90,11 +100,18 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
             onBackPressed();
             return;
         }
+<<<<<<< HEAD
         if(myWallet == v){
             Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.MY_WALLET));
             BaseUtils.jumpToNewActivityWithFinish(this, intent);
         }
 
+=======
+        if (tv_link == v){
+            startActivity(new Intent(this, WalletNewActivity.class));
+            finish();
+        }
+>>>>>>> e475f019f4465ecbb1b44832cfa026b876016ac7
 
     }
 }
