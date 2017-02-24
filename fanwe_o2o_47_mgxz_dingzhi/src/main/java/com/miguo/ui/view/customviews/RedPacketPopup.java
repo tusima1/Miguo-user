@@ -53,7 +53,7 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
         ivOpen = ((ImageView) contentView.findViewById(R.id.iv_open));
         ivFace = ((ImageView) contentView.findViewById(R.id.iv_face));
 
-        ivClose.setOnClickListener(this);
+//        ivClose.setOnClickListener(this);
         ivOpen.setOnClickListener(this);
         return contentView;
     }
@@ -70,6 +70,7 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
             return;
         }
     }
+
 
     private void startRedPacketOpenResultActivity() {
         int delay = (int) (Math.random() * 1500);
