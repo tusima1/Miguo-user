@@ -149,12 +149,14 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
         onlinePayOrderContinuePaymentDao = new OnlinePayOrderContinuePaymentDaoImpl(new OnlinePayOrderContinuePaymentView() {
             @Override
             public void getOrderInfoSuccess(OnlinePayOrderBean.Result.Body orderInfo) {
+                pay.setEnabled(true);
                 HiOfflinePayOrderCategory.this.orderInfo = orderInfo;
                 handleUpdateOrderInfo();
             }
 
             @Override
             public void getOrderInfoError(String message) {
+                pay.setEnabled(true);
                 HiOfflinePayOrderCategory.this.orderInfo = null;
             }
         });
@@ -284,6 +286,9 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
                 return;
             }
         }
+
+        pay.setEnabled(false);
+
         /**
          * 微信和余额混合支付
          */
