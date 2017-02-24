@@ -16,7 +16,6 @@ import com.miguo.ui.view.customviews.ImageTextView;
 import com.miguo.utils.StatusBarCompat;
 
 /**
- * Created by didik on 2016/8/22.
  * 新的含有标题的父Activity
  */
 public abstract class MGBaseActivity extends Activity implements View.OnClickListener {

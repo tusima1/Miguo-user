@@ -22,6 +22,7 @@
             android:layout_height="@dimen/dp44"
             android:scaleType="centerInside"
             android:src="@drawable/ic_back"
+            android:visibility="gone"
             />
 
         <TextView

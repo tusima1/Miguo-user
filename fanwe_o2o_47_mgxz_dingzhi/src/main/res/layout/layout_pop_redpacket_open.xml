@@ -14,6 +14,7 @@
         android:layout_margin="@dimen/md_normal_margin"
         android:layout_alignParentRight="true"
         android:clickable="true"
+        android:visibility="gone"
         />
     <ImageView
         android:id="@+id/iv_face"
