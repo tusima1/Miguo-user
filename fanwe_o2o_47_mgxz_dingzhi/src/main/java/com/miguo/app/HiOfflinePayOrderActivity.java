@@ -30,6 +30,9 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
      * 需付金额
      */
     Double totalAmount;
+
+    boolean fromOrderList = false;
+
     @Override
     protected Category initCategory() {
         getIntentData();
@@ -50,6 +53,7 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
             setOrderId(getIntent().getStringExtra(IntentKey.OFFLINE_PAY_ORDER_ID));
             setUserAmount(getIntent().getDoubleExtra(IntentKey.OFFLINE_PAY_USER_AMOUNT, 0));
             setTotalAmount(getIntent().getDoubleExtra(IntentKey.OFFLINE_PAY_TOTAL_AMOUNT, 0));
+            setFromOrderList(getIntent().getBooleanExtra(IntentKey.OFFLINE_PAY_IS_FROM_ORDER_LIST, false));
         }
     }
 
@@ -80,7 +84,7 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
     }
 
     public void clickBack(){
-        if(null == getCategory()){
+        if(null == getCategory() || isFromOrderList()){
             clickBack2();
             return;
         }
@@ -88,6 +92,10 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
     }
 
     public void clickBack2(){
+        if(isFromOrderList()){
+            BaseUtils.finishActivity(this);
+            return;
+        }
         Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.OFFLINE_PAY));
         intent.putExtra(IntentKey.OFFLINE_SHOP_ID, getShopId());
         finish();
@@ -157,5 +165,13 @@ public class HiOfflinePayOrderActivity extends HiBaseActivity {
 
     public void setShopId(String shopId) {
         this.shopId = shopId;
+    }
+
+    public boolean isFromOrderList() {
+        return fromOrderList;
+    }
+
+    public void setFromOrderList(boolean fromOrderList) {
+        this.fromOrderList = fromOrderList;
     }
 }
