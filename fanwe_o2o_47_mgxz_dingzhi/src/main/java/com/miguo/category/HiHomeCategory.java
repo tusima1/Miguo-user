@@ -187,7 +187,7 @@ public class HiHomeCategory extends Category implements
                  */
                         addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
                 addTab(getString(R.string.find), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
-                addTab("我要直播", R.drawable.tab_live_normal, R.drawable.tab_live_pressed, TabId.TAB_C, true).
+                addTab("我要直播", R.drawable.tab_shop_normal, R.drawable.tab_shop_normal, TabId.TAB_C, true).
                 addTab(getString(R.string.funny), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
                 addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
                 /**
@@ -231,6 +231,7 @@ public class HiHomeCategory extends Category implements
     private void initHomePagers() {
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
+        fragments.add(new HiRepresentFragment());
         fragments.add(new HiRepresentFragment());
         fragments.add(new FunnyFragment());
         fragments.add(new MyFragment());

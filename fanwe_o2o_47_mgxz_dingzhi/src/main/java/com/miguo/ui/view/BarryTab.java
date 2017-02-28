@@ -120,6 +120,8 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
     public BarryTab addTab(String name, int icon, int pressIcon, int id, boolean center){
         Tab tab = new Tab(name, icon, pressIcon, id);
+        tab.setCenter(center);
+        tabs.add(tab);
         setCenter(tab);
         return this;
     }
@@ -153,7 +155,7 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         addView(topLine);
 
         int screenWidth = getScreenWidth();
-        int groupWidth = screenWidth / (hasCenterIcon() ? tabs.size() + 1 : tabs.size());
+        int groupWidth = screenWidth / (hasCenterIcon() ? tabs.size() + 0 : tabs.size());
 
         int iconWidth = dip2px(getType() == Type.NORMAL ? getIconWidht() : 35);
         int centerWidth = dip2px(getCenterIconWidth());
@@ -161,7 +163,8 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         for(int i=0; i<tabs.size(); i++){
             LinearLayout group = new LinearLayout(getContext());
             RelativeLayout.LayoutParams groupParams = getRelativeLayoutParams(groupWidth, matchParent());
-            int marginLeft = hasCenterIcon() ? i >= 2 ? (i + 1 ) * groupWidth : i * groupWidth : i * groupWidth;
+//            int marginLeft = hasCenterIcon() ? i >= 2 ? (i + 1 ) * groupWidth : i * groupWidth : i * groupWidth;
+            int marginLeft = i * groupWidth;
             groupParams.setMargins(marginLeft, 0, 0, 0);
             groupParams.addRule(BELOW, topLine.getId());
             group.setLayoutParams(groupParams);
@@ -171,12 +174,12 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
             group.setOnClickListener(new TabListener(i, tabs.get(i).getId()));
 
             ImageView icon = new ImageView(getContext());
-            LinearLayout.LayoutParams iconParams = getLinearLayoutParams(iconWidth, iconWidth);
+            LinearLayout.LayoutParams iconParams = getLinearLayoutParams(tabs.get(i).isCenter() ? centerWidth : iconWidth, tabs.get(i).isCenter() ? centerWidth : iconWidth);
             icon.setLayoutParams(iconParams);
             icon.setImageResource(tabs.get(i).getIcon());
             group.addView(icon);
 
-            if(getType() == Type.NORMAL){
+            if(getType() == Type.NORMAL && !tabs.get(i).isCenter()){
                 TextView name = new TextView(getContext());
                 name.setText(tabs.get(i).getName());
                 name.setTextColor(getNormalColor());
@@ -190,16 +193,16 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
             addView(group);
         }
 
-        if(hasCenterIcon()){
-            ImageView icon = new ImageView(getContext());
-            RelativeLayout.LayoutParams iconParams = getRelativeLayoutParams(centerWidth, centerWidth);
-            iconParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            icon.setLayoutParams(iconParams);
-            icon.setImageResource(center.getIcon());
-            icon.setOnClickListener(new TabListener(4, TabId.TAB_C));
-            icon.setId(LIVE_ID);
-            addView(icon);
-        }
+//        if(hasCenterIcon()){
+//            ImageView icon = new ImageView(getContext());
+//            RelativeLayout.LayoutParams iconParams = getRelativeLayoutParams(centerWidth, centerWidth);
+//            iconParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+//            icon.setLayoutParams(iconParams);
+//            icon.setImageResource(center.getIcon());
+//            icon.setOnClickListener(new TabListener(4, TabId.TAB_C));
+//            icon.setId(LIVE_ID);
+//            addView(icon);
+//        }
 
         if(viewPager != null){
             viewPager.setOnPageChangeListener(this);
@@ -217,8 +220,12 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         if(type == Type.NORMAL){
             TextView currentTabName = (TextView)allTabs.get(currentIndex).getChildAt(1);
             TextView positionTabName = (TextView)allTabs.get(position).getChildAt(1);
-            currentTabName.setTextColor(getNormalColor());
-            positionTabName.setTextColor(getPressColor());
+            if(null != currentTabName){
+                currentTabName.setTextColor(getNormalColor());
+            }
+            if(null != positionTabName){
+                positionTabName.setTextColor(getPressColor());
+            }
         }
 
         startTabAnim(allTabs.get(position));
@@ -249,12 +256,21 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         int icon;
         int pressIcon;
         int id;
+        boolean center;
 
         public Tab(String name, int icon,int pressIcon, int id){
             this.name = name;
             this.icon = icon;
             this.pressIcon = pressIcon;
             this.id = id;
+        }
+
+        public boolean isCenter() {
+            return center;
+        }
+
+        public void setCenter(boolean center) {
+            this.center = center;
         }
 
         public int getPressIcon() {

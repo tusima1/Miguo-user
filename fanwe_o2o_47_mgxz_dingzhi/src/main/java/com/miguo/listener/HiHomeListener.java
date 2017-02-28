@@ -37,13 +37,14 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
              * 直播不加入
              */
             case TabId.TAB_C:
-                clickLive();
-                break;
-            case TabId.TAB_D:
+//                clickLive();
                 clickTab(2);
                 break;
-            case TabId.TAB_E:
+            case TabId.TAB_D:
                 clickTab(3);
+                break;
+            case TabId.TAB_E:
+                clickTab(4);
                 break;
         }
     }
@@ -96,12 +97,12 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
     }
 
     private void clickTab(int position){
-        if(position == 3){
-            if(TextUtils.isEmpty(App.getInstance().getToken())){
-                clickLogin();
-                return;
-            }
-        }
+//        if(position == 3){
+//            if(TextUtils.isEmpty(App.getInstance().getToken())){
+//                clickLogin();
+//                return;
+//            }
+//        }
         getCategory().clickTab(position);
     }
 
