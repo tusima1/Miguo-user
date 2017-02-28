@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.ConfirmOrderActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
@@ -202,6 +203,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void initTitle() {
         mTitle.setMiddleTextTop("购物车");
+        mTitle.setPadding(0, DisplayUtil.dp2px(getContext(),25),0,0);
         if (getActivity() instanceof HiHomeActivity) {
             mTitle.setLeftImageLeft(0);
         }

@@ -15,6 +15,7 @@ import com.baidu.location.BDLocationListener;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
 import com.fanwe.fragment.MyFragment;
+import com.fanwe.fragment.ShopCartFragmentNew;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
@@ -48,7 +49,6 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
-import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.ui.view.BarryTab;
@@ -233,7 +233,7 @@ public class HiHomeCategory extends Category implements
         fragments.add(new HiHomeFragment());
         fragments.add(new HiRepresentFragment());
         fragments.add(new HiRepresentFragment());
-        fragments.add(new FunnyFragment());
+        fragments.add(new ShopCartFragmentNew());
         fragments.add(new MyFragment());
 
         homePagerAdapter = new HomePagerAdapter(getActivity().getSupportFragmentManager(), fragments);
