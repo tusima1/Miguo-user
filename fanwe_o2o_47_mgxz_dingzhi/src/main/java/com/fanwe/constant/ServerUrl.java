@@ -23,8 +23,8 @@ public class ServerUrl {
      * Do Not Modify
      ***********************/
     public static final String KEY_AES = "FANWE5LMUQC436IM";
-    private static final String SERVER_API_URL_ONLINE = "http://mapi.mgxz.com";
-    private static final String SERVER_H5_ONLINE = "http://m.mgxz.com/";//线上
+    private static final String SERVER_API_URL_ONLINE = "https://mapi.mgxz.com";
+    private static final String SERVER_H5_ONLINE = "https ://m.mgxz.com/";//线上
     /***********************
      * Do Not Modify
      ***********************/

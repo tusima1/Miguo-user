@@ -14,10 +14,13 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.fanwe.app.App;
 import com.fanwe.baidumap.BaiduMapManager;
+import com.fanwe.constant.ServerUrl;
+import com.fanwe.fragment.AppWebViewFragment;
 import com.fanwe.fragment.MyFragment;
 import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.dialog.SDDialogConfirm;
 import com.fanwe.library.dialog.SDDialogCustom;
+import com.fanwe.library.fragment.WebViewFragment;
 import com.fanwe.model.GoodsModel;
 import com.fanwe.model.PageModel;
 import com.fanwe.o2o.miguo.R;
@@ -41,6 +44,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.fragment.HiHomeFragment;
 import com.miguo.fragment.HiRepresentFragment;
+import com.miguo.fragment.HiShopFragment;
 import com.miguo.listener.HiHomeListener;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.model.getLiveListNew.ModelRoom;
@@ -232,7 +236,23 @@ public class HiHomeCategory extends Category implements
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
         fragments.add(new HiRepresentFragment());
-        fragments.add(new HiRepresentFragment());
+
+        String name = SharedPreferencesUtils.getInstance().getUserName();
+        String pwd = SharedPreferencesUtils.getInstance().getPassword();
+
+        AppWebViewFragment frag = new AppWebViewFragment();
+
+        frag.setShowTitle(true);
+        String url;
+        //9月23日添加  &from=app
+        url = ServerUrl.getAppH5Url() + "user/applogin?from=app";
+        String postData ="name=" + name + "&pwd=" + pwd ;
+        frag.setPostData(postData);
+        frag.setUrl(url);
+        frag.setmProgressMode(WebViewFragment.EnumProgressMode.NONE);
+
+//        fragments.add(frag);
+        fragments.add(new HiShopFragment());
         fragments.add(new FunnyFragment());
         fragments.add(new MyFragment());
 
