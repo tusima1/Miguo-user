@@ -1,10 +1,8 @@
 package com.fanwe.library.title;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +17,10 @@ import com.fanwe.library.drawable.SDDrawable;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.library.utils.SDViewUtil;
 
-public class SDTitleSimple extends LinearLayout implements OnClickListener
-{
+import java.util.ArrayList;
+import java.util.List;
+
+public class SDTitleSimple extends LinearLayout implements OnClickListener {
 	public View mView;
 	public SDTitleItem mTitleLeft;
 	public SDTitleItem mTitleMiddle;
@@ -398,6 +398,17 @@ public class SDTitleSimple extends LinearLayout implements OnClickListener
 		public void onCLickMiddle_SDTitleSimple(SDTitleItem v);
 
 		public void onCLickRight_SDTitleSimple(SDTitleItem v, int index);
+	}
+
+	public void setMiddleTextColor(@ColorInt int color){
+		mTitleMiddle.setTextColor(color);
+	}
+	public void setTotalBgColor(@ColorInt int color){
+		mTitleLeft.setBackgroundColor(color);
+		mTitleMiddle.setBackgroundColor(color);
+		mLlLeft.setBackgroundColor(color);
+		mLlMiddle.setBackgroundColor(color);
+		mLlRight.setBackgroundColor(color);
 	}
 
 }

@@ -8,13 +8,11 @@ import android.view.View;
 
 import com.fanwe.BaseActivity;
 import com.fanwe.constant.Constant.TitleType;
-import com.fanwe.jpush.JpushHelper;
 import com.fanwe.library.fragment.SDBaseFragment;
 import com.fanwe.library.title.SDTitleItem;
 import com.fanwe.library.title.SDTitleSimple;
 import com.fanwe.library.title.SDTitleSimple.SDTitleSimpleListener;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 
 public abstract class BaseFragment extends SDBaseFragment implements SDTitleSimpleListener
@@ -42,6 +40,7 @@ public abstract class BaseFragment extends SDBaseFragment implements SDTitleSimp
 		{
 		case TITLE:
 			viewTitle = LayoutInflater.from(getActivity()).inflate(R.layout.title_simple_sd, null);
+			setTitleBgColor(viewTitle);
 			mTitle = (SDTitleSimple) viewTitle.findViewById(R.id.title);
 			if (mTitle != null)
 			{
@@ -66,6 +65,9 @@ public abstract class BaseFragment extends SDBaseFragment implements SDTitleSimp
 
 	protected void init()
 	{
+	}
+	protected void setTitleBgColor(View titleView){
+
 	}
 	
 	protected abstract String setUmengAnalyticsTag();

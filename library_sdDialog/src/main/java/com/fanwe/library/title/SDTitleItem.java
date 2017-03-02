@@ -181,4 +181,13 @@ public class SDTitleItem extends LinearLayout
 		super.setBackgroundDrawable(background);
 	}
 
+	public void setTextColor(int color){
+		if (mTvBot!=null){
+			mTvBot.setTextColor(color);
+		}
+
+		if (mTvTop!=null ){
+			mTvTop.setTextColor(color);
+		}
+	}
 }
