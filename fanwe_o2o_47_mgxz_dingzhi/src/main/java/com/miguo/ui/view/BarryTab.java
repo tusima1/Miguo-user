@@ -3,6 +3,7 @@ package com.miguo.ui.view;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -16,8 +17,12 @@ import android.widget.TextView;
 
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.app.HiBaseActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.definition.TabId;
 import com.miguo.live.views.base.BaseRelativeLayout;
+import com.miguo.utils.BaseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -319,12 +324,12 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
         @Override
         public void onClick(View v) {
-            if(id == TabId.TAB_C){
-                if(onTabClickListener != null){
-                    onTabClickListener.onTabClick(id);
-                }
-                return;
-            }
+//            if(id == TabId.TAB_C){
+//                if(onTabClickListener != null){
+//                    onTabClickListener.onTabClick(id);
+//                }
+//                return;
+//            }
             if(onTabClickListener != null){
                 if(onTabClickListener.onInterceptScrollEvent(id)){
                     if(onTabClickListener != null){
@@ -332,12 +337,17 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
                     }
                     return;
                 }
-
+                clickLogin();
             }
-            if(viewPager != null){
-                viewPager.setCurrentItem(position);
-            }
+//            if(viewPager != null){
+//                viewPager.setCurrentItem(position);
+//            }
         }
+    }
+
+    private void clickLogin(){
+        Intent intent = new Intent(getContext(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+        BaseUtils.jumpToNewActivity((HiBaseActivity)getContext(), intent);
     }
 
     @Override

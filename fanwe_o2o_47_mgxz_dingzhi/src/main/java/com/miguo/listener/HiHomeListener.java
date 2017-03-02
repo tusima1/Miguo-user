@@ -53,20 +53,20 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
     public boolean onInterceptScrollEvent(int tabId) {
         switch (tabId){
             case TabId.TAB_A:
-                return false;
+                return true;
             case TabId.TAB_B:
-                return false;
+                return true;
 
             /**
              * 直播不加入
              */
             case TabId.TAB_C:
-                return false;
+                return !App.getInstance().getToken().equals("");
             case TabId.TAB_D:
-                return false;
+                return !App.getInstance().getToken().equals("");
 
             case TabId.TAB_E:
-                return App.getInstance().getToken().equals("");
+                return !App.getInstance().getToken().equals("");
         }
         return false;
     }
