@@ -9,7 +9,7 @@
     <color name="gray_press">#e5e5e5</color>
     <!-- 主题颜色 -->
 
-    <color name="main_color">#FF6600</color>
+    <color name="main_color">#FFFFFF</color>
     <!-- 主题颜色按下颜色 -->
     <color name="main_color_press">#ffcc66</color>
 
