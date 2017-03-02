@@ -1,6 +1,7 @@
 package com.fanwe.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -203,6 +204,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
      */
     private void initTitle() {
         mTitle.setMiddleTextTop("购物车");
+        mTitle.setConfig(Color.WHITE);
         mTitle.setMiddleTextColor(getResources().getColor(R.color.text_item_title));
         mTitle.setPadding(0, DisplayUtil.dp2px(getContext(),25),0,0);
         if (getActivity() instanceof HiHomeActivity) {
@@ -511,6 +513,13 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         } else {
             mRlEmpty.setVisibility(View.GONE);
         }
+        refreshTitle();
+    }
+
+    private void refreshTitle() {
+//        mTitle.setTotalBgColor(Color.WHITE);
+        mTitle.notifyItemBackgroundChangedAll(Color.WHITE);
+//        mTitle.setTotalBgColor(Color.WHITE);
     }
 
 

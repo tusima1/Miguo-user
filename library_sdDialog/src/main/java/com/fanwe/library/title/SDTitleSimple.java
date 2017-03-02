@@ -147,6 +147,10 @@ public class SDTitleSimple extends LinearLayout implements OnClickListener {
 		setBackgroundColor(mConfig.getmTitleColor());
 		setHeightTitle(mConfig.getmTitleHeight());
 	}
+	public void setConfig(int color)
+	{
+		setBackgroundColor(color);
+	}
 
 	public SDTitleSimple setHeightTitle(int height)
 	{
@@ -164,6 +168,17 @@ public class SDTitleSimple extends LinearLayout implements OnClickListener {
 
 		return SDDrawable.getStateListDrawable(none, null, null, pressed);
 	}
+	private Drawable getBackgroundItem(boolean nullAble)
+	{
+		SDDrawable none = new SDDrawable();
+		none.color(mConfig.getmTitleColor());
+
+		SDDrawable pressed = new SDDrawable();
+		pressed.color(mConfig.getmTitleColorPressed());
+
+		return SDDrawable.getStateListDrawable(none, null, null, pressed);
+	}
+
 
 	public SDTitleSimple initRightItem(int count)
 	{
@@ -193,6 +208,39 @@ public class SDTitleSimple extends LinearLayout implements OnClickListener {
 		{
 			SDViewUtil.setBackgroundDrawable(item, getBackgroundItem());
 		}
+		LinearLayout.LayoutParams params = SDViewUtil.getLayoutParamsLinearLayoutWM();
+		mLlRight.addView(item, params);
+		mListRightItem.add(item);
+		return item;
+	}
+	public SDTitleSimple initRightItem2(int count)
+	{
+		mLlRight.removeAllViews();
+		mListRightItem.clear();
+		if (count <= 0)
+		{
+			return this;
+		}
+
+		for (int i = 0; i < count; i++)
+		{
+			addItemRight2();
+		}
+		notifyItemBackgroundChanged();
+		return this;
+	}
+
+	public SDTitleItem addItemRight2()
+	{
+		SDTitleItem item = new SDTitleItem(getContext());
+		item.setOnClickListener(this);
+//		if (mBackgroundItemResource != 0)
+//		{
+//			SDViewUtil.setBackgroundResource(item, mBackgroundItemResource);
+//		} else
+//		{
+//			SDViewUtil.setBackgroundDrawable(item, getBackgroundItem());
+//		}
 		LinearLayout.LayoutParams params = SDViewUtil.getLayoutParamsLinearLayoutWM();
 		mLlRight.addView(item, params);
 		mListRightItem.add(item);
@@ -411,4 +459,14 @@ public class SDTitleSimple extends LinearLayout implements OnClickListener {
 		mLlRight.setBackgroundColor(color);
 	}
 
+	public void notifyItemBackgroundChangedAll(int color)
+	{
+			mTitleLeft.setBackgroundColor(color);
+			for (SDTitleItem item : mListRightItem)
+			{
+				item.setBackgroundColor(color);
+//				SDViewUtil.setBackgroundResource(item, mBackgroundItemResource);
+			}
+
+	}
 }

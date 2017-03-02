@@ -4,6 +4,28 @@
     android:layout_height="match_parent"
                 android:paddingBottom="45dp"
     android:background="@color/bg_activity_gray" >
+    <!--<LinearLayout
+        android:id="@+id/location_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp44"
+        android:layout_alignParentTop="true"
+
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_title"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:textStyle="bold"
+            android:textColor="@color/text_item_title"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_cc"/>
+    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ll_container"
@@ -86,6 +108,7 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+    <!--android:layout_below="@+id/location_1"-->
 
     <com.handmark.pulltorefresh.library.PullToRefreshScrollView
         xmlns:ptr="http://schemas.android.com/apk/res-auto"
@@ -93,6 +116,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/ll_container"
+
         android:scrollbars="none"
         ptr:ptrHeaderBackground="@color/main_color"
         ptr:ptrHeaderSubTextColor="@color/white"
