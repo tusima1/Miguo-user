@@ -33,10 +33,22 @@
             android:layout_width="match_parent"
             android:layout_height="38dp">
 
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:id="@+id/money_1"
+                android:textSize="15sp"
+                android:textColor="@color/c_595959"
+                android:text="元"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
+                android:layout_toLeftOf="@+id/money_1"
                 android:layout_toRightOf="@+id/amount_text"
                 android:textCursorDrawable="@null"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="3dp"
                 android:gravity="center_vertical|right"
                 android:textColor="@color/black"
                 android:textSize="17sp"
@@ -98,10 +110,22 @@
             android:layout_width="match_parent"
             android:layout_height="38dp">
 
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:id="@+id/money_2"
+                android:textSize="15sp"
+                android:textColor="@color/c_595959"
+                android:text="元"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <EditText
+                android:layout_toLeftOf="@+id/money_2"
                 android:layout_toRightOf="@+id/do_not_participate_in_the_amount_text"
                 android:textCursorDrawable="@null"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="3dp"
                 android:gravity="center_vertical|right"
                 android:textColor="@color/black"
                 android:textSize="17sp"

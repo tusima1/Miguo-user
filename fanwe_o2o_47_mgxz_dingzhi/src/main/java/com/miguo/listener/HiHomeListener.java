@@ -56,15 +56,13 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
                 return true;
             case TabId.TAB_B:
                 return true;
-
             /**
              * 直播不加入
              */
             case TabId.TAB_C:
                 return !App.getInstance().getToken().equals("");
             case TabId.TAB_D:
-                return !App.getInstance().getToken().equals("");
-
+                return true;
             case TabId.TAB_E:
                 return !App.getInstance().getToken().equals("");
         }
