@@ -15,6 +15,8 @@ import com.miguo.category.fragment.HiShopFragmentCategory;
 
 public class HiShopFragment extends HiBaseFragment {
 
+    boolean finish;
+
     @Override
     protected View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_activity_hihome_myshop, container ,false);
@@ -28,7 +30,8 @@ public class HiShopFragment extends HiBaseFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(null != getCategory() && isVisibleToUser){
+        if(null != getCategory() && isVisibleToUser && !finish){
+            finish = true;
             getCategory().update();
         }
     }

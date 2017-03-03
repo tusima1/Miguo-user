@@ -168,6 +168,9 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
                 }
             }
         });
+        /**
+         * 暂时取消红包抵扣
+         */
         getSDFragmentManager().replace(R.id.act_my_red_pay, mFragMyRed);
 
         // 余额支付

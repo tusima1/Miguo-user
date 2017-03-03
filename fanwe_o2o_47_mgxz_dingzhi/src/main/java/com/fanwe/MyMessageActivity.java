@@ -134,7 +134,7 @@ public class MyMessageActivity extends BaseActivity {
 				pullLoadMore();
 			}
 		});
-		mTo_message.setRefreshing();
+//		mTo_message.setRefreshing();
 	}
 
 	private void pullRefresh() {

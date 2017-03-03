@@ -324,12 +324,6 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
         @Override
         public void onClick(View v) {
-//            if(id == TabId.TAB_C){
-//                if(onTabClickListener != null){
-//                    onTabClickListener.onTabClick(id);
-//                }
-//                return;
-//            }
             if(onTabClickListener != null){
                 if(onTabClickListener.onInterceptScrollEvent(id)){
                     if(onTabClickListener != null){

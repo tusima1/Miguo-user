@@ -17,6 +17,7 @@ import com.fanwe.common.model.CommonConstants;
 import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
@@ -170,6 +171,21 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         }
         if (share!=null){
             onShareClick();
+
+            String clickUrl = share.getClickurl();
+            if (TextUtils.isEmpty(clickUrl)) {
+                clickUrl = ServerUrl.getAppH5Url();
+            } else {
+                if (!clickUrl.contains("/share_record_id/")) {
+                    clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
+                } else if (!TextUtils.isEmpty(shareRecordId) && !clickUrl.contains(shareRecordId)) {
+                    int i = clickUrl.indexOf("/share_record_id/");
+                    String temp = clickUrl.substring(0, i);
+                    clickUrl = temp + "/share_record_id/" + shareRecordId;
+                }
+            }
+            share.setClickurl(clickUrl);
+
             UmengShareManager.share(platform, this,
                     share.getTitle(),
                     share.getSummary(),

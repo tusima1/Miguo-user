@@ -190,7 +190,7 @@ public class HiHomeCategory extends Category implements
                  * 名字 默认图标 按下后图标 tab id
                  */
                         addTab(getString(R.string.home), R.drawable.tab_home_normal, R.drawable.tab_home_pressed, TabId.TAB_A).
-                addTab(getString(R.string.find), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
+                addTab(getString(R.string.category), R.drawable.tab_seller_normal, R.drawable.tab_seller_pressed, TabId.TAB_B).
                 addTab("我要直播", R.drawable.tab_shop_normal, R.drawable.tab_shop_normal, TabId.TAB_C, true).
                 addTab(getString(R.string.funny), R.drawable.tab_market_normal, R.drawable.tab_market_pressed, TabId.TAB_D).
                 addTab(getString(R.string.mine), R.drawable.tab_my_normal, R.drawable.tab_my_pressed, TabId.TAB_E).
@@ -236,24 +236,7 @@ public class HiHomeCategory extends Category implements
         fragments = new ArrayList<>();
         fragments.add(new HiHomeFragment());
         fragments.add(new HiRepresentFragment());
-//
-//        String name = SharedPreferencesUtils.getInstance().getUserName();
-//        String pwd = SharedPreferencesUtils.getInstance().getPassword();
-//
-//        AppWebViewFragment frag = new AppWebViewFragment();
-//
-//        frag.setShowTitle(true);
-//        String url;
-//        //9月23日添加  &from=app
-//        url = ServerUrl.getAppH5Url() + "user/applogin?from=app";
-//        String postData ="name=" + name + "&pwd=" + pwd ;
-//        frag.setPostData(postData);
-//        frag.setUrl(url);
-//        frag.setmProgressMode(WebViewFragment.EnumProgressMode.NONE);
-//
-////        fragments.add(frag);
         fragments.add(new HiShopFragment());
-//        fragments.add(new HiRepresentFragment());
         fragments.add(new ShopCartFragmentNew());
         fragments.add(new MyFragment());
 

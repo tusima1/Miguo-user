@@ -171,7 +171,7 @@ public class HiOfflinePayCategory extends Category {
 
             @Override
             public void getOfflinePayInfoError(String message) {
-                showToast(message);
+//                showToast(message);
             }
         });
     }
@@ -329,6 +329,11 @@ public class HiOfflinePayCategory extends Category {
             showToast("不优惠金额超过了消费总额！");
             return;
         }
+
+        if(parseDouble(amountOfConsumption.getText().toString()) <= 0){
+            return;
+        }
+
         /**
          * 未登录
          */

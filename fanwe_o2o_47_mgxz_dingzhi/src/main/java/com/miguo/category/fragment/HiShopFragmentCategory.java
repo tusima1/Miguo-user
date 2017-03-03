@@ -11,6 +11,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.fragment.HiBaseFragment;
+import com.miguo.listener.fragment.HiShopFragmentListener;
 import com.miguo.utils.SharedPreferencesUtils;
 
 import org.apache.http.util.EncodingUtils;
@@ -41,6 +43,9 @@ public class HiShopFragmentCategory extends FragmentCategory {
     @ViewInject(R.id.title_layout)
     RelativeLayout top;
 
+    @ViewInject(R.id.back)
+    ImageView back;
+
     public HiShopFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
     }
@@ -52,12 +57,12 @@ public class HiShopFragmentCategory extends FragmentCategory {
 
     @Override
     protected void initFragmentListener() {
-
+        listener = new HiShopFragmentListener(this);
     }
 
     @Override
     protected void setFragmentListener() {
-
+        back.setOnClickListener(listener);
     }
 
     @Override
@@ -73,9 +78,6 @@ public class HiShopFragmentCategory extends FragmentCategory {
         //9月23日添加  &from=app
         url = ServerUrl.getAppH5Url() + "user/applogin?from=app";
         String postData ="name=" + name + "&pwd=" + pwd ;
-//        webView.loadUrl(url);
-//        frag.setPostData(postData);
-//        frag.setUrl(url);
         webView.postUrl(url, EncodingUtils.getBytes(postData, "base64"));
 
     }
@@ -146,6 +148,10 @@ public class HiShopFragmentCategory extends FragmentCategory {
             }
         };
         webView.addJavascriptInterface(detailHandler, "mgxz");
+    }
+
+    public void clickBack(){
+        webView.goBack();
     }
 
 }
