@@ -503,16 +503,19 @@ public class HiHomeCategory extends Category implements
     }
 
     public void updateFromCityChanged(ModelCityList model) {
-        ((HiHomeFragment) fragments.get(0)).updateFromCityChanged(model);
-        ((HiRepresentFragment) fragments.get(1)).updateFromCityChanged();
+        ((HiHomeFragment) fragments.get(HomePageState.HOME)).updateFromCityChanged(model);
+        ((HiRepresentFragment) fragments.get(HomePageState.CATEGORY)).updateFromCityChanged();
     }
 
     public void onResume(){
-        fragments.get(1).onResume();
+        fragments.get(HomePageState.CATEGORY).onResume();
     }
 
-    public void handlerFunnyFragment() {
-        homeViewPager.setCurrentItem(1);
+    /**
+     * 从活动页点击过来跳转到有趣页
+     */
+    public void handleFunnyFragment() {
+//        homeViewPager.setCurrentItem(1);
     }
 
     /**

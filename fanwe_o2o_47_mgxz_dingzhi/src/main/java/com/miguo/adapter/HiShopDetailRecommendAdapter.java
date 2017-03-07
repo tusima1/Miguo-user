@@ -131,7 +131,7 @@ public class HiShopDetailRecommendAdapter extends BarryBaseRecyclerAdapter{
             tuanStr =model.getTuanPriceFormat();
         }
         getHolder(holder).tuanPrice.setText(tuanStr);
-        getHolder(holder).salary.setText(DataFormat.toDoubleTwo(model.getSalary()) + "元佣金");
+        getHolder(holder).salary.setText("最高" + DataFormat.toDoubleTwo(model.getSalary()) + "元佣金");
 
         setTags(holder,position);
     }

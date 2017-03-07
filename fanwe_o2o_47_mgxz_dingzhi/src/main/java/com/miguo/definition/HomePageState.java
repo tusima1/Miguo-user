@@ -5,7 +5,8 @@ package com.miguo.definition;
  */
 public class HomePageState {
     public static final int HOME = 0;
-    public static final int FUNNY = 1;
-    public static final int FIND = 2;
-    public static final int MY = 3;
+    public static final int CATEGORY = 1;
+    public static final int SHOP = 2;
+    public static final int CART = 3;
+    public static final int MY = 4;
 }

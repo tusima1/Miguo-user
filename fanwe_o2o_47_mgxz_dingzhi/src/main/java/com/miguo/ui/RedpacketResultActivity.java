@@ -45,7 +45,7 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
     }
 
     private void bindData() {
-        tvDesc.setText(showContent);
+//        tvDesc.setText(showContent);
         Glide.with(this).load(face_icon).into(ivFace);
         tvMoney.setText(money);
     }

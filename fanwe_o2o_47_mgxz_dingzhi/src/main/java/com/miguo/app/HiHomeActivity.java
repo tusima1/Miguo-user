@@ -215,7 +215,7 @@ public class HiHomeActivity extends HiBaseActivity {
     }
 
     private void handlerFunnyFragment() {
-        getCategory().handlerFunnyFragment();
+        getCategory().handleFunnyFragment();
     }
 
     @Override

@@ -413,8 +413,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      */
     public void clickRepresent() {
         if (TextUtils.isEmpty(App.getInstance().getToken())) {
-            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
-            BaseUtils.jumpToNewActivity(getActivity(), intent);
+            clickLogin();
             return;
         }
         if (result == null) {
@@ -423,6 +422,11 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         tvRepresent.setClickable(false);
         representMerchantDao.getRepresentMerchant(result.getEnt_id(), result.getId());
         is_endorsement = "1";
+    }
+
+    private void clickLogin(){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     /**
@@ -446,7 +450,13 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
      * 跳转到我的小店
      */
     public void clickMineShopBtn() {
-        getActivity().startActivity(new Intent(getActivity(), UserHomeActivity.class));
+        if(!isEmpty(App.getInstance().getToken())){
+            Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.DISTRIBUTION_STORE));
+            intent.putExtra("id", App.getInstance().getCurrentUser().getUser_id());
+            BaseUtils.jumpToNewActivity(getActivity(), intent);
+            return;
+        }
+        clickLogin();
     }
 
     /**

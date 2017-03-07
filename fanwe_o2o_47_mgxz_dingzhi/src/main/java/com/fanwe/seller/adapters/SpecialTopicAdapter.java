@@ -103,7 +103,7 @@ public class SpecialTopicAdapter extends BaseAdapter {
                 holder.tv_salary.setVisibility(View.GONE);
             }else {
                 holder.tv_salary.setVisibility(View.VISIBLE);
-                holder.tv_salary.setText(float2+"元佣金");
+                holder.tv_salary.setText("最高" + float2 + "元佣金");
             }
 
             holder.tv_price_tuan.setText(detailListBean.getTuan_price_with_unit());

@@ -84,16 +84,29 @@
         </LinearLayout>
     </FrameLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/redPacket_bg"
-        android:ellipsize="end"
+    <LinearLayout
         android:gravity="center"
-        android:lines="1"
-        android:text="存入钱包，可提现，可消费"
-        android:textColor="#ACFFFFFF"
-        android:textSize="13sp"/>
+        android:background="@color/redPacket_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:paddingRight="5.5dp"
+            android:paddingLeft="5.5dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_b3white_14"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:text="成功抢到的概率：50%"
+            android:textColor="#D23838"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+
 
     <View
         android:layout_width="match_parent"
@@ -111,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="38dp"
-        android:text="红包翻倍"
+        android:text="分享后100%翻倍"
         android:textColor="#FFBC441D"
         android:textSize="40sp"
         />
