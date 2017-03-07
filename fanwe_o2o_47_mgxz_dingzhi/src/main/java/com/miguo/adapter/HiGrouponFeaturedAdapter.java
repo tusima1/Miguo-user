@@ -165,7 +165,7 @@ public class HiGrouponFeaturedAdapter extends BarryBaseRecyclerAdapter{
          * 佣金
          */
         if (!TextUtils.isEmpty(getItem(position).getSalary()) && DataFormat.toDouble(getItem(position).getSalary()) != 0) {
-            String temp =  DataFormat.toDoubleTwo(getItem(position).getSalary())  + "元佣金";
+            String temp = "最高" + DataFormat.toDoubleTwo(getItem(position).getSalary())  + "元佣金";
             getHolder(holder).tvSalary.setVisibility(View.VISIBLE);
             SDViewBinder.setTextView(getHolder(holder).tvSalary, temp);
         } else {

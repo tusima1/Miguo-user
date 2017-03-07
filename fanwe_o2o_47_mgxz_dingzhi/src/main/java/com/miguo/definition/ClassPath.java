@@ -1,5 +1,6 @@
 package com.miguo.definition;
 
+
 /**
  * Created by Barry/狗蛋哥/zlh on 2016/10/26.
  * 类名路径常量类
@@ -105,6 +106,12 @@ public class ClassPath {
      * {@link com.fanwe.user.view.WalletNewActivity}
      */
     public static final String MY_WALLET = "com.fanwe.user.view.WalletNewActivity";
+
+    /**
+     * 我的小店
+     * {@link com.fanwe.DistributionStoreWapActivity}
+     */
+    public static final String DISTRIBUTION_STORE = "com.fanwe.DistributionStoreWapActivity";
 
 
 }

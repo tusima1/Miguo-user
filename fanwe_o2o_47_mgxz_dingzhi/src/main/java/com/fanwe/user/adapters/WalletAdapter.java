@@ -78,6 +78,7 @@ public class WalletAdapter extends BaseAdapter {
                 onClickListener.onClick(v,position);
             }
         });
+
         return convertView;
 
     }

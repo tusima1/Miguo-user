@@ -76,6 +76,7 @@ public class AppWebViewFragment extends WebViewFragment implements CallbackView 
                 SDHandlerUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mTitle.setMiddleTextTop(title);
                         setTitle(title);
                     }
                 });

@@ -53,16 +53,18 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
             modelWalletNew1.setTitle("余额");
             modelWalletNew1.setUnit("元");
             walletList.add(modelWalletNew1);
-            ModelWalletNew modelWalletNew2 = new ModelWalletNew();
-            modelWalletNew2.setIcon(R.drawable.recharge);
-            modelWalletNew2.setTitle("充值");
-            modelWalletNew2.setUnit("果钻");
-            walletList.add(modelWalletNew2);
-            ModelWalletNew modelWalletNew3 = new ModelWalletNew();
-            modelWalletNew3.setIcon(R.drawable.income);
-            modelWalletNew3.setTitle("果仁");
-            modelWalletNew3.setUnit("个");
-            walletList.add(modelWalletNew3);
+
+//            ModelWalletNew modelWalletNew2 = new ModelWalletNew();
+//            modelWalletNew2.setIcon(R.drawable.recharge);
+//            modelWalletNew2.setTitle("充值");
+//            modelWalletNew2.setUnit("果钻");
+//            walletList.add(modelWalletNew2);
+//            ModelWalletNew modelWalletNew3 = new ModelWalletNew();
+//            modelWalletNew3.setIcon(R.drawable.income);
+//            modelWalletNew3.setTitle("果仁");
+//            modelWalletNew3.setUnit("个");
+//            walletList.add(modelWalletNew3);
+
             ModelWalletNew modelWalletNew4 = new ModelWalletNew();
             modelWalletNew4.setIcon(R.drawable.gift);
             modelWalletNew4.setTitle("红包");
@@ -83,14 +85,14 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
                     case 0:
                         startActivity(BalanceActivity.class);
                         break;
+//                    case 1:
+//                        //米果钻
+//                        startActivity(RechargeDiamondActivity.class);
+//                        break;
+//                    case 2:
+//                        startActivity(MyIncomeActivity.class);
+//                        break;
                     case 1:
-                        //米果钻
-                        startActivity(RechargeDiamondActivity.class);
-                        break;
-                    case 2:
-                        startActivity(MyIncomeActivity.class);
-                        break;
-                    case 3:
                         //点击红包
                         startActivity(RedPacketListActivity.class);
                         break;
@@ -131,21 +133,21 @@ public class WalletNewActivity extends BaseNewActivity implements CallbackView {
     }
 
     public void dealWithWalletData(List<WalletResult> datas) {
-        if (datas == null || datas.size() < 1 || walletList == null || walletList.size() < 4) {
+        if (datas == null || datas.size() < 1) {
             return;
         } else {
             WalletResult walletResult = datas.get(0);
             if (walletList.get(0) != null) {
                 walletList.get(0).setValue(walletResult.getBalance());
             }
+//            if (walletList.get(1) != null) {
+//                walletList.get(1).setValue(walletResult.getDiamond());
+//            }
+//            if (walletList.get(2) != null) {
+//                walletList.get(2).setValue(walletResult.getBean());
+//            }
             if (walletList.get(1) != null) {
-                walletList.get(1).setValue(walletResult.getDiamond());
-            }
-            if (walletList.get(2) != null) {
-                walletList.get(2).setValue(walletResult.getBean());
-            }
-            if (walletList.get(3) != null) {
-                walletList.get(3).setValue(walletResult.getRedpacket());
+                walletList.get(1).setValue(walletResult.getRedpacket());
             }
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
