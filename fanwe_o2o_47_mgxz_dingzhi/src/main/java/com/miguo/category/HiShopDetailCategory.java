@@ -777,7 +777,7 @@ public class HiShopDetailCategory extends Category implements HiShopDetailView,
         tvRepresent.setVisibility(isRepresent ? View.GONE : View.VISIBLE);
         tvMineShop.setVisibility(isRepresent ? View.VISIBLE : View.GONE);
         tvShare.setVisibility(isRepresent ? View.VISIBLE : View.GONE);
-        representMessage.setText(isRepresent ? "你已代言，分享可赚钱" : "赚人气，赚代言费，与朋友分享自己的生活");
+        representMessage.setText(isRepresent ? "你已代言，分享可赚钱" : "代言后发展下级，下级消费时你有收益");
         //求代言按钮
         if (isRepresent) {
             ivRepresent.setImageResource(R.drawable.ic_represent_already);

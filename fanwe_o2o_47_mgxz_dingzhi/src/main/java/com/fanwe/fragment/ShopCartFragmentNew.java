@@ -125,8 +125,15 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     @Override
     public void onResume() {
         super.onResume();
-        resetInitData();
-        initPull2RefreshSrcollView();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            resetInitData();
+            initPull2RefreshSrcollView();
+        }
     }
 
     /**

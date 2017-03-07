@@ -189,8 +189,12 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
             UmengShareManager.share(platform, this,
                     share.getTitle(),
                     share.getSummary(),
-                    share.getClickurl(), UmengShareManager.getUMImage(this, share.getImageurl()), umShareListener);
+                    getClickUrl(share.getClickurl()), UmengShareManager.getUMImage(this, share.getImageurl()), umShareListener);
         }
+    }
+
+    private String getClickUrl(String clickUrl){
+        return clickUrl.contains("http://") ? clickUrl : "http://" + clickUrl;
     }
 
     private UMShareListener umShareListener=new UMShareListener() {
