@@ -24,6 +24,46 @@ android {
 
     }
 
+    productFlavors {
+//        MiGuo {}
+        YingYongBao {} //应用宝
+//        WanDouJia {} //豌豆荚
+//        Qihu360 {} //360
+        XiaoMi {} //小米
+//        Baidu {} //百度
+//        PP {} //PP助手
+//        HuaWei {} //91
+//        Market91 {} //91
+//        AnZhuo {} //安卓
+//        AnZhi {} //安智
+//        WoShangDian {} //沃商店
+//        Sogou {} //搜狗
+//        Keke {} //可可应用商店
+//        HuaWei {} //搜狗
+//        ZhongGuoYiDong {} //中国移动应用商店
+//        Sina {} //新浪
+//        Meizu {} //魅族
+//        AnBei {} //安贝
+//        LianXiangLe {} //联想乐商城
+//        ZhongXingHui {} //中兴汇天地
+//        YingYongHui {} //应用汇
+//        MuMaYi {} //木蚂蚁
+//        Market3G {} //3G安卓市场
+//        Liqu {} //历趣
+//        Sumsang {} //三星安卓市场
+//        Vivo {} //Vivo应用商城
+//        Leshi {} //乐视应用市场
+//        OPPO {} //OPPO应用商店
+//        GuangDianTong_YouMi1 {} //广点通有米1
+//        GuangDianTong_Youmi2 {} //广点通有米2
+//        GuangDianTong_Youmi3 {} //广点通有米3
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+
+
+
     buildTypes {
         release {
             // 混淆
@@ -39,6 +79,9 @@ android {
         }
     }
 }
+
+
+
 repositories {
     maven {
         url "https://jitpack.io"
