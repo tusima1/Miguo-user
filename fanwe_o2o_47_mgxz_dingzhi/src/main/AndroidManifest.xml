@@ -658,21 +658,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <!-- 系统消息 -->
         <activity
-            android:name="com.miguo.app.HiSystemMessageDetailActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/Transparent_title_area"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 系统消息 -->
-        <activity
-            android:name="com.miguo.app.HiSystemNotificationActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/Transparent_title_area"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 佣金代言钱款消息 -->
-        <activity
-            android:name="com.miguo.app.HiCommissionNotifycationActivity"
+            android:name="com.miguo.app.HiSystemMessageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"

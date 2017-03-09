@@ -54,7 +54,6 @@
     <color name="c_ECECEC">#ECECEC</color>
 
     <!-- hint 灰色字体 rgb 204,204,204 -->
-    <color name="c_42000000">#42000000</color>
     <color name="c_CCCCCC">#CCCCCC</color>
     <color name="c_99000000">#99000000</color>
     <color name="c_D9D9D9">#D9D9D9</color>
@@ -62,7 +61,9 @@
     <color name="c_595959">#595959</color>
     <color name="c_999999">#999999</color>
     <color name="c_c8c8c8">#c8c8c8</color>
-    <color name="c_9B9B9B">#9B9B9B</color>
+    <color name="c_fcecc5">#FCECC5</color>
+    <color name="c_eb9c19">#EB9C19</color>
+    <color name="c_f6f6f6">#f6f6f6</color>
 
 
     <!--color mgxz-->
@@ -115,11 +116,6 @@
     <color name="orange_f5">#f5b830</color>
 
 
-    <color name="c_0C000000">#0C000000</color>
-    <color name="c_4a4a4a">#4a4a4a</color>
-    <color name="c_fcecc5">#fcecc5</color>
-    <color name="c_eb9c19">#eb9c19</color>
-    <color name="c_f6f6f6">#f6f6f6</color>
     <color name="c_232323">#232323</color>
     <color name="c_f5b830">#f5b830</color>
     <color name="c_e5e5e5">#e5e5e5</color>
@@ -127,9 +123,9 @@
     <color name="c_F5B830">#f5b830</color>
     <color name="c_c03f3f">#c03f3f</color>
     <color name="yellow_f5">#f5b830</color>
+    
 
-
-
+  
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
