@@ -113,5 +113,16 @@ public class ClassPath {
      */
     public static final String DISTRIBUTION_STORE = "com.fanwe.DistributionStoreWapActivity";
 
+    /**
+     * 消息中心
+     * {@link com.miguo.app.HiMessageActivity}
+     */
+    public static final String MESSAGE = "com.miguo.app.HiMessageActivity";
+    /**
+     * 系统消息
+     * {@link com.miguo.app.HiSystemMessageActivity}
+     */
+    public static final String MESSAGE_SYSTEM = "com.miguo.app.HiSystemMessageActivity";
+
 
 }
