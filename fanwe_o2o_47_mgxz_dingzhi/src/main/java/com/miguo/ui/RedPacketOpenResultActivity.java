@@ -29,6 +29,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.entity.StatusBean;
 import com.miguo.ui.view.customviews.ArcDrawable;
+import com.miguo.utils.BaseUtils;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -173,28 +174,62 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
             onShareClick();
 
             String clickUrl = share.getClickurl();
-            if (TextUtils.isEmpty(clickUrl)) {
-                clickUrl = ServerUrl.getAppH5Url();
-            } else {
-                if (!clickUrl.contains("/share_record_id/")) {
-                    clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
-                } else if (!TextUtils.isEmpty(shareRecordId) && !clickUrl.contains(shareRecordId)) {
-                    int i = clickUrl.indexOf("/share_record_id/");
-                    String temp = clickUrl.substring(0, i);
-                    clickUrl = temp + "/share_record_id/" + shareRecordId;
-                }
-            }
-            share.setClickurl(clickUrl);
+//            if (TextUtils.isEmpty(clickUrl)) {
+//                clickUrl = ServerUrl.getAppH5Url();
+//            } else {
+//                if (!clickUrl.contains("/share_record_id/")) {
+//                    clickUrl = clickUrl + "/share_record_id/" + shareRecordId;
+//                } else if (!TextUtils.isEmpty(shareRecordId) && !clickUrl.contains(shareRecordId)) {
+//                    int i = clickUrl.indexOf("/share_record_id/");
+//                    String temp = clickUrl.substring(0, i);
+//                    clickUrl = temp + "/share_record_id/" + shareRecordId;
+//                }
+//            }
+            share.setClickurl(getShareRecordIdUrl(clickUrl));
 
             UmengShareManager.share(platform, this,
-                    share.getTitle(),
-                    share.getSummary(),
+                    getTitle(share.getTitle()),
+                    getSummary(share.getSummary()),
                     getClickUrl(share.getClickurl()), UmengShareManager.getUMImage(this, share.getImageurl()), umShareListener);
         }
     }
 
+    private String getTitle(String title){
+        return isEmpty(title) ? "米果小站" : title;
+    }
+
+    private String getSummary(String summary){
+        return isEmpty(summary) ? share.getTitle() : summary;
+    }
+
+    private String getShareRecordIdUrl(String clickUrl){
+        if(isEmpty(clickUrl)){
+            return ServerUrl.getAppH5Url();
+        }
+
+        if(!clickUrl.contains("mgxz")){
+            return clickUrl;
+        }
+
+        if (!clickUrl.contains("/share_record_id/")) {
+            return clickUrl + "/share_record_id/" + shareRecordId;
+        }
+
+        if(!isEmpty(shareRecordId) && !clickUrl.contains(shareRecordId)){
+            int i = clickUrl.indexOf("/share_record_id/");
+            String temp = clickUrl.substring(0, i);
+            return temp + "/share_record_id/" + shareRecordId;
+        }
+
+        return ServerUrl.getAppH5Url();
+    }
+
     private String getClickUrl(String clickUrl){
-        return clickUrl.contains("http://") ? clickUrl : "http://" + clickUrl;
+        return isEmpty(clickUrl) ? "https://m.mgxz.com" : (clickUrl.contains("http://") || clickUrl.contains("https://")) ? clickUrl : "http://" + clickUrl;
+    }
+
+    private boolean isEmpty(Object o){
+        return null == o || "".equals(o.toString());
     }
 
     private UMShareListener umShareListener=new UMShareListener() {

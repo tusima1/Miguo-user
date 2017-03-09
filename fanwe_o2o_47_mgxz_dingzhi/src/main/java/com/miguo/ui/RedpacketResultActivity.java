@@ -12,8 +12,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.didikee.uilibs.utils.StatusBarUtil;
+import com.fanwe.mine.views.RepresentIncomeActivity;
 import com.fanwe.o2o.miguo.R;
-import com.fanwe.user.view.WalletNewActivity;
+import com.fanwe.user.view.InviteActivity;
 import com.miguo.definition.IntentKey;
 import com.miguo.ui.view.customviews.ArcDrawable;
 
@@ -91,7 +92,7 @@ public class RedPacketResultActivity extends AppCompatActivity implements View.O
         }
 
         if (tv_link == v){
-            startActivity(new Intent(this, WalletNewActivity.class));
+            startActivity(new Intent(this, InviteActivity.class));
             finish();
         }
 

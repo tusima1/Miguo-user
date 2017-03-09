@@ -81,7 +81,7 @@ import me.relex.circleindicator.CircleIndicator;
  * Created by zlh on 2017/1/5.
  */
 
-public class HiRepresentFragmentCategory extends FragmentCategory implements PtrHandler, RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener, TouchToMoveListener, RepresentBannerView.OnRepresentBannerClickListener{
+public class HiRepresentFragmentCategory extends FragmentCategory implements  RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener, OnDropDownListener, TouchToMoveListener, RepresentBannerView.OnRepresentBannerClickListener{
 
     @ViewInject(R.id.ptr_layout)
     PtrFrameLayoutForViewPager ptrFrameLayout;
@@ -193,19 +193,6 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements Ptr
             return;
         }
         updateDropDownHelper();
-    }
-
-    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
-        ptrFrameLayout.disableWhenHorizontalMove(true);
-        ptrFrameLayout.setEnabledNextPtrAtOnce(false);
-        MaterialHeader ptrHead = new MaterialHeader(getActivity());
-        ptrHead.setPadding(0, 24, 0, 24);
-        ptrFrameLayout.setHeaderView(ptrHead);
-        ptrFrameLayout.addPtrUIHandler(ptrHead);
-        /**
-         * 设置下拉刷新回调
-         */
-        ptrFrameLayout.setPtrHandler(this);
     }
 
     @Override

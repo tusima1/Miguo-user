@@ -25,7 +25,7 @@ public class JpushHelper {
 
 	private static void initJPushConfig() {
 		Set<String> tagSet = getTag();
-		String alias =getAlias();
+		String alias = getAlias();
 		if (TextUtils.isEmpty(alias)|| tagSet == null) {
 			return;
 		}

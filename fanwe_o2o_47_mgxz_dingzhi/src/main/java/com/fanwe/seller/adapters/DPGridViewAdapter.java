@@ -27,7 +27,7 @@ public class DPGridViewAdapter extends DPBaseAdapter<SearchCateConditionBean.Res
         if(model.isChecked()) {
             holder.setImageResourceAndText(R.id.gridtextview,R.drawable.btn_orange_shape7, model.getName(),"#FFFFFFFF");
         }else{
-            holder.setImageResourceAndText(R.id.gridtextview,R.drawable.btn_white_shape, model.getName(),"#FFCCCCCC");
+            holder.setImageResourceAndText(R.id.gridtextview,R.drawable.btn_white_shape, model.getName(),"#595959");
         }
     }
 

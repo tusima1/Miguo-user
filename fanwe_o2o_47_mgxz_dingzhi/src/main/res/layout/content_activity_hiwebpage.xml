@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:id="@+id/webView"
-    android:layout_below="@+id/title_layout"
+<com.miguo.ui.view.PtrFrameLayoutForViewPager
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ptr_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_below="@+id/title_layout"
+    android:layout_above="@+id/tab_space"
+    app:ptr_keep_header_when_refresh="true"
+    app:ptr_pull_to_fresh="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_marginBottom="50dp"
+            android:layout_below="@+id/title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </WebView>
+    </LinearLayout>
 
 
 
-</WebView>
+
+</com.miguo.ui.view.PtrFrameLayoutForViewPager>

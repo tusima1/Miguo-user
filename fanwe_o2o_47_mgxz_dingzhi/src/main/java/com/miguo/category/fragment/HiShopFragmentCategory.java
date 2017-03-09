@@ -23,9 +23,12 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.HiShopFragmentListener;
+import com.miguo.ui.view.PtrFrameLayoutForViewPager;
 import com.miguo.utils.SharedPreferencesUtils;
 
 import org.apache.http.util.EncodingUtils;
+
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 
 /**
@@ -45,6 +48,9 @@ public class HiShopFragmentCategory extends FragmentCategory {
 
     @ViewInject(R.id.back)
     ImageView back;
+
+    @ViewInject(R.id.ptr_layout)
+    PtrFrameLayoutForViewPager ptrFrameLayoutForViewPager;
 
     public HiShopFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -69,6 +75,18 @@ public class HiShopFragmentCategory extends FragmentCategory {
     protected void init() {
         initWebView();
         setTitlePadding(top);
+        initPtrLayout(ptrFrameLayoutForViewPager);
+    }
+
+    @Override
+    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+        return webView.getScrollY() == 0;
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout frame) {
+        update();
+        super.onRefreshBegin(frame);
     }
 
     public void update(){
@@ -112,6 +130,15 @@ public class HiShopFragmentCategory extends FragmentCategory {
             }
 
             @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if(ptrFrameLayoutForViewPager.isRefreshing()){
+                    ptrFrameLayoutForViewPager.refreshComplete();
+                }
+                HiShopFragmentCategory.this.back.setVisibility(view.canGoBack() ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
 //                loaddingFail();
                 super.onReceivedError(view, request, error);
@@ -127,10 +154,10 @@ public class HiShopFragmentCategory extends FragmentCategory {
             @Override
             @JavascriptInterface
             public void setPageTitle(final String title) {
-                SDHandlerUtil.runOnUiThread(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setTitle(title);
+                        HiShopFragmentCategory.this.title.setText(title);
                     }
                 });
             }

@@ -16,11 +16,15 @@ import com.miguo.fragment.HiBaseFragment;
 import com.miguo.listener.fragment.FragmentListener;
 import com.miguo.utils.BaseUtils;
 
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+
 
 /**
  * Created by zlh/Barry/狗蛋哥 on 13/10/16.
  */
-public abstract class FragmentCategory {
+public abstract class FragmentCategory implements PtrHandler{
 
     protected View view;
     protected HiBaseFragment fragment;
@@ -76,6 +80,29 @@ public abstract class FragmentCategory {
 
     public Intent getIntent(Context context, Class<?> clz){
         return new Intent(context, clz);
+    }
+
+    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
+        ptrFrameLayout.disableWhenHorizontalMove(true);
+        ptrFrameLayout.setEnabledNextPtrAtOnce(false);
+        MaterialHeader ptrHead = new MaterialHeader(getActivity());
+        ptrHead.setPadding(0, 24, 0, 24);
+        ptrFrameLayout.setHeaderView(ptrHead);
+        ptrFrameLayout.addPtrUIHandler(ptrHead);
+        /**
+         * 设置下拉刷新回调
+         */
+        ptrFrameLayout.setPtrHandler(this);
+    }
+
+    @Override
+    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+        return false;
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout frame) {
+
     }
 
     /**
