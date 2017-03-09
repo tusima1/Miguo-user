@@ -108,7 +108,7 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
      * 点击消息中心
      */
     private void clickMessage(){
-        Intent intent = new Intent(getActivity(), MyMessageActivity.class);
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.MESSAGE));
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 

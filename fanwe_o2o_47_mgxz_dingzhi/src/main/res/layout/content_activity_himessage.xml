@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/c_f6f6f6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/prompt_column_layout"
+        android:layout_width="match_parent"
+        android:background="@color/c_fcecc5"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:padding="10dp"
+            android:layout_marginLeft="11.5dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_message_close"
+            android:id="@+id/close"
+            android:layout_width="34dp"
+            android:layout_height="34dp" />
+
+
+        <TextView
+            android:lines="2"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="5dp"
+            android:textSize="14sp"
+            android:ellipsize="end"
+            android:textColor="@color/c_eb9c19"
+            android:layout_centerVertical="true"
+            android:text="为了避免错过团购验券，佣金到账等重要信息，请开启系统通知。"
+            android:layout_toRightOf="@+id/close"
+            android:layout_toLeftOf="@+id/open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/open"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:background="@drawable/shape_cricle_bg_yellow_4"
+            android:gravity="center"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:paddingTop="6.5dp"
+            android:paddingBottom="6.5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="去开启"
+            android:layout_marginRight="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/system_message_layout"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:textColor="@color/c_595959"
+            android:text="系统通知"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:text="99+"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:textSize="10sp"
+            android:background="@drawable/shape_cricle_bg_yellow_50"
+            android:paddingRight="7.8dp"
+            android:paddingLeft="7.8dp"
+            android:paddingTop="4.5dp"
+            android:paddingBottom="4.5dp"
+            android:layout_marginRight="7.5dp"
+            android:layout_toLeftOf="@+id/in_system"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:id="@+id/in_system"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="17dp"
+            android:background="@drawable/in_gray"
+            android:layout_width="7dp"
+            android:layout_height="12.5dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/amount_message_layout"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:textColor="@color/c_595959"
+            android:text="欠款—订单—代言消息"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:text="99+"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:textSize="10sp"
+            android:background="@drawable/shape_cricle_bg_yellow_50"
+            android:paddingRight="7.8dp"
+            android:paddingLeft="7.8dp"
+            android:paddingTop="4.5dp"
+            android:paddingBottom="4.5dp"
+            android:layout_marginRight="7.5dp"
+            android:layout_toLeftOf="@+id/in_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:id="@+id/in_money"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="17dp"
+            android:background="@drawable/in_gray"
+            android:layout_width="7dp"
+            android:layout_height="12.5dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

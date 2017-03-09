@@ -5,5 +5,6 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/top_activity_himessage"/>
+    <include layout="@layout/content_activity_himessage"/>
 
 </LinearLayout>
