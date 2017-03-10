@@ -71,4 +71,7 @@ public class IntentKey {
     public static final String ICON = "icon";
     public static final String MONEY = "money";
     public static final String DESC = "desc";
+
+    public static final String SYSTEM_MESSAGE_URL = "system_message_url";
+
 }
