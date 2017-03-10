@@ -670,7 +670,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <!-- 系统消息 -->
         <activity
-            android:name="com.miguo.app.HiSystemMessageActivity"
+            android:name="com.miguo.app.HiSystemMessageDetailActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
