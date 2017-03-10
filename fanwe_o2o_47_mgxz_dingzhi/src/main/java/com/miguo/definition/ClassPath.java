@@ -1,6 +1,7 @@
 package com.miguo.definition;
 
 
+
 /**
  * Created by Barry/狗蛋哥/zlh on 2016/10/26.
  * 类名路径常量类
@@ -120,9 +121,9 @@ public class ClassPath {
     public static final String MESSAGE = "com.miguo.app.HiMessageActivity";
     /**
      * 系统消息
-     * {@link com.miguo.app.HiSystemMessageActivity}
+     * {@link com.miguo.app.HiSystemMessageDetailActivity}
      */
-    public static final String MESSAGE_SYSTEM = "com.miguo.app.HiSystemMessageActivity";
+    public static final String MESSAGE_SYSTEM = "com.miguo.app.HiSystemMessageDetailActivity";
 
 
 }
