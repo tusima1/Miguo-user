@@ -81,21 +81,6 @@ public class HiMessageCategory extends Category {
         TranslateAnimation animation = new TranslateAnimation(0, -getScreenWidth(), 0, 0);
         animation.setDuration(300);
         animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
         promptColumnLayout.startAnimation(animation);
     }
 
