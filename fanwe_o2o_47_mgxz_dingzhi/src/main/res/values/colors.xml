@@ -61,9 +61,7 @@
     <color name="c_595959">#595959</color>
     <color name="c_999999">#999999</color>
     <color name="c_c8c8c8">#c8c8c8</color>
-    <color name="c_fcecc5">#FCECC5</color>
-    <color name="c_eb9c19">#EB9C19</color>
-    <color name="c_f6f6f6">#f6f6f6</color>
+    <color name="c_9B9B9B">#9B9B9B</color>
 
 
     <!--color mgxz-->
@@ -123,9 +121,9 @@
     <color name="c_F5B830">#f5b830</color>
     <color name="c_c03f3f">#c03f3f</color>
     <color name="yellow_f5">#f5b830</color>
-    
 
-  
+
+
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
