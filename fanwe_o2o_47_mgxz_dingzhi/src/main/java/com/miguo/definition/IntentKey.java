@@ -39,6 +39,11 @@ public class IntentKey {
      */
     public static final String EXTRA_SELECT_TAG_INDEX = "extra_select_tag_index";
     public static final String LOGIN_MOBILE = "extra_login_mobile";
+    /**
+     * 来源标识
+     * {@link com.miguo.definition.Source}
+     */
+    public static final String FROM_SOURCE = "extra_login_from_source";
 
     /**
      * 提现时需要的参数

@@ -9,4 +9,5 @@ public class RequestCode {
     public static final int HOME_WEB_PAGE = 0x0002;
     public static final int LOGIN_SUCCESS_FOR_DIAMON = 0x0005;
     public static final int UPDATE_USER_GO_WITHDRAW_CONDITION = 0x0006;
+    public static final int AMOUNT_MESSAGE_LOGIN = 0x0007;
 }
