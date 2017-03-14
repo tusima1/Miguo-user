@@ -1,5 +1,7 @@
 package com.miguo.category;
 
+import android.Manifest;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -12,6 +14,8 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.listener.HiMessageListener;
+import com.miguo.listener.Listener;
+import com.miguo.utils.NotificationsUtils;
 
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/3/6.
@@ -68,7 +72,13 @@ public class HiMessageCategory extends Category {
 
     @Override
     protected void initViews() {
+        checkPermission();
+    }
 
+    private void checkPermission(){
+        if(NotificationsUtils.isNotificationEnabled(getActivity())){
+            promptColumnLayout.setVisibility(View.GONE);
+        }
     }
 
     public void clickClose(){
@@ -92,5 +102,9 @@ public class HiMessageCategory extends Category {
         amountMessageLayout.startAnimation(animation);
     }
 
+    @Override
+    public HiMessageListener getListener() {
+        return (HiMessageListener)super.getListener();
+    }
 
 }
