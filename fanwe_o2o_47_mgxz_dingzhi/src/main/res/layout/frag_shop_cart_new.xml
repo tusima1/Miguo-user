@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-                android:paddingBottom="45dp"
     android:background="@color/bg_activity_gray" >
     <!--<LinearLayout
         android:id="@+id/location_1"
@@ -116,7 +115,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/ll_container"
-
         android:scrollbars="none"
         ptr:ptrHeaderBackground="@color/main_color"
         ptr:ptrHeaderSubTextColor="@color/white"

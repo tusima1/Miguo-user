@@ -88,6 +88,7 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
         Intent intent =new Intent(mHoldActivity, RedPacketOpenResultActivity.class);
         intent.putExtra(IntentKey.MONEY,money);
         intent.putExtra("order_id",order_id);
+        intent.putExtra("shop_id",shop_id);
         intent.putExtra("share",share);
         intent.putExtra(IntentKey.ICON,faceIcon);
         intent.putExtra(IntentKey.DESC,showContent);
@@ -124,7 +125,8 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
     private String faceIcon;
     private String showContent;
     private String order_id;
-    public void setNeedData(OnlinePayOrderPaymentBean.Result.Body.Share share, String name, String faceIcon, String showContent, String order_id,String money) {
+    private String shop_id;
+    public void setNeedData(OnlinePayOrderPaymentBean.Result.Body.Share share, String name, String faceIcon, String showContent, String order_id,String money, String shop_id) {
 //        this.name = name;
         this.faceIcon = faceIcon;
         this.showContent = showContent;
@@ -133,6 +135,7 @@ public class RedPacketPopup extends BasePopupWindow implements View.OnClickListe
         tvName.setText(name);
         this.order_id = order_id;
         this.share= share;
+        this.shop_id = shop_id;
         this.money = getMoneyTwo(money);
     }
 
