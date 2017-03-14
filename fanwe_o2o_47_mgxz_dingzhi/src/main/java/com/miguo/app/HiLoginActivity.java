@@ -9,6 +9,7 @@ import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
+import com.miguo.definition.Source;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 
@@ -30,6 +31,8 @@ public class HiLoginActivity extends HiBaseActivity {
      */
     String userMobile;
 
+    int fromSouce;
+
     @Override
     protected Category initCategory() {
         return new HiLoginCategory(this);
@@ -45,6 +48,7 @@ public class HiLoginActivity extends HiBaseActivity {
         if(getIntent() != null){
             isFromDiamond = getIntent().getBooleanExtra(IntentKey.FROM_DIAMOND_TO_LOGIN, false);
             mSelectTabIndex = getIntent().getIntExtra(IntentKey.EXTRA_SELECT_TAG_INDEX, 0);
+            setFromSouce(getIntent().getIntExtra(IntentKey.FROM_SOURCE, Source.NULL_SOURCE));
             setUserMobile(getIntent().getStringExtra(IntentKey.LOGIN_MOBILE));
         }
     }
@@ -54,6 +58,12 @@ public class HiLoginActivity extends HiBaseActivity {
             Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
             setResult(ResultCode.RESUTN_OK, intent);
         }
+
+        if(getFromSouce() == Source.AMOUNT_MESSAGE){
+            Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.MESSAGE));
+            setResult(ResultCode.RESUTN_OK, intent);
+        }
+
         BaseUtils.finishActivity(this);
     }
 
@@ -95,5 +105,13 @@ public class HiLoginActivity extends HiBaseActivity {
 
     public void setUserMobile(String userMobile) {
         this.userMobile = userMobile;
+    }
+
+    public int getFromSouce() {
+        return fromSouce;
+    }
+
+    public void setFromSouce(int fromSouce) {
+        this.fromSouce = fromSouce;
     }
 }
