@@ -1,9 +1,6 @@
 package com.miguo.category;
 
-import android.Manifest;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,7 +11,6 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.listener.HiMessageListener;
-import com.miguo.listener.Listener;
 import com.miguo.utils.NotificationsUtils;
 
 /**

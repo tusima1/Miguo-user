@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:id="@+id/item_layout"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/c_595959"
+        android:text="米果小站新版本介绍"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="8.5dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="left|center_vertical"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/c_CCCCCC"
+        android:text="2017-03-15 17:30"
+        android:layout_marginRight="17dp"
+        android:layout_marginTop="8.5dp"
+        android:textSize="16sp"/>
+
+
+    <TextView
+        android:id="@+id/describe"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/c_999999"
+        android:text="直接用layer-list来实现，在项目 res->drawable中创建一个xml，如果列表中有layer-list选择的话直接选择创建，如果没有的话就随意（似乎4.0以下没有 layer-list选择），没有的话将xml文件中的根标签改为layer-list即可"
+        android:layout_below="@+id/title"
+        android:layout_alignLeft="@+id/title"
+        android:layout_marginTop="2.5dp"
+        android:layout_marginRight="25.5dp"
+        android:layout_marginBottom="16.5dp"
+        android:lines="2"
+        android:textSize="15sp"/>
+
+
+    <View
+        android:layout_below="@+id/describe"
+        android:layout_width="match_parent"
+        android:background="@color/c_CCCCCC"
+        android:layout_height="1px"/>
+
+</RelativeLayout>
