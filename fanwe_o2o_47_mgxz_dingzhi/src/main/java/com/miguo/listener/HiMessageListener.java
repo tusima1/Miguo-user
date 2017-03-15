@@ -14,6 +14,7 @@ import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.Source;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.ui.view.notify.NotifyMessage;
 import com.miguo.utils.BaseUtils;
 
 /**
@@ -60,11 +61,15 @@ public class HiMessageListener extends Listener {
     }
 
     private void clickSystemMessage(){
-        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.MESSAGE_SYSTEM));
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LIST_MESSAGE_SYSTEM));
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     public void clickAmountMessage(){
+        new NotifyMessage(getActivity()).show();
+        if(true){
+            return;
+        }
         if(TextUtils.isEmpty(App.getInstance().getToken())){
             Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             intent.putExtra(IntentKey.FROM_SOURCE, Source.AMOUNT_MESSAGE);

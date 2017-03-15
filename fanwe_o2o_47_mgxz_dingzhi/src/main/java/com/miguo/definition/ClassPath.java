@@ -120,6 +120,11 @@ public class ClassPath {
      */
     public static final String MESSAGE = "com.miguo.app.HiMessageActivity";
     /**
+     * 系统消息列表
+     * {@link com.miguo.app.HiSystemNotificationActivity}
+     */
+    public static final String LIST_MESSAGE_SYSTEM = "com.miguo.app.HiSystemNotificationActivity";
+    /**
      * 系统消息
      * {@link com.miguo.app.HiSystemMessageDetailActivity}
      */
