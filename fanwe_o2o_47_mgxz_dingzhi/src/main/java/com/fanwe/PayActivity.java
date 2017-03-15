@@ -30,6 +30,7 @@ import com.fanwe.constant.Constant;
 import com.fanwe.constant.Constant.PaymentType;
 import com.fanwe.constant.Constant.TitleType;
 import com.fanwe.constant.EnumEventTag;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.dialog.LotteryDialog;
 import com.fanwe.dialog.ShareAfterPaytDialog;
 import com.fanwe.library.adapter.SDSimpleTextAdapter;
@@ -66,8 +67,12 @@ import com.fanwe.utils.DisPlayUtil;
 import com.fanwe.wxapp.SDWxappPay;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
+import com.miguo.dao.CreateShareRecordDao;
+import com.miguo.dao.impl.CreateShareRecordDaoImpl;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.ui.RedPacketOpenResultActivity;
 import com.miguo.utils.BaseUtils;
+import com.miguo.view.CreateShareRecordView;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.tencent.mm.sdk.modelpay.PayReq;
@@ -105,6 +110,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
     public static final String EXTRA_ORDER_ID = "extra_order_id";
     public static final String ORDER_ENTITY = "order_detail";
     public static final String BUY_ITEM = "buy_item";
+    public static final String GOODS_ID = "goods_id";
 
     @ViewInject(R.id.act_pay_tv_order_sn)
     private TextView mTvOrderSn;
@@ -152,6 +158,8 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
     private PopupWindow pop;
     private OutSideShoppingCartHelper outSideShoppingCartHelper;
     private Share_info share_info;
+
+    private String goods_id;
 
     private CommonHttpHelper commonHttpHelper;
     private String shareRecordId;
@@ -297,6 +305,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         }
         buyItem = intent.getIntExtra(BUY_ITEM, 0);
         mOrderId = intent.getStringExtra(EXTRA_ORDER_ID);
+        this.goods_id = intent.getStringExtra(GOODS_ID);
         if (intent.getSerializableExtra(ORDER_ENTITY) != null && intent.getSerializableExtra(ORDER_ENTITY) instanceof OrderDetailInfo) {
             orderDetailInfo = (OrderDetailInfo) intent.getSerializableExtra(ORDER_ENTITY);
         }
@@ -954,14 +963,38 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
     };
 
     private void getRecordId() {
-        if (commonHttpHelper == null) {
-            commonHttpHelper = new CommonHttpHelper(PayActivity.this, this);
-        }
+//        if (commonHttpHelper == null) {
+//            commonHttpHelper = new CommonHttpHelper(PayActivity.this, this);
+//        }
+//        if (buyItem > 1) {
+//            commonHttpHelper.createShareRecord(Constant.ShareType.WEB_HOME, "");
+//        } else {
+//            commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, "");
+//        }
+
+        final MGProgressDialog dialog = new MGProgressDialog(this);
+        dialog.show();
+        CreateShareRecordDao createShareRecordDao = new CreateShareRecordDaoImpl(new CreateShareRecordView() {
+            @Override
+            public void createShareRecordSuccess(String shareRecordId) {
+                dialog.dismiss();
+                PayActivity.this.shareRecordId = shareRecordId;
+            }
+
+            @Override
+            public void createShareRecordError(String message) {
+                dialog.dismiss();
+                PayActivity.this.shareRecordId = "";
+            }
+        });
+
         if (buyItem > 1) {
-            commonHttpHelper.createShareRecord(Constant.ShareType.WEB_HOME, "");
+            createShareRecordDao.createShareRecordFromMultiSalePay(App.getInstance().getCurrentUser().getUser_id());
         } else {
-            commonHttpHelper.createShareRecord(Constant.ShareType.GOODS, "");
+            goods_id = goods_id.replace(",", "");
+            createShareRecordDao.createShareRecordFromSingleSalePay(App.getInstance().getCurrentUser().getUser_id(), goods_id);
         }
+
     }
 
 }

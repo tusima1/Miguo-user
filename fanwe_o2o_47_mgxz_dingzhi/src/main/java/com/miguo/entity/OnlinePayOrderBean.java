@@ -68,6 +68,10 @@ public class OnlinePayOrderBean implements Serializable{
              */
             String shop_name;
             /**
+             * 门店id
+             */
+            String shop_id;
+            /**
              * 订单id
              */
             String order_id;
@@ -94,6 +98,14 @@ public class OnlinePayOrderBean implements Serializable{
 
             public String getShop_name() {
                 return shop_name;
+            }
+
+            public String getShop_id() {
+                return shop_id;
+            }
+
+            public void setShop_id(String shop_id) {
+                this.shop_id = shop_id;
             }
 
             public void setShop_name(String shop_name) {

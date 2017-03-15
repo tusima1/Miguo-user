@@ -375,6 +375,30 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         return "";
     }
 
+    private String getSumSeletedGoodsIds() {
+        int size;
+        if (listModel == null || listModel.size() < 1) {
+            return null;
+        }
+        StringBuffer selectedIds = new StringBuffer();
+
+
+        size = listModel.size();
+        for (int i = 0; i < size; i++) {
+            ShoppingCartInfo model = listModel.get(i);
+            boolean checked;
+            checked = model.isChecked();
+            if (checked) {
+                selectedIds.append(model.getPro_id() + ",");
+
+            }
+        }
+        if (selectedIds != null && selectedIds.length() > 1) {
+            return selectedIds.substring(0, selectedIds.length() - 1);
+        }
+        return "";
+    }
+
     /**
      * 计算每一个各类商品的总小计金额。
      */
@@ -495,11 +519,12 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
     private void startConfirmOrderActivity() {
         if (listModel != null && listModel.size() > 0) {
             String mSeletedGoods = getSumSeletedIds();
-
+            String selectGoodsId = getSumSeletedGoodsIds();
             Intent intent = new Intent(getActivity(),
                     ConfirmOrderActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("list_id", mSeletedGoods);
+            bundle.putString("goods_ids", selectGoodsId);
             intent.putExtras(bundle);
             startActivity(intent);
         } else {

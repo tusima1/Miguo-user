@@ -79,9 +79,11 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
     //红包抵扣
     protected MyRedPayMentsFragment mFragMyRed;
     /**
-     * 商品ID 集合。
+     * 商品购物车ID 集合。
      */
     private String mListDeal_id;
+
+    private String goods_ids;
 
     private OutSideShoppingCartHelper outSideShoppingCartHelper;
     private CommonShoppingHelper commonShoppingHelper;
@@ -128,6 +130,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             orderId = intent.getStringExtra("orderId");
         } else {
             mListDeal_id = getIntent().getExtras().getString("list_id");
+            goods_ids = getIntent().getExtras().getString("goods_ids");
         }
     }
 
@@ -452,6 +455,7 @@ public class ConfirmOrderActivity extends BaseActivity implements RefreshCalback
             Intent intent = new Intent(mActivity, PayActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(PayActivity.ORDER_ENTITY, orderDetailInfo);
+            bundle.putSerializable(PayActivity.GOODS_ID, goods_ids);
             bundle.putString(PayActivity.EXTRA_ORDER_ID, orderDetailInfo.getOrder_info().getOrder_id());
             bundle.putInt(PayActivity.BUY_ITEM, buyItem);
             intent.putExtras(bundle);

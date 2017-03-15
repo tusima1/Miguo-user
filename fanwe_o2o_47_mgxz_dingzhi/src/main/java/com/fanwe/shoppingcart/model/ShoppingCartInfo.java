@@ -26,9 +26,8 @@ public class ShoppingCartInfo implements Serializable {
      */
     private String buyFlg;
     /**
-     * 商品ID
+     * 购物车id
      */
-
     private String id;
     /**
      * 原价
