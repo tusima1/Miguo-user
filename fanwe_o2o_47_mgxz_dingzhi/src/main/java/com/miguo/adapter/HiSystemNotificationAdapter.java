@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,8 +13,6 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.definition.ClassPath;
-import com.miguo.definition.IntentKey;
-import com.miguo.entity.MessageListBean;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 
@@ -59,23 +56,17 @@ public class HiSystemNotificationAdapter extends BarryBaseRecyclerAdapter {
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-        getHolder(holder).title.setText(getItem(position).getTitle());
-        getHolder(holder).describe.setText(getItem(position).getContent());
-        getHolder(holder).time.setText(getItem(position).getTime());
+
     }
 
     @Override
     protected void doThings(RecyclerView.ViewHolder holder, int position) {
-        handleUnReadPoint(holder, position);
-    }
 
-    private void handleUnReadPoint(RecyclerView.ViewHolder holder, int position){
-        getHolder(holder).point.setVisibility(getItem(position).hasRead() ? View.GONE : View.VISIBLE);
     }
 
     @Override
-    public MessageListBean.Result.Body getItem(int position) {
-        return (MessageListBean.Result.Body)super.getItem(position);
+    public Object getItem(int position) {
+        return super.getItem(position);
     }
 
     @Override
@@ -97,9 +88,6 @@ public class HiSystemNotificationAdapter extends BarryBaseRecyclerAdapter {
 
         @ViewInject(R.id.describe)
         TextView describe;
-
-        @ViewInject(R.id.point)
-        ImageView point;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -123,10 +111,7 @@ public class HiSystemNotificationAdapter extends BarryBaseRecyclerAdapter {
         }
 
         private void clickItem(){
-            getHolder(holder).point.setVisibility(View.GONE);
             Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.MESSAGE_SYSTEM));
-            intent.putExtra(IntentKey.SYSTEM_MESSAGE_URL, getItem(position).getList_jump_paramater());
-            intent.putExtra(IntentKey.SYSTEM_MESSAGE_ID, getItem(position).getSystem_message_id());
             BaseUtils.jumpToNewActivity(getActivity(), intent);
         }
 

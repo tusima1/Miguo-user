@@ -5,6 +5,7 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/3/14.
@@ -18,8 +19,6 @@ public class NotifyMessage {
 
     WindowManager.LayoutParams mParams;
 
-    NotifyContentView mNotifyContentView;
-
     public NotifyMessage(Context context) {
         this.mContext = context;
         init();
@@ -27,7 +26,6 @@ public class NotifyMessage {
 
     protected void init(){
         initWindowManager();
-        initViews();
     }
 
     /**
@@ -45,11 +43,24 @@ public class NotifyMessage {
     /**
      * 添加view到windowmanager
      */
-    protected void initViews(){
-        mNotifyContentView = new NotifyContentView(mContext);
+    public void show(){
+        final NotifyContentView notifyContentView = new NotifyContentView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        mNotifyContentView.setLayoutParams(params);
-        mWindowManager.addView(mNotifyContentView, mParams);
+        notifyContentView.setLayoutParams(params);
+        mWindowManager.addView(notifyContentView, mParams);
+        notifyContentView.show();
+        notifyContentView.setOnNotifyViewStateChangeListener(new NotifyContentView.OnNotifyViewStateChangeListener() {
+            @Override
+            public void onCancel() {
+                mWindowManager.removeView(notifyContentView);
+                mWindowManager = null;
+            }
+
+            @Override
+            public void action() {
+                Toast.makeText(mContext,"佣金分享..", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
