@@ -2,13 +2,18 @@ package com.miguo.category;
 
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiSystemNotificationAdapter;
 import com.miguo.app.HiBaseActivity;
+import com.miguo.dao.MessageListDao;
+import com.miguo.dao.impl.MessageListDaoImpl;
+import com.miguo.entity.MessageListBean;
 import com.miguo.listener.HiSystemNotificationListener;
+import com.miguo.view.MessageListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +30,8 @@ public class HiSystemNotificationCategory extends Category {
 
     HiSystemNotificationAdapter adapter;
 
+    MessageListDao messageListDao;
+
     public HiSystemNotificationCategory(HiBaseActivity activity) {
         super(activity);
     }
@@ -32,6 +39,7 @@ public class HiSystemNotificationCategory extends Category {
     @Override
     protected void initFirst() {
         adapter = new HiSystemNotificationAdapter(getActivity(), new ArrayList());
+        initMessageListDao();
     }
 
     @Override
@@ -57,7 +65,7 @@ public class HiSystemNotificationCategory extends Category {
     @Override
     protected void initViews() {
         initRecyclerView();
-        notifyDataChanged();
+        onRefresh();
     }
 
     private void initRecyclerView(){
@@ -65,15 +73,22 @@ public class HiSystemNotificationCategory extends Category {
         recyclerView.setAdapter(adapter);
     }
 
-    private void notifyDataChanged(){
-        List list = new ArrayList();
-        list.add("");
-        list.add("");
-        list.add("");
-        list.add("");
-        list.add("");
-        list.add("");
-        adapter.notifyDataSetChanged(list);
+    private void initMessageListDao(){
+        messageListDao = new MessageListDaoImpl(new MessageListView() {
+            @Override
+            public void getMessageListSuccess(List<MessageListBean.Result.Body> messages) {
+                adapter.notifyDataSetChanged(messages);
+            }
+
+            @Override
+            public void getMessageListError(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+    public void onRefresh(){
+        messageListDao.getSystemMessageList(App.getInstance().getToken());
     }
 
 }
