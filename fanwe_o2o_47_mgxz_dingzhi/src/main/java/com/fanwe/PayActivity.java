@@ -69,6 +69,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.dao.CreateShareRecordDao;
 import com.miguo.dao.impl.CreateShareRecordDaoImpl;
+import com.miguo.entity.CreateShareRecordBean;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.RedPacketOpenResultActivity;
 import com.miguo.utils.BaseUtils;
@@ -257,7 +258,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         }
         if (PAY_SUCCESS.equals(payStatus)) {
             //支付成功 处理。
-            showShareDialog();
+//            showShareDialog();
             SDViewUtil.show(mBtnQuan);
             SDEventManager.post(EnumEventTag.PAY_ORDER_SUCCESS.ordinal());
             mHasPay = "all";
@@ -976,9 +977,14 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
         dialog.show();
         CreateShareRecordDao createShareRecordDao = new CreateShareRecordDaoImpl(new CreateShareRecordView() {
             @Override
-            public void createShareRecordSuccess(String shareRecordId) {
+            public void createShareRecordSuccess(CreateShareRecordBean.Result.Body shareRecordId) {
                 dialog.dismiss();
-                PayActivity.this.shareRecordId = shareRecordId;
+                PayActivity.this.shareRecordId = shareRecordId.getId();
+                PayActivity.this.share_info.setClickurl(shareRecordId.getShare().getClickurl());
+                PayActivity.this.share_info.setImageurl(shareRecordId.getShare().getImageurl());
+                PayActivity.this.share_info.setSummary(shareRecordId.getShare().getSummary());
+                PayActivity.this.share_info.setTitle(shareRecordId.getShare().getTitle());
+                showShareDialog();
             }
 
             @Override

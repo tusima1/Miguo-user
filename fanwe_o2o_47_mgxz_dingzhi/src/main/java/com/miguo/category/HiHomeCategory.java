@@ -472,8 +472,7 @@ public class HiHomeCategory extends Category implements
         if (sdDialogConfirm != null && sdDialogConfirm.isShowing()) {
             return;
         }
-        sdDialogConfirm =
-                new SDDialogConfirm(getActivity());
+        sdDialogConfirm = new SDDialogConfirm(getActivity());
         sdDialogConfirm.setTextContent(
                 "当前定位位置为：" + location + "\n" + "是否切换到" + location + "?           ")
                 .setmListener(new SDDialogCustom.SDDialogCustomListener() {

@@ -1,5 +1,6 @@
 package com.fanwe.library.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,7 +13,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 
 import com.fanwe.library.SDLibrary;
 
@@ -79,13 +83,33 @@ public class SDPackageUtil
 		return getPackageInfo(getPackageName());
 	}
 
-	public static Boolean installApkPackage(String apkFilePath)
-	{
+	public static Boolean installApkPackage(String apkFilePath) {
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.setDataAndType(Uri.parse("file://" + apkFilePath), "application/vnd.android.package-archive");
 		SDLibrary.getInstance().getApplication().startActivity(intent);
 		return true;
+	}
+
+	public static boolean installApkPackage(Context context, String apkPath){
+		if (context == null || TextUtils.isEmpty(apkPath)) {
+			return false;
+		}
+
+		File file = new File(apkPath);
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+
+		//判读版本是否在7.0以上
+		if (Build.VERSION.SDK_INT >= 24) {
+			//provider authorities
+			Uri apkUri = FileProvider.getUriForFile(context, "com.fanwe.o2o.miguo.apkprovider", file);
+			//Granting Temporary Permissions to a URI
+			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+			context.startActivity(intent);
+			return true;
+		}
+		return installApkPackage(apkPath);
 	}
 
 	public static Bundle getMetaData(Context context)

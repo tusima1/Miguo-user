@@ -42,7 +42,7 @@ public class Serial implements Serializable {
 		// 这边的save方法进行保存
 		try {
 			FileOutputStream fs = cxt.openFileOutput(fileName,
-					cxt.MODE_WORLD_READABLE + cxt.MODE_WORLD_READABLE);
+					cxt.MODE_PRIVATE);
 			// ser为序列化专用文件类型
 			ObjectOutputStream os = new ObjectOutputStream(fs);
 			os.writeObject(object);

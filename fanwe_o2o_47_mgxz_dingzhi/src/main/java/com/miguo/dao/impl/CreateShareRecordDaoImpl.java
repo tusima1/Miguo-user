@@ -46,7 +46,7 @@ public class CreateShareRecordDaoImpl extends BaseDaoImpl implements CreateShare
 
                 if(bean.getStatusCode() == 200){
                     try{
-                        getListener().createShareRecordSuccess(bean.getResult().get(0).getBody().getId());
+                        getListener().createShareRecordSuccess(bean.getResult().get(0).getBody());
                         return;
                     }catch (Exception e){
                         getListener().createShareRecordError(BASE_ERROR_MESSAGE);
