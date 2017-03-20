@@ -2,36 +2,36 @@ package com.miguo.category;
 
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.miguo.adapter.HiSystemNotificationAdapter;
+import com.miguo.adapter.HiCommissionNotificationAdapter;
 import com.miguo.app.HiBaseActivity;
-import com.miguo.listener.HiSystemNotificationListener;
+import com.miguo.listener.HiCommissionNotifycationListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Barry/狗蛋哥/zlh on 2017/3/15.
- *  * 系统消息列表
+ * Created by Barry/狗蛋哥/zlh on 2017/3/16.
+ * 佣金代言消息列表
  */
-public class HiSystemNotificationCategory extends Category {
-
+public class HiCommissionNotifycationCategory extends Category {
 
     @ViewInject(R.id.recyclerview)
     LoadMoreRecyclerView recyclerView;
 
-    HiSystemNotificationAdapter adapter;
+    BarryBaseRecyclerAdapter adapter;
 
-    public HiSystemNotificationCategory(HiBaseActivity activity) {
+    public HiCommissionNotifycationCategory(HiBaseActivity activity) {
         super(activity);
     }
 
     @Override
     protected void initFirst() {
-        adapter = new HiSystemNotificationAdapter(getActivity(), new ArrayList());
+        adapter = new HiCommissionNotificationAdapter(getActivity(), new ArrayList());
     }
 
     @Override
@@ -41,7 +41,7 @@ public class HiSystemNotificationCategory extends Category {
 
     @Override
     protected void initThisListener() {
-        listener = new HiSystemNotificationListener(this);
+        listener = new HiCommissionNotifycationListener(this);
     }
 
     @Override

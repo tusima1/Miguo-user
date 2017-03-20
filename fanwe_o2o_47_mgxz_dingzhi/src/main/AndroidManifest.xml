@@ -682,6 +682,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/Transparent_title_area"
             android:windowSoftInputMode="adjustPan"/>
+        <!-- 佣金代言钱款消息 -->
+        <activity
+            android:name="com.miguo.app.HiCommissionNotifycationActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent_title_area"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 线下买单支付 -->
         <activity
             android:name="com.miguo.app.HiOfflinePayOrderActivity"

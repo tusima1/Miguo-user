@@ -125,6 +125,12 @@ public class ClassPath {
      */
     public static final String LIST_MESSAGE_SYSTEM = "com.miguo.app.HiSystemNotificationActivity";
     /**
+     * 佣金代言消息列表
+     *
+     * {@link com.miguo.app.HiCommissionNotifycationActivity}
+     */
+    public static final String LIST_MESSAGE_COMMISSION = "com.miguo.app.HiCommissionNotifycationActivity";
+    /**
      * 系统消息
      * {@link com.miguo.app.HiSystemMessageDetailActivity}
      */
