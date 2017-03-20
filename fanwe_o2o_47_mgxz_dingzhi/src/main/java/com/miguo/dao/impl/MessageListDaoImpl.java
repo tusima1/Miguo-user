@@ -6,7 +6,6 @@ import com.fanwe.network.MgCallback;
 import com.fanwe.network.OkHttpUtil;
 import com.fanwe.work.AppRuntimeWorker;
 import com.miguo.dao.MessageListDao;
-import com.miguo.definition.PageSize;
 import com.miguo.entity.MenuBean;
 import com.miguo.entity.MessageListBean;
 import com.miguo.view.BaseView;
@@ -37,16 +36,14 @@ public class MessageListDaoImpl extends BaseDaoImpl implements MessageListDao {
     }
 
     @Override
-    public void getCommissionMessageList(int page, int page_size, String token) {
-        getMessageList(page, page_size, COMMISSION, token);
+    public void getCommissionMessageList(String token) {
+        getMessageList(COMMISSION, token);
     }
 
     @Override
-    public void getMessageList(final int page, int page_size, int messageType, String token) {
+    public void getMessageList(int messageType, String token) {
         TreeMap<String, String> map = new TreeMap<>();
         map.put("method", "MessageList");
-        map.put("page", page + "");
-        map.put("page_size", page_size + "");
         map.put("message_type", messageType + "");
         map.put("token", token);
         OkHttpUtil.getInstance().get("", map, new MgCallback(MessageListBean.class) {
@@ -69,11 +66,7 @@ public class MessageListDaoImpl extends BaseDaoImpl implements MessageListDao {
                 }
                 if(bean.getStatusCode() == 200){
                     try{
-                        if(page == PageSize.BASE_NUMBER_ONE){
-                            getListener().getMessageListSuccess(bean.getResult().get(0).getBody());
-                            return;
-                        }
-                        getListener().getMessageListLoadmoreSuccess(bean.getResult().get(0).getBody());
+                        getListener().getMessageListSuccess(bean.getResult().get(0).getBody());
                         return;
                     }catch (Exception e){
                         getListener().getMessageListError(BASE_ERROR_MESSAGE);
@@ -97,8 +90,8 @@ public class MessageListDaoImpl extends BaseDaoImpl implements MessageListDao {
     }
 
     @Override
-    public void getSystemMessageList(int page, int page_size, String token) {
-        getMessageList(page, page_size,SYSTEM, token);
+    public void getSystemMessageList(String token) {
+        getMessageList(SYSTEM, token);
     }
 
     @Override

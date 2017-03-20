@@ -128,17 +128,9 @@ public class MessageListBean implements Serializable{
             String content;
 
             public String getTime(){
-                try{
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    Date date = new Date(getCreate_time());
-                    return format.format(date);
-                }catch (Exception e){
-                    return "";
-                }
-            }
-
-            public boolean hasRead(){
-                return getRead_status() == 1;
+                SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd HH:mm");
+                Date date = new Date(getCreate_time());
+                return format.format(date);
             }
 
             public String getContent() {
