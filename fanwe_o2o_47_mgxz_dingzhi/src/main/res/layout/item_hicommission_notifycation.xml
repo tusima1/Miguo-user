@@ -8,15 +8,10 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/time"
-        android:layout_marginRight="5dp"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:gravity="center_vertical"
+        android:gravity="left|center_vertical"
         android:textColor="@color/c_595959"
-        android:lines="1"
-        android:ellipsize="end"
         android:text="米果小站新版本介绍"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="8.5dp"
