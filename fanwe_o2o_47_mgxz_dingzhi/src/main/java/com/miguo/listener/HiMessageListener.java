@@ -66,17 +66,13 @@ public class HiMessageListener extends Listener {
     }
 
     public void clickAmountMessage(){
-        new NotifyMessage(getActivity()).show();
-        if(true){
-            return;
-        }
         if(TextUtils.isEmpty(App.getInstance().getToken())){
             Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
             intent.putExtra(IntentKey.FROM_SOURCE, Source.AMOUNT_MESSAGE);
             BaseUtils.jumpToNewActivityForResult(getActivity(), intent, RequestCode.AMOUNT_MESSAGE_LOGIN);
             return;
         }
-        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.MESSAGE_SYSTEM));
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.LIST_MESSAGE_COMMISSION));
         BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
