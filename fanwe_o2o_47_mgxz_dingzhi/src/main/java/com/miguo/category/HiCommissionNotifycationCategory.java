@@ -3,13 +3,18 @@ package com.miguo.category;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.fanwe.adapter.barry.BarryBaseRecyclerAdapter;
+import com.fanwe.app.App;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiCommissionNotificationAdapter;
 import com.miguo.app.HiBaseActivity;
+import com.miguo.dao.MessageListDao;
+import com.miguo.dao.impl.MessageListDaoImpl;
+import com.miguo.entity.MessageListBean;
 import com.miguo.listener.HiCommissionNotifycationListener;
+import com.miguo.view.MessageListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +30,15 @@ public class HiCommissionNotifycationCategory extends Category {
 
     BarryBaseRecyclerAdapter adapter;
 
+    MessageListDao messageListDao;
+
     public HiCommissionNotifycationCategory(HiBaseActivity activity) {
         super(activity);
     }
 
     @Override
     protected void initFirst() {
+        initMessageListDao();
         adapter = new HiCommissionNotificationAdapter(getActivity(), new ArrayList());
     }
 
@@ -57,7 +65,21 @@ public class HiCommissionNotifycationCategory extends Category {
     @Override
     protected void initViews() {
         initRecyclerView();
-        notifyDataChanged();
+        onRefresh();
+    }
+
+    private void initMessageListDao(){
+        messageListDao = new MessageListDaoImpl(new MessageListView() {
+            @Override
+            public void getMessageListSuccess(List<MessageListBean.Result.Body> messages) {
+                adapter.notifyDataSetChanged(messages);
+            }
+
+            @Override
+            public void getMessageListError(String message) {
+                showToast(message);
+            }
+        });
     }
 
     private void initRecyclerView(){
@@ -65,15 +87,7 @@ public class HiCommissionNotifycationCategory extends Category {
         recyclerView.setAdapter(adapter);
     }
 
-    private void notifyDataChanged(){
-        List list = new ArrayList();
-        list.add("");
-        list.add("");
-        list.add("");
-        list.add("");
-        list.add("");
-        list.add("");
-        adapter.notifyDataSetChanged(list);
+    public void onRefresh(){
+        messageListDao.getCommissionMessageList(App.getInstance().getToken());
     }
-
 }

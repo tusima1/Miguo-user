@@ -13,6 +13,7 @@ import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.definition.ClassPath;
+import com.miguo.entity.MessageListBean;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.utils.BaseUtils;
 
@@ -56,7 +57,9 @@ public class HiSystemNotificationAdapter extends BarryBaseRecyclerAdapter {
 
     @Override
     protected void setHolderViews(RecyclerView.ViewHolder holder, int position) {
-
+        getHolder(holder).title.setText(getItem(position).getTitle());
+        getHolder(holder).describe.setText(getItem(position).getContent());
+        getHolder(holder).time.setText(getItem(position).getTime());
     }
 
     @Override
@@ -65,8 +68,8 @@ public class HiSystemNotificationAdapter extends BarryBaseRecyclerAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return super.getItem(position);
+    public MessageListBean.Result.Body getItem(int position) {
+        return (MessageListBean.Result.Body)super.getItem(position);
     }
 
     @Override
