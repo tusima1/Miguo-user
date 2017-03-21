@@ -20,7 +20,6 @@ import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.entity.JpushMessageBean;
 import com.miguo.ui.view.notify.NotifyMessage;
-import com.miguo.utils.NotificationsUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,28 +77,27 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 		 * 收到了推送消息
 		 */
 		if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
+			Log.e("extra", "extra is : " + bundle.getString(JPushInterface.EXTRA_EXTRA));
 			JpushMessageBean bean = getMessage(bundle.getString(JPushInterface.EXTRA_EXTRA));
-			if(bean != null && !NotificationsUtils.isNotificationEnabled(context)){
+			if(bean != null){
+				String a1 = bundle.getString(JPushInterface.EXTRA_CONTENT_TYPE);
+				String a2 = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+				String a3 = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
+				String a4 = bundle.getString(JPushInterface.EXTRA_ACTIVITY_PARAM);
 				bean.setMessage(bundle.getString(JPushInterface.EXTRA_ALERT));
 				new NotifyMessage(context).show(bean);
+
 			}
-			return;
-		}
-		/**
-		 * 推送被打开
-		 */
-		if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+//			String notifitionId = bundle.getString(JPushInterface.ACTION_NOTIFICATION_RECEIVED);
+
+		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
+
 			openNotification(context, bundle);
-			return;
-		}
-		/**
-		 * 自定义消息收到了
-		 */
-		if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
+
+		} else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
 			Log.e("@@@", "是消息类型,而不是通知类型");
 			bundle.getString(JPushInterface.EXTRA_NOTI_TYPE);
 			processCustomMessage(context, bundle);
-			return;
 		}
 	}
 
@@ -154,7 +152,7 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 
 	private long toLong(String var){
 		try{
-			return Long.parseLong(var);
+			return Long.getLong(var);
 		}catch (Exception e){
 			return 0;
 		}

@@ -47,7 +47,7 @@ public class JpushMessageBean implements Serializable{
 
     public String getTime(){
         try{
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd HH:mm");
             Date date = new Date(getCreate_time());
             return format.format(date);
         }catch (Exception e){
