@@ -17,6 +17,12 @@ public interface MessageListView extends BaseView {
     void getMessageListSuccess(List<MessageListBean.Result.Body> messages);
 
     /**
+     * 获取消息列表成功，加载更多
+     * @param messages 消息列表
+     */
+    void getMessageListLoadmoreSuccess(List<MessageListBean.Result.Body> messages);
+
+    /**
      * 获取消息列表失败
      * @param message 失败回调消息
      */

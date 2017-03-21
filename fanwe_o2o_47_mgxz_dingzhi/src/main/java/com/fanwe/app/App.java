@@ -33,6 +33,7 @@ import com.fanwe.umeng.UmengShareManager;
 import com.fanwe.user.model.UserInfoNew;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.crash.CrashHandler;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.sunday.eventbus.SDBaseEvent;
 import com.sunday.eventbus.SDEventManager;
 import com.sunday.eventbus.SDEventObserver;
@@ -52,6 +53,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -280,16 +282,25 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
     }
 
-    public String getImei() {
+    public String getImei(){
+        return TextUtils.isEmpty(getImei2()) ? getLocalImei() : getImei2();
+    }
+
+    public String getLocalImei(){
+        return SharedPreferencesUtils.getInstance().hasImei() ? SharedPreferencesUtils.getInstance().getImei() : SharedPreferencesUtils.getInstance().setImei(createImei());
+    }
+
+    private String createImei(){
+        return UUID.randomUUID().toString();
+    }
+
+    public String getImei2() {
         if (TextUtils.isEmpty(imei)) {
-            TelephonyManager telephonyManager = (TelephonyManager) this
-                    .getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager telephonyManager = (TelephonyManager) this .getSystemService(Context.TELEPHONY_SERVICE);
             imei = telephonyManager.getDeviceId();
             App.getInstance().setImei(telephonyManager.getDeviceId());
         }
-
         return imei;
-
     }
 
     public void setImei(String imei) {

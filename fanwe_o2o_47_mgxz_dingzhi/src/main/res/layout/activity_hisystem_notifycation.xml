@@ -7,12 +7,6 @@
 
     <include layout="@layout/top_activity_hisystem_notifycation"/>
 
-    <com.fanwe.view.LoadMoreRecyclerView
-        android:layout_above="@+id/bottom_layout"
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.fanwe.view.LoadMoreRecyclerView>
+    <include layout="@layout/content_activity_hisystem_notifycation"/>
 
 </LinearLayout>

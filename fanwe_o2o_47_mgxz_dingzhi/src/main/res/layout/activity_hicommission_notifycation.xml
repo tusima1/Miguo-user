@@ -6,12 +6,6 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/top_activity_hicommission_notifycation"/>
-
-    <com.fanwe.view.LoadMoreRecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.fanwe.view.LoadMoreRecyclerView>
+    <include layout="@layout/content_activity_hicommission_notifycation"/>
 
 </LinearLayout>
