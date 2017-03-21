@@ -2,6 +2,7 @@ package com.miguo.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.fanwe.app.App;
 import com.miguo.definition.SharedPreferencesConfig;
@@ -87,5 +88,18 @@ public class SharedPreferencesUtils {
         return !"".equals(getUserName()) && !"".equals(getUserName());
     }
 
+    public boolean hasImei(){
+        return !TextUtils.isEmpty(getImei());
+    }
+
+    public String getImei(){
+        return sp.getString(SharedPreferencesConfig.IMEI, "");
+    }
+
+    public String setImei(String imei){
+        editor.putString(SharedPreferencesConfig.IMEI, imei);
+        editor.commit();
+        return imei;
+    }
 
 }

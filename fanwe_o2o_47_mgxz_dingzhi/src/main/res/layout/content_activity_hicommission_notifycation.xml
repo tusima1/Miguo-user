@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<in.srain.cube.views.ptr.PtrFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ptr_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/title_layout"
+    android:layout_above="@+id/tab_space"
+    app:ptr_keep_header_when_refresh="true"
+    app:ptr_pull_to_fresh="true">
+
+    <com.fanwe.view.LoadMoreRecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.fanwe.view.LoadMoreRecyclerView>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<WebView-->
+            <!--android:id="@+id/webView"-->
+            <!--android:layout_marginBottom="50dp"-->
+            <!--android:layout_below="@+id/title_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+        <!--</WebView>-->
+    <!--</LinearLayout>-->
+
+
+
+
+</in.srain.cube.views.ptr.PtrFrameLayout>
