@@ -7,6 +7,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.miguo.entity.JpushMessageBean;
+
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/3/14.
  * 应用内弹通知
@@ -43,12 +45,12 @@ public class NotifyMessage {
     /**
      * 添加view到windowmanager
      */
-    public void show(){
+    public void show(JpushMessageBean bean){
         final NotifyContentView notifyContentView = new NotifyContentView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         notifyContentView.setLayoutParams(params);
         mWindowManager.addView(notifyContentView, mParams);
-        notifyContentView.show();
+        notifyContentView.show(bean);
         notifyContentView.setOnNotifyViewStateChangeListener(new NotifyContentView.OnNotifyViewStateChangeListener() {
             @Override
             public void onCancel() {

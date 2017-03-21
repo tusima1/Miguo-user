@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fanwe.o2o.miguo.R;
+import com.miguo.entity.JpushMessageBean;
 import com.miguo.live.views.base.BaseRelativeLayout;
 import com.miguo.utils.BaseUtils;
 
@@ -106,7 +108,8 @@ public class NotifyContentView extends BaseRelativeLayout {
     private void initTitle(){
         mTitle = new TextView(getContext());
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.setMargins(dip2px(17), dip2px(10), 0, 0);
+        params.setMargins(dip2px(17), dip2px(10), dip2px(5), 0);
+        params.addRule(RelativeLayout.LEFT_OF, TIME_ID);
         mTitle.setLayoutParams(params);
         mTitle.setTextSize(14);
         mTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.c_9B9B9B));
@@ -149,6 +152,8 @@ public class NotifyContentView extends BaseRelativeLayout {
         mContent.setTextColor(ContextCompat.getColor(getContext(), R.color.c_4a4a4a));
         mContent.setText("你买到了喜欢的东西并做了分享，到账245元现金…");
         mContent.setId(CONTENT_ID);
+        mContent.setMaxLines(2);
+        mContent.setEllipsize(TextUtils.TruncateAt.END);
         root.addView(mContent);
     }
 
@@ -186,7 +191,14 @@ public class NotifyContentView extends BaseRelativeLayout {
         }
     }
 
-    public void show(){
+    public void update(JpushMessageBean bean){
+        mTitle.setText(bean.getTitle());
+        mContent.setText(bean.getMessage());
+        mTime.setText(bean.getTime());
+    }
+
+    public void show(JpushMessageBean bean){
+        update(bean);
         root.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(0, 0 , -dip2px(85), 0);
         animation.setDuration(250);

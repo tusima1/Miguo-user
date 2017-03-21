@@ -13,4 +13,6 @@ public class SharedPreferencesConfig {
     public static final String MOBILE = "mobile";
     public static final String PASSWORD = "pwd";
 
+    public static final String IMEI = "imei";
+
 }

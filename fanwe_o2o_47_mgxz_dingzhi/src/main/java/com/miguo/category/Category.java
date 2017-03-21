@@ -19,10 +19,14 @@ import com.miguo.listener.Listener;
 import com.miguo.utils.BaseUtils;
 import com.miguo.live.views.view.BaseView;
 
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+
 /**
  * Created by  zlh/Barry/狗蛋哥 on 2016/10/13.
  */
-public abstract class Category implements BaseView {
+public abstract class Category implements BaseView ,PtrHandler{
 
     protected Category category;
     protected String title;
@@ -90,6 +94,18 @@ public abstract class Category implements BaseView {
         setTitlePadding();
     }
 
+    protected void initPtrLayout(PtrFrameLayout ptrFrameLayout) {
+        ptrFrameLayout.disableWhenHorizontalMove(true);
+        ptrFrameLayout.setEnabledNextPtrAtOnce(false);
+        MaterialHeader ptrHead = new MaterialHeader(getActivity());
+        ptrHead.setPadding(0, 24, 0, 24);
+        ptrFrameLayout.setHeaderView(ptrHead);
+        ptrFrameLayout.addPtrUIHandler(ptrHead);
+        /**
+         * 设置下拉刷新回调
+         */
+        ptrFrameLayout.setPtrHandler(this);
+    }
 
     /**
      * 绑定View
@@ -166,6 +182,16 @@ public abstract class Category implements BaseView {
         if (view != null) {
             view.setPadding(0, BaseUtils.getStatusBarHeight(getActivity()), 0, 0);
         }
+    }
+
+    @Override
+    public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+        return false;
+    }
+
+    @Override
+    public void onRefreshBegin(PtrFrameLayout frame) {
+
     }
 
     /**
