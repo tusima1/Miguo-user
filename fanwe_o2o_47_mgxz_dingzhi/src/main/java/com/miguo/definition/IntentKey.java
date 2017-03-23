@@ -78,5 +78,6 @@ public class IntentKey {
     public static final String DESC = "desc";
 
     public static final String SYSTEM_MESSAGE_URL = "system_message_url";
+    public static final String SYSTEM_MESSAGE_ID = "system_message_id";
 
 }

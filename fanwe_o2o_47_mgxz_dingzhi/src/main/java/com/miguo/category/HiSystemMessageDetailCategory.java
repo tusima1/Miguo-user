@@ -12,13 +12,22 @@ import android.webkit.WebViewClient;
 
 import com.fanwe.app.App;
 import com.fanwe.app.AppHelper;
+import com.fanwe.constant.ServerUrl;
 import com.fanwe.model.LocalUserModel;
 import com.fanwe.o2o.miguo.R;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.app.HiBaseActivity;
 import com.miguo.app.HiSystemMessageDetailActivity;
+import com.miguo.dao.MessageReadDao;
+import com.miguo.dao.impl.MessageReadDaoImpl;
 import com.miguo.framework.WebActionJSHandler;
+import com.miguo.listener.HiSystemMessageDetailListener;
+import com.miguo.utils.BaseUtils;
+import com.miguo.utils.SharedPreferencesUtils;
+import com.miguo.view.MessageReadView;
+
+import org.apache.http.util.EncodingUtils;
 
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/3/10.
@@ -31,6 +40,7 @@ public class HiSystemMessageDetailCategory extends Category {
 
     WebActionJSHandler handler;
 
+    MessageReadDao messageReadDao;
 
     public HiSystemMessageDetailCategory(HiBaseActivity activity) {
         super(activity);
@@ -44,46 +54,58 @@ public class HiSystemMessageDetailCategory extends Category {
     @Override
     protected void initFirst() {
         handler = new WebActionJSHandler(getActivity());
+        initMessageReadDao();
     }
 
     @Override
     protected void initThisListener() {
-
+        listener = new HiSystemMessageDetailListener(this);
     }
 
     @Override
     protected void setThisListener() {
-
+        back.setOnClickListener(listener);
     }
 
     @Override
     protected void init() {
+        messageReadDao.messageRead(getActivity().getSystemId());
+    }
 
+    private void initMessageReadDao(){
+        messageReadDao = new MessageReadDaoImpl(new MessageReadView() {
+            @Override
+            public void messageReadSuccess() {
+
+            }
+
+            @Override
+            public void messageReadError() {
+
+            }
+        });
     }
 
     @Override
     protected void initViews() {
-
+        initWebView();
     }
 
     public void update(){
         String url = getActivity().getUrl();
-        if (TextUtils.isEmpty(url)) {
+        if(url.contains("mgxz.com")){
+            url = url + "/from/app";
+            String name = SharedPreferencesUtils.getInstance().getUserName();
+            String pwd = SharedPreferencesUtils.getInstance().getPassword();
+            //9月23日添加  &from=app
+            String postData ="name=" + name + "&pwd=" + pwd ;
+            webView.postUrl(url, EncodingUtils.getBytes(postData, "base64"));
             return;
         }
-        LocalUserModel userModel = AppHelper.getLocalUser();
-        if (userModel != null) {
-            String userid = userModel.getUser_mobile();
-            String password = userModel.getUser_pwd();
-            if (!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
-                url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password + "&from=app" : url;
-            } else {
-                url = url + "?name=&pwd=&from=app";
-            }
-        } else {
-            url = url + "?name=&pwd=&from=app";
-        }
+
         webView.loadUrl(url);
+
+
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
@@ -123,6 +145,14 @@ public class HiSystemMessageDetailCategory extends Category {
         });
         webView.addJavascriptInterface(handler, "mgxz");
         update();
+    }
+
+    public void clickBack(){
+        if(webView.canGoBack()){
+            webView.goBack();
+            return;
+        }
+        BaseUtils.finishActivity(getActivity());
     }
 
     @Override
