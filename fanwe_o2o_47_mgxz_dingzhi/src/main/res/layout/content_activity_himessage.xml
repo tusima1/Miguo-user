@@ -73,6 +73,7 @@
 
 
         <TextView
+            android:id="@+id/system_message_count"
             android:text="99+"
             android:textColor="@color/white"
             android:layout_centerVertical="true"
@@ -117,6 +118,7 @@
 
         <TextView
             android:text="99+"
+            android:id="@+id/amount_message_count"
             android:textColor="@color/white"
             android:layout_centerVertical="true"
             android:textSize="10sp"
