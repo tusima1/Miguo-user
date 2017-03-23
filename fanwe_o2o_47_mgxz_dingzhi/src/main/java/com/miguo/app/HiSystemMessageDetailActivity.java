@@ -12,7 +12,7 @@ import com.miguo.definition.IntentKey;
 public class HiSystemMessageDetailActivity extends HiBaseActivity {
 
     String url;
-
+    String systemId;
     @Override
     protected Category initCategory() {
         getIntentData();
@@ -27,10 +27,27 @@ public class HiSystemMessageDetailActivity extends HiBaseActivity {
     private void getIntentData(){
         if(null != getIntent()){
             this.url = getIntent().getStringExtra(IntentKey.SYSTEM_MESSAGE_URL);
+            this.systemId = getIntent().getStringExtra(IntentKey.SYSTEM_MESSAGE_ID);
         }
+    }
+
+    @Override
+    protected void finishActivity() {
+        if(null != getCategory()){
+            getCategory().clickBack();
+        }
+    }
+
+    @Override
+    public HiSystemMessageDetailCategory getCategory() {
+        return (HiSystemMessageDetailCategory)super.getCategory();
     }
 
     public String getUrl() {
         return url;
+    }
+
+    public String getSystemId() {
+        return systemId;
     }
 }

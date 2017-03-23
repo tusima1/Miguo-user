@@ -1,13 +1,31 @@
 package com.miguo.ui.view.notify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.databinding.library.baseAdapters.BR;
+import com.fanwe.WithdrawLogActivity;
+import com.fanwe.constant.ServerUrl;
+import com.fanwe.seller.views.GoodsDetailActivity;
+import com.fanwe.user.view.InviteActivity;
+import com.fanwe.user.view.MyCouponListActivity;
+import com.fanwe.user.view.MyOrderListActivity;
+import com.fanwe.user.view.RedPacketListActivity;
+import com.miguo.app.HiShopDetailActivity;
+import com.miguo.definition.ClassPath;
+import com.miguo.definition.IntentKey;
+import com.miguo.definition.MessageType;
+import com.miguo.definition.RequestCode;
 import com.miguo.entity.JpushMessageBean;
+import com.miguo.factory.ClassNameFactory;
+import com.miguo.factory.MessageTypeFactory;
+import com.miguo.utils.BaseUtils;
 
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/3/14.
@@ -59,10 +77,15 @@ public class NotifyMessage {
             }
 
             @Override
-            public void action() {
-                Toast.makeText(mContext,"佣金分享..", Toast.LENGTH_SHORT).show();
+            public void action(JpushMessageBean bean) {
+                notifyAction(bean);
             }
         });
     }
+
+    private void notifyAction(JpushMessageBean bean){
+        MessageTypeFactory.jump(mContext, bean);
+    }
+
 
 }

@@ -48,6 +48,8 @@ public class NotifyContentView extends BaseRelativeLayout {
 
     boolean cancelForAction;
 
+    JpushMessageBean bean;
+
     public NotifyContentView(Context context) {
         super(context);
     }
@@ -192,12 +194,17 @@ public class NotifyContentView extends BaseRelativeLayout {
     }
 
     public void update(JpushMessageBean bean){
+        this.bean = bean;
         mTitle.setText(bean.getTitle());
         mContent.setText(bean.getMessage());
         mTime.setText(bean.getTime());
     }
 
     public void show(JpushMessageBean bean){
+        if(bean == null){
+            cancel();
+            return;
+        }
         update(bean);
         root.setVisibility(View.VISIBLE);
         TranslateAnimation animation = new TranslateAnimation(0, 0 , -dip2px(85), 0);
@@ -231,7 +238,7 @@ public class NotifyContentView extends BaseRelativeLayout {
                     onNotifyViewStateChangeListener.onCancel();
                     setVisibility(View.GONE);
                     if(cancelForAction){
-                        onNotifyViewStateChangeListener.action();
+                        onNotifyViewStateChangeListener.action(bean);
                     }
                 }
             }
@@ -261,7 +268,7 @@ public class NotifyContentView extends BaseRelativeLayout {
 
     public interface OnNotifyViewStateChangeListener{
         void onCancel();
-        void action();
+        void action(JpushMessageBean bean);
     }
 
 }

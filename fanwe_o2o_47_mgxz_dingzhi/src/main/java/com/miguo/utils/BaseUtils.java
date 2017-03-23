@@ -77,18 +77,26 @@ public class BaseUtils {
     /**
      * 跳转到新到activity
      */
-    public static void jumpToNewActivity(Activity activity, Intent intent) {
+    public static void jumpToNewActivity(Context activity, Intent intent) {
         activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.translate_left,R.anim.translate_right);
+        try{
+            ((Activity)activity).overridePendingTransition(R.anim.translate_left,R.anim.translate_right);
+        }catch (Exception e){
+
+        }
     }
 
     /**
      * 跳转到新到activit并且结束当前Activity
      */
-    public static void jumpToNewActivityWithFinish(Activity activity, Intent intent) {
+    public static void jumpToNewActivityWithFinish(Context activity, Intent intent) {
         activity.startActivity(intent);
-        activity.finish();
-        activity.overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        try{
+            ((Activity)activity).finish();
+            ((Activity)activity).overridePendingTransition(R.anim.translate_left, R.anim.translate_right);
+        }catch (Exception e){
+
+        }
     }
 
     /**
