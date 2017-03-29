@@ -270,7 +270,7 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     private void showRedPacketPop(OnlinePayOrderPaymentBean.Result.Body.Share share,String name,String faceIcon,String showContent,String order_id,String money){
         content = findViewById(android.R.id.content);
         redPacketPopup = new RedPacketPopup(getActivity(),content);
-        redPacketPopup.setNeedData(share,name,faceIcon,showContent,order_id,money);
+        redPacketPopup.setNeedData(share,name,faceIcon,showContent,order_id,money, getActivity().getShopId());
         redPacketPopup.setDismissListener(new RedPacketPopup.OnPopupWindowDismissListener() {
             @Override
             public void whenDismiss() {

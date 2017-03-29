@@ -18,6 +18,7 @@ import com.fanwe.common.model.createShareRecord.ModelCreateShareRecord;
 import com.fanwe.common.presenters.CommonHttpHelper;
 import com.fanwe.constant.Constant;
 import com.fanwe.constant.ServerUrl;
+import com.fanwe.customview.MGProgressDialog;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.network.HttpCallback;
 import com.fanwe.network.OkHttpUtil;
@@ -25,11 +26,14 @@ import com.fanwe.o2o.miguo.R;
 import com.fanwe.umeng.UmengShareManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.dao.CreateShareRecordDao;
+import com.miguo.dao.impl.CreateShareRecordDaoImpl;
 import com.miguo.definition.IntentKey;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.entity.StatusBean;
 import com.miguo.ui.view.customviews.ArcDrawable;
 import com.miguo.utils.BaseUtils;
+import com.miguo.view.CreateShareRecordView;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -69,6 +73,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
     private String shareRecordId = "";//分享id
     private String money = "";
     private String order_id = "";
+    private String shop_id = "";
     private String face_icon = "";
     private String showContent = "";
     private OnlinePayOrderPaymentBean.Result.Body.Share share;
@@ -84,6 +89,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         initView();
         getRecordId();
         bindData();
+        initCreateShareRecordId();
     }
 
     private void bindData() {
@@ -98,6 +104,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         }
         money = intent.getStringExtra(IntentKey.MONEY);
         order_id = intent.getStringExtra("order_id");
+        shop_id = intent.getStringExtra("shop_id");
         face_icon = intent.getStringExtra(IntentKey.ICON);
         showContent = intent.getStringExtra(IntentKey.DESC);
         share = (OnlinePayOrderPaymentBean.Result.Body.Share) intent.getSerializableExtra("share");
@@ -107,6 +114,25 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
             finish();
             return;
         }
+    }
+
+    private void initCreateShareRecordId(){
+        final MGProgressDialog dialog = new MGProgressDialog(this);
+        dialog.show();
+        CreateShareRecordDao createShareRecordDao = new CreateShareRecordDaoImpl(new CreateShareRecordView() {
+            @Override
+            public void createShareRecordSuccess(String shareRecordId) {
+                dialog.dismiss();
+                RedPacketOpenResultActivity.this.shareRecordId = shareRecordId;
+            }
+
+            @Override
+            public void createShareRecordError(String message) {
+                dialog.dismiss();
+                RedPacketOpenResultActivity.this.shareRecordId = "";
+            }
+        });
+        createShareRecordDao.createShareRecordFromOfflinePay(App.getInstance().getCurrentUser().getUser_id(),shop_id);
     }
 
     private void initView() {
@@ -167,7 +193,7 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
 
     private void doShare(SHARE_MEDIA platform){
         if(TextUtils.isEmpty(shareRecordId)){
-            Toast.makeText(this, "分享失败!", Toast.LENGTH_SHORT).show();
+            shareRecordId = "";
             return;
         }
         if (share!=null){
@@ -205,6 +231,10 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
     private String getShareRecordIdUrl(String clickUrl){
         if(isEmpty(clickUrl)){
             return ServerUrl.getAppH5Url();
+        }
+
+        if(TextUtils.isEmpty(shareRecordId)){
+            return clickUrl;
         }
 
         if(!clickUrl.contains("mgxz")){

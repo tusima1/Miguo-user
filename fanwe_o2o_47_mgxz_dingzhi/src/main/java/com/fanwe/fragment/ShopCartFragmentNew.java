@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.didikee.uilibs.utils.DisplayUtil;
 import com.fanwe.ConfirmOrderActivity;
+import com.fanwe.ShopCartActivity;
 import com.fanwe.adapter.ShopCartAdapter;
 import com.fanwe.adapter.ShopCartAdapter.ShopCartSelectedListener;
 import com.fanwe.app.App;
@@ -44,6 +45,7 @@ import com.miguo.app.HiHomeActivity;
 import com.miguo.definition.ClassPath;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.live.views.customviews.MGToast;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGUIUtil;
 
 import java.math.BigDecimal;
@@ -103,6 +105,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
 
     MGProgressDialog dialog;
 
+    @ViewInject(R.id.ll_container)
+    LinearLayout bottomContainer;
+
     @Override
     protected View onCreateContentView(LayoutInflater inflater,
                                        ViewGroup container, Bundle savedInstanceState) {
@@ -116,24 +121,38 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         outSideShoppingCartHelper = new OutSideShoppingCartHelper(this);
         initTitle();
         registeClick();
-        resetInitData();
-//        initPull2RefreshSrcollView();
+        handleBottomMargin();
     }
 
-
+    private void handleBottomMargin(){
+        if(getActivity() instanceof HiHomeActivity){
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 0, BaseUtils.dip2px(45));
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            bottomContainer.setLayoutParams(params);
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(getActivity() instanceof ShopCartActivity){
+            mTitle.setLeftImageLeft(R.drawable.ic_left_arrow_dark);
+            initShoppingCartData();
+        }
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
-            resetInitData();
-            initPull2RefreshSrcollView();
+        if(isVisibleToUser && getActivity() instanceof HiHomeActivity){
+            initShoppingCartData();
         }
+    }
+
+    private void initShoppingCartData(){
+        resetInitData();
+        initPull2RefreshSrcollView();
     }
 
     /**
@@ -213,8 +232,9 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
         mTitle.setMiddleTextTop("购物车");
         mTitle.setConfig(Color.WHITE);
         mTitle.setMiddleTextColor(getResources().getColor(R.color.text_item_title));
-        mTitle.setPadding(0, DisplayUtil.dp2px(getContext(),25),0,0);
+        mTitle.notifyItemBackgroundChangedAll(Color.WHITE);
         if (getActivity() instanceof HiHomeActivity) {
+            mTitle.setPadding(0, DisplayUtil.dp2px(getContext(),25),0,0);
             mTitle.setLeftImageLeft(0);
         }
     }

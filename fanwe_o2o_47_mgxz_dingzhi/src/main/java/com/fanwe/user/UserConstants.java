@@ -323,4 +323,6 @@ public class UserConstants {
      */
     public static final String ONLINE_PAY_ORDER = "OnlinePayOrder";
 
+    public static final String CREATE_SHARE_RECORD = "CreateShareRecord";
+
 }
