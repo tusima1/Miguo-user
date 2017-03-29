@@ -73,6 +73,7 @@ public class UmengShareManager {
         if (shareListener == null) {
             shareListener = getDefaultListener();
         }
+
         new ShareAction(mActivity)
                 .withTitle(title)
                 .withText(content)
