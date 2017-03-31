@@ -33,6 +33,15 @@ public class FixRequestDisallowTouchEventPtrFrameLayout extends PtrFrameLayout{
        super.requestDisallowInterceptTouchEvent(disallowIntercept);
     }
 
+    public void requestDisallowInterceptTouchEvent2(boolean disallowIntercept) {
+        setDisallowInterceptTouchEvent(disallowIntercept);
+        super.requestDisallowInterceptTouchEvent(disallowIntercept);
+    }
+
+    public void setDisallowInterceptTouchEvent(boolean disallowInterceptTouchEvent) {
+        this.disallowInterceptTouchEvent = disallowInterceptTouchEvent;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){

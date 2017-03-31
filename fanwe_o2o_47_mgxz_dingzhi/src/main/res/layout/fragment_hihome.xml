@@ -83,29 +83,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <!--<com.miguo.ui.view.HomeLooperViewPager-->
-                        <!--android:id="@+id/home_fragemnt_view_pager"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
 
+                    <com.miguo.ui.view.RepresentViewPager
+                        android:id="@+id/pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <!--</com.miguo.ui.view.HomeLooperViewPager>-->
+                    </com.miguo.ui.view.RepresentViewPager>
 
                 </RelativeLayout>
 
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/home_tags_view_layout"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
-
-                    <!--<com.miguo.ui.view.HomeTagsView-->
-                        <!--android:id="@+id/home_tags_view"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
-                    <!--</com.miguo.ui.view.HomeTagsView>-->
-
-                <!--</LinearLayout>-->
+                <me.relex.circleindicator.CircleIndicator
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/indicator_circle"
+                    android:visibility="gone"
+                    app:ci_drawable="@drawable/gray_radius_square"
+                    app:ci_height="5dp"
+                    app:ci_margin="5dp"
+                    app:ci_width="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:gravity="center" />
 
                 <LinearLayout
                     android:id="@+id/home_tuan_limit_bottom_layout"

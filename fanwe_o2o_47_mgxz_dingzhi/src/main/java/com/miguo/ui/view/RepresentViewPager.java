@@ -5,7 +5,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
 import com.miguo.model.TouchToMoveListener;
+
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * Created by Administrator on 2017/1/5.
@@ -14,7 +17,7 @@ import com.miguo.model.TouchToMoveListener;
 public class RepresentViewPager extends ViewPager {
 
     TouchToMoveListener touchToMoveListener;
-    PtrFrameLayoutForViewPager ptrFrameLayout;
+    PtrFrameLayout ptrFrameLayout;
 
 
     public RepresentViewPager(Context context) {
@@ -45,7 +48,7 @@ public class RepresentViewPager extends ViewPager {
 
     public void handlerActionDown(MotionEvent ev){
         if(ptrFrameLayout != null){
-            ptrFrameLayout.requestDisallowInterceptTouchEvent2(true);
+            requestDisallowInterceptTouchEvent2(true);
         }
         if(touchToMoveListener != null){
             touchToMoveListener.onActionDown(ev);
@@ -54,7 +57,7 @@ public class RepresentViewPager extends ViewPager {
 
     public void handlerActionMove(MotionEvent ev){
         if(ptrFrameLayout != null){
-            ptrFrameLayout.requestDisallowInterceptTouchEvent2(true);
+            requestDisallowInterceptTouchEvent2(true);
         }
         if(touchToMoveListener != null){
             touchToMoveListener.onActionDown(ev);
@@ -63,12 +66,28 @@ public class RepresentViewPager extends ViewPager {
         if(touchToMoveListener != null){
             touchToMoveListener.onActionMove(ev);
         }
+    }
 
+    public void requestDisallowInterceptTouchEvent2(boolean requestDisallowInterceptTouchEvent){
+        if(ptrFrameLayout instanceof PtrFrameLayoutForViewPager){
+            getPtrFrameLayoutForViewPager().requestDisallowInterceptTouchEvent2(requestDisallowInterceptTouchEvent);
+        }
+        if(ptrFrameLayout instanceof FixRequestDisallowTouchEventPtrFrameLayout){
+            getFixRequestDisallowTouchEventPtrFrameLayout().requestDisallowInterceptTouchEvent2(requestDisallowInterceptTouchEvent);
+        }
+    }
+
+    public PtrFrameLayoutForViewPager getPtrFrameLayoutForViewPager(){
+        return (PtrFrameLayoutForViewPager)ptrFrameLayout;
+    }
+
+    public FixRequestDisallowTouchEventPtrFrameLayout getFixRequestDisallowTouchEventPtrFrameLayout(){
+        return (FixRequestDisallowTouchEventPtrFrameLayout)ptrFrameLayout;
     }
 
     public void handlerActionCancel(MotionEvent ev){
         if(ptrFrameLayout != null){
-            ptrFrameLayout.requestDisallowInterceptTouchEvent2(false);
+            requestDisallowInterceptTouchEvent2(false);
         }
         if(touchToMoveListener != null){
             touchToMoveListener.onActionCancel(ev);
@@ -79,7 +98,7 @@ public class RepresentViewPager extends ViewPager {
         this.touchToMoveListener = touchToMoveListener;
     }
 
-    public void setPtrFrameLayout(PtrFrameLayoutForViewPager ptrFrameLayout) {
+    public void setPtrFrameLayout(PtrFrameLayout ptrFrameLayout) {
         this.ptrFrameLayout = ptrFrameLayout;
     }
 }

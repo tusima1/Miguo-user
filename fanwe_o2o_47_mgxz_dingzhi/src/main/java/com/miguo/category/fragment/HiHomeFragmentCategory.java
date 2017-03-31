@@ -1,6 +1,8 @@
 package com.miguo.category.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,6 +23,7 @@ import com.fanwe.dao.barry.view.GetSpecialListView;
 import com.fanwe.library.utils.SDCollectionUtil;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
+import com.fanwe.seller.model.getBusinessListings.ModelBusinessListings;
 import com.fanwe.seller.model.getCityList.ModelCityList;
 import com.fanwe.seller.views.SellerFragment;
 import com.fanwe.view.FixRequestDisallowTouchEventPtrFrameLayout;
@@ -28,8 +31,12 @@ import com.fanwe.view.HomeTuanTimeLimitView;
 import com.fanwe.work.AppRuntimeWorker;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.miguo.adapter.HiRepresentBannerFragmentAdapter;
+import com.miguo.adapter.HiRepresentCateAdapter;
 import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.adapter.HomebannerPagerAdapter;
+import com.miguo.dao.GetSearchCateConditionDao;
+import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.entity.BannerTypeModel;
@@ -46,10 +53,15 @@ import com.miguo.definition.MenuParams;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.CheckCitySignBean;
 import com.miguo.entity.MenuBean;
+import com.miguo.entity.SearchCateConditionBean;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.factory.SearchCateConditionFactory;
 import com.miguo.fragment.HiBaseFragment;
+import com.miguo.fragment.HiRepresentCateFragment;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
+import com.miguo.model.TouchToMoveListener;
+import com.miguo.ui.view.RepresentViewPager;
 import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.AutoBanner;
 import com.miguo.ui.view.AutofitTextView;
@@ -63,8 +75,10 @@ import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetMenuListView;
+import com.miguo.view.GetSearchCateConditionView;
 import com.miguo.view.HomeGreetingView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -72,6 +86,7 @@ import java.util.UUID;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.MaterialHeader;
+import me.relex.circleindicator.CircleIndicator;
 
 /**
  * Created by by zlh/Barry/狗蛋哥 on 2016/10/13.
@@ -83,6 +98,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         HomeLooperViewPager.HomeBannerViewPagerOnTouchListener,
         HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
+        TouchToMoveListener,
         HomeGreetingView,
         GetAdspaceListView,
         CheckCityView {
@@ -147,6 +163,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     boolean hasSeeler = false;
 
+    @ViewInject(R.id.pager)
+    RepresentViewPager pager;
+    HiRepresentBannerFragmentAdapter bannerAdapter;
+    @ViewInject(R.id.indicator_circle)
+    CircleIndicator circleIndicator;
+
+
     /**
      * 限时特惠
      */
@@ -190,6 +213,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     CheckCitySignBean.Result.Body citySign;
 
+    GetSearchCateConditionDao getSearchCateConditionDao;
+
+
     public HiHomeFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
     }
@@ -200,6 +226,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeGreetingDao = new HomeGreetingDaoImpl(this);
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
         checkCitySignDao = new CheckCitySignDaoImpl(this);
+        initSearchCateCondition();
     }
 
     @Override
@@ -245,6 +272,72 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefresh();
     }
 
+
+
+    /**
+     * 获取分类数据
+     */
+    private void initSearchCateCondition(){
+        getSearchCateConditionDao = new GetSearchCateConditionDaoImpl(new GetSearchCateConditionView(){
+            @Override
+            public void getSearchCateConditionError(String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadComplete();
+                    }
+                });
+            }
+
+            @Override
+            public void getSearchCateConditionSuccess(SearchCateConditionBean.ResultBean.BodyBean body) {
+                SearchCateConditionFactory.update(body);
+                updateCategories();
+                loadComplete();
+            }
+        });
+    }
+
+    public void updateCategories(){
+        SearchCateConditionBean.ResultBean.BodyBean bean = SearchCateConditionFactory.getHomeRepresent();
+        if(null != bean){
+            initCategories(bean.getCategoryList());
+        }
+    }
+
+    private void initCategories(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
+        updateCategoryViewPagerParams(categories);
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        int count = categories.size() / 8 + (categories.size() % 8 > 0 ? 1 : 0);
+        for(int i = 0; i < count; i++){
+            List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> current = new ArrayList<>();
+            int categoryTypeCount = ((i + 1) * 8 <= categories.size() ? 8 : categories.size() - (i * 8));
+            for(int j = 0; j < categoryTypeCount; j++){
+                current.add(categories.get(i * 8 + j));
+            }
+            HiRepresentCateFragment fragment = new HiRepresentCateFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(IntentKey.REPRESENT_CATEGORYS, (Serializable) current);
+            fragment.setArguments(bundle);
+            fragments.add(fragment);
+        }
+        bannerAdapter = new HiRepresentBannerFragmentAdapter(fragment.getChildFragmentManager(), fragments);
+        pager.setAdapter(bannerAdapter);
+        circleIndicator.setViewPager(pager);
+        circleIndicator.setVisibility(categories.size() <= 8 ? View.GONE : View.VISIBLE);
+        pager.setTouchToMoveListener(this);
+        pager.setPtrFrameLayout(ptrFrameLayout);
+    }
+
+    private void updateCategoryViewPagerParams(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
+        RelativeLayout.LayoutParams params = getRelativeLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, getCategoryViewPagerHeight(categories));
+        pager.setLayoutParams(params);
+    }
+
+    private int getCategoryViewPagerHeight(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
+        return categories.size() <= 4 ? HiRepresentCateAdapter.getItemHeight() : HiRepresentCateAdapter.getItemHeight() * 2;
+    }
+
     private void initDefaultCity() {
         ModelCityList bean = AppRuntimeWorker.getCityCurr();
         citySayHi.setText(bean.getUname());
@@ -256,6 +349,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefreshTimeLimit();
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
+        onRefreshSearchCondition();
     }
 
     public void clickRefresh(){
@@ -343,6 +437,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     public void onRefreshFeaturedGroupon() {
         featuredGrouponCategory.onRefresh();
+    }
+
+    public void onRefreshSearchCondition(){
+        getSearchCateConditionDao.getSearchCateCondition();
     }
 
     /**
