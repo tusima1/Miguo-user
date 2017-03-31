@@ -77,34 +77,35 @@
 
                 </RelativeLayout>
 
+                <!-- banner不要了 -->
                 <RelativeLayout
                     android:id="@+id/banner_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.miguo.ui.view.HomeLooperViewPager
-                        android:id="@+id/home_fragemnt_view_pager"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <!--<com.miguo.ui.view.HomeLooperViewPager-->
+                        <!--android:id="@+id/home_fragemnt_view_pager"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
 
 
-                    </com.miguo.ui.view.HomeLooperViewPager>
+                    <!--</com.miguo.ui.view.HomeLooperViewPager>-->
 
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/home_tags_view_layout"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/home_tags_view_layout"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
 
-                    <com.miguo.ui.view.HomeTagsView
-                        android:id="@+id/home_tags_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                    </com.miguo.ui.view.HomeTagsView>
+                    <!--<com.miguo.ui.view.HomeTagsView-->
+                        <!--android:id="@+id/home_tags_view"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+                    <!--</com.miguo.ui.view.HomeTagsView>-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
                 <LinearLayout
                     android:id="@+id/home_tuan_limit_bottom_layout"

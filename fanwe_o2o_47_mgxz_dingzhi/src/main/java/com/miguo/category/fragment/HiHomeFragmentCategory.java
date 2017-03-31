@@ -84,7 +84,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
         GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
         HomeGreetingView,
-        GetAdspaceListView, GetMenuListView, CheckCityView {
+        GetAdspaceListView,
+        CheckCityView {
 
 
     /**
@@ -121,8 +122,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     LinearLayout topSayHi;
     @ViewInject(R.id.sayhi)
     AutofitTextView sayhi;
-    @ViewInject(R.id.scroll_content)
-    LinearLayout scrollContent;
     @ViewInject(R.id.city_sayhi)
     TextView citySayHi;
 
@@ -132,17 +131,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.title_space)
     View space;
 
-    /**
-     * 轮播ViewPager
-     */
-    @ViewInject(R.id.home_fragemnt_view_pager)
-    AutoBanner homeViewPager;
-
     @ViewInject(R.id.banner_layout)
     RelativeLayout bannerLayout;
-
-//    HomeBannerAdapter homeBannerAdapter;
-    HomebannerPagerAdapter homeBannerAdapter;
 
     /**
      * 网络请求失败的显示界面
@@ -167,14 +157,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     LinearLayout homeTuanLimitBottomLayout;
 
     /**
-     * 标签栏
-     */
-    @ViewInject(R.id.home_tags_view)
-    HomeTagsView homeTagsView;
-    @ViewInject(R.id.home_tags_view_layout)
-    LinearLayout homeTagsViewLayout;
-
-    /**
      * 广告位2
      */
     @ViewInject(R.id.home_ad_view_2)
@@ -187,7 +169,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     HomeGreetingDao homeGreetingDao;
     GetAdspaceListDao getAdspaceListDao;
-    GetMenuListDao getMenuListDao;
     CheckCitySignDao checkCitySignDao;
 
     /**
@@ -218,7 +199,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         getSpecialListDao = new GetSpecialListDaoImpl(this);
         homeGreetingDao = new HomeGreetingDaoImpl(this);
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
-        getMenuListDao = new GetMenuListDaoImpl(this);
         checkCitySignDao = new CheckCitySignDaoImpl(this);
     }
 
@@ -243,9 +223,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         qrScran.setOnClickListener(listener);
         citySayHi.setOnClickListener(listener);
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener) listener);
-        homeTagsView.setOnHomeTagsClickListener((HiHomeFragmentListener) listener);
         scrollView.setRecyclerScrollViewOnTouchListener(this);
-//        homeViewPager.setHomeBannerViewPagerOnTouchListener(this);
         homeTuanTimeLimitView.setTimeLimitedOnTouchListener(this);
     }
 
@@ -256,7 +234,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         setTitlePadding(sayHiLayout);
         setTitlePadding(titleLayout);
         initPtrLayout(ptrFrameLayout);
-        initChirldViewsParent();
         initDefaultCity();
         /**
          * 今日精选
@@ -268,10 +245,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefresh();
     }
 
-    private void initChirldViewsParent() {
-        homeTagsView.setHiHomeFragmentCategory(this);
-    }
-
     private void initDefaultCity() {
         ModelCityList bean = AppRuntimeWorker.getCityCurr();
         citySayHi.setText(bean.getUname());
@@ -279,13 +252,10 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     public void onRefreshAfter() {
-//        clearPage();
         onRefreshGreeting();
         onRefreshTimeLimit();
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
-        onRefreshMenus();
-//        startTabShowAnimation();
     }
 
     public void clickRefresh(){
@@ -309,11 +279,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void clearPage() {
         sayHiLayout.setVisibility(View.GONE);
-        bannerLayout.setVisibility(View.GONE);
         homeTuanTimeLimitView.setVisibility(View.GONE);
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
-        homeTagsView.setVisibility(View.GONE);
-        homeTagsViewLayout.setVisibility(View.GONE);
         homeADView2.setVisibility(View.GONE);
         featuredGrouponCategory.clearPage();
     }
@@ -322,26 +289,17 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 首页banner数据
      */
     private void initBanner(List<AdspaceListBean.Result.Body> bodys) {
-        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
-        RelativeLayout.LayoutParams bannerParams = getRelativeLayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(210));
-        homeViewPager.setLayoutParams(bannerParams);
-        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
-        homeBannerAdapter = new HomebannerPagerAdapter(this, bodys);
-        homeViewPager.setAdapter(homeBannerAdapter);
+//        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
+//        RelativeLayout.LayoutParams bannerParams = getRelativeLayoutParams(
+//                RelativeLayout.LayoutParams.MATCH_PARENT, SDCollectionUtil.isEmpty(bodys) ? RelativeLayout.LayoutParams.WRAP_CONTENT : dip2px(210));
+//        homeViewPager.setLayoutParams(bannerParams);
+//        bannerLayout.setVisibility(SDCollectionUtil.isEmpty(bodys) ? View.GONE : View.VISIBLE);
+//        homeBannerAdapter = new HomebannerPagerAdapter(this, bodys);
+//        homeViewPager.setAdapter(homeBannerAdapter);
     }
 
     private void initFeaturedGrouponCategory() {
         featuredGrouponCategory = new FeaturedGrouponCategory(view, fragment);
-    }
-
-    /**
-     * 首页标签、菜单栏
-     */
-    private void initHomeMenuView(List<MenuBean.Result.Body> list) {
-        homeTagsView.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
-        homeTagsViewLayout.setVisibility(SDCollectionUtil.isEmpty(list) ? View.GONE : View.VISIBLE);
-        homeTagsView.init(list);
     }
 
     private void initHomeADView2(List<AdspaceListBean.Result.Body> body) {
@@ -385,10 +343,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     public void onRefreshFeaturedGroupon() {
         featuredGrouponCategory.onRefresh();
-    }
-
-    public void onRefreshMenus() {
-        getMenuListDao.getMenuList(getCurrentHttpUuid(),MenuParams.TERMINAL_TYPE, MenuParams.MENU_TYPE_INDEX);
     }
 
     /**
@@ -1004,27 +958,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     }
 
-    /**
-     * 首页菜单
-     */
-    @Override
-    public void getMenuListSuccess(final String httpUuid ,List<MenuBean.Result.Body> list) {
-        if(isCurrentHttp(httpUuid)){
-            initHomeMenuView(list);
-        }
-        loadComplete();
-    }
-
-    @Override
-    public void getMenuListError(final String httpUuid) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                loadComplete();
-            }
-        });
-
-    }
 
     /**
      * 专题点击回调

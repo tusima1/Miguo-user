@@ -58,7 +58,8 @@ public class HomeBannerImageView extends ImageView{
      * @return
      */
     public HomeLooperViewPager getHomeViewPager(){
-        return (HomeLooperViewPager)getActivity().findViewById(R.id.home_fragemnt_view_pager);
+//        return (HomeLooperViewPager)getActivity().findViewById(R.id.home_fragemnt_view_pager);
+        return null;
     }
 
     public HiBaseActivity getActivity(){
