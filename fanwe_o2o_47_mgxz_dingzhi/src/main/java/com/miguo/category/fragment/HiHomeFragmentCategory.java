@@ -302,7 +302,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         /**
          * {@link com.miguo.dao.impl.CheckCitySignDaoImpl}
          * {@link #checkCitySignSuccess()}
-         * {@link #checkCitySignError()}
+         * {@link #checkCitySignError(CheckCitySignBean.Result.Body citySign)}
          */
         checkCitySignDao.checkCitySign(AppRuntimeWorker.getCity_id());
     }

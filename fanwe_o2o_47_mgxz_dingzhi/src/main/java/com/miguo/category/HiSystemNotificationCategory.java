@@ -94,9 +94,15 @@ public class HiSystemNotificationCategory extends Category {
             }
 
             @Override
-            public void getMessageListError(String message) {
-                showToast(message);
-                loadComplete();
+            public void getMessageListError(final String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(message);
+                        loadComplete();
+                    }
+                });
+
             }
         });
     }

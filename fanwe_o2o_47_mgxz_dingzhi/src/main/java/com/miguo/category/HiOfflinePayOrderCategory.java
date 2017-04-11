@@ -270,7 +270,7 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
     private void showRedPacketPop(OnlinePayOrderPaymentBean.Result.Body.Share share,String name,String faceIcon,String showContent,String order_id,String money){
         content = findViewById(android.R.id.content);
         redPacketPopup = new RedPacketPopup(getActivity(),content);
-        redPacketPopup.setNeedData(share,name,faceIcon,showContent,order_id,money, getActivity().getShopId());
+        redPacketPopup.setNeedData(share,name,faceIcon,showContent,order_id,money, getShopId());
         redPacketPopup.setDismissListener(new RedPacketPopup.OnPopupWindowDismissListener() {
             @Override
             public void whenDismiss() {
@@ -278,6 +278,10 @@ public class HiOfflinePayOrderCategory extends Category implements OnlinePayOrde
             }
         });
         redPacketPopup.showAtLocation(content, Gravity.CENTER,0,0);
+    }
+
+    private String getShopId(){
+        return getActivity().isFromOrderList() ? orderInfo.getShop_id() : getActivity().getShopId();
     }
 
     public void clickPay(){

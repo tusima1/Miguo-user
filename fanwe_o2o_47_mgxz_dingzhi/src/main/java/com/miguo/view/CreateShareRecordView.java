@@ -1,5 +1,7 @@
 package com.miguo.view;
 
+import com.miguo.entity.CreateShareRecordBean;
+
 /**
  * Created by Barry/狗蛋哥/zlh on 2017/3/13.
  */
@@ -7,9 +9,10 @@ package com.miguo.view;
 public interface CreateShareRecordView extends BaseView {
 
     /**
-     * @param shareRecordId 分享id
+     *
+     * @param shareRecord 分享信息
      */
-    void createShareRecordSuccess(String shareRecordId);
+    void createShareRecordSuccess(CreateShareRecordBean.Result.Body shareRecord);
 
     /**
      *

@@ -29,6 +29,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.dao.CreateShareRecordDao;
 import com.miguo.dao.impl.CreateShareRecordDaoImpl;
 import com.miguo.definition.IntentKey;
+import com.miguo.entity.CreateShareRecordBean;
 import com.miguo.entity.OnlinePayOrderPaymentBean;
 import com.miguo.entity.StatusBean;
 import com.miguo.ui.view.customviews.ArcDrawable;
@@ -121,9 +122,9 @@ public class RedPacketOpenResultActivity extends AppCompatActivity implements Vi
         dialog.show();
         CreateShareRecordDao createShareRecordDao = new CreateShareRecordDaoImpl(new CreateShareRecordView() {
             @Override
-            public void createShareRecordSuccess(String shareRecordId) {
+            public void createShareRecordSuccess(CreateShareRecordBean.Result.Body shareRecordId) {
                 dialog.dismiss();
-                RedPacketOpenResultActivity.this.shareRecordId = shareRecordId;
+                RedPacketOpenResultActivity.this.shareRecordId = shareRecordId.getId();
             }
 
             @Override

@@ -1,5 +1,7 @@
 package com.miguo.entity;
 
+import com.fanwe.shoppingcart.model.Share_info;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -49,6 +51,16 @@ public class CreateShareRecordBean implements Serializable{
 
         public class Body implements Serializable{
             String id;
+
+            Share_info share;
+
+            public Share_info getShare() {
+                return share;
+            }
+
+            public void setShare(Share_info share) {
+                this.share = share;
+            }
 
             public String getId() {
                 return id;

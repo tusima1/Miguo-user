@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.IBinder;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.fanwe.app.ActivityLifeManager;
+import com.fanwe.app.App;
 import com.fanwe.base.CallbackView;
 import com.fanwe.common.HttpManagerX;
 import com.fanwe.common.model.CommonConstants;
@@ -246,12 +248,13 @@ public class AppUpgradeService extends Service implements CallbackView {
             mNotificationManager.notify(mNotificationId, mNotification);
             mNotificationManager.cancel(mNotificationId);
             if (!filePath.endsWith(".apk")){
-                File  oldFile=new File(filePath);
-                filePath+=".apk";
-                File newFile=new File(filePath);
+                File oldFile = new File(filePath);
+                filePath += ".apk";
+                File newFile = new File(filePath);
                 oldFile.renameTo(newFile);
             }
-            SDPackageUtil.installApkPackage(filePath);
+//            SDPackageUtil.installApkPackage(filePath);
+            SDPackageUtil.installApkPackage(App.getInstance(), filePath);
             MGToast.showToast("下载完成");
             stopSelf();
         }

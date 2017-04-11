@@ -484,8 +484,14 @@ public class HiRepresentFragmentCategory extends FragmentCategory implements  Re
 
             @Override
             public void getAdspaceListError(String httpUuid) {
-                scrollview.smoothScrollTo(0, 2);
-                loadComplete();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollview.smoothScrollTo(0, 2);
+                        loadComplete();
+                    }
+                });
+
             }
         });
     }

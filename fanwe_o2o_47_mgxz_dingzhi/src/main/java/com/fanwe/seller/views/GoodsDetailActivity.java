@@ -67,6 +67,7 @@ import com.miguo.live.model.LiveConstants;
 import com.miguo.live.presenters.ShoppingCartHelper;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.ui.view.AutoBanner;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.MGLog;
 import com.miguo.utils.MGUIUtil;
 import com.miguo.utils.NetWorkStateUtil;
@@ -797,6 +798,10 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
         }
     }
 
+    private void handleGoodsGroupFinish(){
+
+    }
+
     @Override
     public void onFailue(String responseBody) {
         if (dialog != null) {
@@ -806,6 +811,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             MGUIUtil.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    MGToast.showToast("添加购物车失败！");
                     mTvBuy.onFinish();
                 }
             });
@@ -869,24 +875,30 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
     //立即购买
     private void clickBuyGoods(boolean isGoToShoppingCart) {
         if (TextUtils.isEmpty(GoodsId) && !NetWorkStateUtil.isConnected(GoodsDetailActivity.this)) {
+            MGToast.showToast("网络好像有点问题！");
             return;
         }
+
+        //当前未登录.
+        if ("0".equals(mTimeStatus)) {
+            MGToast.showToast("该商品团购还未开始");
+            return;
+        } else if ("1".equals(mTimeStatus)) {
+            addToLocalShopping();
+            goToShopping();
+        } else if ("2".equals(mTimeStatus)) {
+            MGToast.showToast("该商品团购时间已过期");
+            return;
+        }
+
         if (!TextUtils.isEmpty(App.getInstance().getToken())) {
             //当前已经登录，
             addGoodsToShoppingPacket(isGoToShoppingCart);
-        } else {
-            //当前未登录.
-            if ("0".equals(mTimeStatus)) {
-                MGToast.showToast("商品活动未开始");
-                return;
-            } else if ("1".equals(mTimeStatus)) {
-                addToLocalShopping();
-                goToShopping();
-            } else if ("2".equals(mTimeStatus)) {
-                MGToast.showToast("商品已经过期。");
-                return;
-            }
         }
+
+        Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
+        BaseUtils.jumpToNewActivity(this, intent);
+
         UmengEventStatistics.sendEvent(this, UmengEventStatistics.BUY);
     }
 

@@ -46,7 +46,7 @@ public class CreateShareRecordDaoImpl extends BaseDaoImpl implements CreateShare
 
                 if(bean.getStatusCode() == 200){
                     try{
-                        getListener().createShareRecordSuccess(bean.getResult().get(0).getBody().getId());
+                        getListener().createShareRecordSuccess(bean.getResult().get(0).getBody());
                         return;
                     }catch (Exception e){
                         getListener().createShareRecordError(BASE_ERROR_MESSAGE);
@@ -72,12 +72,12 @@ public class CreateShareRecordDaoImpl extends BaseDaoImpl implements CreateShare
 
     @Override
     public void createShareRecordFromOfflinePay(String lgn_user_id, String content_id) {
-        createShareRecord("2", "0", lgn_user_id, "1", content_id);
+        createShareRecord("64", "0", lgn_user_id, "1", content_id);
     }
 
     @Override
     public void createShareRecordFromSingleSalePay(String lgn_user_id, String content_id) {
-        createShareRecord("1", "0", lgn_user_id, "1", content_id);
+        createShareRecord("65", "0", lgn_user_id, "1", content_id);
     }
 
     @Override
