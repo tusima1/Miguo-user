@@ -80,4 +80,6 @@ public class IntentKey {
     public static final String SYSTEM_MESSAGE_URL = "system_message_url";
     public static final String SYSTEM_MESSAGE_ID = "system_message_id";
 
+    public static final String COMMISSION_NOTIFYCATION_FROM = "commission_notifycation_from";
+
 }

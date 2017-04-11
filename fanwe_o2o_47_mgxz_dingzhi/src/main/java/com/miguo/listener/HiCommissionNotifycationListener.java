@@ -1,5 +1,8 @@
 package com.miguo.listener;
 
+import android.view.View;
+
+import com.fanwe.o2o.miguo.R;
 import com.fanwe.view.LoadMoreRecyclerView;
 import com.miguo.category.Category;
 import com.miguo.category.HiCommissionNotifycationCategory;
@@ -13,6 +16,20 @@ public class HiCommissionNotifycationListener extends Listener implements LoadMo
 
     public HiCommissionNotifycationListener(Category category) {
         super(category);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back:
+                clickBack();
+                break;
+        }
+    }
+
+
+    private void clickBack(){
+        getCategory().clickBack();
     }
 
     @Override

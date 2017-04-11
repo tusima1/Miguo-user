@@ -55,6 +55,15 @@ public class SharedPreferencesUtils {
         editor.commit();
     }
 
+    public String getToken(){
+        return sp.getString(SharedPreferencesConfig.TOKEN, "");
+    }
+
+    public void saveToken(String token){
+        editor.putString(SharedPreferencesConfig.TOKEN, token);
+        editor.commit();
+    }
+
     /**
      * 获取本地保存的用户名
      * @return

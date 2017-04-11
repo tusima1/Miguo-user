@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.fanwe.InitAdvsMultiActivity;
 import com.fanwe.WithdrawLogActivity;
 import com.fanwe.constant.ServerUrl;
 import com.fanwe.seller.views.GoodsDetailActivity;
@@ -25,6 +26,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.entity.JpushMessageBean;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.factory.MessageTypeFactory;
+import com.miguo.utils.AppStateUtil;
 import com.miguo.utils.BaseUtils;
 
 /**
@@ -84,6 +86,15 @@ public class NotifyMessage {
     }
 
     private void notifyAction(JpushMessageBean bean){
+        if(!AppStateUtil.isAppRunning(mContext)){
+            Intent intent = new Intent(mContext, InitAdvsMultiActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("type", bean.getPush_jump_target());
+            intent.putExtra("value", bean.getPush_jump_paramater());
+            intent.putExtra("system_message_id", bean.getSystem_message_id());
+            BaseUtils.jumpToNewActivity(mContext, intent);
+            return;
+        }
         MessageTypeFactory.jump(mContext, bean);
     }
 

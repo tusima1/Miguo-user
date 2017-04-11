@@ -17,6 +17,7 @@ import com.miguo.category.HiHomeCategory;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.definition.ResultCode;
+import com.miguo.factory.MessageTypeFactory;
 import com.miguo.live.views.customviews.MGToast;
 import com.miguo.utils.BaseUtils;
 import com.miguo.utils.dev.DevUtil;
@@ -58,6 +59,11 @@ public class HiHomeActivity extends HiBaseActivity {
     private DevUtil devUtil;
 
 
+    String type;
+    String value;
+    String systemMessageId;
+
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_hihome_activity);
@@ -65,7 +71,6 @@ public class HiHomeActivity extends HiBaseActivity {
 
     @Override
     protected Category initCategory() {
-
         setCurrentCityId(AppRuntimeWorker.getCity_id());
         JpushHelper.registerAll();
         setTwiceKeyDownToCloseActivity(true);
@@ -76,6 +81,21 @@ public class HiHomeActivity extends HiBaseActivity {
         return new HiHomeCategory(this);
     }
 
+    boolean checkNotify = false;
+
+    private void getIntentData(){
+
+        if(checkNotify){
+            return;
+        }
+        checkNotify = true;
+        setType(getIntent().getStringExtra("type"));
+        setValue(getIntent().getStringExtra("value"));
+        setSystemMessageId(getIntent().getStringExtra("system_message_id"));
+        if(type != null){
+            MessageTypeFactory.jump(this , type, value, systemMessageId);
+        }
+    }
 
     @Override
     protected void doOnResume() {
@@ -95,6 +115,9 @@ public class HiHomeActivity extends HiBaseActivity {
                 handlerReturnCityId(AppRuntimeWorker.getCityCurr());
             }
         }
+
+        getIntentData();
+
     }
 
     @Override
@@ -132,6 +155,10 @@ public class HiHomeActivity extends HiBaseActivity {
                  * 城市列表返回回调
                  */
                 case RequestCode.RESUTN_CITY_ID:
+                    /**
+                     * 城市更换后需要重新注册极光推送
+                     */
+                    JpushHelper.registerAll();
                     handlerReturnCityId(data);
                     break;
                 case RequestCode.HOME_WEB_PAGE:
@@ -229,5 +256,29 @@ public class HiHomeActivity extends HiBaseActivity {
 
     public void setCurrentCityId(String currentCityId) {
         this.currentCityId = currentCityId;
+    }
+
+    public String getSystemMessageId() {
+        return systemMessageId;
+    }
+
+    public void setSystemMessageId(String systemMessageId) {
+        this.systemMessageId = systemMessageId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

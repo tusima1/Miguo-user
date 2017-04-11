@@ -60,6 +60,34 @@ import cn.jpush.android.api.JPushInterface;
 public class InitAdvsMultiActivity extends AppCompatActivity implements CallbackView {
     private SellerHttpHelper sellerHttpHelper;
 
+    String type;
+    String value;
+    String systemMessageId;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getSystemMessageId() {
+        return systemMessageId;
+    }
+
+    public void setSystemMessageId(String systemMessageId) {
+        this.systemMessageId = systemMessageId;
+    }
+
     // app所需要的全部危险权限
     static final String[] PERMISSIONS = new String[]{
             DangerousPermissions.CAMERA,
@@ -81,13 +109,20 @@ public class InitAdvsMultiActivity extends AppCompatActivity implements Callback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStartTime = System.currentTimeMillis();
+        getIntentData();
         if (Build.VERSION.SDK_INT >= 23) {
             checkPermissions();
         } else {
             init();
         }
         //请求crash log上传token
-       getCrashLogToken();
+        getCrashLogToken();
+    }
+
+    private void getIntentData(){
+        setType(getIntent().getStringExtra("type"));
+        setValue(getIntent().getStringExtra("value"));
+        setSystemMessageId(getIntent().getStringExtra("system_message_id"));
     }
 
     private void getCrashLogToken() {
@@ -256,6 +291,11 @@ public class InitAdvsMultiActivity extends AppCompatActivity implements Callback
             finish();
         } else {
             final Intent intent = new Intent(getApplicationContext(), ClassNameFactory.getClass(ClassPath.HOME_ACTIVITY));
+            if(type != null){
+                intent.putExtra("type", type);
+                intent.putExtra("value", value);
+                intent.putExtra("system_message_id", systemMessageId);
+            }
             long currentTime = System.currentTimeMillis();
             long offset = currentTime - mStartTime < 0 ? waitTime : currentTime - mStartTime;
             if (offset > waitTime) {
