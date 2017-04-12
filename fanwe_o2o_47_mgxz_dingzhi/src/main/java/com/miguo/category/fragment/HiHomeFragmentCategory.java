@@ -61,6 +61,8 @@ import com.miguo.fragment.HiBaseFragment;
 import com.miguo.fragment.HiRepresentCateFragment;
 import com.miguo.listener.fragment.HiHomeFragmentListener;
 import com.miguo.model.TouchToMoveListener;
+import com.miguo.ui.view.HomeADView3;
+import com.miguo.ui.view.HomeTimeLimitView;
 import com.miguo.ui.view.RepresentViewPager;
 import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.AutoBanner;
@@ -68,13 +70,11 @@ import com.miguo.ui.view.AutofitTextView;
 import com.miguo.ui.view.BarryTab;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeLooperViewPager;
-import com.miguo.ui.view.HomeTagsView;
 import com.miguo.ui.view.HomeViewPager;
 import com.miguo.ui.view.RecyclerBounceNestedScrollView;
 import com.miguo.utils.HomeCategoryUtils;
 import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
-import com.miguo.view.GetMenuListView;
 import com.miguo.view.GetSearchCateConditionView;
 import com.miguo.view.HomeGreetingView;
 
@@ -96,8 +96,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         RecyclerBounceNestedScrollView.OnRecyclerScrollViewListener,
         RecyclerBounceNestedScrollView.RecyclerScrollViewOnTouchListener,
         HomeLooperViewPager.HomeBannerViewPagerOnTouchListener,
-        HomeTuanTimeLimitView.TimeLimitedOnTouchListener,
-        GetSpecialListView, HomeTuanTimeLimitView.OnTimeLimitClickListener,
+        HomeTimeLimitView.OnTimeLimitClickListener,
+        HomeTimeLimitView.TimeLimitedOnTouchListener,
+        GetSpecialListView,
         TouchToMoveListener,
         HomeGreetingView,
         GetAdspaceListView,
@@ -174,7 +175,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 限时特惠
      */
     @ViewInject(R.id.home_tuan)
-    HomeTuanTimeLimitView homeTuanTimeLimitView;
+    HomeTimeLimitView homeTuanTimeLimitView;
     GetSpecialListDao getSpecialListDao;
     @ViewInject(R.id.home_tuan_limit_bottom_layout)
     LinearLayout homeTuanLimitBottomLayout;
@@ -183,7 +184,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 广告位2
      */
     @ViewInject(R.id.home_ad_view_2)
-    HomeADView2 homeADView2;
+    HomeADView3 homeADView2;
     @ViewInject(R.id.home_ad_view_2_space_layout)
     LinearLayout homeAdView2SpaceLayout;
 

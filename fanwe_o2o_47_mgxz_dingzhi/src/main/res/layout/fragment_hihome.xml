@@ -94,6 +94,7 @@
                 </RelativeLayout>
 
                 <me.relex.circleindicator.CircleIndicator
+                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="3dp"
                     android:id="@+id/indicator_circle"
                     android:visibility="gone"
@@ -118,19 +119,238 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="5dp"
+                        android:layout_height="7dp"
                         android:background="@color/c_F2F2F2" />
 
                 </LinearLayout>
 
-                <com.fanwe.view.HomeTuanTimeLimitView
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:gravity="center"
+                            android:background="@drawable/bg_mgdr"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp">
+
+                            <ImageView
+                                android:background="@drawable/ic_mgdrb"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp" />
+
+                            <TextView
+                                android:text="米果达人榜"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:gravity="center"
+                            android:background="@drawable/bg_dyhdb"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp">
+
+                            <ImageView
+                                android:background="@drawable/ic_dyhdb"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp" />
+
+                            <TextView
+                                android:text="代言红店榜"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_live"
+                        android:layout_width="match_parent"
+                        android:layout_height="112dp">
+
+
+                        <TextView
+                            android:gravity="center"
+                            android:background="@drawable/home_live_shape"
+                            android:layout_centerInParent="true"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
+                            android:text="直播"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:gravity="center"
+                            android:background="@drawable/bg_mdyyj"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp">
+
+                            <ImageView
+                                android:background="@drawable/ic_mdyyj"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp" />
+
+                            <TextView
+                                android:text="买单有佣金"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:gravity="center"
+                            android:background="@drawable/bg_hbyhq"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp">
+
+                            <ImageView
+                                android:background="@drawable/ic_hbyhq"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp" />
+
+                            <TextView
+                                android:text="红包优惠券"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <View
+                    android:background="@color/c_F2F2F2"
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"/>
+
+                <LinearLayout
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <RelativeLayout
+                        android:layout_width="65dp"
+                        android:layout_height="match_parent">
+                        
+                        
+                        <ImageView
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/ic_mgtt"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp" />
+
+                        <View
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/c_CCCCCC"
+                            android:layout_width="1dp"
+                            android:layout_height="25dp"/>
+                        
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:layout_marginLeft="17dp"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="哈哈哈"
+                                android:textSize="11sp"
+                                android:textColor="@color/c_595959"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_marginLeft="14dp"
+                                android:text="用米果到店付获得11元佣金"
+                                android:textSize="11sp"
+                                android:textColor="@color/c_999999"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:text="啦啦啦"
+                                android:textSize="11sp"
+                                android:textColor="@color/c_595959"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_marginLeft="14dp"
+                                android:text="分享好友消费获得佣金10元"
+                                android:textSize="11sp"
+                                android:textColor="@color/c_999999"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:background="@color/c_F2F2F2"
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"/>
+
+                <com.miguo.ui.view.HomeTimeLimitView
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="6dp"
                     android:id="@+id/home_tuan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </com.fanwe.view.HomeTuanTimeLimitView>
+                </com.miguo.ui.view.HomeTimeLimitView>
 
 
 
@@ -154,14 +374,14 @@
 
 
 
-                <com.miguo.ui.view.HomeADView2
+                <com.miguo.ui.view.HomeADView3
                     android:background="@color/c_F2F2F2"
                     android:id="@+id/home_ad_view_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
 
-                </com.miguo.ui.view.HomeADView2>
+                </com.miguo.ui.view.HomeADView3>
 
                 <LinearLayout
                     android:id="@+id/featured_title_layout"

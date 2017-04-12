@@ -15,6 +15,7 @@ import com.miguo.definition.RequestCode;
 import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.factory.ClassNameFactory;
+import com.miguo.ui.view.HomeADView3;
 import com.miguo.utils.BaseUtils;
 import com.miguo.ui.view.HomeADView2;
 import com.miguo.ui.view.HomeTagsView;
@@ -23,7 +24,7 @@ import com.miguo.ui.view.floatdropdown.SearchGuideActivity;
 /**
  * Created by zlh/Barry/狗蛋哥 on 2016/10/20.
  */
-public class HiHomeFragmentListener extends FragmentListener implements HomeADView2.OnTopicAdsClickListener, HomeTagsView.OnHomeTagsClickListener{
+public class HiHomeFragmentListener extends FragmentListener implements HomeADView3.OnTopicAdsClickListener, HomeTagsView.OnHomeTagsClickListener{
 
     public HiHomeFragmentListener(FragmentCategory category) {
         super(category);

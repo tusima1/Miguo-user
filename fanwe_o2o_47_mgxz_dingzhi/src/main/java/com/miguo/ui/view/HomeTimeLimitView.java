@@ -1,4 +1,4 @@
-package com.fanwe.view;
+package com.miguo.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.fanwe.model.SpecialListModel;
 import com.fanwe.o2o.miguo.R;
 import com.fanwe.utils.DataFormat;
+import com.fanwe.view.HomeTuanHorizontalScrollView;
 import com.miguo.live.views.base.BaseRelativeLayout;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -20,9 +21,9 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by Barry/狗蛋哥 on 2016/10/10.
  * 首页六个推荐列表
  */
-public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTuanHorizontalScrollView.OnTimeLimitClickListener, HomeTuanHorizontalScrollView.HomeTuanHorizontalScrollViewOnTouchListener{
+public class HomeTimeLimitView extends BaseRelativeLayout implements TimeLimitedHorizontalScrollView.OnTimeLimitClickListener, TimeLimitedHorizontalScrollView.HomeTuanHorizontalScrollViewOnTouchListener{
 
-    HomeTuanHorizontalScrollView homeTuanHorizontalScrollView;
+    TimeLimitedHorizontalScrollView homeTuanHorizontalScrollView;
     LinearLayout top;
     public static final int TOP_ID = 0x4514651;
 
@@ -39,21 +40,21 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     TextView rightText;
 
 
-    public HomeTuanTimeLimitView(Context context) {
+    public HomeTimeLimitView(Context context) {
         super(context);
         if(!isInEditMode()){
             init();
         }
     }
 
-    public HomeTuanTimeLimitView(Context context, AttributeSet attrs) {
+    public HomeTimeLimitView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if(!isInEditMode()){
             init();
         }
     }
 
-    public HomeTuanTimeLimitView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HomeTimeLimitView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if(!isInEditMode()){
             init();
@@ -132,8 +133,8 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
     }
 
     protected void init(){
-        homeTuanHorizontalScrollView = new HomeTuanHorizontalScrollView(getContext());
-        RelativeLayout.LayoutParams params = getRelativeLayoutParams(matchParent(), wrapContent());
+        homeTuanHorizontalScrollView = new TimeLimitedHorizontalScrollView(getContext());
+        LayoutParams params = getRelativeLayoutParams(matchParent(), wrapContent());
         params.setMargins(0, dip2px(5), 0, 0);
         params.addRule(RelativeLayout.BELOW, TOP_ID);
         homeTuanHorizontalScrollView.setLayoutParams(params);
@@ -149,7 +150,7 @@ public class HomeTuanTimeLimitView extends BaseRelativeLayout implements HomeTua
          * 顶部容器
          */
         top = new LinearLayout(getContext());
-        RelativeLayout.LayoutParams topParams = getRelativeLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LayoutParams topParams = getRelativeLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         topParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         top.setLayoutParams(topParams);
         top.setGravity(Gravity.CENTER);
