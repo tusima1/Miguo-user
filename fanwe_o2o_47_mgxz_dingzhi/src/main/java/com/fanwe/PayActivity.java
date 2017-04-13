@@ -984,7 +984,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 PayActivity.this.share_info.setImageurl(shareRecordId.getShare().getImageurl());
                 PayActivity.this.share_info.setSummary(shareRecordId.getShare().getSummary());
                 PayActivity.this.share_info.setTitle(shareRecordId.getShare().getTitle());
-                showShareDialog();
+//                showShareDialog();
             }
 
             @Override
@@ -994,7 +994,7 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
             }
         });
 
-        if (buyItem > 1) {
+        if (buyItem > 1 || goods_id == null || "".equals(goods_id)) {
             createShareRecordDao.createShareRecordFromMultiSalePay(App.getInstance().getCurrentUser().getUser_id());
         } else {
             goods_id = goods_id.replace(",", "");
