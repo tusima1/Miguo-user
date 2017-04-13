@@ -53,6 +53,7 @@ import com.miguo.live.presenters.LiveHttpHelper;
 import com.miguo.live.views.LiveUtil;
 import com.miguo.live.views.dialog.GetDiamondInputDialog;
 import com.miguo.live.views.dialog.GetDiamondLoginDialog;
+import com.miguo.live.views.view.FunnyFragment;
 import com.miguo.presenters.TencentIMBindPresenter;
 import com.miguo.presenters.impl.TencentIMBindPresenterImpl;
 import com.miguo.ui.view.BarryTab;
@@ -239,11 +240,12 @@ public class HiHomeCategory extends Category implements
         fragments.add(new HiShopFragment());
         fragments.add(new ShopCartFragmentNew());
         fragments.add(new MyFragment());
+        fragments.add(new FunnyFragment());
 
         homePagerAdapter = new HomePagerAdapter(getActivity().getSupportFragmentManager(), fragments);
 
         homeViewPager.setAdapter(homePagerAdapter);
-        homeViewPager.setOffscreenPageLimit(5);
+        homeViewPager.setOffscreenPageLimit(6);
     }
 
     /**

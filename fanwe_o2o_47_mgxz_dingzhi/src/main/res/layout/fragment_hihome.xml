@@ -183,6 +183,7 @@
 
                     <RelativeLayout
                         android:layout_weight="1"
+                        android:id="@+id/live_layout"
                         android:background="@drawable/bg_live"
                         android:layout_width="match_parent"
                         android:layout_height="112dp">
@@ -258,6 +259,7 @@
                     android:layout_height="7dp"/>
 
                 <LinearLayout
+                    android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="40dp">
@@ -282,59 +284,129 @@
                         
                     </RelativeLayout>
 
-
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_marginLeft="17dp"
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:gravity="center_vertical"
                         android:layout_height="match_parent">
-
                         <LinearLayout
+                            android:id="@+id/toutiao_1"
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:gravity="center_vertical"
+                            android:layout_height="match_parent">
 
-                            <TextView
-                                android:text="哈哈哈"
-                                android:textSize="11sp"
-                                android:textColor="@color/c_595959"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                            <TextView
-                                android:layout_marginLeft="14dp"
-                                android:text="用米果到店付获得11元佣金"
-                                android:textSize="11sp"
-                                android:textColor="@color/c_999999"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/toutiao1_name_1"
+                                    android:text="哈哈哈"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_595959"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
 
+                                <TextView
+                                    android:id="@+id/toutiao1_content_1"
+                                    android:layout_marginLeft="14dp"
+                                    android:text="用米果到店付获得11元佣金"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_999999"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/toutiao1_name_2"
+                                    android:text="啦啦啦"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_595959"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:id="@+id/toutiao1_content_2"
+                                    android:layout_marginLeft="14dp"
+                                    android:text="分享好友消费获得佣金10元"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_999999"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
+
                         <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/toutiao_2"
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:gravity="center_vertical"
+                            android:layout_height="match_parent">
 
-                            <TextView
-                                android:text="啦啦啦"
-                                android:textSize="11sp"
-                                android:textColor="@color/c_595959"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                            <TextView
-                                android:layout_marginLeft="14dp"
-                                android:text="分享好友消费获得佣金10元"
-                                android:textSize="11sp"
-                                android:textColor="@color/c_999999"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                <TextView
+                                    android:id="@+id/toutiao2_name_1"
+                                    android:text="哈哈哈"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_595959"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
 
+                                <TextView
+                                    android:id="@+id/toutiao2_content_1"
+                                    android:layout_marginLeft="14dp"
+                                    android:text="用米果到店付获得11元佣金"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_999999"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/toutiao2_name_2"
+                                    android:text="啦啦啦"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_595959"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:id="@+id/toutiao2_content_2"
+                                    android:layout_marginLeft="14dp"
+                                    android:text="分享好友消费获得佣金10元"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/c_999999"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
+                    </RelativeLayout>
+
+
 
                 </LinearLayout>
 

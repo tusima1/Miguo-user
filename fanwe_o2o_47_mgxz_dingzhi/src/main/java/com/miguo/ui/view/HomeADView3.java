@@ -49,6 +49,7 @@ public class HomeADView3 extends BaseHorizantalScrollView{
         content = new RelativeLayout(getContext());
         LayoutParams params = new LayoutParams(matchParent(), wrapContent());
         content.setLayoutParams(params);
+        content.setBackgroundColor(Color.WHITE);
         addView(content);
     }
 
@@ -66,7 +67,7 @@ public class HomeADView3 extends BaseHorizantalScrollView{
         int margionSpace = dip2px(5);
         int width = (int)((screenWidth - margionSpace * 3) / (float)2.8);
         int height = width * 65 / 100;
-        int index = 3;
+        int index = 1;
 
         for(int i = 0; i < ads.size(); i++){
 
@@ -103,28 +104,21 @@ public class HomeADView3 extends BaseHorizantalScrollView{
              * 2 、4 、 6 、 8……
              * 坐标的图片处理
              */
-            if(i % 2 == 1){
-                imgParams.addRule(RelativeLayout.BELOW, content.getChildAt((i - 1) * index).getId());
-                imgParams.addRule(RelativeLayout.ALIGN_LEFT, content.getChildAt((i - 1) * index).getId());
-                if(i - 2 > 0){
-                    imgParams.addRule(RelativeLayout.ALIGN_BOTTOM, content.getChildAt((i - 2) * index).getId());
-                    imgParams.addRule(RelativeLayout.ALIGN_TOP, content.getChildAt((i - 2) * index).getId());
-                }
-            }
 
             /**
              * 设置图片间距
              */
-            imgParams.setMargins((i % 2 == 0 && i != -1) ? dip2px(5) : 0, i == 1 ? dip2px(5) : 0 , 0, 0);
+            imgParams.setMargins(dip2px(5),0 , 0, 0);
 
             /**
              * 第一张为1
              * 如果是顶排的图片，并且不是第一个
              * 那应该是3 , 5, 7 ,9..图片
              */
-            if(i % 2 == 0 && i != 0){
+//            if(i % 2 == 0 && i != 0){
+            if(i != 0){
                 imgParams.addRule(RelativeLayout.RIGHT_OF, content.getChildAt((i - 1) * index).getId());
-                imgParams.addRule(RelativeLayout.ALIGN_TOP, content.getChildAt((i - 2) * index).getId());
+                imgParams.addRule(RelativeLayout.ALIGN_TOP, content.getChildAt((i - 1) * index).getId());
             }
 
             img.setLayoutParams(imgParams);

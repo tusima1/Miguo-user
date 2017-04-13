@@ -55,12 +55,19 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
             case R.id.nodata:
                 clickNodata();
                 break;
+            case R.id.live_layout:
+                clickLiveLayout();
+                break;
         }
+    }
+
+    private void clickLiveLayout(){
+        getCategory().clickLiveLayout();
     }
 
     private void clickNodata(){
         if(null == getCategory().getCitySign() || TextUtils.isEmpty(getCategory().getCitySign().getCity_image_link())){
-        return;
+            return;
         }
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.WEB_PAGE_ACTIVITY));
         Bundle bundle = new Bundle();

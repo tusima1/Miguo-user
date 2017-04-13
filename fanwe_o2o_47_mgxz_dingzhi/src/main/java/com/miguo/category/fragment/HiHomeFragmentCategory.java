@@ -2,6 +2,8 @@ package com.miguo.category.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,7 +38,9 @@ import com.miguo.adapter.HiRepresentCateAdapter;
 import com.miguo.adapter.HomePagerAdapter;
 import com.miguo.adapter.HomebannerPagerAdapter;
 import com.miguo.dao.GetSearchCateConditionDao;
+import com.miguo.dao.TouTiaoDao;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
+import com.miguo.dao.impl.TouTiaoDaoImpl;
 import com.miguo.definition.ClassPath;
 import com.miguo.definition.IntentKey;
 import com.miguo.entity.BannerTypeModel;
@@ -54,6 +58,7 @@ import com.miguo.entity.AdspaceListBean;
 import com.miguo.entity.CheckCitySignBean;
 import com.miguo.entity.MenuBean;
 import com.miguo.entity.SearchCateConditionBean;
+import com.miguo.entity.ToutiaoBean;
 import com.miguo.factory.AdspaceTypeFactory;
 import com.miguo.factory.ClassNameFactory;
 import com.miguo.factory.SearchCateConditionFactory;
@@ -77,10 +82,13 @@ import com.miguo.view.CheckCityView;
 import com.miguo.view.GetAdspaceListView;
 import com.miguo.view.GetSearchCateConditionView;
 import com.miguo.view.HomeGreetingView;
+import com.miguo.view.TouTiaoView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -170,7 +178,33 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     @ViewInject(R.id.indicator_circle)
     CircleIndicator circleIndicator;
 
+    @ViewInject(R.id.live_layout)
+    RelativeLayout liveLayout;
 
+    /**
+     * 米果头条
+     */
+    @ViewInject(R.id.toutiao_1)
+    LinearLayout toutiaoLayout1;
+    @ViewInject(R.id.toutiao1_name_1)
+    TextView toutiao1Name1;
+    @ViewInject(R.id.toutiao1_name_2)
+    TextView toutiao1Name2;
+    @ViewInject(R.id.toutiao1_content_1)
+    TextView toutiao1Content1;
+    @ViewInject(R.id.toutiao1_content_2)
+    TextView toutiao1Content2;
+
+    @ViewInject(R.id.toutiao_2)
+    LinearLayout toutiaoLayout2;
+    @ViewInject(R.id.toutiao2_name_1)
+    TextView toutiao2Name1;
+    @ViewInject(R.id.toutiao2_name_2)
+    TextView toutiao2Name2;
+    @ViewInject(R.id.toutiao2_content_1)
+    TextView toutiao2Content1;
+    @ViewInject(R.id.toutiao2_content_2)
+    TextView toutiao2Content2;
     /**
      * 限时特惠
      */
@@ -216,6 +250,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     GetSearchCateConditionDao getSearchCateConditionDao;
 
+    TouTiaoDao touTiaoDao;
+
 
     public HiHomeFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -228,6 +264,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
         checkCitySignDao = new CheckCitySignDaoImpl(this);
         initSearchCateCondition();
+        initTouTiaoDao();
     }
 
     @Override
@@ -246,6 +283,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         refresh.setOnClickListener(listener);
         messageLayout.setOnClickListener(listener);
         areaLayout.setOnClickListener(listener);
+        liveLayout.setOnClickListener(listener);
         searchLayout.setOnClickListener(listener);
         titleLayout.setOnClickListener(listener);
         qrScran.setOnClickListener(listener);
@@ -257,6 +295,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void init() {
+        initHandler();
         setTopHeight(dip2px(210));
         setTitleAlpha(titleLayout, 0);
         setTitlePadding(sayHiLayout);
@@ -274,6 +313,9 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
 
+    public void clickLiveLayout(){
+        getHomeViewPager().setCurrentItem(5);
+    }
 
     /**
      * 获取分类数据
@@ -297,6 +339,124 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
                 loadComplete();
             }
         });
+    }
+
+    List<ToutiaoBean.Result.Body> toutiao;
+    Handler handler;
+    Timer timer;
+    int currentPosition = 0;
+    private void initTouTiaoDao(){
+        touTiaoDao = new TouTiaoDaoImpl(new TouTiaoView() {
+            @Override
+            public void getToutiaoListSuccess(List<ToutiaoBean.Result.Body> toutiao){
+                HiHomeFragmentCategory.this.toutiao = toutiao;
+                initTimer();
+            }
+
+            @Override
+            public void getToutiaoListError(String message) {
+
+            }
+        });
+    }
+
+    private void initHandler(){
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what){
+                    case 0:
+                        currentPosition = (currentPosition + 1) * 2 >= toutiao.size() ? 0 : currentPosition + 1;
+                        updateToutiao(currentPosition);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    private void initTimer(){
+        if(toutiao == null || toutiao.size() <= 0){
+            return;
+        }
+        if(timer != null){
+            timer.cancel();
+        }
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(0);
+            }
+        };
+        timer.schedule(task, 0, 3000);
+    }
+
+    private void updateToutiao(int position){
+        toutiao1Name1.setText(toutiao.get(position * 2).getUser_name());
+        toutiao1Content1.setText(toutiao.get(position * 2).getTitle());
+
+        if(position * 2 + 1 < toutiao.size()){
+            toutiao1Name2.setText(toutiao.get(position * 2 + 1).getUser_name());
+            toutiao1Content2.setText(toutiao.get(position * 2 + 1).getTitle());
+        }else {
+            toutiao1Name2.setText("");
+            toutiao1Content2.setText("");
+        }
+
+        int position2 = position * 2 + 2 >= toutiao.size() ? 0 : position + 1;
+
+        toutiao2Name1.setText(toutiao.get(position2 * 2).getUser_name());
+        toutiao2Content1.setText(toutiao.get(position2 * 2).getTitle());
+
+        if(position2 * 2 + 1 < toutiao.size()){
+            toutiao2Name2.setText(toutiao.get(position2 * 2 + 1).getUser_name());
+            toutiao2Content2.setText(toutiao.get(position2 * 2 + 1).getTitle());
+        }else {
+            toutiao2Name2.setText("");
+            toutiao2Content2.setText("");
+        }
+
+
+        startAnimation();
+
+    }
+
+    private void startAnimation(){
+        toutiaoLayout2.setVisibility(View.VISIBLE);
+        TranslateAnimation animation1 = new TranslateAnimation(0, 0, 0, -toutiaoLayout1.getMeasuredHeight());
+        animation1.setDuration(500);
+
+
+        TranslateAnimation animation2 = new TranslateAnimation(0, 0, toutiaoLayout1.getMeasuredHeight(), 0);
+        animation2.setDuration(500);
+        animation2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                toutiao1Name1.setText(toutiao2Name1.getText().toString());
+                toutiao1Name2.setText(toutiao2Name2.getText().toString());
+
+                toutiao1Content1.setText(toutiao2Content1.getText().toString());
+                toutiao1Content2.setText(toutiao2Content2.getText().toString());
+
+                toutiaoLayout2.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        toutiaoLayout1.startAnimation(animation1);
+        toutiaoLayout2.startAnimation(animation2);
+
     }
 
     public void updateCategories(){
@@ -351,6 +511,11 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
         onRefreshSearchCondition();
+        onRefreshToutiao();
+    }
+
+    private void onRefreshToutiao(){
+        touTiaoDao.getToutiao();
     }
 
     public void clickRefresh(){

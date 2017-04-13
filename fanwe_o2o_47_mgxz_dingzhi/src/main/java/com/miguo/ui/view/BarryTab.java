@@ -216,11 +216,33 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
         setCurrentTab(0);
     }
 
+    int prePosition;
     public void setCurrentTab(int position){
+        tabs.get(2).setPressIcon(position == 5 ? Tab.LIVE_ICON : Tab.SHOP_ICON);
+
+//        if(position == 2 && prePosition == 5){
+//            onTabClickListener.onTabClick(TabId.TAB_F);
+//            return;
+//        }
+
+        if(position == 5){
+            prePosition = 5;
+            ImageView currentIcon = (ImageView)allTabs.get(currentIndex).getChildAt(0);
+            TextView currentTabName = (TextView)allTabs.get(currentIndex).getChildAt(1);
+            if(null != currentTabName){
+                currentTabName.setTextColor(getNormalColor());
+            }
+            ImageView positionIcon = (ImageView)allTabs.get(2).getChildAt(0);
+            currentIcon.setImageResource(tabs.get(currentIndex).getIcon());
+            positionIcon.setImageResource(tabs.get(2).getPressIcon());
+            return;
+        }
         ImageView currentIcon = (ImageView)allTabs.get(currentIndex).getChildAt(0);
         ImageView positionIcon = (ImageView)allTabs.get(position).getChildAt(0);
+        ImageView center = (ImageView)allTabs.get(2).getChildAt(0);
         currentIcon.setImageResource(tabs.get(currentIndex).getIcon());
         positionIcon.setImageResource(tabs.get(position).getPressIcon());
+        center.setImageResource(tabs.get(2).getPressIcon());
 
         if(type == Type.NORMAL){
             TextView currentTabName = (TextView)allTabs.get(currentIndex).getChildAt(1);
@@ -237,7 +259,7 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
 
 
         if(onTabClickListener != null){
-            onTabClickListener.onTabClick(tabs.get(position).getId());
+            prePosition = position;
         }
 
         this.currentIndex = position;
@@ -257,6 +279,9 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
     }
 
     class Tab{
+
+        public static final int LIVE_ICON = R.drawable.tab_live_normal;
+        public static final int SHOP_ICON = R.drawable.tab_shop_normal;
         String name;
         int icon;
         int pressIcon;
@@ -327,7 +352,7 @@ public class BarryTab extends BaseRelativeLayout implements ViewPager.OnPageChan
             if(onTabClickListener != null){
                 if(onTabClickListener.onInterceptScrollEvent(id)){
                     if(onTabClickListener != null){
-                        onTabClickListener.onTabClick(id);
+                        onTabClickListener.onTabClick(position == 2 && prePosition == 5 ? TabId.TAB_F : id);
                     }
                     return;
                 }

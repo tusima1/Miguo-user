@@ -46,6 +46,9 @@ public class HiHomeListener extends Listener implements BarryTab.OnTabClickListe
             case TabId.TAB_E:
                 clickTab(4);
                 break;
+            case TabId.TAB_F:
+                clickLive();
+                break;
         }
     }
 
