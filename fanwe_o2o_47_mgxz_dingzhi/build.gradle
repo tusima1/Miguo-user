@@ -11,8 +11,8 @@ android {
         applicationId "com.fanwe.o2o.miguo"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 2017041302
-        versionName "5.8.3.2"
+        versionCode 2017041404
+        versionName "5.8.4"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_7
             targetCompatibility JavaVersion.VERSION_1_7

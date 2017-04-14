@@ -979,12 +979,29 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
             @Override
             public void createShareRecordSuccess(CreateShareRecordBean.Result.Body shareRecordId) {
                 dialog.dismiss();
-                PayActivity.this.shareRecordId = shareRecordId.getId();
-                PayActivity.this.share_info.setClickurl(shareRecordId.getShare().getClickurl());
-                PayActivity.this.share_info.setImageurl(shareRecordId.getShare().getImageurl());
-                PayActivity.this.share_info.setSummary(shareRecordId.getShare().getSummary());
-                PayActivity.this.share_info.setTitle(shareRecordId.getShare().getTitle());
-//                showShareDialog();
+                if(null != shareRecordId.getId()){
+                    PayActivity.this.shareRecordId = shareRecordId.getId();
+                }
+
+                if(null != shareRecordId.getShare().getClickurl()){
+                    PayActivity.this.share_info.setClickurl(shareRecordId.getShare().getClickurl());
+                }
+
+                if(null != shareRecordId.getShare().getImageurl()){
+                    PayActivity.this.share_info.setImageurl(shareRecordId.getShare().getImageurl());
+                }
+
+                if(null != shareRecordId.getShare().getSummary()){
+                    PayActivity.this.share_info.setSummary(shareRecordId.getShare().getSummary());
+                }
+
+                if(null != shareRecordId.getShare().getTitle()){
+                    PayActivity.this.share_info.setTitle(shareRecordId.getShare().getTitle());
+                }
+
+                if(PAY_SUCCESS.equals(payStatus)){
+                     showShareDialog();
+                }
             }
 
             @Override
@@ -993,6 +1010,21 @@ public class PayActivity extends BaseActivity implements RefreshCalbackView, Cal
                 PayActivity.this.shareRecordId = "";
             }
         });
+
+        String url = share_info.getClickurl();
+        try{
+            int index1 = url.indexOf("id/") + 3;
+            int index2 = url.length();
+            if(index1 > 0){
+                index2 = url.indexOf("/", index1);
+                if(index2 < 0){
+                    index2 = url.length();
+                }
+            }
+            goods_id = index1 > 0 ? url.substring(index1, index2) : "";
+        }catch (Exception e){
+            goods_id = "";
+        }
 
         if (buyItem > 1 || goods_id == null || "".equals(goods_id)) {
             createShareRecordDao.createShareRecordFromMultiSalePay(App.getInstance().getCurrentUser().getUser_id());
