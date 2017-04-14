@@ -112,7 +112,7 @@
             android:layout_centerVertical="true"
             android:textSize="16sp"
             android:textColor="@color/c_595959"
-            android:text="欠款—订单—代言消息"
+            android:text="钱款—订单—代言消息"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

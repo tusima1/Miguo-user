@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.fanwe.DaiYanStoreWapActivity;
+import com.fanwe.InitAdvsMultiActivity;
 import com.fanwe.MyMessageActivity;
 import com.fanwe.app.AppConfig;
 import com.fanwe.constant.JPushType;
@@ -19,7 +20,10 @@ import com.fanwe.seller.views.GoodsDetailActivity;
 import com.miguo.app.HiHomeActivity;
 import com.miguo.app.HiShopDetailActivity;
 import com.miguo.entity.JpushMessageBean;
+import com.miguo.factory.MessageTypeFactory;
 import com.miguo.ui.view.notify.NotifyMessage;
+import com.miguo.utils.AppStateUtil;
+import com.miguo.utils.BaseUtils;
 import com.miguo.utils.NotificationsUtils;
 
 import org.json.JSONException;
@@ -184,50 +188,18 @@ public class HomeEventDetailReceiver extends BroadcastReceiver {
 			return;
 		}
 
-		String act = "";
-		int object_id=-1;
-		String notice_type = "";
-		int messsage_id=-1;
-		int messsage_type=-1;
-		JSONObject obj;
-		try {
-			obj = new JSONObject(extras);
-			object_id=obj.getInt("object_id");
-			messsage_id=obj.getInt("message_id");
-			messsage_type=obj.getInt("message_type");
-			act=obj.getString("message_act");
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if(!AppStateUtil.isAppRunning(context)){
+			Intent intent = new Intent(context, InitAdvsMultiActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra("type", bean.getPush_jump_target());
+			intent.putExtra("value", bean.getPush_jump_paramater());
+			intent.putExtra("system_message_id", bean.getSystem_message_id());
+			BaseUtils.jumpToNewActivity(context, intent);
+			return;
 		}
-		
-		// 根据notifitionid,判断是那个通知
-		// String type = bundle.getString(JPushInterface.EXTRA_EXTRA);
-		if (JPushType.TUAN_DEAL.equals(act)) {
-			if (object_id == -1) {
-				Log.e("Debug", "object_id没有值!");
-				return;
-			}
-			bundle.putInt("extra_goods_id", object_id);
-			startActivity(context, GoodsDetailActivity.class, bundle);
-		} else if (JPushType.SHOP.equals(act)) {
-			// 门店详情
-			if (object_id == -1) {
-				Log.e("Debug", "object_id没有值!");
-				return;
-			}
-			bundle.putInt("extra_merchant_id", object_id);
-			startActivity(context, HiShopDetailActivity.class, bundle);
-		} else if (JPushType.LIMIT_SALE.equals(act)) {
-			// 限时特卖
+		MessageTypeFactory.jump(context, bean);
 
-		} else if (JPushType.HTML5.equals(act)) {
-			// h5页面
-			openH5(object_id,context);
-		} else {
-			// 默认,去首页
-			bundle.putInt("index", 3);
-			startActivity(context, HiHomeActivity.class, bundle);
-		}
+
 	}
 
 	/** 启动页面 **/

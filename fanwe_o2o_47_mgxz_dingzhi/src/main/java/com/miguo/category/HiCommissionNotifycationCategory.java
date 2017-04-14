@@ -11,11 +11,13 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.miguo.adapter.HiCommissionNotificationAdapter;
 import com.miguo.app.HiBaseActivity;
+import com.miguo.app.HiCommissionNotifycationActivity;
 import com.miguo.dao.MessageListDao;
 import com.miguo.dao.impl.MessageListDaoImpl;
 import com.miguo.definition.PageSize;
 import com.miguo.entity.MessageListBean;
 import com.miguo.listener.HiCommissionNotifycationListener;
+import com.miguo.utils.SharedPreferencesUtils;
 import com.miguo.view.MessageListView;
 
 import java.util.ArrayList;
@@ -100,9 +102,15 @@ public class HiCommissionNotifycationCategory extends Category {
             }
 
             @Override
-            public void getMessageListError(String message) {
-                showToast(message);
-                loadComplete();
+            public void getMessageListError(final String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(message);
+                        clickBack();
+                    }
+                });
+
             }
         });
     }
@@ -117,8 +125,16 @@ public class HiCommissionNotifycationCategory extends Category {
         recyclerView.loadComplete();
     }
 
+    public void clickBack(){
+        getActivity().finishActivity();
+    }
+
     public void onRefresh(){
-        messageListDao.getCommissionMessageList(PageSize.BASE_NUMBER_ONE, PageSize.BASE_PAGE_SIZE, App.getInstance().getToken());
+        if(isEmpty(SharedPreferencesUtils.getInstance().getToken())){
+            clickBack();
+            return;
+        }
+        messageListDao.getCommissionMessageList(PageSize.BASE_NUMBER_ONE, PageSize.BASE_PAGE_SIZE, SharedPreferencesUtils.getInstance().getToken());
     }
 
     public void onLoadmore() {
@@ -129,4 +145,8 @@ public class HiCommissionNotifycationCategory extends Category {
         return adapter.getItemCount() % PageSize.BASE_PAGE_SIZE > 0 ? -1 : (adapter.getItemCount() / PageSize.BASE_PAGE_SIZE) + 1;
     }
 
+    @Override
+    public HiCommissionNotifycationActivity getActivity() {
+        return (HiCommissionNotifycationActivity)super.getActivity();
+    }
 }

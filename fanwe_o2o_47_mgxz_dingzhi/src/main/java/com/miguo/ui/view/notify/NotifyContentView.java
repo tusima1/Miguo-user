@@ -112,6 +112,7 @@ public class NotifyContentView extends BaseRelativeLayout {
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.setMargins(dip2px(17), dip2px(10), dip2px(5), 0);
         params.addRule(RelativeLayout.LEFT_OF, TIME_ID);
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         mTitle.setLayoutParams(params);
         mTitle.setTextSize(14);
         mTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.c_9B9B9B));

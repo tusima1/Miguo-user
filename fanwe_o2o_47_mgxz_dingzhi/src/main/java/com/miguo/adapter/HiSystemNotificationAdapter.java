@@ -3,6 +3,10 @@ package com.miguo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -67,6 +71,35 @@ public class HiSystemNotificationAdapter extends BarryBaseRecyclerAdapter {
     @Override
     protected void doThings(RecyclerView.ViewHolder holder, int position) {
         handleUnReadPoint(holder, position);
+        handleSpecialText(holder, position);
+    }
+
+    private void handleSpecialText(RecyclerView.ViewHolder holder, int position){
+        getHolder(holder).describe.setText(hasSpecialText(position) ? getHandleText(position) : getItem(position).getContent());
+    }
+
+    private boolean hasSpecialText(int position){
+        return getItem(position).getContent().indexOf("#") > 0;
+    }
+
+    /**
+     * 我今天在这里#分享收益#了
+     * 6 and 11
+     * 我今天在这里分享收益了
+     * 6 and 10
+     * @param position
+     * @return
+     */
+    private SpannableStringBuilder getHandleText(int position){
+        String text = getItem(position).getContent();
+        int first = text.indexOf("#");
+        int second = text.indexOf("#", first + 1);
+        text = text.replace("#", "");
+        SpannableStringBuilder builder = new SpannableStringBuilder(text);
+        ForegroundColorSpan yellow = new ForegroundColorSpan(getColor(R.color.c_f5b830));
+        builder.setSpan(yellow, first, second - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(new UnderlineSpan(), first, second - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return builder;
     }
 
     private void handleUnReadPoint(RecyclerView.ViewHolder holder, int position){

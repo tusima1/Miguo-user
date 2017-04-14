@@ -330,6 +330,7 @@ public class App extends MultiDexApplication implements SDEventObserver, TANetCh
 
     public void setCurrentUser(UserInfoNew currentUser) {
         this.currentUser = currentUser;
+        SharedPreferencesUtils.getInstance().saveToken(getToken());
     }
 
     /**

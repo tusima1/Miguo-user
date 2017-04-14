@@ -93,10 +93,22 @@ public class OrderOutAdapter extends SDBaseAdapter<ModelOrderItemOut> {
                     @Override
                     public void onClick(View v) {
                         if(!TextUtils.isEmpty(model.getOrder_id())) {
-                            Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.OFFLINE_PAY_ORDER));
-                            intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_ID, model.getOrder_id());
-                            intent.putExtra(IntentKey.OFFLINE_PAY_IS_FROM_ORDER_LIST, true);
-                            BaseUtils.jumpToNewActivity(mActivity, intent);
+                            if(!TextUtils.isEmpty(model.getOrder_id())) {
+                                /**
+                                 * 5是到店付
+                                 */
+                                if(model.getOrder_type().equals("5")){
+                                    Intent intent = new Intent(mActivity, ClassNameFactory.getClass(ClassPath.OFFLINE_PAY_ORDER));
+                                    intent.putExtra(IntentKey.OFFLINE_PAY_ORDER_ID, model.getOrder_id());
+                                    intent.putExtra(IntentKey.OFFLINE_PAY_IS_FROM_ORDER_LIST, true);
+                                    BaseUtils.jumpToNewActivity(mActivity, intent);
+                                    return;
+                                }
+
+                                Intent intent = new Intent(mActivity, ConfirmOrderActivity.class);
+                                intent.putExtra("orderId", model.getOrder_id());
+                                mActivity.startActivity(intent);
+                            }
                         }
 
                     }

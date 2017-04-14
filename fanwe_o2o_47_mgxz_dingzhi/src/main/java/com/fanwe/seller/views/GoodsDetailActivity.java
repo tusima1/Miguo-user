@@ -879,16 +879,23 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             return;
         }
 
-        //当前未登录.
+        UmengEventStatistics.sendEvent(this, UmengEventStatistics.BUY);
+
+        if ("2".equals(mTimeStatus)) {
+            MGToast.showToast("该商品团购时间已过期");
+            return;
+        }
         if ("0".equals(mTimeStatus)) {
             MGToast.showToast("该商品团购还未开始");
             return;
-        } else if ("1".equals(mTimeStatus)) {
-            addToLocalShopping();
-            goToShopping();
-        } else if ("2".equals(mTimeStatus)) {
-            MGToast.showToast("该商品团购时间已过期");
-            return;
+        }
+
+        if(TextUtils.isEmpty(App.getInstance().getToken())){
+            if ("1".equals(mTimeStatus)){
+                addToLocalShopping();
+                goToShopping();
+                return;
+            }
         }
 
         if (!TextUtils.isEmpty(App.getInstance().getToken())) {
@@ -896,10 +903,6 @@ public class GoodsDetailActivity extends AppCompatActivity implements CallbackVi
             addGoodsToShoppingPacket(isGoToShoppingCart);
         }
 
-        Intent intent = new Intent(this, ClassNameFactory.getClass(ClassPath.LOGIN_ACTIVITY));
-        BaseUtils.jumpToNewActivity(this, intent);
-
-        UmengEventStatistics.sendEvent(this, UmengEventStatistics.BUY);
     }
 
     /**
