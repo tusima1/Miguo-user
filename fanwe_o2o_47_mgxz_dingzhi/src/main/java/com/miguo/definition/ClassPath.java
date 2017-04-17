@@ -136,5 +136,11 @@ public class ClassPath {
      */
     public static final String MESSAGE_SYSTEM = "com.miguo.app.HiSystemMessageDetailActivity";
 
+    /**
+     * 首页网页
+     * {@link com.miguo.app.HiHomeActionWebActivity}
+     */
+    public static final String HOME_ACTION_WEB = "com.miguo.app.HiHomeActionWebActivity";
+
 
 }

@@ -82,4 +82,8 @@ public class IntentKey {
 
     public static final String COMMISSION_NOTIFYCATION_FROM = "commission_notifycation_from";
 
+    public static final String WEB_URL = "web_url";
+
+    public static final String WEB_TITLE = "web_title";
+
 }

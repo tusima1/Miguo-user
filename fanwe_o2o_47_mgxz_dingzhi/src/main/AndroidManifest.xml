@@ -1086,6 +1086,10 @@
             android:name="com.miguo.ui.RedPacketResultActivity"
             android:theme="@style/Transparent_title_area">
         </activity>
+        <activity
+            android:name="com.miguo.app.HiHomeActionWebActivity"
+            android:theme="@style/Transparent_title_area">
+        </activity>
         <activity android:name="com.miguo.ui.RedPacketOpenResultActivity"
                   android:theme="@style/Transparent_title_area"
             >

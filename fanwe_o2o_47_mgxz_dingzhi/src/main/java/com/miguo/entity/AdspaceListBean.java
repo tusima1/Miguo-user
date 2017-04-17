@@ -55,6 +55,18 @@ public class AdspaceListBean implements Serializable{
             String descript;// 说明
             String type;//1:团购 2:门店 3:商家 4:主题 5:限时特买
             String adspace_id;
+            /**
+             * 优先加载
+             */
+            int resId;
+
+            public int getResId() {
+                return resId;
+            }
+
+            public void setResId(int resId) {
+                this.resId = resId;
+            }
 
             public String getAdspace_id() {
                 return adspace_id;

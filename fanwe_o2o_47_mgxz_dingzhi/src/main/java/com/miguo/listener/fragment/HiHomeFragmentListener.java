@@ -10,6 +10,7 @@ import com.fanwe.o2o.miguo.R;
 import com.miguo.category.fragment.FragmentCategory;
 import com.miguo.category.fragment.HiHomeFragmentCategory;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.HomeActionUrls;
 import com.miguo.definition.IntentKey;
 import com.miguo.definition.RequestCode;
 import com.miguo.entity.AdspaceListBean;
@@ -58,7 +59,42 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
             case R.id.live_layout:
                 clickLiveLayout();
                 break;
+            case R.id.mgdr_layout:
+                clickHomeAction(0);
+                break;
+            case R.id.dyhb_layout:
+                clickHomeAction(1);
+                break;
+            case R.id.mdyj_layout:
+                clickHomeAction(2);
+                break;
+            case R.id.hbyh_layout:
+                clickHomeAction(3);
+                break;
         }
+    }
+
+    private void clickHomeAction(int position){
+        Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.HOME_ACTION_WEB));
+        switch (position){
+            case 0:
+                intent.putExtra(IntentKey.WEB_URL, HomeActionUrls.MIGUO_DAREN_BANG);
+                intent.putExtra(IntentKey.WEB_TITLE, "米果达人榜");
+                break;
+            case 1:
+                intent.putExtra(IntentKey.WEB_URL, HomeActionUrls.DAIYAN_HONGDIAN_BANG);
+                intent.putExtra(IntentKey.WEB_TITLE, "代言红店榜");
+                break;
+            case 2:
+                intent.putExtra(IntentKey.WEB_URL, HomeActionUrls.MAIDAN_YONGJIN_BANG);
+                intent.putExtra(IntentKey.WEB_TITLE, "买单有佣金");
+                break;
+            case 3:
+                intent.putExtra(IntentKey.WEB_URL, HomeActionUrls.HONG_BAO_YOU_HUI_QUAN);
+                intent.putExtra(IntentKey.WEB_TITLE, "红包优惠券");
+                break;
+        }
+        BaseUtils.jumpToNewActivity(getActivity(), intent);
     }
 
     private void clickLiveLayout(){

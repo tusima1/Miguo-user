@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.miguo.ui.view.PtrFrameLayoutForViewPager
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ptr_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:ptr_keep_header_when_refresh="true"
+    app:ptr_pull_to_fresh="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </WebView>
+    </LinearLayout>
+
+
+
+
+</com.miguo.ui.view.PtrFrameLayoutForViewPager>

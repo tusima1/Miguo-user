@@ -137,6 +137,7 @@
                         android:layout_height="wrap_content">
 
                         <LinearLayout
+                            android:id="@+id/mgdr_layout"
                             android:gravity="center"
                             android:background="@drawable/bg_mgdr"
                             android:layout_width="match_parent"
@@ -159,6 +160,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:gravity="center"
+                            android:id="@+id/dyhb_layout"
                             android:background="@drawable/bg_dyhdb"
                             android:layout_width="match_parent"
                             android:layout_height="56dp">
@@ -209,6 +211,7 @@
 
                         <LinearLayout
                             android:gravity="center"
+                            android:id="@+id/mdyj_layout"
                             android:background="@drawable/bg_mdyyj"
                             android:layout_width="match_parent"
                             android:layout_height="56dp">
@@ -229,6 +232,7 @@
                         </LinearLayout>
                         <LinearLayout
                             android:gravity="center"
+                            android:id="@+id/hbyh_layout"
                             android:background="@drawable/bg_hbyhq"
                             android:layout_width="match_parent"
                             android:layout_height="56dp">
@@ -301,7 +305,7 @@
 
                                 <TextView
                                     android:id="@+id/toutiao1_name_1"
-                                    android:text="哈哈哈"
+                                    android:text="—"
                                     android:textSize="11sp"
                                     android:textColor="@color/c_595959"
                                     android:layout_width="wrap_content"
@@ -310,7 +314,7 @@
                                 <TextView
                                     android:id="@+id/toutiao1_content_1"
                                     android:layout_marginLeft="14dp"
-                                    android:text="用米果到店付获得11元佣金"
+                                    android:text="————"
                                     android:textSize="11sp"
                                     android:textColor="@color/c_999999"
                                     android:layout_width="wrap_content"
@@ -325,7 +329,7 @@
 
                                 <TextView
                                     android:id="@+id/toutiao1_name_2"
-                                    android:text="啦啦啦"
+                                    android:text="—"
                                     android:textSize="11sp"
                                     android:textColor="@color/c_595959"
                                     android:layout_width="wrap_content"
@@ -334,7 +338,7 @@
                                 <TextView
                                     android:id="@+id/toutiao1_content_2"
                                     android:layout_marginLeft="14dp"
-                                    android:text="分享好友消费获得佣金10元"
+                                    android:text="————"
                                     android:textSize="11sp"
                                     android:textColor="@color/c_999999"
                                     android:layout_width="wrap_content"
@@ -414,40 +418,43 @@
                     android:background="@color/c_F2F2F2"
                     android:layout_width="match_parent"
                     android:layout_height="7dp"/>
+                <View
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="7dp"/>
 
-                <com.miguo.ui.view.HomeTimeLimitView
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="6dp"
+                <com.miguo.ui.view.HomeADView3
+                    android:background="@color/white"
                     android:id="@+id/home_tuan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </com.miguo.ui.view.HomeTimeLimitView>
 
-
+                </com.miguo.ui.view.HomeADView3>
 
                 <LinearLayout
                     android:id="@+id/home_ad_view_2_space_layout"
+                    android:background="@color/white"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="6dp">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="#21000000" />
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="1px"-->
+                        <!--android:background="#21000000" />-->
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:background="@color/c_F2F2F2" />
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="5dp"-->
+                        <!--android:background="@color/c_F2F2F2" />-->
 
                 </LinearLayout>
 
 
 
                 <com.miguo.ui.view.HomeADView3
-                    android:background="@color/c_F2F2F2"
+                    android:background="@color/white"
                     android:id="@+id/home_ad_view_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -463,7 +470,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="5dp"
-                        android:background="@color/c_F2F2F2" />
+                        android:background="@color/white" />
 
                     <TextView
                         android:paddingTop="10dp"

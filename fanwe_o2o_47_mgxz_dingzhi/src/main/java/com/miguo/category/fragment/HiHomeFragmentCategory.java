@@ -42,7 +42,9 @@ import com.miguo.dao.TouTiaoDao;
 import com.miguo.dao.impl.GetSearchCateConditionDaoImpl;
 import com.miguo.dao.impl.TouTiaoDaoImpl;
 import com.miguo.definition.ClassPath;
+import com.miguo.definition.HomeActionUrls;
 import com.miguo.definition.IntentKey;
+import com.miguo.definition.TimeLimitedType;
 import com.miguo.entity.BannerTypeModel;
 import com.miguo.dao.CheckCitySignDao;
 import com.miguo.dao.GetAdspaceListDao;
@@ -106,7 +108,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         HomeLooperViewPager.HomeBannerViewPagerOnTouchListener,
         HomeTimeLimitView.OnTimeLimitClickListener,
         HomeTimeLimitView.TimeLimitedOnTouchListener,
-        GetSpecialListView,
         TouchToMoveListener,
         HomeGreetingView,
         GetAdspaceListView,
@@ -209,8 +210,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      * 限时特惠
      */
     @ViewInject(R.id.home_tuan)
-    HomeTimeLimitView homeTuanTimeLimitView;
-    GetSpecialListDao getSpecialListDao;
+    HomeADView3 homeTuanTimeLimitView;
+//    GetSpecialListDao getSpecialListDao;
     @ViewInject(R.id.home_tuan_limit_bottom_layout)
     LinearLayout homeTuanLimitBottomLayout;
 
@@ -234,6 +235,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
      */
     FeaturedGrouponCategory featuredGrouponCategory;
 
+
+
     boolean hasTop = true;
     int topHeight = dip2px(206);
 
@@ -252,6 +255,17 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     TouTiaoDao touTiaoDao;
 
+    @ViewInject(R.id.mgdr_layout)
+    LinearLayout mgrdLayout;
+
+    @ViewInject(R.id.dyhb_layout)
+    LinearLayout dyhbLayout;
+
+    @ViewInject(R.id.mdyj_layout)
+    LinearLayout mdyjLayout;
+
+    @ViewInject(R.id.hbyh_layout)
+    LinearLayout hbyhLayout;
 
     public HiHomeFragmentCategory(View view, HiBaseFragment fragment) {
         super(view, fragment);
@@ -259,7 +273,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void initFirst() {
-        getSpecialListDao = new GetSpecialListDaoImpl(this);
+//        getSpecialListDao = new GetSpecialListDaoImpl(this);
         homeGreetingDao = new HomeGreetingDaoImpl(this);
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
         checkCitySignDao = new CheckCitySignDaoImpl(this);
@@ -279,6 +293,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     @Override
     protected void setFragmentListener() {
+        mgrdLayout.setOnClickListener(listener);
+        dyhbLayout.setOnClickListener(listener);
+        mdyjLayout.setOnClickListener(listener);
+        hbyhLayout.setOnClickListener(listener);
+
+
         nodata.setOnClickListener(listener);
         refresh.setOnClickListener(listener);
         messageLayout.setOnClickListener(listener);
@@ -290,7 +310,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         citySayHi.setOnClickListener(listener);
         homeADView2.setOnTopicAdsClickListener((HiHomeFragmentListener) listener);
         scrollView.setRecyclerScrollViewOnTouchListener(this);
-        homeTuanTimeLimitView.setTimeLimitedOnTouchListener(this);
     }
 
     @Override
@@ -507,11 +526,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     public void onRefreshAfter() {
         onRefreshGreeting();
-        onRefreshTimeLimit();
+//        onRefreshTimeLimit();
         onRefreshAdspaceList();
         onRefreshFeaturedGroupon();
         onRefreshSearchCondition();
         onRefreshToutiao();
+        initLimited();
     }
 
     private void onRefreshToutiao(){
@@ -539,7 +559,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void clearPage() {
         sayHiLayout.setVisibility(View.GONE);
-        homeTuanTimeLimitView.setVisibility(View.GONE);
+//        homeTuanTimeLimitView.setVisibility(View.GONE);
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
         homeADView2.setVisibility(View.GONE);
         featuredGrouponCategory.clearPage();
@@ -580,22 +600,6 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
          */
         ptrFrameLayout.setPtrHandler(this);
         scrollView.setOnRecyclerScrollViewListener(this);
-    }
-
-    public void onRefreshTimeLimit() {
-        try {
-            getSpecialListDao.getSpecialList(getCurrentHttpUuid(),
-                    AppRuntimeWorker.getCity_id(),
-                    BaiduMapManager.getInstance().getLongitude() + "",
-                    BaiduMapManager.getInstance().getLatitude() + "",
-                    "0");
-        } catch (Exception e) {
-            getSpecialListDao.getSpecialList(getCurrentHttpUuid(),
-                    "fc9ebab9-7aa1-49d5-8c56-2bddc7d92ded",
-                    "",
-                    "",
-                    "0");
-        }
     }
 
     /**
@@ -673,6 +677,46 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     public void loadCompleteWithError() {
         loadComplete();
         scrollView.loadCompliteWithError();
+    }
+
+    private void initLimited(){
+        List<AdspaceListBean.Result.Body> limited = new ArrayList<>();
+        AdspaceListBean.Result.Body xianShiTeHui = new AdspaceListBean().new Result().new Body();
+        xianShiTeHui.setResId(R.drawable.xianshitehui);
+        xianShiTeHui.setTitle("限时特惠");
+        xianShiTeHui.setType(TimeLimitedType.XIAN_SHI_TE_HUI);
+
+        AdspaceListBean.Result.Body yiYuanQiang = new AdspaceListBean().new Result().new Body();
+        yiYuanQiang.setResId(R.drawable.yiyuanqiang);
+        yiYuanQiang.setTitle("一元抢");
+        yiYuanQiang.setType(TimeLimitedType.YI_YUAN_QIANG);
+
+        AdspaceListBean.Result.Body benZhouTuiJian = new AdspaceListBean().new Result().new Body();
+        benZhouTuiJian.setResId(R.drawable.benzhoutuijian);
+        benZhouTuiJian.setTitle("本周推荐");
+        benZhouTuiJian.setType(TimeLimitedType.BEN_ZHOU_TUI_JIAN);
+
+        limited.add(xianShiTeHui);
+        limited.add(yiYuanQiang);
+        limited.add(benZhouTuiJian);
+        homeTuanTimeLimitView.init(limited);
+        initLimitedListener();
+    }
+
+    private void initLimitedListener(){
+        homeTuanTimeLimitView.setOnTopicAdsClickListener(new HomeADView3.OnTopicAdsClickListener() {
+            @Override
+            public void onTopicAdsClick(AdspaceListBean.Result.Body ad) {
+                switch (ad.getType()){
+                    case TimeLimitedType.XIAN_SHI_TE_HUI:
+                        break;
+                    case TimeLimitedType.YI_YUAN_QIANG:
+                        break;
+                    case TimeLimitedType.BEN_ZHOU_TUI_JIAN:
+                        break;
+                }
+            }
+        });
     }
 
     /**
@@ -1079,60 +1123,60 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         loadComplete();
     }
 
-    /**
-     * 获取限时特惠数据回调
-     */
-    @Override
-    public void getSpecialListSuccess(String httpUuid,final SpecialListModel.Result result) {
-        if(!isCurrentHttp(httpUuid)){
-            loadComplete();
-            return;
-        }
-        if (getActivity() == null) {
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (result != null) {
-                    homeTuanLimitBottomLayout.setVisibility(SDCollectionUtil.isEmpty(result.getBody()) ? View.GONE : View.VISIBLE);
-                    homeTuanTimeLimitView.setVisibility(SDCollectionUtil.isEmpty(result.getBody()) ? View.GONE : View.VISIBLE);
-                    homeTuanTimeLimitView.init(result);
-                    homeTuanTimeLimitView.setParent(ptrFrameLayout);
-                    homeTuanTimeLimitView.setOnTimeLimitClickListener(HiHomeFragmentCategory.this);
-                }
-                loadComplete();
-            }
-        });
-    }
+//    /**
+//     * 获取限时特惠数据回调
+//     */
+//    @Override
+//    public void getSpecialListSuccess(String httpUuid,final SpecialListModel.Result result) {
+//        if(!isCurrentHttp(httpUuid)){
+//            loadComplete();
+//            return;
+//        }
+//        if (getActivity() == null) {
+//            return;
+//        }
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (result != null) {
+//                    homeTuanLimitBottomLayout.setVisibility(SDCollectionUtil.isEmpty(result.getBody()) ? View.GONE : View.VISIBLE);
+//                    homeTuanTimeLimitView.setVisibility(SDCollectionUtil.isEmpty(result.getBody()) ? View.GONE : View.VISIBLE);
+//                    homeTuanTimeLimitView.init(result);
+//                    homeTuanTimeLimitView.setParent(ptrFrameLayout);
+//                    homeTuanTimeLimitView.setOnTimeLimitClickListener(HiHomeFragmentCategory.this);
+//                }
+//                loadComplete();
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void getSpecialListLoadmoreSuccess(String httpUuid,SpecialListModel.Result result) {
+//        loadComplete();
+//    }
+//
+//    @Override
+//    public void getSpecialListError(final String httpUuid,String msg) {
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(isCurrentHttp(httpUuid)){
+//                    homeTuanLimitBottomLayout.setVisibility(View.GONE);
+//                }
+//                loadComplete();
+//            }
+//        });
+//
+//    }
 
-    @Override
-    public void getSpecialListLoadmoreSuccess(String httpUuid,SpecialListModel.Result result) {
-        loadComplete();
-    }
-
-    @Override
-    public void getSpecialListError(final String httpUuid,String msg) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(isCurrentHttp(httpUuid)){
-                    homeTuanLimitBottomLayout.setVisibility(View.GONE);
-                }
-                loadComplete();
-            }
-        });
-
-    }
-
-    @Override
-    public void getSpecialListNoData(String httpUuid,String msg) {
-        if(isCurrentHttp(httpUuid)){
-            homeTuanLimitBottomLayout.setVisibility(View.GONE);
-            homeTuanTimeLimitView.setVisibility(View.GONE);
-        }
-        loadComplete();
-    }
+//    @Override
+//    public void getSpecialListNoData(String httpUuid,String msg) {
+//        if(isCurrentHttp(httpUuid)){
+//            homeTuanLimitBottomLayout.setVisibility(View.GONE);
+//            homeTuanTimeLimitView.setVisibility(View.GONE);
+//        }
+//        loadComplete();
+//    }
     /** 获取限时特惠数据回调 end*/
 
 

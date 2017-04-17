@@ -97,7 +97,6 @@ public class HiShopFragmentCategory extends FragmentCategory {
         url = ServerUrl.getAppH5Url() + "user/applogin?from=app";
         String postData ="name=" + name + "&pwd=" + pwd ;
         webView.postUrl(url, EncodingUtils.getBytes(postData, "base64"));
-
     }
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})

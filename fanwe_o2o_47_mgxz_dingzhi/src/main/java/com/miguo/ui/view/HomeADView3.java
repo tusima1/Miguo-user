@@ -63,11 +63,10 @@ public class HomeADView3 extends BaseHorizantalScrollView{
 
 
         int screenWidth = getScreenWidth();
-        int margionSpaceFirst = dip2px(17);
         int margionSpace = dip2px(5);
         int width = (int)((screenWidth - margionSpace * 3) / (float)2.8);
         int height = width * 65 / 100;
-        int index = 1;
+        int index = 2;
 
         for(int i = 0; i < ads.size(); i++){
 
@@ -75,7 +74,7 @@ public class HomeADView3 extends BaseHorizantalScrollView{
              * 遮罩
              */
             RoundImageView view = new RoundImageView(getContext());
-            view.setBackgroundColor(Color.argb(64, 0, 0, 0));
+//            view.setBackgroundColor(Color.argb(64, 0, 0, 0));
             view.setRectAdius((float)dip2px(5));
 
 
@@ -84,10 +83,12 @@ public class HomeADView3 extends BaseHorizantalScrollView{
              */
             TextView title = new TextView(getContext());
             title.setText(getItem(i).getTitle());
-            title.setTextSize(16);
-            title.setTextColor(Color.argb(255, 220, 220, 220));
+            title.setTextSize(14);
+            title.setMaxLines(2);
+            title.setTextColor(Color.WHITE);
             title.setLineSpacing(0, 1.3f);
-            title.setPadding(dip2px(50), dip2px(30), dip2px(50), dip2px(30));
+//            title.setBackgroundColor(Color.argb(64, 0, 0, 0));
+            title.setPadding(dip2px(10), dip2px(10), dip2px(10), dip2px(10));
             title.setGravity(Gravity.CENTER);
 
             /**
@@ -100,12 +101,6 @@ public class HomeADView3 extends BaseHorizantalScrollView{
             RelativeLayout.LayoutParams imgParams = getRelativeLayoutParams(width, height);
 
             /**
-             * 第一张为1
-             * 2 、4 、 6 、 8……
-             * 坐标的图片处理
-             */
-
-            /**
              * 设置图片间距
              */
             imgParams.setMargins(dip2px(5),0 , 0, 0);
@@ -115,7 +110,6 @@ public class HomeADView3 extends BaseHorizantalScrollView{
              * 如果是顶排的图片，并且不是第一个
              * 那应该是3 , 5, 7 ,9..图片
              */
-//            if(i % 2 == 0 && i != 0){
             if(i != 0){
                 imgParams.addRule(RelativeLayout.RIGHT_OF, content.getChildAt((i - 1) * index).getId());
                 imgParams.addRule(RelativeLayout.ALIGN_TOP, content.getChildAt((i - 1) * index).getId());
@@ -123,19 +117,22 @@ public class HomeADView3 extends BaseHorizantalScrollView{
 
             img.setLayoutParams(imgParams);
 
-            String url =getItem(i).getIcon();
-            if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
-                url = DisplayUtil.qiniuUrlExchange(url,400,200);
+            if(ads.get(i).getResId() > 0){
+                img.setImageResource(ads.get(i).getResId());
+            }else {
+                String url =getItem(i).getIcon();
+                if(!TextUtils.isEmpty(url)&&url.startsWith("http://")){
+                    url = DisplayUtil.qiniuUrlExchange(url,200,100);
+                }
+                SDViewBinder.setImageView(url, img);
             }
-            SDViewBinder.setImageView(url, img);
-
 
             title.setLayoutParams(imgParams);
             view.setLayoutParams(imgParams);
 
             img.setBackgroundColor(Color.GRAY);
             content.addView(img);
-            content.addView(view);
+//            content.addView(view);
             content.addView(title);
 
             img.setOnClickListener(new TopicAdsListener(i));
