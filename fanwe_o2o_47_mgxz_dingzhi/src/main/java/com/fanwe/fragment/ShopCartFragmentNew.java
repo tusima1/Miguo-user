@@ -556,6 +556,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             SDViewUtil.hide(mLl_count);
             mTitle.initRightItem(0);
         } else {
+            SDViewUtil.show(mLl_count);
             mTitle.initRightItem(1);
             mTitle.setMiddleTextTop("购物车" + "（" + listModel.size() + "）");
         }
@@ -594,6 +595,7 @@ public class ShopCartFragmentNew extends BaseFragment implements RefreshCalbackV
             SDViewUtil.hide(mLl_count);
             mTitle.setMiddleTextTop("购物车");
         } else {
+            SDViewUtil.show(mLl_count);
             mTitle.setMiddleTextTop("购物车" + "（" + num + "）");
         }
     }
