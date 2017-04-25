@@ -283,7 +283,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         homeGreetingDao = new HomeGreetingDaoImpl(this);
         getAdspaceListDao = new GetAdspaceListDaoImpl(this);
         checkCitySignDao = new CheckCitySignDaoImpl(this);
-        initSearchCateCondition();
+        initSearchCateCondition();   //
         initTouTiaoDao();
     }
 
@@ -513,12 +513,13 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     private void initCategories(List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> categories){
         updateCategoryViewPagerParams(categories);
         ArrayList<Fragment> fragments = new ArrayList<>();
-        int count = categories.size() / 8 + (categories.size() % 8 > 0 ? 1 : 0);
+        int typeCountForOnePage = 10;   // 每页分类上面 有多少个 分类图标
+        int count = categories.size() / typeCountForOnePage + (categories.size() % typeCountForOnePage > 0 ? 1 : 0);
         for(int i = 0; i < count; i++){
             List<SearchCateConditionBean.ResultBean.BodyBean.CategoryListBean> current = new ArrayList<>();
-            int categoryTypeCount = ((i + 1) * 8 <= categories.size() ? 8 : categories.size() - (i * 8));
+            int categoryTypeCount = ((i + 1) * typeCountForOnePage <= categories.size() ? typeCountForOnePage : categories.size() - (i * typeCountForOnePage));
             for(int j = 0; j < categoryTypeCount; j++){
-                current.add(categories.get(i * 8 + j));
+                current.add(categories.get(i * typeCountForOnePage + j));
             }
             HiRepresentCateFragment fragment = new HiRepresentCateFragment();
             Bundle bundle = new Bundle();
@@ -529,7 +530,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
         bannerAdapter = new HiRepresentBannerFragmentAdapter(fragment.getChildFragmentManager(), fragments);
         pager.setAdapter(bannerAdapter);
         circleIndicator.setViewPager(pager);
-        circleIndicator.setVisibility(categories.size() <= 8 ? View.GONE : View.VISIBLE);
+        circleIndicator.setVisibility(categories.size() <= typeCountForOnePage ? View.GONE : View.VISIBLE);
         pager.setTouchToMoveListener(this);
         pager.setPtrFrameLayout(ptrFrameLayout);
     }
