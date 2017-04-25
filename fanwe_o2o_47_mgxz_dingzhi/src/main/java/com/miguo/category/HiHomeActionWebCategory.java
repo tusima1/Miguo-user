@@ -132,23 +132,6 @@ public class HiHomeActionWebCategory extends Category implements ShoppingCartVie
 
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void initWebView() {
-        String url = getActivity().getUrl();
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-        LocalUserModel userModel = AppHelper.getLocalUser();
-        if (userModel != null) {
-            String userid = userModel.getUser_mobile();
-            String password = userModel.getUser_pwd();
-            if (!TextUtils.isEmpty(App.getInstance().getToken()) && !TextUtils.isEmpty(userid) && !TextUtils.isEmpty(password)) {
-                url = url.contains("mgxz.com") ? url + "?" + "name=" + userid + "&pwd=" + password + "&from=app" : url;
-            } else {
-                url = url + "?name=&pwd=&from=app";
-            }
-        } else {
-            url = url + "?name=&pwd=&from=app";
-        }
-
         WebSettings webSettings = webView.getSettings();
         //支持js
         webSettings.setJavaScriptEnabled(true);
@@ -182,7 +165,6 @@ public class HiHomeActionWebCategory extends Category implements ShoppingCartVie
                 super.onReceivedError(view, request, error);
             }
         });
-//        webView.loadUrl(url);
         webView.addJavascriptInterface(handler, "mgxz");
     }
 

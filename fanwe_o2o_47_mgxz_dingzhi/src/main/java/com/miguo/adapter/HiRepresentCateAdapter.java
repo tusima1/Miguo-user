@@ -81,7 +81,7 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
     }
 
     private static int getImageWidth(){
-        return (int)(getScreenWidth() * 0.14);
+        return (int)(getScreenWidth() * 0.12);
     }
 
     public static int getItemHeight(){
@@ -89,7 +89,7 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
     }
 
     private static int getTextViewHeight(){
-        return dip2px(15);
+        return dip2px(20);
     }
 
     private static int getTextViewMarginTop(){

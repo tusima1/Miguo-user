@@ -74,6 +74,10 @@ public class HiHomeFragmentListener extends FragmentListener implements HomeADVi
         }
     }
 
+    /**
+     * 点击首页达人榜板块四个模块分类
+     * @param position
+     */
     private void clickHomeAction(int position){
         Intent intent = new Intent(getActivity(), ClassNameFactory.getClass(ClassPath.HOME_ACTION_WEB));
         switch (position){

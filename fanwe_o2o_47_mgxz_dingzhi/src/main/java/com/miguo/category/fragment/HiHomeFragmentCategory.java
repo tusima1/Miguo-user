@@ -255,6 +255,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     TouTiaoDao touTiaoDao;
 
+    @ViewInject(R.id.category_layout)
+    LinearLayout categoryLayout;
+
+    @ViewInject(R.id.tou_tiao_layout)
+    LinearLayout touTiaolayout;
+
     @ViewInject(R.id.mgdr_layout)
     LinearLayout mgrdLayout;
 
@@ -346,6 +352,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        categoryLayout.setVisibility(View.GONE);
+                        homeTuanLimitBottomLayout.setVisibility(View.GONE);
                         loadComplete();
                     }
                 });
@@ -353,6 +361,8 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
             @Override
             public void getSearchCateConditionSuccess(SearchCateConditionBean.ResultBean.BodyBean body) {
+                categoryLayout.setVisibility(View.VISIBLE);
+                homeTuanLimitBottomLayout.setVisibility(View.VISIBLE);
                 SearchCateConditionFactory.update(body);
                 updateCategories();
                 loadComplete();
@@ -367,14 +377,28 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     private void initTouTiaoDao(){
         touTiaoDao = new TouTiaoDaoImpl(new TouTiaoView() {
             @Override
-            public void getToutiaoListSuccess(List<ToutiaoBean.Result.Body> toutiao){
-                HiHomeFragmentCategory.this.toutiao = toutiao;
-                initTimer();
+            public void getToutiaoListSuccess(final List<ToutiaoBean.Result.Body> toutiao){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HiHomeFragmentCategory.this.toutiao = toutiao;
+                        initTimer();
+                        touTiaolayout.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
             @Override
             public void getToutiaoListError(String message) {
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(timer != null){
+                            timer.cancel();
+                        }
+                        touTiaolayout.setVisibility(View.GONE);
+                    }
+                });
             }
         });
     }
@@ -396,6 +420,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void initTimer(){
         if(toutiao == null || toutiao.size() <= 0){
+            touTiaolayout.setVisibility(View.GONE);
             return;
         }
         if(timer != null){
@@ -559,10 +584,12 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
 
     private void clearPage() {
         sayHiLayout.setVisibility(View.GONE);
-//        homeTuanTimeLimitView.setVisibility(View.GONE);
         homeTuanLimitBottomLayout.setVisibility(View.GONE);
         homeADView2.setVisibility(View.GONE);
         featuredGrouponCategory.clearPage();
+        homeTuanTimeLimitView.setVisibility(View.GONE);
+        categoryLayout.setVisibility(View.GONE);
+        touTiaolayout.setVisibility(View.GONE);
     }
 
     /**
@@ -680,6 +707,7 @@ public class HiHomeFragmentCategory extends FragmentCategory implements
     }
 
     private void initLimited(){
+        homeTuanTimeLimitView.setVisibility(View.VISIBLE);
         List<AdspaceListBean.Result.Body> limited = new ArrayList<>();
         AdspaceListBean.Result.Body xianShiTeHui = new AdspaceListBean().new Result().new Body();
         xianShiTeHui.setResId(R.drawable.xianshitehui);
