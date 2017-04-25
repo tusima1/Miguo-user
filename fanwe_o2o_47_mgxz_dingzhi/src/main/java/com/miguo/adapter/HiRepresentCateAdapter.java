@@ -77,7 +77,7 @@ public class HiRepresentCateAdapter extends BarryBaseRecyclerAdapter {
     }
 
     public int getPaddingSpace(){
-        return (getScreenWidth() - getImageWidth() * 4) / 5;
+        return (getScreenWidth() - getImageWidth() * 5) / 6;    // 得到每个图标之间的距离
     }
 
     private static int getImageWidth(){

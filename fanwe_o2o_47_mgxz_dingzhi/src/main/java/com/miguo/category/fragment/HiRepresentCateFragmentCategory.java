@@ -57,7 +57,7 @@ public class HiRepresentCateFragmentCategory extends FragmentCategory {
     }
 
     private void initRecyclerView(){
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),5));
         recyclerView.setAdapter(adapter);
     }
 
